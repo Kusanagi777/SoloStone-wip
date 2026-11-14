@@ -822,7 +822,8 @@ public sealed class FairBotState
 #if ENGINE_SOURCE
         var projectedChooser = copy.Player1.PlayerId == owner ? copy.Player1 : copy.Player2;
         for (var next = projectedChooser.Choice?.NextChoice; next != null; next = next.NextChoice)
-            foreach (int id in next.Choices.Where(id => !offered.Contains(id)))
+            // A repeated Discover queues its later choices with no offers yet (DiscoverTask: Griftah); nothing to mask there.
+            foreach (int id in (next.Choices ?? new List<int>()).Where(id => !offered.Contains(id)))
                 Mask(copy, copy.IdEntityDic[id].Controller, copy.IdEntityDic[id]);
         // The owner cannot know the designation either; both viewpoints use anonymous pair records.
         foreach (var entry in copy.IdEntityDic.Values.Where(e => !(e is EngineUnknown)
@@ -1186,7 +1187,7 @@ public sealed class FairBotState
             for (var choice = player.Choice?.NextChoice; choice != null; choice = choice.NextChoice)
             {
                 queuedChoices.Add(choice);
-                kept.UnionWith(choice.Choices);
+                if (choice.Choices != null) kept.UnionWith(choice.Choices);
             }
         // Keep only public memberships; private parents' option topology and retired attachments disappear.
         var slots = hidden.Where(c => c.Zone == c.Controller.HandZone || c.Zone == c.Controller.DeckZone
@@ -1222,7 +1223,7 @@ public sealed class FairBotState
             slot.ZonePosition = old.ZonePosition;
             game.IdEntityDic[slot.Id] = slot;
         }
-        foreach (var choice in queuedChoices)
+        foreach (var choice in queuedChoices.Where(choice => choice.Choices != null))
             choice.Choices = choice.Choices.Select(id => ids.TryGetValue(id, out int mapped) ? mapped : id).ToList();
         foreach (var frame in assembleFrames)
             foreach (var field in assembleBodyFields)

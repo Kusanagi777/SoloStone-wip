@@ -126,8 +126,10 @@ Check("T1 tokens are scripted cards the client knows (Pyroblast, Coin, Boom Bot,
         // Phase 8 family 09: the fifteen run treasures King Togwaggle's Magic Candle finds (two of them in A. F. Kay's deck) are admitted for a
         // boss on catalog runs (DungeonRunAdmission.F09.cs run-treasure-boss-find, and LOOTA_839's own row); the legacy verdict is unchanged.
         bool bossFinds = new[] { "LOOTA_806", "LOOTA_812", "LOOTA_816", "LOOTA_819", "LOOTA_821", "LOOTA_823", "LOOTA_826", "LOOTA_827", "LOOTA_835", "LOOTA_836",
-            "LOOTA_838", "LOOTA_839", "LOOTA_842b", "LOOTA_843", "LOOTA_847" }.Contains(id);
-        Check($"T2 admission {id}: a run-treasure row, admitted for the player only (legacy and catalog; a catalog run's boss too for the fifteen King Togwaggle finds), with a 'none:' lift",
+            "LOOTA_838", "LOOTA_839", "LOOTA_842b", "LOOTA_843", "LOOTA_847" }.Contains(id)
+            // Phase 8 family 16: the five Ol' Toomba's Tales of Fortune shuffles into his deck (DungeonRunAdmission.F16.cs run-treasure-boss-shuffle).
+            || new[] { "LOOTA_811", "LOOTA_837", "LOOTA_841", "LOOTA_842", "LOOTA_842a" }.Contains(id);
+        Check($"T2 admission {id}: a run-treasure row, admitted for the player only (legacy and catalog; a catalog run's boss too for the fifteen King Togwaggle finds and the five Ol' Toomba shuffles in), with a 'none:' lift",
             p.Subject && p.Admitted && pc.Admitted && b.Admitted == bossFinds && !DungeonRunAdmission.Classify(C(id), id, AdmitScope.Boss).Admitted && !gen.Admitted && p.Family.StartsWith("run-treasure", StringComparison.Ordinal)
             && DungeonRunAdmission.IsNoneLift(p.Lift) && p.Reason.StartsWith("treasure: only the player can hold it", StringComparison.Ordinal), p.Family + " " + p.Admit);
     }

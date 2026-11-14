@@ -2,9 +2,23 @@
   "schemaVersion": 1,
   "encountersVersion": 1,
   "generatedBy": "tools/dungeon-run-catalog (encounters); do not edit by hand",
-  "sources": { "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45", "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8", "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466", "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206", "reference/encounters/F06.json": "950c2268088073de3055ab49d444a40be440198596d0b90ef54a4a1520c644c3", "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b", "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd", "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a", "reference/encounters/F10.json": "525748f2fdb0cfa6c69d81f806c745152b5377df5c99f7a1ecfd1fe65933fe7d" },
+  "sources": { "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45", "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8", "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466", "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206", "reference/encounters/F06.json": "950c2268088073de3055ab49d444a40be440198596d0b90ef54a4a1520c644c3", "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b", "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd", "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a", "reference/encounters/F10.json": "525748f2fdb0cfa6c69d81f806c745152b5377df5c99f7a1ecfd1fe65933fe7d", "reference/encounters/F16.json": "bf8f089c6cef3bfba9b5091675f05f9960e9d9ed6e89060420a42db223aab484" },
   "decks": {
     "enc-dala_21_whirt": ["KAR_009", "KAR_009", "DAL_603", "DAL_603", "CS2_023", "CS2_023", "LOE_119", "LOE_119", "BOT_601", "BOT_447", "BOT_447", "EX1_004", "EX1_004", "DAL_092", "DAL_092", "DAL_086", "BOT_413", "BOT_413", "EX1_050", "EX1_050", "EX1_103", "EX1_103", "CS2_117", "CS2_117", "GVG_089", "GVG_089", "EX1_021", "EX1_021", "OG_161", "OG_161"],
+    "enc-dala_31_timothy": ["CFM_815", "CS2_092", "LOOT_500", "OG_229", "EX1_383", "OG_123", "EX1_012", "EX1_100", "NEW1_029", "EX1_557", "EX1_083", "LOOT_516", "KAR_114", "TRL_096", "BOT_401", "GVG_119", "GIL_620", "EX1_558", "EX1_116", "FP1_030", "EX1_110", "BRM_028", "LOOT_357", "CS2_092", "BOT_401", "BOT_909", "CFM_800", "DAL_570", "EX1_130", "ICC_038"],
+    "enc-dala_32_kizi": ["CFM_753", "GVG_023", "EX1_129", "EX1_400", "GVG_050", "ICC_064", "KAR_011", "CFM_807", "GIL_125", "TRL_521", "CS2_213", "CFM_753", "GVG_023", "EX1_129", "EX1_400", "GVG_050", "ICC_064", "KAR_011", "GIL_125", "TRL_521", "CS2_213", "EX1_607", "ICC_238", "OG_312", "GVG_051", "CS2_114", "GIL_155", "EX1_391", "EX1_604", "BRM_016"],
+    "enc-dala_33_gold_elemental": ["DAL_092", "GIL_815", "CS2_187", "BOT_098", "EX1_089", "CFM_807", "CFM_064", "DAL_081", "LOOT_516", "TRL_525", "GVG_119", "CS2_187", "CFM_669", "EX1_283", "EX1_095", "DAL_088", "CFM_670", "DAL_092", "GIL_815", "BOT_098", "EX1_089", "CFM_064", "DAL_081", "TRL_525", "CFM_669", "EX1_283", "EX1_095", "DAL_088", "EX1_319", "LOOT_014"],
+    "enc-dala_34_carousel": ["OG_313", "LOE_050", "UNG_086", "TRL_232", "LOOT_314", "ICC_835", "CFM_315", "TRL_348", "FP1_011", "GVG_017", "EX1_534t", "AT_058", "NEW1_031", "OG_045", "CFM_335", "DS1_178", "EX1_534", "GVG_049", "EX1_543", "UNG_952", "UNG_925", "FP1_002", "LOOT_193", "UNG_087", "OG_313", "LOE_050", "UNG_086", "TRL_232", "LOOT_314", "CFM_315"],
+    "enc-dala_35_zoie": ["EX1_621", "GVG_012", "CS2_235", "GVG_072", "CFM_606", "LOOT_278", "AT_011", "CS1_112", "GIL_156", "GIL_190", "EX1_001", "ICC_700", "DS1_055", "GIL_118", "EX1_621", "GVG_012", "CS2_235", "GVG_072", "CFM_606", "LOOT_278", "AT_011", "CS1_112", "GIL_156", "GIL_190", "EX1_001", "ICC_700", "DS1_055", "GIL_118", "UNG_034", "CS2_234"],
+    "enc-dala_36_draemus": ["KAR_300", "OG_313", "LOE_050", "UNG_086", "TRL_232", "UNG_852", "EX1_549", "EX1_549", "FP1_011", "UNG_915", "TRL_111", "TRL_111", "TRL_566", "EX1_531", "ICC_419", "TRL_339", "TRL_339", "GIL_828", "GIL_828", "LOOT_170", "GIL_142", "LOE_010", "GIL_827", "UNG_047", "GIL_155", "LOE_022", "UNG_957", "UNG_933", "EX1_577", "TRL_542"],
+    "enc-dala_37_toomba": ["EX1_145", "EX1_145", "KAR_069", "KAR_069", "TRL_071", "TRL_071", "EX1_278", "EX1_278", "EX1_129", "EX1_129", "UNG_060", "UNG_060", "LOOT_211", "LOOT_211", "TRL_124", "CS2_080", "TRL_127", "TRL_127", "GIL_557", "GIL_557", "CS2_077", "TRL_126", "CFM_637", "NEW1_016", "NEW1_016", "LOE_079", "TRL_015", "TRL_015", "GVG_070", "GVG_070"],
+    "enc-dala_38_tipsi": ["DALA_BOSS_38t", "LOOT_104", "KAR_009", "BOT_531", "UNG_941", "EX1_608", "GVG_123", "BOT_254", "BOT_604", "DAL_576", "EX1_012", "DAL_748", "ICC_913", "ICC_093", "EX1_584", "EX1_284", "EX1_563", "DALA_BOSS_38t", "LOOT_104", "KAR_009", "BOT_531", "UNG_941", "EX1_608", "GVG_123", "BOT_254", "BOT_604", "DAL_576", "DAL_748", "ICC_913", "ICC_093"],
+    "enc-dala_39_aki": ["TRL_543", "AT_073", "CFM_800", "EX1_363", "CFM_759", "CFM_759", "OG_221", "OG_221", "OG_311", "OG_311", "CS2_089", "CS2_089", "TRL_306", "DAL_727", "EX1_349", "GIL_685", "TRL_302", "CFM_815", "CS2_094", "CS2_094", "BRM_001", "BRM_001", "GVG_093", "GVG_093", "BRM_022", "TRL_524", "TRL_524", "AT_106", "LOOT_134", "LOOT_134"],
+    "enc-dala_40_oxana": ["EX1_308", "DAL_602", "DAL_602", "CS2_062", "LOOT_018", "CS2_064", "CFM_663", "CFM_663", "TRL_321", "CS2_108", "CS2_104", "GIL_155", "CFM_716", "EX1_604", "EX1_604", "ICC_064", "ICC_450", "EX1_414", "ICC_405", "UNG_933", "EX1_007", "UNG_814", "BRM_019", "BRM_019", "DAL_550", "DAL_550", "GIL_117", "GIL_117", "DAL_592", "ICC_314"],
+    "enc-dala_41_ungan": ["OG_061", "DAL_373", "TRL_119", "TRL_119", "DS1_184", "KAR_004", "KAR_004", "BOT_437", "CS2_084", "CS2_084", "AT_061", "AT_061", "EX1_554", "EX1_554", "ICC_200", "ICC_200", "LOOT_079", "LOOT_079", "NEW1_031", "EX1_617", "EX1_539", "EX1_538", "GIL_828", "DAL_371", "DAL_371", "DS1_183", "GVG_073", "LOOT_080", "DAL_378", "LOOT_085"],
+    "enc-dala_42_pogo": ["BOT_283", "BOT_283", "BOT_283", "BOT_283", "DAL_010", "GVG_024", "GVG_024", "GVG_027", "GVG_027", "BOT_565", "BOT_565", "GVG_013", "GVG_013", "BOT_079", "BOT_079", "GVG_103", "GVG_103", "EX1_556", "EX1_556", "GVG_044", "GVG_044", "GVG_094", "GVG_094", "GVG_119", "GVG_020", "GVG_020", "GVG_106", "BOT_102", "BOT_102", "BOT_534"],
+    "enc-dala_44_erekem": ["CFM_626", "CFM_626", "KAR_073", "KAR_073", "CS2_053", "CS2_053", "UNG_938", "UNG_938", "EX1_575", "EX1_575", "ICC_088", "ICC_088", "CS2_042", "CS2_042", "DAL_431", "DAL_047", "DAL_047", "EX1_012", "EX1_007", "EX1_007", "GIL_581", "TRL_015", "CFM_668", "CFM_668", "TRL_550", "TRL_550", "GIL_578", "DAL_592", "DAL_592", "TRL_542"],
+    "enc-dala_45_moragg": ["LOOT_014", "LOOT_014", "CS2_065", "CS2_065", "GVG_018", "GVG_018", "LOOT_013", "LOOT_013", "BOT_224", "BOT_224", "BRM_006", "BRM_006", "DAL_605", "DAL_605", "GIL_693", "GIL_693", "CFM_610", "DAL_563", "DAL_563", "CS2_062", "CS2_064", "CFM_663", "CFM_663", "EX1_309", "TRL_555", "EX1_312", "LOOT_368", "LOOT_368", "OG_239", "GVG_094"],
     "enc-gila_20_mangy_wolf": ["CS2_005", "ICC_054", "DS1_175", "OG_045", "GIL_828", "LOOT_077", "OG_216", "OG_216", "EX1_162", "EX1_162", "CS2_005", "ICC_054", "DS1_175", "OG_045", "GIL_828", "LOOT_077", "KAR_005", "CFM_315", "EX1_531", "EX1_017", "EX1_010", "CS2_172", "CS2_125", "CS2_237", "CS2_120", "KAR_005", "CFM_315", "EX1_531", "EX1_017", "EX1_010"],
     "enc-gila_21_rottooth": ["EX1_578", "OG_313", "OG_313", "GVG_030", "OG_048", "CS2_013", "AT_039", "ICC_419", "LOOT_258", "CS2_125", "EX1_578", "GVG_030", "OG_048", "CS2_013", "AT_039", "ICC_419", "LOOT_258", "CS2_125", "CS2_005", "ICC_079", "TRL_243", "EX1_570", "AT_042", "LOE_050", "CS2_172", "EX1_017", "CS2_120", "CS2_005", "ICC_079", "TRL_243"],
     "enc-gila_22_willie": ["CS2_072", "CFM_630", "CFM_630", "CFM_630", "OG_070", "AT_031", "EX1_131", "EX1_124", "BRM_007", "EX1_522", "AT_033", "ICC_850", "CS2_076", "CS2_080", "BRM_008", "CS2_077", "GVG_028", "EX1_010", "CFM_669", "CS2_161", "CS2_072", "OG_070", "AT_031", "EX1_131", "EX1_124", "BRM_007", "EX1_522", "AT_033", "ICC_850", "CS2_076"],
@@ -1713,6 +1727,339 @@
           { "used": "CS2_189", "reason": "fill:curated" },
           { "used": "CS2_188", "reason": "fill:curated" }
         ]
+      }
+    },
+    {
+      "id": "dala_31_timothy",
+      "name": "Timothy Jones",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_31h",
+      "power": "DALA_BOSS_31p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "cards": ["DALA_BOSS_31e"],
+      "deck": {
+        "id": "enc-dala_31_timothy",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Timothy_Jones", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "wiki": "Elite Tauren Chieftain", "listed": "PRO_001", "reason": "unscripted" },
+          { "wiki": "Prince Malchezaar", "listed": "KAR_096", "reason": "admission:unclassified" },
+          { "used": "CS2_092", "reason": "fill:second-copy" },
+          { "used": "BOT_401", "reason": "fill:second-copy" },
+          { "used": "BOT_909", "reason": "fill:Heroic" },
+          { "used": "CFM_800", "reason": "fill:Heroic" },
+          { "used": "DAL_570", "reason": "fill:Heroic" },
+          { "used": "EX1_130", "reason": "fill:Heroic" },
+          { "used": "ICC_038", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "dala_32_kizi",
+      "name": "Kizi Copperclip",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_32h",
+      "power": "DALA_BOSS_32p",
+      "tier": "1",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 1 },
+      "flags": ["passive"],
+      "cards": ["DALA_BOSS_32e1", "DALA_BOSS_32e2", "DALA_BOSS_32e3", "DALA_BOSS_32e4"],
+      "deck": {
+        "id": "enc-dala_32_kizi",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Kizi_Copperclip", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "CFM_753", "reason": "fill:second-copy" },
+          { "used": "GVG_023", "reason": "fill:second-copy" },
+          { "used": "EX1_129", "reason": "fill:second-copy" },
+          { "used": "EX1_400", "reason": "fill:second-copy" },
+          { "used": "GVG_050", "reason": "fill:second-copy" },
+          { "used": "ICC_064", "reason": "fill:second-copy" },
+          { "used": "KAR_011", "reason": "fill:second-copy" },
+          { "used": "GIL_125", "reason": "fill:second-copy" },
+          { "used": "TRL_521", "reason": "fill:second-copy" },
+          { "used": "CS2_213", "reason": "fill:second-copy" },
+          { "used": "EX1_607", "reason": "fill:Heroic" },
+          { "used": "ICC_238", "reason": "fill:Heroic" },
+          { "used": "OG_312", "reason": "fill:Heroic" },
+          { "used": "GVG_051", "reason": "fill:Heroic" },
+          { "used": "CS2_114", "reason": "fill:Heroic" },
+          { "used": "GIL_155", "reason": "fill:Heroic" },
+          { "used": "EX1_391", "reason": "fill:Heroic" },
+          { "used": "EX1_604", "reason": "fill:Heroic" },
+          { "used": "BRM_016", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "dala_33_gold_elemental",
+      "name": "Gold Elemental",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_33h",
+      "power": "DALA_BOSS_33p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "flags": ["passive"],
+      "cards": ["GAME_005"],
+      "deck": {
+        "id": "enc-dala_33_gold_elemental",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Gold_Elemental", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "DAL_092", "reason": "fill:second-copy" },
+          { "used": "GIL_815", "reason": "fill:second-copy" },
+          { "used": "BOT_098", "reason": "fill:second-copy" },
+          { "used": "EX1_089", "reason": "fill:second-copy" },
+          { "used": "CFM_064", "reason": "fill:second-copy" },
+          { "used": "DAL_081", "reason": "fill:second-copy" },
+          { "used": "TRL_525", "reason": "fill:second-copy" },
+          { "used": "CFM_669", "reason": "fill:second-copy" },
+          { "used": "EX1_283", "reason": "fill:second-copy" },
+          { "used": "EX1_095", "reason": "fill:second-copy" },
+          { "used": "DAL_088", "reason": "fill:second-copy" },
+          { "used": "EX1_319", "reason": "fill:Heroic" },
+          { "used": "LOOT_014", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "dala_34_carousel",
+      "name": "Carousel Gryphon",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_34h",
+      "power": "DALA_BOSS_34p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 3 },
+      "flags": ["passive", "bothPlayers", "position"],
+      "deck": {
+        "id": "enc-dala_34_carousel",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Carousel_Gryphon_(boss)", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "wiki": "Gloom Stag", "listed": "GIL_130", "reason": "admission:unclassified" },
+          { "used": "OG_313", "reason": "fill:second-copy" },
+          { "used": "LOE_050", "reason": "fill:second-copy" },
+          { "used": "UNG_086", "reason": "fill:second-copy" },
+          { "used": "TRL_232", "reason": "fill:second-copy" },
+          { "used": "LOOT_314", "reason": "fill:second-copy" },
+          { "used": "CFM_315", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "dala_35_zoie",
+      "name": "Soothsayer Zoie",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_35h",
+      "power": "DALA_BOSS_35p",
+      "tier": "2",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 3 },
+      "flags": ["passive"],
+      "deck": {
+        "id": "enc-dala_35_zoie",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Soothsayer_Zoie", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "EX1_621", "reason": "fill:second-copy" },
+          { "used": "GVG_012", "reason": "fill:second-copy" },
+          { "used": "CS2_235", "reason": "fill:second-copy" },
+          { "used": "GVG_072", "reason": "fill:second-copy" },
+          { "used": "CFM_606", "reason": "fill:second-copy" },
+          { "used": "LOOT_278", "reason": "fill:second-copy" },
+          { "used": "AT_011", "reason": "fill:second-copy" },
+          { "used": "CS1_112", "reason": "fill:second-copy" },
+          { "used": "GIL_156", "reason": "fill:second-copy" },
+          { "used": "GIL_190", "reason": "fill:second-copy" },
+          { "used": "EX1_001", "reason": "fill:second-copy" },
+          { "used": "ICC_700", "reason": "fill:second-copy" },
+          { "used": "DS1_055", "reason": "fill:second-copy" },
+          { "used": "GIL_118", "reason": "fill:second-copy" },
+          { "used": "UNG_034", "reason": "fill:Heroic" },
+          { "used": "CS2_234", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "dala_36_draemus",
+      "name": "Draemus",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_36h",
+      "power": "DALA_BOSS_36p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "cards": ["DALA_BOSS_36t"],
+      "deck": {
+        "id": "enc-dala_36_draemus",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Draemus", "read": "2026-11-14", "list": "Normal" }
+      }
+    },
+    {
+      "id": "dala_37_toomba",
+      "name": "Ol' Toomba",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_37h",
+      "power": "DALA_BOSS_37p",
+      "tier": "3",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "cards": ["LOOTA_806", "LOOTA_811", "LOOTA_812", "LOOTA_816", "LOOTA_819", "LOOTA_821", "LOOTA_826", "LOOTA_827", "LOOTA_835", "LOOTA_836", "LOOTA_837", "LOOTA_838", "LOOTA_839", "LOOTA_841", "LOOTA_842a", "LOOTA_842b", "LOOTA_843", "LOOTA_847", "LOOT_998k", "LOOT_998l"],
+      "deck": {
+        "id": "enc-dala_37_toomba",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Ol%27_Toomba", "read": "2026-11-14", "list": "Normal" }
+      }
+    },
+    {
+      "id": "dala_38_tipsi",
+      "name": "Tipsi Wobblerune",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_38h",
+      "power": "DALA_BOSS_38p",
+      "tier": "2",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "cards": ["KAR_073", "GVG_003", "KAR_077", "KAR_091", "KAR_075", "KAR_076", "CFM_659", "BRM_019", "KARA_13_22", "GIL_805", "DAL_721"],
+      "deck": {
+        "id": "enc-dala_38_tipsi",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Tipsi_Wobblerune", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "DALA_BOSS_38t", "reason": "fill:second-copy" },
+          { "used": "LOOT_104", "reason": "fill:second-copy" },
+          { "used": "KAR_009", "reason": "fill:second-copy" },
+          { "used": "BOT_531", "reason": "fill:second-copy" },
+          { "used": "UNG_941", "reason": "fill:second-copy" },
+          { "used": "EX1_608", "reason": "fill:second-copy" },
+          { "used": "GVG_123", "reason": "fill:second-copy" },
+          { "used": "BOT_254", "reason": "fill:second-copy" },
+          { "used": "BOT_604", "reason": "fill:second-copy" },
+          { "used": "DAL_576", "reason": "fill:second-copy" },
+          { "used": "DAL_748", "reason": "fill:second-copy" },
+          { "used": "ICC_913", "reason": "fill:second-copy" },
+          { "used": "ICC_093", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "dala_39_aki",
+      "name": "Aki the Brilliant",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_39h",
+      "power": "DALA_BOSS_39p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["passive"],
+      "cards": ["DALA_BOSS_39e"],
+      "deck": {
+        "id": "enc-dala_39_aki",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Aki_the_Brilliant", "read": "2026-11-14", "list": "Normal" }
+      }
+    },
+    {
+      "id": "dala_40_oxana",
+      "name": "Oxana Demonslay",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_40h",
+      "power": "DALA_BOSS_40p",
+      "tier": "3",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["passive"],
+      "deck": {
+        "id": "enc-dala_40_oxana",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Oxana_Demonslay", "read": "2026-11-14", "list": "Normal" }
+      }
+    },
+    {
+      "id": "dala_41_ungan",
+      "name": "Ungan Oddkind",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_41h",
+      "power": "DALA_BOSS_41p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "cards": ["NEW1_032", "NEW1_033", "NEW1_034"],
+      "deck": {
+        "id": "enc-dala_41_ungan",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Ungan_Oddkind", "read": "2026-11-14", "list": "Normal" }
+      }
+    },
+    {
+      "id": "dala_42_pogo",
+      "name": "P.O.G.O.",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_42h",
+      "power": "DALA_BOSS_42p",
+      "tier": "3",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "deck": {
+        "id": "enc-dala_42_pogo",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/P.O.G.O.", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "wiki": "Fel Reaver", "listed": "GVG_016", "used": "GVG_020", "reason": "unscripted" },
+          { "wiki": "Fel Reaver", "listed": "GVG_016", "used": "GVG_020", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "dala_44_erekem",
+      "name": "Erekem",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_44h",
+      "power": "DALA_BOSS_44p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["hiddenZone"],
+      "cards": ["DALA_BOSS_44e"],
+      "deck": {
+        "id": "enc-dala_44_erekem",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Erekem", "read": "2026-11-14", "list": "Normal" }
+      }
+    },
+    {
+      "id": "dala_45_moragg",
+      "name": "Moragg",
+      "provenance": "DALA",
+      "family": "16",
+      "hero": "DALA_BOSS_45h",
+      "power": "DALA_BOSS_45p",
+      "tier": "4",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 8 },
+      "deck": {
+        "id": "enc-dala_45_moragg",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Moragg_(boss)", "read": "2026-11-14", "list": "Normal" }
       }
     }
   ],
