@@ -398,6 +398,9 @@ Guard("G", () =>
     var echo1 = ToHand(g850, g850.Player2, "LOOT_504"); var echo2 = ToHand(g850, g850.Player1, "GIL_145");
     Check("G7b a repeatable spell is never brought below (1): Unstable Evolution (\"Repeatable this turn\") stays (1), Sound the Bells! (Echo, 2) costs (1)",
         echo1.Cost == 1 && echo2.Cost == 1 && DungeonRunEncounters.Repeatable(echo1) && DungeonRunEncounters.Repeatable(echo2) && !DungeonRunEncounters.Repeatable(fireball), echo1.Cost + " " + echo2.Cost);
+    var echoCopy = ToHand(g850, g850.Player2, "LOOT_504t");
+    Check("G7c the copy Unstable Evolution adds to the hand (LOOT_504t, no tag 1114 in the client data) is repeatable too and stays (1)",
+        echoCopy.Cost == 1 && DungeonRunEncounters.Repeatable(echoCopy), echoCopy.Cost.ToString());
     var both = Plan(); both.GlobalRules = new List<string> { "DALA_850", "DALA_866" };
     var gb = Ready(both);
     Check("G8 two rules are both on both players, in the plan's order", gb.EncounterOrNull.GlobalRules.SequenceEqual(new[] { "DALA_850", "DALA_866" }) && DungeonRunGlobalRules.IsActive(gb.Player2, "DALA_850") && DungeonRunGlobalRules.IsActive(gb.Player2, "DALA_866"));

@@ -26,9 +26,13 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 		/// <summary>
 		/// A card that can be played again and again in one turn: the Echo keyword, or "Repeatable this turn" (tag 1114:
-		/// Unstable Evolution). A global cost cut never brings one below (1).
+		/// Unstable Evolution). A global cost cut never brings one below (1). The copy Unstable Evolution puts into the hand
+		/// (LOOT_504t) prints the same text but lacks tag 1114 in the client data, so it is named here: without it Anomaly -
+		/// Arcane cut the copy to (0) and the boss repeated it without end (bp.sh rules01 DALA_850).
 		/// </summary>
-		public static bool Repeatable(IPlayable p) => p.IsEcho || p.Card[(GameTag)1114] != 0;
+		public static bool Repeatable(IPlayable p) => p.IsEcho || p.Card[(GameTag)1114] != 0 || p.Card.Id == UnstableEvolutionCopy;
+
+		private const string UnstableEvolutionCopy = "LOOT_504t";
 
 		private const string Counterspell = "EX1_287";
 
