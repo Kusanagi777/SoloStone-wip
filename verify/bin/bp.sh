@@ -22,6 +22,8 @@
 #                        bp.sh enc09-auto|enc09-finals|enc09-rooms|enc09-cards   (c-bosspilot-enc09)
 #   family 10 modes:     bp.sh enc10|enc10-nab|enc10-seeds|enc10-hagatha        (twice per call)
 #                        bp.sh enc10a|enc10b|enc10-cards|enc10-shrine <k>         (one run per call, k = 1 or 2; then `bp.sh same <mode>`)
+#   family 18 modes:     bp.sh enc18a|enc18b|enc18-finale <k>                     (one run per call, k = 1 or 2; then `bp.sh same <mode>`;
+#                                                                                  enc18-finale on the fixture schedule with the Heist finale enabled)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -75,6 +77,10 @@ CARDS10=GILA_BOSS_23t,GILA_BOSS_26t2,GILA_BOSS_27t,GILA_BOSS_29t,GILA_BOSS_35t,G
 W10=gila_38_cozzlewurt
 PAD10=$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10
 SHR10=gila_26_gnomenapper,gila_27_experiment_3c,gila_29_sazzmi,gila_32_niira,gila_35_chupacabran,gila_36_griselda,gila_22_willie,gila_26_gnomenapper,gila_29_sazzmi
+# family 18 (Dalaran Heist bosses E): the twelve combat rows (the four finale rows have no floor on the shipped schedule, whose
+# finale is disabled: enc18-finale fights them on the fixture schedule with the finale enabled)
+A18=dala_61_saelorn,dala_62_haro,dala_63_dagg,dala_64_biggs,dala_65_valdera,dala_66_marei
+B18=dala_68_lilayell,dala_70_smiggs,dala_71_anarii,dala_72_kazamon,dala_73_hesutu,dala_74_kara
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -214,6 +220,10 @@ enc10-shrine) need $E; once enc10-shrine "$2" BOSS=$PAD10,$SHR10 GAMES=1
   echo "fights against a shrine row (TRLA_209h_*) by the nine rows: $(grep -v "^$W10" "$LOGS/enc10-shrine-$2.txt" | grep -c 'TRLA_209h_') of 9" ;;
 enc10-seeds) need $E; twice enc10-seeds FAMILY=10 SEED_BASE=19000 WATCH=$CARDS10 ;;
 enc10-hagatha) need $E; twice enc10-hagatha BOSS=gila_61_hagatha GAMES=6 WATCH=GILA_BOSS_27t ;;
+enc18a) need $E; once enc18a "$2" BOSS=$A18 ;;
+enc18b) need $E; once enc18b "$2" BOSS=$B18 ;;
+enc18-finale) # the Heist finale (fixture: acts-v3h with its finale enabled): Norroa, Vargoth, Kalec, Khadgar in order, floors 16-19
+  need $E; once enc18-finale "$2" FINALE=1 WATCH=KARA_00_08 SCHEDULE_JSON=$FX/p8f18/fixtures/schedule-finale18.json ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;

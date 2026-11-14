@@ -70,6 +70,11 @@ namespace SabberStoneCore.Actions
 		/// </summary>
 		public const GameTag SetAsideStore = (GameTag)32645;
 		/// <summary>
+		/// On a hero power (Kazamon Steelskin's Steelskin, "You can't damage yourself"): damage its owner's sources deal to its
+		/// owner's hero is prevented. Family 18 (rules in EncounterRules.F18.cs: <see cref="PreventsSelfDamage"/>).
+		/// </summary>
+		public const GameTag SelfDamageImmune = (GameTag)32653;
+		/// <summary>
 		/// On the game: one bit per hooked global rule (EncounterCard.HookIndex) that was applied to this match (family 05:
 		/// DungeonRunGlobalRules.Apply runs a rule's apply hook once; a rule with no player enchantment is active by this mark).
 		/// </summary>

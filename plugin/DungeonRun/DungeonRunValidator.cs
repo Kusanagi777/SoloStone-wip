@@ -1224,6 +1224,10 @@ internal static class DungeonRunValidator
                 if (act.BossHealth.Length != act.Floors || act.BossHealth.Any(h => h < 1)) Fail(at, "bossHealth needs one positive value per fixed boss");
                 if (act.BossMana.Length != act.Floors || act.BossMana.Any(m => m < 0 || m > 10)) Fail(at, "bossMana needs one value 0 to 10 per fixed boss");
                 if (act.TavernAtStart && (act.TavernGold < 0 || act.TavernOffers < 1)) Fail(at, "a finale tavern needs tavern gold 0 or more and at least 1 offer");
+                // Family 18: the finale's own twist (its "twist" key: acts-v3h's DALA_830 The Finale) is checked as an act's.
+                foreach (string id in act.TwistPool.Where(id => schedules?.Rule(id)?.Kind != DungeonRunGlobalRule.KindTwist))
+                    Fail(at, $"twist pool names {id}, which is not a twist rule");
+                if (act.TwistPool.Count > 0 && (act.TwistChance < 1 || act.TwistChance > 100)) Fail(at, $"twist chance {act.TwistChance} must be 1 to 100");
                 foreach (string id in act.FixedBosses) used.Add(id);
                 continue;
             }

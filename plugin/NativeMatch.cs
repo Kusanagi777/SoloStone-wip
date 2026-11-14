@@ -1300,7 +1300,10 @@ public sealed class NativeMatch
     private Random timeoutRandom;
     private readonly HashSet<int> expiredHumanOptions = new HashSet<int>();
     private readonly HashSet<int> expiredHumanChoices = new HashSet<int>();
-    private int HumanTurnSeconds => Game.CurrentPlayer[GameTag.TIMEOUT] == 15 ? 15 : Game.Turn <= 2 ? 45 : 75;
+    // A short turn timer (Nozdormu the Eternal's 15 seconds; family 18: Magistrix Norroa's Kaironomaly, 25): the current
+    // player's TIMEOUT tag when an effect set it short (SabberStoneCore.Actions.EncounterRules.ShortTurnSeconds), else 0.
+    private int ShortTurn => SabberStoneCore.Actions.EncounterRules.ShortTurnSeconds(Game.CurrentPlayer);
+    private int HumanTurnSeconds => ShortTurn > 0 ? ShortTurn : Game.Turn <= 2 ? 45 : 75;
     private long TimerNow => TurnTimerClock?.Invoke() ?? MonotonicMilliseconds;
 
     private void NoteHumanTimerAction()
@@ -1403,7 +1406,7 @@ public sealed class NativeMatch
         humanTimeoutTag = Game.Player1[GameTag.TIMEOUT];
         turnDeadline = Game.CurrentPlayer == Game.Player1 && PlayerTurnTimerEnabled
             ? now + (humanShortFuse ? 7 : HumanTurnSeconds) * 1000L
-            : Game.CurrentPlayer[GameTag.TIMEOUT] == 15 ? now + 15000
+            : ShortTurn > 0 ? now + ShortTurn * 1000L
             : Game.CurrentPlayer == Game.Player2 ? now + 75000 : long.MaxValue;
         if (Game.CurrentPlayer == Game.Player1 && PlayerTurnTimerEnabled)
         {
@@ -1428,7 +1431,7 @@ public sealed class NativeMatch
         if (Game == null || Game.State == State.COMPLETE) { HideNpcRope(); return; }
         if (Game.Step != Step.MAIN_ACTION) return;
         bool npcTurn = Game.CurrentPlayer == Game.Player2;
-        bool shortened = Game.CurrentPlayer[GameTag.TIMEOUT] == 15;
+        bool shortened = ShortTurn > 0;
         if (!npcTurn && !PlayerTurnTimerEnabled) HideNpcRope();
         if (!npcTurn && !shortened && !PlayerTurnTimerEnabled) return;
         // Wait only at the start (animation slush). Once armed, animations/menus/choices cannot pause the human clock.
