@@ -164,7 +164,8 @@ Guard("A", () =>
     Check("A4 the teammates' hidden-steal row holds TRLA_152 and TRLA_190 (TRLA_186, the shrine, keeps its own) and states the hidden zones (the boss's deck and hand, its own-deck ledger, the masked hand, the hand-transfer facts)",
         steal.Ids.SequenceEqual(new[] { "TRLA_152", "TRLA_190" }) && steal.Admit == AdmitScope.Player && steal.Lift == DungeonRunAdmission.RunTeammateLift
         && steal.Reason.Contains("OwnDeckLedger") && steal.Reason.Contains("masks") && steal.Reason.Contains("LOOTA_834") && DungeonRunAdmission.RuleFor("TRLA_190") == steal
-        && DungeonRunAdmission.RuleFor("TRLA_186") != steal && DungeonRunAdmission.RuleFor("TRLA_186").Family == "hidden-steal");
+        // Phase 8 family 13: TRLA_186's own row is boss-hidden-steal (a Rumble Run champion's shrine too).
+        && DungeonRunAdmission.RuleFor("TRLA_186") != steal && DungeonRunAdmission.RuleFor("TRLA_186").Family == "boss-hidden-steal");
     var harpoon = DungeonRunAdmission.RuleFor("TRLA_191");
     Check("A5 TRLA_191's row names SelfCondition.IsNotStartInDeck and no pending requirement", harpoon.Reason.Contains("SelfCondition.IsNotStartInDeck") && harpoon.Requires == null
         && harpoon.Ids.SequenceEqual(new[] { "TRLA_191" }));

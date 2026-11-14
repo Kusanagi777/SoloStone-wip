@@ -121,10 +121,11 @@ Guard("A", () =>
     foreach (string id in Nine)
     {
         var v = V(id, AdmitScope.Player);
-        Check($"A1 {id}: scripted with its form {id}t (3-turn sleeper pointing back), admitted for the run player only, never generated",
+        // Phase 8 family 13: every shrine is a Rumble Run champion's too (the boss-shrine row: the run player and a boss).
+        Check($"A1 {id}: scripted with its form {id}t (3-turn sleeper pointing back), admitted for the run player and (phase 8) a boss, never generated",
             ShrineRules.IsScripted(id) && ShrineRules.FormOf(id) == id + "t" && C(id).Implemented && C(id + "t").Implemented && C(id + "t").Dormant?.Turns == 3
-            && C(id + "t")[(GameTag)1132] == C(id).AssetId && v.Admitted && v.Family == "board-shrine" && v.Rule.NeverGenerated
-            && !V(id, AdmitScope.Boss).Admitted && !V(id, AdmitScope.Generated).Admitted && gen.Contains(id) && gen.Contains(id + "t")
+            && C(id + "t")[(GameTag)1132] == C(id).AssetId && v.Admitted && v.Family == "boss-shrine" && v.Rule.NeverGenerated
+            && V(id, AdmitScope.Boss).Admitted && !V(id, AdmitScope.Generated).Admitted && gen.Contains(id) && gen.Contains(id + "t")
             && V(id + "t", AdmitScope.Player).Family == "board-shrine-form", $"{v.Family} {v.Admitted}");
         var s = NewRun(RowOf(DeckOf(id)), DeckOf(id), 10 + Array.IndexOf(Nine, id));
         var plan = run.BuildPlan(s);
@@ -136,9 +137,10 @@ Guard("A", () =>
         Check($"A3 the client enchantment record {e} is scripted (no effect of its own; the shrine carries it)", C(e).Implemented && C(e).Type == CardType.ENCHANTMENT);
     var ff = C(DungeonRunShrines.Frostfire);
     var fv = V(DungeonRunShrines.Frostfire, AdmitScope.Player);
-    Check("A4 TRLA_129s Frostfire: a scripted 0-cost targeted Mage spell, admitted for the run player only (shrine-token), never generated",
-        ff.Implemented && ff.Type == CardType.SPELL && ff.Cost == 0 && ff.MustHaveTargetToPlay && ff.Class == CardClass.MAGE && fv.Admitted && fv.Family == "shrine-token"
-        && fv.Rule.NeverGenerated && !V(DungeonRunShrines.Frostfire, AdmitScope.Boss).Admitted && gen.Contains(DungeonRunShrines.Frostfire),
+    // Phase 8 family 13: Hex Lord Malacrass's Progeny makes Frostfires for a boss too (the boss-shrine-token row).
+    Check("A4 TRLA_129s Frostfire: a scripted 0-cost targeted Mage spell, admitted for the run player and (phase 8) a boss (boss-shrine-token), never generated",
+        ff.Implemented && ff.Type == CardType.SPELL && ff.Cost == 0 && ff.MustHaveTargetToPlay && ff.Class == CardClass.MAGE && fv.Admitted && fv.Family == "boss-shrine-token"
+        && fv.Rule.NeverGenerated && V(DungeonRunShrines.Frostfire, AdmitScope.Boss).Admitted && gen.Contains(DungeonRunShrines.Frostfire),
         $"{ff.Cost} {ff.MustHaveTargetToPlay} {fv.Family}");
     Check("A4 the shrine-card table names Frostfire as Progeny's", DungeonRunShrines.ShrineCards["TRLA_129"].SequenceEqual(new[] { "TRLA_129s" }));
     var errors = DungeonRunValidator.Validate(data, null);

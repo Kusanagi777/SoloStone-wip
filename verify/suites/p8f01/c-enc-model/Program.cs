@@ -104,9 +104,9 @@ Guard("A", () =>
         string.Join(" | ", oldErrors.Take(3)));
     Check("A3 the encounters follow the custom bosses, whose order is unchanged", data.Bosses.Take(20).Select(b => b.Id).SequenceEqual(old.Bosses.Select(b => b.Id))
         && data.Bosses.Skip(20).All(b => b.IsEncounter) && data.Bosses.Take(20).All(b => !b.IsEncounter && b.Tier == null));
-    Check("A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)", data.Encounters.Take(8).Select(b => b.Id).SequenceEqual(new[] { "ulda_40_icarax", "gila_61_hagatha", "dala_21_whirt", "trl_200_voone",
+    Check("A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; family 13's eight Rumble Run champions beside Voone; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)", data.Encounters.Take(8).Select(b => b.Id).SequenceEqual(new[] { "ulda_40_icarax", "gila_61_hagatha", "dala_21_whirt", "trl_200_voone",
         "loot_35_brandlemar", "loot_48_trapped_room", "gila_25_ivan", "ulda_44_trap_room" }) && data.Encounters.Skip(8).All(b => b.Family != "01")
-        && string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())) == "01:5,07:18,08:17,09:11,10:15,13:1,23:1,24:1",
+        && string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())) == "01:5,07:18,08:17,09:11,10:15,13:9,23:1,24:1",
         string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())));
     var icarax = data.Boss("ulda_40_icarax"); var hagatha = data.Boss("gila_61_hagatha"); var whirt = data.Boss("dala_21_whirt"); var voone = data.Boss("trl_200_voone");
     Check("A5 Icarax: 300 fixed Health, two more forms at 200 and 100 with their own heroes, powers and decks", icarax.Health == 300 && icarax.FixedHealth && icarax.Forms.Count == 2
@@ -148,7 +148,8 @@ Refused("B8 persistentDamage with no Health of its own", d => { var b = d.Boss("
 Refused("B9 form thresholds that do not fall", d => d.Boss("ulda_40_icarax").Forms[1].HealthAtMost = 250, "does not fall below");
 Refused("B10 a form with two entry conditions", d => d.Boss("ulda_40_icarax").Forms[0].OnDeath = true, "needs exactly one");
 Refused("B11 flag forms without forms", d => d.Boss("dala_21_whirt").Flags.Add("forms"), "flag forms and the forms");
-Refused("B12 a shrine variant the table does not admit for a boss", d => d.Boss("trl_200_voone").Variants[0].Shrine = "TRLA_115", "admission board-shrine");
+// Phase 8 family 13 admitted every board shrine for a boss: the TRLA_107 fixture (scripted, admitted for no side) stands for a shrine the table refuses.
+Refused("B12 a shrine variant the table does not admit for a boss", d => d.Boss("trl_200_voone").Variants[0].Shrine = "TRLA_107", "admission board-shrine-form");
 Refused("B13 an unscripted shrine", d => d.Boss("trl_200_voone").Variants[0].Shrine = "TRLA_200h", "not a scripted board shrine");
 Refused("B14 a hero card that is not scripted as one", d => d.Boss("gila_61_hagatha").HeroCards[0].Hero = "GILA_900h2", "not scripted as a fight-only hero card");
 Refused("B15 a hero card passive that is no passive treasure", d => d.Boss("gila_61_hagatha").HeroCards[0].Passives[0] = "CS2_029", "is not a passive treasure");
@@ -252,7 +253,7 @@ Guard("D", () =>
 Guard("E", () =>
 {
     var v3 = data.Schedules.Find("acts-v3h");
-    bool distinct = true, known = true, deterministic = true, whirtActs = true, majors = true, voone = true; int withWhirt = 0, withVoone = 0, hagatha = 0, icarax = 0;
+    bool distinct = true, known = true, deterministic = true, whirtActs = true, majors = true, voone = true; int withWhirt = 0, withVoone = 0, withRumble = 0, hagatha = 0, icarax = 0;
     // A major slot follows the mix as every slot does: it takes the provenance the run holds fewer bosses of so far (the
     // encounter major or a custom boss; a tie is the slot's seeded order). Family 10 put Monster Hunt rows into the combat
     // tiers, so Hagatha is no longer the act II major of every run (she was while no other GIL row could be drawn before her).
@@ -272,6 +273,7 @@ Guard("E", () =>
         int w = seq.IndexOf("dala_21_whirt"), vo = seq.IndexOf("trl_200_voone");
         if (w >= 0) { withWhirt++; whirtActs &= w >= 7 && w <= 11 && w != 9; }          // mix-4 (floors 8-9) or mix-5 (floors 11-12)
         if (vo >= 0) { withVoone++; voone &= vo >= 2 && vo <= 6 && vo != 4; }             // mix-2 (floors 3-4) or mix-3 (floors 6-7)
+        if (seq.Any(id => data.Boss(id).Provenance == "TRL")) withRumble++;                // family 13: nine Rumble Run rows over the four tiers
         // Family 09: the act I major is a custom band-3 boss or one of the five Dungeon Run final bosses (enc-major1).
         majors &= MajorByMix(seq, 9, "gila_61_hagatha", "band3") && MajorByMix(seq, 14, "ulda_40_icarax", "final") && (data.Boss(seq[4]).Pools.Contains("band3") || data.Boss(seq[4]).Pools.Contains("enc-major1"));
         if (seq[9] == "gila_61_hagatha") hagatha++;
@@ -279,8 +281,9 @@ Guard("E", () =>
     }
     Check("E1 1000 seeds: 15 distinct known bosses each, and the same seed gives the same sequence", distinct && known && deterministic);
     Check("E2 an encounter lands only on floors whose pool set holds its tier", whirtActs && voone, $"whirt in {withWhirt}, voone in {withVoone}");
-    Check("E3 the least-used provenance is drawn first: every run meets Whirt and Voone (the only Heist and Rumble rows), and each major is of the provenance the run holds fewer bosses of (act II: Hagatha or a custom band3 boss; act III: Icarax or a custom final)",
-        withWhirt == 1000 && withVoone == 1000 && majors && hagatha > 0 && icarax > 0, $"whirt in {withWhirt}, voone in {withVoone}, Hagatha the act II major in {hagatha}, Icarax the act III major in {icarax}");
+    // Family 13 put eight more Rumble Run rows into the four tiers: every run still meets a Rumble Run row, Voone in some runs only.
+    Check("E3 the least-used provenance is drawn first: every run meets Whirt (the only Heist row) and a Rumble Run row, and each major is of the provenance the run holds fewer bosses of (act II: Hagatha or a custom band3 boss; act III: Icarax or a custom final)",
+        withWhirt == 1000 && withRumble == 1000 && withVoone > 0 && majors && hagatha > 0 && icarax > 0, $"whirt in {withWhirt}, a Rumble Run row in {withRumble}, voone in {withVoone}, Hagatha the act II major in {hagatha}, Icarax the act III major in {icarax}");
     // Persistent damage steers the act III major on a run that reads the ledger: a second lord (a fixture clone) with banked damage is taken first.
     var d2 = Load(encounters: encountersJson);
     var clone = d2.Boss("ulda_40_icarax");
@@ -386,11 +389,15 @@ Guard("G", () =>
     d.Schedules.Rule("DALA_864").NoBoardShrine = true;
     d.Schedules.Rule("DALA_866").IncompatibleRules.Add("DALA_864");
     var r = new DungeonRun(d);
-    var withVoone = V3(r, "MAGE", 4001);
-    int vooneAct = (withVoone.BossSequence.IndexOf("trl_200_voone") / 5) + 1;
+    // Family 13: the nine Rumble Run rows carry the shrine flag, so the run is the first from seed 4001 that meets Voone and has an act with no shrine row.
+    int ShrineFreeAct(DungeonRunState st) => Enumerable.Range(1, 3).FirstOrDefault(a => st.BossSequence.Skip((a - 1) * 5).Take(5).All(id => !d.Boss(id).HasFlag("shrine")));
+    long g10Seed = 4001;
+    var withVoone = V3(r, "MAGE", g10Seed);
+    while (g10Seed < 4400 && (!withVoone.BossSequence.Contains("trl_200_voone") || ShrineFreeAct(withVoone) == 0)) withVoone = V3(r, "MAGE", ++g10Seed);
+    int vooneAct = (withVoone.BossSequence.IndexOf("trl_200_voone") / 5) + 1, freeAct = ShrineFreeAct(withVoone);
     var sch = r.ScheduleFor(withVoone);
-    Check("G10 a rule a boss flag excludes is left out of that boss's act only", !r.RuleCandidates(withVoone, sch, vooneAct, "anomaly").Any(x => x.Id == "DALA_850")
-        && r.RuleCandidates(withVoone, sch, 3, "anomaly").Any(x => x.Id == "DALA_850"), "voone act " + vooneAct);
+    Check("G10 a rule a boss flag excludes is left out of that boss's act only", freeAct > 0 && !r.RuleCandidates(withVoone, sch, vooneAct, "anomaly").Any(x => x.Id == "DALA_850")
+        && r.RuleCandidates(withVoone, sch, freeAct, "anomaly").Any(x => x.Id == "DALA_850"), "seed " + g10Seed + " voone act " + vooneAct + " shrine-free act " + freeAct);
     var shrineDeck = d.Decks.First(x => x.Shrine != null && d.FindClass(x.Class) != null);
     var shrineRun = r.NewRun(All(d), shrineDeck.Class, shrineDeck.Id, d.Class(shrineDeck.Class).Powers[0], 4002, schedule: "acts-v3h");
     Check("G11 a board-shrine run on acts-v3h keeps its shrine and is never offered a rule that excludes shrine runs", shrineRun.BoardShrine == shrineDeck.Shrine
@@ -607,9 +614,10 @@ Guard("J", () =>
     var p21 = DungeonRunAdmission.Classify(null, "DALA_BOSS_21p", AdmitScope.Boss, null, catalogRun: true);
     var p21legacy = DungeonRunAdmission.Classify(null, "DALA_BOSS_21p", AdmitScope.Boss, null);
     Check("J8 DALA_BOSS_21p: admitted for a boss on a catalog run with the generated-Secrets need, rejected on a legacy run", p21.Admitted && p21.Rule.BossNeeds == DungeonRunAdmission.BossNeedsGeneratedSecrets && !p21legacy.Admitted);
-    Check("J9 the three Warrior shrines are admitted for the run player and for a boss; the other shrines for the run player only",
-        new[] { "TRLA_104", "TRLA_170", "TRLA_171" }.All(id => DungeonRunAdmission.Classify(null, id, AdmitScope.Boss, null, catalogRun: true).Admitted && DungeonRunAdmission.Classify(null, id, AdmitScope.Player, null, catalogRun: true).Admitted)
-        && !DungeonRunAdmission.Classify(null, "TRLA_115", AdmitScope.Boss, null, catalogRun: true).Admitted && DungeonRunAdmission.Classify(null, "TRLA_115", AdmitScope.Player, null, catalogRun: true).Admitted);
+    // Family 13 admitted the other 24 shrines for a boss (the Rumble Run champions' variants); the TRLA_107 fixture stays admitted for no side.
+    Check("J9 the three Warrior shrines (family 01) and the other 24 (family 13) are admitted for the run player and for a boss; the TRLA_107 fixture for neither",
+        ShrineRules.Scripted.Where(id => id != DungeonRunShrines.FixtureShrine).All(id => DungeonRunAdmission.Classify(null, id, AdmitScope.Boss, null, catalogRun: true).Admitted && DungeonRunAdmission.Classify(null, id, AdmitScope.Player, null, catalogRun: true).Admitted)
+        && ShrineRules.Scripted.Count == 28 && !DungeonRunAdmission.Classify(null, "TRLA_107", AdmitScope.Boss, null, catalogRun: true).Admitted && !DungeonRunAdmission.Classify(null, "TRLA_107", AdmitScope.Player, null, catalogRun: true).Admitted);
     Check("J10 the three anomalies are admitted as rules only and never generated", new[] { "DALA_850", "DALA_864", "DALA_866" }.All(id => DungeonRunAdmission.Classify(null, id, AdmitScope.Rule).Admitted
         && !DungeonRunAdmission.Classify(null, id, AdmitScope.Player).Admitted && !DungeonRunAdmission.Classify(null, id, AdmitScope.Boss).Admitted && DungeonRunAdmission.GeneratedRejects(true).Contains(id)));
     Check("J11 the hunters' hero cards are the run player's only; Toki's is rejected with the phase-9 lift", DungeonRunAdmission.Classify(null, "GILA_500h4", AdmitScope.Player).Admitted

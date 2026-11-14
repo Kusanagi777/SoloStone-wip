@@ -144,8 +144,9 @@ Guard("A", () =>
     foreach (string id in Six)
     {
         var v = V(id, AdmitScope.Player);
-        // Phase 8 family 01: the three Warrior shrines are a boss's too (War Master Voone's variants; the boss-shrine row).
-        bool bossShrine = id == "TRLA_104" || id == "TRLA_170" || id == "TRLA_171";
+        // Phase 8 family 01: the three Warrior shrines are a boss's too (War Master Voone's variants; the boss-shrine row). Phase 8
+        // family 13: so are the Hunter shrines (Zul'jin's variants; TRLA_110 on a catalog run, with the boss's generated Secrets).
+        bool bossShrine = true;
         Check($"A1 {id}: scripted with its form {id}t (3-turn sleeper pointing back), admitted for the run player ({(bossShrine ? "and, since phase 8, a boss" : "only")}), never generated",
             ShrineRules.IsScripted(id) && C(id).Implemented && C(id + "t").Implemented && C(id + "t").Dormant?.Turns == 3 && C(id + "t")[(GameTag)1132] == C(id).AssetId
             && v.Admitted && v.Family == (bossShrine ? "boss-shrine" : "board-shrine") && v.Rule.NeverGenerated && V(id, AdmitScope.Boss).Admitted == bossShrine && !V(id, AdmitScope.Generated).Admitted

@@ -322,46 +322,9 @@ internal static partial class DungeonRunAdmission
         // shrine upgrade a run reward, a teammate a run deck card. None is a boss card or a generation result. Each family
         // (S1/S2/S3 shrines, U upgrades, T1/T2 teammates, D companions) moves its ids to the admitted rows as it scripts them; the
         // D ids sit in their admission families' rows above (TRLA_809 deck-wide-change, the companions start-of-game-draw).
-        new AdmissionRule
-        {
-            NeverGenerated = true,
-            Family = "board-shrine", Admit = AdmitScope.Player, Lift = BossShrineLift,
-            Reason = "the run player's board shrine: placed at Start of Game by ShrineRules, sent dormant (the slot it left) when it dies "
-                + "or would be transformed, bounced or shuffled, revived at full Health after three owner's turns; the boss sees a public "
-                + "minion and its search reproduces dormancy and revival through the engine projection (c-shrine-core S1-S12); its "
-                + "effects are public engine resolution: Armor-equal Attack (TRLA_104), Dragon cost cuts (TRLA_170), aura-granted Overkill "
-                + "(TRLA_162, TRLA_171: OverkillRules), a random keyword on summoned Beasts (TRLA_163), and TRLA_110's Hunter Secrets put "
-                + "into play by the run player (a board-shrine run is a catalog run, whose player may generate Secrets; the boss's "
-                + "Secret prior holds every Hunter Secret that generation can yield, GeneratedSecretPool) (c-shrines-S1); Spell Damage "
-                + "from the spells in hand (TRLA_108), a free Hero Power refreshed by a kill (TRLA_128), a Frostfire per freeze the run "
-                + "player causes (TRLA_129), Divine Shield after surviving damage (TRLA_105), 5 damage to the boss's hero after the run "
-                + "player's hero takes damage (TRLA_137, recursion-guarded), a copy of a spell cast on a friendly minion cast on the "
-                + "shrine (TRLA_138: RecastRules), Deathrattles two extra times (TRLA_114), a random Priest spell after each spell "
-                + "(TRLA_146: the run's generation filter), any healing of the boss's characters damages them, the boss's own heals, Lifesteal and restore passives included (TRLA_147) (c-shrines-S2, c-p7fix); "
-                + "Stealth on the run player's other minions and a +2 Attack Deathrattle when it goes dormant (TRLA_106), each spell "
-                + "cast again on the same target (TRLA_187: RecastRules, never recursive), the Overload amount as Attack for the run "
-                + "player's minions (TRLA_109), Battlecries two extra times (TRLA_154: EXTRA_BATTLECRIES_ADDITIONAL, BattlecryRules), "
-                + "spells (2) cheaper (TRLA_155), spells paid with Health (TRLA_113: SPELLS_COST_HEALTH), a random Demon per discard "
-                + "through the run's generation filter (TRLA_178), damage to the run player's hero on their own turn dealt to the boss's "
-                + "hero instead (TRLA_179); the boss sees each result as a public board, hand-count or Health change (c-shrines-S3)",
-            // Phase 8 moves a shrine to a boss-shrine row (DungeonRunAdmission.F<NN>.cs) as its boss-side test lands: TRLA_104,
-            // TRLA_170 and TRLA_171 (the Warrior shrines, family 01); the others follow in family 13.
-            Ids = new[] { "TRLA_105", "TRLA_106", "TRLA_108", "TRLA_109", "TRLA_110", "TRLA_112", "TRLA_113", "TRLA_114", "TRLA_115",
-                "TRLA_116", "TRLA_128", "TRLA_129", "TRLA_137", "TRLA_138", "TRLA_146", "TRLA_147", "TRLA_154", "TRLA_155", "TRLA_162", "TRLA_163",
-                "TRLA_178", "TRLA_179", "TRLA_187" },
-        },
-        new AdmissionRule
-        {
-            NeverGenerated = true,
-            Family = "hidden-steal", Admit = AdmitScope.Player, Lift = BossShrineLift,
-            Reason = "takes a hidden card from the opponent's deck: TRLA_186 Treasure from Below, the run player's board shrine, steals a "
-                + "random card of the boss's deck at the start of the run player's turn (it costs (2) less). Only the run player holds "
-                + "it (never a boss card or a generation result). The boss learns only what is public: a card left its deck (its "
-                + "own-deck ledger, OwnDeckLedger, drops an unknown slot by the deck count, never the stolen definition) and the run "
-                + "player's hand grew by a card its fair view masks like every other card there; the search never sees the stolen "
-                + "identity (c-shrines-S3 G9-G15)",
-            Ids = new[] { "TRLA_186" },
-        },
+        // Phase 8 moved every board shrine to its boss-shrine rows (DungeonRunAdmission.F01.cs: the three Warrior shrines; F13.cs:
+        // the other 24, with TRLA_186 and TRLA_129s), which emptied the phase-7 rows board-shrine, hidden-steal (TRLA_186) and
+        // shrine-token.
         new AdmissionRule
         {
             NeverGenerated = true,
@@ -374,15 +337,6 @@ internal static partial class DungeonRunAdmission
                 + "random card of the boss's hand to the run player's by the hand-to-hand theft rule of Gloves of Mugging (LOOTA_834: "
                 + "the hand-transfer facts, so the boss knows what left its own hand; c-teammates-T2 O3-O8)",
             Ids = new[] { "TRLA_152", "TRLA_190" },
-        },
-        new AdmissionRule
-        {
-            NeverGenerated = true,
-            Family = "shrine-token", Admit = AdmitScope.Player, Lift = BossShrineLift,
-            Reason = "a card a run board shrine makes for its owner during the game (TRLA_129s Frostfire: TRLA_129 Jan'alai's Progeny puts "
-                + "one into the run player's hand per freeze they cause); a public 0-cost 'Deal 1 damage' spell in the run player's hand, "
-                + "never a boss card or a generation result (c-shrines-S2)",
-            Ids = new[] { "TRLA_129s" },
         },
         new AdmissionRule
         {

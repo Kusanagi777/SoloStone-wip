@@ -10,9 +10,9 @@ One ledger for the unified Dungeon Run (gap review 2026-11-10, implementation st
 | --- | ---: |
 | Reference-CSV records (original adventure ids) | 2,050 |
 | Original bucket / starter / finale-deck / loadout cards and labels not in the CSV | 1,791 |
-| Of those, original cards also in SoloStone's current pool | 973 |
-| SoloStone-only rows (run catalog entries and current pool cards) | 863 |
-| **Total rows** | **4,704** |
+| Of those, original cards also in SoloStone's current pool | 1,093 |
+| SoloStone-only rows (run catalog entries and current pool cards) | 878 |
+| **Total rows** | **4,719** |
 
 The reference CSV has 2,050 records and every one is a row. 22 bucket labels without a CSV record (Monster Hunt's Darius and Toki labels) were added as `label:` rows. A card that has several provenances is one row whose `adventures`, `roles`, `buckets` and `decks` columns list all of them.
 
@@ -20,12 +20,12 @@ The reference CSV has 2,050 records and every one is a row. 22 bucket labels wit
 
 | Classification | Rows | Original (non-SoloStone) rows | SoloStone rows |
 | --- | ---: | ---: | ---: |
-| implemented | 2,813 | 2,192 | 1,867 |
-| partial | 295 | 146 | 163 |
-| missing | 538 | 538 | 0 |
+| implemented | 2,813 | 2,192 | 1,988 |
+| partial | 311 | 147 | 178 |
+| missing | 537 | 537 | 0 |
 | duplicate/support | 1,058 | 965 | 228 |
 | intentionally adapted | 0 | 0 | 0 |
-| **Total** | 4,704 | 3,841 | 2,258 |
+| **Total** | 4,719 | 3,841 | 2,394 |
 
 A row with several adventures counts once in each column it belongs to, so the last two columns can overlap.
 
@@ -35,27 +35,27 @@ A row with several adventures counts once in each column it belongs to, so the l
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Dungeon Run | 940 | 70 | 49 | 133 | 0 | 1,192 |
 | Monster Hunt | 513 | 27 | 116 | 109 | 0 | 765 |
-| Rumble Run | 979 | 0 | 10 | 163 | 0 | 1,152 |
+| Rumble Run | 979 | 1 | 9 | 163 | 0 | 1,152 |
 | The Dalaran Heist | 1,433 | 22 | 185 | 284 | 0 | 1,924 |
 | Tombs of Terror | 1,128 | 27 | 178 | 276 | 0 | 1,609 |
-| SoloStone | 1,867 | 163 | 0 | 228 | 0 | 2,258 |
+| SoloStone | 1,988 | 178 | 0 | 228 | 0 | 2,394 |
 
 ### Classification by role
 
 | Role | implemented | partial | missing | duplicate/support | intentionally adapted | Rows |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | bucket member | 1,713 | 0 | 0 | 0 | 0 | 1,713 |
+| card | 837 | 103 | 37 | 0 | 0 | 977 |
 | starter | 809 | 0 | 0 | 0 | 0 | 809 |
-| card | 630 | 96 | 37 | 0 | 0 | 763 |
 | bucket label | 0 | 0 | 0 | 440 | 0 | 440 |
 | enchantment | 0 | 0 | 0 | 396 | 0 | 396 |
-| boss power | 20 | 69 | 192 | 85 | 0 | 366 |
+| boss power | 20 | 70 | 191 | 85 | 0 | 366 |
 | boss hero | 0 | 0 | 263 | 31 | 0 | 294 |
 | finale deck | 232 | 2 | 0 | 0 | 0 | 234 |
 | treasure | 195 | 0 | 2 | 19 | 0 | 216 |
 | boss deck | 172 | 0 | 0 | 0 | 0 | 172 |
 | bundle member | 156 | 0 | 0 | 0 | 0 | 156 |
-| boss | 20 | 69 | 0 | 0 | 0 | 89 |
+| boss | 20 | 77 | 0 | 0 | 0 | 97 |
 | hero power | 76 | 0 | 1 | 0 | 0 | 77 |
 | passive treasure | 75 | 0 | 2 | 0 | 0 | 77 |
 | boss card | 0 | 27 | 37 | 0 | 0 | 64 |
@@ -109,11 +109,11 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Monster Hunt | final boss |  |  | 1 |  |  | 1 |
 | Monster Hunt | portrait |  |  |  | 4 |  | 4 |
 | Rumble Run | bucket member | 804 |  |  |  |  | 804 |
-| Rumble Run | starter | 234 |  |  |  |  | 234 |
 | Rumble Run | card | 1 |  |  |  |  | 1 |
+| Rumble Run | starter | 234 |  |  |  |  | 234 |
 | Rumble Run | bucket label |  |  |  | 92 |  | 92 |
 | Rumble Run | enchantment |  |  |  | 41 |  | 41 |
-| Rumble Run | boss power |  |  | 1 |  |  | 1 |
+| Rumble Run | boss power |  | 1 |  |  |  | 1 |
 | Rumble Run | boss hero |  |  | 9 |  |  | 9 |
 | Rumble Run | teammate | 54 |  |  |  |  | 54 |
 | Rumble Run | hero | 9 |  |  | 1 |  | 10 |
@@ -124,8 +124,8 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Rumble Run | portrait |  |  |  | 1 |  | 1 |
 | Rumble Run | shrine upgrade | 9 |  |  |  |  | 9 |
 | The Dalaran Heist | bucket member | 1,280 |  |  |  |  | 1,280 |
-| The Dalaran Heist | starter | 262 |  |  |  |  | 262 |
 | The Dalaran Heist | card | 9 |  | 9 |  |  | 18 |
+| The Dalaran Heist | starter | 262 |  |  |  |  | 262 |
 | The Dalaran Heist | bucket label |  |  |  | 108 |  | 108 |
 | The Dalaran Heist | enchantment |  |  |  | 115 |  | 115 |
 | The Dalaran Heist | boss power |  | 1 | 75 | 47 |  | 123 |
@@ -141,8 +141,8 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | The Dalaran Heist | support |  |  |  | 4 |  | 4 |
 | The Dalaran Heist | twist |  | 4 | 1 |  |  | 5 |
 | Tombs of Terror | bucket member | 983 |  |  |  |  | 983 |
-| Tombs of Terror | starter | 124 |  |  |  |  | 124 |
 | Tombs of Terror | card | 6 |  | 6 |  |  | 12 |
+| Tombs of Terror | starter | 124 |  |  |  |  | 124 |
 | Tombs of Terror | bucket label |  |  |  | 88 |  | 88 |
 | Tombs of Terror | enchantment |  |  |  | 120 |  | 120 |
 | Tombs of Terror | boss power |  | 4 | 85 | 38 |  | 127 |
@@ -161,15 +161,15 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Tombs of Terror | final boss |  |  | 5 |  |  | 5 |
 | Tombs of Terror | portrait |  |  |  | 8 |  | 8 |
 | Tombs of Terror | twist |  | 4 |  |  |  | 4 |
+| SoloStone | card | 821 | 101 |  |  |  | 922 |
 | SoloStone | starter | 791 |  |  |  |  | 791 |
-| SoloStone | card | 614 | 94 |  |  |  | 708 |
 | SoloStone | enchantment |  |  |  | 166 |  | 166 |
 | SoloStone | boss power | 20 |  |  |  |  | 20 |
 | SoloStone | boss hero |  |  |  | 18 |  | 18 |
 | SoloStone | treasure | 195 |  |  | 19 |  | 214 |
 | SoloStone | boss deck | 172 |  |  |  |  | 172 |
 | SoloStone | bundle member | 156 |  |  |  |  | 156 |
-| SoloStone | boss | 20 | 69 |  |  |  | 89 |
+| SoloStone | boss | 20 | 77 |  |  |  | 97 |
 | SoloStone | hero power | 67 |  |  |  |  | 67 |
 | SoloStone | passive treasure | 74 |  |  |  |  | 74 |
 | SoloStone | bundle | 52 |  |  |  |  | 52 |
@@ -186,9 +186,9 @@ Empty cells are zero. A row is counted under each adventure-role pair it carries
 
 | gaps | partial rows | of which original (non-SoloStone) |
 | --- | ---: | ---: |
-| reach | 295 | 146 |
+| reach | 311 | 147 |
 
-75 partial rows are collectible cards that only need a place in the draft catalog (engine, AI and admission already pass).
+82 partial rows are collectible cards that only need a place in the draft catalog (engine, AI and admission already pass).
 
 ## Blocking capability gaps
 
@@ -201,39 +201,39 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `ai:global-rule-rejected` | 1 | 0 | 0 | Admission family `global-rule-rejected`: Glittering ("After a player plays a card that costs (8) or more, that player adds a Treasure to their hand"): the wiki states the pool is the Dalaran Heist treasures, which are run rewards the table admits for the run player's run deck only (no boss and no generation pool may hold one: RunTreasureLift), and several of them write run state (DALA_718, DALA_719, DALA_721). A rule for both players needs each treasure admitted for a boss and as a generation result; until then the rule is rejected in schedule-v1.json and not scripted (admitted: none; lifted by phase 8 (encounters/anomalies): the Dalaran Heist active treasures admitted for a boss and as a generation result (the treasure-on-boss work of the encounter families that give a boss treasure cards: LOOTA_BOSS_99p, Ol' Toomba); DALA_857). |
 | `ai:start-of-game-draw` | 1 | 0 | 0 | Admission family `start-of-game-draw`: ends the fight and edits the run deck (admitted: none; lifted by phase 9 (economy): a run-owned match exit (an escape outcome and a skipped fight node) that edits the run deck (deferred there by phase 6); ULDA_111). |
 | `ai:treasure-data-gap` | 1 | 0 | 0 |  |
-| `engine:unscripted` | 275 | 0 | 0 | No engine script for the card id (CardDefs has no implemented entry). |
+| `engine:unscripted` | 274 | 0 | 0 | No engine script for the card id (CardDefs has no implemented entry). |
 | `validation:rule-rejected` | 1 | 0 | 0 | Current DungeonRunValidator admission rule `rule-rejected` rejects the card. |
-| `run:encounter-roster` | 422 | 0 | 0 | Original encounters: boss heroes, powers, special cards and setups in the encounter pool. |
-| `run:default-schedule` | 286 | 190 | 73 | Placed on the version-3 schedules (acts-v3h, acts-v3t), which a new run follows only once schedule-v1.json "defaults" names them (the phase-8 close-out, after the encounter families fill the pools and enable the finales). |
-| `run:adventure-cards` | 133 | 0 | 73 | Adventure-only cards (boss/treasure support cards in the original namespaces) that need an owning feature to appear. |
+| `run:encounter-roster` | 413 | 0 | 0 | Original encounters: boss heroes, powers, special cards and setups in the encounter pool. |
+| `run:default-schedule` | 302 | 199 | 80 | Placed on the version-3 schedules (acts-v3h, acts-v3t), which a new run follows only once schedule-v1.json "defaults" names them (the phase-8 close-out, after the encounter families fill the pools and enable the finales). |
+| `run:adventure-cards` | 140 | 0 | 80 | Adventure-only cards (boss/treasure support cards in the original namespaces) that need an owning feature to appear. |
 | `run:global-rules` | 10 | 8 | 0 | Anomalies and chapter twists as validated global rules on the match plan. |
 | `run:special-finales` | 7 | 2 | 2 | Special finales (Tekahn Inner Sanctum hand-off, Hagatha, Heist finale). |
 | `run:treasure-content` | 4 | 0 | 0 | Original passive and active treasures as run content entries (DungeonRunContent + run-v1.json). |
 | `run:deck-mutation` | 3 | 0 | 0 | Persistent run-deck mutation and run-scoped state ("Dungeon Deck", "this run", bosses defeated). |
 | `run:tavern` | 2 | 0 | 0 | Bob's tavern services between fights (deck edits, recruits). |
 | `run:adventure-heroes` | 1 | 0 | 0 | The 18 adventure heroes and their special player powers. |
-| `data:original-boss-decks-absent` | 193 | 0 | 0 | Original boss decks are server-side: the client database has none, so an encounter needs a reconstructed deck. |
+| `data:original-boss-decks-absent` | 185 | 0 | 0 | Original boss decks are server-side: the client database has none, so an encounter needs a reconstructed deck. |
 
-764 rows carry at least one gap.
+771 rows carry at least one gap.
 
 ### AI support
 
 | ai_support | Rows |
 | --- | ---: |
-| ok | 2,692 |
+| ok | 2,707 |
 | not applicable | 1,058 |
-| unknown:unscripted | 270 |
+| unknown:unscripted | 269 |
 | ok:run-treasure | 117 |
 | ok:secret-card | 42 |
 | ok:teammate | 41 |
 | ok:run-hero-power | 31 |
 | ok:secret-from-deck | 29 |
+| ok:boss-shrine | 26 |
 | ok:global-rule-symmetric | 24 |
-| ok:board-shrine (player only; boss after phase 8 (encounters/anomalies): boss shrine rosters (BossShrineLift); the run player's only until then) | 23 |
 | ok:boss-card | 17 |
 | ok:from-own-deck | 17 |
+| ok:boss-power-public | 16 |
 | ok:collectible-public | 16 |
-| ok:boss-power-public | 15 |
 | ok:run-treasure-evolving | 15 |
 | ok:run-treasure-boss-find | 14 |
 | ok:start-of-game-draw | 14 |
@@ -262,7 +262,6 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:boss-own-hand-power | 3 |
 | ok:boss-power-own-hand | 3 |
 | ok:boss-room | 3 |
-| ok:boss-shrine | 3 |
 | ok:collectible-own-deck | 3 |
 | ok:deck-condition | 3 |
 | ok:generated-pool | 3 |
@@ -301,7 +300,9 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:boss-craft | 1 |
 | ok:boss-extra-turn | 1 |
 | ok:boss-form | 1 |
+| ok:boss-hidden-steal | 1 |
 | ok:boss-setaside-store | 1 |
+| ok:boss-shrine-token | 1 |
 | ok:boss-token | 1 |
 | ok:boss-token (boss only; player after none: boss decks only; no player role offers it) | 1 |
 | ok:boss-treasure-find | 1 |
@@ -314,7 +315,6 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:hidden-deck-summon | 1 |
 | ok:hidden-hand-discover | 1 |
 | ok:hidden-reveal | 1 |
-| ok:hidden-steal (player only; boss after phase 8 (encounters/anomalies): boss shrine rosters (BossShrineLift); the run player's only until then) | 1 |
 | ok:opening-hand | 1 |
 | ok:own-graveyard | 1 |
 | ok:random-cast | 1 |
@@ -332,7 +332,6 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:run-treasure-side-shuffle | 1 |
 | ok:secret-destroy (boss only; player after none: boss decks only (Mushhuckster Max's list); the run player's pools and generation keep it out) | 1 |
 | ok:secret-named | 1 |
-| ok:shrine-token (player only; boss after phase 8 (encounters/anomalies): boss shrine rosters (BossShrineLift); the run player's only until then) | 1 |
 | ok:spell-recast | 1 |
 | ok:text-only | 1 |
 | ok:wrong-target | 1 |
@@ -359,10 +358,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `deck-wide-change` | player | rewrites every card in the owner's deck; the boss's own-deck ledger (OwnDeckLedger.Sample) does not carry the rewrite yet | phase 8 (encounters/anomalies): the first boss decks that use deck-wide rewrites (encounter families) bring the boss's own-deck ledger for deck-wide rewrites and removals |  | 8 of 8 |
 | `deck-wide-change` | player | a shrine upgrade (phase 7 D): a run reward of a board-shrine run (the shrine-upgrade draft), applied at match start as its client player enchantment (TRLA_809e), never a hero power, a passive treasure or a generation result; every run shrine of the run player carries its grant TRLA_809e2, whose Deathrattle, as the shrine goes dormant, gives each minion in the run player's in-game deck +1/+1 (TRLA_809e3; the run deck records are unchanged; the Deathrattle doublers repeat it). Only the run player holds it; the boss's search reads the buffs as engine state of the run player's cards when they are drawn, and the boss side waits for its own-deck ledger (OwnDeckLedger.Sample does not carry a deck-wide rewrite yet) (c-companions-D U1-U9) | phase 8 (encounters/anomalies): the first boss decks that use deck-wide rewrites (encounter families) bring the boss's own-deck ledger for deck-wide rewrites and removals |  | 1 of 1 |
 | `start-of-game-draw` | player | a Rumble Run start-of-game companion (phase 7 D), the sixth teammate of its class: a run deck card the teammate draft adds on a board-shrine run, only the run player holds it (never a boss card or a generation result); drawn at the start of the game (StartOfGameRules, a self-drawing source never dealt in an opening hand), after both mulligans, after the board shrine and the Start of Game treasures and before the first decision, so the draw is revealed to both players; then a public card: 2 full Mana Crystals on death (TRLA_121), Rush for the owner's Beasts (TRLA_164), the basic Hero Power upgraded (TRLA_135), a Truesilver Champion equipped (TRLA_139), +1/+1 to a random friendly minion on death (TRLA_148), Immune (TRLA_188), the Overloaded Mana Crystals unlocked (TRLA_156), the owner's hero Immune on the owner's turn (TRLA_180), Taunt for its neighbours (TRLA_172); the boss sees each result as a public board, hero, weapon, Mana or hero-power change (c-companions-D) | none: a run teammate; no boss deck or generation pool offers it |  | 9 of 9 |
-| `board-shrine` | player | the run player's board shrine: placed at Start of Game by ShrineRules, sent dormant (the slot it left) when it dies or would be transformed, bounced or shuffled, revived at full Health after three owner's turns; the boss sees a public minion and its search reproduces dormancy and revival through the engine projection (c-shrine-core S1-S12); its effects are public engine resolution: Armor-equal Attack (TRLA_104), Dragon cost cuts (TRLA_170), aura-granted Overkill (TRLA_162, TRLA_171: OverkillRules), a random keyword on summoned Beasts (TRLA_163), and TRLA_110's Hunter Secrets put into play by the run player (a board-shrine run is a catalog run, whose player may generate Secrets; the boss's Secret prior holds every Hunter Secret that generation can yield, GeneratedSecretPool) (c-shrines-S1); Spell Damage from the spells in hand (TRLA_108), a free Hero Power refreshed by a kill (TRLA_128), a Frostfire per freeze the run player causes (TRLA_129), Divine Shield after surviving damage (TRLA_105), 5 damage to the boss's hero after the run player's hero takes damage (TRLA_137, recursion-guarded), a copy of a spell cast on a friendly minion cast on the shrine (TRLA_138: RecastRules), Deathrattles two extra times (TRLA_114), a random Priest spell after each spell (TRLA_146: the run's generation filter), any healing of the boss's characters damages them, the boss's own heals, Lifesteal and restore passives included (TRLA_147) (c-shrines-S2, c-p7fix); Stealth on the run player's other minions and a +2 Attack Deathrattle when it goes dormant (TRLA_106), each spell cast again on the same target (TRLA_187: RecastRules, never recursive), the Overload amount as Attack for the run player's minions (TRLA_109), Battlecries two extra times (TRLA_154: EXTRA_BATTLECRIES_ADDITIONAL, BattlecryRules), spells (2) cheaper (TRLA_155), spells paid with Health (TRLA_113: SPELLS_COST_HEALTH), a random Demon per discard through the run's generation filter (TRLA_178), damage to the run player's hero on their own turn dealt to the boss's hero instead (TRLA_179); the boss sees each result as a public board, hand-count or Health change (c-shrines-S3) | phase 8 (encounters/anomalies): boss shrine rosters (BossShrineLift); the run player's only until then |  | 23 of 23 |
-| `hidden-steal` | player | takes a hidden card from the opponent's deck: TRLA_186 Treasure from Below, the run player's board shrine, steals a random card of the boss's deck at the start of the run player's turn (it costs (2) less). Only the run player holds it (never a boss card or a generation result). The boss learns only what is public: a card left its deck (its own-deck ledger, OwnDeckLedger, drops an unknown slot by the deck count, never the stolen definition) and the run player's hand grew by a card its fair view masks like every other card there; the search never sees the stolen identity (c-shrines-S3 G9-G15) | phase 8 (encounters/anomalies): boss shrine rosters (BossShrineLift); the run player's only until then |  | 1 of 1 |
 | `hidden-steal` | player | a Rumble Run teammate (phase 7 T2) that takes hidden cards from the opponent, a run deck card only the run player holds (never a boss card or a generation result): TRLA_152 Soulsapper's Deathrattle steals 2 random spells of the boss's deck by TRLA_186's deck-steal rule (DungeonRunShrines.TakeFromDeck: the boss's own-deck ledger, OwnDeckLedger, drops unknown slots by the deck count, never a stolen definition, and the boss's fair view masks the stolen cards in the run player's hand; c-teammates-T2 E10-E16), and TRLA_190 Salty Looter's Battlecry and Deathrattle each move a random card of the boss's hand to the run player's by the hand-to-hand theft rule of Gloves of Mugging (LOOTA_834: the hand-transfer facts, so the boss knows what left its own hand; c-teammates-T2 O3-O8) | none: a run teammate; no boss deck or generation pool offers it |  | 2 of 2 |
-| `shrine-token` | player | a card a run board shrine makes for its owner during the game (TRLA_129s Frostfire: TRLA_129 Jan'alai's Progeny puts one into the run player's hand per freeze they cause); a public 0-cost 'Deal 1 damage' spell in the run player's hand, never a boss card or a generation result (c-shrines-S2) | phase 8 (encounters/anomalies): boss shrine rosters (BossShrineLift); the run player's only until then |  | 1 of 1 |
 | `board-shrine-form` | none | a shrine's dormant form (made by ShrineRules when its shrine dies, never a card) or the TRLA_107 Tribal Shrine fixture (a scripted enemy shrine that tests place on the boss side; boss shrine rosters are phase 8): never offered, dealt or generated | none: engine-made dormant forms and the boss-side test fixture; no player role, boss deck or generation pool offers them |  | 29 of 29 |
 | `shrine-upgrade` | player | a shrine upgrade: a run reward of a board-shrine run (the shrine-upgrade draft), applied at match start as its client player enchantment, never a hero power or a passive treasure: TRLA_804 a second shrine, TRLA_805 revival one turn sooner; TRLA_801/802/803/806/807/808 put their grant on every run shrine of the owner as it lands or revives (DungeonRunShrines.Grant): spells cost (1) less per shrine, Taunt on the shrines' neighbours, a full heal at each turn start, and the granted Deathrattles (destroy the enemy Shrines, draw until the hand is full, hand cards cost (2) less). All public board, hand-cost and Deathrattle facts the engine resolves, so the boss's legal moves and its endpoint projection (NeedsEndpointProjection on a shrine board) see them; the boss never holds one (c-shrine-core U1-U4, c-shrine-upgrades) | phase 8 (encounters/anomalies): boss shrine rosters (BossShrineLift); the run player's only until then |  | 8 of 8 |
 | `teammate` | player | a Rumble Run teammate: a run deck card the teammate draft adds on a board-shrine run; public effects the engine resolves (a hero-attack trigger, Overkill), so the boss's legal moves and search see the result (c-shrine-core T1-T4); phase 7 T1: an Overkill summon of the owner's highest-Attack deck minion (TRLA_122) or a spell draw (TRLA_134), a discounted draw per Armor gain (TRLA_123), draws from the owner's own deck until the hand is full (TRLA_165 Beasts, TRLA_140 spells), a random Hunter spell per minion death through the run's generation filter (TRLA_166), a Poisonous Deathrattle that hits every enemy (TRLA_167), the Attack of the other minions doubled (TRLA_169), a hand of Arcane Missiles (TRLA_130), Spell Damage per freeze (TRLA_131), a hero power that also Freezes or destroys an already Frozen minion (TRLA_132), a Fireball at a random enemy after each spell (TRLA_133), a random enemy minion destroyed per heal (TRLA_141), hits capped at 1 (TRLA_142), hits redirected to the owner's hero (TRLA_143), Divine Shield again on Overkill (TRLA_144); the boss sees each result as a public board, hand-count or Health change, never the cards drawn (c-teammates-T1); phase 7 T2: random Deathrattle minions (TRLA_149) or Pirates until the board is full (TRLA_193) summoned on death, random healing spells (TRLA_150 Overkill), Shaman spells (TRLA_161 Overkill), Warlock spells per hit on the owner's hero (TRLA_185) and a hand of random spells (TRLA_184), every one through the run's generation filter; every minion restored to full Health (TRLA_151), spells (2) cheaper (TRLA_153), a copy of each card played this turn (TRLA_189 Combo), a spell drawn from the owner's deck and discounted after each spell (TRLA_192), 3 damage to random enemy minions repeated on each kill, at most 8 hits (TRLA_157), 2 damage to every enemy minion after each Overload (TRLA_158), a spell Discover kept whole while Overloaded (TRLA_159), 3 of the boss's Mana Crystals Overloaded (TRLA_160: public Overload owed), the lowest-Cost card discarded and a card drawn (TRLA_181 Overkill), a Lifesteal Battlecry on every enemy minion (TRLA_182), a Hero Power usable any number of times (TRLA_183), a Dragon Discover kept whole beside a Dragon (TRLA_173 Overkill), the owner's minions held at 1 Health on the owner's turn (TRLA_174), Armor gains doubled (TRLA_175), Rush and a Dragon draw per Dragon played (TRLA_176), every enemy minion destroyed for 2 Armor each (TRLA_177); the boss sees each result as a public board, hand-count, Mana, Armor or Health change, never the cards drawn or generated (c-teammates-T2) | none: a run teammate; no boss deck or generation pool offers it |  | 41 of 41 |
@@ -507,6 +503,11 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `boss-control-all` | boss | Sazzmi Gentlehorn's Infatuation, "Gain control of enemy minions with 1 or less Attack": a control change of every such public board minion, in board order (the engine's ControlTask on each: one taken while the boss's board is full is destroyed). A run shrine never changes sides and is left as it is, awake or dormant (ShrineRules.CanChangeController); the power is offered only while a minion it can take is on the enemy board, which is public (c-enc-10 G1-G5; the enc10a bosspilot mode) | none: a boss hero power |  | 1 of 1 |
 | `boss-setaside-store` | boss | Gnomenapper's Nab, "Put an enemy minion into a sack": a public board minion of the run player leaves play for the set-aside store of a Stuffed Sack summoned for the boss (EncounterRules.Store: the minion itself, its damage and enchantments kept, in its own controller's set-aside zone; the link is one private tag on the sack, EncounterRules.SetAsideStore, that game clones and the boss's fair view carry). The stored minion was public and stays known to both sides; no hidden zone is read. Nab needs a free slot on the boss's board, and a run shrine is never a legal target, awake or dormant (a shrine never enters a store) (c-enc-10 E1-E14; the enc10a and enc10-nab bosspilot modes) | none: a boss hero power |  | 1 of 1 |
 | `boss-hunt-card` | player, boss | a Monster Hunt boss deck card, start weapon or token whose effect is public board and hero resolution, the same in either player's hands: Chuck, the spell, discards every minion its caster holds and deals the Attack of each to the enemy hero (GILA_BOSS_23t: the caster's own hand), Stuffed Sack returns the minion it holds to that minion's own controller when it dies (GILA_BOSS_26t, EncounterRules.Release; a silenced, transformed or bounced sack returns nothing), Sack of Gnomes fills its caster's board with random Gnomes of a fixed list behind the generation filter (GILA_BOSS_26t2), Amalgamate destroys all minions and summons one Amalgamation with their combined Attack and Health (GILA_BOSS_27t; a run shrine goes dormant as from any destroy effect) and the Amalgamation is every minion type (GILA_BOSS_27t2), Enchanting Tune takes control of all enemy minions and sets them to 1/1 (GILA_BOSS_29t; a run shrine never changes sides), the Scythe never loses Durability from an attack and gains +1 Attack when its hero kills a minion with it (GILA_BOSS_33t), Vampiric Fangs destroys a minion and restores its Health to the caster's hero (GILA_BOSS_35t) and Murloc Infestation gives the caster's minions "Deathrattle: Summon a random Murloc" (GILA_BOSS_37t: a scripted Murloc behind the generation filter). No hidden zone of the other side is read or written (c-enc-10 D3-D5, E3-E16, F3-F8, G6-G9, J3-J11, L4-L6, N5-N7; the enc10a, enc10b, enc10-nab and enc10-cards bosspilot modes) | none: boss decks only; no player role offers it |  | 9 of 9 |
+| `boss-shrine` | player, boss | a board shrine on either side: the run player's (phase 7: the shrine of a rumble_<class>_<n> starter) or a Rumble Run champion's (the encounter row's shrine variant, armed for the boss by ShrineRules.Arm exactly as the player's: it lands after both mulligans, goes dormant when it dies or would be transformed, bounced or shuffled, and revives at full Health after three of its owner's turns; the other side's search reproduces dormancy and revival through the endpoint projection). Every script reads its own controller, so its effect is the same public engine resolution on either side: Divine Shield after a friendly minion survives damage (TRLA_105), Stealth on its owner's other minions and +2 Attack when it goes dormant (TRLA_106), Spell Damage +1 per spell in its owner's hand (TRLA_108: a public Spell Damage number, the count of a hand its owner knows), the Overload amount as Attack (TRLA_109), Mana Crystals refreshed on an Armor gain (TRLA_112), spells paid with Health (TRLA_113), Deathrattles three times (TRLA_114), +1/+1 on each summon (TRLA_115), the hero's Attack added at the end of its owner's turn (TRLA_116), a free hero power refreshed by a kill (TRLA_128), a Frostfire per freeze its owner causes (TRLA_129), 5 damage to the enemy hero after its owner's hero takes damage (TRLA_137, recursion-guarded), a spell cast on a friendly minion cast again on the shrine (TRLA_138) or again on its target (TRLA_187: RecastRules, never recursive), a random Priest spell after each spell (TRLA_146) and a random Demon per discard (TRLA_178), both through the generation filter of the side that generates (a boss's: RunMatchPlan.ExcludedGeneratedBoss, so never a Secret or a card the table keeps from a boss), healing of its owner's enemies dealt as damage (TRLA_147), Battlecries three times (TRLA_154), spells (2) cheaper (TRLA_155), aura-granted Overkill cost cuts (TRLA_162), a random keyword on its owner's summoned Beasts (TRLA_163) and damage to its owner's hero on its owner's turn dealt to the enemy hero instead (TRLA_179). No hidden zone of the other side is read or written (c-shrine-core S1-S12, c-shrines-S1/S2/S3 and c-p7fix for the run player's; c-enc-13 S105-S187 for a boss's, in real engine games through the run setup path; the enc13 bosspilot modes) | none: a board shrine; no deck or generation pool offers it |  | 22 of 22 |
+| `boss-shrine` | player | TRLA_110 Halazzi's Trap, a board shrine (phase 7): after its owner casts a spell it puts a random Hunter Secret into play for its owner (put, not cast; game RNG; reported as a random event). The run player's on a board-shrine run, which is a catalog run whose player may generate Secrets (the boss's Secret prior holds every Hunter Secret that generation yields, GeneratedSecretPool) (c-shrines-S1) | none: a boss holds Halazzi's Trap only through an encounter row (a catalog run) that turns its generated Secrets on |  | 1 of 1 |
+| `boss-hidden-steal` | player, boss | TRLA_186 Treasure from Below, a board shrine on either side: at the start of its owner's turn a random card of the opponent's deck moves to its owner's hand and costs (2) less (DungeonRunShrines.TakeFromDeck: a deck exit and a transfer whose definition only the new owner sees; a full hand burns it). On the run player's side (phase 7) the boss learns only that a card left its deck (its own-deck ledger, OwnDeckLedger, drops an unknown slot by the deck count) and masks the stolen card like the rest of the player's hand (c-shrines-S3 G9-G15). On a boss's side (Captain Hooktusk's middle variant, trl_202_hooktusk) the boss learns exactly the card it took, now in its own hand, and nothing else: the run player's other deck cards stay unknown slots in its fair view, the stolen card is a card of its hand like any other, and its search never simulates its own next turn start, where the steal happens (c-enc-13 S186; the enc13 bosspilot modes) | none: a board shrine; no deck or generation pool offers it |  | 1 of 1 |
+| `boss-shrine-token` | player, boss | a card a board shrine makes for its owner during the game (TRLA_129s Frostfire: TRLA_129 Jan'alai's Progeny puts one into its owner's hand per freeze that owner causes); a public 0-cost 'Deal 1 damage' spell in the run player's hand (phase 7, c-shrines-S2) or in Hex Lord Malacrass's (his late variant: the boss knows its own hand, the run player sees a hand count), never a deck card or a generation result (c-enc-13 S129; the enc13 bosspilot modes) | none: a board shrine; no deck or generation pool offers it |  | 1 of 1 |
+| `boss-power-public` | boss | Zul'jin's hero power Steady Throw (TRLA_065p): 2 damage to the enemy hero, no target, as Steady Shot; public hero state the engine resolves, no hidden zone (c-enc-13 Z1-Z4; the enc13 bosspilot modes) | none: a boss hero power |  | 1 of 1 |
 
 ### Validation (current DungeonRunValidator admission)
 
@@ -514,10 +515,10 @@ Client entity checks ran against the CARD table in `data/dungeon-run/reference/c
 
 | Validation | Rows |
 | --- | ---: |
-| passes (all forms) | 3,379 |
-| rejected (one rule or more) | 234 |
-| not applicable | 1,091 |
-| rejected: `not-scripted` | 232 |
+| passes (all forms) | 3,419 |
+| rejected (one rule or more) | 233 |
+| not applicable | 1,067 |
+| rejected: `not-scripted` | 231 |
 | rejected: `rule-rejected` | 1 |
 | rejected: `encounter-rejected` | 1 |
 | rejected: `admission:turn-rewind` | 1 |
@@ -593,7 +594,7 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | Input | SHA-256 (first 16) |
 | --- | --- |
 | `data/dungeon-run/catalog-v1.json` | `ce68329f5cb1c094` |
-| `data/dungeon-run/encounters-v1.json` | `b4503f6407670464` |
+| `data/dungeon-run/encounters-v1.json` | `7c7ec423f6e7c08b` |
 | `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
 | `data/dungeon-run/reference/adventure-reference.csv` | `4a608dfa596733e7` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |
@@ -604,6 +605,6 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | `data/dungeon-run/tavern-v1.json` | `f69c185d773c8414` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
-| `tools/restoration-ledger/curation.json` | `c45893e7e5ae2a82` |
+| `tools/restoration-ledger/curation.json` | `5b48dbaa97d276f6` |
 
 Plus the engine card data and DungeonRunContent compiled from the working tree.

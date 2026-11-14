@@ -162,9 +162,10 @@ Guard("D", () =>
     AdmissionVerdict V(string id, AdmitScope scope) => DungeonRunAdmission.Classify(null, id, scope, null, true);
     // Phase 7 T1 scripted TRLA_122 (the id this check named before): the first teammate still unscripted, null once all are.
     string pendingMate = data.Teammates.Values.SelectMany(v => v).OrderBy(x => x, StringComparer.Ordinal).FirstOrDefault(id => !DungeonRunShrines.ScriptedTeammates.Contains(id));
-    Check("D15 admission: the scripted shrines, upgrades and teammates are admitted for the run player only",
+    // Phase 8 family 13: the shrines are a Rumble Run champion's too (Wardruid Loti's variants: the boss-shrine row).
+    Check("D15 admission: the scripted shrines are admitted for the run player and (phase 8) a boss, the upgrades and teammates for the run player only",
         new[] { "TRLA_112", "TRLA_115", "TRLA_116", "TRLA_804", "TRLA_805", "TRLA_124", "TRLA_125", "TRLA_127" }
-            .All(id => V(id, AdmitScope.Player).Admitted && !V(id, AdmitScope.Boss).Admitted && !V(id, AdmitScope.Generated).Admitted));
+            .All(id => V(id, AdmitScope.Player).Admitted && V(id, AdmitScope.Boss).Admitted == (id == "TRLA_112" || id == "TRLA_115" || id == "TRLA_116") && !V(id, AdmitScope.Generated).Admitted));
     Check("D16 admission: unscripted shrines, forms, the TRLA_107 fixture, unscripted upgrades and teammates admit nothing",
         // Phase 7 T2 scripted TRLA_193 (named here before): pendingMate stands for the unscripted teammates.
         // Phase 7 D scripted TRLA_809 (named here before) and the companions: no upgrade or teammate is unscripted any more.

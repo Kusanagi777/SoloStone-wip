@@ -126,11 +126,12 @@ Guard("A", () =>
     foreach (string id in Nine)
     {
         var v = V(id, AdmitScope.Player);
-        string family = id == "TRLA_186" ? "hidden-steal" : "board-shrine";
-        Check($"A1 {id}: scripted with its form {id}t (3-turn sleeper pointing back), admitted for the run player only ({family}), never generated",
+        // Phase 8 family 13: every shrine is a Rumble Run champion's too (boss-shrine; TRLA_186 boss-hidden-steal).
+        string family = id == "TRLA_186" ? "boss-hidden-steal" : "boss-shrine";
+        Check($"A1 {id}: scripted with its form {id}t (3-turn sleeper pointing back), admitted for the run player and (phase 8) a boss ({family}), never generated",
             ShrineRules.IsScripted(id) && ShrineRules.FormOf(id) == id + "t" && C(id).Implemented && C(id + "t").Implemented && C(id + "t").Dormant?.Turns == 3
             && C(id + "t")[(GameTag)1132] == C(id).AssetId && v.Admitted && v.Family == family && v.Rule.NeverGenerated
-            && !V(id, AdmitScope.Boss).Admitted && !V(id, AdmitScope.Generated).Admitted && gen.Contains(id) && gen.Contains(id + "t")
+            && V(id, AdmitScope.Boss).Admitted && !V(id, AdmitScope.Generated).Admitted && gen.Contains(id) && gen.Contains(id + "t")
             && V(id + "t", AdmitScope.Player).Family == "board-shrine-form", $"{v.Family} {v.Admitted}");
         var s = NewRun(RowOf(DeckOf(id)), DeckOf(id), 10 + Array.IndexOf(Nine, id));
         var plan = run.BuildPlan(s);
@@ -141,8 +142,9 @@ Guard("A", () =>
     foreach (string e in new[] { "TRLA_106e", "TRLA_109e", "TRLA_113e" })
         Check($"A3 the client enchantment record {e} is scripted", C(e).Implemented && C(e).Type == CardType.ENCHANTMENT);
     var hs = DungeonRunAdmission.RuleFor("TRLA_186");
+    // Phase 8 family 13: the row is boss-hidden-steal (the run player's and Captain Hooktusk's).
     Check("A4 the hidden-steal row (TRLA_186) states the hidden zone: the boss's deck, its own-deck ledger and the masked hand",
-        hs.Family == "hidden-steal" && hs.Admit == AdmitScope.Player && hs.NeverGenerated && hs.Reason.Contains("OwnDeckLedger") && hs.Reason.Contains("deck")
+        hs.Family == "boss-hidden-steal" && hs.Admit == (AdmitScope.Player | AdmitScope.Boss) && hs.NeverGenerated && hs.Reason.Contains("OwnDeckLedger") && hs.Reason.Contains("deck")
         && hs.Reason.Contains("masks"));
     Check("A4 every one of the 27 shrines is scripted (no deck plays without its shrine any more)",
         data.Decks.Where(d => d.Shrine != null).All(d => ShrineRules.IsScripted(d.Shrine)) && data.Decks.Count(d => d.Shrine != null) == 27);
