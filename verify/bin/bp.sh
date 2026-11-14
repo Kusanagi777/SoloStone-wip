@@ -22,6 +22,8 @@
 #                        bp.sh enc09-auto|enc09-finals|enc09-rooms|enc09-cards   (c-bosspilot-enc09)
 #   family 10 modes:     bp.sh enc10|enc10-nab|enc10-seeds|enc10-hagatha        (twice per call)
 #                        bp.sh enc10a|enc10b|enc10-cards|enc10-shrine <k>         (one run per call, k = 1 or 2; then `bp.sh same <mode>`)
+#   family 17 modes:     bp.sh enc17|enc17-seeds|enc17-void|enc17-cards <k>  (c-bosspilot-enc09; one run per call, k = 1 or 2; then `bp.sh same <mode>`,
+#                        and for enc17-cards `bp.sh enc17-check`: the fixture rows played every boss card)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -75,6 +77,9 @@ CARDS10=GILA_BOSS_23t,GILA_BOSS_26t2,GILA_BOSS_27t,GILA_BOSS_29t,GILA_BOSS_35t,G
 W10=gila_38_cozzlewurt
 PAD10=$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10
 SHR10=gila_26_gnomenapper,gila_27_experiment_3c,gila_29_sazzmi,gila_32_niira,gila_35_chupacabran,gila_36_griselda,gila_22_willie,gila_26_gnomenapper,gila_29_sazzmi
+# family 17: the boss cards a boss plays from hand; the rows whose power is cast by rule (c-bosspilot-enc09 reports "auto N")
+CARDS17=DALA_BOSS_48t,DALA_BOSS_51t2,DALA_503,DALA_BOSS_56t,DALA_BOSS_59t,DALA_BOSS_59t2,DALA_502
+AUTO17=dala_50_nozari,dala_55_hannigan,dala_56_wagtoggle,dala_59_goya
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -214,6 +219,13 @@ enc10-shrine) need $E; once enc10-shrine "$2" BOSS=$PAD10,$SHR10 GAMES=1
   echo "fights against a shrine row (TRLA_209h_*) by the nine rows: $(grep -v "^$W10" "$LOGS/enc10-shrine-$2.txt" | grep -c 'TRLA_209h_') of 9" ;;
 enc10-seeds) need $E; twice enc10-seeds FAMILY=10 SEED_BASE=19000 WATCH=$CARDS10 ;;
 enc10-hagatha) need $E; twice enc10-hagatha BOSS=gila_61_hagatha GAMES=6 WATCH=GILA_BOSS_27t ;;
+enc17) need $E9; once enc17 "$2" FAMILY=17 WATCH=$CARDS17 AUTO=$AUTO17 ;;
+enc17-seeds) need $E9; once enc17-seeds "$2" FAMILY=17 SEED_BASE=19000 WATCH=$CARDS17 AUTO=$AUTO17 ;;
+enc17-void) need $E9; once enc17-void "$2" BOSS=dala_48_zuramat GAMES=6 WATCH=$CARDS17 ;;
+enc17-cards) need $E9; once enc17-cards "$2" BOSS=fix17_zuramat,fix17_millificent,fix17_wagtoggle,fix17_goya,fix17_gallywix GAMES=4 WATCH=$CARDS17 ENCOUNTERS_JSON=$FX/p8f17/fixtures/encounters-f17.json ;;
+enc17-check) # after `bp.sh same enc17-cards`: every boss card of the family was played from hand by a boss at least once
+  unplayed=$(tail -n 1 "$R/bp-enc17-cards-a.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Za-z0-9_]+ x0( |$)" | xargs)
+  [ -z "$unplayed" ] && echo "bosspilot enc17-cards: all 7 boss cards played by the boss" || echo "bosspilot enc17-cards UNPLAYED: $unplayed" ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;

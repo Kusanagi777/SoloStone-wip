@@ -24,8 +24,8 @@ namespace SabberStoneCore.Actions
 	{
 		// ------------------------------------------------------------------ tag table (32630-32699)
 		// One allocation table for every encounter family: a family that needs a counter adds a constant here (32636-32659; family NN's
-		// reserved number is 32635 + NN: taken 32637 by family 02, 32641 by family 06, 32643 by family 08, 32644 by family 09 and
-		// 32645 by family 10), never a number in its own file, so two families cannot collide. 32660-32699 are the global rules'
+		// reserved number is 32635 + NN: taken 32637 by family 02, 32641 by family 06, 32643 by family 08, 32644 by family 09,
+		// 32645 by family 10 and 32652 by family 17), never a number in its own file, so two families cannot collide. 32660-32699 are the global rules'
 		// (DungeonRunGlobalRules: 32660-32662 taken by family 05 and the wave 2 integration, 32680 by family 06, whose rule-state
 		// tags are 32680-32699).
 		// All of them are private: NativeMatch never sends them (IsPrivateTag joins NativeMatch.IsDecisionInternalTag).
@@ -69,6 +69,11 @@ namespace SabberStoneCore.Actions
 		/// set-aside zone, 0 for none. Family 10 (the set-aside store; rules in EncounterRules.F10.cs).
 		/// </summary>
 		public const GameTag SetAsideStore = (GameTag)32645;
+		/// <summary>
+		/// On an Extortion (DALA_BOSS_59t3): the entity id of the card it holds in its player's set-aside zone, 0 for none.
+		/// Family 17 (Madam Goya's Blackmail; rules in EncounterRules.F17.cs).
+		/// </summary>
+		public const GameTag ExtortionEscrow = (GameTag)32652;
 		/// <summary>
 		/// On the game: one bit per hooked global rule (EncounterCard.HookIndex) that was applied to this match (family 05:
 		/// DungeonRunGlobalRules.Apply runs a rule's apply hook once; a rule with no player enchantment is active by this mark).
