@@ -228,6 +228,7 @@ namespace SabberStoneCore.Actions
 		{
 			RunEncounter enc = Of(game);
 			if (enc == null || game.State == State.COMPLETE) return;
+			ResolveUnderbellyRats(game); // family 15, The Rat King: a living Underbelly Rat replaces a dead hero (EncounterRules.F15.cs)
 			if (enc.BossForms.Count > 1) ResolveBoss(game, enc);
 			if (enc.PlayerRelay.Count > 0) ResolveRelay(game, enc);
 		}

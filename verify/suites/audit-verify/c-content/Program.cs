@@ -76,9 +76,10 @@ foreach (var content in DungeonRunContent.All.Where(c => c.ShellId != null))
         && (content.Kind is RunContentKind.Effect || card.Cost == content.Cost || content.Kind == RunContentKind.PassivePower),
         card == null ? "missing" : $"type={card.Type} impl={card.Implemented} cost={card.Cost}/{content.Cost}");
 }
-Check("passive power registry = passive content (plus the passive encounter powers: phase 8 family 01, Trapped Room's Alarm; family 08, the three totems, the two Gutmooks, Candlebeard and the Lava-Filled Chamber; family 09, Xol's Beam Me Up! and the four rule-cast powers Dispel Ward, Devour, Doors Are Closing and Stolen Time)", DungeonRunCardsGen.PassiveHeroPowers.Count == DungeonRunContent.All.Count(c => c.Kind == RunContentKind.PassivePower) + DungeonRunEncounters.PassivePowers.Count()
+Check("passive power registry = passive content (plus the passive encounter powers: phase 8 family 01, Trapped Room's Alarm; family 08, the three totems, the two Gutmooks, Candlebeard and the Lava-Filled Chamber; family 09, Xol's Beam Me Up! and the four rule-cast powers Dispel Ward, Devour, Doors Are Closing and Stolen Time; family 15, the rule-cast Equivalent Exchange and Totemic Summons, Twin Paths, Stormswell, Assembly, Cold Water and Scroll Savvy)", DungeonRunCardsGen.PassiveHeroPowers.Count == DungeonRunContent.All.Count(c => c.Kind == RunContentKind.PassivePower) + DungeonRunEncounters.PassivePowers.Count()
     && DungeonRunEncounters.PassivePowers.SequenceEqual(new[] { "LOOTA_BOSS_48p", "LOOTA_BOSS_16p", "LOOTA_BOSS_17p", "LOOTA_BOSS_38p", "LOOTA_BOSS_19p", "LOOTA_BOSS_33p", "LOOTA_BOSS_31p", "LOOTA_BOSS_47p",
-        "LOOTA_BOSS_20p", "LOOTA_BOSS_26p8", "LOOTA_BOSS_34p", "LOOTA_BOSS_52p", "LOOTA_BOSS_53p" }));
+        "LOOTA_BOSS_20p", "LOOTA_BOSS_26p8", "LOOTA_BOSS_34p", "LOOTA_BOSS_52p", "LOOTA_BOSS_53p",
+        "DALA_BOSS_16p", "DALA_BOSS_17p", "DALA_BOSS_18p", "DALA_BOSS_20p", "DALA_BOSS_25p", "DALA_BOSS_26p", "DALA_BOSS_28p" }));
 Check("no class power treated as run passive", new[] { "CS2_017","DS1h_292","CS2_034","CS2_101","CS1h_001","CS2_083b","CS2_049","CS2_056","CS2_102","HERO_11bp","HERO_10bp" }.All(id => !HeroPower.ActivatesAtGameStart(Cards.FromId(id))));
 
 // ---------------------------------------------------------------- 2. start-state treasures

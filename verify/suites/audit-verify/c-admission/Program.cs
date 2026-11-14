@@ -202,10 +202,12 @@ foreach (var rule in DungeonRunAdmission.Rules)
     // Phase 8 family 09: the run treasures King Togwaggle's Magic Candle finds (and A. F. Kay's deck lists) are admitted for a boss on catalog runs:
     // LOOTA_839's own row and the run-treasure-boss-find row (the legacy verdict of both stays the run player's only).
     var bossTreasures = DungeonRunAdmission.Rules.Where(r => r.Family == "run-treasure-side-shuffle" || r.Family == "run-treasure-boss-find").ToList();
-    Check("only the three secret-generated rules carry a catalog lift (the player side; since phase 8 the boss power DALA_BOSS_21p and the two named-Hunter-Secret cards), and since family 09 the two rows of the treasures a boss finds (Player to Player + Boss)",
-        new HashSet<AdmissionRule>(DungeonRunAdmission.Rules.Where(r => r.CatalogAdmit != null)).SetEquals(new[] { playerSide, bossSide, named }.Concat(bossTreasures)) && DungeonRunAdmission.Rules.Count(r => r.CatalogAdmit != null) == 5 && bossTreasures.Count == 2
-        && bossTreasures.All(r => r.Admit == AdmitScope.Player && r.CatalogAdmit == (AdmitScope.Player | AdmitScope.Boss) && r.CatalogLift == DungeonRunAdmission.RunTreasureBossLift)
-        && bossTreasures.SelectMany(r => r.Ids).Count() == 15);
+    // Phase 8 family 15: Mama Diggs's Excavate finds A Small Rock (GILA_500p2t), a third run-treasure-boss-find row with its own lift.
+    Check("only the three secret-generated rules carry a catalog lift (the player side; since phase 8 the boss power DALA_BOSS_21p and the two named-Hunter-Secret cards), and since family 09 the rows of the treasures a boss finds (Player to Player + Boss; family 15 adds A Small Rock's)",
+        new HashSet<AdmissionRule>(DungeonRunAdmission.Rules.Where(r => r.CatalogAdmit != null)).SetEquals(new[] { playerSide, bossSide, named }.Concat(bossTreasures)) && DungeonRunAdmission.Rules.Count(r => r.CatalogAdmit != null) == 6 && bossTreasures.Count == 3
+        && bossTreasures.All(r => r.Admit == AdmitScope.Player && r.CatalogAdmit == (AdmitScope.Player | AdmitScope.Boss)
+            && r.CatalogLift == (r.Ids.SequenceEqual(new[] { "GILA_500p2t" }) ? DungeonRunAdmission.SmallRockBossLift : DungeonRunAdmission.RunTreasureBossLift))
+        && bossTreasures.SelectMany(r => r.Ids).Count() == 16);
     foreach (string id in new[] { "BOT_402", "DAL_141", "GIL_116", "ICC_204", "UNG_011", "LOOTA_833", "GILA_509", "GILA_903", "TRLA_168", "ULD_429" })
     {
         var legacyV = DungeonRunAdmission.Classify(Engine(id), id, AdmitScope.Player);

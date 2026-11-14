@@ -573,7 +573,9 @@ internal static partial class DungeonRunAdmission
         {
             Family = "run-treasure", Admit = AdmitScope.Player, Lift = RunTreasureLift,
             Reason = "treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F3 T5-T22)",
-            Ids = new[] { "GILA_500p2t", "GILA_500t", "GILA_500t2", "GILA_500t3", "GILA_501", "GILA_503", "GILA_507", "GILA_508", "GILA_510",
+            // Phase 8 family 15: GILA_500p2t A Small Rock left this row for run-treasure-boss-find in DungeonRunAdmission.F15.cs
+            // (the same legacy verdict; on catalog runs Mama Diggs's Excavate finds it for a boss).
+            Ids = new[] { "GILA_500t", "GILA_500t2", "GILA_500t3", "GILA_501", "GILA_503", "GILA_507", "GILA_508", "GILA_510",
                 "GILA_604", "GILA_608", "GILA_610", "GILA_611", "GILA_612" },
         },
         new AdmissionRule
