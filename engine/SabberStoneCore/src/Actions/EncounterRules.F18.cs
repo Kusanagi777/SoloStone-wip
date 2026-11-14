@@ -64,7 +64,7 @@ namespace SabberStoneCore.Actions
 		/// <summary>
 		/// Marei Loom's Next... for one player <paramref name="c"/>: with a card in hand and one in deck, a random card of the
 		/// deck (the game RNG, picked first) leaves it, the left-most hand card is shuffled into the deck (as a card returned
-		/// to a deck, it loses its hand enchantments), and the deck card takes the left-most hand slot. The player sees the
+		/// to a deck, it loses its hand enchantments; an Echo copy stops being one), and the deck card takes the left-most hand slot. The player sees the
 		/// new card (its hand entry is the ordinary one); what the opponent believed about the player's hand and deck is reset
 		/// (RunHelpers.BeliefReset), so a fair search never learns a hidden card it did not see. False when nothing moved.
 		/// </summary>
@@ -78,6 +78,9 @@ namespace SabberStoneCore.Actions
 			IPlayable taken = c.DeckZone.Remove(pick);
 			IPlayable back = c.HandZone.Remove(left);
 			back.Reset();
+			// An Echo copy (a ghostly card, removed from the hand at the end of the turn) that goes into the deck is an ordinary
+			// card there: it leaves the game's ghostly list, which names hand cards only.
+			g.GhostlyCards.Remove(back.Id);
 			Generic.ShuffleIntoDeck(c, source, back);
 			using (g.Facts.HandEntry(taken, HistoryHandEntryKind.Other, Zone.DECK))
 			{

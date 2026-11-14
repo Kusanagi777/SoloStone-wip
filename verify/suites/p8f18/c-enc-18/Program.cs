@@ -58,7 +58,7 @@ var run = new DungeonRun(data);
 var all = new DungeonRunProfile(); all.Unlocked.AddRange(data.Unlocks.Keys);
 
 const string Yeti = "CS2_182", Croc = "CS2_120", Raptor = "CS2_172", Moonfire = "CS2_008", Fireball = "CS2_029", Wisp = "CS2_231", Hellfire = "CS2_062";
-const string Geomancer = "CS2_142", Librarian = "LOOT_014", IceBarrier = "EX1_289", Arcane = "CS2_025";
+const string Geomancer = "CS2_142", Librarian = "LOOT_014", IceBarrier = "EX1_289", Arcane = "CS2_023";
 const string Elemental = "DALA_504", Darkened = "DALA_BOSS_62e", Gains = "DALA_BOSS_64e", Rancor = "DALA_BOSS_73e", Treant = "EX1_573t";
 string[] Thirty(string id) => Enumerable.Repeat(id, 30).ToArray();
 
@@ -270,6 +270,16 @@ Guard("Marei", () =>
     int costBefore = reduced.Cost;
     Check("F6 a hand card shuffled into the deck loses its hand enchantments (Fireball back at (4))", Power(g) && reduced.Zone == boss.DeckZone && reduced.Cost == 4 && costBefore == 3,
         costBefore + " -> " + reduced.Cost);
+    Round(g);
+    EmptyHand(boss);
+    var echo = ToHand(g, boss, Moonfire);
+    g.GhostlyCards.Add(echo.Id);   // as PlayCard marks an Echo copy
+    bool swapped = Power(g);
+    var (view2, viewBoss2, _) = FairView(g);
+    string viewEnd = "ok";
+    try { if (!view2.Process(EndTurnTask.Any(viewBoss2))) viewEnd = "refused"; } catch (Exception e) { viewEnd = e.GetType().Name + ": " + e.Message; }
+    Check("F7 an Echo copy swapped into the deck is an ordinary card there (it leaves the ghostly list): the turn ends in the boss's fair view and in the game",
+        swapped && echo.Zone == boss.DeckZone && !g.GhostlyCards.Contains(echo.Id) && viewEnd == "ok" && g.Process(EndTurnTask.Any(boss)) && echo.Zone == boss.DeckZone, viewEnd);
 });
 
 // ============================================================ G  Sky Captain Smiggs: Bombardment
@@ -353,6 +363,7 @@ Guard("Kazamon", () =>
     Check("K3 its Kobold Librarian (2 damage to its own hero) costs it nothing, Armor included", Cast(g, Librarian) && boss.Hero.Health == bossHealth && boss.Hero.Armor == 4);
     Check("K4 its own Fireball at its own hero deals nothing", Cast(g, Fireball, boss.Hero) && boss.Hero.Health == bossHealth);
     ToPlayer(g);
+    boss.Hero.Armor = 0;
     Check("K5 the run player's Fireball hurts it as usual (6)", Cast(g, Fireball, boss.Hero) && boss.Hero.Health == bossHealth - 6, (bossHealth - boss.Hero.Health).ToString());
     ToBoss(g);
     EmptyDeck(boss);
@@ -410,6 +421,7 @@ Guard("Vargoth", () =>
     int uses = 0;
     for (int i = 0; i < 24; i++)
     {
+        EmptyHand(boss);
         if (Power(g)) uses++;
         foreach (var p in boss.HandZone) seen.Add(p.Card.Id);
         EmptyHand(boss);
@@ -453,8 +465,10 @@ Guard("Khadgar", () =>
     Check("Q3 with two Elementals each adds one cast (3 damage; a copy never casts again)", Cast(g, Moonfire, player.Hero) && player.Hero.Health == health - 3, (health - player.Hero.Health).ToString());
     Check("Q4 a Secret is not cast twice (one Ice Barrier in play)", Cast(g, IceBarrier) && boss.SecretZone.Count == 1);
     EmptyHand(boss);
-    int hand = boss.HandZone.Count;
-    Check("Q5 an untargeted spell copies too (Arcane Intellect three times: six cards)", Cast(g, Arcane) && boss.HandZone.Count == hand + 6, (boss.HandZone.Count - hand).ToString());
+    int hand = boss.HandZone.Count, deck = boss.DeckZone.Count;
+    bool cast = Cast(g, Arcane);
+    Check("Q5 an untargeted spell copies too (Arcane Intellect three times: six cards)", cast && boss.HandZone.Count == hand + 6 && boss.DeckZone.Count == deck - 6,
+        cast + " hand " + (boss.HandZone.Count - hand) + " deck " + deck + "->" + boss.DeckZone.Count + " " + string.Join(",", boss.HandZone.Select(p => p.Card.Id)));
     ToPlayer(g);
     int bossHealth = boss.Hero.Health;
     Check("Q6 the run player's spells are not copied (its Moonfire deals 1)", Cast(g, Moonfire, boss.Hero) && boss.Hero.Health == bossHealth - 1);
@@ -485,8 +499,9 @@ Guard("Finale", () =>
     var fxErrors = DungeonRunValidator.Validate(fx, null);
     var v3 = fx.Schedules.Find("acts-v3h");
     var finale = v3.Acts.LastOrDefault();
-    Check("R2 the fixture (the shipped schedule with the finale enabled on its four pending bosses) validates; acts-v3h then ends with the finale act: the four bosses in order, its twist DALA_830 at 100",
-        fxErrors.Count == 0 && v3.Acts.Count == 4 && finale != null && finale.IsFinale && finale.FixedBosses.SequenceEqual(fixedBosses) && finale.TwistPool.SequenceEqual(new[] { "DALA_830" })
+    // The one error is the released-shape pin: enabling the finale changes acts-v3h's shape, which the close-out re-pins (ReleasedShapes[3]).
+    Check("R2 the fixture (the shipped schedule with the finale enabled on its four pending bosses) validates but for the released-shape pin of acts-v3h (new digest 09B43E71F9440039); acts-v3h then ends with the finale act: the four bosses in order, its twist DALA_830 at 100",
+        fxErrors.Count == 1 && fxErrors[0].StartsWith("schedule acts-v3h: its node shape changed (digest 09B43E71F9440039, scheduleVersion 3 shipped FF4FEC05953AA0DE)") && v3.Acts.Count == 4 && finale != null && finale.IsFinale && finale.FixedBosses.SequenceEqual(fixedBosses) && finale.TwistPool.SequenceEqual(new[] { "DALA_830" })
         && finale.TwistChance == 100 && finale.TavernAtStart && v3.FloorCount == 19, string.Join(" | ", fxErrors.Take(3)));
     var bad = Load(fixtureSchedule.Replace("\"twist\": {\"pool\": [\"DALA_830\"], \"chance\": 100}", "\"twist\": {\"pool\": [\"DALA_850\"], \"chance\": 100}"));
     var badErrors = DungeonRunValidator.Validate(bad, null);
@@ -610,7 +625,7 @@ Guard("Rows", () =>
         && powers.Count(id => DungeonRunAdmission.RuleFor(id).Family == "boss-own-hand-power") == 2, string.Join(",", families));
     var bolan = data.RejectedEncounters.FirstOrDefault(x => x.Id == "DALA_BOSS_75h");
     Check("M8 Commander Bolan is rejected (no row; the rejected list states the data gap and its lift); his power has an admission row that admits nothing",
-        !data.Bosses.Any(b => b.HeroCard == "DALA_BOSS_75h") && bolan != null && bolan.Power == "DALA_BOSS_75p" && bolan.Reason.Contains("no text") && bolan.Lift.StartsWith("data:")
+        !data.Bosses.Any(b => b.HeroCard == "DALA_BOSS_75h") && bolan != null && bolan.Power == "DALA_BOSS_75p" && bolan.Reason.Contains("no text") && bolan.Lift.StartsWith("none: a data gap")
         && DungeonRunAdmission.RuleFor("DALA_BOSS_75p")?.Admit == AdmitScope.None && !C("DALA_BOSS_75p").Implemented && DungeonRunEncounters.Find("DALA_BOSS_75p") == null);
     Check("M9 the two unused cards (Phase Spider, Cheerful Spirit) are rejected: unscripted, an admission row that admits nothing, in no deck",
         new[] { "DALA_BOSS_61t", "DALA_501" }.All(id => !C(id).Implemented && DungeonRunAdmission.RuleFor(id)?.Family == "unused-card" && DungeonRunAdmission.RuleFor(id).Admit == AdmitScope.None

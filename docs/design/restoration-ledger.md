@@ -198,7 +198,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | --- | ---: | ---: | ---: | --- |
 | `ai:turn-rewind` | 2 | 0 | 0 | Admission family `turn-rewind`: restarts the turn or the game, which rebuilds the controllers; bot state and plan cache must restart (admitted: none; lifted by phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6); GILA_900p, GILA_911). |
 | `ai:unused-card` | 2 | 0 | 0 |  |
-| `ai:boss-rejected-data` | 1 | 0 | 0 | Admission family `boss-rejected-data`: Commander Bolan's A Quest!, "Give your opponent a Quest!": the five quests it hands out (DALA_BOSS_75e1-75e5) have no text, requirement or reward in the client data and the wiki gives none, nor the minions he summons instead of a deck; the encounter is rejected (reference/encounters/F18.json "rejected") (admitted: none; lifted by data: a source for Commander Bolan's five quests (their requirements) and his summon list; then a script of the quests as run-player enchantments that end the fight with a no-loss win; DALA_BOSS_75p). |
+| `ai:boss-rejected-data` | 1 | 0 | 0 |  |
 | `ai:finale-state` | 1 | 0 | 0 | Admission family `finale-state`: its second half damages the Plague Lord of the act finale whenever the run fights it; the run has no Plague Lord finale and no state that carries damage to it until phase 8, and a Gnomebliterator that only dealt its first half would misstate the card (c-treasures-F12 T28) (admitted: none; lifted by phase 8 (encounters/anomalies): the Plague Lord finale encounters and the run state that carries damage to a Plague Lord into its fight; ULDA_115). |
 | `ai:global-rule-rejected` | 1 | 0 | 0 | Admission family `global-rule-rejected`: Glittering ("After a player plays a card that costs (8) or more, that player adds a Treasure to their hand"): the wiki states the pool is the Dalaran Heist treasures, which are run rewards the table admits for the run player's run deck only (no boss and no generation pool may hold one: RunTreasureLift), and several of them write run state (DALA_718, DALA_719, DALA_721). A rule for both players needs each treasure admitted for a boss and as a generation result; until then the rule is rejected in schedule-v1.json and not scripted (admitted: none; lifted by phase 8 (encounters/anomalies): the Dalaran Heist active treasures admitted for a boss and as a generation result (the treasure-on-boss work of the encounter families that give a boss treasure cards: LOOTA_BOSS_99p, Ol' Toomba); DALA_857). |
 | `ai:start-of-game-draw` | 1 | 0 | 0 | Admission family `start-of-game-draw`: ends the fight and edits the run deck (admitted: none; lifted by phase 9 (economy): a run-owned match exit (an escape outcome and a skipped fight node) that edits the run deck (deferred there by phase 6); ULDA_111). |
@@ -295,7 +295,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:run-treasure-paid-cost | 2 |
 | ok:run-treasure-rule | 2 |
 | ok:run-treasure-run-log | 2 |
-| blocked:boss-rejected-data (data: a source for Commander Bolan's five quests (their requirements) and his summon list; then a script of the quests as run-player enchantments that end the fight with a no-loss win) | 1 |
+| blocked:boss-rejected-data (none: a data gap no phase owns; it needs a source for Commander Bolan's five quests (their requirements) and his summon list; then a script of the quests as run-player enchantments that end the fight with a no-loss win) | 1 |
 | blocked:finale-state (phase 8 (encounters/anomalies): the Plague Lord finale encounters and the run state that carries damage to a Plague Lord into its fight) | 1 |
 | blocked:global-rule-rejected (phase 8 (encounters/anomalies): the Dalaran Heist active treasures admitted for a boss and as a generation result (the treasure-on-boss work of the encounter families that give a boss treasure cards: LOOTA_BOSS_99p, Ol' Toomba)) | 1 |
 | blocked:start-of-game-draw (phase 9 (economy): a run-owned match exit (an escape outcome and a skipped fight node) that edits the run deck (deferred there by phase 6)) | 1 |
@@ -520,7 +520,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `boss-hidden-shuffle` | boss | Marei Loom's Next..., "Swap the left-most card in each player's hand with one in their deck" (0): for each player with a card in hand and in deck, a random deck card (the game RNG) takes the left-most hand slot and that hand card is shuffled into the deck (EncounterRules.SwapLeftmostWithDeck). Each side sees only its own new card; what the opponent believed about either player's hand and deck is reset (RunHelpers.BeliefReset), so the boss's fair view keeps the run player's hand masked and never learns the card that came to it. Offered by zone counts only (c-enc-18 section F; the enc18 bosspilot mode) | none: a boss hero power |  | 1 of 1 |
 | `boss-card` | player, boss | Kirin Tor Elemental, "Your spells cast an additional time." (DALA_504, Archmage Khadgar's Summon Elemental): after its controller casts a spell a copy is cast again on the same target (RecastRules.Recast, Pirate's Mark's rule; a copy never casts again, a Secret or a Quest is not cast twice). Public board resolution, the same in either player's hands (c-enc-18 section Q; the enc18-finale bosspilot mode) | none: boss decks only; no player role offers it |  | 1 of 1 |
 | `global-rule-run` |  | Twist - The Finale, "This run has four additional powerful bosses" (DALA_830): a twist the run layer carries (schedule-v1.json effect "run": no match script, never in a match plan's rule list). It is the rule of the schedule's finale block (acts-v3h: four fixed fights, Norroa, Vargoth, Kalec and Khadgar, after act III's major), rolled at NewRun with chance 100 for the finale act and shown as that act's rule (c-enc-18 section R; the enc18-finale bosspilot mode on the fixture schedule) | none: a global rule card; never a deck card, a boss card or a generation result |  | 1 of 1 |
-| `boss-rejected-data` | none | Commander Bolan's A Quest!, "Give your opponent a Quest!": the five quests it hands out (DALA_BOSS_75e1-75e5) have no text, requirement or reward in the client data and the wiki gives none, nor the minions he summons instead of a deck; the encounter is rejected (reference/encounters/F18.json "rejected") | data: a source for Commander Bolan's five quests (their requirements) and his summon list; then a script of the quests as run-player enchantments that end the fight with a no-loss win |  | 1 of 1 |
+| `boss-rejected-data` | none | Commander Bolan's A Quest!, "Give your opponent a Quest!": the five quests it hands out (DALA_BOSS_75e1-75e5) have no text, requirement or reward in the client data and the wiki gives none, nor the minions he summons instead of a deck; the encounter is rejected (reference/encounters/F18.json "rejected") | none: a data gap no phase owns; it needs a source for Commander Bolan's five quests (their requirements) and his summon list; then a script of the quests as run-player enchantments that end the fight with a no-loss win |  | 1 of 1 |
 | `unused-card` | none | a client card The Dalaran Heist never used: Phase Spider (DALA_BOSS_61t; the wiki: "an unused card intended for use during Sael'orn encounter", in neither of her decks) and Cheerful Spirit (DALA_501; the wiki: "an unused mage minion"). No encounter, deck, treasure or reward of the adventure can put one into a game | none: unused in the adventure (no encounter, deck, treasure or reward of The Dalaran Heist names it) |  | 2 of 2 |
 
 ### Validation (current DungeonRunValidator admission)
@@ -610,7 +610,7 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | Input | SHA-256 (first 16) |
 | --- | --- |
 | `data/dungeon-run/catalog-v1.json` | `ce68329f5cb1c094` |
-| `data/dungeon-run/encounters-v1.json` | `27279f4262f74d7e` |
+| `data/dungeon-run/encounters-v1.json` | `2783d937d770c24d` |
 | `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
 | `data/dungeon-run/reference/adventure-reference.csv` | `4a608dfa596733e7` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |
@@ -621,6 +621,6 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | `data/dungeon-run/tavern-v1.json` | `f69c185d773c8414` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
-| `tools/restoration-ledger/curation.json` | `b89534870ee6dfe9` |
+| `tools/restoration-ledger/curation.json` | `92c88f6287177213` |
 
 Plus the engine card data and DungeonRunContent compiled from the working tree.

@@ -7,7 +7,7 @@
 internal static partial class DungeonRunAdmission
 {
     /// <summary>The lift of Commander Bolan's quests (a data gap: no source for the five quests).</summary>
-    internal const string BolanQuestsLift = "data: a source for Commander Bolan's five quests (their requirements) and his summon list; then a script of the quests as run-player enchantments that end the fight with a no-loss win";
+    internal const string BolanQuestsLift = "none: a data gap no phase owns; it needs a source for Commander Bolan's five quests (their requirements) and his summon list; then a script of the quests as run-player enchantments that end the fight with a no-loss win";
     /// <summary>The lift of a card the adventure never used (nothing to restore).</summary>
     internal const string UnusedCardLift = "none: unused in the adventure (no encounter, deck, treasure or reward of The Dalaran Heist names it)";
 

@@ -439,7 +439,7 @@ REJECTED = [
                    "either (its page: no deck, \"will instead summon minions from turn to turn like Tad\", \"Upon completion of any event, the "
                    "reward choice is given and the battle ends\"; the quest names have no page, only rows marked Unknown in the Rise of "
                    "Shadows enchantment list), nor the minions he summons. Neither the quests nor the fight can be built from a source"),
-        ("lift", "data: a source for the five quests' requirements and Bolan's summon list (a transcription of the original encounter), then "
+        ("lift", "none: a data gap no phase owns; it needs a source for the five quests' requirements and Bolan's summon list (a transcription of the original encounter), then "
                  "a script of the quests as run-player enchantments that end the fight with a no-loss win (EncounterRules.EndWithNoLoss)"),
         ("cards", ["DALA_BOSS_75e1", "DALA_BOSS_75e2", "DALA_BOSS_75e3", "DALA_BOSS_75e4", "DALA_BOSS_75e5"])]),
 ]

@@ -123,7 +123,7 @@ Guard("A", () =>
     // Family 18 rejects Commander Bolan (his five quests have no source: a data gap), the second rejected encounter.
     Check("A10 the rejected list names Toki's hero card with its reason and lift, then (family 18) Commander Bolan's with his data gap", data.RejectedEncounters.Count == 2 && data.RejectedEncounters[0].Id == "GILA_900h2"
         && data.RejectedEncounters[0].Reason.Length > 0 && data.RejectedEncounters[0].Lift.StartsWith("phase 9")
-        && data.RejectedEncounters[1].Id == "DALA_BOSS_75h" && data.RejectedEncounters[1].Reason.Length > 0 && data.RejectedEncounters[1].Lift.StartsWith("data:"));
+        && data.RejectedEncounters[1].Id == "DALA_BOSS_75h" && data.RejectedEncounters[1].Reason.Length > 0 && data.RejectedEncounters[1].Lift.StartsWith("none: a data gap"));
     Check("A11 PoolOf maps tiers to pools", DungeonRunEncounterData.PoolOf("1") == "enc-t1" && DungeonRunEncounterData.PoolOf("major2") == "enc-major2" && DungeonRunEncounterData.PoolOf("finale") == "finale");
 });
 

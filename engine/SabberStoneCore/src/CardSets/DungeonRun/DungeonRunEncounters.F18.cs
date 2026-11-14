@@ -93,7 +93,6 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			g.OnRandomHappened(true);
 			int cost = discarded.Cost;
 			Generic.DiscardBlock.Invoke(c, discarded);
-			g.ProcessTasks();
 			if (g.State == State.COMPLETE || c.BoardZone.IsFull) return discarded;
 			SummonRandom(g, c, s, RuleMinions(g, c, s, "cost" + cost, card => card.Cost == cost));
 			return discarded;
