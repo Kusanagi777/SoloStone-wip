@@ -9,8 +9,9 @@ namespace SabberStoneCore.Actions
 {
 	// Phase 8, family 12 (Monster Hunt bosses C, passive powers): the engine rules two of its boss powers need beyond a trigger
 	// or an aura, each read from live game state only (no tag of its own; every clone and AI simulation replays it).
-	//   EchoCopyFloor / EchoCopiesLeft   The Whisperer's "All spells have Echo" (GILA_BOSS_50p): the client's Echo rule that a
-	//                                    copy never costs less than (1), and a per-turn limit on the copies (see below).
+	//   EchoCopiesLeft                   The Whisperer's "All spells have Echo" (GILA_BOSS_50p): a per-turn limit on the copies
+	//                                    (see below). The client's Echo rule that a copy never costs less than (1)
+	//                                    (EchoCopyFloor) began here and holds in every game since the wave 4 integration.
 	//   DeathNeighbours                  Ratcatcher Hannigul's Cannibalism (GILA_BOSS_67p): the minions that stood next to a
 	//                                    minion in its board when it died.
 	public static partial class EncounterRules
@@ -51,14 +52,17 @@ namespace SabberStoneCore.Actions
 		public static bool EchoCopiesLeft(Controller c) => EchoCopiesThisTurn(c) < EchoCopiesPerTurn;
 
 		/// <summary>
-		/// CostRules.AdjustCost, last: "Copies can't cost less than (1)" (the client's Echo rule) for an Echo copy in a match The
-		/// Whisperer's rule is in (only an encounter boss has that power). Outside such a match, and for any other card,
-		/// <paramref name="amount"/> is returned unchanged.
+		/// CostRules.AdjustCost, last: "Copies can't cost less than (1)" (the client's Echo rule since Descent of Dragons, keyword
+		/// tooltip on hearthstone.wiki.gg/wiki/Echo) for every Echo copy (GHOSTLY: the copy an Echo or "Repeatable this turn" card
+		/// puts into the hand) in every game. Family 12 added it for The Whisperer's fight only; the wave 4 integration made it
+		/// general, after family 11 met a (0)-Cost Sound the Bells! loop under a Mage shrine without The Whisperer. The per-turn
+		/// copy limit (<see cref="EchoCopiesPerTurn"/>) stays The Whisperer's. For any other card <paramref name="amount"/> is
+		/// returned unchanged.
 		/// </summary>
 		internal static int EchoCopyFloor(IPlayable source, int amount)
 		{
 			if (amount >= 1 || source is HeroPower || source[GameTag.GHOSTLY] != 1) return amount;
-			return EchoRuleActive(source.Game) ? 1 : amount;
+			return 1;
 		}
 
 		/// <summary>

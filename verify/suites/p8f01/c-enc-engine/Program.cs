@@ -401,6 +401,18 @@ Guard("G", () =>
     var echoCopy = ToHand(g850, g850.Player2, "LOOT_504t");
     Check("G7c the copy Unstable Evolution adds to the hand (LOOT_504t, no tag 1114 in the client data) is repeatable too and stays (1)",
         echoCopy.Cost == 1 && DungeonRunEncounters.Repeatable(echoCopy), echoCopy.Cost.ToString());
+    // Wave 4 integration: the client's Echo rule "Copies can't cost less than (1)" holds in every game, not only under The
+    // Whisperer (family 11 met a (0)-Cost Sound the Bells! loop under a Mage shrine without it).
+    var gEcho = Ready(Plan());
+    Mana(gEcho.Player1, 10);
+    var apprentice = Board(gEcho, gEcho.Player1, "EX1_608"); Board(gEcho, gEcho.Player1, "EX1_608");
+    var bells = ToHand(gEcho, gEcho.Player1, "GIL_145");
+    int bellsCost = bells.Cost;
+    bool bellsPlayed = Play(gEcho, bells, apprentice);
+    var bellsCopy = gEcho.Player1.HandZone.LastOrDefault(p => p.Card.Id == "GIL_145" && p[GameTag.GHOSTLY] == 1);
+    Check("G7d with no encounter rule (no Whisperer): Sound the Bells! (Echo, 2) costs (0) under two Sorcerer's Apprentices, but its Echo copy costs (1), never less",
+        !EncounterRules.EchoRuleActive(gEcho) && bellsCost == 0 && bellsPlayed && bellsCopy != null && bellsCopy.Cost == 1 && gEcho.Player1.UsedMana == 0,
+        bellsCost + " " + bellsPlayed + " " + bellsCopy?.Cost + " used " + gEcho.Player1.UsedMana);
     var both = Plan(); both.GlobalRules = new List<string> { "DALA_850", "DALA_866" };
     var gb = Ready(both);
     Check("G8 two rules are both on both players, in the plan's order", gb.EncounterOrNull.GlobalRules.SequenceEqual(new[] { "DALA_850", "DALA_866" }) && DungeonRunGlobalRules.IsActive(gb.Player2, "DALA_850") && DungeonRunGlobalRules.IsActive(gb.Player2, "DALA_866"));
