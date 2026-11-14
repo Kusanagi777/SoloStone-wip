@@ -46,9 +46,11 @@ internal static partial class DungeonRunAdmission
             Family = "heist-recast-power", Admit = AdmitScope.Boss, Lift = NoneBossPower,
             Reason = "The Amazing \"Bonepaw\"'s Mana Echoes, \"Cast a random spell that was cast this game (targets chosen randomly)\": a "
                 + "new copy of a spell either player played from hand this game (the public play history), cast by the engine's effect "
-                + "play rule (AutoPlayRules: random targets and choices). Only a scripted spell the run's generation filter allows for the "
-                + "boss, never a Secret or a Quest; offered only after such a spell was played, a condition on the public play history "
-                + "that the boss's fair view holds exactly (c-enc-14 E1-E5; the enc14 bosspilot mode)",
+                + "play rule (AutoPlayRules: random targets and choices). Never a Quest; a Secret only one the boss itself played (a card of "
+                + "its own deck, admitted for it; a run player's Secret would be a boss-generated Secret outside any closed boss pool) and "
+                + "only while its Secret zone has room and holds no copy of it; every other spell only as the run's generation filter "
+                + "allows for the boss. Offered only while an echo is possible, a condition on the public play history and the boss's "
+                + "own Secret zone, which its fair view holds exactly (c-enc-14 E1-E10; the enc14 bosspilot mode)",
             Ids = new[] { "DALA_BOSS_05p" },
         },
         new AdmissionRule

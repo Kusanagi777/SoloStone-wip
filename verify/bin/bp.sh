@@ -222,7 +222,7 @@ enc14-seeds) need $E; twice enc14-seeds FAMILY=14 SEED_BASE=19000 WATCH=$CARDS14
 enc14-flight) need $E; twice enc14-flight BOSS=dala_07_belnaara GAMES=8 ;;
 enc14-cards) need $E; twice enc14-cards BOSS=fix14_dazzik,fix14_akazamzarak GAMES=6 WATCH=$CARDS14 ENCOUNTERS_JSON=$FX/p8f14/fixtures/encounters-f14.json
   # every boss card of the family was played from hand by a boss at least once
-  unplayed=$(tail -n 1 "$R/bp-enc14-cards-a.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Z0-9_]+ x0( |$)" | xargs)
+  unplayed=$(tail -n 1 "$R/bp-enc14-cards-a.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Za-z0-9_]+ x0( |$)" | xargs)
   [ -z "$unplayed" ] && echo "bosspilot enc14-cards: all 5 boss cards played by the boss" || echo "bosspilot enc14-cards UNPLAYED: $unplayed" ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;

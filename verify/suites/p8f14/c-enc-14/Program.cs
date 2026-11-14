@@ -139,6 +139,14 @@ bool ViewOffered(Game g)
     var (view, viewBoss, _) = FairView(g);
     return viewBoss.Options().Any(o => o is HeroPowerTask);
 }
+// The golden pilot's own view (its own Secrets kept live, the run player's removed): the one that holds a boss's Secret zone.
+bool PilotViewOffered(Game g)
+{
+    var options = new FairOptions { RemoveOpponentSecrets = true, TrackOwnDeck = true, MaterializeOwnDeckTriggers = true };
+    var view = FairBotState.Create(g, g.Player2.PlayerId, 1, DeckStyle.Tempo, options).FingerprintGame;
+    var viewBoss = view.Player1.PlayerId == g.Player2.PlayerId ? view.Player1 : view.Player2;
+    return viewBoss.Options().Any(o => o is HeroPowerTask);
+}
 
 // ============================================================ A  Chomper: Chomp
 Guard("Chomper", () =>
@@ -307,11 +315,14 @@ Guard("Kaye", () =>
     var g2 = Fight("dala_04_kaye", bossDeck: Fireball, playerDeck: Raptor);
     boss = g2.Player2; player = g2.Player1;
     ToBoss(g2);
+    // Before the power is used this turn: the real game and the boss's fair view must agree that it is offered.
+    bool realOffered = Offered(g2);
+    var (view, viewBoss, viewPlayer) = FairView(g2);
+    bool viewOffered = viewBoss.Options().Any(o => o is HeroPowerTask);
     Power(g2);
     Check("D3 with no minion in the boss's deck only the run player's arrives (Duel!'s rule)", boss.BoardZone.Count == 0 && player.BoardZone.Count == 1 && player.BoardZone[0].Card.Id == Raptor);
-    var (view, viewBoss, viewPlayer) = FairView(g2);
-    Check("D4 in the boss's fair view the power is offered too and the run player's deck holds no known minion", viewBoss.Options().Any(o => o is HeroPowerTask) == Offered(g2)
-        && viewPlayer.DeckZone.All(p => !(p is Minion)));
+    Check("D4 before it is used, the power is offered in the game and in the boss's fair view alike, where the run player's deck holds no known minion", realOffered && viewOffered
+        && viewPlayer.DeckZone.All(p => !(p is Minion)), "real " + realOffered + " view " + viewOffered);
 });
 
 // ============================================================ E  The Amazing "Bonepaw": Mana Echoes
@@ -335,7 +346,8 @@ Guard("Bonepaw", () =>
     Check("E3 the echo is no play: the play history is unchanged", player.PlayHistory.Count + boss.PlayHistory.Count == history);
     Round(g);
     Cast(g, Counterspell);
-    Check("E4 a Secret or a Quest is never echoed: a played Counterspell joins no echo list", DungeonRunEncounters.ManaEchoes(boss).All(card => card.Id == Fireball) && boss.SecretZone.Count == 1);
+    Check("E4 a Secret still in the boss's Secret zone is not echoed: its own Counterspell in play joins no echo list", DungeonRunEncounters.ManaEchoes(boss).All(card => card.Id == Fireball)
+        && boss.SecretZone.Count == 1);
     var targets = new HashSet<string>();
     for (int i = 0; i < 12; i++)
     {
@@ -347,6 +359,41 @@ Guard("Bonepaw", () =>
         boss.Hero.Damage = 0; player.Hero.Damage = 0;
     }
     Check("E5 targets are chosen randomly: twelve echoes hit both heroes", targets.SetEquals(new[] { "boss", "player" }), string.Join(",", targets));
+    // Secrets: a boss's own Secret is echoed once it has left play; never while a copy is in play or the zone is full; a run
+    // player's Secret is never (a boss-generated Secret outside a closed boss pool).
+    const string IceBarrier = "EX1_289", Effigy = "AT_002", ExplosiveTrap = "EX1_610";
+    var g3 = Fight("dala_05_bonepaw");
+    boss = g3.Player2; player = g3.Player1;
+    ToBoss(g3);
+    Cast(g3, IceBarrier);
+    Check("E6 the boss played Ice Barrier, which is in its Secret zone: no echo is possible (the power is not offered, in the game or the fair view)",
+        boss.SecretZone.Count == 1 && boss.SecretZone[0].Card.Id == IceBarrier && DungeonRunEncounters.ManaEchoes(boss).Count == 0 && !Offered(g3) && !PilotViewOffered(g3));
+    var gone = boss.SecretZone[0];
+    gone.ActivatedTrigger?.Remove(); boss.SecretZone.Remove(gone); boss.GraveyardZone.Add(gone);
+    bool secretOffered = Offered(g3), secretView = PilotViewOffered(g3);
+    bool echoed = Power(g3);
+    var again = boss.SecretZone.FirstOrDefault();
+    Check("E7 once that Ice Barrier left play it is echoed: the power is offered (also in the fair view) and a new Ice Barrier enters the boss's Secret zone", secretOffered && secretView && echoed
+        && boss.SecretZone.Count == 1 && again != null && again != gone && again.Card.Id == IceBarrier, again?.Card.Id);
+    Round(g3);
+    var other = new[] { "EX1_287", "EX1_294", "EX1_594" };
+    foreach (string id in other) DungeonRunEncounters.PutSecret(boss, C(id));
+    Cast(g3, Effigy);
+    var effigy = boss.SecretZone.FirstOrDefault(x => x.Card.Id == Effigy);
+    if (effigy != null) { effigy.ActivatedTrigger?.Remove(); boss.SecretZone.Remove(effigy); boss.GraveyardZone.Add(effigy); }
+    DungeonRunEncounters.PutSecret(boss, C("FP1_018"));
+    Check("E8 with a full Secret zone (five Secrets) no Secret is echoed, not even Effigy, which left play", boss.SecretZone.IsFull && DungeonRunEncounters.ManaEchoes(boss).Count == 0 && !Offered(g3),
+        "zone " + boss.SecretZone.Count + " echoes " + string.Join(",", DungeonRunEncounters.ManaEchoes(boss).Select(x => x.Id)));
+    var freed = boss.SecretZone.First(x => x.Card.Id == "FP1_018");
+    freed.ActivatedTrigger?.Remove(); boss.SecretZone.Remove(freed); boss.GraveyardZone.Add(freed);
+    Check("E9 with room again Effigy (played by the boss, out of play) is the one echo; Ice Barrier, whose echo is in play, is not",
+        DungeonRunEncounters.ManaEchoes(boss).Select(x => x.Id).Distinct().OrderBy(x => x, StringComparer.Ordinal).SequenceEqual(new[] { Effigy }), string.Join(",", DungeonRunEncounters.ManaEchoes(boss).Select(x => x.Id)));
+    foreach (var x in boss.SecretZone.ToArray()) { x.ActivatedTrigger?.Remove(); boss.SecretZone.Remove(x); boss.GraveyardZone.Add(x); }
+    ToPlayer(g3);
+    Cast(g3, ExplosiveTrap);
+    ToBoss(g3);
+    Check("E10 a Secret the run player played (Explosive Trap) is never an echo for the boss", player.SecretZone.Any(x => x.Card.Id == ExplosiveTrap)
+        && DungeonRunEncounters.ManaEchoes(boss).All(x => x.Id != ExplosiveTrap));
 });
 
 // ============================================================ F  Dazzik "Hellscream": "Armor Up", "Scourgelord" Dazzik

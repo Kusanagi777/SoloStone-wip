@@ -59,16 +59,28 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 		/// <summary>
 		/// DALA_BOSS_05p Mana Echoes, "Cast a random spell that was cast this game": the spells either player played from hand this
-		/// game (the public play history, one entry per play) that <paramref name="c"/> may cast: scripted, never a Secret or a
-		/// Quest (they could not enter play twice), and allowed by the run's generation filter for <paramref name="c"/>.
+		/// game (the public play history, one entry per play) that <paramref name="c"/> may cast now. Scripted and never a Quest
+		/// (it could not be in play twice). A Secret only while <paramref name="c"/>'s Secret zone has room and holds no copy of
+		/// it (a cast Secret enters play, as the Tombs Monocle's casts do), and only one <paramref name="c"/> itself played this
+		/// game: a boss's Secret is a card of its own deck, admitted for it, while a Secret of the run player's is a boss-generated
+		/// Secret outside any closed boss pool (the generation filter blocks every boss-generated Secret unless an encounter row
+		/// turns them on for its class pool). Every other spell passes the run's generation filter for <paramref name="c"/>.
 		/// </summary>
 		public static List<Card> ManaEchoes(Controller c)
 		{
 			Game g = c.Game;
-			var played = c.PlayHistory.Concat(c.Opponent.PlayHistory).Select(h => h.SourceCard)
-				.Where(card => card != null && card.Type == CardType.SPELL && card.Implemented && !card.IsSecret && !card.IsQuest).ToList();
-			if (played.Count == 0) return played;
-			using (g.GenerateFor(c)) return played.Where(card => !g.BlocksGenerated(card)).ToList();
+			bool SecretFits(Card card) => !c.SecretZone.IsFull && !c.SecretZone.Any(p => p.Card.AssetId == card.AssetId);
+			bool Castable(Card card) => card != null && card.Type == CardType.SPELL && card.Implemented && !card.IsQuest;
+			var own = c.PlayHistory.Select(h => h.SourceCard).Where(Castable).ToList();
+			var theirs = c.Opponent.PlayHistory.Select(h => h.SourceCard).Where(card => Castable(card) && !card.IsSecret).ToList();
+			if (own.Count + theirs.Count == 0) return own;
+			var found = new List<Card>();
+			using (g.GenerateFor(c))
+			{
+				found.AddRange(own.Where(card => card.IsSecret ? SecretFits(card) : !g.BlocksGenerated(card)));
+				found.AddRange(theirs.Where(card => !g.BlocksGenerated(card)));
+			}
+			return found;
 		}
 
 		/// <summary>

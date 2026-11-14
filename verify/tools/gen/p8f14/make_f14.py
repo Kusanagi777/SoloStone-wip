@@ -146,8 +146,10 @@ ROWS = [
          flags=["bothPlayers", "recast"], total="20; 25", extend=True, fillers=[],
          notes=[("schedule", "Bonepaw's pool table gives 20 and 25 cards (levels 3-5). Level 4: tier 2."),
                 ("power", "Mana Echoes casts a new copy of a random spell either player played from hand this game (the play history), "
-                 "targets and choices random; only a scripted spell the boss side's generation filter allows, never a Secret or a Quest "
-                 "(they could not enter play twice). Offered only after such a spell was played.")]),
+                 "targets and choices random; only a scripted spell, never a Quest. A Secret is echoed while the boss's Secret zone has "
+                 "room and holds no copy of it, and only one the boss itself played (a card of its own, admitted deck); a Secret of the "
+                 "run player's would be a boss-generated Secret outside any closed boss pool, which the generation filter blocks, so it "
+                 "is never echoed. Every other spell passes the boss side's generation filter. Offered only while an echo is possible.")]),
     dict(n="06", key="dazzik", page="Dazzik_%22Hellscream%22", name='Dazzik "Hellscream"', tier="2", level=4, archetype="control",
          flags=["start"], total="25", extend=True, fillers=[], ids={'"Scourgelord" Dazzik': "DALA_BOSS_06dk"},
          start=R([("bossDeckAdd", ["DALA_BOSS_06dk"])]),
