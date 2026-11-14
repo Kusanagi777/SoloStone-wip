@@ -170,6 +170,13 @@ Guard("Wendy", () =>
         player.HandZone.Count + "/" + boss.HandZone.Count + " yeti at boss " + boss.HandZone.Count(p => p.Card.Id == Yeti));
     var clone = g.Clone();
     Check("A6 a game clone carries the rule-cast count (TAG_SCRIPT_DATA_NUM_2 of the power)", DungeonRunEncounters.AutoCasts(clone.Player2.Hero.HeroPower) == Casts(boss) && Casts(boss) >= 2, Casts(boss).ToString());
+    // In the boss's fair view the run player's hand is masked (Unknown stand-ins): the exchange there moves a stand-in, never throws.
+    var (view2, viewBoss2, viewPlayer2) = FairView(g);
+    int bossCards = viewBoss2.HandZone.Count, playerCards = viewPlayer2.HandZone.Count, unknownBefore = viewPlayer2.HandZone.Count(p => p is Unknown);
+    string viewSwap = "ok";
+    try { if (!DungeonRunEncounters.ExchangeRandomCards(view2, viewBoss2, viewBoss2.Hero.HeroPower)) viewSwap = "nothing moved"; } catch (Exception e) { viewSwap = e.GetType().Name + ": " + e.Message; }
+    Check("A7 the exchange resolves in the boss's fair view too (a masked card of the run player's hand for one of its own); both hands keep their counts",
+        viewSwap == "ok" && unknownBefore > 0 && viewBoss2.HandZone.Count == bossCards && viewPlayer2.HandZone.Count == playerCards, viewSwap + " unknown " + unknownBefore);
 });
 
 // ============================================================ B  Tala Stonerage: Twin Paths
