@@ -155,6 +155,8 @@ phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] 
 // Phase 8 family 12: the rows of the Monster Hunt passive and clickable boss powers and boss cards it scripts (DungeonRunAdmission.F12.cs; each row names its test).
 phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] { "boss-passive-public", "boss-passive-both", "boss-deck-rewrite", "boss-hidden-shuffle",
     "boss-minion-power", "boss-hunt-minion" }.Contains(r.Family)).SelectMany(r => r.Ids));
+// Phase 8 family 13: the boss shrines' rows (DungeonRunAdmission.F13.cs): TRLA_186 and TRLA_129s left hidden-steal and shrine-token.
+phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] { "boss-hidden-steal", "boss-shrine-token" }.Contains(r.Family)).SelectMany(r => r.Ids));
 Check("the table lists only ledger rows (and the phase 6 F2/F3/F4/F7/F8/F9 run-treasure, run-hero, run-deck-token and treasure-data-gap rows, GILA_903 and ULDA_Brann_HP3)",
     runDeckTokenIds.SequenceEqual(new[] { "DALA_716t" }) && dataGapIds.SequenceEqual(new[] { "DALA_740" })
     && tableIds.All(id => ledgerIds.Contains(id) || runTreasureIds.Contains(id) || runHeroIds.Contains(id) || runDeckTokenIds.Contains(id) || dataGapIds.Contains(id) || id == "GILA_903" || id == "ULDA_Brann_HP3" || id == "ULDA_115" || phase7Ids.Contains(id)),
@@ -166,7 +168,7 @@ int Count(string family, AdmitScope? admit = null) => DungeonRunAdmission.Rules.
 Check("Secret rows: 42 secret-card, 29 secret-from-deck, 1 secret-named, 11 secret-generated (GILA_903 from phase 6 F4; TRLA_110 a board shrine from phase 7 S1), 1 text-only",
     Count("secret-card") == 42 && Count("secret-from-deck") == 29 && Count("secret-named") == 1 && Count("secret-generated") == 11 && Count("text-only") == 1
     && secretRows.All(id => new[] { "secret-card", "secret-from-deck", "secret-named", "secret-generated", "text-only" }.Contains(DungeonRunAdmission.RuleFor(id)?.Family)
-        || id == "TRLA_110" && DungeonRunAdmission.RuleFor(id)?.Family == "board-shrine"));
+        || id == "TRLA_110" && DungeonRunAdmission.RuleFor(id)?.Family == "boss-shrine"));   // phase 8 family 13: boss-shrine
 Check("deck rows: 6 highlander, 5 not-started-in-deck, 17 from-own-deck, 9 deck-wide-change, 15 start-of-game-draw, 2 empty-deck",
     deckRows.Count(id => DungeonRunAdmission.RuleFor(id).Family == "highlander") == 6 && deckRows.Count(id => DungeonRunAdmission.RuleFor(id).Family == "not-started-in-deck") == 5
     && deckRows.Count(id => DungeonRunAdmission.RuleFor(id).Family == "from-own-deck") == 17 && deckRows.Count(id => DungeonRunAdmission.RuleFor(id).Family == "deck-wide-change") == 9
@@ -208,8 +210,11 @@ foreach (var rule in DungeonRunAdmission.Rules)
     // Phase 8 family 09: the run treasures King Togwaggle's Magic Candle finds (and A. F. Kay's deck lists) are admitted for a boss on catalog runs:
     // LOOTA_839's own row and the run-treasure-boss-find row (the legacy verdict of both stays the run player's only).
     var bossTreasures = DungeonRunAdmission.Rules.Where(r => r.Family == "run-treasure-side-shuffle" || r.Family == "run-treasure-boss-find").ToList();
-    Check("only the three secret-generated rules carry a catalog lift (the player side; since phase 8 the boss power DALA_BOSS_21p and the two named-Hunter-Secret cards), and since family 09 the two rows of the treasures a boss finds (Player to Player + Boss)",
-        new HashSet<AdmissionRule>(DungeonRunAdmission.Rules.Where(r => r.CatalogAdmit != null)).SetEquals(new[] { playerSide, bossSide, named }.Concat(bossTreasures)) && DungeonRunAdmission.Rules.Count(r => r.CatalogAdmit != null) == 5 && bossTreasures.Count == 2
+    // Phase 8 family 13: TRLA_110 Halazzi's Trap's own row (Player to Player + Boss with the generated-Secrets need).
+    var trapRow = DungeonRunAdmission.RuleFor("TRLA_110");
+    Check("only the three secret-generated rules carry a catalog lift (the player side; since phase 8 the boss power DALA_BOSS_21p and the two named-Hunter-Secret cards), and since family 09 the two rows of the treasures a boss finds (Player to Player + Boss), and since family 13 TRLA_110's boss-shrine row",
+        new HashSet<AdmissionRule>(DungeonRunAdmission.Rules.Where(r => r.CatalogAdmit != null)).SetEquals(new[] { playerSide, bossSide, named, trapRow }.Concat(bossTreasures)) && DungeonRunAdmission.Rules.Count(r => r.CatalogAdmit != null) == 6 && bossTreasures.Count == 2
+        && trapRow.Ids.SequenceEqual(new[] { "TRLA_110" }) && trapRow.Admit == AdmitScope.Player && trapRow.CatalogAdmit == (AdmitScope.Player | AdmitScope.Boss)
         && bossTreasures.All(r => r.Admit == AdmitScope.Player && r.CatalogAdmit == (AdmitScope.Player | AdmitScope.Boss) && r.CatalogLift == DungeonRunAdmission.RunTreasureBossLift)
         && bossTreasures.SelectMany(r => r.Ids).Count() == 15);
     foreach (string id in new[] { "BOT_402", "DAL_141", "GIL_116", "ICC_204", "UNG_011", "LOOTA_833", "GILA_509", "GILA_903", "TRLA_168", "ULD_429" })
@@ -225,8 +230,12 @@ foreach (var rule in DungeonRunAdmission.Rules)
     }
     // Phase 7 S1: TRLA_110 Halazzi's Trap is a board shrine (scripted), admitted for the run player and never generated.
     var trap = DungeonRunAdmission.Classify(Engine("TRLA_110"), "TRLA_110", AdmitScope.Player, null, catalogRun: true);
-    Check("TRLA_110 is a board shrine (phase 7 S1): Player, never the boss, never generated",
-        trap.Admitted && trap.Family == "board-shrine" && trap.Rule.NeverGenerated && !DungeonRunAdmission.Classify(Engine("TRLA_110"), "TRLA_110", AdmitScope.Boss, null, catalogRun: true).Admitted
+    // Phase 8 family 13: Zul'jin's late variant holds it, so a boss on a catalog run too (with the boss's generated Secrets).
+    var trapBoss = DungeonRunAdmission.Classify(Engine("TRLA_110"), "TRLA_110", AdmitScope.Boss, null, catalogRun: true);
+    Check("TRLA_110 is a board shrine (phase 7 S1): Player; since phase 8 family 13 a boss on a catalog run, with the generated-Secrets need (Hunter); never a legacy run's boss; never generated",
+        trap.Admitted && trap.Family == "boss-shrine" && trap.Rule.NeverGenerated && trapBoss.Admitted && trapBoss.CatalogLifted
+        && trapBoss.Rule.BossNeeds == DungeonRunAdmission.BossNeedsGeneratedSecrets && trapBoss.Rule.BossSecretClass == CardClass.HUNTER
+        && !DungeonRunAdmission.Classify(Engine("TRLA_110"), "TRLA_110", AdmitScope.Boss, null).Admitted
         && DungeonRunAdmission.GeneratedRejects(true).Contains("TRLA_110"));
     var boss21 = DungeonRunAdmission.Classify(Engine("DALA_BOSS_21p"), "DALA_BOSS_21p", AdmitScope.Any, null, catalogRun: true);
     Check("DALA_BOSS_21p (phase 8): a boss power on a catalog run only (never the run player's, never generated); rejected in every scope on a legacy run",

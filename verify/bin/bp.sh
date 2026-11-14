@@ -25,6 +25,7 @@
 #   family 11 modes:     bp.sh enc11-pete                                         (twice per call)
 #                        bp.sh enc11a|enc11b|enc11-cards|enc11-shrine <k>         (one run per call, k = 1 or 2; then `bp.sh same <mode>`)
 #   family 12 modes:     bp.sh enc12|enc12-seeds|enc12-hidden                     (twice per call)
+#   family 13 modes:     bp.sh enc13a|enc13b|enc13-seeds   (the nine Rumble Run champions, every shrine variant; twice per call)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -87,6 +88,10 @@ PAD11=$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11
 SHR11=gila_51_garrow,gila_62_gustave,gila_58_grum,gila_56_face_collector,gila_57_raeth,gila_41_brushwood,gila_55_azalina,gila_40_splintergraft,gila_42_baran
 # family 12: the three rows that change a hidden zone or repeat spells (Forlorn Lovers' own deck, The Whisperer's Echo, Hypnotize)
 HID12=gila_39_forlorn_lovers,gila_50_whisperer,gila_64_winslow
+# family 13: the nine Rumble Run champions (Voone is family 01's row, filed under 13), 2 games per shrine variant; the boss cards watched
+A13=trl_200_voone,trl_201_zentimo,trl_202_hooktusk,trl_203_thekal,trl_204_zuljin
+B13=trl_205_loti,trl_206_jeklik,trl_207_malacrass,trl_208_talanji
+CARDS13=TRLA_168,TRLA_129s
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -237,6 +242,11 @@ enc11-shrine) need $E; once enc11-shrine "$2" BOSS=$PAD11,$SHR11 GAMES=1
 enc12) need $E; twice enc12 FAMILY=12 WATCH=GILA_BOSS_68t ;;
 enc12-seeds) need $E; twice enc12-seeds FAMILY=12 SEED_BASE=19000 WATCH=GILA_BOSS_68t ;;
 enc12-hidden) need $E; twice enc12-hidden BOSS=$HID12 GAMES=6 ;;
+enc13a) need $E; twice enc13a BOSS=$A13 GAMES=2 WATCH=$CARDS13
+  echo "enc13a: fights against a Rikkar row with its own shrine (TRLA_209h_*): $(grep -c 'TRLA_209h_' "$R/bp-enc13a-a.txt")" ;;
+enc13b) need $E; twice enc13b BOSS=$B13 GAMES=2 WATCH=$CARDS13
+  echo "enc13b: fights against a Rikkar row with its own shrine (TRLA_209h_*): $(grep -c 'TRLA_209h_' "$R/bp-enc13b-a.txt")" ;;
+enc13-seeds) need $E; twice enc13-seeds FAMILY=13 GAMES=1 SEED_BASE=19000 WATCH=$CARDS13 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;
