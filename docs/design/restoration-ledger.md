@@ -197,9 +197,9 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | Gap | Rows blocked | Only blocker | Collectible rows | What it needs |
 | --- | ---: | ---: | ---: | --- |
 | `ai:turn-rewind` | 2 | 0 | 0 | Admission family `turn-rewind`: restarts the turn or the game, which rebuilds the controllers; bot state and plan cache must restart (admitted: none; lifted by phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6); GILA_900p, GILA_911). |
-| `ai:boss-rejected-restart` | 1 | 0 | 0 | Admission family `boss-rejected-restart`: Infinite Toki's Alternate Timeline, "Start a new game, but your opponent's Health stays the same": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of her deck (data/dungeon-run/reference/encounters/F23.json "rejected") (admitted: none; lifted by phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6); GILA_BOSS_48t). |
 | `ai:finale-state` | 1 | 0 | 0 | Admission family `finale-state`: its second half damages the Plague Lord of the act finale whenever the run fights it; the run has no Plague Lord finale and no state that carries damage to it until phase 8, and a Gnomebliterator that only dealt its first half would misstate the card (c-treasures-F12 T28) (admitted: none; lifted by phase 8 (encounters/anomalies): the Plague Lord finale encounters and the run state that carries damage to a Plague Lord into its fight; ULDA_115). |
 | `ai:global-rule-rejected` | 1 | 0 | 0 | Admission family `global-rule-rejected`: Glittering ("After a player plays a card that costs (8) or more, that player adds a Treasure to their hand"): the wiki states the pool is the Dalaran Heist treasures, which are run rewards the table admits for the run player's run deck only (no boss and no generation pool may hold one: RunTreasureLift), and several of them write run state (DALA_718, DALA_719, DALA_721). A rule for both players needs each treasure admitted for a boss and as a generation result; until then the rule is rejected in schedule-v1.json and not scripted (admitted: none; lifted by phase 8 (encounters/anomalies): the Dalaran Heist active treasures admitted for a boss and as a generation result (the treasure-on-boss work of the encounter families that give a boss treasure cards: LOOTA_BOSS_99p, Ol' Toomba); DALA_857). |
+| `ai:nemesis-rejected-restart` | 1 | 0 | 0 | Admission family `nemesis-rejected-restart`: Infinite Toki's Alternate Timeline, "Start a new game, but your opponent's Health stays the same": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of her deck (data/dungeon-run/reference/encounters/F23.json "rejected") (admitted: none; lifted by phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6); GILA_BOSS_48t). |
 | `ai:start-of-game-draw` | 1 | 0 | 0 | Admission family `start-of-game-draw`: ends the fight and edits the run deck (admitted: none; lifted by phase 9 (economy): a run-owned match exit (an escape outcome and a skipped fight node) that edits the run deck (deferred there by phase 6); ULDA_111). |
 | `ai:treasure-data-gap` | 1 | 0 | 0 |  |
 | `engine:unscripted` | 265 | 0 | 0 | No engine script for the card id (CardDefs has no implemented entry). |
@@ -235,13 +235,13 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:boss-card | 17 |
 | ok:from-own-deck | 17 |
 | ok:collectible-public | 16 |
-| ok:boss-hunt-card | 15 |
 | ok:boss-power-public | 15 |
 | ok:run-treasure-evolving | 15 |
 | ok:run-treasure-boss-find | 14 |
 | ok:start-of-game-draw | 14 |
 | ok:public-effect | 13 |
-| ok:boss-board-power | 12 |
+| ok:boss-board-power | 10 |
+| ok:boss-hunt-card | 9 |
 | ok:boss-public-power | 9 |
 | ok:deck-wide-change (player only; boss after phase 8 (encounters/anomalies): the first boss decks that use deck-wide rewrites (encounter families) bring the boss's own-deck ledger for deck-wide rewrites and removals) | 9 |
 | ok:public-board | 9 |
@@ -251,6 +251,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:global-rule-hidden | 6 |
 | ok:global-rule-start | 6 |
 | ok:highlander | 6 |
+| ok:nemesis-hunt-card | 6 |
 | ok:not-started-in-deck | 6 |
 | ok:run-treasure-discover | 6 |
 | ok:collectible-generated | 5 |
@@ -278,34 +279,34 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:secret-generated | 3 |
 | ok:start-of-game | 3 |
 | blocked:turn-rewind (phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)) | 2 |
-| ok:boss-auto-cast | 2 |
 | ok:boss-control | 2 |
 | ok:boss-player-deck-insert | 2 |
 | ok:boss-run-edit | 2 |
 | ok:empty-deck | 2 |
 | ok:global-rule-run | 2 |
 | ok:hidden-steal | 2 |
+| ok:nemesis-board-power | 2 |
 | ok:own-deck-insert | 2 |
 | ok:own-deck-pull | 2 |
 | ok:run-hero-power-token | 2 |
 | ok:run-treasure-belief-reset | 2 |
-| ok:run-treasure-boss-deck | 2 |
 | ok:run-treasure-hand-escrow | 2 |
 | ok:run-treasure-match-start | 2 |
+| ok:run-treasure-nemesis-deck | 2 |
 | ok:run-treasure-paid-cost | 2 |
 | ok:run-treasure-rule | 2 |
 | ok:run-treasure-run-log | 2 |
-| blocked:boss-rejected-restart (phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)) | 1 |
 | blocked:finale-state (phase 8 (encounters/anomalies): the Plague Lord finale encounters and the run state that carries damage to a Plague Lord into its fight) | 1 |
 | blocked:global-rule-rejected (phase 8 (encounters/anomalies): the Dalaran Heist active treasures admitted for a boss and as a generation result (the treasure-on-boss work of the encounter families that give a boss treasure cards: LOOTA_BOSS_99p, Ol' Toomba)) | 1 |
+| blocked:nemesis-rejected-restart (phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)) | 1 |
 | blocked:start-of-game-draw (phase 9 (economy): a run-owned match exit (an escape outcome and a skipped fight node) that edits the run deck (deferred there by phase 6)) | 1 |
 | blocked:treasure-data-gap (none: a data gap no phase owns; the client data does not state the hidden effects' triggers or chances) | 1 |
+| ok:boss-auto-cast | 1 |
 | ok:boss-both-draw | 1 |
 | ok:boss-control-all | 1 |
 | ok:boss-craft | 1 |
 | ok:boss-extra-turn | 1 |
 | ok:boss-form | 1 |
-| ok:boss-passive-immune | 1 |
 | ok:boss-setaside-store | 1 |
 | ok:boss-token | 1 |
 | ok:boss-token (boss only; player after none: boss decks only; no player role offers it) | 1 |
@@ -320,6 +321,8 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:hidden-hand-discover | 1 |
 | ok:hidden-reveal | 1 |
 | ok:hidden-steal (player only; boss after phase 8 (encounters/anomalies): boss shrine rosters (BossShrineLift); the run player's only until then) | 1 |
+| ok:nemesis-auto-cast | 1 |
+| ok:nemesis-passive-immune | 1 |
 | ok:opening-hand | 1 |
 | ok:own-graveyard | 1 |
 | ok:random-cast | 1 |
@@ -512,12 +515,12 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `boss-control-all` | boss | Sazzmi Gentlehorn's Infatuation, "Gain control of enemy minions with 1 or less Attack": a control change of every such public board minion, in board order (the engine's ControlTask on each: one taken while the boss's board is full is destroyed). A run shrine never changes sides and is left as it is, awake or dormant (ShrineRules.CanChangeController); the power is offered only while a minion it can take is on the enemy board, which is public (c-enc-10 G1-G5; the enc10a bosspilot mode) | none: a boss hero power |  | 1 of 1 |
 | `boss-setaside-store` | boss | Gnomenapper's Nab, "Put an enemy minion into a sack": a public board minion of the run player leaves play for the set-aside store of a Stuffed Sack summoned for the boss (EncounterRules.Store: the minion itself, its damage and enchantments kept, in its own controller's set-aside zone; the link is one private tag on the sack, EncounterRules.SetAsideStore, that game clones and the boss's fair view carry). The stored minion was public and stays known to both sides; no hidden zone is read. Nab needs a free slot on the boss's board, and a run shrine is never a legal target, awake or dormant (a shrine never enters a store) (c-enc-10 E1-E14; the enc10a and enc10-nab bosspilot modes) | none: a boss hero power |  | 1 of 1 |
 | `boss-hunt-card` | player, boss | a Monster Hunt boss deck card, start weapon or token whose effect is public board and hero resolution, the same in either player's hands: Chuck, the spell, discards every minion its caster holds and deals the Attack of each to the enemy hero (GILA_BOSS_23t: the caster's own hand), Stuffed Sack returns the minion it holds to that minion's own controller when it dies (GILA_BOSS_26t, EncounterRules.Release; a silenced, transformed or bounced sack returns nothing), Sack of Gnomes fills its caster's board with random Gnomes of a fixed list behind the generation filter (GILA_BOSS_26t2), Amalgamate destroys all minions and summons one Amalgamation with their combined Attack and Health (GILA_BOSS_27t; a run shrine goes dormant as from any destroy effect) and the Amalgamation is every minion type (GILA_BOSS_27t2), Enchanting Tune takes control of all enemy minions and sets them to 1/1 (GILA_BOSS_29t; a run shrine never changes sides), the Scythe never loses Durability from an attack and gains +1 Attack when its hero kills a minion with it (GILA_BOSS_33t), Vampiric Fangs destroys a minion and restores its Health to the caster's hero (GILA_BOSS_35t) and Murloc Infestation gives the caster's minions "Deathrattle: Summon a random Murloc" (GILA_BOSS_37t: a scripted Murloc behind the generation filter). No hidden zone of the other side is read or written (c-enc-10 D3-D5, E3-E16, F3-F8, G6-G9, J3-J11, L4-L6, N5-N7; the enc10a, enc10b, enc10-nab and enc10-cards bosspilot modes) | none: boss decks only; no player role offers it |  | 9 of 9 |
-| `boss-board-power` | boss | a nemesis's clickable hero power that resolves on the public boards: Chronoacceleration gives a friendly minion Mega-Windfury and destroys it at the end of the turn (GILA_BOSS_48p with its client enchantment GILA_BOSS_48e: Power Overwhelming's end-of-turn rule), Pistol Barrage deals 2 damage to a minion and the minions next to it (GILA_BOSS_59p, Cone of Cold's adjacency, no Spell Damage). Offered by the play requirements only (a friendly or any minion), which read the exact boards; no hidden zone is read or written (c-enc-23 A1-A8, C1-C5; the enc23 bosspilot mode) | none: a boss hero power |  | 2 of 2 |
-| `boss-passive-immune` | boss | Glinda Crowskin's passive False Heart: her hero is Immune while she controls a minion that is not a permanent or dormant one (family 06's hero aura EncounterRules.HeroImmuneWhile, the rule of ULDA_706 No-Face for one side, re-checked at every aura update), a public board fact both sides' searches replay; started at match start by EncounterRules.ActivatePower, never offered as an option. The row carries the flag heroImmune, which keeps ULDA_706 away from her fight (c-enc-23 B1-B6; the enc23 bosspilot mode) | none: a boss hero power |  | 1 of 1 |
-| `boss-auto-cast` | boss | Captain Shivers' Plunder (0), "Draw a weapon from your deck", auto-cast as on the wiki (the client card is AI_MUST_PLAY): at the start of his turn, while his deck holds a weapon and his hand has room, one weapon of his own deck is drawn by the game RNG (family 09's AutoCast rule: never an option of the AI, so no choice of it depends on the deck order the search samples); the run player sees a draw. In practice it draws back Kingsbane, which his row equips at the start and whose Deathrattle shuffles it in (c-enc-23 D1-D6; the enc23 bosspilot mode) | none: a boss hero power |  | 1 of 1 |
-| `boss-hunt-card` | player, boss | a Monster Hunt boss deck card whose effect is public board and hero resolution or a change to its caster's own hand and deck, the same in either player's hands: Crowskin Faithful draws its controller a card and shuffles a new Faithful into that controller's deck when it dies (GILA_BOSS_49t), Crowskin Pact transforms a minion into a Faithful and takes control of it (GILA_BOSS_49t2; a run shrine picked goes dormant instead and never changes sides), Cursed Crewmember draws two cards and shuffles a copy of its caster's hand into that caster's deck (GILA_BOSS_60t: Dead Man's Hand's rule; the caster knows its own hand, the opponent sees a deck count), and Witchwood's Touch draws 1, 2 or 3 cards and gains 6, 8 or 10 Armor (GILA_BOSS_99t, 99t2, 99t3). No hidden zone of the other side is read or written (c-enc-23 B7-B12, D7-D10, E1-E9; the enc23 and enc23-cards bosspilot modes) | none: boss decks only; no player role offers it |  | 6 of 6 |
-| `run-treasure-boss-deck` | player | treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F3, c-treasures-F4) | none: a run treasure; no boss deck or generation pool offers it |  | 2 of 2 |
-| `boss-rejected-restart` | none | Infinite Toki's Alternate Timeline, "Start a new game, but your opponent's Health stays the same": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of her deck (data/dungeon-run/reference/encounters/F23.json "rejected") | phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6) |  | 1 of 1 |
+| `nemesis-board-power` | boss | a nemesis's clickable hero power that resolves on the public boards: Chronoacceleration gives a friendly minion Mega-Windfury and destroys it at the end of the turn (GILA_BOSS_48p with its client enchantment GILA_BOSS_48e: Power Overwhelming's end-of-turn rule), Pistol Barrage deals 2 damage to a minion and the minions next to it (GILA_BOSS_59p, Cone of Cold's adjacency, no Spell Damage). Offered by the play requirements only (a friendly or any minion), which read the exact boards; no hidden zone is read or written (c-enc-23 A1-A8, C1-C5; the enc23 bosspilot mode) | none: a boss hero power |  | 2 of 2 |
+| `nemesis-passive-immune` | boss | Glinda Crowskin's passive False Heart: her hero is Immune while she controls a minion that is not a permanent or dormant one (family 06's hero aura EncounterRules.HeroImmuneWhile, the rule of ULDA_706 No-Face for one side, re-checked at every aura update), a public board fact both sides' searches replay; started at match start by EncounterRules.ActivatePower, never offered as an option. The row carries the flag heroImmune, which keeps ULDA_706 away from her fight (c-enc-23 B1-B6; the enc23 bosspilot mode) | none: a boss hero power |  | 1 of 1 |
+| `nemesis-auto-cast` | boss | Captain Shivers' Plunder (0), "Draw a weapon from your deck", auto-cast as on the wiki (the client card is AI_MUST_PLAY): at the start of his turn, while his deck holds a weapon and his hand has room, one weapon of his own deck is drawn by the game RNG (family 09's AutoCast rule: never an option of the AI, so no choice of it depends on the deck order the search samples); the run player sees a draw. In practice it draws back Kingsbane, which his row equips at the start and whose Deathrattle shuffles it in (c-enc-23 D1-D6; the enc23 bosspilot mode) | none: a boss hero power |  | 1 of 1 |
+| `nemesis-hunt-card` | player, boss | a Monster Hunt boss deck card whose effect is public board and hero resolution or a change to its caster's own hand and deck, the same in either player's hands: Crowskin Faithful draws its controller a card and shuffles a new Faithful into that controller's deck when it dies (GILA_BOSS_49t), Crowskin Pact transforms a minion into a Faithful and takes control of it (GILA_BOSS_49t2; a run shrine picked goes dormant instead and never changes sides), Cursed Crewmember draws two cards and shuffles a copy of its caster's hand into that caster's deck (GILA_BOSS_60t: Dead Man's Hand's rule; the caster knows its own hand, the opponent sees a deck count), and Witchwood's Touch draws 1, 2 or 3 cards and gains 6, 8 or 10 Armor (GILA_BOSS_99t, 99t2, 99t3). No hidden zone of the other side is read or written (c-enc-23 B7-B12, D7-D10, E1-E9; the enc23 and enc23-cards bosspilot modes) | none: boss decks only; no player role offers it |  | 6 of 6 |
+| `run-treasure-nemesis-deck` | player | treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F3, c-treasures-F4) | none: a run treasure; no boss deck or generation pool offers it |  | 2 of 2 |
+| `nemesis-rejected-restart` | none | Infinite Toki's Alternate Timeline, "Start a new game, but your opponent's Health stays the same": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of her deck (data/dungeon-run/reference/encounters/F23.json "rejected") | phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6) |  | 1 of 1 |
 
 ### Validation (current DungeonRunValidator admission)
 
