@@ -24,14 +24,16 @@ namespace SabberStoneCore.Actions
 		public const int ShortTurnBelow = 45;
 
 		/// <summary>
-		/// The short turn timer <paramref name="c"/> plays under, in seconds, or 0 for the ordinary clock: its TIMEOUT tag when
-		/// an effect set it below <see cref="ShortTurnBelow"/> (Nozdormu the Eternal: 15; Kaironomaly: 25), else 0. NativeMatch
-		/// ends a turn whose short timer ran out, whether or not the player's own Turn Timer option is on (as it did for 15 alone).
+		/// The short turn timer <paramref name="c"/> plays under, in seconds, or 0 for the ordinary clock: its own TIMEOUT tag
+		/// (the base value an effect wrote, without controller auras) when it is below <see cref="ShortTurnBelow"/> (Nozdormu the
+		/// Eternal: 15; Kaironomaly: 25), else 0. A TIMEOUT aura (classic Nozdormu, EX1_560: SET -55) is not read: it never shortened
+		/// a turn in NativeMatch and must neither make one short nor cancel Kaironomaly's. NativeMatch ends a turn whose short timer
+		/// ran out, whether or not the player's own Turn Timer option is on (as it did for 15 alone).
 		/// </summary>
 		public static int ShortTurnSeconds(Controller c)
 		{
 			if (c == null) return 0;
-			int t = c[GameTag.TIMEOUT];
+			int t = c[GameTag.TIMEOUT] - c.ControllerAuraEffects[GameTag.TIMEOUT];
 			return t > 0 && t < ShortTurnBelow ? t : 0;
 		}
 

@@ -408,6 +408,21 @@ Guard("Norroa", () =>
     var plain = Fight("dala_70_smiggs");
     Check("N4 without the power the timer is the ordinary one (no short turn)", EncounterRules.ShortTurnSeconds(plain.Player1) == 0 && plain.Player1.TimeOut == 75, plain.Player1.TimeOut.ToString());
     Check("N5 a clone carries the timer", g.Clone().Player1.TimeOut == 15);
+    // Classic Nozdormu (EX1_560: a CONTROLLERS aura TIMEOUT SET -55, so TIMEOUT reads 20 with it) is no short turn of its own,
+    // and it does not cancel Kaironomaly's 25 (the rule reads the base tag an effect wrote, never the aura).
+    var classic = Fight("dala_70_smiggs");
+    Board(classic, classic.Player1, "EX1_560");
+    Check("N6 classic Nozdormu alone gives no short turn (its aura is not a timer NativeMatch enforces)", classic.Player1.TimeOut == 20 && EncounterRules.ShortTurnSeconds(classic.Player1) == 0
+        && EncounterRules.ShortTurnSeconds(classic.Player2) == 0, classic.Player1.TimeOut + " -> " + EncounterRules.ShortTurnSeconds(classic.Player1));
+    var g2 = Fight("dala_43_norroa");
+    Board(g2, g2.Player1, "EX1_560");
+    EndTurn(g2); EndTurn(g2);
+    Check("N7 with classic Nozdormu in play Norroa's 25 seconds hold for the run player's turn", g2.CurrentPlayer == g2.Player1 && EncounterRules.ShortTurnSeconds(g2.Player1) == 25
+        && EncounterRules.ShortTurnSeconds(g2.Player2) == 0, EncounterRules.ShortTurnSeconds(g2.Player1).ToString());
+    var eternal = Fight("dala_70_smiggs");
+    eternal.Player1.TimeOut = 15;
+    Board(eternal, eternal.Player1, "EX1_560");
+    Check("N8 Nozdormu the Eternal's 15 (the base tag MainBegin writes) is unchanged, with or without classic Nozdormu's aura", EncounterRules.ShortTurnSeconds(eternal.Player1) == 15);
 });
 
 // ============================================================ O  Archmage Vargoth: Arcane Runes
