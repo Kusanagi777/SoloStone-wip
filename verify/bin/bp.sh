@@ -24,6 +24,7 @@
 #                        bp.sh enc10a|enc10b|enc10-cards|enc10-shrine <k>         (one run per call, k = 1 or 2; then `bp.sh same <mode>`)
 #   family 11 modes:     bp.sh enc11-pete                                         (twice per call)
 #                        bp.sh enc11a|enc11b|enc11-cards|enc11-shrine <k>         (one run per call, k = 1 or 2; then `bp.sh same <mode>`)
+#   family 12 modes:     bp.sh enc12|enc12-seeds|enc12-hidden                     (twice per call)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -84,6 +85,8 @@ CARDS11=GILA_BOSS_41t,GILA_BOSS_43t,GILA_BOSS_55t2,GILA_BOSS_57t
 W11=gila_44_sezavo
 PAD11=$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11
 SHR11=gila_51_garrow,gila_62_gustave,gila_58_grum,gila_56_face_collector,gila_57_raeth,gila_41_brushwood,gila_55_azalina,gila_40_splintergraft,gila_42_baran
+# family 12: the three rows that change a hidden zone or repeat spells (Forlorn Lovers' own deck, The Whisperer's Echo, Hypnotize)
+HID12=gila_39_forlorn_lovers,gila_50_whisperer,gila_64_winslow
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -231,6 +234,9 @@ enc11-cards) need $E; once enc11-cards "$2" BOSS=fix11_brushwood,fix11_damph,fix
   [ -z "$unplayed" ] && echo "bosspilot enc11-cards: the boss played Hack, Grave Mistake, Soul Assimilation and Shallow Graves from hand" || echo "bosspilot enc11-cards UNPLAYED: $unplayed" ;;
 enc11-shrine) need $E; once enc11-shrine "$2" BOSS=$PAD11,$SHR11 GAMES=1
   echo "fights against a shrine row (TRLA_209h_*) by the nine rows: $(grep -v "^$W11" "$LOGS/enc11-shrine-$2.txt" | grep -c 'TRLA_209h_') of 9" ;;
+enc12) need $E; twice enc12 FAMILY=12 WATCH=GILA_BOSS_68t ;;
+enc12-seeds) need $E; twice enc12-seeds FAMILY=12 SEED_BASE=19000 WATCH=GILA_BOSS_68t ;;
+enc12-hidden) need $E; twice enc12-hidden BOSS=$HID12 GAMES=6 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;
@@ -243,5 +249,5 @@ shrineU) need $SUITES/p7u/c-bosspilot-shrine-U; released shrineU SHRINE_RUN=1 ;;
 shrineT1) need $SUITES/p7t1/c-bosspilot-teammates-T1; released shrineT1 SHRINE_RUN=1 ;;
 shrineT2) need $SUITES/p7t2/c-bosspilot-teammates-T2; released shrineT2 SHRINE_RUN=1 ;;
 shrineD) need $SUITES/p7d/c-bosspilot-companions-D; released shrineD SHRINE_RUN=1 ;;
-*) sed -n 2,29p "$0"; exit 2 ;;
+*) sed -n 2,30p "$0"; exit 2 ;;
 esac

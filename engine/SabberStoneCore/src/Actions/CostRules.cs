@@ -269,7 +269,8 @@ namespace SabberStoneCore.Actions
                     if (rule.SetCost.HasValue) amount = rule.SetCost.Value;
                     if (rule.OnlyTemporary) amount = Math.Max(0, amount - rule.Reduction);
                 }
-            return amount;
+            // Phase 8 family 12: an Echo copy never costs less than (1) in a match under The Whisperer's rule (unchanged elsewhere).
+            return EncounterRules.EchoCopyFloor(source, amount);
         }
 
         internal static int AfterExternalCostAuras(Playable source, int amount)

@@ -152,6 +152,9 @@ phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] 
 // Phase 8 family 11: the rows of the Monster Hunt boss powers and boss cards it scripts (DungeonRunAdmission.F11.cs; each row names its test).
 phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] { "boss-hunt-power", "boss-hunt-own-hand", "boss-hunt-form", "boss-hunt-deck-shuffle",
     "boss-hunt-card-b" }.Contains(r.Family)).SelectMany(r => r.Ids));
+// Phase 8 family 12: the rows of the Monster Hunt passive and clickable boss powers and boss cards it scripts (DungeonRunAdmission.F12.cs; each row names its test).
+phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] { "boss-passive-public", "boss-passive-both", "boss-deck-rewrite", "boss-hidden-shuffle",
+    "boss-minion-power", "boss-hunt-minion" }.Contains(r.Family)).SelectMany(r => r.Ids));
 Check("the table lists only ledger rows (and the phase 6 F2/F3/F4/F7/F8/F9 run-treasure, run-hero, run-deck-token and treasure-data-gap rows, GILA_903 and ULDA_Brann_HP3)",
     runDeckTokenIds.SequenceEqual(new[] { "DALA_716t" }) && dataGapIds.SequenceEqual(new[] { "DALA_740" })
     && tableIds.All(id => ledgerIds.Contains(id) || runTreasureIds.Contains(id) || runHeroIds.Contains(id) || runDeckTokenIds.Contains(id) || dataGapIds.Contains(id) || id == "GILA_903" || id == "ULDA_Brann_HP3" || id == "ULDA_115" || phase7Ids.Contains(id)),
