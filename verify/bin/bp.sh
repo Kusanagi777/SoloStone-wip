@@ -85,7 +85,7 @@ B11=gila_54_cragtorr,gila_55_azalina,gila_56_face_collector,gila_57_raeth,gila_5
 CARDS11=GILA_BOSS_41t,GILA_BOSS_43t,GILA_BOSS_55t2,GILA_BOSS_57t
 W11=gila_44_sezavo
 PAD11=$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11
-SHR11=gila_51_garrow,gila_62_gustave,gila_58_grum,gila_56_face_collector,gila_57_raeth,gila_41_brushwood,gila_55_azalina,gila_40_splintergraft,gila_42_baran
+SHR11=gila_62_gustave,gila_51_garrow,gila_58_grum,gila_56_face_collector,gila_57_raeth,gila_41_brushwood,gila_55_azalina,gila_40_splintergraft,gila_42_baran
 # family 12: the three rows that change a hidden zone or repeat spells (Forlorn Lovers' own deck, The Whisperer's Echo, Hypnotize)
 HID12=gila_39_forlorn_lovers,gila_50_whisperer,gila_64_winslow
 # family 13: the nine Rumble Run champions (Voone is family 01's row, filed under 13), 2 games per shrine variant; the boss cards watched
@@ -259,5 +259,5 @@ shrineU) need $SUITES/p7u/c-bosspilot-shrine-U; released shrineU SHRINE_RUN=1 ;;
 shrineT1) need $SUITES/p7t1/c-bosspilot-teammates-T1; released shrineT1 SHRINE_RUN=1 ;;
 shrineT2) need $SUITES/p7t2/c-bosspilot-teammates-T2; released shrineT2 SHRINE_RUN=1 ;;
 shrineD) need $SUITES/p7d/c-bosspilot-companions-D; released shrineD SHRINE_RUN=1 ;;
-*) sed -n 2,30p "$0"; exit 2 ;;
+*) sed -n '2,/^[^#]/{/^#/p}' "$0"; exit 2 ;;   # the whole usage block: every comment line before the first command
 esac
