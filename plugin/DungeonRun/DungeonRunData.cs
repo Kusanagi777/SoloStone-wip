@@ -1526,7 +1526,7 @@ internal static class DungeonRunEncounterData
     {
         "passive", "bothPlayers", "hiddenZone", "secrets", "forms", "start", "position", "shrine", "persistentDamage", "heroSwitch", "relay",
         "deckReplace", "doubleBattlecry", "doubleDeathrattle", "recast", "forcedAttack", "heroImmune", "boardStart", "damageCap", "noLoss",
-        "listedDeck",
+        "listedDeck", "mirrorDeck",
     };
     internal const string PersistentDamage = "persistentDamage", HeroSwitch = "heroSwitch", Relay = "relay", FormsFlag = "forms", ShrineFlag = "shrine";
     /// <summary>
@@ -1534,6 +1534,11 @@ internal static class DungeonRunEncounterData
     /// <see cref="MaxDeck"/>) instead of 30 (Tad's ten minions, the Treasure Vault's unused deck).
     /// </summary>
     internal const string ListedDeck = "listedDeck";
+    /// <summary>
+    /// Family 11: the boss plays a copy of the run player's deck as the fight plays it (Face Collector, "This boss plays a deck
+    /// identical to the player's"), less the cards a boss may not hold; the row's own deck is the fallback (DungeonRun.ApplyEncounter).
+    /// </summary>
+    internal const string MirrorDeck = "mirrorDeck";
 
     /// <summary>The row's decks hold exactly 30 cards: a combat tier without the flag <see cref="ListedDeck"/>.</summary>
     internal static bool ThirtyCardDeck(string tier, IEnumerable<string> flags) => IsCombatTier(tier) && (flags == null || !flags.Contains(ListedDeck));

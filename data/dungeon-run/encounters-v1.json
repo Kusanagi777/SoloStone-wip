@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "encountersVersion": 1,
   "generatedBy": "tools/dungeon-run-catalog (encounters); do not edit by hand",
-  "sources": { "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45", "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8", "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466", "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206", "reference/encounters/F06.json": "950c2268088073de3055ab49d444a40be440198596d0b90ef54a4a1520c644c3", "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b", "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd", "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a", "reference/encounters/F10.json": "525748f2fdb0cfa6c69d81f806c745152b5377df5c99f7a1ecfd1fe65933fe7d" },
+  "sources": { "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45", "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8", "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466", "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206", "reference/encounters/F06.json": "950c2268088073de3055ab49d444a40be440198596d0b90ef54a4a1520c644c3", "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b", "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd", "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a", "reference/encounters/F10.json": "525748f2fdb0cfa6c69d81f806c745152b5377df5c99f7a1ecfd1fe65933fe7d", "reference/encounters/F11.json": "ebc297d23557da107798a4f357e03a658bf3d2d8e0b32c289dcb2426d0b573ce" },
   "decks": {
     "enc-dala_21_whirt": ["KAR_009", "KAR_009", "DAL_603", "DAL_603", "CS2_023", "CS2_023", "LOE_119", "LOE_119", "BOT_601", "BOT_447", "BOT_447", "EX1_004", "EX1_004", "DAL_092", "DAL_092", "DAL_086", "BOT_413", "BOT_413", "EX1_050", "EX1_050", "EX1_103", "EX1_103", "CS2_117", "CS2_117", "GVG_089", "GVG_089", "EX1_021", "EX1_021", "OG_161", "OG_161"],
     "enc-gila_20_mangy_wolf": ["CS2_005", "ICC_054", "DS1_175", "OG_045", "GIL_828", "LOOT_077", "OG_216", "OG_216", "EX1_162", "EX1_162", "CS2_005", "ICC_054", "DS1_175", "OG_045", "GIL_828", "LOOT_077", "KAR_005", "CFM_315", "EX1_531", "EX1_017", "EX1_010", "CS2_172", "CS2_125", "CS2_237", "CS2_120", "KAR_005", "CFM_315", "EX1_531", "EX1_017", "EX1_010"],
@@ -21,7 +21,21 @@
     "enc-gila_36_griselda": ["LOOT_231", "LOOT_231", "UNG_018", "UNG_018", "CS2_024", "CS2_024", "UNG_846", "UNG_846", "CFM_065", "UNG_021", "CS2_033", "GIL_645", "KAR_036", "UNG_809", "UNG_809", "UNG_845", "UNG_845", "GIL_819", "GIL_819", "GIL_119", "CFM_065", "UNG_021", "CS2_033", "GIL_645", "KAR_036", "GIL_119", "UNG_928", "UNG_084", "UNG_816", "UNG_847"],
     "enc-gila_37_wharrgarbl": ["GILA_BOSS_37t", "GILA_BOSS_37t", "LOE_026", "UNG_942", "UNG_201", "CFM_310", "LOE_113", "LOEA10_3", "NEW1_017", "EX1_509", "EX1_506", "UNG_073", "UNG_073", "EX1_050", "EX1_103", "EX1_103", "EX1_507", "UNG_937", "UNG_937", "OG_161", "LOE_026", "UNG_201", "CFM_310", "LOE_113", "LOEA10_3", "NEW1_017", "EX1_509", "EX1_506", "EX1_050", "EX1_507"],
     "enc-gila_38_cozzlewurt": ["KAR_300", "KAR_300", "KAR_300", "LOE_115", "LOE_115", "AT_037", "AT_037", "EX1_164", "EX1_539", "LOOT_170", "LOOT_170", "GIL_664", "GIL_664", "EX1_009", "EX1_009", "EX1_015", "EX1_015", "CS2_147", "GVG_104", "UNG_801", "EX1_164", "EX1_539", "CS2_147", "GVG_104", "UNG_801", "EX1_008", "CS2_169", "CS2_171", "CS2_189", "CS2_188"],
+    "enc-gila_40_splintergraft": ["OG_051", "OG_051", "EX1_161", "EX1_161", "CS2_013", "CS2_013", "CS2_013", "CS2_013", "ICC_808", "ICC_808", "GVG_032", "GVG_032", "EX1_158", "EX1_158", "FP1_019", "FP1_019", "EX1_571", "EX1_571", "UNG_111", "UNG_111", "EX1_164", "EX1_164", "NEW1_008", "NEW1_008", "EX1_178", "EX1_178", "GIL_667", "GIL_667", "GIL_616", "GIL_616"],
+    "enc-gila_41_brushwood": ["GILA_BOSS_41t", "GILA_BOSS_41t", "GILA_BOSS_41t", "GILA_BOSS_41t", "GVG_049", "CS2_108", "EX1_391", "EX1_400", "EX1_400", "EX1_402", "EX1_402", "EX1_392", "CS2_114", "NEW1_036", "NEW1_036", "CS2_104", "EX1_604", "EX1_604", "EX1_604", "ICC_408", "ICC_408", "CFM_756", "EX1_407", "ICC_405", "BRM_019", "BRM_019", "EX1_399", "EX1_399", "EX1_399", "OG_318"],
+    "enc-gila_42_baran": ["UNG_923", "EX1_400", "EX1_400", "EX1_402", "EX1_402", "ICC_837", "LOOT_367", "CS2_104", "EX1_604", "EX1_604", "ICC_062", "LOOT_364", "LOOT_364", "EX1_606", "BRM_016", "NEW1_011", "NEW1_011", "GIL_803", "GIL_803", "CFM_756", "CFM_756", "KAR_091", "LOOT_365", "LOOT_365", "GVG_053", "LOOT_203", "LOOT_519", "ICC_405", "EX1_390", "EX1_390"],
+    "enc-gila_43_damph": ["ICC_243", "BRM_017", "LOOT_187", "LOOT_187", "GIL_805", "LOE_104", "LOOT_507", "ICC_201", "FP1_028", "FP1_028", "EX1_096", "FP1_024", "tt_004", "ICC_702", "ICC_702", "GVG_096", "FP1_015", "FP1_014", "GVG_114", "OG_133", "ICC_243", "BRM_017", "GIL_805", "LOE_104", "LOOT_507", "ICC_201", "EX1_096", "FP1_024", "tt_004", "GVG_096"],
+    "enc-gila_44_sezavo": ["CS2_235", "CS2_235", "CS2_004", "CS2_004", "GVG_072", "GVG_072", "EX1_302", "EX1_302", "EX1_029", "EX1_001", "EX1_011", "EX1_393", "EX1_096", "EX1_096", "EX1_015", "EX1_015", "CFM_646", "CS2_117", "CS2_182", "AT_111", "EX1_029", "EX1_001", "EX1_011", "EX1_393", "CFM_646", "CS2_117", "CS2_182", "AT_111", "AT_055", "FP1_001"],
+    "enc-gila_51_garrow": ["OG_198", "OG_198", "AT_031", "AT_031", "GIL_696", "GIL_696", "AT_033", "AT_033", "LOE_012", "LOE_012", "UNG_926", "UNG_926", "UNG_926", "UNG_926", "LOOT_154", "LOOT_154", "CFM_790", "CFM_790", "BRM_026", "BRM_026", "ICC_025", "ICC_025", "CFM_669", "CFM_669", "EX1_116", "GIL_682", "GIL_682", "LOOT_383", "LOOT_383", "EX1_577"],
+    "enc-gila_52_pete": ["CS2_072", "CS2_072", "CFM_630", "EX1_145", "CS2_073", "CS2_073", "UNG_856", "KAR_069", "KAR_069", "GIL_506", "GIL_506", "AT_031", "AT_031", "EX1_131", "EX1_131", "EX1_124", "EX1_124", "EX1_129", "GIL_696", "AT_033", "EX1_613", "EX1_134", "CS2_077", "NEW1_005", "NEW1_004", "EX1_010", "ICC_468", "GVG_081", "GVG_081", "EX1_095"],
+    "enc-gila_52_pete-f1": ["EX1_606", "EX1_606", "OG_047", "OG_047", "GIL_637", "GIL_637", "CS2_011", "CS2_011", "CS2_012", "CS2_012", "EX1_570", "EX1_570", "LOOT_054", "LOOT_054", "AT_039", "AT_039", "CFM_316", "CFM_316", "CFM_316", "CFM_333", "EX1_534", "EX1_534", "FP1_002", "FP1_002", "ICC_812", "ICC_812", "ICC_031", "ICC_031", "ICC_905", "ICC_905"],
+    "enc-gila_54_cragtorr": ["EX1_606", "EX1_606", "UNG_116", "CS2_013", "CS2_013", "GVG_032", "GVG_032", "FP1_019", "FP1_019", "EX1_164", "EX1_164", "NEW1_008", "EX1_178", "EX1_178", "UNG_086", "UNG_086", "CS2_232", "BRM_028", "GIL_667", "EX1_586", "EX1_586", "OG_042", "KAR_711", "KAR_711", "GVG_121", "GVG_121", "EX1_105", "EX1_105", "EX1_620", "EX1_620"],
+    "enc-gila_55_azalina": ["EX1_606", "GILA_BOSS_55t2", "GILA_BOSS_55t2", "GIL_553", "GIL_553", "GVG_041", "GVG_041", "OG_195", "OG_195", "CFM_308", "FP1_020", "FP1_020", "AT_073", "AT_073", "EX1_132", "EX1_130", "EX1_349", "EX1_349", "EX1_366", "ICC_802", "ICC_802", "UNG_956", "UNG_956", "NEW1_019", "NEW1_019", "GIL_513", "GIL_513", "GIL_513", "EX1_093", "EX1_093"],
+    "enc-gila_56_face_collector": ["CS2_072", "CS2_072", "CS2_074", "CS2_074", "EX1_134", "EX1_134", "EX1_124", "EX1_124", "EX1_581", "EX1_581", "EX1_129", "EX1_129", "CS2_076", "CS2_076", "CS2_077", "EX1_131", "EX1_131", "EX1_096", "EX1_096", "EX1_556", "EX1_556", "CS2_117", "CS2_117", "CS2_182", "CS2_182", "CS2_179", "CS2_179", "CS2_200", "EX1_284", "EX1_284"],
+    "enc-gila_57_raeth": ["GILA_BOSS_57t", "GILA_BOSS_57t", "GILA_BOSS_57t", "GILA_BOSS_57t", "BRM_017", "BRM_017", "ICC_212", "ICC_212", "LOOT_507", "LOOT_507", "UNG_831", "UNG_831", "EX1_312", "EX1_312", "EX1_007", "EX1_007", "tt_004", "tt_004", "ICC_702", "ICC_702", "EX1_595", "EX1_595", "LOOT_161", "LOOT_161", "EX1_399", "EX1_399", "EX1_110", "KAR_041", "KAR_041", "EX1_016"],
+    "enc-gila_58_grum": ["EX1_028", "CFM_940", "CFM_940", "EX1_391", "EX1_391", "AT_064", "AT_064", "EX1_392", "EX1_392", "ICC_837", "ICC_837", "CS2_104", "CS2_104", "AT_069", "AT_069", "GVG_052", "GVG_052", "CS2_197", "CS2_197", "CS2_197", "CS2_200", "LOOT_383", "OG_173", "OG_173", "AT_120", "EX1_586", "KAR_711", "GVG_121", "EX1_105", "EX1_620"],
     "enc-gila_61_hagatha": ["GILA_BOSS_61t3", "GILA_BOSS_61t3", "GILA_BOSS_61t", "GILA_BOSS_61t", "GILA_BOSS_27t", "GILA_BOSS_27t", "GIL_800", "ICC_835", "GIL_677", "AT_052", "AT_052", "AT_054", "NEW1_010", "GIL_608", "GIL_608", "GIL_693", "GIL_693", "EX1_303", "GIL_618", "GIL_825", "GIL_681", "GIL_681", "EX1_043", "EX1_043", "GIL_620", "CFM_668", "CFM_668", "BRM_028", "CFM_060", "CFM_060", "GIL_623", "GIL_623", "OG_153", "GVG_118", "ICC_314", "EX1_563", "KAR_711", "KAR_711", "EX1_105", "EX1_105"],
+    "enc-gila_62_gustave": ["EX1_606", "EX1_606", "OG_313", "OG_313", "GVG_035", "EX1_549", "EX1_549", "CFM_334", "CFM_334", "GVG_017", "GVG_017", "CFM_338", "CFM_338", "ICC_419", "ICC_419", "EX1_539", "EX1_539", "EX1_534", "EX1_534", "UNG_919", "GVG_049", "EX1_543", "CS2_120", "CS2_120", "EX1_014", "LOOT_161", "LOOT_161", "AT_090", "AT_090", "NEW1_041"],
     "enc-loot_04_sturmi": ["OG_179", "OG_179", "EX1_610", "EX1_611", "BRM_013", "BRM_013", "NEW1_031", "NEW1_031", "EX1_536", "EX1_536", "OG_292", "OG_292", "EX1_539", "EX1_539", "EX1_538", "EX1_538", "OG_216", "OG_216", "OG_309", "EX1_534", "EX1_534", "LOE_046", "LOE_046", "LOE_029", "EX1_096", "EX1_096", "LOE_047", "LOE_047", "EX1_016", "OG_133"],
     "enc-loot_05_hamm": ["EX1_604", "EX1_604", "EX1_604", "EX1_604", "BRM_016", "BRM_016", "BRM_016", "BRM_016", "EX1_407", "EX1_407", "ICC_405", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "GVG_099", "GVG_099", "CFM_667", "CFM_667", "CFM_667", "CFM_667", "GVG_090", "GVG_090", "GVG_090", "GVG_090", "GVG_090"],
     "enc-loot_06_blackseed": ["CS2_008", "CS2_008", "AT_037", "AT_037", "AT_038", "AT_038", "CS2_012", "CS2_012", "OG_202", "OG_202", "UNG_111", "UNG_111", "GVG_041", "ICC_054", "ICC_054", "EX1_010", "EX1_010", "EX1_045", "EX1_045", "OG_156", "OG_156", "UNG_844", "ICC_025", "ICC_025", "ICC_466", "ICC_466", "CFM_667", "CFM_667", "CFM_668", "CFM_668"],
@@ -1712,6 +1726,281 @@
           { "used": "CS2_171", "reason": "fill:curated" },
           { "used": "CS2_189", "reason": "fill:curated" },
           { "used": "CS2_188", "reason": "fill:curated" }
+        ]
+      }
+    },
+    {
+      "id": "gila_40_splintergraft",
+      "name": "Splintergraft",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_40h",
+      "power": "GILA_BOSS_40p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "printed-health", "original": 40 },
+      "cards": ["GILA_BOSS_40e"],
+      "deck": {
+        "id": "enc-gila_40_splintergraft",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Splintergraft_(boss)", "read": "2026-11-14", "list": "Deck" }
+      }
+    },
+    {
+      "id": "gila_41_brushwood",
+      "name": "Brushwood Centurion",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_41h",
+      "power": "GILA_BOSS_41p",
+      "tier": "4",
+      "archetype": "midrange",
+      "level": { "source": "printed-health", "original": 60 },
+      "flags": ["forcedAttack"],
+      "deck": {
+        "id": "enc-gila_41_brushwood",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Brushwood_Centurion", "read": "2026-11-14", "list": "Deck" }
+      }
+    },
+    {
+      "id": "gila_42_baran",
+      "name": "Baran the Blind",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_42h",
+      "power": "GILA_BOSS_42p",
+      "tier": "2",
+      "archetype": "control",
+      "level": { "source": "printed-health", "original": 30 },
+      "deck": {
+        "id": "enc-gila_42_baran",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Baran_the_Blind", "read": "2026-11-14", "list": "Deck" }
+      }
+    },
+    {
+      "id": "gila_43_damph",
+      "name": "Gravekeeper Damph",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_43h",
+      "power": "GILA_BOSS_43p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "printed-health", "original": 35 },
+      "flags": ["doubleDeathrattle"],
+      "deck": {
+        "id": "enc-gila_43_damph",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Gravekeeper_Damph", "read": "2026-11-14", "list": "Deck" },
+        "substitutions": [
+          { "used": "ICC_243", "reason": "fill:second-copy" },
+          { "used": "BRM_017", "reason": "fill:second-copy" },
+          { "used": "GIL_805", "reason": "fill:second-copy" },
+          { "used": "LOE_104", "reason": "fill:second-copy" },
+          { "used": "LOOT_507", "reason": "fill:second-copy" },
+          { "used": "ICC_201", "reason": "fill:second-copy" },
+          { "used": "EX1_096", "reason": "fill:second-copy" },
+          { "used": "FP1_024", "reason": "fill:second-copy" },
+          { "used": "tt_004", "reason": "fill:second-copy" },
+          { "used": "GVG_096", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "gila_44_sezavo",
+      "name": "Doctor Sezavo",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_44h",
+      "power": "GILA_BOSS_44p",
+      "tier": "1",
+      "archetype": "aggro",
+      "level": { "source": "printed-health", "original": 20 },
+      "deck": {
+        "id": "enc-gila_44_sezavo",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Doctor_Sezavo", "read": "2026-11-14", "list": "Deck" },
+        "substitutions": [
+          { "used": "EX1_029", "reason": "fill:second-copy" },
+          { "used": "EX1_001", "reason": "fill:second-copy" },
+          { "used": "EX1_011", "reason": "fill:second-copy" },
+          { "used": "EX1_393", "reason": "fill:second-copy" },
+          { "used": "CFM_646", "reason": "fill:second-copy" },
+          { "used": "CS2_117", "reason": "fill:second-copy" },
+          { "used": "CS2_182", "reason": "fill:second-copy" },
+          { "used": "AT_111", "reason": "fill:second-copy" },
+          { "used": "AT_055", "reason": "fill:curated" },
+          { "used": "FP1_001", "reason": "fill:curated" }
+        ]
+      }
+    },
+    {
+      "id": "gila_51_garrow",
+      "name": "Garrow, the Rancorous",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_51h",
+      "power": "GILA_BOSS_51p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "printed-health", "original": 40 },
+      "deck": {
+        "id": "enc-gila_51_garrow",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Garrow,_the_Rancorous", "read": "2026-11-14", "list": "Deck" }
+      }
+    },
+    {
+      "id": "gila_52_pete",
+      "name": "Crooked Pete",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_52h",
+      "power": "GILA_BOSS_52p",
+      "tier": "3",
+      "archetype": "tempo",
+      "level": { "source": "printed-health", "original": 40 },
+      "flags": ["forms", "deckReplace"],
+      "cards": ["GILA_BOSS_52e", "GILA_BOSS_52e2"],
+      "deck": {
+        "id": "enc-gila_52_pete",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Crooked_Pete", "read": "2026-11-14", "list": "Deck" }
+      },
+      "forms": [
+        {
+          "hero": "GILA_BOSS_52h2",
+          "power": "GILA_BOSS_52p2",
+          "at": { "script": true },
+          "draw": 6,
+          "deck": {
+            "id": "enc-gila_52_pete-f1",
+            "kind": "substituted",
+            "source": { "url": "https://hearthstone.wiki.gg/wiki/Crooked_Pete", "read": "2026-11-14", "list": "Beastly Pete" },
+            "substitutions": [
+              { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
+              { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "gila_54_cragtorr",
+      "name": "Cragtorr",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_54h",
+      "power": "GILA_BOSS_54p",
+      "tier": "3",
+      "archetype": "control",
+      "level": { "source": "printed-health", "original": 40 },
+      "cards": ["GILA_BOSS_54e"],
+      "deck": {
+        "id": "enc-gila_54_cragtorr",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Cragtorr", "read": "2026-11-14", "list": "Deck" },
+        "substitutions": [
+          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
+          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "gila_55_azalina",
+      "name": "Azalina Soulthief",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_55h",
+      "power": "GILA_BOSS_55p",
+      "tier": "4",
+      "archetype": "midrange",
+      "level": { "source": "printed-health", "original": 50 },
+      "cards": ["GILA_BOSS_55t"],
+      "deck": {
+        "id": "enc-gila_55_azalina",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Azalina_Soulthief_(boss)", "read": "2026-11-14", "list": "Deck" },
+        "substitutions": [
+          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "gila_56_face_collector",
+      "name": "Face Collector",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_56h",
+      "power": "GILA_BOSS_56p",
+      "tier": "4",
+      "archetype": "midrange",
+      "level": { "source": "printed-health", "original": 60 },
+      "flags": ["mirrorDeck"],
+      "deck": {
+        "id": "enc-gila_56_face_collector",
+        "kind": "curated",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Face_Collector_(boss)", "read": "2026-11-14", "list": "Deck" }
+      }
+    },
+    {
+      "id": "gila_57_raeth",
+      "name": "Raeth Ghostsong",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_57h",
+      "power": "GILA_BOSS_57p",
+      "tier": "4",
+      "archetype": "control",
+      "level": { "source": "printed-health", "original": 60 },
+      "deck": {
+        "id": "enc-gila_57_raeth",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Raeth_Ghostsong", "read": "2026-11-14", "list": "Deck" }
+      }
+    },
+    {
+      "id": "gila_58_grum",
+      "name": "Grum",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_58h",
+      "power": "GILA_BOSS_58p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "printed-health", "original": 40 },
+      "cards": ["GILA_BOSS_58e"],
+      "deck": {
+        "id": "enc-gila_58_grum",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Grum", "read": "2026-11-14", "list": "Deck" },
+        "substitutions": [
+          { "wiki": "Ogre Ninja", "listed": "GVG_088", "used": "EX1_028", "reason": "unscripted" },
+          { "wiki": "Ogre Brute", "listed": "GVG_065", "used": "CS2_197", "reason": "unscripted" },
+          { "wiki": "Ogre Brute", "listed": "GVG_065", "used": "CS2_197", "reason": "unscripted" },
+          { "wiki": "Mogor's Champion", "listed": "AT_088", "used": "LOOT_383", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "gila_62_gustave",
+      "name": "Gustave, the Gutripper",
+      "provenance": "GIL",
+      "family": "11",
+      "hero": "GILA_BOSS_62h",
+      "power": "GILA_BOSS_62p",
+      "tier": "4",
+      "archetype": "midrange",
+      "level": { "source": "printed-health", "original": 50 },
+      "deck": {
+        "id": "enc-gila_62_gustave",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Gustave,_the_Gutripper", "read": "2026-11-14", "list": "Deck" },
+        "substitutions": [
+          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
+          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
         ]
       }
     }

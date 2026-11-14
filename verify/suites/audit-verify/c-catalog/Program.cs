@@ -705,8 +705,10 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // Phase 8 wave 3 (families 06, 09, 10): + 60 rows, all "partial" (26 run:boss rows: 11 of family 09, 15 of family 10; 34
     // cards of their decks that are new to the ledger: 15 and 19), and 70 rows leave "missing" for "partial" (21 rules and
     // tokens of family 06; 25 powers, cards and tokens of family 09; 15 boss powers and 9 boss cards of family 10).
-    Check("ledger golden (phase 8 wave 3: families 06, 09, 10): 4704 rows; 2813 implemented, 295 partial, 538 missing, 1058 duplicate/support, 0 intentionally adapted",
-        rows.Count == 4704 && classes.GetValueOrDefault("implemented") == 2813 && classes.GetValueOrDefault("partial") == 295 && classes.GetValueOrDefault("missing") == 538
+    // Phase 8 family 11: + 19 rows, all "partial" (13 run:boss rows; 6 cards of their decks new to the ledger), and 19 rows leave
+    // "missing" for "partial" (14 boss powers and 5 boss cards and tokens).
+    Check("ledger golden (phase 8 wave 3: families 06, 09, 10; family 11): 4723 rows; 2813 implemented, 333 partial, 519 missing, 1058 duplicate/support, 0 intentionally adapted",
+        rows.Count == 4723 && classes.GetValueOrDefault("implemented") == 2813 && classes.GetValueOrDefault("partial") == 333 && classes.GetValueOrDefault("missing") == 519
         && classes.GetValueOrDefault("duplicate/support") == 1058 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
 }
 
