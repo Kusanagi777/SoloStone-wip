@@ -685,9 +685,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("TRL_318", new CardDef(new Power
 			{
-				// TODO [TRL_318] Hex Lord Malacrass && Test: Hex Lord Malacrass_TRL_318
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = DungeonRun.DungeonRunEncounters.HexLordMalacrass
 			}));
 
 			// ------------------------------------------ MINION - MAGE
@@ -1077,7 +1075,7 @@ namespace SabberStoneCore.CardSets.Standard
 			{
 				PowerTask = ComplexTask.Create(
 					new IncludeTask(EntityType.HAND),
-					new FilterStackTask(SelfCondition.IsTagValue(GameTag.ENTITY_ID, 68, RelaSign.GEQ), SelfCondition.IsMinion),
+					new FilterStackTask(SelfCondition.IsNotStartInDeck, SelfCondition.IsMinion),
 					new SummonStackTask(true))
 			}));
 
@@ -1655,9 +1653,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("TRL_522", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_IF_AVAILABLE_AND_MINIMUM_SPELLS_PLAYED_THIS_TURN,2}}, new Power
 			{
-				// TODO [TRL_522] Wartbringer && Test: Wartbringer_TRL_522
-				//PowerTask = null,
-				//Trigger = null,
+				// The target is offered only after two spells this turn (TargetingPredicates.MinimumSpellsPlayedThisTurn).
+				PowerTask = new DamageTask(2, EntityType.TARGET)
 			}));
 
 			// ----------------------------------------- SPELL - SHAMAN
@@ -2166,6 +2163,7 @@ namespace SabberStoneCore.CardSets.Standard
 			{
 				Trigger = TriggerBuilder.Type(TriggerType.AFTER_PLAY_MINION)
 					.SetTask(new DamageTask(1, EntityType.TARGET))
+					.SetSource(TriggerSource.FRIENDLY)
 			}));
 
 		}
@@ -2793,17 +2791,9 @@ namespace SabberStoneCore.CardSets.Standard
 			//       minion takes damage, this
 			//       _minion takes it instead.
 			// --------------------------------------------------------
-			cards.Add("TRL_535", new CardDef(new Power
-			{
-				// TODO [TRL_535] Snapjaw Shellfighter && Test: Snapjaw Shellfighter_TRL_535
-				//Trigger = TriggerBuilder.Type(TriggerType.PREDAMAGE)
-				//	.SetTask(ComplexTask.Create(
-				//		new GetEventNumberTask(),
-				//		new DamageNumberTask(EntityType.SOURCE),
-				//		new SetEventNumberTask(0)))
-				//	.SetSource(TriggerSource.ADJACENT_TO_THE_OWNER)
-				//	.GetTrigger()
-			}));
+			// Phase 6 F10 (Dungeon Run Tombs/Heist/Rumble starters): the redirect is CombatRules.Shellfighter, read by Character.TakeDamage before the damaged minion's
+			// own prevention: damage to a minion next to an active Shellfighter is dealt to the Shellfighter instead.
+			cards.Add("TRL_535", new CardDef());
 
 			// --------------------------------------- MINION - NEUTRAL
 			// [TRL_537] Da Undatakah - COST:8 [ATK:8/HP:5]

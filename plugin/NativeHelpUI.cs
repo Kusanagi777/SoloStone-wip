@@ -175,7 +175,7 @@ internal static class NativeHelpUI
         return gear != null && gear.gameObject.activeInHierarchy && box != null && box.IsInStateWithButtons()
             && !SceneMgr.Get().IsTransitioning() && UniversalInputManager.Get()?.IsDialogActive() != true
             && !(shop != null && shop.IsOpen()) && !NativeRewardUI.BlocksHome && !NativeAchievements.Active
-            && !NativeProfileSelector.BlocksHome;
+            && !NativeProfileSelector.BlocksHome && !NativeDungeonRunUI.BlocksHome;
     }
 
     private static void TickHelp(bool atHome)

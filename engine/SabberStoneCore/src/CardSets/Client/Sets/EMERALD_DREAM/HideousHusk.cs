@@ -41,10 +41,11 @@ namespace SabberStoneCore.CardSets.Client.Sets
                     int health = candidates.Min(m => m.Health);
                     var victim = ctx.SampleDistinct(candidates.Where(m => m.Health == health).ToArray(), 1)[0];
                     int amount = Math.Min(Amount(source), victim.BaseHealth);
-                    int current = victim.Health;
+                    int damage = victim.Damage;
                     ctx.GiveBuff(victim.Id, "EDR_810e", amount);
-                    // Transfer maximum Health, clamping current Health rather than dealing damage.
-                    victim.Damage = Math.Max(0, victim.BaseHealth - current);
+                    // Steal Health (not damage): the victim keeps its damage, so its current Health falls by the
+                    // stolen amount along with its maximum, and it dies when that leaves it at 0.
+                    victim.Damage = Math.Min(damage, victim.BaseHealth);
                     ctx.GiveBuff(c.Hero.Id, "EDR_810e2", amount);
                 })
             } };

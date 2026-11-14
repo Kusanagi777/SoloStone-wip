@@ -321,6 +321,10 @@ namespace SabberStoneCore.Model
 						needsTarget = true;
 						TargetingAvailabilityPredicate += TargetingPredicates.MinimumFriendlySecrets(requirement.Value);
 						break;
+					case PlayReq.REQ_TARGET_IF_AVAILABLE_AND_MINIMUM_SPELLS_PLAYED_THIS_TURN:
+						needsTarget = true;
+						TargetingAvailabilityPredicate += TargetingPredicates.MinimumSpellsPlayedThisTurn(requirement.Value);
+						break;
 					case PlayReq.REQ_TARGET_IF_AVAILABLE_AND_NO_3_COST_CARD_IN_DECK:
 						// TODO
 						TargetingType = TargetingType.AllMinions;
@@ -349,6 +353,9 @@ namespace SabberStoneCore.Model
 						break;
 					case PlayReq.REQ_FRIENDLY_MINION_DIED_THIS_GAME:
 						PlayAvailabilityPredicate += TargetingPredicates.ReqFriendlyMinionDiedThisGame;
+						break;
+					case PlayReq.REQ_FRIENDLY_DEATHRATTLE_MINION_DIED_THIS_GAME:
+						PlayAvailabilityPredicate += TargetingPredicates.ReqFriendlyDeathrattleMinionDiedThisGame;
 						break;
 					case PlayReq.REQ_FRIENDLY_MINION_OF_RACE_DIED_THIS_TURN:
 						PlayAvailabilityPredicate +=
@@ -412,6 +419,12 @@ namespace SabberStoneCore.Model
         internal void SetPrintedCharge(bool charge)
         { Charge = charge; if (charge) Tags[GameTag.CHARGE] = 1; else Tags.Remove(GameTag.CHARGE); }
 
+        internal void SetPrintedTaunt(bool taunt)
+        { Taunt = taunt; if (taunt) Tags[GameTag.TAUNT] = 1; else Tags.Remove(GameTag.TAUNT); }
+
+        internal void SetPrintedRush(bool rush)
+        { Rush = rush; if (rush) Tags[GameTag.RUSH] = 1; else Tags.Remove(GameTag.RUSH); }
+
         internal void SetPrintedLifesteal(bool lifesteal)
         { LifeSteal = lifesteal; if (lifesteal) Tags[GameTag.LIFESTEAL] = 1; else Tags.Remove(GameTag.LIFESTEAL); }
 
@@ -421,6 +434,10 @@ namespace SabberStoneCore.Model
             Tags[GameTag.ATK] = attack; Tags[GameTag.HEALTH] = health;
         }
 
+        /// <summary>A hero portrait's printed Health (a Dungeon Run named hero plays at its run Health).</summary>
+        internal void SetPrintedHealth(int health)
+        { Health = health; Tags[GameTag.HEALTH] = health; }
+
         internal void SetPrintedRaces(Race primary, params Race[] additional)
         {
             Race = primary;
@@ -429,6 +446,10 @@ namespace SabberStoneCore.Model
             foreach (var race in additional) Tags[AdditionalRaceTags.First(p => p.Value == race).Key] = 1;
             Races = Array.AsReadOnly(DecodeRaces().ToArray());
         }
+
+        /// <summary>A Secret by its run script (a client shell that names "Secret" in its text but carries no SECRET tag).</summary>
+        internal void SetPrintedSecret()
+        { IsSecret = true; Tags[GameTag.SECRET] = 1; }
 
         internal void SetPrintedDeathrattle()
         {
@@ -531,6 +552,10 @@ namespace SabberStoneCore.Model
 					needsTarget = true;
 					TargetingAvailabilityPredicate += TargetingPredicates.MinimumFriendlySecrets(requirement.Value);
 					break;
+				case PlayReq.REQ_TARGET_IF_AVAILABLE_AND_MINIMUM_SPELLS_PLAYED_THIS_TURN:
+					needsTarget = true;
+					TargetingAvailabilityPredicate += TargetingPredicates.MinimumSpellsPlayedThisTurn(requirement.Value);
+					break;
 				case PlayReq.REQ_TARGET_IF_AVAILABLE_AND_NO_3_COST_CARD_IN_DECK:
 					// TODO
 					TargetingType = TargetingType.AllMinions;
@@ -559,6 +584,9 @@ namespace SabberStoneCore.Model
 					break;
 				case PlayReq.REQ_FRIENDLY_MINION_DIED_THIS_GAME:
 					PlayAvailabilityPredicate += TargetingPredicates.ReqFriendlyMinionDiedThisGame;
+					break;
+				case PlayReq.REQ_FRIENDLY_DEATHRATTLE_MINION_DIED_THIS_GAME:
+					PlayAvailabilityPredicate += TargetingPredicates.ReqFriendlyDeathrattleMinionDiedThisGame;
 					break;
 				case PlayReq.REQ_FRIENDLY_MINION_OF_RACE_DIED_THIS_TURN:
 					PlayAvailabilityPredicate +=
@@ -880,7 +908,22 @@ namespace SabberStoneCore.Model
 			if (!TargetingPredicate?.Invoke(target) ?? false)
 				return false;
 
+			// A run shrine cannot change controller (phase 7): a card whose play takes control of its target cannot aim at it.
+			if (target is Minion shrine && Actions.ShrineRules.BlocksControl(shrine) && TakesControlOfTarget)
+				return false;
+
 			return true;
+		}
+
+		private int _takesControlOfTarget;
+		/// <summary>The card's play takes control of its target (Actions.ShrineRules.TakesControlOfTarget), read once.</summary>
+		internal bool TakesControlOfTarget
+		{
+			get
+			{
+				if (_takesControlOfTarget == 0) _takesControlOfTarget = Actions.ShrineRules.TakesControlOfTarget(this) ? 1 : 2;
+				return _takesControlOfTarget == 1;
+			}
 		}
 
 		public List<ICharacter> GetValidPlayTargets(in Controller c)

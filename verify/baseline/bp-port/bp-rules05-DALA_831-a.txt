@@ -1,0 +1,14 @@
+tunnel_rat         solostone t       floor  1 DRUID/druid_thicket/CS2_017                    deck 10 -> boss     turns  20 decisions  43 fallbacks  0 health  30 mana+0 power  4 checks ok rule DALA_831 seen 18
+tunnel_rat         solostone t       floor  1 HUNTER/hunter_kennel/DS1h_292                  deck 10 -> player   turns  19 decisions  38 fallbacks  0 health  30 mana+0 power  4 checks ok rule DALA_831 seen 18
+loot_35_brandlemar LOOT t1      floor  1 MAGE/mage_rimeward/CS2_034                     deck 10 -> boss     turns  23 decisions  35 fallbacks  0 health  30 mana+0 power  3 checks ok rule DALA_831 seen 9
+loot_35_brandlemar LOOT t1      floor  1 PALADIN/paladin_gleaming/CS2_101               deck 10 -> player   turns  13 decisions  14 fallbacks  0 health  30 mana+0 power  2 checks ok rule DALA_831 seen 6
+gila_25_ivan       GIL  t2      floor  3 PRIEST/priest_mending/CS1h_001                 deck 16 -> boss     turns  18 decisions  38 fallbacks  0 health  34 mana+0 power  4 checks ok rule DALA_831 seen 12
+gila_25_ivan       GIL  t2      floor  3 ROGUE/rogue_backalley/CS2_083b                 deck 17 -> boss     turns  14 decisions  31 fallbacks  0 health  34 mana+0 power  1 checks ok rule DALA_831 seen 8
+loot_48_trapped_room LOOT t2      floor  3 SHAMAN/shaman_stormdebt/CS2_049                deck 17 -> boss     turns  10 decisions  18 fallbacks  0 health  34 mana+0 power  0 checks ok rule DALA_831 seen 4
+loot_48_trapped_room LOOT t2      floor  3 WARLOCK/warlock_fiendpact/CS2_056              deck 16 -> boss     turns  23 decisions  33 fallbacks  0 health  34 mana+0 power  0 checks ok rule DALA_831 seen 1
+dala_21_whirt      DALA t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 32 -> boss     turns  42 decisions 135 fallbacks  0 health  51 mana+0 power 20 checks ok rule DALA_831 seen 34
+dala_21_whirt      DALA t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 31 -> boss     turns  36 decisions  78 fallbacks  0 health  46 mana+0 power 13 checks ok rule DALA_831 seen 16
+ulda_44_trap_room  ULDA t3      floor  8 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 31 -> player   turns  11 decisions  14 fallbacks  0 health  46 mana+1 power  4 checks ok rule DALA_831 seen 1
+ulda_44_trap_room  ULDA t3      floor  8 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 35 -> boss     turns  23 decisions  41 fallbacks  0 health  46 mana+0 power  4 checks ok rule DALA_831 seen 8
+encounter run: schedule acts-v3h, rule DALA_831; power unused: -; form unreached: -
+games 12, boss wins 9, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, rule-seen 135, rule-unseen -

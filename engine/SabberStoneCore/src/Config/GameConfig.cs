@@ -16,6 +16,7 @@ using SabberStoneCore.Model;
 using SabberStoneCore.Model.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SabberStoneCore.Config
 {
@@ -110,6 +111,69 @@ namespace SabberStoneCore.Config
 		/// <value><see cref="CardClass"/></value>
 		public Card Player2HeroCard { get; set; }
 
+		// Run-mode hero setup (Dungeon Run bosses, treasures). Applied once when the Game is constructed;
+		// clones and snapshots carry the resulting entity state, so these are construction inputs only.
+
+		/// <summary>Hero power for player 1 instead of the hero card's own; null keeps the default.</summary>
+		[field: NonSerialized]
+		public Card Player1HeroPower { get; set; }
+
+		/// <summary>Hero power for player 2 instead of the hero card's own; null keeps the default.</summary>
+		[field: NonSerialized]
+		public Card Player2HeroPower { get; set; }
+
+		/// <summary>Starting maximum health for player 1's hero; null keeps the hero card's health.</summary>
+		[field: NonSerialized]
+		public int? Player1HeroHealth { get; set; }
+
+		/// <summary>Starting maximum health for player 2's hero; null keeps the hero card's health.</summary>
+		[field: NonSerialized]
+		public int? Player2HeroHealth { get; set; }
+
+		/// <summary>Extra cards dealt to player 1's opening hand, before the mulligan (0 to <see cref="MaxOpeningHandBonus"/>).</summary>
+		[field: NonSerialized]
+		public int Player1OpeningHandBonus { get; set; }
+
+		/// <summary>Extra cards dealt to player 2's opening hand, before the mulligan (0 to <see cref="MaxOpeningHandBonus"/>).</summary>
+		[field: NonSerialized]
+		public int Player2OpeningHandBonus { get; set; }
+
+		/// <summary>Largest opening-hand bonus: a second player's 4 cards plus The Coin, plus this, fill a 10-card hand.</summary>
+		public const int MaxOpeningHandBonus = 5;
+
+		/// <summary>
+		/// Largest opening-hand bonus of the player <see cref="StartPlayer"/> names: a first player's 3 cards and no Coin, plus
+		/// this, make a 9-card hand (phase 8 family 06: ULDA_715 Bountiful, "Both players start with 9 cards in their hand").
+		/// </summary>
+		public const int MaxFirstOpeningHandBonus = 6;
+
+		/// <summary>
+		/// Indices into <see cref="Player1Deck"/> (its order as given, before the Game constructor reverses an unshuffled deck)
+		/// of run cards that always start in player 1's opening hand: the Dungeon Run opening flags (Right Hand Man, Study
+		/// Break). At most <see cref="MaxOpeningSlots"/>, distinct, in range. Null or empty deals as before, consuming no RNG.
+		/// </summary>
+		[field: NonSerialized]
+		public int[] Player1OpeningSlots { get; set; }
+
+		/// <summary>Most opening-flag slots a run deck may carry (<see cref="Player1OpeningSlots"/>).</summary>
+		public const int MaxOpeningSlots = 3;
+
+		/// <summary>
+		/// Dungeon Run facts card scripts may read (CardSets.DungeonRun.RunContext: bosses defeated, slot logs, the treasure
+		/// pool, a next-fight bonus). Immutable, so a clone (MemberwiseClone) shares it with its source; null outside a run match.
+		/// Not carried by snapshots: a script reads it through RunHelpers, which treats null as an empty run.
+		/// </summary>
+		[field: NonSerialized]
+		public CardSets.DungeonRun.RunContext RunContext { get; set; }
+
+		/// <summary>
+		/// Dungeon Run encounter rules of this match (phase 8: boss forms, the start block, the player's hero relay, the global
+		/// rules; CardSets.DungeonRun.RunEncounter). Immutable, so a clone (MemberwiseClone) shares it with its source; null
+		/// outside an encounter match, where every Actions.EncounterRules hook is a no-op. All of its state is entity tags.
+		/// </summary>
+		[field: NonSerialized]
+		public CardSets.DungeonRun.RunEncounter Encounter { get; set; }
+
 		/// <summary>
 		/// Gets or sets the format of the game.
 		/// This value influences the game rules, see <see cref="FormatType"/>
@@ -202,6 +266,103 @@ namespace SabberStoneCore.Config
 
 		// Only schema-2 replay hosts may select this; MemberwiseClone preserves it.
 		internal bool LegacyPoolReplay { get; set; }
+
+		/// <summary>
+		/// Run-mode rule (Dungeon Run): cards generated during the game (Discover, random cards, random casts) never
+		/// include Secrets, whoever generates. An alias of <see cref="Player1ExcludeGeneratedSecrets"/> and
+		/// <see cref="Player2ExcludeGeneratedSecrets"/>: setting it sets both, and it reads true only while both are set.
+		/// Unlike the run construction inputs above it is live game state, so clones and snapshots keep it.
+		/// </summary>
+		public bool ExcludeGeneratedSecrets
+		{
+			get => Player1ExcludeGeneratedSecrets && Player2ExcludeGeneratedSecrets;
+			set { Player1ExcludeGeneratedSecrets = value; Player2ExcludeGeneratedSecrets = value; }
+		}
+
+		/// <summary>
+		/// Run-mode rule: cards generated while player 1 is the generating controller never include Secrets. Live game
+		/// state: clones and snapshots keep it.
+		/// </summary>
+		public bool Player1ExcludeGeneratedSecrets { get; set; }
+
+		/// <summary>
+		/// Run-mode rule: cards generated while player 2 (a Dungeon Run boss) is the generating controller never include
+		/// Secrets. Live game state: clones and snapshots keep it.
+		/// </summary>
+		public bool Player2ExcludeGeneratedSecrets { get; set; }
+
+		/// <summary>
+		/// True when generation by player <paramref name="generatorPlayer"/> (1, 2, or 0 when unknown) never yields a
+		/// Secret. An unknown generator is blocked when either side is, so the filter never lets through a Secret a side
+		/// excludes.
+		/// </summary>
+		internal bool ExcludesGeneratedSecrets(int generatorPlayer) =>
+			generatorPlayer == 1 ? Player1ExcludeGeneratedSecrets
+			: generatorPlayer == 2 ? Player2ExcludeGeneratedSecrets
+			: Player1ExcludeGeneratedSecrets || Player2ExcludeGeneratedSecrets;
+
+		/// <summary>Either side's generation is kept free of Secrets.</summary>
+		internal bool ExcludesAnyGeneratedSecrets => Player1ExcludeGeneratedSecrets || Player2ExcludeGeneratedSecrets;
+
+		// Sorted (ordinal) and distinct; null when empty. A plain array keeps the clone and snapshot carry exact. The keys
+		// are computed once in the setters, so a filtered-pool cache lookup never joins the lists again.
+		private string[] _excludedGeneratedIds, _player1ExcludedGeneratedIds, _player2ExcludedGeneratedIds;
+		private string _excludedGeneratedKey = "", _player1ExcludedGeneratedKey = "", _player2ExcludedGeneratedKey = "";
+
+		private static string[] SortedIds(IEnumerable<string> value)
+		{
+			var ids = value?.Where(id => id != null).Distinct(StringComparer.Ordinal).OrderBy(id => id, StringComparer.Ordinal).ToArray();
+			return ids == null || ids.Length == 0 ? null : ids;
+		}
+
+		private static string KeyOf(string[] ids) => ids == null ? "" : string.Join("|", ids);
+
+		/// <summary>
+		/// Run-mode rule (Dungeon Run admission, Generated scope): card ids that generation (Discover, random cards,
+		/// random casts, random transforms) never yields in this game, whoever generates. Empty outside run matches. Live
+		/// game state like <see cref="ExcludeGeneratedSecrets"/>: clones and snapshots keep it.
+		/// </summary>
+		public IReadOnlyCollection<string> ExcludedGeneratedIds
+		{
+			get => _excludedGeneratedIds ?? Array.Empty<string>();
+			set { _excludedGeneratedIds = SortedIds(value); _excludedGeneratedKey = KeyOf(_excludedGeneratedIds); }
+		}
+
+		/// <summary>
+		/// Run-mode rule: card ids generation never yields when player 1 is the generating controller, in addition to
+		/// <see cref="ExcludedGeneratedIds"/>. Live game state: clones and snapshots keep it.
+		/// </summary>
+		public IReadOnlyCollection<string> Player1ExcludedGeneratedIds
+		{
+			get => _player1ExcludedGeneratedIds ?? Array.Empty<string>();
+			set { _player1ExcludedGeneratedIds = SortedIds(value); _player1ExcludedGeneratedKey = KeyOf(_player1ExcludedGeneratedIds); }
+		}
+
+		/// <summary>
+		/// Run-mode rule: card ids generation never yields when player 2 is the generating controller (a Dungeon Run
+		/// boss), in addition to <see cref="ExcludedGeneratedIds"/>. Live game state: clones and snapshots keep it.
+		/// </summary>
+		public IReadOnlyCollection<string> Player2ExcludedGeneratedIds
+		{
+			get => _player2ExcludedGeneratedIds ?? Array.Empty<string>();
+			set { _player2ExcludedGeneratedIds = SortedIds(value); _player2ExcludedGeneratedKey = KeyOf(_player2ExcludedGeneratedIds); }
+		}
+
+		private static bool Contains(string[] ids, string cardId) =>
+			ids != null && cardId != null && Array.BinarySearch(ids, cardId, StringComparer.Ordinal) >= 0;
+
+		/// <summary>True when generation by player <paramref name="generatorPlayer"/> (1, 2, or 0 when unknown) may not yield the id.</summary>
+		internal bool ExcludesGenerated(string cardId, int generatorPlayer) =>
+			Contains(_excludedGeneratedIds, cardId)
+			|| generatorPlayer == 1 && Contains(_player1ExcludedGeneratedIds, cardId)
+			|| generatorPlayer == 2 && Contains(_player2ExcludedGeneratedIds, cardId);
+
+		internal bool HasExcludedGeneratedIds =>
+			_excludedGeneratedIds != null || _player1ExcludedGeneratedIds != null || _player2ExcludedGeneratedIds != null;
+
+		/// <summary>Stable key of the id sets that apply to one generating player, for per-set pool caches.</summary>
+		internal string ExcludedGeneratedKey(int generatorPlayer) => _excludedGeneratedKey + "#"
+			+ (generatorPlayer == 1 ? "1:" + _player1ExcludedGeneratedKey : generatorPlayer == 2 ? "2:" + _player2ExcludedGeneratedKey : "0:");
 
 		// Replay hosts supply verified historical membership; ordinary games use the installed catalog.
 		[field: NonSerialized]

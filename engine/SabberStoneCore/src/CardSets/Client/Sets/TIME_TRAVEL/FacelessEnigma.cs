@@ -21,7 +21,10 @@ namespace SabberStoneCore.CardSets.Client.Sets
             card.Power = new Power { PowerTask = new DecisionBattlecryTask("client/TIME_860/v1",
                 new DiscoverThenContinueTask((g, c, s, stack) => {
                     var ctx = new EffectContext(g, c.Id, s.Id);
-                    var offers = ctx.SampleDistinct(OfflineCardPools.Candidates(g, c.HeroClass, TimeTravelPools.Secrets(), DbfId, PoolDestination.Other), 2).ToArray();
+                    // The offer not taken is cast for the opponent, so both sides' run generation filters apply (Game.GenerateFor).
+                    System.Collections.Generic.IReadOnlyList<Card> pool;
+                    using (g.GenerateFor(c.Opponent)) pool = OfflineCardPools.Candidates(g, c.HeroClass, TimeTravelPools.Secrets(), DbfId, PoolDestination.Other);
+                    var offers = ctx.SampleDistinct(pool, 2).ToArray();
                     stack.Number1 = offers.Length > 0 ? offers[0].AssetId : 0;
                     stack.Number2 = offers.Length > 1 ? offers[1].AssetId : 0;
                     return offers;

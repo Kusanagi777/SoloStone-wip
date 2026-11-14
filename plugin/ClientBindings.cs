@@ -52,7 +52,10 @@ internal static class ClientBindings
         if (stream == null) throw new InvalidOperationException("This SoloStone build is missing its client binding list.");
         using (var reader = new StreamReader(stream))
         {
-            var rows = reader.ReadToEnd().Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Where(line => line[0] != '#').ToArray();
+            // A Windows checkout with core.autocrlf embeds the list with CRLF endings: without the normalisation every
+            // signature column ends in '\r' and no method or field row can match (a false "client no longer matches").
+            var rows = reader.ReadToEnd().Replace("\r\n", "\n").Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(line => line[0] != '#').ToArray();
             if (rows.Length == 0) throw new InvalidOperationException("This SoloStone build has an empty client binding list.");
             return rows;
         }

@@ -1,0 +1,44 @@
+tunnel_rat         b1 floor 1 TRLA_209h_Mage/rumble_mage_108/CS2_034           shrine TRLA_108 x1 up [] mates 0 deck 10 -> boss     turns  19 decisions  49 fallbacks  0 health 30 mana+0 mods  0 flags 0
+tunnel_rat         b1 floor 1 TRLA_209h_Paladin/rumble_paladin_105/CS2_101     shrine TRLA_105 x1 up [] mates 0 deck 10 -> player   turns  17 decisions  35 fallbacks  0 health 30 mana+0 mods  0 flags 0
+bog_croaker        b1 floor 1 TRLA_209h_Priest/rumble_priest_114/CS1h_001      shrine TRLA_114 x1 up [] mates 0 deck 10 -> player   turns  23 decisions  40 fallbacks  0 health 30 mana+0 mods  0 flags 0
+bog_croaker        b1 floor 1 TRLA_209h_Mage/rumble_mage_128/CS2_034           shrine TRLA_128 x1 up [] mates 0 deck 10 -> player   turns  13 decisions  18 fallbacks  0 health 30 mana+0 mods  0 flags 0
+lantern_thief      b1 floor 1 TRLA_209h_Paladin/rumble_paladin_137/CS2_101     shrine TRLA_137 x1 up [] mates 0 deck 10 -> boss     turns  22 decisions  50 fallbacks  0 health 30 mana+0 mods  0 flags 0
+lantern_thief      b1 floor 1 TRLA_209h_Priest/rumble_priest_146/CS1h_001      shrine TRLA_146 x1 up [] mates 0 deck 10 -> boss     turns  14 decisions  35 fallbacks  0 health 30 mana+0 mods  0 flags 0
+mire_brute         b1 floor 1 TRLA_209h_Mage/rumble_mage_129/CS2_034           shrine TRLA_129 x1 up [] mates 0 deck 10 -> boss     turns  18 decisions  29 fallbacks  0 health 30 mana+0 mods  0 flags 0
+mire_brute         b1 floor 1 TRLA_209h_Paladin/rumble_paladin_138/CS2_101     shrine TRLA_138 x1 up [] mates 0 deck 10 -> boss     turns  15 decisions  34 fallbacks  0 health 30 mana+0 mods  0 flags 0
+hedge_witch        b1 floor 1 TRLA_209h_Priest/rumble_priest_147/CS1h_001      shrine TRLA_147 x1 up [] mates 0 deck 10 -> boss     turns  19 decisions  38 fallbacks  0 health 30 mana+0 mods  0 flags 0
+hedge_witch        b1 floor 1 TRLA_209h_Mage/rumble_mage_108/CS2_034           shrine TRLA_108 x1 up [] mates 0 deck 10 -> boss     turns  22 decisions  38 fallbacks  0 health 30 mana+0 mods  0 flags 0
+cellar_matron      b1 floor 1 TRLA_209h_Paladin/rumble_paladin_105/CS2_101     shrine TRLA_105 x1 up [] mates 0 deck 10 -> player   turns  13 decisions  17 fallbacks  0 health 30 mana+0 mods  0 flags 0
+cellar_matron      b1 floor 1 TRLA_209h_Priest/rumble_priest_114/CS1h_001      shrine TRLA_114 x1 up [] mates 0 deck 10 -> boss     turns  24 decisions  44 fallbacks  0 health 30 mana+0 mods  0 flags 0
+ashen_abbess       b2 floor 6 TRLA_209h_Mage/rumble_mage_128/CS2_034           shrine TRLA_128 x1 up [TRLA_801] mates 2 deck 29 -> player   turns  23 decisions  32 fallbacks  0 health 45 mana+0 mods  2 flags 0
+ashen_abbess       b2 floor 6 TRLA_209h_Paladin/rumble_paladin_137/CS2_101     shrine TRLA_137 x1 up [TRLA_801] mates 2 deck 29 -> player   turns  15 decisions  22 fallbacks  0 health 40 mana+0 mods  0 flags 0
+tollkeeper         b2 floor 6 TRLA_209h_Priest/rumble_priest_146/CS1h_001      shrine TRLA_146 x1 up [TRLA_801] mates 2 deck 27 -> player   turns  15 decisions  23 fallbacks  0 health 43 mana+0 mods  0 flags 0
+tollkeeper         b2 floor 6 TRLA_209h_Mage/rumble_mage_129/CS2_034           shrine TRLA_129 x1 up [TRLA_802] mates 2 deck 32 -> boss     turns  25 decisions  36 fallbacks  0 health 43 mana+0 mods  4 flags 0
+golemancer         b2 floor 6 TRLA_209h_Paladin/rumble_paladin_138/CS2_101     shrine TRLA_138 x1 up [TRLA_801] mates 2 deck 28 -> player   turns  17 decisions  24 fallbacks  0 health 43 mana+0 mods  0 flags 1
+golemancer         b2 floor 6 TRLA_209h_Priest/rumble_priest_147/CS1h_001      shrine TRLA_147 x1 up [TRLA_802] mates 2 deck 27 -> player   turns  17 decisions  24 fallbacks  0 health 43 mana+0 mods  1 flags 0
+storm_herald       b2 floor 6 TRLA_209h_Mage/rumble_mage_108/CS2_034           shrine TRLA_108 x1 up [TRLA_803] mates 1 deck 27 -> player   turns  23 decisions  35 fallbacks  0 health 43 mana+0 mods  0 flags 0
+storm_herald       b2 floor 6 TRLA_209h_Paladin/rumble_paladin_105/CS2_101     shrine TRLA_105 x1 up [TRLA_801] mates 2 deck 29 -> player   turns  13 decisions  18 fallbacks  0 health 40 mana+1 mods  1 flags 1
+frostwarden        b2 floor 6 TRLA_209h_Priest/rumble_priest_114/CS1h_001      shrine TRLA_114 x1 up [TRLA_801] mates 2 deck 25 -> player   turns  23 decisions  48 fallbacks  0 health 40 mana+0 mods  0 flags 0
+frostwarden        b2 floor 6 TRLA_209h_Mage/rumble_mage_128/CS2_034           shrine TRLA_128 x1 up [TRLA_801] mates 2 deck 27 -> player   turns  13 decisions  16 fallbacks  0 health 40 mana+1 mods  0 flags 1
+pit_champion       b2 floor 6 TRLA_209h_Paladin/rumble_paladin_137/CS2_101     shrine TRLA_137 x1 up [TRLA_801] mates 2 deck 32 -> player   turns  19 decisions  32 fallbacks  0 health 55 mana+0 mods  4 flags 0
+pit_champion       b2 floor 6 TRLA_209h_Priest/rumble_priest_146/CS1h_001      shrine TRLA_146 x1 up [TRLA_803] mates 2 deck 28 -> player   turns  32 decisions  60 fallbacks  0 health 55 mana+0 mods  1 flags 1
+hollow_regent      b3 floor 5 TRLA_209h_Mage/rumble_mage_129/CS2_034           shrine TRLA_129 x1 up [] mates 2 deck 25 -> boss     turns   8 decisions  20 fallbacks  0 health 40 mana+1 mods  1 flags 0
+hollow_regent      b3 floor 5 TRLA_209h_Paladin/rumble_paladin_138/CS2_101     shrine TRLA_138 x1 up [] mates 2 deck 26 -> boss     turns   8 decisions  20 fallbacks  0 health 40 mana+1 mods  0 flags 0
+lady_of_thorns     b3 floor 5 TRLA_209h_Priest/rumble_priest_147/CS1h_001      shrine TRLA_147 x1 up [] mates 2 deck 23 -> boss     turns  14 decisions  31 fallbacks  0 health 40 mana+1 mods  1 flags 0
+lady_of_thorns     b3 floor 5 TRLA_209h_Mage/rumble_mage_108/CS2_034           shrine TRLA_108 x1 up [] mates 2 deck 15 -> boss     turns  10 decisions  28 fallbacks  0 health 40 mana+1 mods  0 flags 0
+clockwork_tyrant   b3 floor 5 TRLA_209h_Paladin/rumble_paladin_105/CS2_101     shrine TRLA_105 x1 up [] mates 2 deck 26 -> boss     turns  18 decisions  40 fallbacks  0 health 40 mana+1 mods  0 flags 0
+clockwork_tyrant   b3 floor 5 TRLA_209h_Priest/rumble_priest_114/CS1h_001      shrine TRLA_114 x1 up [] mates 2 deck 26 -> boss     turns  16 decisions  39 fallbacks  0 health 40 mana+1 mods  0 flags 1
+ember_matron       b3 floor 5 TRLA_209h_Mage/rumble_mage_128/CS2_034           shrine TRLA_128 x1 up [] mates 2 deck 22 -> boss     turns  16 decisions  48 fallbacks  0 health 40 mana+1 mods  1 flags 0
+ember_matron       b3 floor 5 TRLA_209h_Paladin/rumble_paladin_137/CS2_101     shrine TRLA_137 x1 up [] mates 2 deck 24 -> boss     turns  10 decisions  27 fallbacks  0 health 40 mana+1 mods  0 flags 1
+devouring_maw      bF floor 15 TRLA_209h_Priest/rumble_priest_146/CS1h_001      shrine TRLA_146 x1 up [TRLA_803,TRLA_801] mates 3 deck 48 -> boss     turns  14 decisions  52 fallbacks  0 health 70 mana+3 mods  0 flags 2
+devouring_maw      bF floor 15 TRLA_209h_Mage/rumble_mage_129/CS2_034           shrine TRLA_129 x2 up [TRLA_804,TRLA_801] mates 1 deck 37 -> boss     turns  10 decisions  31 fallbacks  0 health 75 mana+3 mods  1 flags 1
+gilded_king        bF floor 15 TRLA_209h_Paladin/rumble_paladin_138/CS2_101     shrine TRLA_138 x1 up [TRLA_801,TRLA_806] mates 4 deck 36 -> boss     turns  14 decisions  36 fallbacks  0 health 73 mana+3 mods  5 flags 0
+gilded_king        bF floor 15 TRLA_209h_Priest/rumble_priest_147/CS1h_001      shrine TRLA_147 x1 up [TRLA_801,TRLA_802] mates 4 deck 46 -> boss     turns  14 decisions  40 fallbacks  0 health 70 mana+3 mods  5 flags 2
+sleepless_one      bF floor 15 TRLA_209h_Mage/rumble_mage_108/CS2_034           shrine TRLA_108 x1 up [TRLA_807,TRLA_802] mates 4 deck 49 -> player   turns  62 decisions 217 fallbacks  0 health 75 mana+3 mods  4 flags 0
+sleepless_one      bF floor 15 TRLA_209h_Paladin/rumble_paladin_105/CS2_101     shrine TRLA_105 x2 up [TRLA_804,TRLA_802] mates 3 deck 38 -> player   turns  59 decisions 207 fallbacks  0 health 70 mana+3 mods  8 flags 0
+hollow_sovereign   bF floor 15 TRLA_209h_Priest/rumble_priest_114/CS1h_001      shrine TRLA_114 x2 up [TRLA_804,TRLA_802] mates 3 deck 38 -> boss     turns   6 decisions  21 fallbacks  0 health 80 mana+3 mods  4 flags 0
+hollow_sovereign   bF floor 15 TRLA_209h_Mage/rumble_mage_128/CS2_034           shrine TRLA_128 x2 up [TRLA_804,TRLA_802] mates 3 deck 42 -> boss     turns  10 decisions  34 fallbacks  0 health 80 mana+3 mods  6 flags 2
+shrine run: 40 games with a run shrine on the board, 31 in which the boss killed it at least once; player turns ended by the stand-in cap (60 actions) 0
+act run: acts-v2 schedule, boss health from the act curve, the start-mana bonus applied (DungeonRunSetup.ApplyAfterStart), tavern purchases on the walk (deck enchantments and opening flags in the plan)
+catalog run: widened priors TRLA_209h_Mage=41 TRLA_209h_Paladin=11 TRLA_209h_Priest=0; games with a player Secret in play 7
+games 40, boss wins 23, faults 0, fallbacks 0, games with a Secret in play 5, decks 9, powers 3, swallowed leaf exceptions 0

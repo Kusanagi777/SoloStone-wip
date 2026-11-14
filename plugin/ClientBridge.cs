@@ -45,7 +45,7 @@ internal static class ClientBridge
     internal static void PrimeAchievementForTest(string id)
     {
         var profile = LocalLadder.Profile;
-        if (profile?.Pending?.AchievementContext == null || profile.Pending.DebugScenario
+        if (profile?.Pending?.AchievementContext == null || profile.Pending.NeverSettles
             || profile.Achievements.Unlocks.Any(row => row.Id == id))
             throw new InvalidOperationException("Achievement fixture requires an eligible match and a locked achievement.");
         (match ?? throw new InvalidOperationException("No local match.")).PrimeAchievementForTest(id);
@@ -56,6 +56,8 @@ internal static class ClientBridge
     internal static bool OwnsLocalPostMatch => staged && match?.Game?.State == SabberStoneCore.Enums.State.COMPLETE
         && matchId == LocalLadder.MatchId && SceneMgr.IsInitialized() && SceneMgr.Get().GetMode() == SceneMgr.Mode.GAMEPLAY;
     private static bool ready, npcGameplaySeen, npcFailed;
+    /// <summary>The client has loaded its entity definitions and the bridge is up (DefLoader is safe to query).</summary>
+    internal static bool Ready => ready;
     private static readonly System.Reflection.FieldInfo NpcDelayedTasks = AccessTools.Field(typeof(PowerProcessor), "m_delayedRealTimeTasks");
     public static Action StartMatch;
     public static Action<int, int, int, int, int> Option;
@@ -282,6 +284,7 @@ internal static class ClientBridge
         var input = UniversalInputManager.Get();
         return scene.GetMode() == SceneMgr.Mode.HUB && !scene.IsTransitionNowOrPending() && input != null && !input.IsDialogActive()
             && LocalLadder.Screen == "Menu" && !NativeRewardUI.BlocksHome && !NativeAchievements.Active && !NativeProfileSelector.BlocksHome
+            && !NativeDungeonRunUI.BlocksHome
             && LocalLadder.Profile.PendingRewardPresentation == null && !LocalLadder.Profile.PackRevealPending;
     }
 
@@ -373,6 +376,7 @@ internal static class ClientBridge
                 NativeTestControl.SendFailed(error);
             }
         }
+        if (OwnsLiveMatch) TickDungeonRun();
         NativeSpellWatchdog.Update(OwnsLiveMatch, matchId, log);
 #if ENGINE_SOURCE
         if (OwnsLiveMatch) match?.TickChoiceWatchdog();
@@ -433,6 +437,52 @@ internal static class ClientBridge
             if (!defs.ContainsKey(checkedDeck.Hero + "bp")) throw new InvalidOperationException("Current hero power definition missing: " + checkedDeck.Hero);
         }
         return new PreparedLocalMatch(deck, opponent, seed, player, prepared);
+    }
+
+    // Dungeon Run fight: every check that can refuse runs here, before Begin (as PrepareLocalMatch). The run deck, boss deck
+    // and powers are not LocalDecks entries, so the client-definition check covers the plan itself: both heroes, both hero
+    // powers (or the hero's own), every card in both decks and boss sideboards, and every treasure effect shell. Skin
+    // portraits have no "<hero>bp" id, so the resolved power is checked instead of that convention.
+    internal static PreparedLocalMatch PrepareRunMatch(SabberStoneCore.CardSets.DungeonRun.RunMatchPlan plan, DungeonRunBossPilot boss,
+        int seed, string deck, string opponent, int deckMax = DungeonRun.LegacyDeckMax)
+    {
+        EnsureCanStart();
+        var defs = DefLoader.Get().GetAllEntityDefs();
+        foreach (string id in RequiredPaladinDefinitions)
+            if (!defs.ContainsKey(id)) throw new InvalidOperationException("Required Paladin definition missing: " + id);
+        string PowerOf(SabberStoneCore.Model.Card hero, string powerKey) =>
+            SabberStoneCore.CardSets.DungeonRun.DungeonRunSetup.PowerCardId(powerKey)
+            ?? SabberStoneCore.Model.Cards.FromAssetId(hero[SabberStoneCore.Enums.GameTag.HERO_POWER])?.Id;
+        var required = new List<string> { plan.PlayerHero.Id, plan.BossHero.Id, PowerOf(plan.PlayerHero, plan.PlayerHeroPowerId),
+            PowerOf(plan.BossHero, plan.BossHeroPowerId) };
+        required.AddRange(plan.PlayerDeck.Select(card => card.Id));
+        required.AddRange(plan.BossDeck.Select(card => card.Id));
+        if (plan.BossSideboards != null) required.AddRange(plan.BossSideboards.Values.SelectMany(ids => ids));
+        foreach (string key in plan.PlayerTreasures)
+        {
+            var treasure = SabberStoneCore.CardSets.DungeonRun.DungeonRunContent.Get(key);
+            if (treasure.EffectKey != null) required.Add(SabberStoneCore.CardSets.DungeonRun.DungeonRunContent.Get(treasure.EffectKey).ShellId);
+        }
+        // An act run's deck enchantments (Bob's tavern buffs and discounts, the opening marker) are sent as entities too.
+        if (plan.PlayerDeckSlots != null) required.AddRange(plan.PlayerDeckSlots.Where(slot => slot?.Mods != null).SelectMany(slot => slot.Mods));
+        // Checked as sent: the match maps engine ids through TransportCardId (CS2_034 -> HERO_08bp on 37.x clients).
+        foreach (string id in required.Distinct())
+            if (id == null || !defs.ContainsKey(NativeMatch.TransportCardId(id)))
+                throw new InvalidOperationException("Current card definition missing: " + (id ?? "(no hero power)"));
+        var prepared = new NativeMatch(Send, plan, boss, seed, deckMax);
+        return new PreparedLocalMatch(deck, opponent, seed, null, prepared);
+    }
+
+    // A Dungeon Run fight the rules cannot end: the boss AI failed (a fault, the floor is restaged) or the turn cap passed
+    // (a loss). Ending it on the engine side lets the client close the board and LocalLadder record the run outcome.
+    private static void TickDungeonRun()
+    {
+        if (match == null || !match.IsDungeonRun || match.Game == null || match.Game.State == SabberStoneCore.Enums.State.COMPLETE
+            || match.DungeonRunEnding != null || match.Game.Step == SabberStoneCore.Enums.Step.BEGIN_MULLIGAN) return;
+        string reason = npcFailed ? "fault" : match.Game.Turn > NativeMatch.DungeonRunTurnCap ? "turn-limit" : null;
+        if (reason == null) return;
+        try { match.EndDungeonRunFight(reason); log.LogInfo("DUNGEON_RUN_FIGHT_ENDED reason=" + reason + " turn=" + match.Game.Turn); }
+        catch (Exception error) { log.LogError("DUNGEON_RUN_END_FAILED reason=" + reason + ": " + error); }
     }
 
     // The native client has an entity definition for this card (debug scenario ids must be playable by the pinned client).

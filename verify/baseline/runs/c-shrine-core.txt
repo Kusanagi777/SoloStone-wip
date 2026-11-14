@@ -1,0 +1,132 @@
+PASS D1 the 27 Rumble Run starter decks each name their shrine (deck "shrine" = TRLA_<n> of the deck id)  (27 decks)
+PASS D2 no other deck names a shrine
+PASS D3 the teammate table: 9 classes, 6 each, 54 distinct, the 9 companions included
+PASS D4 the shrine-upgrade pool lists TRLA_801..809
+PASS D5 schedule data is scheduleVersion 3 (phase 8; acts-v2 still stamps 2), default acts-v2; acts-v1 and act1 keep their released shapes  (v3 acts-v2 3293D82FA6BD48B3)
+PASS D6 acts-v2's shape is pinned for version 2 (ReleasedShapes[2])  (8D594CBB45303A53)
+PASS D7 acts-v2: teammate drafts after I.2, I.4, II.3, III.3; shrine-upgrade drafts after the I and II majors; the same nodes as acts-v1  (1.2,1.4,2.3,3.3 | 1.5,2.5)
+PASS D8 a version-1 file never reads the phase-7 keys
+PASS D9 the validator passes the shipped data's shrines, teammates, upgrades and schedules
+PASS D10 the validator passes the shipped data (no error at all)  (0: )
+PASS D11 a shrine in the teammate table is refused
+PASS D12 a deck naming another class's shrine is refused
+PASS D13 a teammate floor outside the act is refused
+PASS D14 scripted shrine TRLA_104: its form TRLA_104t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_105: its form TRLA_105t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_106: its form TRLA_106t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_108: its form TRLA_108t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_109: its form TRLA_109t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_110: its form TRLA_110t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_112: its form TRLA_112t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_113: its form TRLA_113t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_114: its form TRLA_114t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_115: its form TRLA_115t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_116: its form TRLA_116t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_128: its form TRLA_128t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_129: its form TRLA_129t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_137: its form TRLA_137t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_138: its form TRLA_138t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_146: its form TRLA_146t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_147: its form TRLA_147t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_154: its form TRLA_154t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_155: its form TRLA_155t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_162: its form TRLA_162t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_163: its form TRLA_163t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_170: its form TRLA_170t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_171: its form TRLA_171t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_178: its form TRLA_178t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_179: its form TRLA_179t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_186: its form TRLA_186t points back (tag 1132) and is a 3-turn sleeper
+PASS D14 scripted shrine TRLA_187: its form TRLA_187t points back (tag 1132) and is a 3-turn sleeper
+PASS D15 admission: the scripted shrines, upgrades and teammates are admitted for the run player only
+PASS D16 admission: unscripted shrines, forms, the TRLA_107 fixture, unscripted upgrades and teammates admit nothing
+PASS D17 generation never yields a shrine, a form or a teammate (the Generated scope rejects them)
+PASS N1 a new Rikkar Druid run on Gonk's Mark has the board shrine TRLA_115 (schedule acts-v2, version 2)  (TRLA_115 v2 acts-v2)
+PASS N2 the shrine is never the run's hero power, a passive treasure or a deck card
+PASS N3 the plan carries the shrine (one copy, no upgrades); its treasures stay passive treasures only
+PASS N4 a Rikkar deck whose shrine is not scripted yet plays without one (rejected until its shrine family scripts it; vacuous once all are)  (none pending)
+PASS N5 a class-row run has no shrine
+PASS N6 a legacy-schedule run has no shrine
+PASS N7 TRLA_804 makes the plan two copies
+PASS N8 Configure refuses an unscripted shrine
+PASS N9 the save writes BoardShrine and ShrineUpgrades
+PASS N10 a run with no shrine writes neither field
+PASS S1 Gonk's Mark is on the run player's board after Start of Game: left-most slot, marked, 0/3, an ordinary minion  (TRLA_115 pos 0 0/3)
+PASS S1 nothing is left in the set-aside zone and the boss has no shrine
+PASS S1 the shrine entered through the history (a FULL_ENTITY the client is sent)
+PASS S2 TRLA_115: a minion the owner summons gets +1/+1 (Bloodfen Raptor 3/2 -> 4/3)  (4/3)
+PASS S2 the shrine does not buff itself
+PASS S2 an enemy summon is not buffed
+PASS S3 a shrine killed by damage goes dormant in the slot it left (its TRLA_115t form, untouchable, marked)  (TRLA_115t pos 0/0 dormant True)
+PASS S3 the death counts: a death fact, NumFriendlyMinionsThatDiedThisTurn, the corpse in the graveyard
+PASS S3 the dormant form shows 3 turns  (3)
+PASS S3 the dormant form has no trigger (a summon gets no +1/+1)  (3)
+PASS S3 an AoE does not touch the dormant form
+PASS S4 death on the owner's turn 1: dormant 2 at turn 3, 1 at turn 5, revived at the start of turn 7  (t3:TRLA_115t/2 t5:TRLA_115t/1 t7:TRLA_115/0)
+PASS S5 revived: a fresh entity at full Health in the same slot, marked, generation 1, awake  (id 58 hp 3 pos 0 gen 1)
+PASS S5 its trigger is back (a summon gets +1/+1 again)  (4)
+PASS S6 the boss's Fireball kills the shrine on the boss's turn: dormant
+PASS S6 death on the enemy's turn 2: revived at the start of the owner's turn 7  (t3:TRLA_115t t5:TRLA_115t t7:TRLA_115)
+PASS S7 a destroy effect (Assassinate) sends the shrine dormant
+PASS S8 Hex on the shrine destroys it instead (dormant, no Frog on the board)  (played True TRLA_115t board TRLA_115t)
+PASS S8 the dormant form cannot be targeted (Polymorph's options do not name it)
+PASS S9 Sap (return to hand) destroys the shrine instead: dormant, not in the owner's hand
+PASS S10 Recycle (shuffle into a deck) destroys the shrine instead: dormant; the copy in the deck is a plain card  (TRLA_115t)
+PASS S11 Mind Control cannot target the shrine: the play is refused, the shrine stays the owner's and awake, card and Mana kept
+PASS S12 Faceless Manipulator copies it as a plain minion (no mark), keeping its text  (p2 [TRLA_115] p1 [TRLA_115*])
+PASS S12 the copy's text works for its new owner (Stonetusk Boar 1/1 -> 2/2)  (2/2)
+PASS S12 the copy dies for good (no dormant form on the boss's board)
+PASS S13 a silenced shrine stays a run shrine (marked, awake)
+PASS S13 silenced: its text is gone (a summon gets no +1/+1)  (3)
+PASS S13 a silenced shrine still goes dormant
+PASS S13 it comes back un-silenced with its text  (TRLA_115 silenced False raptor 4)
+PASS S14 the shrine's death counts for "a friendly minion died" (Resurrect is playable) but it is not in the pool (nothing summoned)  (played True board TRLA_115t)
+PASS S14 an ordinary dead minion is still resurrected
+PASS S14 the graveyard pool (IncludeTask GRAVEYARD) leaves the corpse out
+PASS S15 the board is full (shrine + 6)
+PASS S15 a full board at death: the dormant form takes the shrine's slot and both Golems' Deathrattles still summon  (TRLA_115t,skele21,skele21)
+PASS S16 TRLA_112 Gonk's Armament: gaining Armor (Shapeshift) refreshes the Mana Crystals  (TRLA_112 used True armor 1 mana 10)
+PASS S17 TRLA_116 Bonds of Balance: at the end of its owner's turn it gains Attack equal to the hero's (3)  (TRLA_116 3 hero 3 trig True ench [TRLA_116e] turn 2)
+PASS S17 a shrine with Attack can attack (no CANT_ATTACK invented)  (True 30->27)
+PASS S17 the end of the owner's next turn grows it again (3 + 3)  (6)
+PASS S17 the boss's turn does not grow it  (6)
+PASS S18 a shrine placed on Darius's board sits between his edge Cannons  (GILA_601,TRLA_115,GILA_601)
+PASS S18 its dormant form keeps the slot between them  (GILA_601,TRLA_115t,GILA_601)
+PASS S19 the fixture is a Taunt: the hero can only attack it  (TRLA_107)
+PASS S19 Amulet of Domination (control) on the fixture does nothing  (played False)
+PASS S19 killed, the fixture goes dormant on the boss's board
+PASS U1 TRLA_804: two shrines start on the board, side by side in the two left-most slots  (TRLA_115,TRLA_115)
+PASS U1 both triggers work (+2/+2)  (5/4)
+PASS U1 each copy goes dormant on its own
+PASS U2 TRLA_805 attaches its player enchantment
+PASS U2 TRLA_805: a shrine that dies on turn 1 shows 2 turns and revives at the start of turn 5  (t1:2 t3:TRLA_115t t5:TRLA_115)
+PASS U2 the upgrade is its owner's only (the boss's shrines would still sleep 3)
+PASS T1 TRLA_124 Zandalari Striker: after the hero attacks, the owner's minions get +2 Attack (the shrine included)  (3->5 shrine 2)
+PASS T2 TRLA_125 The Fan Favorite: Overkill gives the hero +10 Attack this turn  (True hero 10)
+PASS T2 the +10 lasts this turn only  (0)
+PASS T3 TRLA_127 Astral Raptor: Rush; Overkill summons another (two on the board; the summon gets Gonk's Mark)  (True raptors 2)
+PASS T4 the first teammate draft opens after the act I floor-2 fight, on the treasure screen, offering 3 scripted Druid teammates (TRLA_125 among them)  (floor 2 teammate [TRLA_123,TRLA_125,TRLA_127] log f1:treasure[LOOTA_804,frost_lantern,mending_charm])
+PASS T4 a save and resume keeps the open teammate draft and its offer
+PASS T4 the pick joins the deck as a card record with origin "teammate", then the bundle draft opens  (TRLA_125/teammate BundleDraft)
+PASS T4 a second pick is refused
+PASS T5 the floor-4 teammate draft never offers the teammate already taken  (floor 4 [TRLA_122,TRLA_123,TRLA_124])
+PASS T6 the shrine-upgrade draft opens after the act I major (floor 5), after its treasure draft, offering 3 scripted upgrades  (floor 5 [TRLA_806,TRLA_807,TRLA_809] )
+PASS T6 the upgrade joins ShrineUpgrades, not Treasures, and the plan carries it
+PASS T7 the act II shrine-upgrade draft offers only upgrades not held  (floor 10 shrine-upgrade [TRLA_802,TRLA_807,TRLA_808] f6:treasure[LOOTA_831,grave_candle,old_map] f7:treasure[LOOTA_811,LOOTA_835,quiet_satchel] f8:teammate[TRLA_121,TRLA_123,TRLA_124])
+PASS T7 the act II floor-3 teammate draft offered the last scripted teammate  (f6:treasure[LOOTA_831,grave_candle,old_map] f7:treasure[LOOTA_811,LOOTA_835,quiet_satchel] f8:teammate[TRLA_121,TRLA_123,TRLA_124])
+PASS T8 a later fight's plan: the shrine, its copies (two with TRLA_804), both upgrades in pick order  (TRLA_806,TRLA_802)
+PASS T8 that fight starts with the planned shrines and revival timer
+PASS T8 the run's teammates are in the plan's deck  (TRLA_125,TRLA_122,TRLA_121)
+PASS T9 a class-row run on acts-v2 never opens a teammate or shrine-upgrade draft  (f1:treasure[LOOTA_812,old_map,warden_golem] f3:treasure[LOOTA_845,gilded_idol,spark_lantern] f6:treasure[LOOTA_801,LOOTA_831,hearty_tonic] f7:treasure[LOOTA_800,LOOTA_819,deep_satchel] f10:treasure[bottomless_tome,frost_lantern,quiet_satchel])
+PASS T9 a Rikkar run whose shrine is unscripted opens none either
+PASS V1 the fixture is a phase-6 run: phase-6 data (scheduleVersion 1) stamps schedule version 1 on acts-v1 and gives no shrine  (data v1 run v1 acts-v1 shrine -)
+PASS V1 a version-4 file upgrades to 6 as the identity (the run's fields unchanged, no shrine)  (Dungeon Run save upgraded from version 4 to 6 (run in progress: TRLA_209h_Druid, power CS2_017, catalog v1, schedule v1))
+PASS V1 the one-time backup dungeon-run.v4.xml is written, and the file is version 6
+PASS V1 the run body is byte-identical after the upgrade
+PASS V1 a version-6 file loads as is (no upgrade)
+PASS V2 the phase-6 run (schedule version 1) still loads on version-2 data and walks acts-v1 with no phase-7 draft
+PASS V2 its plan has no shrine
+PASS V3 a run on a future schedule version is still refused
+PASS V3 a version-1 run naming acts-v2 (never released with version 1) is refused
+PASS V4 a version-7 file is refused (never downgraded)
+SUMMARY checks passed 131 failed 0

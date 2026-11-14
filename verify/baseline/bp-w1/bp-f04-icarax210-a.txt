@@ -1,0 +1,6 @@
+ulda_40_icarax     ULDA tmajor3 floor 15 DRUID/druid_thicket/CS2_017                    deck 32 -> boss     turns  17 decisions  35 fallbacks  0 health 100 mana+3 power  5 checks ok form 2>2 left 90 banked 90
+ulda_40_icarax     ULDA tmajor3 floor 15 HUNTER/hunter_kennel/DS1h_292                  deck 26 -> boss     turns  14 decisions  28 fallbacks  0 health 100 mana+3 power  1 checks ok form 2>2 left 90 banked 90
+ulda_40_icarax     ULDA tmajor3 floor 15 MAGE/mage_rimeward/CS2_034                     deck 49 -> boss     turns  18 decisions  35 fallbacks  0 health 100 mana+3 power  4 checks ok form 2>2 left 78 banked 78
+ulda_40_icarax     ULDA tmajor3 floor 15 PALADIN/paladin_gleaming/CS2_101               deck 47 -> boss     turns  12 decisions  21 fallbacks  0 health 100 mana+3 power  1 checks ok form 2>2 left 90 banked 90
+encounter run: schedule acts-v3h, carried 210; power unused: -; form unreached: -
+games 4, boss wins 4, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched ULD_720 x5 ULD_707 x0 ULD_721 x1, most boss Secrets 0

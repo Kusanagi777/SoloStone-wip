@@ -44,6 +44,30 @@ namespace SabberStoneCore.Actions
             return true;
         }
 
+        /// <summary>TRLA_147 Bwonsamdi's Covenant: "Healing enemies damages them instead."</summary>
+        public const string Covenant = "TRLA_147";
+
+        /// <summary>
+        /// TRLA_147 Bwonsamdi's Covenant (a run board shrine, phase 7 S2): any healing restored to a character whose controller's
+        /// opponent has an awake, unsilenced Covenant on its board deals that much damage instead, whoever heals it ("Healing
+        /// enemies damages them instead": the effect sits on the Covenant owner's enemies, as TRLA_147e does on the client). So
+        /// the owner's heals on enemy characters, the enemy's heals of its own characters, its Lifesteal and its "restore Health"
+        /// passives (a boss's Vigil) all damage; the owner's own characters are still healed. <paramref name="healer"/> is kept
+        /// for the callers and does not narrow the rule.
+        /// </summary>
+        public static bool DamagesEnemies(Controller healer, ICharacter target)
+        {
+            var enemy = target?.Controller?.Opponent;
+            if (enemy == null) return false;
+            var board = enemy.BoardZone;
+            for (int i = 0; i < board.Count; i++)
+            {
+                var m = board[i];
+                if (m.Card.Id == Covenant && !m.IsSilenced && !m.Untouchable && !m.ToBeDestroyed) return true;
+            }
+            return false;
+        }
+
         public static int Bonus(Controller owner) => owner[GameTag.OUTGOING_HEALING_ADJUSTMENT]
             + 2 * (owner.AppliedEnchantments?.Count(e => e.Card.Id == "CATA_216e") ?? 0);
 
@@ -61,7 +85,7 @@ namespace SabberStoneCore.Actions
             foreach (var target in recipients)
             {
                 int heal = alreadyScaled ? amount : Amount(source, full ? target.Damage : amount, owner);
-                if (converted)
+                if (converted || DamagesEnemies(owner, target))
                 {
                     if (source[ConvertedHeal] != 0) continue;
                     source[ConvertedHeal] = 1;

@@ -1,0 +1,15 @@
+plan hero=HERO_03 power=CS2_083b deck=CORE_BT_701,CORE_BT_701,LOE_010,CORE_EX1_278,CORE_EX1_278,EX1_522,CFM_636,CFM_636,LOE_012,AT_028,TB_CoOpv3_005,CFM_095,TLC_242,UNG_002,CATA_556,LOOT_144,TRL_569 boss=bog_croaker matchSeed=72971963
+floor 3 boss=bog_croaker power=CS2_083b matchSeed=72971963
+floor 3 treasure offered=deep_satchel,hearty_tonic,whetstone_charm
+floor 3 bundle offered=bundle_neutral_battlecry,bundle_neutral_murloc,bundle_rogue_spells
+floor 4 boss=ashen_abbess power=CS2_083b matchSeed=924063735
+floor 4 bundle offered=bundle_neutral_elemental,bundle_neutral_taunt,bundle_rogue_battlecry
+floor 5 boss=tollkeeper power=CS2_083b matchSeed=1248489816
+floor 5 treasure offered=bottomless_tome,iron_skin,lucky_coin
+floor 5 bundle offered=bundle_neutral_deathrattle,bundle_neutral_murloc,bundle_rogue_deathrattle
+floor 6 boss=frostwarden power=CS2_083b matchSeed=1956220308
+floor 6 bundle offered=bundle_neutral_taunt,bundle_rogue_battlecry,bundle_rogue_weapons
+floor 7 boss=lady_of_thorns power=CS2_083b matchSeed=677753457
+floor 7 bundle offered=bundle_neutral_murloc,bundle_rogue_deathrattle,bundle_rogue_spells
+floor 8 boss=gilded_king power=CS2_083b matchSeed=1350879256
+end phase=Victory deck=33 treasures=deep_satchel,frost_lantern,bottomless_tome

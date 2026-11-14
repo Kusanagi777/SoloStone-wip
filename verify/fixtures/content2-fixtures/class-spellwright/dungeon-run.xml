@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
+  <Profile>
+    <Heroes />
+    <Unlocked />
+    <Archive />
+  </Profile>
+  <Active DataVersion="dungeon-run/1" Seed="6491657387877879262" TypedSeed="false" Hero="spellwright" Power="CS2_034" Floor="3" Phase="PreMatch" Attempt="0" DraftsWithoutDominant="1">
+    <Deck>
+      <string>KAR_009</string>
+      <string>KAR_009</string>
+      <string>CATA_484</string>
+      <string>JAIL_312</string>
+      <string>JAIL_312</string>
+      <string>EX1_608</string>
+      <string>GVG_123</string>
+      <string>GVG_123</string>
+      <string>BOT_604</string>
+      <string>TIME_856</string>
+      <string>TB_CoOpv3_005</string>
+      <string>DAL_182</string>
+      <string>MEND_506</string>
+      <string>GIL_664</string>
+      <string>CATA_556</string>
+      <string>LOOT_144</string>
+      <string>TRL_569</string>
+    </Deck>
+    <Treasures />
+    <ActiveTreasures>
+      <string>frost_lantern</string>
+    </ActiveTreasures>
+    <Upgrades />
+    <BossSequence>
+      <string>mire_brute</string>
+      <string>lantern_thief</string>
+      <string>cellar_matron</string>
+      <string>frostwarden</string>
+      <string>golemancer</string>
+      <string>tollkeeper</string>
+      <string>lady_of_thorns</string>
+      <string>gilded_king</string>
+    </BossSequence>
+    <TakenBundles>
+      <string>bundle_mage_beast</string>
+      <string>bundle_neutral_dragon</string>
+    </TakenBundles>
+    <BundleCooldowns>
+      <string>bundle_neutral_beast@3</string>
+      <string>bundle_neutral_murloc@3</string>
+      <string>bundle_neutral_elemental@4</string>
+      <string>bundle_neutral_mechanical@4</string>
+    </BundleCooldowns>
+    <DraftedThemes>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>dragon</string>
+      <string>dragon</string>
+      <string>dragon</string>
+    </DraftedThemes>
+    <Drafts>
+      <DungeonRunDraft Floor="1" Kind="treasure" Picked="frost_lantern">
+        <Offered>
+          <string>frost_lantern</string>
+          <string>healing_spring</string>
+          <string>quake_stone</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="1" Kind="bundle" Picked="bundle_mage_beast">
+        <Offered>
+          <string>bundle_mage_beast</string>
+          <string>bundle_neutral_beast</string>
+          <string>bundle_neutral_murloc</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="2" Kind="bundle" Picked="bundle_neutral_dragon">
+        <Offered>
+          <string>bundle_neutral_dragon</string>
+          <string>bundle_neutral_elemental</string>
+          <string>bundle_neutral_mechanical</string>
+        </Offered>
+      </DungeonRunDraft>
+    </Drafts>
+    <Matches>
+      <DungeonRunMatchSummary Floor="1" Boss="mire_brute" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="2" Boss="lantern_thief" Outcome="Win" Attempt="1" />
+    </Matches>
+  </Active>
+</DungeonRun>

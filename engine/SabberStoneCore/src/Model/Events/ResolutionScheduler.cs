@@ -211,6 +211,7 @@ namespace SabberStoneCore.Model.Events
             if (repeat) frame.NextStep--;
             ContinueEffect(game);
             Actions.AutoPlayRules.DrainDiscover(game.ControllerById(frame.ControllerId));
+            CardSets.DungeonRun.RunPlayerRules.DeliverDiscovered(game.ControllerById(frame.ControllerId));
             // Nested frames share the root's source; a parked Outcast play also owns the work it queued.
             Actions.OutcastRules.AfterResume(game, frame.SourceId);
             Actions.AfterAttackRules.Flush(game);

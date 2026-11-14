@@ -314,7 +314,8 @@ namespace SabberStoneCore.Actions
 				source.IsAttacking = false;
 				target.IsDefending = false;
 
-				int numAtk = source.NumAttacksThisTurn + 1;
+				// An Overkill that let the attacker attack again (TRLA_171e): this attack does not count.
+				int numAtk = OverkillRules.ConsumeAttackAgain(source) ? source.NumAttacksThisTurn : source.NumAttacksThisTurn + 1;
 
 				c.NumOptionsPlayedThisTurn++;
 				if (minion != null)

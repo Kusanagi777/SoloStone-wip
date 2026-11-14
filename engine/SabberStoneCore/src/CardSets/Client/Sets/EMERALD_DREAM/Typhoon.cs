@@ -17,6 +17,8 @@ namespace SabberStoneCore.CardSets.Client.Sets
             card.Power = new Power { PowerTask = new CustomTask((g, c, s, t, stack) => {
                 var minions = c.BoardZone.GetAll().Concat(c.Opponent.BoardZone.GetAll()).ToArray();
                 foreach (var minion in minions) {
+                    // A run shrine never leaves its board (phase 8): an awake one is destroyed and goes dormant, a dormant form stays.
+                    if (ShrineRules.InterceptLeave(minion)) continue;
                     bool opponent = g.Random.Next(2) == 1;
                     g.OnRandomHappened(true);
                     var destination = opponent ? c.Opponent : c;

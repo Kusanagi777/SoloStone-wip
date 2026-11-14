@@ -1,0 +1,18 @@
+<Project>
+  <!-- Imported automatically by every project under verify/ (MSBuild walks up from the .csproj and stops at the first
+       Directory.Build.props). It gives each suite repo-relative paths, so no .csproj names a drive or an absolute path:
+         $(SoloStoneRoot)  the repository root (the folder holding engine/ and plugin/), with a trailing slash
+         $(VerifyRoot)     this folder (verify/), with a trailing slash
+         $(EngineDll)      the engine build of bin/engine.sh: verify/.out/engine-out/SabberStoneCore.dll
+         $(EngineDir)      its folder (the audit hall harnesses use this name)
+       and compiles lib/VerifyPaths.cs into every suite (how a Program.cs finds the repo, the fixtures and .out/). -->
+  <PropertyGroup>
+    <SoloStoneRoot>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', '..'))</SoloStoneRoot>
+    <VerifyRoot>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)'))</VerifyRoot>
+    <EngineDir Condition="'$(EngineDir)' == ''">$(VerifyRoot).out/engine-out</EngineDir>
+    <EngineDll Condition="'$(EngineDll)' == ''">$(EngineDir)/SabberStoneCore.dll</EngineDll>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(VerifyRoot)lib/VerifyPaths.cs" Link="VerifyPaths.cs" />
+  </ItemGroup>
+</Project>

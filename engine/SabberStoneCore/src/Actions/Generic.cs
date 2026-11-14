@@ -92,6 +92,8 @@ namespace SabberStoneCore.Actions
 		public static Func<Controller, Minion, bool> ReturnToHandBlock
 			=> delegate (Controller c, Minion minion)
 			{
+                // A run shrine on a board is destroyed instead (phase 7, ShrineRules).
+                if (ShrineRules.InterceptLeave(minion)) return false;
                 var fromZone = minion.Zone?.Type ?? Zone.INVALID;
                 DarkGifts.RemoveForBackwardMove(minion, fromZone, Zone.HAND);
 				if (!RemoveFromZone.Invoke(c, minion))
@@ -182,7 +184,7 @@ namespace SabberStoneCore.Actions
 						if (span[i].Card.Type != type) continue;
 						buffer[k++] = i;
 					}
-					card = k == 0 ? null : span[rnd.Next(k)];
+					card = k == 0 ? null : span[buffer[rnd.Next(k)]];
 
 					span = c.Opponent.DeckZone.GetSpan();
 					k = 0;
@@ -191,7 +193,7 @@ namespace SabberStoneCore.Actions
 						if (span[i].Card.Type != type) continue;
 						buffer[k++] = i;
 					}
-					cardOp = k == 0 ? null : span[rnd.Next(k)];
+					cardOp = k == 0 ? null : span[buffer[rnd.Next(k)]];
 				}
 
 				if (c.Game.History)
@@ -286,6 +288,8 @@ namespace SabberStoneCore.Actions
 			{
 				if (oldMinion?.Zone?.Type != Zone.PLAY || card.Type == CardType.LOCATION)
 					return false;
+				// A run shrine is destroyed instead of transformed (phase 7, ShrineRules); its own revival passes.
+				if (ShrineRules.InterceptTransform(oldMinion)) return false;
 
 				TransformRules.Intercept(oldMinion, card, out card);
                 if (card == null) return false;
@@ -381,6 +385,7 @@ namespace SabberStoneCore.Actions
         internal static IPlayable ChangeEntity(Controller c, IPlayable p, Card newCard, bool removeEnchantments,
             Minion dormantCopy = null, bool resetHeldState = false, bool intercept = true)
 			{
+                if (p is Minion runShrine && p.Zone is BoardZone && ShrineRules.InterceptTransform(runShrine)) return p;
                 if (intercept) TransformRules.Intercept(p as Minion, newCard, out newCard);
                 if (newCard == null) return p;
                 // Aya also replaces Coins made in place; resolve before publishing CHANGE_ENTITY.

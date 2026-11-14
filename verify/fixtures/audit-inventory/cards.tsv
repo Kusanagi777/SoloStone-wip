@@ -1,0 +1,802 @@
+id	name	type	class	cost	atk	hp	implemented	sources	parents	via	randomgen	chunk	text
+AT_004	Arcane Blast	SPELL	MAGE	1	0	0	True	bundle:bundle_mage_spells				class-MAGE	Deal $2 damage to a minion. This spell gets double bonus from <b>Spell Damage</b>.
+AT_011	Holy Champion	MINION	PRIEST	4	3	5	True	starter:priest_mending				class-PRIEST	Whenever a character is healed, gain +2 Attack.
+AT_011e	Light's Blessing	ENCHANTMENT	NEUTRAL	0	0	0	True		AT_011	scriptcard		class-PRIEST	Increased Attack.
+AT_013	Power Word: Glory	SPELL	PRIEST	1	0	0	True	bundle:bundle_priest_spells				class-PRIEST	Choose a minion. Whenever it attacks, restore 4 Health to\nyour hero.
+AT_013e	Power Word: Glory	ENCHANTMENT	NEUTRAL	0	0	0	True		AT_013	scriptcard		class-PRIEST	When this attacks, restore #4 Health to the hero of the player who buffed it.
+AT_021	Tiny Knight of Evil	MINION	WARLOCK	2	3	2	True	starter:warlock_ashen				class-WARLOCK	Whenever you discard a card, gain +1/+1.
+AT_021e	Felrage	ENCHANTMENT	WARLOCK	0	0	0	True		AT_021	scriptcard		class-WARLOCK	Increased stats.
+AT_022	Fist of Jaraxxus	SPELL	WARLOCK	4	0	0	True	starter:warlock_ashen				class-WARLOCK	When you play or discard this, deal $4 damage to a random enemy. @spelldmg
+AT_028	Shado-Pan Rider	MINION	ROGUE	5	3	7	True	starter:rogue_backalley				class-ROGUE	<b>Combo:</b> Gain +3 Attack.
+AT_028e	Chi Lance	ENCHANTMENT	NEUTRAL	0	0	0	True		AT_028	scriptcard		class-ROGUE	+3 Attack.
+AT_029	Buccaneer	MINION	ROGUE	1	2	1	True	starter:rogue_corsair				class-ROGUE	Whenever you equip a weapon, give it +1 Attack.
+AT_029e	Extra Stabby	ENCHANTMENT	NEUTRAL	0	0	0	True		AT_029	scriptcard		class-ROGUE	+1 Attack
+AT_030	Undercity Valiant	MINION	ROGUE	2	3	2	True	starter:rogue_backalley				class-ROGUE	<b>Combo:</b> Deal 1 damage.
+AT_037	Living Roots	SPELL	DRUID	1	0	0	True	bundle:bundle_druid_spells;starter:druid_forked				class-DRUID-2	<b>Choose One -</b> Deal $2 damage; or Summon two 1/1 Saplings. @spelldmg
+AT_037t	Sapling	MINION	DRUID	1	1	1	True	contenttoken:druid_rootcall	TB_Henchmania_ChuH	scriptcard		run-player-powers+active-treasures	
+AT_039	Savage Combatant	MINION	DRUID	4	5	4	True	starter:druid_thicket				class-DRUID-2	<b>Inspire:</b> Give your hero\n+2 Attack this turn.
+AT_039e	Savage	ENCHANTMENT	DRUID	0	0	0	True		AT_039	script;scriptcard		class-DRUID-2	+2 Attack this turn.
+AT_042	Druid of the Saber	MINION	DRUID	2	2	1	True	starter:druid_forked				class-DRUID-2	[x]<b>Choose One -</b> Transform\ninto a 2/1 with <b>Charge</b>;\nor a 3/2 with <b>Stealth</b>.
+AT_052	Totem Golem	MINION	SHAMAN	2	3	4	True	starter:shaman_stormdebt				class-SHAMAN	<b>Overload:</b> (1)
+AT_055	Flash Heal	SPELL	PRIEST	1	0	0	True	starter:priest_mending				class-PRIEST	Restore #5 Health.
+AT_064	Bash	SPELL	WARRIOR	3	0	0	True	starter:warrior_plated				class-WARRIOR	Deal $3 damage.\nGain 3 Armor. @spelldmg
+AT_074	Seal of Champions	SPELL	PALADIN	3	0	0	True	starter:paladin_gleaming				class-PALADIN	Give a minion\n+3 Attack and <b>Divine Shield</b>.
+AT_074e2	Seal of Champions	ENCHANTMENT	PALADIN	0	0	0	True		AT_074	scriptcard		class-PALADIN	+3 Attack and <b>Divine Shield</b>.
+AT_075	Warhorse Trainer	MINION	PALADIN	3	2	4	True	starter:paladin_lantern				class-PALADIN	Your Silver Hand Recruits have +1 Attack.
+AT_075e	Might of the Hostler	ENCHANTMENT	PALADIN	0	0	0	True		AT_075	scriptcard		class-PALADIN	Warhorse Trainer is granting this minion +1 Attack.
+AT_092	Ice Rager	MINION	NEUTRAL	3	5	2	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+AT_096	Clockwork Knight	MINION	NEUTRAL	5	5	5	True	starter:hunter_scrapyard				class-HUNTER	<b>Battlecry:</b> Give a friendly Mech +1/+1.
+AT_096e	Wound Up	ENCHANTMENT	NEUTRAL	0	0	0	True		AT_096	scriptcard		class-HUNTER	+1/+1.
+AT_097	Tournament Attendee	MINION	NEUTRAL	1	2	1	True	bundle:bundle_neutral_taunt				neutral-bundles	<b>Taunt</b>
+AT_105	Injured Kvaldir	MINION	NEUTRAL	1	2	4	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2;bundle:bundle_neutral_battlecry				neutral-bundles	<b>Battlecry:</b> Deal 3 damage to this minion.
+AV_337t	Mountain Cub	MINION	HUNTER	3	2	4	True		CORE_AV_337	script;tag1452		class-HUNTER	<b>Taunt</b>
+BAR_035t	Swift Hyena	MINION	HUNTER	1	1	1	True		CORE_BAR_801	script;tag1452		boss-ember_matron+boss-devouring_maw	<b>Rush</b>
+BAR_878t	Battlefield Medic	MINION	PALADIN	2	2	2	True		CORE_BAR_878	script;tag1452		class-PALADIN	<b>Lifesteal</b>
+BOT_020	Skaterbot	MINION	NEUTRAL	1	1	1	True	bundle:bundle_neutral_mechanical;starter:hunter_scrapyard;starter:warrior_shieldhire				class-HUNTER	<b>Magnetic</b>\n<b>Rush</b>
+BOT_031	Goblin Bomb	MINION	NEUTRAL	1	0	2	True	bundle:bundle_neutral_deathrattle				neutral-bundles	[x]<b>Deathrattle:</b> Deal 2 damage\nto the enemy hero.
+BOT_035	Venomizer	MINION	HUNTER	2	2	2	True	starter:hunter_scrapyard				class-HUNTER	<b>Magnetic</b>\n<b>Poisonous</b>
+BOT_059	Eternium Rover	MINION	WARRIOR	1	1	3	True	bundle:bundle_warrior_mechanical;starter:warrior_plated				class-WARRIOR	Whenever this minion takes damage, gain 2_Armor.
+BOT_079	Faithful Lumi	MINION	NEUTRAL	1	1	1	True	starter:hunter_scrapyard				class-HUNTER	<b>Battlecry:</b> Give a friendly Mech +1/+1.
+BOT_079e	Illuminated	ENCHANTMENT	NEUTRAL	0	0	0	True		BOT_079	scriptcard		class-HUNTER	+1/+1.
+BOT_102t	Spark	MINION	NEUTRAL	1	1	1	True		BOT_451	scriptcard		class-SHAMAN	<b>Rush</b>
+BOT_222	Spirit Bomb	SPELL	WARLOCK	1	0	0	True	bundle:bundle_warlock_spells				class-WARLOCK	Deal $4 damage to a minion and your hero. @spelldmg
+BOT_224	Doubling Imp	MINION	WARLOCK	3	2	2	True	starter:warlock_fiendpact				class-WARLOCK	<b>Battlecry:</b> Summon a copy of this minion.
+BOT_237	Beryllium Nullifier	MINION	WARRIOR	7	4	8	True	bundle:bundle_warrior_mechanical				class-WARRIOR	<b>Magnetic</b>\nCan't be targeted by spells or Hero Powers.
+BOT_283	Pogo-Hopper	MINION	ROGUE	1	1	1	True	bundle:bundle_rogue_battlecry				class-ROGUE	[x]<b>Battlecry:</b> Gain +2/+2 for\neach other Pogo-Hopper\nyou played this game.
+BOT_291	Storm Chaser	MINION	SHAMAN	4	3	4	True	bundle:bundle_shaman_elemental				class-SHAMAN	<b>Battlecry:</b> Draw a spell from your deck that costs_(5) or more.
+BOT_299	Omega Assembly	SPELL	WARRIOR	1	0	0	True	bundle:bundle_warrior_spells				class-WARRIOR	[x]<b>Discover</b> a Mech. If you\nhave 10 Mana Crystals,\nkeep all 3 cards.
+BOT_309	Upgradeable Framebot	MINION	NEUTRAL	2	1	5	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+BOT_312	Replicating Menace	MINION	NEUTRAL	4	3	1	True	bundle:bundle_neutral_mechanical				neutral-bundles	<b>Magnetic</b>\n<b>Deathrattle:</b> Summon three 1/1 Microbots.
+BOT_312t	Microbot	MINION	NEUTRAL	1	1	1	True		BOT_312	scriptcard		neutral-bundles	
+BOT_443	Void Analyst	MINION	WARLOCK	2	2	2	True	starter:warlock_fiendpact				class-WARLOCK	<b>Deathrattle:</b> Give all Demons in your hand +1/+1.
+BOT_445	Mecharoo	MINION	NEUTRAL	1	1	1	True	starter:hunter_scrapyard				class-HUNTER	<b>Deathrattle:</b> Summon a 1/1 Jo-E Bot.
+BOT_445t	Jo-E Bot	MINION	NEUTRAL	1	1	1	True		BOT_445	scriptcard		class-HUNTER	
+BOT_451	Voltaic Burst	SPELL	SHAMAN	1	0	0	True	bundle:bundle_shaman_spells				class-SHAMAN	Summon two 1/1 Sparks with <b>Rush</b>. <b>Overload:</b> (1)
+BOT_509	Dead Ringer	MINION	PRIEST	2	2	1	True	starter:priest_grave				class-PRIEST	<b>Deathrattle:</b> Draw a <b>Deathrattle</b> minion from your deck.
+BOT_533	Menacing Nimbus	MINION	SHAMAN	2	2	2	True	starter:shaman_kindred				class-SHAMAN	<b>Battlecry:</b> Add a random Elemental to your hand.
+BOT_558	Test Subject	MINION	PRIEST	1	0	2	True	bundle:bundle_priest_deathrattle				class-PRIEST	[x]<b>Deathrattle:</b> Return any\nspells you cast on this\nminion to your hand.
+BOT_565	Blightnozzle Crawler	MINION	ROGUE	4	2	4	True	bundle:bundle_rogue_deathrattle				class-ROGUE	<b>Deathrattle:</b> Summon a 1/1 Ooze with <b>Poisonous</b> and <b>Rush</b>.
+BOT_565t	Radioactive Ooze	MINION	ROGUE	1	1	1	True		BOT_565	scriptcard		class-ROGUE	<b>Poisonous</b>\n<b>Rush</b>
+BOT_603	Steel Rager	MINION	NEUTRAL	4	5	1	True	starter:hunter_scrapyard				class-HUNTER	<b>Rush</b>
+BOT_906	Glow-Tron	MINION	PALADIN	1	1	3	True	bossdeck:golemancer:boss-paladin-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Magnetic</b>
+BOT_909	Crystology	SPELL	PALADIN	1	0	0	True	bundle:bundle_paladin_spells				class-PALADIN	[x]Draw two 1-Attack\nminions from your deck.
+BOT_910	Glowstone Technician	MINION	PALADIN	5	3	4	True	starter:paladin_wagon				class-PALADIN	<b>Battlecry:</b> Give all minions in your hand +2/+2.
+BOT_911	Annoy-o-Module	MINION	PALADIN	4	2	4	True	starter:paladin_gleaming				class-PALADIN	<b>Magnetic</b>\n<b>Divine Shield</b>\n<b>Taunt</b>
+BRM_004	Twilight Whelp	MINION	PRIEST	1	2	1	True	bundle:bundle_priest_battlecry;starter:priest_wyrmwatch				class-PRIEST	<b>Battlecry:</b> If you're holding a Dragon, gain +2 Health.
+BRM_005	Demonwrath	SPELL	WARLOCK	3	0	0	True	bundle:bundle_warlock_spells				class-WARLOCK	[x]Deal $2 damage to all\nminions except Demons. @spelldmg
+BRM_006	Imp Gang Boss	MINION	WARLOCK	3	2	4	True	starter:warlock_fiendpact				class-WARLOCK	Whenever this minion takes damage, summon a 1/1 Imp.
+BRM_006t	Imp	MINION	WARLOCK	1	1	1	True		BRM_006	scriptcard		class-WARLOCK	
+BRM_010	Druid of the Flame	MINION	DRUID	3	2	2	True	starter:druid_forked				class-DRUID-2	<b>Choose One -</b> Transform into a 5/2 minion; or a 2/5 minion.
+BRM_012	Fireguard Destroyer	MINION	SHAMAN	4	3	6	True	starter:shaman_kindred				class-SHAMAN	<b>Battlecry:</b> Gain 1-4 Attack. <b>Overload:</b> (1)
+CAP_000	SI:7 Slayer	MINION	ROGUE	3	1	2	True	starter:rogue_wayfinder				class-ROGUE	[x]<b><b>Stealth</b>.</b> Whenever a\nfriendly <b><b>Stealth</b>ed</b> minion\nattacks, give it +2/+2.
+CAP_000e	Slayer	ENCHANTMENT	ROGUE	0	0	0	True		CAP_000	scriptcard		class-ROGUE	+2/+2.
+CAP_002	Follow the Footsteps	SPELL	ROGUE	1	0	0	True	bundle:bundle_rogue_spells;starter:rogue_wayfinder				class-ROGUE	[x]<b>Discover</b> a <b>Stealth</b>\nminion. Give it this\neffect for a turn.
+CAP_003	SI:7 Supplier	MINION	ROGUE	2	1	3	True	starter:rogue_wayfinder				class-ROGUE	<b>Stealth</b>\nAfter this attacks,&\ndraw a card.
+CAP_004	Disguised Operator	MINION	ROGUE	1	4	2	True	bundle:bundle_rogue_deathrattle				class-ROGUE	[x] Can be played on either side.\n<b>Rush</b>. <b>Deathrattle:</b> Your\nopponent draws 2 cards.
+CAP_006	Tricks of the Trade	SPELL	ROGUE	1	0	0	True	starter:rogue_backalley				class-ROGUE	[x]Deal $1 damage.\nIf a <b><b>Stealth</b>ed</b> minion\nattacked while holding\nthis, deal $3 instead.
+CAP_105	Hook n' Heave	SPELL	WARRIOR	2	0	0	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	<b>Discover</b> a Pirate.\nSummon two 1/1 Cannoneers.
+CAP_106	Captain Crowley	MINION	WARRIOR	5	4	5	True		CAP_107t	script		class-WARRIOR	[x]Your Cannoneers fire\nan additional shot.\n<b>Battlecry</b>: Summon\n_two 1/1 Cannoneers.
+CAP_107	Cannonmaster	MINION	WARRIOR	1	3	1	True	bossdeck:hollow_sovereign:npc-dragon-warrior;bundle:bundle_warrior_battlecry				class-WARRIOR	[x]<b>Battlecry:</b> Get a 1/1\nCannoneer that deals\n1 damage to a random\nenemy at end of turn.
+CAP_107t	Cannoneer	MINION	WARRIOR	1	1	1	True		CAP_105;CAP_106;CAP_107	script;scriptcard;tag1452		class-WARRIOR	[x]At the end of your turn,\ndeal 1 damage to a\nrandom enemy.
+CAP_407	Wanted Poster	SPELL	NEUTRAL	2	0	0	True	bossdeck:lady_of_thorns:npc-chef-druid				boss-hollow_regent+boss-lady_of_thorns	<b>Discover</b> a minion\n_that costs (5) or more.\nGive it <b>Prepare</b>.
+CAP_801	Haunt	SPELL	PRIEST	3	0	0	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	Give a minion +2/+3,\n<b>Reborn</b>, and <b>Taunt</b>.
+CAP_801e2	Haunted	ENCHANTMENT	NEUTRAL	0	0	0	True		CAP_801	script		boss-gilded_king+boss-sleepless_one	+2/+3 <b>Reborn</b> and <b>Taunt</b>.
+CAP_802	Follow the Ghosts	SPELL	PRIEST	2	0	0	True	starter:priest_grave				class-PRIEST	[x]Summon a 2/1 Ghost\nwith <b>Reborn</b>. Give a\nplayable card in your hand\nthis effect for a turn.
+CAP_802e1	Following the Ghosts	ENCHANTMENT	PRIEST	0	0	0	True		CAP_802	script		class-PRIEST	After this is played, summon a 2/1 Ghost with <b>Reborn</b>. Give a card in your hand this effect for a turn.
+CAP_802t	Spooky Ghost	MINION	PRIEST	2	2	1	True		CAP_802	script;tag1452		class-PRIEST	<b>Reborn</b>
+CAP_803	Lingering Spirit	MINION	PRIEST	4	3	3	True	starter:priest_grave				class-PRIEST	[x]<b>Reborn</b>\n<b>Deathrattle:</b> Restore #3 Health\nto your hero. Excess healing\n_____damages a random enemy.__
+CAP_805	Slime 'em!	SPELL	PRIEST	4	0	0	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	[x]Destroy all minions.\nEach player gets a\n3-Cost spell that\nresummons theirs.
+CAP_805e	I've Been Slimed	ENCHANTMENT	PRIEST	0	0	0	True		CAP_805;CAP_805t	script		boss-gilded_king+boss-sleepless_one	
+CAP_805t	Ectoplasm	SPELL	PRIEST	3	0	0	True		CAP_805	script;tag1452		boss-gilded_king+boss-sleepless_one	Resummon all\nfriendly minions that were slimed.
+CAP_806	Raith Van Geist	MINION	PRIEST	7	5	5	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	[x]<b>Battlecry:</b> Resurrect your\nminions that were <b>Reborn</b>\nthis game. They attack\n___random enemy minions.
+CATA_130	Crystalspine Cub	MINION	DRUID	1	1	1	True	bundle:bundle_druid_beast				class-DRUID-1	Whenever you spend your last Mana Crystal,&\ngain +1/+1.
+CATA_130e	Crystallized	ENCHANTMENT	DRUID	0	0	0	True		CATA_130	scriptcard		class-DRUID-1	+1/+1.
+CATA_131	Felwood Treant	MINION	DRUID	2	2	2	True	bossdeck:sleepless_one:npc-druid-azshara				boss-gilded_king+boss-sleepless_one	[x]<b>Battlecry:</b> Gain a temporary\nMana Crystal. If you spent 4\nMana while holding this, it's\n___permanent. <i>({0} left!)</i>@[x]<b>Battlecry:</b> Gain a temporary\nMana Crystal. If you spent 4\nMana while holding this, it's\n___permanent. <i>(Ready!)</i>@[x]<b>Battlecry:</b> Gain a temporary\nMana Crystal. If you spent\n4 Mana while holding this,\nit's permanent.
+CATA_135	Mossbinding	SPELL	DRUID	2	0	0	True	bossdeck:lady_of_thorns:npc-chef-druid				boss-hollow_regent+boss-lady_of_thorns	[x]Summon two 1/2 Golems.\nSpend all your Mana to\ngive them +1/+1 for\neach Mana spent. 
+CATA_135e	Moss Shaped	ENCHANTMENT	DRUID	0	0	0	True		CATA_135	script		boss-hollow_regent+boss-lady_of_thorns	Increased stats.
+CATA_135t	Moss Golem	MINION	DRUID	1	1	2	True		CATA_135	script		boss-hollow_regent+boss-lady_of_thorns	
+CATA_136	Azshara's Triumph	SPELL	DRUID	1	0	0	True	bossdeck:lady_of_thorns:npc-chef-druid			EffectContext.PickRandomCard	boss-hollow_regent+boss-lady_of_thorns	Shuffle 5 random minions into your deck\nthat cost (8) or more.\nDouble their stats.
+CATA_136e	Azshara's Triumph	ENCHANTMENT	NEUTRAL	0	0	0	True		CATA_136	script		boss-hollow_regent+boss-lady_of_thorns	Doubled Attack and Health.
+CATA_139	Wickerfang	MINION	DRUID	6	0	5	True	bossdeck:sleepless_one:npc-druid-azshara				boss-gilded_king+boss-sleepless_one	<b>Colossal +4</b>\nAfter one of Wickerfang's Legs gains stats, this gains them too.
+CATA_139t3	Wickerfang's Leg	MINION	DRUID	1	0	2	True		CATA_139	tag1078;tag1452		boss-gilded_king+boss-sleepless_one	At the end of your turn, gain +1/+1.
+CATA_139te	Growing Quick!	ENCHANTMENT	INVALID	0	0	0	True		CATA_139t3	scriptcard		boss-gilded_king+boss-sleepless_one	+1/+1.
+CATA_153	Al'Akir, Lord of Storms	MINION	SHAMAN	8	2	8	True	bossdeck:ember_matron:npc-zee-shaman			EffectContext.PickRandomCard	boss-ember_matron+boss-devouring_maw	[x]<b>Colossal +2, <b>Rush</b>, Windfury</b>\n<b>Battlecry:</b> Get 2 minions with\nCost equal to this minion's\nAttack. They cost (1).
+CATA_153t1	Charged Hand of Al'Akir	MINION	SHAMAN	1	1	2	True		CATA_153	tag1078;tag1452		boss-ember_matron+boss-devouring_maw	[x]Adjacent minions\nhave +{0} Attack.\n<i><b>Herald</b> twice to upgrade.</i>@[x]Adjacent minions\nhave +{0} Attack.\n<i><b>Herald</b> once to upgrade.</i>@[x]Adjacent minions\nhave +{0} Attack.
+CATA_190h	Deathwing, Worldbreaker	HERO	INVALID	10	0	30	True	bossdeck:clockwork_tyrant:npc-warlock-pig;bossdeck:ember_matron:npc-zee-shaman				boss-clockwork_tyrant+boss-hollow_sovereign	[x]<b>Battlecry:</b> Choose {0}\n|4(Cataclysm,Cataclysms) to unleash!\n<i><b>Herald</b> twice to upgrade.</i>@[x]<b>Battlecry:</b> Choose {0}\n|4(Cataclysm,Cataclysms) to unleash!\n<i><b>Herald</b> once to upgrade.</i>@[x]<b>Battlecry:</b> Choose {0}\n|4(Cataclysm,Cataclysms) to unleash!
+CATA_190p	Ruthless	HERO_POWER	NEUTRAL	2	0	0	True		CATA_190h	tag380		boss-clockwork_tyrant+boss-hollow_sovereign	+$a5 Attack this turn.
+CATA_190pe	Ruthless	ENCHANTMENT	NEUTRAL	0	0	0	True		CATA_190p	scriptcard		boss-clockwork_tyrant+boss-hollow_sovereign	+5 Attack this turn.
+CATA_305	Incensed Matriarch	MINION	PRIEST	4	3	3	True	starter:priest_wyrmwatch				class-PRIEST	At the end of your turn,\nif this is at full Health,&\n gain +3 Health.
+CATA_305e	Incensed	ENCHANTMENT	PRIEST	0	0	0	True		CATA_305	scriptcard		class-PRIEST	+3 Health.
+CATA_308	Medivh's Triumph	SPELL	PRIEST	5	0	0	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	Deal $4 damage\nto all minions.\nCosts (1) if you control\na <b>Legendary</b> card.
+CATA_472	Inspiring Maul	WEAPON	PALADIN	2	2	2	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	<b>Deathrattle:</b> Trigger a random friendly minion's end of turn effect.
+CATA_473	Nozdormu, Bronze Aspect	MINION	PALADIN	5	4	4	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	[x]At the end of your turn, give\nyour minions <b>Divine Shield</b>.\nAny that already had one\n__gain +3/+3 instead.
+CATA_473e	Nozdormu's Nimbus	ENCHANTMENT	NEUTRAL	0	0	0	True		CATA_473	script		boss-hollow_regent+boss-lady_of_thorns	+3/+3.
+CATA_474	Spearheart Sentry	MINION	PALADIN	4	3	4	True	bossdeck:hollow_regent:npc-pure-paladin			EffectContext.PickRandomCard	boss-hollow_regent+boss-lady_of_thorns	[x]At the end of your turn,&\nget a random Holy spell.\nReduce its Cost by (3).
+CATA_475	Scalebreaker Bulwark	MINION	PALADIN	6	3	6	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	[x]At the end of your\nturn,& deal 2 damage\nto all enemies.
+CATA_479	Flight Maneuvers	SPELL	PALADIN	4	0	0	True	bossdeck:hollow_regent:npc-pure-paladin	CATA_479t;CATA_479t2	script;tag2889		boss-hollow_regent+boss-lady_of_thorns	[x]<b>Shatter</b>. Summon\ntwo 4/2 Drakes. Give\nyour minions +1 Attack\nand <b>Divine Shield</b>.@Summon two 4/2 Drakes. Give your minions +1 Attack and <b>Divine Shield</b>.
+CATA_479e	Courageous	ENCHANTMENT	PALADIN	0	0	0	True		CATA_479t2	scriptcard		boss-hollow_regent+boss-lady_of_thorns	+1 Attack and <b>Divine Shield</b>.
+CATA_479t	Flight Maneuvers	SPELL	PALADIN	4	0	0	True		CATA_479;CATA_479t2	script;tag2		boss-hollow_regent+boss-lady_of_thorns	[x]<b>Shattered</b>\nSummon two 4/2 Drakes.
+CATA_479t2	Flight Maneuvers	SPELL	PALADIN	4	0	0	True		CATA_479;CATA_479t	script;tag3		boss-hollow_regent+boss-lady_of_thorns	<b>Shattered</b>. Give your minions +1 Attack and <b>Divine Shield</b>.
+CATA_479t3	Sky Drake	MINION	PALADIN	3	4	2	True		CATA_479t	script		boss-hollow_regent+boss-lady_of_thorns	
+CATA_483	Unstable Spellcaster	MINION	MAGE	4	2	5	True	bundle:bundle_mage_battlecry;starter:mage_kindled				class-MAGE	[x]<b>Spell Damage +1</b>\n<b>Battlecry:</b> If you dealt\ndamage with a spell this turn,&\n summon a copy of this.
+CATA_484	Winterspring Whelp	MINION	MAGE	1	1	2	True	bundle:bundle_mage_battlecry;starter:mage_survey				class-MAGE	<b>Battlecry:</b>& <b>Discover</b> a\n1-Cost spell from any_class.
+CATA_487	Raincaller	MINION	MAGE	2	1	4	True	starter:mage_kindled				class-MAGE	The first time you deal damage with a spell each turn,& gain +2 Attack.
+CATA_492	Shrine of Twilight	LOCATION	WARLOCK	4	0	2	True	bossdeck:clockwork_tyrant:npc-warlock-pig				boss-clockwork_tyrant+boss-hollow_sovereign	<b>Herald</b> {0}.\nDraw a card.
+CATA_496	Cursed Chains	SPELL	WARLOCK	2	0	0	True	bossdeck:clockwork_tyrant:npc-warlock-pig				boss-clockwork_tyrant+boss-hollow_sovereign	[x]Take control of an\nenemy minion until\nthe end of their turn.\n It can't attack this turn.
+CATA_497	Ultraxion	MINION	INVALID	6	6	7	True	bossdeck:ember_matron:npc-zee-shaman				boss-ember_matron+boss-devouring_maw	[x]<b>Battlecry:</b> <b>Herald</b> {0}.\nReduce Deathwing's\nCost by ({1}).\n <i>(<b>Herald</b> to improve!)</i>
+CATA_554	Earthen Roar	SPELL	HUNTER	1	0	0	True	bossdeck:devouring_maw:npc-hunter-face;bundle:bundle_hunter_spells				class-HUNTER	[x]Set an enemy\nminion's Health to 1.\nIf you're holding a\nDragon, pick another.
+CATA_556	Carrier Whelp	MINION	NEUTRAL	1	1	2	True	bossdeck:ember_matron:npc-zee-shaman;bossdeck:hollow_sovereign:npc-dragon-warrior;bundle:bundle_neutral_dragon;starter:priest_wyrmwatch			EffectContext.PickRandomCard	class-PRIEST	<b>Battlecry:</b>& Get a random\nDragon that costs\n(3) or less.
+CATA_557	Sylvanas's Triumph	SPELL	HUNTER	2	0	0	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	[x]Deal $3 damage.\nIf you've played\nanother copy of this,\n hit all enemies instead.
+CATA_558	Reinforcement Rallier	MINION	HUNTER	1	2	2	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	<b>Elusive</b>
+CATA_565	Skywall Sentinel	MINION	SHAMAN	2	0	2	True	bossdeck:ember_matron:npc-zee-shaman				boss-ember_matron+boss-devouring_maw	<b>Taunt</b>\n<b>Battlecry:</b> <b>Herald</b> {0}.
+CATA_582	Searing Fissure	SPELL	WARRIOR	2	0	0	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	Deal $1 damage to all minions. Give your hero +3 Attack this turn.
+CATA_584	Erupting Volcano	LOCATION	WARRIOR	3	0	3	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	[x]Deal 3 damage randomly\nsplit among enemies.\nIf you've played a Fire spell\nthis turn, deal 3 more.
+CATA_585	Torch	SPELL	WARRIOR	1	0	0	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	[x]Deal $@ damage\nto a damaged minion.\nReturn this to hand with\nany excess damage.
+CATA_612	Frostbitten Imp	MINION	NEUTRAL	2	5	3	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Battlecry:</b> <b>Freeze</b> this.
+CATA_722	Envoy of the End	MINION	INVALID	5	5	4	True	bossdeck:ember_matron:npc-zee-shaman				boss-ember_matron+boss-devouring_maw	<b>Taunt</b>\n <b>Battlecry:</b> <b>Herald</b> {0}.
+CATA_725	Shadowsworn Disciple	MINION	WARLOCK	2	2	1	True	bossdeck:clockwork_tyrant:npc-warlock-pig				boss-clockwork_tyrant+boss-hollow_sovereign	<b><b>Battlecry:</b> Herald</b> {0}.\n<b>Deathrattle:</b> Restore #3 Health to your hero.
+CFM_061	Jinyu Waterspeaker	MINION	SHAMAN	4	3	6	True	starter:shaman_stormdebt				class-SHAMAN	[x]<b>Battlecry:</b> Restore #6 Health.\n<b>Overload:</b> (1)
+CFM_095	Weasel Tunneler	MINION	NEUTRAL	1	1	1	True	bundle:bundle_neutral_beast				neutral-bundles	<b>Deathrattle:</b> Shuffle this minion into your opponent's deck.
+CFM_300	Public Defender	MINION	WARRIOR	2	0	7	True	starter:warrior_shieldhire				class-WARRIOR	<b>Taunt</b>
+CFM_305	Smuggler's Run	SPELL	PALADIN	1	0	0	True	starter:paladin_wagon				class-PALADIN	Give all minions in your hand +1/+1.
+CFM_310t	Murloc Razorgill	MINION	SHAMAN	1	1	1	True		UNG_010	scriptcard		neutral-bundles	
+CFM_315	Alleycat	MINION	HUNTER	1	1	1	True	bundle:bundle_hunter_beast;starter:hunter_kennel				class-HUNTER	<b>Battlecry:</b> Summon a 1/1_Cat.
+CFM_315t	Tabbycat	MINION	HUNTER	1	1	1	True		CFM_315	scriptcard		class-HUNTER	
+CFM_316	Rat Pack	MINION	HUNTER	3	2	2	True	bundle:bundle_hunter_deathrattle;starter:hunter_snareline				class-HUNTER	[x]<b>Deathrattle:</b> Summon a\nnumber of 1/1 Rats equal\n_to this minion's Attack.
+CFM_605	Drakonid Operative	MINION	PRIEST	5	5	6	True	starter:priest_wyrmwatch				class-PRIEST	[x]<b>Battlecry:</b> If you're holding a\nDragon, <b>Discover</b> a card in\n_your opponent's deck.
+CFM_626	Kabal Talonpriest	MINION	PRIEST	3	3	4	True	starter:priest_mending				class-PRIEST	<b>Battlecry:</b> Give a friendly minion +3 Health.
+CFM_626e	Fortitude	ENCHANTMENT	NEUTRAL	0	0	0	True		CFM_626	scriptcard		class-PRIEST	+3 Health.
+CFM_634	Lotus Assassin	MINION	ROGUE	5	5	5	True	starter:rogue_wayfinder				class-ROGUE	<b>Stealth</b>. Whenever this attacks and kills a minion, gain <b>Stealth</b>.
+CFM_636	Shadow Rager	MINION	ROGUE	3	5	1	True	starter:rogue_wayfinder				class-ROGUE	<b>Stealth</b>
+CFM_650	Grimscale Chum	MINION	PALADIN	1	2	1	True	bundle:bundle_paladin_battlecry				class-PALADIN	[x]<b>Battlecry:</b> Give a random\nMurloc in your hand +1/+1.
+CFM_665	Worgen Greaser	MINION	NEUTRAL	4	6	3	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+CFM_671	Cryomancer	MINION	MAGE	5	5	5	True	starter:mage_rimeward				class-MAGE	<b>Battlecry:</b> If an enemy is <b>Frozen</b>, gain +2/+2.
+CFM_694	Shadow Sensei	MINION	ROGUE	4	4	4	True	starter:rogue_wayfinder				class-ROGUE	<b>Battlecry:</b> Give a <b>Stealthed</b> minion +2/+2.
+CFM_694e	Trained	ENCHANTMENT	ROGUE	0	0	0	True		CFM_694	scriptcard		class-ROGUE	+2/+2.
+CFM_751	Abyssal Enforcer	MINION	WARLOCK	7	6	6	True	bundle:bundle_warlock_battlecry				class-WARLOCK	<b>Battlecry:</b> Deal 3 damage to all other characters.
+CFM_756	Alley Armorsmith	MINION	WARRIOR	5	2	7	True	starter:warrior_plated				class-WARRIOR	[x]<b>Taunt</b>\nWhenever this minion\ndeals damage, gain\nthat much Armor.
+CFM_759	Meanstreet Marshal	MINION	PALADIN	1	1	2	True	bundle:bundle_paladin_deathrattle;starter:paladin_wagon				class-PALADIN	<b>Deathrattle:</b> If this minion has 2 or more Attack, draw a card.
+CFM_816	Virmen Sensei	MINION	DRUID	5	4	5	True	starter:druid_thicket				class-DRUID-2	<b>Battlecry:</b> Give a friendly Beast +2/+2.
+CFM_816e	Get Big	ENCHANTMENT	NEUTRAL	0	0	0	True		CFM_816	scriptcard		class-DRUID-2	+2/+2.
+CORE_AV_337	Mountain Bear	MINION	HUNTER	7	5	6	True	bundle:bundle_hunter_beast				class-HUNTER	[x]<b>Taunt</b>\n<b>Deathrattle:</b>& Summon two\n2/4 Cubs with <b>Taunt</b>.
+CORE_BAR_541	Runed Orb	SPELL	MAGE	2	0	0	True	starter:mage_survey				class-MAGE	Deal $2 damage. <b>Discover</b> a spell.
+CORE_BAR_801	Wound Prey	SPELL	HUNTER	1	0	0	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	Deal $1 damage. Summon a 1/1 Hyena with <b>Rush</b>.
+CORE_BAR_878	Veteran Warmedic	MINION	PALADIN	4	3	5	True	starter:paladin_lantern				class-PALADIN	[x]After you cast a Holy spell,&\n summon a 2/2 Medic\nwith <b>Lifesteal</b>.
+CORE_BT_156	Imprisoned Vilefiend	MINION	NEUTRAL	2	3	5	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Dormant</b> for 2 turns.\n<b>Rush</b>
+CORE_BT_201	Augmented Porcupine	MINION	HUNTER	3	2	4	True	starter:hunter_snareline				class-HUNTER	[x]<b>Deathrattle</b>: Deal this\nminion's Attack damage\nrandomly split among\nall enemies.
+CORE_BT_701	Spymistress	MINION	ROGUE	1	3	1	True	starter:rogue_wayfinder				class-ROGUE	<b>Stealth</b>
+CORE_CFM_753	Grimestreet Outfitter	MINION	PALADIN	2	2	2	True	starter:paladin_wagon				class-PALADIN	<b>Battlecry:</b>& Give all minions in your hand +1/+1.
+CORE_CS1_112	Holy Nova	SPELL	PRIEST	3	0	0	True	starter:priest_mending				class-PRIEST	Deal $2 damage to all enemy minions. Restore #2 Health to all friendly characters.
+CORE_CS2_004	Power Word: Shield	SPELL	PRIEST	1	0	0	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	Give a minion +2_Health.\nDraw a card.
+CORE_CS2_009	Mark of the Wild	SPELL	DRUID	2	0	0	True	starter:druid_barkbough				class-DRUID-2	Give a minion <b>Taunt</b> and +2/+3.<i>\n(+2 Attack/+3 Health)</i>
+CORE_CS2_023	Arcane Intellect	SPELL	MAGE	3	0	0	True	starter:mage_survey				class-MAGE	Draw 2 cards.
+CORE_CS2_053	Far Sight	SPELL	SHAMAN	3	0	0	True	bundle:bundle_shaman_spells				class-SHAMAN	Draw a card. That card costs (3) less.
+CORE_CS2_062	Hellfire	SPELL	WARLOCK	3	0	0	True	bossdeck:clockwork_tyrant:npc-warlock-pig				boss-clockwork_tyrant+boss-hollow_sovereign	Deal $3 damage to ALL_characters.
+CORE_CS2_108	Execute	SPELL	WARRIOR	1	0	0	True	starter:warrior_redfury				class-WARRIOR	Destroy a damaged enemy minion.
+CORE_DRG_107	Violet Spellwing	MINION	MAGE	1	2	1	True	bundle:bundle_mage_elemental;starter:mage_kindled				class-MAGE	<b>Deathrattle:</b> Add an 'Arcane Missiles' spell to_your hand.
+CORE_DS1_184	Tracking	SPELL	HUNTER	1	0	0	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	<b>Discover</b> a card from your deck.
+CORE_EX1_131	Defias Ringleader	MINION	ROGUE	2	3	2	True	starter:rogue_backalley				class-ROGUE	<b>Combo:</b>& Summon a 2/1 Defias Bandit.
+CORE_EX1_134	SI:7 Agent	MINION	ROGUE	3	3	3	True	starter:rogue_backalley				class-ROGUE	<b>Combo:</b> Deal 3 damage.
+CORE_EX1_154	Wrath	SPELL	DRUID	2	0	0	True	starter:druid_forked				class-DRUID-2	<b>Choose One -</b>\nDeal $3 damage to a minion; or $1 damage\nand draw a card.
+CORE_EX1_160	Power of the Wild	SPELL	DRUID	2	0	0	True	starter:druid_forked				class-DRUID-2	<b>Choose One -</b> Give your minions +1/+1; or Summon a 3/2 Panther.
+CORE_EX1_169	Innervate	SPELL	DRUID	0	0	0	True	bossdeck:lady_of_thorns:npc-chef-druid;bossdeck:sleepless_one:npc-druid-azshara				boss-hollow_regent+boss-lady_of_thorns	Gain 1 Mana Crystal this turn only.
+CORE_EX1_197	Shadow Word: Ruin	SPELL	PRIEST	4	0	0	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	Destroy all minions with 5 or more Attack.
+CORE_EX1_250	Earth Elemental	MINION	SHAMAN	5	7	9	True	bundle:bundle_shaman_taunt;starter:shaman_stormdebt				class-SHAMAN	<b>Taunt</b>\n<b>Overload</b>: (2)
+CORE_EX1_302	Mortal Coil	SPELL	WARLOCK	1	0	0	True	bossdeck:clockwork_tyrant:npc-warlock-pig				boss-clockwork_tyrant+boss-hollow_sovereign	Deal $1 damage to a minion. If it dies,\ndraw a card.
+CORE_EX1_309	Siphon Soul	SPELL	WARLOCK	4	0	0	True	bossdeck:clockwork_tyrant:npc-warlock-pig				boss-clockwork_tyrant+boss-hollow_sovereign	Destroy a minion. Restore #3 Health to_your hero.
+CORE_EX1_319	Flame Imp	MINION	WARLOCK	1	3	2	True	bossdeck:tollkeeper:boss-warlock-b2;bundle:bundle_warlock_battlecry				class-WARLOCK	<b>Battlecry:</b>& Deal 3 damage to your hero.
+CORE_EX1_362	Argent Protector	MINION	PALADIN	2	3	2	True	starter:paladin_gleaming				class-PALADIN	<b>Battlecry:</b> Give a friendly minion <b>Divine Shield</b>.
+CORE_EX1_509	Murloc Tidecaller	MINION	NEUTRAL	1	1	2	True	bundle:bundle_neutral_murloc				neutral-bundles	Whenever you summon a Murloc, gain +1 Attack.
+CORE_EX1_606	Shield Block	SPELL	WARRIOR	2	0	0	True	starter:warrior_plated				class-WARRIOR	Gain 5 Armor.\nDraw a card.
+CORE_FP1_011	Webspinner	MINION	HUNTER	1	1	1	True	bundle:bundle_hunter_deathrattle;starter:hunter_snareline			EffectContext.PickRandomCard	class-HUNTER	<b>Deathrattle:</b> Get a\nrandom Beast.
+CORE_GIL_531	Witch's Apprentice	MINION	SHAMAN	0	0	1	True	bossdeck:ember_matron:npc-zee-shaman			EffectContext.PickRandomCard	boss-ember_matron+boss-devouring_maw	<b>Taunt</b>\n<b>Battlecry:</b> Add a random Shaman spell to your hand.
+CORE_GIL_558	Swamp Leech	MINION	NEUTRAL	1	2	1	True	starter:warlock_leechwall				class-WARLOCK	<b>Lifesteal</b>
+CORE_GVG_061	Muster for Battle	SPELL	PALADIN	3	0	0	True	bundle:bundle_paladin_spells				class-PALADIN	Summon three {0} Silver Hand Recruits. Equip a 1/4 Weapon.
+CORE_GVG_085	Annoy-o-Tron	MINION	NEUTRAL	2	1	2	True	starter:warrior_shieldhire				class-WARRIOR	<b>Taunt</b>\n<b>Divine Shield</b>
+CORE_ICC_038	Righteous Protector	MINION	PALADIN	1	1	1	True	bossdeck:hollow_regent:npc-pure-paladin;starter:paladin_gleaming				class-PALADIN	<b>Taunt</b>\n<b>Divine Shield</b>
+CORE_ICC_055	Drain Soul	SPELL	WARLOCK	2	0	0	True	bossdeck:clockwork_tyrant:npc-warlock-pig;starter:warlock_leechwall				class-WARLOCK	<b>Lifesteal</b>\nDeal $3 damage\nto a minion.
+CORE_KAR_069	Swashburglar	MINION	ROGUE	1	1	2	True	starter:rogue_corsair			EffectContext.PickRandomCard	class-ROGUE	<b>Battlecry:</b>& Add a random card from another class to_your hand.
+CORE_LOOT_013	Vulgar Homunculus	MINION	WARLOCK	2	2	4	True	starter:warlock_fiendpact				class-WARLOCK	<b>Taunt</b>\n<b>Battlecry:</b>& Deal 2 damage to your hero.
+CORE_NEW1_023	Faerie Dragon	MINION	NEUTRAL	2	3	2	True	starter:priest_wyrmwatch				class-PRIEST	<b>Elusive</b>
+CORE_OG_218	Bloodhoof Brave	MINION	WARRIOR	4	2	6	True	starter:warrior_redfury				class-WARRIOR	<b>Taunt</b>\nHas +3 Attack while damaged.
+CORE_ONY_018	Boomkin	MINION	DRUID	5	4	5	True	starter:druid_forked				class-DRUID-2	<b>Choose One - </b>Restore\n#8 Health to your hero; or Deal 4 damage.
+CORE_RLK_657	Underking	MINION	DRUID	7	6	6	True	bossdeck:sleepless_one:npc-druid-azshara;bundle:bundle_druid_deathrattle				class-DRUID-1	[x]<b>Rush</b>\n<b>Battlecry and Deathrattle:</b>&\nGain 6 Armor.
+CORE_SCH_713	Cult Neophyte	MINION	NEUTRAL	2	3	2	True	bossdeck:lady_of_thorns:npc-chef-druid				boss-hollow_regent+boss-lady_of_thorns	<b>Battlecry:</b>& Your opponent's spells cost (1) more next_turn.
+CORE_SW_108	First Flame	SPELL	MAGE	1	0	0	True	starter:mage_kindled				class-MAGE	Deal $2 damage to a minion. Add a Second Flame to your hand.
+CORE_SW_439	Vibrant Squirrel	MINION	DRUID	1	2	1	True	bundle:bundle_druid_deathrattle				class-DRUID-1	[x]<b>Deathrattle:</b> Shuffle 4 Acorns\ninto your deck. When drawn,\nsummon a 2/1 Squirrel.
+CORE_TRL_307	Flash of Light	SPELL	PALADIN	2	0	0	True	starter:paladin_lantern				class-PALADIN	Restore #4 Health.\nDraw a card.
+CORE_ULD_191	Beaming Sidekick	MINION	NEUTRAL	1	1	2	True	bossdeck:ember_matron:npc-zee-shaman				boss-ember_matron+boss-devouring_maw	<b>Battlecry:</b> Give a friendly minion +2 Health.
+CORE_UNG_205	Glacial Shard	MINION	NEUTRAL	1	2	1	True	bossdeck:clockwork_tyrant:npc-warlock-pig;bossdeck:devouring_maw:npc-hunter-face;bossdeck:ember_matron:npc-zee-shaman;bossdeck:lady_of_thorns:npc-chef-druid;bundle:bundle_neutral_elemental				neutral-bundles	<b>Battlecry:</b> <b>Freeze</b> an_enemy.
+CORE_UNG_809	Fire Fly	MINION	NEUTRAL	1	1	2	True	bossdeck:ember_matron:npc-zee-shaman				boss-ember_matron+boss-devouring_maw	<b>Battlecry</b>: Add a 1/2 Elemental to your hand.
+CORE_UNG_912	Jeweled Macaw	MINION	HUNTER	1	1	2	True	bundle:bundle_hunter_battlecry			EffectContext.PickRandomCard	class-HUNTER	<b>Battlecry:</b>& Add a random Beast to your hand.
+CORE_WC_042	Wailing Vapor	MINION	SHAMAN	1	1	3	True	bossdeck:ember_matron:npc-zee-shaman;bundle:bundle_shaman_elemental;starter:shaman_kindred				class-SHAMAN	[x]After you play an Elemental,\ngain +1 Attack.
+CORE_WON_337	Ironforge Portal	SPELL	WARRIOR	4	0	0	True	starter:warrior_plated				class-WARRIOR	Gain 4 Armor.\nSummon a random\n4-Cost minion.
+CORE_YOD_026	Fiendish Servant	MINION	WARLOCK	1	2	1	True	bundle:bundle_warlock_demon				class-WARLOCK	[x]<b>Deathrattle:</b>& Give this\nminion's Attack to a random\nfriendly minion.
+CS1h_001	Lesser Heal	HERO_POWER	PRIEST	2	0	0	True	classpower:PRIEST:CS1h_001				run-player-powers+active-treasures	<b>Hero Power</b>\nRestore #2 Health.
+CS2_005	Claw	SPELL	DRUID	1	0	0	True	starter:druid_barkbough				class-DRUID-2	Give your hero +2_Attack this turn. Gain 2 Armor.
+CS2_009e	Mark of the Wild	ENCHANTMENT	DRUID	0	0	0	True		CORE_CS2_009	scriptcard		class-DRUID-2	+2/+2 and <b>Taunt</b>.
+CS2_017	Shapeshift	HERO_POWER	DRUID	2	0	0	True	classpower:DRUID:CS2_017				run-player-powers+active-treasures	<b>Hero Power</b>\n+1 Attack this turn.\n+1 Armor.
+CS2_024	Frostbolt	SPELL	MAGE	2	0	0	True	starter:mage_rimeward				class-MAGE	Deal $3 damage to a_character and <b>Freeze</b> it. @spelldmg
+CS2_026	Frost Nova	SPELL	MAGE	3	0	0	True	bundle:bundle_mage_spells;starter:mage_rimeward				class-MAGE	<b>Freeze</b> all enemy minions.
+CS2_033	Water Elemental	MINION	MAGE	4	3	6	True	starter:mage_rimeward				class-MAGE	<b>Freeze</b> any character damaged by this minion.
+CS2_034	Fireblast	HERO_POWER	MAGE	2	0	0	True	classpower:MAGE:CS2_034				run-player-powers+active-treasures	<b>Hero Power</b>\nDeal $1 damage. @spelldmg
+CS2_039	Windfury	SPELL	SHAMAN	2	0	0	True	starter:shaman_galeriders				class-SHAMAN	Give a minion <b>Windfury</b>.
+CS2_049	Totemic Call	HERO_POWER	SHAMAN	2	0	0	True	bosspower:bog_croaker:CS2_049;classpower:SHAMAN:CS2_049				run-player-powers+active-treasures	<b>Hero Power</b>\nSummon a random Totem.
+CS2_050	Searing Totem	MINION	SHAMAN	1	1	1	True		CS2_049	entourage;script		run-player-powers+active-treasures	
+CS2_051	Stoneclaw Totem	MINION	SHAMAN	1	0	2	True		CS2_049	entourage;script		run-player-powers+active-treasures	<b>Taunt</b>
+CS2_052	Wrath of Air Totem	MINION	SHAMAN	1	0	2	True		CS2_049	entourage;script		run-player-powers+active-treasures	<b>Spell Damage +1</b>
+CS2_053e	Far Sight	ENCHANTMENT	SHAMAN	0	0	0	True		CORE_CS2_053	script		class-SHAMAN	One of your cards costs (3) less.
+CS2_056	Life Tap	HERO_POWER	WARLOCK	2	0	0	True	classpower:WARLOCK:CS2_056				run-player-powers+active-treasures	<b>Hero Power</b>\nDraw a card and take $2_damage. @spelldmg
+CS2_065	Voidwalker	MINION	WARLOCK	1	1	3	True	bossdeck:tollkeeper:boss-warlock-b2;starter:warlock_fiendpact;starter:warlock_leechwall				class-WARLOCK	<b>Taunt</b>
+CS2_080	Assassin's Blade	WEAPON	ROGUE	5	3	0	True	bundle:bundle_rogue_weapons;starter:rogue_corsair				class-ROGUE	
+CS2_082	Wicked Knife	WEAPON	ROGUE	1	1	0	True		CS2_083b	scriptcard		run-player-powers+active-treasures	
+CS2_083b	Dagger Mastery	HERO_POWER	ROGUE	2	0	0	True	bosspower:tunnel_rat:CS2_083b;classpower:ROGUE:CS2_083b				run-player-powers+active-treasures	<b>Hero Power</b>\nEquip a 1/2 Dagger.
+CS2_088	Guardian of Kings	MINION	PALADIN	7	5	6	True	bundle:bundle_paladin_battlecry				class-PALADIN	<b>Battlecry:</b> Restore #6 Health to your hero.
+CS2_091	Light's Justice	WEAPON	PALADIN	1	1	0	True	bundle:bundle_paladin_weapons				class-PALADIN	
+CS2_101	Reinforce	HERO_POWER	PALADIN	2	0	0	True	classpower:PALADIN:CS2_101				run-player-powers+active-treasures	<b>Hero Power</b>\nSummon a 1/1 Silver Hand Recruit.
+CS2_101t	Silver Hand Recruit	MINION	PALADIN	1	1	1	True		AT_075;CS2_101;LOOT_286t1;MEND_802;TB_010e;UNG_950;UNG_960	script;scriptcard		run-passive-treasure-and-buff-effects	
+CS2_102	Armor Up!	HERO_POWER	WARRIOR	2	0	0	True	bosspower:pit_champion:CS2_102;classpower:WARRIOR:CS2_102				run-player-powers+active-treasures	<b>Hero Power</b>\nGain 2 Armor.
+CS2_104	Rampage	SPELL	WARRIOR	2	0	0	True	starter:warrior_redfury				class-WARRIOR	Give a damaged minion +3/+3.
+CS2_104e	Rampage	ENCHANTMENT	WARRIOR	0	0	0	True		CS2_104	scriptcard		class-WARRIOR	+3/+3.
+CS2_106	Fiery War Axe	WEAPON	WARRIOR	3	3	0	True	starter:warrior_shieldhire				class-WARRIOR	
+CS2_112	Arcanite Reaper	WEAPON	WARRIOR	5	5	0	True	starter:warrior_shieldhire				class-WARRIOR	
+CS2_118	Magma Rager	MINION	NEUTRAL	3	5	1	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+CS2_119	Oasis Snapjaw	MINION	NEUTRAL	4	2	7	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+CS2_120	River Crocolisk	MINION	NEUTRAL	2	2	3	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+CS2_168	Murloc Raider	MINION	NEUTRAL	1	2	1	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+CS2_169	Young Dragonhawk	MINION	NEUTRAL	1	1	1	True	starter:shaman_galeriders				class-SHAMAN	<b>Windfury</b>
+CS2_171	Stonetusk Boar	MINION	NEUTRAL	1	1	1	True	starter:warrior_shieldhire				class-WARRIOR	<b>Charge</b>
+CS2_172	Bloodfen Raptor	MINION	NEUTRAL	2	3	2	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1;starter:druid_thicket				class-DRUID-1	
+CS2_182	Chillwind Yeti	MINION	NEUTRAL	4	4	5	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+CS2_235	Northshire Cleric	MINION	PRIEST	1	1	3	True	starter:priest_mending				class-PRIEST	Whenever a minion is healed, draw a card.
+CS2_236	Divine Spirit	SPELL	PRIEST	2	0	0	True	starter:priest_mending				class-PRIEST	Double a minion's Health.
+CS3_007	Novice Zapper	MINION	SHAMAN	1	3	2	True	bossdeck:storm_herald:boss-shaman-b2;starter:shaman_stormdebt				class-SHAMAN	<b>Spell Damage +1</b> <b>Overload:</b> (1)
+Core_LOE_115	Raven Idol	SPELL	DRUID	1	0	0	True	bossdeck:lady_of_thorns:npc-chef-druid				boss-hollow_regent+boss-lady_of_thorns	<b>Choose One -</b>\n<b>Discover</b> a minion; or <b>Discover</b> a spell.
+DAL_039	Convincing Infiltrator	MINION	PRIEST	5	2	6	True	starter:priest_grave				class-PRIEST	[x]<b><b>Taunt</b></b>\n<b>Deathrattle:</b> Destroy a\n random enemy minion.
+DAL_092	Arcane Servant	MINION	NEUTRAL	2	2	3	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+DAL_163	Messenger Raven	MINION	MAGE	3	3	2	True	starter:mage_survey			DiscoverCriteria;DiscoverTask;DiscoverType.INVALID	class-MAGE	<b>Battlecry:</b> <b>Discover</b> a\nMage minion.
+DAL_182	Magic Dart Frog	MINION	MAGE	2	1	3	True	bundle:bundle_mage_beast				class-MAGE	After you cast a spell, deal 1 damage to a random enemy minion.
+DAL_350	Crystal Power	SPELL	DRUID	1	0	0	True	starter:druid_forked				class-DRUID-2	<b>Choose One -</b> Deal $2 damage to a minion; or_Restore #5 Health. @spelldmg
+DAL_413	EVIL Conscripter	MINION	PRIEST	2	2	2	True	starter:priest_grave				class-PRIEST	<b>Deathrattle:</b> Add a <b>Lackey</b> to your hand.
+DAL_433	Sludge Slurper	MINION	SHAMAN	1	1	1	True	bundle:bundle_shaman_battlecry				class-SHAMAN	<b>Battlecry:</b> Add a <b>Lackey</b> to your hand. <b>Overload:</b> (1)
+DAL_577	Ray of Frost	SPELL	MAGE	1	0	0	True	starter:mage_rimeward				class-MAGE	<b>Twinspell</b>\n<b>Freeze</b> a minion.\nIf it's already <b>Frozen</b>,\ndeal $2 damage to it. @spelldmg
+DAL_577ts	Ray of Frost	SPELL	MAGE	1	0	0	True		DAL_577	tag1186		class-MAGE	<b>Freeze</b> a minion.\nIf it's already <b>Frozen</b>,\ndeal $2 damage to it. @spelldmg
+DAL_604	Ursatron	MINION	HUNTER	3	3	3	True	starter:hunter_scrapyard				class-HUNTER	<b>Deathrattle:</b> Draw a Mech from your deck.
+DAL_608	Magic Trick	SPELL	MAGE	1	0	0	True	starter:mage_survey			DiscoverCriteria;DiscoverTask;DiscoverType.INVALID	class-MAGE	<b>Discover</b> a spell that costs (3) or less.
+DAL_727	Call to Adventure	SPELL	PALADIN	3	0	0	True	starter:paladin_wagon				class-PALADIN	Draw the lowest Cost minion from your deck. Give it +2/+2.
+DAL_770	Omega Devastator	MINION	WARRIOR	4	4	5	True	bundle:bundle_warrior_mechanical				class-WARRIOR	[x]<b>Battlecry:</b> If you have 10\nMana Crystals, deal 10\ndamage to a minion.
+DINO_400	Barricade Basher	MINION	WARRIOR	3	4	3	True	starter:warrior_plated				class-WARRIOR	[x]Whenever you gain Armor,\n gain +2/+2 and attack a\nrandom enemy minion.
+DINO_411	Holy Eggbearer	MINION	NEUTRAL	2	1	2	True	bossdeck:ember_matron:npc-zee-shaman				boss-ember_matron+boss-devouring_maw	<b>Battlecry:</b> Draw a\n0-Attack minion.
+DREAM_01	Laughing Sister	MINION	DREAM	3	3	5	True		EDR_846	script		boss-clockwork_tyrant+boss-hollow_sovereign	Can't be targeted by spells or Hero Powers.
+DREAM_02	Ysera Awakens	SPELL	DREAM	2	0	0	True		EDR_846	script		boss-clockwork_tyrant+boss-hollow_sovereign	Deal $5 damage to all characters except Ysera. @spelldmg
+DREAM_03	Emerald Drake	MINION	DREAM	4	7	6	True		EDR_846	script		boss-clockwork_tyrant+boss-hollow_sovereign	
+DREAM_04	Dream	SPELL	DREAM	0	0	0	True		EDR_846	script		boss-clockwork_tyrant+boss-hollow_sovereign	Return a minion to its owner's hand.
+DREAM_05	Nightmare	SPELL	DREAM	0	0	0	True		EDR_846	script		boss-clockwork_tyrant+boss-hollow_sovereign	Give a minion +5/+5. At the start of your next turn, destroy it.
+DREAM_05e	Nightmare	ENCHANTMENT	NEUTRAL	0	0	0	True		DREAM_05	scriptcard		boss-clockwork_tyrant+boss-hollow_sovereign	This minion has +5/+5, but will be destroyed soon.
+DS1_175	Timber Wolf	MINION	HUNTER	1	1	1	True	starter:hunter_kennel				class-HUNTER	Your other Beasts have +1_Attack.
+DS1_175o	Furious Howl	ENCHANTMENT	HUNTER	0	0	0	True		DS1_175	scriptcard		class-HUNTER	+1 Attack from {0}.
+DS1_178	Tundra Rhino	MINION	HUNTER	5	2	5	True	starter:hunter_kennel				class-HUNTER	Your Beasts have <b>Charge</b>.
+DS1_178e	Charge	ENCHANTMENT	HUNTER	0	0	0	True		DS1_178	scriptcard		class-HUNTER	{0} grants <b>Charge</b>.
+DS1h_292	Steady Shot	HERO_POWER	HUNTER	2	0	0	True	bosspower:cellar_matron:DS1h_292;classpower:HUNTER:DS1h_292				run-player-powers+active-treasures	<b>Hero Power</b>\nDeal $2 damage to the enemy hero.@<b>Hero Power</b>\nDeal $2 damage. @spelldmg
+EDR_000	Ysera, Emerald Aspect	MINION	NEUTRAL	9	4	12	True	bossdeck:gilded_king:npc-priest-reborn;bossdeck:sleepless_one:npc-druid-azshara				boss-gilded_king+boss-sleepless_one	[x]<b>Start of Game:</b> Increase both\nplayers'maximum Mana by 5.\n<b>Battlecry:</b> Gain 3\nMana Crystals.
+EDR_258	Toreth the Unbreaking	MINION	PALADIN	5	3	4	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	[x]<b>Divine Shield</b>, <b>Taunt</b>\nYour <b><b>Divine Shield</b>s</b> take\nthree hits to break.
+EDR_270	Horn of Plenty	SPELL	DRUID	2	0	0	True	bossdeck:lady_of_thorns:npc-chef-druid				boss-hollow_regent+boss-lady_of_thorns	[x]<b>Discover</b> a Nature spell.\nIt costs (2) less.
+EDR_272	Evergreen Stag	MINION	DRUID	6	6	7	True	bossdeck:sleepless_one:npc-druid-azshara				boss-gilded_king+boss-sleepless_one	<b>Elusive</b>\n<b>Lifesteal</b>\n<b>Taunt</b>
+EDR_453	Briarspawn Drake	MINION	NEUTRAL	10	12	7	True	bossdeck:sleepless_one:npc-druid-azshara				boss-gilded_king+boss-sleepless_one	[x]At the end of your turn,\nattack a random enemy\nminion <i>(excess damage\nhits the enemy hero)</i>.
+EDR_456	Darkrider	MINION	WARRIOR	1	1	1	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	<b>Battlecry:</b> If you're holding\na Dragon, <b>Discover</b> a Dragon\nwith a <b>Dark Gift</b>.
+EDR_457	Brood Keeper	MINION	WARRIOR	2	2	3	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	<b>Battlecry:</b> If you're holding a\nDragon,& equip a 2/2 Sword.
+EDR_457t	Nightmare Slicer	WEAPON	WARRIOR	2	2	2	True		EDR_457	script		boss-clockwork_tyrant+boss-hollow_sovereign	
+EDR_469	Slumbering Sprite	MINION	NEUTRAL	1	3	3	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	[x]Starts <b>Dormant</b>.\nAfter you use your Hero\nPower, this awakens.
+EDR_472	Weaver of the Cycle	MINION	PRIEST	3	3	3	True	bundle:bundle_priest_battlecry				class-PRIEST	<b>Battlecry:</b> If you're holding a spell that costs (5) or more, deal 3 damage.
+EDR_485	Rotheart Dryad	MINION	WARLOCK	1	1	1	True	bossdeck:clockwork_tyrant:npc-warlock-pig;bundle:bundle_warlock_deathrattle				class-WARLOCK	<b>Deathrattle:</b>& Draw a minion that costs (7) or more.
+EDR_489	Agamaggan	MINION	WARLOCK	10	9	9	True	bossdeck:clockwork_tyrant:npc-warlock-pig				boss-clockwork_tyrant+boss-hollow_sovereign	[x]<b>Battlecry:</b> The next card you\nplay costs your OPPONENT'S\nHealth instead of Mana\n<i>(up to 10)</i>.
+EDR_492	Mother Duck	MINION	NEUTRAL	4	2	3	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	<b>Battlecry:</b>& Summon three 1/1 Ducklings with <b>Rush</b>.
+EDR_492t	Duckling	MINION	NEUTRAL	1	1	1	True		EDR_492	script		boss-clockwork_tyrant+boss-hollow_sovereign	<b>Rush</b>
+EDR_521	Tricky Satyr	MINION	ROGUE	3	4	3	True	bundle:bundle_rogue_battlecry				class-ROGUE	<b>Battlecry:</b> Get a copy of the lowest Cost card in your opponent's hand.
+EDR_810	Hideous Husk	MINION	DEATHKNIGHT	6	3	5	True	userreport:bloated_leech	EDR_810t	script		leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	[x]Your Leeches steal 1 more\nHealth from their victims.\n<b>Battlecry:</b> Summon two\n0/2 Leeches.
+EDR_810e	Blood Sucker	ENCHANTMENT	DEATHKNIGHT	0	0	0	True		EDR_810t	script		leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	Reduced Health.
+EDR_810e2	Blood Soaked	ENCHANTMENT	DEATHKNIGHT	0	0	0	True		EDR_810t	script		leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	Increased Health.
+EDR_810t	Bloated Leech	MINION	DEATHKNIGHT	1	0	2	True		EDR_810;EDR_814;EDR_817	script;tag1078		leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	[x]At the end of your turn, your\nhero steals @ Health from\nthe lowest Health enemy.
+EDR_814	Infested Breath	SPELL	DEATHKNIGHT	2	0	0	True	userreport:bloated_leech				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	Deal $2 damage. Summon a 0/2 Leech.
+EDR_817	Sanguine Infestation	SPELL	DEATHKNIGHT	5	0	0	True	userreport:bloated_leech				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	Draw 2 cards.\nSummon two 0/2 Leeches.
+EDR_846	Shaladrassil	SPELL	NEUTRAL	8	0	0	True	bossdeck:clockwork_tyrant:npc-warlock-pig;bossdeck:sleepless_one:npc-druid-azshara				boss-clockwork_tyrant+boss-hollow_sovereign	[x]Get all 5 Dream cards.\nIf you've played a higher\nCost card while holding\nthis, corrupt them!
+EDR_846t1	Corrupted Nightmare	SPELL	DREAM	0	0	0	True		EDR_846	script		boss-clockwork_tyrant+boss-hollow_sovereign	Give a minion <b>Immune</b> this turn and +5/+5.
+EDR_846t2	Corrupted Dream	SPELL	DREAM	0	0	0	True		EDR_846	script		boss-clockwork_tyrant+boss-hollow_sovereign	Shuffle a minion into its owner's deck.
+EDR_846t3	Corrupted Laughing Sister	MINION	DREAM	2	6	10	True		EDR_846	script		boss-clockwork_tyrant+boss-hollow_sovereign	<b>Elusive</b>\nYour hero is <b>Elusive</b>.
+EDR_846t3e	Laughing	ENCHANTMENT	NEUTRAL	0	0	0	True		EDR_846t3	scriptcard		boss-clockwork_tyrant+boss-hollow_sovereign	Corrupted Laughing Sister grants <b>Elusive</b>.
+EDR_846t4	Corrupted Awakening	SPELL	DREAM	2	0	0	True		EDR_846	script		boss-clockwork_tyrant+boss-hollow_sovereign	Deal $5 damage to\nall enemies.\n<i>(ESPECIALLY Ysera!)</i>
+EDR_846t5	Corrupted Drake	MINION	DREAM	4	14	12	True		EDR_846	script		boss-clockwork_tyrant+boss-hollow_sovereign	
+EDR_856	Nightmare Lord Xavius	MINION	NEUTRAL	4	4	4	True	bossdeck:ember_matron:npc-zee-shaman;bossdeck:gilded_king:npc-priest-reborn;bossdeck:sleepless_one:npc-druid-azshara				boss-ember_matron+boss-devouring_maw	<b>Battlecry:</b> <b>Discover</b> a minion from your deck. Give it a <b>Dark Gift</b>.
+EDR_889	Petal Peddler	MINION	NEUTRAL	2	1	4	True	bossdeck:hollow_sovereign:npc-dragon-warrior;starter:priest_wyrmwatch				class-PRIEST	[x]At the end of your turn,\ngive another random\n_friendly Dragon +1/+1.
+EDR_889e	Flowery	ENCHANTMENT	NEUTRAL	0	0	0	True		EDR_889	script		class-PRIEST	+1/+1.
+EDR_970	Kaldorei Priestess	MINION	PRIEST	3	3	3	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	[x]<b>Battlecry:</b> Give all enemy\nminions -2 Attack until\nyour next turn. <b>Imbue</b>\nyour Hero Power.
+EDR_970e	Pacified	ENCHANTMENT	PRIEST	0	0	0	True		EDR_970	script		boss-gilded_king+boss-sleepless_one	-2 Attack until your next turn.
+EDR_971	Critter Caretaker	MINION	NEUTRAL	1	2	2	True	bossdeck:clockwork_tyrant:npc-warlock-pig				boss-clockwork_tyrant+boss-hollow_sovereign	At the end of your turn,& restore #3 Health to both_heroes.
+END_007	Press the Advantage	SPELL	INVALID	2	0	0	True	bossdeck:lady_of_thorns:npc-chef-druid;bossdeck:sleepless_one:npc-druid-azshara				boss-hollow_regent+boss-lady_of_thorns	Deal $1 damage. Give your hero +1 Attack this turn. Draw 1 card. Gain 1 Armor.
+END_010	Twilight Timereaver	MINION	INVALID	6	5	5	True	bossdeck:sleepless_one:npc-druid-azshara				boss-gilded_king+boss-sleepless_one	<b>Choose One -</b> Set the Attack of all other minions to 1; or Health to 1.
+END_011	Acceleration Aura	SPELL	INVALID	2	0	0	True	bossdeck:hollow_regent:npc-pure-paladin;bossdeck:sleepless_one:npc-druid-azshara				boss-hollow_regent+boss-lady_of_thorns	At the start of your turn, gain a temporary Mana Crystal. Lasts @ turns.
+END_020	Eternal Toil	SPELL	INVALID	1	0	0	True	bossdeck:clockwork_tyrant:npc-warlock-pig			EffectContext.PickRandomCard	boss-clockwork_tyrant+boss-hollow_sovereign	[x]Deal $1 damage to a\nminion. If it survives, draw\na card. If it dies, summon\na random 1-Cost minion.
+END_033	Prescient Slitherdrake	MINION	NEUTRAL	7	5	8	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	[x]<b>Elusive</b>\nCosts (3) less if you're\n_holding another Dragon.
+EX1_021	Thrallmar Farseer	MINION	NEUTRAL	3	2	3	True	starter:shaman_galeriders				class-SHAMAN	<b>Windfury</b>
+EX1_045	Ancient Watcher	MINION	NEUTRAL	2	4	5	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	Can't attack.
+EX1_131t	Defias Bandit	MINION	ROGUE	1	2	1	True		CORE_EX1_131	scriptcard;tag1452		class-ROGUE	
+EX1_166	Keeper of the Grove	MINION	DRUID	4	2	4	True	starter:druid_forked				class-DRUID-2	<b>Choose One -</b> Deal_2_damage; or <b>Silence</b> a minion.
+EX1_185	Siegebreaker	MINION	WARLOCK	7	5	8	True	bundle:bundle_warlock_demon				class-WARLOCK	<b>Taunt</b>\nYour other Demons have +1 Attack.
+EX1_185e	Siegebreaking	ENCHANTMENT	WARLOCK	0	0	0	True		EX1_185	scriptcard		class-WARLOCK	Siegebreaker is granting this minion +1 Attack.
+EX1_238	Lightning Bolt	SPELL	SHAMAN	1	0	0	True	starter:shaman_stormdebt				class-SHAMAN	Deal $3 damage. <b>Overload:</b> (1) @spelldmg
+EX1_243	Dust Devil	MINION	SHAMAN	1	3	1	True	bossdeck:storm_herald:boss-shaman-b2;starter:shaman_galeriders				class-SHAMAN	<b>Windfury</b>. <b>Overload:</b> (2)
+EX1_247	Stormforged Axe	WEAPON	SHAMAN	2	2	0	True	starter:shaman_stormdebt				class-SHAMAN	<b>Overload:</b> (1)
+EX1_248	Feral Spirit	SPELL	SHAMAN	3	0	0	True	starter:shaman_stormdebt				class-SHAMAN	Summon two 2/3 Spirit Wolves with <b>Taunt</b>. <b>Overload:</b> (1)
+EX1_258	Unbound Elemental	MINION	SHAMAN	3	2	4	True	starter:shaman_stormdebt				class-SHAMAN	Whenever you play a card_with <b>Overload</b>, gain_+1/+1.
+EX1_258e	Overloading	ENCHANTMENT	SHAMAN	0	0	0	True		EX1_258	scriptcard		class-SHAMAN	Increased stats.
+EX1_277	Arcane Missiles	SPELL	MAGE	1	0	0	True		CORE_DRG_107	scriptcard;tag1452		class-MAGE	Deal $3 damage randomly split among all enemies.
+EX1_301	Felguard	MINION	WARLOCK	3	3	5	True	bundle:bundle_warlock_demon				class-WARLOCK	<b>Taunt</b>\n<b>Battlecry:</b> Destroy one of your Mana Crystals.
+EX1_306	Felstalker	MINION	WARLOCK	2	4	3	True	starter:warlock_ashen				class-WARLOCK	<b>Battlecry:</b> Discard a random card.
+EX1_308	Soulfire	SPELL	WARLOCK	1	0	0	True	starter:warlock_ashen				class-WARLOCK	[x]Deal $4 damage.\nDiscard a random card. @spelldmg
+EX1_310	Doomguard	MINION	WARLOCK	5	5	7	True	starter:warlock_ashen				class-WARLOCK	<b>Charge</b>. <b>Battlecry:</b> Discard two random cards.
+EX1_319	Flame Imp	MINION	WARLOCK	1	3	2	True	bossdeck:tollkeeper:boss-warlock-b2;starter:warlock_fiendpact				class-WARLOCK	<b>Battlecry:</b> Deal 3 damage to your hero.
+EX1_396	Mogu'shan Warden	MINION	NEUTRAL	4	1	7	True	bundle:bundle_neutral_taunt				neutral-bundles	<b>Taunt</b>
+EX1_402	Armorsmith	MINION	WARRIOR	2	1	4	True	starter:warrior_plated				class-WARRIOR	Whenever a friendly minion_takes damage, gain 1 Armor.
+EX1_405	Shieldbearer	MINION	NEUTRAL	1	0	4	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Taunt</b>
+EX1_411	Gorehowl	WEAPON	WARRIOR	7	7	0	True	bundle:bundle_warrior_weapons				class-WARRIOR	Attacking a minion costs 1 Attack instead of 1 Durability.
+EX1_411e	Bloodrage	ENCHANTMENT	WARRIOR	0	0	0	True		EX1_411	scriptcard		class-WARRIOR	No durability loss.
+EX1_412	Raging Worgen	MINION	NEUTRAL	3	3	3	True	starter:warrior_redfury				class-WARRIOR	Has +1 Attack and <b>Windfury</b> while damaged.
+EX1_412e	Enraged	ENCHANTMENT	NEUTRAL	0	0	0	True		EX1_412	scriptcard		class-WARRIOR	+1 Attack and <b>Windfury</b>.
+EX1_509e	Blarghghl	ENCHANTMENT	NEUTRAL	0	0	0	True		CORE_EX1_509	scriptcard		neutral-bundles	Increased Attack.
+EX1_522	Patient Assassin	MINION	ROGUE	2	1	1	True	starter:rogue_wayfinder				class-ROGUE	<b>Stealth</b>\n <b>Poisonous</b>
+EX1_531	Scavenging Hyena	MINION	HUNTER	2	2	2	True	starter:hunter_kennel				class-HUNTER	Whenever a friendly Beast dies, gain +2/+1.
+EX1_531e	Well Fed	ENCHANTMENT	HUNTER	0	0	0	True		EX1_531	scriptcard		class-HUNTER	Increased Attack and Health.
+EX1_538t	Hound	MINION	HUNTER	1	1	1	True	contenttoken:hunter_pack_whistle	TB_RoadToNR_Finley_HP	scriptcard		run-player-powers+active-treasures	<b>Charge</b>
+EX1_567	Doomhammer	WEAPON	SHAMAN	5	2	0	True	starter:shaman_galeriders				class-SHAMAN	<b>Windfury, Overload:</b> (2)
+EX1_587	Windspeaker	MINION	SHAMAN	4	3	3	True	starter:shaman_galeriders				class-SHAMAN	<b>Battlecry:</b> Give a friendly minion <b>Windfury</b>.
+EX1_598	Imp	MINION	NEUTRAL	1	1	1	True	contenttoken:warlock_fiend_gate	TB_EVILBRM_RafaamHeroPower	scriptcard		run-player-powers+active-treasures	
+EX1_623	Temple Enforcer	MINION	PRIEST	6	6	6	True	bundle:bundle_priest_battlecry				class-PRIEST	<b>Battlecry:</b> Give a friendly minion +3 Health.
+EX1_623e	Infusion	ENCHANTMENT	PRIEST	0	0	0	True		EX1_623	scriptcard		class-PRIEST	+3 Health.
+EX1_tk11	Spirit Wolf	MINION	SHAMAN	2	2	3	True		EX1_248	scriptcard		class-SHAMAN	<b>Taunt</b>
+FIR_906	Overheat	SPELL	DRUID	3	0	0	True	bundle:bundle_druid_spells				class-DRUID-2	Give your minions +1/+1. Discard a random Nature spell to give them +1/+1 more.
+FIR_906e	Overheated	ENCHANTMENT	DRUID	0	0	0	True		FIR_906	script		class-DRUID-2	+1/+1.
+FIR_907	Amirdrassil	LOCATION	DRUID	5	0	3	True	bossdeck:sleepless_one:npc-druid-azshara			EffectContext.PickRandomCard	boss-gilded_king+boss-sleepless_one	[x]Summon a @-Cost minion.\nGain @ Armor. Draw @ |4(card, cards).\nRefresh @ Mana |4(Crystal, Crystals).\n<i>(Improves each use!)</i>
+FIR_908	Charred Chameleon	MINION	DRUID	1	1	2	True	bundle:bundle_druid_battlecry				class-DRUID-1	<b>Battlecry:</b> If you've used\nyour Hero Power this turn,\ngive a friendly minion\n+1/+2 and <b>Rush</b>.
+FIR_908e3	Spreading Flames	ENCHANTMENT	DRUID	0	0	0	True		FIR_908	script		class-DRUID-1	+1/+2.
+FIR_918	Light of the New Moon	SPELL	PRIEST	3	0	0	True	bundle:bundle_priest_spells				class-PRIEST	[x]Give a minion +3/+3.\n<i>(Cast @ |4(spell, spells) to return this\nto your hand when played.)</i>
+FIR_918e1	Elune's Light	ENCHANTMENT	NEUTRAL	0	0	0	True		FIR_918	scriptcard		class-PRIEST	+3/+3.
+FIR_918t	Light of the Full Moon	SPELL	PRIEST	3	0	0	True		FIR_918	script		class-PRIEST	Give a minion +3/+3. Add a Light of the New Moon to your hand.
+FIR_922	Cindersword	WEAPON	ROGUE	1	1	2	True	bundle:bundle_rogue_weapons				class-ROGUE	<b>Battlecry:</b> If you're holding a minion with\na <b>Dark Gift</b>, gain +3 Attack.
+FIR_922e	Fiery	ENCHANTMENT	ROGUE	0	0	0	True		FIR_922	script		class-ROGUE	+3 Attack.
+FIR_939	Shadowflame Suffusion	SPELL	WARRIOR	2	0	0	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	[x]Deal $2 damage.\n<b>Discover</b> a Warrior\nminion with a <b>Dark Gift</b>.
+FP1_001	Zombie Chow	MINION	NEUTRAL	1	2	3	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Deathrattle:</b> Restore #5 Health to the enemy hero.
+FP1_022	Voidcaller	MINION	WARLOCK	4	3	4	True	starter:warlock_fiendpact				class-WARLOCK	<b>Deathrattle:</b> Put a random Demon from your hand into the battlefield.
+FP1_023	Dark Cultist	MINION	PRIEST	3	3	4	True	starter:priest_grave				class-PRIEST	<b>Deathrattle:</b> Give a random friendly minion +3 Health.
+GAME_005	The Coin	SPELL	NEUTRAL	0	0	0	True	contentstart:lucky_coin	LOOT_144;LOOT_534;TB_ArchivistEnch	scriptcard		run-passive-treasure-and-buff-effects	Gain 1 Mana Crystal this turn only.
+GIL_113	Rabid Worgen	MINION	WARRIOR	3	3	3	True	starter:warrior_shieldhire				class-WARRIOR	<b>Rush</b>
+GIL_143	Vicious Scalehide	MINION	NEUTRAL	2	1	3	True	starter:warlock_leechwall				class-WARLOCK	<b>Lifesteal</b>\n<b>Rush</b>
+GIL_155	Redband Wasp	MINION	WARRIOR	2	1	3	True	starter:warrior_redfury				class-WARRIOR	<b>Rush</b>\nHas +3 Attack while damaged.
+GIL_155e	Enraged	ENCHANTMENT	NEUTRAL	0	0	0	True		GIL_155	scriptcard		class-WARRIOR	+3 Attack.
+GIL_188	Druid of the Scythe	MINION	DRUID	3	2	2	True	starter:druid_forked				class-DRUID-2	[x]<b>Choose One -</b> Transform\ninto a 4/2 with <b>Rush</b>;\nor a 2/4 with <b>Taunt</b>.
+GIL_188t3	Druid of the Scythe	MINION	DRUID	3	4	4	True		GIL_188	scriptcard		class-DRUID-2	<b>Rush</b>\n<b>Taunt</b>
+GIL_201	Pumpkin Peasant	MINION	NEUTRAL	3	2	4	True	starter:warlock_leechwall				class-WARLOCK	[x]<b>Lifesteal</b>\nEach turn this is in your hand,\nswap its Attack and Health.
+GIL_507	Bewitched Guardian	MINION	DRUID	5	4	1	True	starter:druid_barkbough				class-DRUID-2	[x]<b>Taunt</b>\n<b>Battlecry:</b> Gain +1 Health\n_for each card in your hand._
+GIL_527	Felsoul Inquisitor	MINION	NEUTRAL	4	1	6	True	starter:warlock_leechwall				class-WARLOCK	<b>Lifesteal</b>\n<b>Taunt</b>
+GIL_531	Witch's Apprentice	MINION	SHAMAN	1	0	1	True	bundle:bundle_shaman_taunt				class-SHAMAN	<b>Taunt</b>\n<b>Battlecry:</b> Add a random Shaman spell to your hand.
+GIL_545	Ghostly Charger	MINION	PALADIN	5	3	4	True	starter:paladin_gleaming				class-PALADIN	<b>Divine Shield</b>\n<b>Rush</b>
+GIL_557	Cursed Castaway	MINION	ROGUE	6	5	3	True	bundle:bundle_rogue_deathrattle				class-ROGUE	<b>Rush</b>\n<b>Deathrattle:</b> Draw a <b>Combo</b> card from your deck.
+GIL_562	Vilebrood Skitterer	MINION	HUNTER	5	1	3	True	starter:hunter_snareline				class-HUNTER	<b>Poisonous</b>\n<b>Rush</b>
+GIL_645	Bonfire Elemental	MINION	MAGE	5	5	5	True	starter:mage_kindled				class-MAGE	<b>Battlecry:</b> If you played an_Elemental last turn, draw a card.
+GIL_653	Woodcutter's Axe	WEAPON	WARRIOR	2	2	0	True	starter:warrior_shieldhire				class-WARRIOR	<b>Deathrattle:</b> Give +2/+1 to a random friendly <b>Rush</b> minion.
+GIL_664	Vex Crow	MINION	MAGE	4	3	3	True	bundle:bundle_mage_beast				class-MAGE	Whenever you cast a spell, summon a random\n2-Cost minion.
+GIL_685	Paragon of Light	MINION	PALADIN	3	2	5	True	starter:paladin_wagon				class-PALADIN	While this minion has 3 or more Attack, it has <b>Taunt</b> and <b>Lifesteal</b>.
+GIL_807	Bogshaper	MINION	SHAMAN	7	4	8	True	bundle:bundle_shaman_elemental				class-SHAMAN	Whenever you cast a spell, draw a minion from your_deck.
+GIL_835	Squashling	MINION	PRIEST	2	2	1	True	starter:priest_mending				class-PRIEST	[x]<b>Echo</b>\n<b>Battlecry:</b> Restore #2 Health.
+GIL_902	Cutthroat Buccaneer	MINION	ROGUE	3	2	4	True	starter:rogue_corsair				class-ROGUE	<b>Combo:</b> Give your weapon +1 Attack.
+GIL_902e	Sharpened	ENCHANTMENT	NEUTRAL	0	0	0	True		GIL_902	scriptcard		class-ROGUE	+1 Attack.
+GVG_002	Snowchugger	MINION	MAGE	2	2	3	True	starter:mage_rimeward				class-MAGE	<b>Freeze</b> any character damaged by this minion.
+GVG_018	Queen of Pain	MINION	WARLOCK	2	1	4	True	starter:warlock_leechwall				class-WARLOCK	<b>Lifesteal</b>
+GVG_023	Goblin Auto-Barber	MINION	ROGUE	2	3	2	True	starter:rogue_corsair				class-ROGUE	<b>Battlecry:</b> Give your weapon +1 Attack.
+GVG_023a	Extra Sharp	ENCHANTMENT	NEUTRAL	0	0	0	True		GVG_023	scriptcard		class-ROGUE	+1 Attack.
+GVG_030	Anodized Robo Cub	MINION	DRUID	2	2	2	True	starter:druid_barkbough				class-DRUID-2	<b>Taunt</b>. <b>Choose One -</b>\n+1 Attack; or +1 Health.
+GVG_037	Whirling Zap-o-matic	MINION	SHAMAN	2	3	2	True	starter:shaman_galeriders				class-SHAMAN	<b>Windfury</b>
+GVG_044	Spider Tank	MINION	NEUTRAL	3	3	4	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+GVG_048	Metaltooth Leaper	MINION	HUNTER	3	3	3	True	starter:hunter_scrapyard				class-HUNTER	<b>Battlecry:</b> Give your other Mechs +2 Attack.
+GVG_051	Warbot	MINION	WARRIOR	1	1	3	True	bossdeck:pit_champion:boss-warrior-b2;starter:warrior_redfury				class-WARRIOR	Has +1 Attack while damaged.
+GVG_051e	Enraged	ENCHANTMENT	WARRIOR	0	0	0	True		GVG_051	scriptcard		class-WARRIOR	+1 Attack
+GVG_058	Shielded Minibot	MINION	PALADIN	2	2	2	True	starter:paladin_gleaming				class-PALADIN	<b>Divine Shield</b>
+GVG_060	Quartermaster	MINION	PALADIN	5	2	5	True	starter:paladin_lantern				class-PALADIN	<b>Battlecry:</b> Give your Silver Hand Recruits +2/+2.
+GVG_064	Puddlestomper	MINION	NEUTRAL	2	3	2	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1;bundle:bundle_neutral_murloc				neutral-bundles	
+GVG_071	Lost Tallstrider	MINION	NEUTRAL	4	5	4	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+GVG_084	Flying Machine	MINION	NEUTRAL	3	1	4	True	starter:shaman_galeriders				class-SHAMAN	<b>Windfury</b>
+HERO_01	Garrosh Hellscream	HERO	WARRIOR	0	0	30	True	classhero:WARRIOR				run-boss-powers-passives-shrines+heroes	
+HERO_01b	Corrupt Garrosh	HERO	WARRIOR	0	0	30	False	bosshero:hollow_sovereign;bosshero:mire_brute;bosshero:pit_champion				run-boss-powers-passives-shrines+heroes	
+HERO_02	Thrall	HERO	SHAMAN	0	0	30	True	classhero:SHAMAN				run-boss-powers-passives-shrines+heroes	
+HERO_02a	Morgl the Oracle	HERO	SHAMAN	0	0	30	False	bosshero:bog_croaker				run-boss-powers-passives-shrines+heroes	
+HERO_02c	The Thunder King	HERO	SHAMAN	0	0	30	False	bosshero:storm_herald				run-boss-powers-passives-shrines+heroes	
+HERO_02d	Warchief Thrall	HERO	SHAMAN	0	0	30	False	bosshero:ember_matron				run-boss-powers-passives-shrines+heroes	
+HERO_03	Valeera Sanguinar	HERO	ROGUE	0	0	30	True	classhero:ROGUE				run-boss-powers-passives-shrines+heroes	
+HERO_03a	Maiev Shadowsong	HERO	ROGUE	0	0	30	False	bosshero:tunnel_rat				run-boss-powers-passives-shrines+heroes	
+HERO_04	Uther Lightbringer	HERO	PALADIN	0	0	30	True	classhero:PALADIN				run-boss-powers-passives-shrines+heroes	
+HERO_04a	Lady Liadrin	HERO	PALADIN	0	0	30	False	bosshero:golemancer				run-boss-powers-passives-shrines+heroes	
+HERO_04b	Prince Arthas	HERO	PALADIN	0	0	30	False	bosshero:hollow_regent				run-boss-powers-passives-shrines+heroes	
+HERO_05	Rexxar	HERO	HUNTER	0	0	30	True	classhero:HUNTER				run-boss-powers-passives-shrines+heroes	
+HERO_05a	Alleria Windrunner	HERO	HUNTER	0	0	30	False	bosshero:cellar_matron				run-boss-powers-passives-shrines+heroes	
+HERO_05c	Sylvanas Windrunner	HERO	HUNTER	0	0	30	False	bosshero:devouring_maw				run-boss-powers-passives-shrines+heroes	
+HERO_06	Malfurion Stormrage	HERO	DRUID	0	0	30	True	classhero:DRUID				run-boss-powers-passives-shrines+heroes	
+HERO_06a	Lunara	HERO	DRUID	0	0	30	False	bosshero:lady_of_thorns				run-boss-powers-passives-shrines+heroes	
+HERO_06c	Shan'do Malfurion	HERO	DRUID	0	0	30	False	bosshero:sleepless_one				run-boss-powers-passives-shrines+heroes	
+HERO_06d	Dame Hazelbark	HERO	DRUID	0	0	30	False	bosshero:hedge_witch				run-boss-powers-passives-shrines+heroes	
+HERO_07	Gul'dan	HERO	WARLOCK	0	0	30	True	classhero:WARLOCK				run-boss-powers-passives-shrines+heroes	
+HERO_07a	Nemsy Necrofizzle	HERO	WARLOCK	0	0	30	False	bosshero:lantern_thief				run-boss-powers-passives-shrines+heroes	
+HERO_07b	Mecha-Jaraxxus	HERO	WARLOCK	0	0	30	False	bosshero:clockwork_tyrant				run-boss-powers-passives-shrines+heroes	
+HERO_07c	Shadow Gul'dan	HERO	WARLOCK	0	0	30	False	bosshero:tollkeeper				run-boss-powers-passives-shrines+heroes	
+HERO_08	Jaina Proudmoore	HERO	MAGE	0	0	30	True	classhero:MAGE				run-boss-powers-passives-shrines+heroes	
+HERO_08c	Fire Mage Jaina	HERO	MAGE	0	0	30	False	bosshero:frostwarden				run-boss-powers-passives-shrines+heroes	
+HERO_09	Anduin Wrynn	HERO	PRIEST	0	0	30	True	classhero:PRIEST				run-boss-powers-passives-shrines+heroes	
+HERO_09a	Tyrande Whisperwind	HERO	PRIEST	0	0	30	False	bosshero:ashen_abbess				run-boss-powers-passives-shrines+heroes	
+HERO_09c	King Anduin	HERO	PRIEST	0	0	30	False	bosshero:gilded_king				run-boss-powers-passives-shrines+heroes	
+ICC_021	Exploding Bloatbat	MINION	HUNTER	4	2	1	True	starter:hunter_snareline				class-HUNTER	<b>Deathrattle:</b>\nDeal 2 damage to all enemy minions.
+ICC_049	Toxic Arrow	SPELL	HUNTER	2	0	0	True	starter:hunter_snareline				class-HUNTER	Deal $2 damage to a minion. If it survives, give it <b>Poisonous</b>. @spelldmg
+ICC_068	Ice Walker	MINION	MAGE	2	1	3	True	starter:mage_rimeward				class-MAGE	Your Hero Power also <b><b>Freeze</b>s</b> the target.
+ICC_075	Despicable Dreadlord	MINION	WARLOCK	5	4	5	True	starter:warlock_fiendpact				class-WARLOCK	At the end of your turn, deal 1 damage to all enemy minions.
+ICC_079	Gnash	SPELL	DRUID	3	0	0	True	starter:druid_barkbough				class-DRUID-2	Give your hero +3_Attack this turn. Gain 3 Armor.
+ICC_091	Dead Man's Hand	SPELL	WARRIOR	2	0	0	True	bundle:bundle_warrior_spells				class-WARRIOR	Shuffle a copy of your hand into your deck.
+ICC_252	Coldwraith	MINION	MAGE	3	3	4	True	starter:mage_rimeward				class-MAGE	<b>Battlecry:</b> If an enemy is <b>Frozen</b>, draw a card.
+ICC_450	Death Revenant	MINION	WARRIOR	5	3	3	True	starter:warrior_redfury				class-WARRIOR	<b>Battlecry:</b> Gain +1/+1 for each damaged minion.
+ICC_807	Strongshell Scavenger	MINION	DRUID	4	2	3	True	bundle:bundle_druid_battlecry				class-DRUID-1	<b>Battlecry:</b> Give your <b>Taunt</b> minions +2/+2.
+ICC_808	Crypt Lord	MINION	DRUID	3	1	6	True	starter:druid_barkbough				class-DRUID-2	[x]<b>Taunt</b>\nAfter you summon a minion,\n gain +1 Health.
+ICC_808e	Might of Ner'ub	ENCHANTMENT	DRUID	0	0	0	True		ICC_808	scriptcard		class-DRUID-2	Increased Health.
+ICC_825	Abominable Bowman	MINION	HUNTER	7	6	7	True	bundle:bundle_hunter_deathrattle				class-HUNTER	[x]<b>Deathrattle:</b> Summon\na random friendly Beast\nthat died this game.
+ICC_836	Breath of Sindragosa	SPELL	MAGE	1	0	0	True	starter:mage_rimeward				class-MAGE	Deal $2 damage to a random enemy minion and <b>Freeze</b> it. @spelldmg
+ICC_850	Shadowblade	WEAPON	ROGUE	3	3	0	True	bundle:bundle_rogue_weapons;starter:rogue_corsair				class-ROGUE	<b>Battlecry:</b> Your hero is <b>Immune</b> this turn.
+ICC_850e	Shaded	ENCHANTMENT	ROGUE	0	0	0	True		ICC_850	script;scriptcard		class-ROGUE	<b>Immune</b> this turn.
+JAIL_035	Vigilant Sentry	MINION	PALADIN	3	2	3	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	[x]<b>Taunt</b>\n<b>Battlecry:</b> If your deck has\nno Neutral cards, summon\n_two Vigilant Sentries.
+JAIL_202	Spiderling	MINION	DRUID	1	1	2	True	bossdeck:lady_of_thorns:npc-chef-druid;starter:druid_thicket				class-DRUID-1	Your hero has +1 Attack\non your turn.
+JAIL_202e	Tiny Fangs	ENCHANTMENT	DRUID	0	0	0	True		JAIL_202	scriptcard		class-DRUID-1	+1 Attack.
+JAIL_327	Reinforcement Aura	SPELL	PALADIN	3	0	0	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	[x]At the end of your turn,\nsummon a minion from\nyour deck that costs (2)\nor less. Lasts @ turns.
+JAIL_328	Scarlet Bruiser	MINION	PALADIN	2	2	2	True	bosssideboard:hollow_regent:JAIL_397			EffectContext.PickRandomCard	boss-hollow_regent+boss-lady_of_thorns	[x]<b>Deathrattle:</b> If your deck\nhas no Neutral cards,& get\na random Paladin card.\nIt costs (2) less.
+JAIL_330	Dalaran Champion	MINION	PALADIN	4	3	3	True	starter:paladin_wagon				class-PALADIN	[x]<b>Divine Shield</b>, <b>Taunt</b>\nAfter this gains stats,\ngain an extra +1/+1\n<i>(wherever this is).</i>
+JAIL_376	Ball and Chain	WEAPON	WARRIOR	1	1	2	True	bundle:bundle_warrior_weapons;starter:warrior_shieldhire				class-WARRIOR	<b>Deathrattle:</b>&\nGive your damaged minions +1/+2.
+JAIL_376e	Makeshift Weapon	ENCHANTMENT	WARRIOR	0	0	0	True		JAIL_376	script		class-WARRIOR	+1/+2.
+JAIL_380	Smuggled Shovel	WEAPON	HUNTER	1	1	2	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	<b>Deathrattle:</b>& Draw a spell that didn't start in your deck.
+JAIL_384	Chainbreaker Hogger	MINION	WARRIOR	8	10	10	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	[x]<b>Taunt</b>\n<b>Start of Game:</b> Duplicate\nall other <b>Legendary</b> cards\nin your deck.
+JAIL_397	Commander Beatrix	MINION	PALADIN	5	5	6	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	[x]<b>Taunt</b>\nWhile building your deck,\npick a 2-Cost minion. Ten\n_copies join your deck!
+JAIL_421	Warptooth	MINION	WARRIOR	4	3	3	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	[x]<b>Charge</b>. If four friendly\ncharacters take damage on\none of your turns, summon\n__this from hand or deck.
+JAIL_452	Disguised Detective	MINION	SHAMAN	1	4	3	True	bossdeck:storm_herald:boss-shaman-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	Can be played on either side. <b>Overload</b> that\nplayer for (2).
+JAIL_457	Hijacked Securitybot	MINION	SHAMAN	4	3	3	True	bossdeck:ember_matron:npc-zee-shaman				boss-ember_matron+boss-devouring_maw	<b>Prepare</b>\n<b>Battlecry:</b>& Give your other minions +1/+1.
+JAIL_457e	Hijacked	ENCHANTMENT	NEUTRAL	0	0	0	True		JAIL_457	script		boss-ember_matron+boss-devouring_maw	Increased stats.
+JAIL_458	Tiny Pal	WEAPON	SHAMAN	4	2	3	True	bossdeck:ember_matron:npc-zee-shaman				boss-ember_matron+boss-devouring_maw	[x]<b>Battlecry:</b> Choose your\nelemental ammunition!\n<i>(After your hero attacks,\nchoose another).</i>
+JAIL_507	Spiteful Chef	MINION	DRUID	3	3	2	True	bossdeck:lady_of_thorns:npc-chef-druid			EffectContext.PickRandomCard	boss-hollow_regent+boss-lady_of_thorns	[x]<b>Battlecry:</b> Summon a 2-Cost\n<b>Taunt</b> minion. If you have 10\nor more Mana, summon a\n6-Cost instead.
+JAIL_513	Caged Cranium	MINION	WARLOCK	3	3	1	True	bundle:bundle_warlock_battlecry;starter:warlock_leechwall				class-WARLOCK	[x]<b>Taunt</b>\n<b>Battlecry:</b>& Gain +1 Health\n__for each card in your hand._
+JAIL_513e	Uncaged	ENCHANTMENT	NEUTRAL	0	0	0	True		JAIL_513	script		class-WARLOCK	Increased Health.
+JAIL_516	Scarlet Recruiter	MINION	PALADIN	5	4	4	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	[x]<b>Battlecry:</b> Summon two\nminions from your deck\nthat cost (2) or less.\nGive them <b>Rush</b>.
+JAIL_516e	New Recruit	ENCHANTMENT	NEUTRAL	0	0	0	True		JAIL_516	script		boss-hollow_regent+boss-lady_of_thorns	<b>Rush</b>
+JAIL_703	Gullible Guard	MINION	NEUTRAL	1	1	3	True	bossdeck:frostwarden:boss-mage-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Deathrattle:</b> You can say Sorry this game.
+JAIL_800	Mug'Zee	MINION	SHAMAN	6	6	7	True	bossdeck:ember_matron:npc-zee-shaman				boss-ember_matron+boss-devouring_maw	[x]<b>Start of Game:</b> If your deck\nhas no other minions, get\nMug's Hero Power. If it has\nno spells, get Zee's!
+JAIL_802	Gallagio Goon	MINION	SHAMAN	2	2	3	True	bossdeck:ember_matron:npc-zee-shaman				boss-ember_matron+boss-devouring_maw	After you play a <b>Battlecry</b> minion, give it +1/+1.
+JAIL_802e	Wiseguy	ENCHANTMENT	SHAMAN	0	0	0	True		JAIL_802	script		boss-ember_matron+boss-devouring_maw	+1/+1.
+JAIL_850	Warden Maiev	MINION	NEUTRAL	2	1	3	True	bossdeck:ember_matron:npc-zee-shaman				boss-ember_matron+boss-devouring_maw	[x]After you play a minion,\ngive it +3/+3 and make it\n_go <b>Dormant</b> for 1 turn.
+JAIL_850e	In the Slammer	ENCHANTMENT	NEUTRAL	0	0	0	True		JAIL_850	script		boss-ember_matron+boss-devouring_maw	<b>Dormant</b>. Awaken in @ |4(turn, turns).
+JAIL_850e2	Pushups	ENCHANTMENT	NEUTRAL	0	0	0	True		JAIL_850	script		boss-ember_matron+boss-devouring_maw	+3/+3.
+JAIL_860	Chef Neth'rek	MINION	DRUID	3	3	3	True	bossdeck:lady_of_thorns:npc-chef-druid				boss-hollow_regent+boss-lady_of_thorns	[x]<b>Start of Game:</b> If your deck\nonly has cards that cost (3)\nor less, set your Mana to\n10 after five turns!
+JAIL_866	Lethal Recipe	SPELL	DRUID	3	0	0	True	bossdeck:lady_of_thorns:npc-chef-druid				boss-hollow_regent+boss-lady_of_thorns	[x]Draw 2 minions.\nIf you have 10 or more\nMana, give them +3/+3.
+JAIL_866e	Lethal	ENCHANTMENT	NEUTRAL	0	0	0	True		JAIL_866	script		boss-hollow_regent+boss-lady_of_thorns	+3/+3.
+JAIL_872	Spider Rider	MINION	DRUID	2	1	4	True	bossdeck:lady_of_thorns:npc-chef-druid				boss-hollow_regent+boss-lady_of_thorns	After your hero attacks,& draw a card.
+JAIL_875	Staff of Trickery	WEAPON	DRUID	4	1	4	True	bossdeck:sleepless_one:npc-druid-azshara				boss-gilded_king+boss-sleepless_one	[x]After your hero attacks,\n<b>Discover</b> a Druid card.\nReduce its Cost by\nyour hero's Attack.
+JAIL_877	Underbelly Network	LOCATION	HUNTER	2	0	2	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	Summon a 2/1 Rat with "<b>Deathrattle:</b> Draw a card."
+JAIL_877t	Snoot Hoarder	MINION	HUNTER	2	2	1	True		JAIL_877	script		boss-ember_matron+boss-devouring_maw	<b>Deathrattle:</b> Draw a card.
+JAIL_879	Beast Tripwire	SPELL	HUNTER	4	0	0	True	bossdeck:devouring_maw:npc-hunter-face			EffectContext.PickRandomCard	boss-ember_matron+boss-devouring_maw	[x]Summon a random\n5-Cost Beast. Shuffle 2\nspells into your deck that\ndo it again when drawn.
+JAIL_879t	Tripped Beast Tripwire	SPELL	HUNTER	4	0	0	True		JAIL_879	script;tag1452	EffectContext.PickRandomCard	boss-ember_matron+boss-devouring_maw	<b>Casts When Drawn</b>\nSummon a random\n5-Cost Beast.
+JAIL_881	Arcane Tripwire	SPELL	HUNTER	3	0	0	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	[x]Deal $4 damage split\namong all enemies. Shuffle\n2 spells into your deck that\ndo it again when drawn.
+JAIL_881t	Tripped Arcane Tripwire	SPELL	HUNTER	3	0	0	True		JAIL_881	script;tag1452		boss-ember_matron+boss-devouring_maw	<b>Casts When Drawn</b>\nDeal $4 damage split among all enemies.
+JAIL_912	Soothsayer	MINION	PRIEST	7	6	6	True	bossdeck:gilded_king:npc-priest-reborn;bundle:bundle_priest_deathrattle			EffectContext.PickRandomCard	class-PRIEST	[x]<b>Prepare</b>, <b>Taunt</b>\n<b>Deathrattle:</b> Restore #6 Health\nto your hero.& Summon a\n_random 6-Cost minion.
+JAIL_913	Hold Them Off!	SPELL	PRIEST	5	0	0	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	<b>Prepare</b>\nGive a minion +5/+5 and <b>Lifesteal</b>.
+JAIL_913e	Hold the Line!	ENCHANTMENT	NEUTRAL	0	0	0	True		JAIL_913	scriptcard		boss-gilded_king+boss-sleepless_one	+5/+5 and <b>Lifesteal</b>.
+JAIL_940	Undeath Sentence	SPELL	PRIEST	1	0	0	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	[x]Trigger the <b>Deathrattle</b> of\na random friendly minion\nthat died this game.
+JAIL_941	Holy Embrace	SPELL	PRIEST	2	0	0	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	Restore #4 Health.\n_Get a 'Dark Embrace'\n_that deals 4 damage.
+JAIL_941t	Dark Embrace	SPELL	PRIEST	2	0	0	True		JAIL_941	tag1078;tag1452		boss-gilded_king+boss-sleepless_one	Deal $4 damage.
+JAIL_942	Specter of Despair	MINION	PRIEST	2	2	6	True	bossdeck:ashen_abbess:boss-priest-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Taunt</b>\n_Can't attack.
+KAR_005	Kindly Grandmother	MINION	HUNTER	2	1	1	True	starter:hunter_snareline				class-HUNTER	<b>Deathrattle:</b> Summon a 3/2 Big Bad Wolf.
+KAR_005a	Big Bad Wolf	MINION	HUNTER	2	3	2	True		KAR_005	scriptcard		class-HUNTER	
+KAR_010	Nightbane Templar	MINION	PALADIN	3	2	3	True	bundle:bundle_paladin_battlecry				class-PALADIN	<b>Battlecry:</b> If you're holding a Dragon, summon two 1/1 Whelps.
+KAR_089	Malchezaar's Imp	MINION	WARLOCK	1	1	3	True	starter:warlock_ashen				class-WARLOCK	Whenever you discard a card, draw a card.
+KAR_205	Silverware Golem	MINION	WARLOCK	3	3	3	True	starter:warlock_ashen				class-WARLOCK	If you discard this minion, summon it.
+KAR_300	Enchanted Raven	MINION	DRUID	1	2	2	True	bossdeck:hedge_witch:boss-druid-b1;starter:druid_thicket				class-DRUID-1	
+LOE_002	Forgotten Torch	SPELL	MAGE	3	0	0	True	starter:mage_kindled				class-MAGE	Deal $3 damage. Shuffle a 'Roaring Torch' into your deck that deals 6 damage. @spelldmg
+LOE_003	Ethereal Conjurer	MINION	MAGE	5	6	3	True	starter:mage_survey			DiscoverCriteria;DiscoverTask;DiscoverType.SPELL	class-MAGE	<b>Battlecry: Discover</b> a spell.
+LOE_020	Desert Camel	MINION	HUNTER	3	2	4	True	bundle:bundle_hunter_battlecry				class-HUNTER	<b>Battlecry:</b> Put a 1-Cost minion from each deck into the battlefield.
+LOE_050	Mounted Raptor	MINION	DRUID	3	3	2	True	starter:druid_thicket				class-DRUID-2	<b>Deathrattle:</b> Summon a random 1-Cost minion.
+LOOT_033	Cavern Shinyfinder	MINION	ROGUE	2	3	1	True	starter:rogue_corsair				class-ROGUE	<b>Battlecry:</b> Draw a weapon from your deck.
+LOOT_047	Barkskin	SPELL	DRUID	1	0	0	True	starter:druid_barkbough				class-DRUID-2	Give a minion +3 Health. Gain 3 Armor.
+LOOT_048	Ironwood Golem	MINION	DRUID	4	3	6	True	starter:druid_barkbough				class-DRUID-2	<b>Taunt</b>\nCan only attack if you have 3 or more Armor.
+LOOT_078	Cave Hydra	MINION	HUNTER	3	2	4	True	bundle:bundle_hunter_beast;starter:hunter_kennel				class-HUNTER	Also damages the minions next to whomever\nthis attacks.
+LOOT_144	Hoarding Dragon	MINION	NEUTRAL	4	5	6	True	bundle:bundle_neutral_dragon				neutral-bundles	<b>Deathrattle:</b> Give your opponent two Coins.
+LOOT_154	Gravelsnout Knight	MINION	NEUTRAL	1	2	3	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Battlecry:</b> Summon a random 1-Cost minion for_your opponent.
+LOOT_170	Raven Familiar	MINION	MAGE	2	2	2	True	starter:mage_survey				class-MAGE	<b>Battlecry:</b> Reveal a spell in each deck. If yours costs more, draw it.
+LOOT_203	Lesser Mithril Spellstone	SPELL	WARRIOR	7	0	0	True	bundle:bundle_warrior_spells				class-WARRIOR	Summon one 5/5 Mithril Golem. <i>(Equip a weapon to upgrade.)</i>
+LOOT_203t2	Mithril Spellstone	SPELL	WARRIOR	7	0	0	True		LOOT_203	scriptcard		class-WARRIOR	Summon two 5/5 Mithril Golems. <i>(Equip a weapon to upgrade.)</i>
+LOOT_203t3	Greater Mithril Spellstone	SPELL	WARRIOR	7	0	0	True		LOOT_203t2	scriptcard		class-WARRIOR	Summon three 5/5 Mithril Golems.
+LOOT_203t4	Mithril Golem	MINION	WARRIOR	5	5	5	True		LOOT_203;LOOT_203t2;LOOT_203t3	scriptcard		class-WARRIOR	
+LOOT_211	Elven Minstrel	MINION	ROGUE	4	3	2	True	starter:rogue_backalley				class-ROGUE	<b>Combo:</b> Draw 2 minions from your deck.
+LOOT_258	Dire Mole	MINION	NEUTRAL	1	1	3	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:bog_croaker:boss-shaman-b1;bossdeck:cellar_matron:boss-hunter-b1;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:hedge_witch:boss-druid-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+LOOT_286	Unidentified Maul	WEAPON	PALADIN	3	2	0	True	bundle:bundle_paladin_weapons				class-PALADIN	Gains a bonus effect in_your hand.
+LOOT_286t1	Champion's Maul	WEAPON	PALADIN	3	2	0	True		LOOT_286	entourage;script		class-PALADIN	<b>Battlecry:</b> Summon two 1/1 Silver Hand Recruits.
+LOOT_286t2	Sacred Maul	WEAPON	PALADIN	3	2	0	True		LOOT_286	entourage;script		class-PALADIN	<b>Battlecry:</b> Give your minions <b>Taunt</b>.
+LOOT_286t3	Blessed Maul	WEAPON	PALADIN	3	2	0	True		LOOT_286	entourage;script		class-PALADIN	<b>Battlecry:</b> Give your minions +1 Attack.
+LOOT_286t3e	Holy Blessings	ENCHANTMENT	NEUTRAL	0	0	0	True		LOOT_286;LOOT_286t3	script;scriptcard		class-PALADIN	+1 Attack.
+LOOT_286t4	Purifier's Maul	WEAPON	PALADIN	3	2	0	True		LOOT_286	entourage;script		class-PALADIN	<b>Battlecry:</b> Give your minions <b>Divine Shield</b>.
+LOOT_351	Greedy Sprite	MINION	DRUID	3	3	1	True	bundle:bundle_druid_deathrattle				class-DRUID-1	<b>Deathrattle:</b> Gain an empty Mana Crystal.
+LOOT_398	Benevolent Djinn	MINION	PALADIN	3	2	4	True	starter:paladin_lantern				class-PALADIN	At the end of your turn, restore #3 Health to your_hero.
+LOOT_507	Lesser Diamond Spellstone	SPELL	PRIEST	7	0	0	True	bundle:bundle_priest_spells				class-PRIEST	Resurrect 2 different friendly minions. @<i>(Cast 4 spells to upgrade.)</i>
+LOOT_534	Gilded Gargoyle	MINION	PRIEST	3	2	2	True	starter:priest_grave				class-PRIEST	<b>Deathrattle:</b> Add a Coin to your hand.
+MEND_046	Bashana Runetotem	MINION	DRUID	7	4	4	True	bossdeck:sleepless_one:npc-druid-azshara				boss-gilded_king+boss-sleepless_one	[x]<b>Battlecry:</b> Get three\n2/2 Treants. Carve 12\nMana worth of Nature\nspells into them.
+MEND_046t	Treant	MINION	DRUID	1	2	2	True		MEND_046	script		boss-gilded_king+boss-sleepless_one	<b>Battlecry:</b> Cast {0}.
+MEND_307	Roam Free	SPELL	HUNTER	7	0	0	True	bundle:bundle_hunter_spells				class-HUNTER	[x]Replace your future Animal\nCompanions with random\nBeasts that cost (2) more.\nChoose one to summon.
+MEND_506	Mystic Runesaber	MINION	MAGE	2	2	3	True	bundle:bundle_mage_beast				class-MAGE	[x]<b>Elusive</b>\n<b>Battlecry:</b> Increase the\neffects of your Leylines\nby 1 this game.
+MEND_802	Convalescence	SPELL	PALADIN	2	0	0	True	bossdeck:hollow_regent:npc-pure-paladin;starter:paladin_lantern				class-PALADIN	Summon two {0} Silver Hand Recruits with <b>Divine Shield</b>.
+NEW1_009	Healing Totem	MINION	SHAMAN	1	0	2	True		CS2_049	entourage;script		run-player-powers+active-treasures	At the end of your turn, restore #1 Health to all friendly minions.
+NEW1_011	Kor'kron Elite	MINION	WARRIOR	4	4	3	True	starter:warrior_shieldhire				class-WARRIOR	<b>Charge</b>
+OG_028	Thing from Below	MINION	SHAMAN	6	5	5	True	bundle:bundle_shaman_taunt				class-SHAMAN	[x]<b>Taunt</b>\nCosts (1) less for each\nTotem you've summoned\nthis game.
+OG_044b	Druid of the Flame	MINION	DRUID	3	5	5	True		BRM_010	scriptcard		class-DRUID-2	
+OG_044c	Druid of the Saber	MINION	DRUID	2	3	2	True		AT_042	scriptcard		class-DRUID-2	<b>Charge</b>\n<b>Stealth</b>
+OG_048	Mark of Y'Shaarj	SPELL	DRUID	2	0	0	True	starter:druid_thicket				class-DRUID-2	Give a minion +2/+2.\nIf it's a Beast, draw\na card.
+OG_070	Bladed Cultist	MINION	ROGUE	1	1	2	True	starter:rogue_backalley				class-ROGUE	<b>Combo:</b> Gain +1/+1.
+OG_070e	Thirsty Blades	ENCHANTMENT	ROGUE	0	0	0	True		OG_070	scriptcard		class-ROGUE	+1/+1.
+OG_161	Corrupted Seer	MINION	NEUTRAL	6	2	3	True	bundle:bundle_neutral_murloc				neutral-bundles	<b>Battlecry:</b> Deal 2 damage to all non-Murloc minions.
+OG_179	Fiery Bat	MINION	HUNTER	1	2	1	True	starter:hunter_snareline				class-HUNTER	<b>Deathrattle:</b> Deal 1 damage to a random enemy.
+OG_216	Infested Wolf	MINION	HUNTER	4	3	3	True	starter:hunter_kennel				class-HUNTER	<b>Deathrattle:</b> Summon two 1/1 Spiders.
+OG_216a	Spider	MINION	HUNTER	1	1	1	True		OG_216	scriptcard		class-HUNTER	
+OG_218e	Enraged	ENCHANTMENT	NEUTRAL	0	0	0	True		CORE_OG_218	scriptcard		class-WARRIOR	+3 Attack.
+OG_221	Selfless Hero	MINION	PALADIN	1	2	1	True	starter:paladin_gleaming				class-PALADIN	<b>Deathrattle:</b> Give a random friendly minion <b>Divine Shield</b>.
+OG_222	Rallying Blade	WEAPON	PALADIN	3	3	0	True	starter:paladin_gleaming				class-PALADIN	<b>Battlecry:</b> Give +1/+1 to your minions with <b>Divine Shield</b>.
+OG_234	Darkshire Alchemist	MINION	PRIEST	5	4	5	True	starter:priest_mending				class-PRIEST	<b>Battlecry:</b> Restore #5 Health.
+OG_248	Am'gam Rager	MINION	NEUTRAL	3	1	5	True	bossdeck:bog_croaker:boss-shaman-b1;bossdeck:lantern_thief:boss-warlock-b1;bossdeck:mire_brute:boss-warrior-b1;bossdeck:tunnel_rat:boss-rogue-b1				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	
+OG_267	Southsea Squidface	MINION	ROGUE	4	4	4	True	starter:rogue_corsair				class-ROGUE	<b>Deathrattle:</b> Give your weapon +2 Attack.
+OG_267e	Squid Oil Sheen	ENCHANTMENT	ROGUE	0	0	0	True		OG_267	scriptcard		class-ROGUE	+2 Attack
+OG_301	Ancient Shieldbearer	MINION	WARRIOR	7	6	6	True	bundle:bundle_warrior_battlecry				class-WARRIOR	<b>Battlecry:</b> If your C'Thun has at least 10 Attack, gain 10 Armor.
+OG_313	Addled Grizzly	MINION	DRUID	3	2	2	True	starter:druid_thicket				class-DRUID-2	After you summon a minion, give it +1/+1.
+OG_313e	Addled	ENCHANTMENT	NEUTRAL	0	0	0	True		OG_313	scriptcard		class-DRUID-2	+1/+1.
+OG_325	Carrion Grub	MINION	HUNTER	3	2	5	True	bossdeck:cellar_matron:boss-hunter-b1;starter:hunter_kennel				class-HUNTER	
+SCH_713e	Spoiled!	ENCHANTMENT	NEUTRAL	0	0	0	True		CORE_SCH_713	script		boss-hollow_regent+boss-lady_of_thorns	Your spells cost (1) more this turn.
+SW_108t	Second Flame	SPELL	MAGE	1	0	0	True		CORE_SW_108	tag1452		class-MAGE	Deal $2 damage to\na minion.
+SW_439t	Acorn	SPELL	DRUID	1	0	0	True		CORE_SW_439	scriptcard		class-DRUID-1	[x]<b>Casts When Drawn</b>\nSummon a 2/1 Squirrel.
+SW_439t2	Satisfied Squirrel	MINION	DRUID	1	2	1	True		SW_439t	script;scriptcard		class-DRUID-1	
+TB_006e	Big Banana	ENCHANTMENT	NEUTRAL	0	0	0	True	bosspassivefx:hollow_sovereign:fx_sovereign;content:Effect:fx_sovereign;contentfx:passive_sovereign:fx_sovereign				run-passive-treasure-and-buff-effects	Has +2/+2.
+TB_007e	Deviate Switch	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_whetstone;contentfx:whetstone_charm:fx_whetstone				run-passive-treasure-and-buff-effects	Attack and Health have been swapped by Deviate Banana.
+TB_010e	Choose One of Three	ENCHANTMENT	NEUTRAL	0	0	0	True	bosspassivefx:sleepless_one:fx_undying;content:Effect:fx_undying;contentfx:passive_undying:fx_undying				run-passive-treasure-and-buff-effects	
+TB_015	Pirate	MINION	NEUTRAL	3	3	5	True	content:ActiveTreasure:warden_golem				run-player-powers+active-treasures	
+TB_207MaskedBallE	TB207 Masked Ball e	ENCHANTMENT	NEUTRAL	0	0	0	True	bosspassivefx:hollow_regent:fx_command;content:Effect:fx_command;contentfx:passive_command:fx_command				run-passive-treasure-and-buff-effects	
+TB_207TolBaradE	TB207 Minions Make Spells e	ENCHANTMENT	NEUTRAL	0	0	0	True	bosspassivefx:lady_of_thorns:fx_bramble;content:Effect:fx_bramble;contentfx:passive_bramble:fx_bramble				run-passive-treasure-and-buff-effects	
+TB_Amalgam_Ench	Amalgam Enchant	ENCHANTMENT	NEUTRAL	0	0	0	True	bosspassivefx:hedge_witch:fx_overgrowth;content:Effect:fx_overgrowth;contentfx:passive_overgrowth:fx_overgrowth				run-passive-treasure-and-buff-effects	Minions have all races.
+TB_ArchivistEnch	Archivist Enchant - Not Player Facing	ENCHANTMENT	NEUTRAL	0	0	0	True	bosspassivefx:lantern_thief:fx_pilfer;content:Effect:fx_pilfer;contentfx:passive_pilfer:fx_pilfer				run-passive-treasure-and-buff-effects	
+TB_BRMA01_2H_2	Pile On!!!	HERO_POWER	NEUTRAL	0	0	0	True	bosspower:hollow_regent:passive_command;content:PassivePower:passive_command				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nPut a minion from each deck into the battlefield.
+TB_BRMA10_3H	The Rookery	HERO_POWER	NEUTRAL	0	0	0	True	bosspower:lady_of_thorns:passive_bramble;content:PassivePower:passive_bramble				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nGive all Corrupted Eggs +1 Health, then summon one.
+TB_BlingBrawl_Blade1e	Blingtron's Blade	ENCHANTMENT	NEUTRAL	0	0	0	True	bosspassivefx:ashen_abbess:fx_vigil;content:Effect:fx_vigil;contentfx:passive_vigil:fx_vigil				run-passive-treasure-and-buff-effects	When this breaks, randomly summon a new weapon.
+TB_BlingBrawl_Blade2e	Blingtron's Blade HERO	ENCHANTMENT	NEUTRAL	0	0	0	True	bosspassivefx:tollkeeper:fx_tithe;content:Effect:fx_tithe;contentfx:passive_tithe:fx_tithe				run-passive-treasure-and-buff-effects	
+TB_BlingBrawl_Hero1e	Sharpened	ENCHANTMENT	ROGUE	0	0	0	True	bosspassivefx:golemancer:fx_discipline;content:Effect:fx_discipline;contentfx:passive_discipline:fx_discipline				run-passive-treasure-and-buff-effects	+1 Attack
+TB_BlingBrawl_Hero1p	Sharpen	HERO_POWER	ROGUE	0	0	0	True	bosspower:hollow_sovereign:passive_sovereign;content:PassivePower:passive_sovereign				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nIncrease your weapon's attack by 1
+TB_Blizzcon2016_GoonsEnchant	The Grimy Goons	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_embers_1;contentfx:shrine_embers_1:fx_embers_1				run-passive-treasure-and-buff-effects	
+TB_Blizzcon2016_KabalEnchant	The Kabal	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_embers_2;contentfx:shrine_embers_2:fx_embers_2				run-passive-treasure-and-buff-effects	
+TB_Blizzcon2016_LotusEnchant	The Jade Lotus	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_embers_3;contentfx:shrine_embers_3:fx_embers_3				run-passive-treasure-and-buff-effects	
+TB_BoomAnnoy_001e	Loves Annoy-o-tron	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_bulwark_2;contentfx:shrine_bulwark_2:fx_bulwark_2				run-passive-treasure-and-buff-effects	+2/+2.
+TB_BoomBotFestival_001e	Boom Bot Attached	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_bulwark_3;contentfx:shrine_bulwark_3:fx_bulwark_3				run-passive-treasure-and-buff-effects	<b>Deathrattle:</b> Deal 1-4 damage to a random enemy.
+TB_BossBattle_KoboldHP	Magic Candle	HERO_POWER	NEUTRAL	2	0	0	True	bosspower:mire_brute:boss_stomp;content:HeroPower:boss_stomp				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nFind a Treasure!
+TB_BossRumble_001hp	Smuggle	HERO_POWER	NEUTRAL	2	0	0	True	bosspower:storm_herald:boss_chain_spark;content:HeroPower:boss_chain_spark				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nGive a random minion in your hand +2/+2
+TB_BossRumble_002hp	Construct Golem	HERO_POWER	NEUTRAL	2	0	0	True	bosspower:frostwarden:boss_chill;content:HeroPower:boss_chill				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nSummon a {0} <b>Jade Golem</b>.@Summon a <b>Jade Golem</b>.
+TB_BossRumble_003hp	Brew Potion	HERO_POWER	NEUTRAL	2	0	0	True	bosspower:ember_matron:boss_cinder_rain;content:HeroPower:boss_cinder_rain				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nAdd a random Potion to your hand.
+TB_BountyHunt_Consume	Consume	HERO_POWER	NEUTRAL	0	0	0	True	bosspower:sleepless_one:passive_undying;content:PassivePower:passive_undying				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nDestroy a friendly minion, then draw 3 cards.
+TB_BountyHunt_Hypnotize	Hypnotize	HERO_POWER	NEUTRAL	2	0	0	True	classpower:ROGUE:carto_ambush;content:HeroPower:carto_ambush				run-player-powers+active-treasures	[x]<b>Hero Power</b>\nEach player shuffles their\nhand into their deck and\ndraws that many cards.
+TB_BuildaBoss_404p	Toxic Fumes	HERO_POWER	NEUTRAL	2	0	0	True	classpower:MAGE:carto_survey;content:HeroPower:carto_survey;legacypower:cartographer:carto_survey			DiscoverCriteria;DiscoverTask;DiscoverType.SPELL	run-player-powers+active-treasures	<b>Hero Power</b>\nDeal 1 damage to all minions.
+TB_Carousel_EnchA	Carousel Enchant A - Not Player Facing	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_dawn_3;contentfx:shrine_dawn_3:fx_dawn_3				run-passive-treasure-and-buff-effects	Rotate Minions
+TB_Carousel_EnchB	Carousel Enchant B - Not Player Facing	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_bulwark_1;contentfx:shrine_bulwark_1:fx_bulwark_1				run-passive-treasure-and-buff-effects	Rotate Minions
+TB_Champs_EX1_145e	Preparation	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_iron_skin;contentfx:iron_skin:fx_iron_skin				run-passive-treasure-and-buff-effects	The next spell you cast this turn costs (3) less.
+TB_CheaterChess_Black	Castle	HERO_POWER	NEUTRAL	3	0	0	True	classpower:ROGUE:carto_shortcut;content:HeroPower:carto_shortcut				run-player-powers+active-treasures	<b>Hero Power</b>\n<b>Discover</b> a chess piece.
+TB_Chupacabran_HP	Bloodthirst	HERO_POWER	NEUTRAL	2	0	0	True	classpower:DRUID:druid_thornhide;content:HeroPower:druid_thornhide				run-player-powers+active-treasures	<b>Hero Power</b>\nGive a friendly minion +1/+1 and <b>Lifesteal</b>.
+TB_Chupacabran_HP_E	Bloodthirsty	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_ember_brand;contentfx:ember_brand:fx_ember_brand				run-passive-treasure-and-buff-effects	Increased stats and <b>Lifesteal.</b>
+TB_CoOpv3_001	Glorious Finale	SPELL	NEUTRAL	2	0	0	True	content:ActiveTreasure:blazing_rod				run-player-powers+active-treasures	The true battle begins....
+TB_CoOpv3_002	Twisted Light	SPELL	PRIEST	1	0	0	True	content:ActiveTreasure:iron_ward				run-player-powers+active-treasures	Restore 30 health to Nefarian. Deal 30 damage to all other minions.
+TB_CoOpv3_003	Bamboozle	SPELL	NEUTRAL	3	0	0	True	content:ActiveTreasure:bottomless_tome				run-player-powers+active-treasures	Swap player's hands.
+TB_CoOpv3_004	Cleave	SPELL	NEUTRAL	2	0	0	True	content:ActiveTreasure:mirror_shard				run-player-powers+active-treasures	Deal 7 damage to a minion and its owner.
+TB_CoOpv3_005	Cleave	SPELL	NEUTRAL	1	0	0	True	content:ActiveTreasure:frost_lantern				run-player-powers+active-treasures	Deal 4 damage to a minion and its owner.
+TB_CoOpv3_006	Elemental Eruption	SPELL	SHAMAN	4	0	0	True	content:ActiveTreasure:quake_stone				run-player-powers+active-treasures	Deal 4-6 damage to all other minions.
+TB_CoOpv3_007	Flame Missiles	SPELL	NEUTRAL	2	0	0	True	content:ActiveTreasure:healing_spring				run-player-powers+active-treasures	Deal 5 damage randomly split among all other characters.
+TB_CoOpv3_008	Flame Missiles	SPELL	NEUTRAL	1	0	0	True	content:ActiveTreasure:charm_seedling				run-player-powers+active-treasures	Deal 10 damage randomly split among all other characters.
+TB_CoOpv3_009	Explosive Rune	SPELL	NEUTRAL	1	0	0	True	content:ActiveTreasure:charm_sprouting				run-player-powers+active-treasures	Summon an 'Explosive Rune.'
+TB_CoOpv3_009e	Going Nova	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:buff_1_1	TB_207MaskedBallE;TB_Carousel_EnchA	scriptcard		run-passive-treasure-and-buff-effects	It's about to blow!
+TB_CoOpv3_010	Explosive Runes	SPELL	NEUTRAL	1	0	0	True	content:ActiveTreasure:charm_blooming				run-player-powers+active-treasures	Summon two 'Explosive Runes.'
+TB_CoOpv3_011	Don't Push Me!	SPELL	NEUTRAL	1	0	0	True	content:ActiveTreasure:sig_field_atlas				run-player-powers+active-treasures	He's getting angry....
+TB_CoOpv3_012	Immolate	SPELL	NEUTRAL	2	0	0	True	content:ActiveTreasure:sig_smoke_flask				run-player-powers+active-treasures	Deal 4 damage to each hero.
+TB_CoOpv3_013	Immolate	SPELL	NEUTRAL	3	0	0	True	content:ActiveTreasure:sig_star_chart				run-player-powers+active-treasures	Deal 7 damage to each hero.
+TB_CoOpv3_101e	Team Player Enchantment	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:buff_2_2	TB_MechWar_Boss1_HeroPower	scriptcard		run-passive-treasure-and-buff-effects	<b>Immune</b> ahile attacking
+TB_CoOpv3_104e	Unity	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:buff_atk_1				run-passive-treasure-and-buff-effects	+2/+2
+TB_CoOpv3_200	Follow MY Rules!	SPELL	PALADIN	1	0	0	True	content:ActiveTreasure:hunting_net				run-player-powers+active-treasures	Change the Attack of all other minions to 1.
+TB_CoOpv3_BOSS2e	Getting Angry....	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:buff_hp_1	TB_Face_Ench1;TB_FireFestEnch	scriptcard		run-passive-treasure-and-buff-effects	Now he's mad....
+TB_CoOpv3_BOSS3e	Enough!	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:buff_hp_2	TB_Henchmania_MyraH	scriptcard		run-passive-treasure-and-buff-effects	Nefarian is <b>Immune</b> this turn.
+TB_CoOpv3_BOSS4e	Cowed	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:buff_atk_1_turn	TB_John_002p	scriptcard		run-passive-treasure-and-buff-effects	Can't attack this turn.
+TB_CoOpv3_BOSSe	WHY WON'T YOU DIE!?	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:cost_minus_1				run-passive-treasure-and-buff-effects	Now he's REALLY mad....
+TB_CoopHero_HP_001	Madness	HERO_POWER	NEUTRAL	2	0	0	True	classpower:HUNTER:trapper_snare;content:HeroPower:trapper_snare;legacypower:trapper:trapper_snare				run-player-powers+active-treasures	Armies!!
+TB_Coopv3_100	Dragonscale Warrior	MINION	NEUTRAL	2	3	2	True	content:ActiveTreasure:swift_hound				run-player-powers+active-treasures	Whenever any player targets this minion with a spell, that player draws a card.
+TB_Coopv3_101	Freewheeling Skulker	MINION	NEUTRAL	4	4	4	True	content:ActiveTreasure:gilded_idol				run-player-powers+active-treasures	At the end of your turn, switch sides.
+TB_DALA_Minion1e	Dalaran Dedication	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_dawn_1;contentfx:shrine_dawn_1:fx_dawn_1				run-passive-treasure-and-buff-effects	Dalaran is granting this card Health.
+TB_DALA_Minion3e	For Dalaran!	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_dawn_2;contentfx:shrine_dawn_2:fx_dawn_2				run-passive-treasure-and-buff-effects	Dalaran is granting this card Attack and Health.
+TB_DeathrattleYog_ench	Deathrattle Yog Enchant	ENCHANTMENT	NEUTRAL	0	0	0	True	bosspassivefx:gilded_king:fx_hoard;content:Effect:fx_hoard;contentfx:passive_hoard:fx_hoard				run-passive-treasure-and-buff-effects	
+TB_DiscoverMyDeck_Enchantment	Discover My Deck Enchant	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_grave_candle;contentfx:grave_candle:fx_grave_candle				run-passive-treasure-and-buff-effects	
+TB_DoubleMinions_ench	Double Minions Enchant	ENCHANTMENT	NEUTRAL	0	0	0	True	bosspassivefx:devouring_maw:fx_devour;content:Effect:fx_devour;contentfx:passive_devour:fx_devour				run-passive-treasure-and-buff-effects	
+TB_DrawnDiscovery_Ench	Draw and Discover Ench	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_mending;contentfx:mending_charm:fx_mending				run-passive-treasure-and-buff-effects	
+TB_EVILBRM_BoomHeroPower	Overmine	HERO_POWER	WARRIOR	2	0	0	True	classpower:SHAMAN:shaman_spark_lash;content:HeroPower:shaman_spark_lash				run-player-powers+active-treasures	[x]<b>Hero Power</b>\nShuffle two Bombs\ninto your opponent's\ndeck.
+TB_EVILBRM_RafaamHeroPower	Arch-Villainy	HERO_POWER	NEUTRAL	2	0	0	True	classpower:WARLOCK:warlock_fiend_gate;content:HeroPower:warlock_fiend_gate				run-player-powers+active-treasures	<b>Hero Power</b>\nSteal a card from your opponent's deck. If it's a minion, summon it.
+TB_EndlessMinions01	Endless Enchantment	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_quiet_satchel;contentfx:quiet_satchel:fx_quiet_satchel				run-passive-treasure-and-buff-effects	+2/+2.
+TB_Face_Ench1	Safe	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_banner;contentfx:champions_banner:fx_banner				run-passive-treasure-and-buff-effects	This minion is safe from attacks and cannot have taunt.
+TB_FactionWar_Boss_Rag_0	Swat Fly	HERO_POWER	NEUTRAL	2	0	0	True	classpower:WARLOCK:warlock_sanguine_pact;content:HeroPower:warlock_sanguine_pact				run-player-powers+active-treasures	<b>Hero Power</b>\nDeal $3 damage to random enemy, for now... @spelldmg
+TB_FireFestEnch	Conflagrate	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_stoneskin;contentfx:stoneskin_idol:fx_stoneskin				run-passive-treasure-and-buff-effects	Gains Attack for each minion killed.
+TB_Firefest2_003e	Firey	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_thrifty;contentfx:thrifty_gloves:fx_thrifty				run-passive-treasure-and-buff-effects	+2/+2.
+TB_Firefest2_005e	Frostbitten	ENCHANTMENT	NEUTRAL	0	0	0	True	content:Effect:fx_spark_lantern;contentfx:spark_lantern:fx_spark_lantern				run-passive-treasure-and-buff-effects	+4 Health.
+TB_Firefest2_Ahune_HP	Freezing Touch	HERO_POWER	NEUTRAL	2	0	0	True	classpower:MAGE:mage_rimebite;content:HeroPower:mage_rimebite				run-player-powers+active-treasures	<b>Hero Power</b>\n Deal $1 damage. If this kills a minion, summon a Frost Elemental. @spelldmg
+TB_FoxBlessing1	Leech Blessing	ENCHANTMENT	NEUTRAL	1	0	0	True	content:Effect:fx_old_map;contentfx:old_map:fx_old_map				run-passive-treasure-and-buff-effects	<b>Lifesteal</b>
+TB_FoxBlessing2	Deadly Blessing	ENCHANTMENT	NEUTRAL	1	0	0	True	content:Effect:fx_keen_eye;contentfx:keen_eye:fx_keen_eye				run-passive-treasure-and-buff-effects	<b>Poisonous</b>
+TB_HeadlessHorseman_HP1	Slash	HERO_POWER	NEUTRAL	0	0	0	True	bosspower:lantern_thief:passive_pilfer;content:PassivePower:passive_pilfer				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nDeal 2 damage randomly split among all enemies.
+TB_HeadlessHorseman_HP3	Conscript	HERO_POWER	NEUTRAL	0	0	0	True	bosspower:hedge_witch:passive_overgrowth;content:PassivePower:passive_overgrowth				run-boss-powers-passives-shrines+heroes	<b>Passive Hero Power</b>\nYour minions count as Pirates.
+TB_HeadlessHorseman_HP4	Witchcraft	HERO_POWER	NEUTRAL	0	0	0	True	bosspower:ashen_abbess:passive_vigil;content:PassivePower:passive_vigil				run-boss-powers-passives-shrines+heroes	<b>Passive Hero Power</b>\nIf you have enough mana, your spells cost double and cast a second copy.
+TB_HeadlessHorseman_HP5	Sense Weakness	HERO_POWER	NEUTRAL	0	0	0	True	bosspower:tollkeeper:passive_tithe;content:PassivePower:passive_tithe				run-boss-powers-passives-shrines+heroes	<b>Passive Hero Power</b>\nWhenever a non-<b>Boss</b> enemy survives damage, summon a 1/1 Cat.
+TB_HeadlessHorseman_HP6	Mummification	HERO_POWER	NEUTRAL	0	0	0	True	bosspower:golemancer:passive_discipline;content:PassivePower:passive_discipline				run-boss-powers-passives-shrines+heroes	<b>Passive Hero Power</b>\nGive all your summoned minions <b>Reborn</b>
+TB_Henchmania_ChuH	Undermine	HERO_POWER	WARRIOR	2	0	0	True	classpower:DRUID:druid_rootcall;content:HeroPower:druid_rootcall				run-player-powers+active-treasures	<b>Hero Power</b>\nShuffle an Explosive into your opponent's deck.
+TB_Henchmania_MyraH	Necrium Infusion	HERO_POWER	ROGUE	2	0	0	True	classpower:PRIEST:priest_ward_of_faith;content:HeroPower:priest_ward_of_faith				run-player-powers+active-treasures	<b>Hero Power</b>\nTrigger a random friendly minion's <b>Deathrattle</b>.
+TB_John_002p	Magic Candle	HERO_POWER	NEUTRAL	2	0	0	True	classpower:WARRIOR:sellsword_war_cry;content:HeroPower:sellsword_war_cry				run-player-powers+active-treasures	<b>Hero Power</b>\nFind a Treasure!
+TB_LOEA13_2	Ancient Power	HERO_POWER	DRUID	0	0	0	True	bosspower:gilded_king:passive_hoard;content:PassivePower:passive_hoard				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nGive each player a random card. It costs (0).
+TB_LevelUp_001	Level Up!	HERO_POWER	NEUTRAL	2	0	0	True	classpower:WARRIOR:sellsword_shield_wall;content:HeroPower:sellsword_shield_wall				run-player-powers+active-treasures	Level up all the spells in your hand and deck.
+TB_MammothParty_hp001	Decorate	HERO_POWER	NEUTRAL	0	0	0	True	content:PassivePower:shrine_bulwark_3				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nCreate *{0}* |4(decoration, decorations) for the Tavern.\nProgress: {1}/25
+TB_MammothParty_hp002	Pelt	HERO_POWER	NEUTRAL	0	0	0	True	content:PassivePower:shrine_embers_1				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nDeal 3 damage to the Piñata.
+TB_MechWar_Boss1_HeroPower	Hello! Hello! Hello!	HERO_POWER	NEUTRAL	2	0	0	True	bosspower:clockwork_tyrant:boss_overclock;content:HeroPower:boss_overclock				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nGive your lowest attack minion <b>Divine Shield</b> and <b>Taunt</b>.
+TB_MechWar_Boss2_HeroPower	Boom Bot Jr.	HERO_POWER	NEUTRAL	0	0	0	True	bosspower:devouring_maw:passive_devour;content:PassivePower:passive_devour				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nDeal 2 damage randomly split among all enemies.
+TB_RoadToNR_DinoHP	Closer Than It Looks	HERO_POWER	NEUTRAL	0	0	0	True	content:PassivePower:shrine_embers_2				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nDestroy the left-most enemy minion.
+TB_RoadToNR_Finley_HP	Power Up!	HERO_POWER	PALADIN	2	0	0	True	classpower:HUNTER:hunter_pack_whistle;content:HeroPower:hunter_pack_whistle				run-player-powers+active-treasures	[x]<b>Hero Power</b>\nGive a minion\n<b>Divine Shield</b> & <b>Windfury</b>.
+TB_RoadToNR_MurgathaHP	Mrrgl-ution	HERO_POWER	SHAMAN	2	0	0	True	classpower:PRIEST:priest_penitent_lash;content:HeroPower:priest_penitent_lash				run-player-powers+active-treasures	<b>Hero Power</b>\nTransform a friendly minion into a random murloc that costs (1) more. <i>Max cost: (5)</i>
+TB_RoadToNR_OrgrimmarHP	Curious Bystander	HERO_POWER	NEUTRAL	0	0	0	True	content:PassivePower:shrine_embers_3				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nSummon a random Orgrimmar citizen
+TB_RoadToNR_RenoHP	Practice	HERO_POWER	MAGE	2	0	0	True	classpower:PALADIN:paladin_vow_of_light;content:HeroPower:paladin_vow_of_light				run-player-powers+active-treasures	<b>Hero Power</b>\nCast a random portal with random targets.
+TB_SPT_BossHeroPower	Barracks	HERO_POWER	NEUTRAL	0	0	0	True	content:PassivePower:shrine_dawn_1				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nSummon a random Stormwind Soldier.
+TB_SPT_DALA_BossHeroPower	Dalaran Defenders	HERO_POWER	NEUTRAL	0	0	0	True	content:PassivePower:shrine_dawn_2				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nSummon a random defender of Dalaran.
+TB_SPT_DPromoHP	Diabolical Powers	HERO_POWER	INVALID	0	0	0	True	content:PassivePower:shrine_bulwark_1				run-boss-powers-passives-shrines+heroes	Summon a random Imp.
+TB_SPT_DPromoHP2	So Many...	HERO_POWER	NEUTRAL	0	0	0	True	content:PassivePower:shrine_bulwark_2				run-boss-powers-passives-shrines+heroes	Whenever a Hell Bovine Dies, draw a card.
+TB_SPT_MTH_BossHeroPower	Party Barracks	HERO_POWER	NEUTRAL	0	0	0	True	content:PassivePower:shrine_dawn_3				run-boss-powers-passives-shrines+heroes	<b>Hero Power</b>\nSummon a random Stormwind Partygoer.
+TB_TempleOutrun_Lazul_HP3	Return Fateful	HERO_POWER	NEUTRAL	2	0	0	True	classpower:PALADIN:paladin_lantern_march;content:HeroPower:paladin_lantern_march				run-player-powers+active-treasures	<b>Hero Power</b>\nSummon a friendly <b>Deathrattle</b> minion that died this game.
+TB_TempleOutrun_Toggwaggle_HP	Fool's Gold	HERO_POWER	NEUTRAL	2	0	0	True	classpower:SHAMAN:shaman_spirit_kindling;content:HeroPower:shaman_spirit_kindling				run-player-powers+active-treasures	<b>Hero Power</b>\nReduce the cost of a random card in your hand to (0).
+TIME_009	Gelbin of Tomorrow	MINION	PALADIN	8	6	6	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	[x]<b>Fabled</b>\n<b>Battlecry:</b> Put one of each\nAura from your deck into\nthe battlefield.
+TIME_009t1	Gnomish Aura	SPELL	PALADIN	4	0	0	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	[x]<b>Tradeable</b>\nAt the end of your turn,\nrestore #4 Health to all your\ncharacters. Lasts @ turns.
+TIME_009t2	Mekkatorque's Aura	SPELL	PALADIN	5	0	0	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	[x]<b>Tradeable</b>. At the end\nof your turn, give a random\nfriendly minion +4/+4 and\n<b>Divine Shield</b>. Lasts @ turns.
+TIME_015	Hardlight Protector	MINION	PALADIN	2	2	1	True	starter:paladin_lantern				class-PALADIN	[x]<b>Divine Shield</b>\n<b>Battlecry:</b> Restore #3 Health\nto your hero and give them\n<b>Divine Shield</b>.
+TIME_019	Manifested Timeways	MINION	PALADIN	4	3	3	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	<b>Battlecry:</b> If you control\nan Aura,& deal 3 damage\nto all enemies.
+TIME_030	Divergence	SPELL	WARLOCK	5	0	0	True	bossdeck:clockwork_tyrant:npc-warlock-pig				boss-clockwork_tyrant+boss-hollow_sovereign	Split a random\nminion in your hand into two halves.
+TIME_030e1	Divergent	ENCHANTMENT	WARLOCK	0	0	0	True		TIME_030	script		boss-clockwork_tyrant+boss-hollow_sovereign	Cost split in half.
+TIME_030e2	Diverged	ENCHANTMENT	WARLOCK	0	0	0	True		TIME_030	script		boss-clockwork_tyrant+boss-hollow_sovereign	Attack and Health split in half.
+TIME_034	Stadium Announcer	MINION	WARRIOR	4	3	3	True	bossdeck:hollow_sovereign:npc-dragon-warrior			EffectContext.PickRandomCard	boss-clockwork_tyrant+boss-hollow_sovereign	[x]<b>Rewind</b>\n<b>Battlecry:</b> Both players\nequip a random weapon.\nGive yours +1/+1.
+TIME_034e	Upper Hand	ENCHANTMENT	WARRIOR	0	0	0	True		TIME_034	script		boss-clockwork_tyrant+boss-hollow_sovereign	+1/+1.
+TIME_035	Time Machine	MINION	NEUTRAL	6	6	6	True	bundle:bundle_neutral_mechanical			EffectContext.PickRandomCard	neutral-bundles	<b>Taunt</b>\n<b>Deathrattle:</b>& Get a random <b>Rewind</b> card.
+TIME_038	Mister Clocksworth	MINION	NEUTRAL	8	3	3	True	bossdeck:clockwork_tyrant:npc-warlock-pig			EffectContext.PickRandomCard	boss-clockwork_tyrant+boss-hollow_sovereign	[x]<b>Rewind</b>, <b>Rewind</b>, <b>Rewind</b>\n<b>Battlecry:</b> Summon 2 random\n<b>Legendary</b> minions.
+TIME_045	Whelp of the Infinite	MINION	NEUTRAL	3	1	4	True	starter:priest_wyrmwatch				class-PRIEST	<b>Poisonous</b>\n<b>Reborn</b>
+TIME_046	Cyborg Patriarch	MINION	NEUTRAL	3	3	12	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Dormant</b> for 3 turns.\n<b>Taunt</b>
+TIME_046e	Prime Ape	ENCHANTMENT	NEUTRAL	0	0	0	True		TIME_046	script		leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Dormant</b>. Awaken in @ |4(turn, turns).
+TIME_056	Whelp of the Bronze	MINION	NEUTRAL	3	4	1	True	starter:priest_wyrmwatch				class-PRIEST	<b>Lifesteal</b>\n<b>Divine Shield</b>
+TIME_060	Quantum Destabilizer	MINION	NEUTRAL	3	4	9	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	This minion takes double damage from all sources.
+TIME_064	Chrono-Lord Deios	MINION	NEUTRAL	7	4	8	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	[x]Your <b>Battlecries</b>,\n<b>Deathrattles</b>, Hero Power,\nand end of turn effects\ntrigger twice.
+TIME_211	Lady Azshara	MINION	DRUID	5	5	5	True	bossdeck:sleepless_one:npc-druid-azshara				boss-gilded_king+boss-sleepless_one	[x]<b>Fabled</b>. <b>Choose One -</b>\nEmpower Zin-Azshari; or\nThe Well of Eternity. <i>(The\n__other gets destroyed!)</i>
+TIME_211t1	The Well of Eternity	LOCATION	DRUID	4	0	3	True	bossdeck:sleepless_one:npc-druid-azshara			EffectContext.PickRandomCard	boss-gilded_king+boss-sleepless_one	Fill your hand\nwith random\n<b>Temporary</b> spells.
+TIME_211t1te	Eternalized	ENCHANTMENT	DRUID	0	0	0	True		TIME_211t1	script		boss-gilded_king+boss-sleepless_one	Casts twice.
+TIME_211t2	Zin-Azshari	LOCATION	DRUID	4	0	3	True	bossdeck:sleepless_one:npc-druid-azshara				boss-gilded_king+boss-sleepless_one	Summon a copy of a friendly minion.
+TIME_211t2te	The City's Strength	ENCHANTMENT	DRUID	0	0	0	True		TIME_211t2	script		boss-gilded_king+boss-sleepless_one	Doubled stats.
+TIME_427	Cleansing Lightspawn	MINION	PRIEST	4	2	3	True	bundle:bundle_priest_elemental				class-PRIEST	[x]<b>Lifesteal</b>\n<b>Battlecry:</b> Deal damage\nto an enemy minion equal\n___to this minion's Health.
+TIME_432	Intertwined Fate	SPELL	PRIEST	3	0	0	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	<b>Discover</b> a copy of a card from your deck and one from your opponent's.
+TIME_433	Cease to Exist	SPELL	PRIEST	3	0	0	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	<b>Rewind</b>\n<b>Silence</b> and destroy a random enemy minion.
+TIME_600	Precise Shot	SPELL	HUNTER	2	0	0	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	Deal $3 damage.\nIf this is EXACTLY in the center of your hand,\ndeal $5 instead.
+TIME_601	Arrow Retriever	MINION	HUNTER	2	3	1	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	<b>Battlecry:</b>& Draw until you have 3 cards.
+TIME_603	Ticking Timebomb	MINION	HUNTER	2	1	1	True	starter:hunter_scrapyard				class-HUNTER	<b>Deathrattle:</b>& Destroy a random enemy minion.
+TIME_605	Epoch Stalker	MINION	HUNTER	6	3	4	True	bundle:bundle_hunter_battlecry				class-HUNTER	<b>Rush</b>, <b>Elusive</b>\n<b>Battlecry:</b>& Summon a\ncopy of this.
+TIME_606	Quel'dorei Fletcher	MINION	HUNTER	1	1	3	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	Your Hero Power costs\n(0) while your hand has\n3 or less cards.
+TIME_606e	Fletching	ENCHANTMENT	HUNTER	0	0	0	True		TIME_606	script		boss-ember_matron+boss-devouring_maw	Your Hero Power costs (0).
+TIME_609	Ranger General Sylvanas	MINION	HUNTER	3	2	4	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	[x]<b>Fabled</b>. <b>Battlecry:</b> Deal 2\ndamage to all enemies.\n____If you've played Alleria or____\n__Vereesa, repeat for each.
+TIME_609t1	Ranger Captain Alleria	MINION	HUNTER	3	2	4	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	[x]<b>Battlecry:</b> <b>Discover</b> a spell.\nIf you've played Sylvanas or\nVereesa, repeat for each.
+TIME_609t2	Ranger Initiate Vereesa	MINION	HUNTER	3	2	4	True	bossdeck:devouring_maw:npc-hunter-face				boss-ember_matron+boss-devouring_maw	[x]<b>Battlecry:</b> Give minions in\nyour deck +1/+1. If you've\nplayed Alleria or Sylvanas,\nrepeat for each.
+TIME_609t2e	Windrunner's Allegiance	ENCHANTMENT	HUNTER	0	0	0	True		TIME_609t2	script		boss-ember_matron+boss-devouring_maw	+1/+1.
+TIME_700	Chronological Aura	SPELL	PALADIN	5	0	0	True	bossdeck:hollow_regent:npc-pure-paladin				boss-hollow_regent+boss-lady_of_thorns	At the end of your turn, summon a 3/5 Dragon with <b>Taunt</b>.\nLasts @ turns.
+TIME_701	Waveshaping	SPELL	DRUID	1	0	0	True	bossdeck:lady_of_thorns:npc-chef-druid;bossdeck:sleepless_one:npc-druid-azshara				boss-hollow_regent+boss-lady_of_thorns	<b>Discover</b> a card from your deck. The others get put on the bottom.
+TIME_702	Ebb and Flow	SPELL	DRUID	2	0	0	True	bossdeck:lady_of_thorns:npc-chef-druid;bossdeck:sleepless_one:npc-druid-azshara				boss-hollow_regent+boss-lady_of_thorns	Deal $3 damage.\nIf you played a minion while holding this,\ngain 5 Armor.
+TIME_704	Highborne Mentor	MINION	DRUID	7	6	6	True	bundle:bundle_druid_battlecry				class-DRUID-1	[x]<b>Battlecry:</b> Get a 2/2 Pupil.\n<b>Discover</b> a spell that costs\n(7) or more from the past\nto teach it.
+TIME_711	Flashback	SPELL	ROGUE	2	0	0	True	bundle:bundle_rogue_spells				class-ROGUE	Summon two random 1-Cost minions from the past. <b>Combo:</b> With +1 Attack.
+TIME_711e	Memories	ENCHANTMENT	ROGUE	0	0	0	True		TIME_711	script		class-ROGUE	+1 Attack.
+TIME_712	Dethrone	SPELL	ROGUE	7	0	0	True	bundle:bundle_rogue_spells			EffectContext.PickRandomCard	class-ROGUE	Destroy a minion. <b>Combo:</b> Summon a random 8-Cost minion.
+TIME_857	Alter Time	SPELL	MAGE	4	0	0	True	starter:mage_survey				class-MAGE	<b>Discover</b> two Arcane spells from the past. They cost (2) less.
+TIME_858	Temporal Construct	MINION	MAGE	7	5	5	True	bundle:bundle_mage_battlecry				class-MAGE	[x]<b>Battlecry:</b> Deal 5 damage\nto an enemy minion.\nDraw cards equal to the\nexcess damage.
+TIME_EVENT_999	Sands of Time	SPELL	NEUTRAL	1	0	0	True	bossdeck:clockwork_tyrant:npc-warlock-pig				boss-clockwork_tyrant+boss-hollow_sovereign	<b>Rewind</b>\n<b>Discover</b> a spell from\nANY class. <i>(Or just your class after you <b>Rewind</b>!)</i>
+TLC_100	Elise the Navigator	MINION	NEUTRAL	4	3	5	True	bossdeck:sleepless_one:npc-druid-azshara				boss-gilded_king+boss-sleepless_one	<b>Battlecry:</b> If your deck started with 10 cards of different Costs, craft a custom location.
+TLC_106	Endbringer Umbra	MINION	NEUTRAL	7	6	6	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	[x]<b>Battlecry:</b> Trigger the\n<b>Deathrattles</b> of 5\nfriendly minions that\ndied this game.
+TLC_226	Conjured Bookkeeper	MINION	MAGE	3	2	2	True	bundle:bundle_mage_elemental;starter:mage_kindled				class-MAGE	<b>Deathrattle:</b> Draw a spell. <b>Kindred:</b>& Summon a copy of this.
+TLC_240	Tyrannogill	MINION	PALADIN	6	6	3	True	bundle:bundle_paladin_deathrattle				class-PALADIN	[x]<b>Rush</b>\n<b>Deathrattle:</b> Summon three\n2/1 Murlocs. Give them each\na random <b>Bonus Effect</b>.
+TLC_240t	Dinoloc	MINION	PALADIN	2	2	1	True		TLC_240	script;tag1452		class-PALADIN	
+TLC_240t2	Dinoloc	MINION	PALADIN	2	2	1	True		TLC_240	script		class-PALADIN	
+TLC_240t3	Dinoloc	MINION	PALADIN	2	2	1	True		TLC_240	script		class-PALADIN	
+TLC_242	Ancient Stegodon	MINION	NEUTRAL	3	1	5	True	bundle:bundle_neutral_beast				neutral-bundles	<b>Battlecry:</b> Choose to\ngain <b>Taunt</b>, <b>Poisonous</b>,\nor +1/+1.
+TLC_249	Sizzling Cinder	MINION	NEUTRAL	1	2	1	True	bossdeck:devouring_maw:npc-hunter-face	TLC_482	script;tag1452		boss-ember_matron+boss-devouring_maw	<b>Deathrattle:</b>& Deal 2 damage randomly split among all enemies.
+TLC_334	Relic of Kings	SPELL	MAGE	7	0	0	True	bundle:bundle_mage_spells				class-MAGE	<b>Discover</b> a spell from any class that costs (8) or more. It costs (1).
+TLC_451	Cursed Catacombs	SPELL	WARLOCK	0	0	0	True	bossdeck:clockwork_tyrant:npc-warlock-pig				boss-clockwork_tyrant+boss-hollow_sovereign	<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.
+TLC_461	Scrappy Scavenger	MINION	MAGE	1	1	1	True	starter:mage_survey			EffectContext.Discover;OfflinePoolFilter.Discover	class-MAGE	[x]<b>Battlecry:</b>& <b>Discover</b> a\ncard with Cost equal to your\nremaining Mana Crystals.
+TLC_466	Story of Lakkari	SPELL	WARLOCK	7	0	0	True	bundle:bundle_warlock_spells				class-WARLOCK	[x]At the end of your turn,\ndiscard a card and fill\nyour board with 3/2 Imps.\nLasts 3 turns.
+TLC_469	Tunnel Terror	MINION	WARLOCK	3	4	3	True	bundle:bundle_warlock_deathrattle			EffectContext.PickRandomCard	class-WARLOCK	<b>Deathrattle:</b>& Get two random <b>Temporary</b>\n2-Cost minions.
+TLC_482	Slagclaw	MINION	SHAMAN	5	3	4	True	bossdeck:ember_matron:npc-zee-shaman;starter:shaman_kindred				class-SHAMAN	[x]<b>Battlecry:</b> Summon two\n2/1 Sizzling Cinders.\n<b>Kindred:</b> Trigger your Sizzling\nCinders' <b>Deathrattles.</b>
+TLC_515	Cultist Map	SPELL	ROGUE	2	0	0	True	starter:rogue_wayfinder				class-ROGUE	<b>Discover</b> a card from your deck. If you play it this turn, also pick one of the others.
+TLC_600	Windpeak Wyrm	MINION	WARRIOR	8	6	6	True	bossdeck:hollow_sovereign:npc-dragon-warrior				boss-clockwork_tyrant+boss-hollow_sovereign	[x]<b>Battlecry:</b> Deal 5 damage\nand gain 5 Armor.\n<b>Kindred:</b> Costs (2) less.
+TLC_606	Latorvian Armorer	MINION	WARRIOR	3	3	3	True	bundle:bundle_warrior_battlecry				class-WARRIOR	<b>Battlecry:</b> Deal 2 damage to an enemy minion. If it dies,& gain 5 Armor.
+TLC_813	Purifying Vines	SPELL	PRIEST	1	0	0	True		TLC_820	scriptcard;tag1078;tag1452		class-PRIEST	Choose a minion.\nIf it's friendly, give it +2 Health. If it's an enemy, give it -2 Health.
+TLC_813e	Verdant Vines	ENCHANTMENT	PRIEST	0	0	0	True		TLC_813	script		class-PRIEST	+2 Health.
+TLC_813e2	Withering Vines	ENCHANTMENT	PRIEST	0	0	0	True		TLC_813	script		class-PRIEST	-2 Health.
+TLC_814	Twilight Mender	MINION	PRIEST	3	3	4	True	bundle:bundle_priest_deathrattle			EffectContext.PickRandomCard	class-PRIEST	<b>Deathrattle:</b>& Get a random Holy and Shadow spell.
+TLC_817	Reach Equilibrium	SPELL	PRIEST	1	0	0	True	bossdeck:gilded_king:npc-priest-reborn				boss-gilded_king+boss-sleepless_one	[x]<b>Quest:</b> Cast 4 Holy spells\n<b>Reward:</b> Life's Breath.\n<b>Quest:</b> Cast 4 Shadow spells.\n<b>Reward:</b> Death's Touch.
+TLC_817t5	Sol'etos, Cycle's Rebirth	MINION	PRIEST	5	8	8	True		TLC_817	tag1089		boss-gilded_king+boss-sleepless_one	[x]<b>Taunt</b>, <b>Reborn</b>. <b>Battlecry:</b>\nSummon a copy of this.\n<b>Deathrattle:</b> Deal 5 damage\nto a random enemy.
+TLC_820	Glade Ecologist	MINION	PRIEST	1	2	1	True	starter:priest_grave				class-PRIEST	[x]<b>Deathrattle:</b> Get a 1-Cost\nHoly spell that gives a\nminion +2 or -2 Health.
+TLC_821	Wilted Shadow	MINION	PRIEST	7	6	7	True	bundle:bundle_priest_elemental				class-PRIEST	[x]<b>Lifesteal</b>\nWhenever you heal an\nenemy, this attacks it.
+TLC_831	Pterrordax Egg	MINION	NEUTRAL	3	0	3	True	bundle:bundle_neutral_deathrattle				neutral-bundles	[x]<b>Deathrattle:</b> Summon\na 3/3 Pterrordax that\nsteals 1 Health from\nall other minions.
+TLC_831e	Pterrified	ENCHANTMENT	NEUTRAL	0	0	0	True		TLC_831	script		neutral-bundles	Reduced Health.
+TLC_831e2	Pterrifying	ENCHANTMENT	NEUTRAL	0	0	0	True		TLC_831	script		neutral-bundles	Increased Health.
+TLC_831t	Juvenile Pterrordax	MINION	NEUTRAL	3	3	3	True		TLC_831	script;tag1452		neutral-bundles	
+TRL_071	Bloodsail Howler	MINION	ROGUE	2	1	1	True	starter:rogue_corsair				class-ROGUE	[x]<b>Rush</b>\n<b>Battlecry:</b> Gain +1/+1\nfor each other Pirate\nyou control.
+TRL_077	Gurubashi Hypemon	MINION	ROGUE	7	5	7	True	bundle:bundle_rogue_battlecry			DiscoverCriteria;DiscoverTask;DiscoverType.BATTLECRY	class-ROGUE	<b>Battlecry:</b> <b>Discover</b> a 1/1 copy of a <b>Battlecry</b> minion. It costs (1).
+TRL_077e	Hype!	ENCHANTMENT	NEUTRAL	0	0	0	True		TRL_077	scriptcard		class-ROGUE	Gurubashi Hypemon made this 1/1.
+TRL_305	A New Challenger...	SPELL	PALADIN	7	0	0	True	bundle:bundle_paladin_spells			DiscoverCriteria;DiscoverTask;DiscoverType.SIX_COST_SUMMON	class-PALADIN	<b>Discover</b> a 6-Cost minion. Summon it with <b>Taunt</b> and <b>Divine Shield</b>.
+TRL_311	Arcanosaur	MINION	MAGE	6	3	3	True	bundle:bundle_mage_elemental				class-MAGE	<b>Battlecry:</b> If you played an_Elemental last turn, deal_3_damage_to_all other minions.
+TRL_360	Overlord's Whip	WEAPON	WARRIOR	3	2	0	True	bundle:bundle_warrior_weapons;starter:warrior_redfury				class-WARRIOR	After you play a minion, deal 1 damage to it.
+TRL_363	Saronite Taskmaster	MINION	NEUTRAL	1	2	3	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Deathrattle:</b> Summon a 0/3 Free Agent with <b>Taunt</b> for_your opponent.
+TRL_363t	Free Agent	MINION	NEUTRAL	1	0	3	True		TRL_363	scriptcard		leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	<b>Taunt</b>
+TRL_509	Banana Buffoon	MINION	NEUTRAL	3	2	2	True	bundle:bundle_neutral_battlecry				neutral-bundles	<b>Battlecry:</b> Add 2 Bananas to your hand.
+TRL_509t	Bananas	SPELL	NEUTRAL	1	0	0	True		TRL_509	scriptcard		neutral-bundles	Give a minion +1/+1.
+TRL_509te	Bananas	ENCHANTMENT	NEUTRAL	0	0	0	True		TRL_509t	scriptcard		neutral-bundles	Has +1/+1.
+TRL_550	Amani War Bear	MINION	NEUTRAL	7	5	7	True	bundle:bundle_neutral_taunt				neutral-bundles	<b>Rush</b>\n<b>Taunt</b>
+TRL_551	Reckless Diretroll	MINION	WARLOCK	3	2	6	True	starter:warlock_ashen				class-WARLOCK	<b>Taunt</b>\n<b>Battlecry:</b> Discard your lowest Cost card.
+TRL_569	Crowd Roaster	MINION	NEUTRAL	7	7	4	True	bundle:bundle_neutral_dragon				neutral-bundles	[x]<b>Battlecry:</b> If you're holding\na Dragon, deal 7 damage\nto an enemy minion.
+ULD_181	Earthquake	SPELL	SHAMAN	7	0	0	True	bundle:bundle_shaman_spells				class-SHAMAN	Deal $5 damage to all minions, then deal $2 damage to all minions.
+ULD_191e	Assisting!	ENCHANTMENT	NEUTRAL	0	0	0	True		CORE_ULD_191	scriptcard		boss-ember_matron+boss-devouring_maw	+2 Health.
+ULD_273	Overflow	SPELL	DRUID	7	0	0	True	bundle:bundle_druid_spells				class-DRUID-2	Restore #5 Health\nto all characters.\nDraw 5 cards.
+UNG_002	Volcanosaur	MINION	NEUTRAL	7	5	6	True	bundle:bundle_neutral_beast				neutral-bundles	<b>Battlecry:</b> <b>Adapt</b>, then_<b>Adapt</b>.
+UNG_010	Sated Threshadon	MINION	NEUTRAL	7	5	7	True	bundle:bundle_neutral_deathrattle				neutral-bundles	<b>Deathrattle:</b> Summon three 1/1 Murlocs.
+UNG_018	Flame Geyser	SPELL	MAGE	2	0	0	True	starter:mage_kindled				class-MAGE	Deal $2 damage.\nAdd a 1/2 Elemental to_your hand. @spelldmg
+UNG_019	Air Elemental	MINION	SHAMAN	1	2	1	True	starter:shaman_kindred				class-SHAMAN	Can't be targeted by spells or Hero Powers.
+UNG_032	Crystalline Oracle	MINION	PRIEST	1	1	1	True	bundle:bundle_priest_elemental;starter:priest_grave				class-PRIEST	[x]<b>Deathrattle:</b> Copy a card\nfrom your opponent's deck\n_and add it to your hand.
+UNG_049	Tar Lurker	MINION	WARLOCK	5	1	7	True	starter:warlock_leechwall				class-WARLOCK	<b>Taunt</b>\nHas +3 Attack during your opponent's turn.
+UNG_085	Emerald Hive Queen	MINION	NEUTRAL	1	2	3	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	Your minions cost (2) more.
+UNG_086	Giant Anaconda	MINION	DRUID	7	5	3	True	bundle:bundle_druid_beast				class-DRUID-1	<b>Deathrattle:</b> Summon a minion from your hand with 5 or more Attack.
+UNG_109	Elder Longneck	MINION	DRUID	3	5	1	True	bundle:bundle_druid_beast				class-DRUID-1	<b>Battlecry:</b> If you're holding a minion with 5 or more Attack, <b>Adapt</b>.
+UNG_202	Fire Plume Harbinger	MINION	SHAMAN	2	1	1	True	starter:shaman_kindred				class-SHAMAN	<b>Battlecry:</b> Reduce the Cost of Elementals in your hand_by (1).
+UNG_208	Stone Sentinel	MINION	SHAMAN	7	4	4	True	bundle:bundle_shaman_battlecry				class-SHAMAN	<b>Battlecry:</b> If you played an Elemental last turn, summon two 2/3 Elementals with <b>Taunt</b>.
+UNG_809t1	Flame Elemental	MINION	NEUTRAL	1	1	2	True		CORE_UNG_809;UNG_845	scriptcard;tag1452		class-SHAMAN	
+UNG_813	Stormwatcher	MINION	NEUTRAL	7	4	8	True	bundle:bundle_neutral_elemental				neutral-bundles	<b>Windfury</b>
+UNG_829t3	Nether Imp	MINION	WARLOCK	2	3	2	True		TLC_466	tag1452		class-WARLOCK	
+UNG_830	Cruel Dinomancer	MINION	WARLOCK	6	5	5	True	bundle:bundle_warlock_deathrattle				class-WARLOCK	[x]<b>Deathrattle:</b> Summon a\nrandom minion you\ndiscarded this game.
+UNG_844	Humongous Razorleaf	MINION	NEUTRAL	3	4	8	True	bossdeck:ashen_abbess:boss-priest-b2;bossdeck:frostwarden:boss-mage-b2;bossdeck:golemancer:boss-paladin-b2;bossdeck:pit_champion:boss-warrior-b2;bossdeck:storm_herald:boss-shaman-b2;bossdeck:tollkeeper:boss-warlock-b2				leech-family+boss-tunnel_rat+boss-ashen_abbess+band2-misc	Can't attack.
+UNG_845	Igneous Elemental	MINION	NEUTRAL	3	2	3	True	bundle:bundle_neutral_elemental;starter:shaman_kindred				class-SHAMAN	<b>Deathrattle:</b> Add two 1/2 Elementals to your hand.
+UNG_846	Shimmering Tempest	MINION	MAGE	2	2	1	True	starter:mage_kindled				class-MAGE	<b>Deathrattle:</b> Add a random Mage spell to your hand.
+UNG_847	Blazecaller	MINION	NEUTRAL	7	6	6	True	bundle:bundle_neutral_battlecry				neutral-bundles	<b>Battlecry:</b> If you played an_Elemental last turn, deal 5 damage.
+UNG_915	Crackling Razormaw	MINION	HUNTER	2	3	2	True	starter:hunter_kennel				class-HUNTER	<b>Battlecry:</b> <b>Adapt</b> a friendly_Beast.
+UNG_917	Dinomancy	SPELL	HUNTER	2	0	0	True	bundle:bundle_hunter_spells				class-HUNTER	Your Hero Power becomes 'Give a Beast +2/+2.'
+UNG_917e	Well Fed	ENCHANTMENT	HUNTER	0	0	0	True		UNG_917t1	scriptcard		class-HUNTER	+2/+2.
+UNG_917t1	Dinomancy	HERO_POWER	HUNTER	2	0	0	True		UNG_917	scriptcard		class-HUNTER	<b>Hero Power</b>\nGive a Beast +2/+2.
+UNG_923	Iron Hide	SPELL	WARRIOR	1	0	0	True	starter:warrior_plated				class-WARRIOR	Gain 5 Armor.
+UNG_938	Hot Spring Guardian	MINION	SHAMAN	3	2	4	True	bundle:bundle_shaman_battlecry;starter:shaman_kindred				class-SHAMAN	<b>Taunt</b>\n<b>Battlecry:</b> Restore #3_Health.
+UNG_950	Vinecleaver	WEAPON	PALADIN	7	4	0	True	bundle:bundle_paladin_weapons				class-PALADIN	[x]After your hero attacks,\nsummon two 1/1 Silver\nHand Recruits.
+UNG_953	Primalfin Champion	MINION	PALADIN	2	1	2	True	bundle:bundle_paladin_deathrattle				class-PALADIN	[x]<b>Deathrattle:</b> Return any\nspells you cast on this\nminion to your hand.
+UNG_960	Lost in the Jungle	SPELL	PALADIN	1	0	0	True	starter:paladin_lantern				class-PALADIN	Summon two 1/1 Silver Hand Recruits.
+UNG_999t10	Shrouding Mist	SPELL	NEUTRAL	0	0	0	True		UNG_109	entourage;script		class-DRUID-1	<b>Stealth</b> until your next turn.
+UNG_999t10e	Shrouding Mist	ENCHANTMENT	NEUTRAL	0	0	0	True		UNG_999t10	scriptcard		class-DRUID-1	Stealthed until your next turn.
+UNG_999t13	Poison Spit	SPELL	NEUTRAL	0	0	0	True		UNG_109	entourage;script		class-DRUID-1	<b>Poisonous</b>
+UNG_999t13e	Poison Spit	ENCHANTMENT	NEUTRAL	0	0	0	True		UNG_999t13	scriptcard		class-DRUID-1	<b>Poisonous</b>
+UNG_999t14	Volcanic Might	SPELL	NEUTRAL	0	0	0	True		UNG_109	entourage;script		class-DRUID-1	+1/+1
+UNG_999t14e	Volcanic Might	ENCHANTMENT	NEUTRAL	0	0	0	True		UNG_999t14	scriptcard		class-DRUID-1	+1/+1.
+UNG_999t2	Living Spores	SPELL	NEUTRAL	0	0	0	True		UNG_109	entourage;script		class-DRUID-1	<b>Deathrattle:</b> Summon two 1/1 Plants.
+UNG_999t2e	Living Spores	ENCHANTMENT	NEUTRAL	0	0	0	True		UNG_999t2	scriptcard		class-DRUID-1	 <b>Deathrattle:</b> Summon two 1/1 Plants.
+UNG_999t2t1	Plant	MINION	NEUTRAL	1	1	1	True		UNG_999t2e	script		class-DRUID-1	
+UNG_999t3	Flaming Claws	SPELL	NEUTRAL	0	0	0	True		UNG_109	entourage;script		class-DRUID-1	+3 Attack
+UNG_999t3e	Flaming Claws	ENCHANTMENT	NEUTRAL	0	0	0	True		UNG_999t3	scriptcard		class-DRUID-1	+3 Attack.
+UNG_999t4	Rocky Carapace	SPELL	NEUTRAL	0	0	0	True		UNG_109	entourage;script		class-DRUID-1	+3 Health
+UNG_999t4e	Rocky Carapace	ENCHANTMENT	NEUTRAL	0	0	0	True		UNG_999t4	scriptcard		class-DRUID-1	+3 Health.
+UNG_999t5	Liquid Membrane	SPELL	NEUTRAL	0	0	0	True		UNG_109	entourage;script		class-DRUID-1	<b>Elusive</b>
+UNG_999t5e	Liquid Membrane	ENCHANTMENT	NEUTRAL	0	0	0	True		UNG_999t5	scriptcard		class-DRUID-1	<b>Elusive</b>.
+UNG_999t6	Massive	SPELL	NEUTRAL	0	0	0	True		UNG_109	entourage;script		class-DRUID-1	<b>Taunt</b>
+UNG_999t6e	Massive	ENCHANTMENT	NEUTRAL	0	0	0	True		UNG_999t6	scriptcard		class-DRUID-1	<b>Taunt</b>
+UNG_999t7	Lightning Speed	SPELL	NEUTRAL	0	0	0	True		UNG_109	entourage;script		class-DRUID-1	<b>Windfury</b>
+UNG_999t7e	Lightning Speed	ENCHANTMENT	NEUTRAL	0	0	0	True		UNG_999t7	scriptcard		class-DRUID-1	<b>Windfury</b>
+UNG_999t8	Crackling Shield	SPELL	NEUTRAL	0	0	0	True		UNG_109	entourage;script		class-DRUID-1	<b>Divine Shield</b>
+UNG_999t8e	Crackling Shield	ENCHANTMENT	NEUTRAL	0	0	0	True		UNG_999t8	scriptcard		class-DRUID-1	<b>Divine Shield</b>
+WC_042e	Rising Gas	ENCHANTMENT	SHAMAN	0	0	0	True		CORE_WC_042	scriptcard		class-SHAMAN	+1 Attack.
+YOD_010	Shotbot	MINION	PALADIN	2	2	2	True	starter:paladin_wagon				class-PALADIN	<b>Reborn</b>

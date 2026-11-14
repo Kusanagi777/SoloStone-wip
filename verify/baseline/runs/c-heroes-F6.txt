@@ -1,0 +1,19 @@
+T22 DALA_Mage_HP1     heist_mage_1           boss turns 16 power-uses 8 explosives-drawn 0 decisions 35 fallbacks 0 boss hedge_witch
+T22 DALA_Mage_HP2     heist_mage_random      boss turns 10 power-uses 4 explosives-drawn 0 decisions 25 fallbacks 0 boss hedge_witch
+T22 DALA_Hunter_HP1   heist_hunter_1         boss turns 12 power-uses 5 explosives-drawn 0 decisions 23 fallbacks 0 boss hedge_witch
+T22 DALA_Hunter_HP2   heist_hunter_random    boss turns 12 power-uses 6 explosives-drawn 0 decisions 27 fallbacks 0 boss hedge_witch
+T22 DALA_Shaman_HP1   heist_shaman_1         boss turns 12 power-uses 2 explosives-drawn 0 decisions 24 fallbacks 0 boss hedge_witch
+T22 DALA_Shaman_HP2   heist_shaman_random    boss turns 10 power-uses 5 explosives-drawn 0 decisions 18 fallbacks 0 boss hedge_witch
+T22 DALA_Priest_HP1   heist_priest_1         boss turns 12 power-uses 5 explosives-drawn 0 decisions 24 fallbacks 0 boss hedge_witch
+T22 DALA_Priest_HP2   heist_priest_random    boss turns 14 power-uses 6 explosives-drawn 0 decisions 31 fallbacks 0 boss hedge_witch
+T22 DALA_Rogue_HP1    heist_rogue_1          boss turns 12 power-uses 5 explosives-drawn 0 decisions 28 fallbacks 0 boss hedge_witch
+T22 DALA_Rogue_HP2    heist_rogue_random     boss turns 14 power-uses 6 explosives-drawn 0 decisions 30 fallbacks 0 boss hedge_witch
+T22 DALA_Warrior_HP1  heist_warrior_1        boss turns 10 power-uses 4 explosives-drawn 0 decisions 19 fallbacks 0 boss hedge_witch
+T22 DALA_Warrior_HP2  heist_warrior_random   boss turns 10 power-uses 4 explosives-drawn 2 decisions 22 fallbacks 0 boss hedge_witch
+T22 DALA_Druid_HP1    heist_druid_1          boss turns 12 power-uses 5 explosives-drawn 0 decisions 28 fallbacks 0 boss hedge_witch
+T22 DALA_Druid_HP2    heist_druid_random     boss turns 12 power-uses 5 explosives-drawn 0 decisions 26 fallbacks 0 boss hedge_witch
+T22 DALA_Warlock_HP1  heist_warlock_1        boss turns 10 power-uses 4 explosives-drawn 0 decisions 21 fallbacks 0 boss hedge_witch
+T22 DALA_Warlock_HP2  heist_warlock_random   boss turns 10 power-uses 4 explosives-drawn 0 decisions 21 fallbacks 0 boss hedge_witch
+T22 DALA_Paladin_HP1  heist_paladin_1        boss turns 12 power-uses 5 explosives-drawn 0 decisions 28 fallbacks 0 boss hedge_witch
+T22 DALA_Paladin_HP2  heist_paladin_random   boss turns 12 power-uses 4 explosives-drawn 0 decisions 28 fallbacks 0 boss hedge_witch
+566 passed, 0 failed

@@ -28,7 +28,10 @@ public static class AiFingerprint
     public static string PublicText(FairBotState state)
     {
         var facts = state.Facts;
+        // A closed Secret pool is part of the decision input; absent, the text is exactly the pre-prior one.
+        string prior = GoldenPilot.SecretPriorHash(state.OpponentSecretPrior);
         return Dump(state.FingerprintGame, true) + "\nsecrets:" + N(facts.OpponentSecretCount)
+            + (prior == null ? "" : "\nsecret-prior:" + prior)
             + "\nknown-deck:" + string.Join(",", facts.OwnDeckKnowledge.OrderBy(p => p.Key, StringComparer.Ordinal)
                 .Select(p => p.Key + "=" + N(p.Value)));
     }

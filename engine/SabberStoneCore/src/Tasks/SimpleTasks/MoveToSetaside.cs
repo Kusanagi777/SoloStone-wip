@@ -34,6 +34,9 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			//entities.ForEach(p =>
 			foreach (IPlayable p in IncludeTask.GetEntities(Type, in controller, source, target, stack?.Playables))
 			{
+				// A run shrine on a board (phase 7) is destroyed instead of removed (Recycle's shuffle, a "remove from play").
+				if (SabberStoneCore.Actions.ShrineRules.InterceptLeave(p))
+					continue;
 				IPlayable removedEntity = p.Zone.Remove(p);
 				game.Log(LogLevel.INFO, BlockType.PLAY, "MoveToSetaside",
 					!game.Logging ? "" : $"{p.Controller.Name}'s {p} is moved to the setaside zone.");

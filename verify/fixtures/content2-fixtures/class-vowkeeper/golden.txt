@@ -1,0 +1,15 @@
+plan hero=HERO_04 power=CS2_101 deck=BOT_906,BOT_906,CORE_ICC_038,CS2_089,CS2_089,YOD_010,AT_075,AT_075,ICC_820,GIL_545,TB_CoOpv3_007,AT_105,TRL_509,UNG_847,CORE_EX1_509,GVG_064,OG_161 boss=cellar_matron matchSeed=386287371
+floor 3 boss=cellar_matron power=CS2_101 matchSeed=386287371
+floor 3 treasure offered=gilded_idol,grave_candle,iron_skin
+floor 3 bundle offered=bundle_neutral_beast,bundle_neutral_mechanical,bundle_paladin_weapons
+floor 4 boss=ashen_abbess power=CS2_101 matchSeed=31384249
+floor 4 bundle offered=bundle_neutral_dragon,bundle_paladin_battlecry,bundle_paladin_deathrattle
+floor 5 boss=pit_champion power=CS2_101 matchSeed=1407236679
+floor 5 treasure offered=frost_lantern,spark_lantern,warden_golem
+floor 5 bundle offered=bundle_neutral_elemental,bundle_neutral_taunt,bundle_paladin_spells
+floor 6 boss=tollkeeper power=CS2_101 matchSeed=357242481
+floor 6 bundle offered=bundle_neutral_deathrattle,bundle_neutral_mechanical,bundle_paladin_battlecry
+floor 7 boss=hollow_regent power=CS2_101 matchSeed=736989540
+floor 7 bundle offered=bundle_paladin_deathrattle,bundle_paladin_spells,bundle_paladin_weapons
+floor 8 boss=hollow_sovereign power=CS2_101 matchSeed=1615777234
+end phase=Victory deck=34 treasures=healing_spring,gilded_idol,frost_lantern

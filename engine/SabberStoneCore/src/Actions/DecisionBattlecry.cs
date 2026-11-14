@@ -33,6 +33,8 @@ namespace SabberStoneCore.Actions
             PayloadRules.CaptureGeneratedDecision(c, source.Card);
             c[DecisionRemaining] = ((c.ExtraBattlecry || CardSets.Client.Sets.MugZee.DoubleBattlecry(source)) && (source is not Minion m || m.HasBattleCry) || DarkGifts.DoublesBattlecry(source)
                 || source.Combo && c.IsComboActive && c.ControllerAuraEffects[GameTag.EXTRA_MINION_BATTLECRIES_BASE] == 1) ? 2 : 1;
+            // TRLA_154 Tribute from the Tides: additional Battlecry resolutions (BattlecryRules).
+            if (source is not Minion battlecrier || battlecrier.HasBattleCry) c[DecisionRemaining] += BattlecryRules.Additional(c);
             OverloadBlock(c, source, c.Game.History);
             RunDecisionBattlecries(c, task);
             if (!c.Game.Resolution.HasSuspendedEffect)

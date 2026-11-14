@@ -16,9 +16,10 @@ namespace SabberStoneCore.CardSets.Client.Sets
             card.ExcludeFromLegacyRandomPools = true;
             card.Power = new Power { LocationActivation = new LocationActivation {
                 Target = LocationTargetKind.None, RequiresFreeSlot = true,
+                // No LOCATION_ACTION_COOLDOWN: the card carries no tag 2353, so it refreshes on the owner's next turn.
                 Task = EffectContext.Task(context => {
                     context.SummonRightOfLocation("JAIL_877t");
-                    return context.RunLegacy(new SetGameTagTask(GameTag.LOCATION_ACTION_COOLDOWN, 1, EntityType.SOURCE));
+                    return TaskState.COMPLETE;
                 })
             } };
         }

@@ -197,13 +197,33 @@ public sealed partial class DeckPlanEvaluator : IStateEvaluator
     }
     internal double Hand(IEnumerable<FairCard> cards)
     {
+        // A held curse (LOE_007t Cursed!, which DALA_745 gives the boss: "While this is in your hand, take 2 damage at the
+        // start of your turn") is no asset: it prices the life it will cost while held (HeldCurseTicks start-of-turn ticks at
+        // the own-life weight), so playing it to be rid of it outscores a cheap development play, not only spare mana.
+        double curses = cards.Where(c => !c.Unknown).Sum(c => (double)HeldSelfDamage(c.CardId)) * HeldCurseTicks * (W.OwnLife * k.OwnLife);
         if (Brain?.HandFlat == null)
-            return cards.Sum(c => c.Unknown ? 5.5 * k.UnknownCard : HandCard(c)) * k.Hand;
-        int count = cards.Count();
-        return (Math.Min(4, count) * Brain.HandFlat.Value + Math.Max(0, Math.Min(7, count) - 4) * Brain.HandTail) * k.Hand;
+            return cards.Sum(c => c.Unknown ? 5.5 * k.UnknownCard : HandCard(c)) * k.Hand - curses;
+        int count = cards.Count(c => c.Unknown || HeldSelfDamage(c.CardId) == 0);
+        return (Math.Min(4, count) * Brain.HandFlat.Value + Math.Max(0, Math.Min(7, count) - 4) * Brain.HandTail) * k.Hand - curses;
     }
+    /// <summary>The start-of-turn ticks a held curse is priced at (<see cref="Hand"/>): the turns it would stay in hand unplayed.</summary>
+    internal const int HeldCurseTicks = 4;
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, int> heldSelfDamage =
+        new System.Collections.Concurrent.ConcurrentDictionary<string, int>(StringComparer.Ordinal);
+    /// <summary>
+    /// The damage a card deals its own holder each turn it stays in hand ("While this is in your hand, take N damage ..."),
+    /// read from the card text; 0 for every other card.
+    /// </summary>
+    internal static int HeldSelfDamage(string cardId) => cardId == null ? 0 : heldSelfDamage.GetOrAdd(cardId, id =>
+    {
+        var card = Cards.FromId(id);
+        string text = System.Text.RegularExpressions.Regex.Replace(card?.Text ?? "", @"<[^>]*>|\[x\]|[$#@]", "").Replace('_', ' ').ToLowerInvariant();
+        var m = System.Text.RegularExpressions.Regex.Match(text, @"while this is in your hand, take (\d+) damage");
+        return m.Success ? int.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture) : 0;
+    });
     private double HandCard(FairCard card)
     {
+        if (HeldSelfDamage(card.CardId) > 0) return 0;
         double generic = 2 + Math.Min(8, Math.Max(card.Cost, Cards.FromId(card.CardId).Cost)) * W.Hand;
         if (DeathHeld && card.Held != null) return Math.Max(generic, HeldValue(card, true));
         // A held attack weapon promises the same charges as an equipped one, but still costs mana to equip.
@@ -340,7 +360,8 @@ public sealed partial class DeckPlanEvaluator : IStateEvaluator
     {
         var enemy = f.Opponent;
         bool active = enemy.PlayerId == f.CurrentPlayerId;
-        int mana = active ? enemy.Mana : Math.Max(0, Math.Min(10, enemy.BaseMana + 1) - enemy.OverloadOwed);
+        // An active side's remaining mana can be negative (Overload locked past its crystals); the knapsack below needs >= 0.
+        int mana = active ? Math.Max(0, enemy.Mana) : Math.Max(0, Math.Min(10, enemy.BaseMana + 1) - enemy.OverloadOwed);
         int unknown = Math.Min(10, enemy.Hand.Count(c => c.Unknown) + (!active && enemy.DeckCount > 0 && enemy.Hand.Count < 10 ? 1 : 0));
         int spellPower = enemy.Board.Sum(c => Math.Max(0, Tag(c, GameTag.SPELLPOWER)));
         bool heroPower = !active || !enemy.HeroPower.Exhausted, boardSlot = enemy.Board.Count < 7;

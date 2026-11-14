@@ -12,6 +12,7 @@
 // GNU Affero General Public License for more details.
 #endregion
 using System.Collections.Generic;
+using System.Linq;
 using SabberStoneCore.Enums;
 
 namespace SabberStoneCore.Model.Entities
@@ -56,7 +57,19 @@ namespace SabberStoneCore.Model.Entities
 		public override bool IsPlayableByPlayer =>
 			System.Linq.Enumerable.Contains(Controller.HeroPowers, this) && !IsExhausted && !Controller.HeroPowerDisabled && base.IsPlayableByPlayer && !IsPassiveHeroPower;
 
-		public bool IsPassiveHeroPower => Card.HideStat || Card.Id == "BE_004p" || Card.Id == "JAIL_800hp1" || Card.Id == "JAIL_800hp2";
+		public bool IsPassiveHeroPower => Card.HideStat || PassiveIds.Contains(Card.Id)
+			// Phase 8: an existing client passive a Dungeon Run boss starts with (GIL_504h Bewitch), once EncounterRules started its trigger.
+			|| this[Actions.EncounterRules.PowerActive] != 0 && CardSets.DungeonRun.DungeonRunEncounters.IsExistingPassive(Card.Id);
+
+		/// <summary>Hero powers that are passive without the HIDE_STATS tag: the client-era ones plus
+		/// the Dungeon Run boss passives registered in <see cref="CardSets.DungeonRun.DungeonRunCardsGen"/>.</summary>
+		private static readonly HashSet<string> PassiveIds = new HashSet<string>(
+			new[] { "BE_004p", "JAIL_800hp1", "JAIL_800hp2" }.Concat(CardSets.DungeonRun.DungeonRunCardsGen.PassiveHeroPowers));
+
+		/// <summary>True for a passive hero power that runs its power once at the start of the game
+		/// when a hero starts with it (Dungeon Run boss passives). Other passives activate only when their hero card is played.</summary>
+		public static bool ActivatesAtGameStart(Card power) =>
+			power != null && CardSets.DungeonRun.DungeonRunCardsGen.PassiveHeroPowers.Contains(power.Id);
 
 		public override IPlayable Clone(in Controller controller)
 		{

@@ -1,0 +1,115 @@
+PASS A1 the row's plan: George and Karl with Divinity at 30 Health (fixed), one script form (Karl and George, The Silver Hand, 30 Health), four Tag Teams in the 30-card deck  (30 2)
+PASS A2 Divinity costs (2), is clickable, is not offered with no minion, and gives every minion of the boss (not the run player's) Divine Shield
+PASS A4 Tag Team (0): Karl and George comes in with The Silver Hand at his own full 30 Health; George waits on the bench with his 7 damage; the Armor stays with the side  (LOOTA_BOSS_32h/AT_132_PALADIN 30hp bench 8)
+PASS A5 the new power is fresh after the swap: The Silver Hand summons two 1/1 Recruits in the same turn
+PASS A3 Divinity is George's: as Karl the power is The Silver Hand, offered again next turn
+PASS A6 a second Tag Team brings George back with the 23 Health he left with; Karl waits with his 5 damage  (LOOTA_BOSS_15h/LOOTA_BOSS_15p 23hp)
+PASS A7 a game clone carries the bench: Tag Team in the clone brings Karl in at 25, the real game is untouched  (LOOTA_BOSS_32h/AT_132_PALADIN 25hp)
+PASS A8 the boss's fair view carries the bench too: Tag Team played there brings Karl in at 25  (ok LOOTA_BOSS_32h/AT_132_PALADIN 25hp)
+PASS A9 George is defeated: Karl takes over with his own 25 Health, the fight goes on, and the bench is empty for good  (LOOTA_BOSS_32h/AT_132_PALADIN 25hp RUNNING)
+PASS A10 with George defeated Tag Team does nothing (the card is spent, Karl stays)
+PASS A11 Karl defeated as well: the boss loses; the harvest reads form 1 after three form changes  (COMPLETE form 1 changes 3)
+PASS A2b Divinity is not offered while every minion of the boss has Divine Shield already, and is again once one lacks it
+PASS A12 George defeated before any Tag Team: Karl takes over at his full 30 Health ("switches to Karl on defeat")  (LOOTA_BOSS_32h/AT_132_PALADIN 30hp)
+PASS A12b then Karl: the boss loses
+PASS A13 Karl defeated while George waits with 10 damage: George returns at 20 Health with Divinity  (LOOTA_BOSS_15h/LOOTA_BOSS_15p 20hp)
+PASS A14 Tag Team cast by the run player does nothing (neither hero changes)
+PASS B1 Totem of the Dead is a passive hero power, started at match start and never offered
+PASS B2 Azun: the run player's Deathrattle triggers twice (Loot Hoarder draws 2)
+PASS B3 it does not stack with the run player's own Baron Rivendare (still twice)
+PASS B4 Azun: Battlecries are not doubled (Novice Engineer draws 1)
+PASS B5 Azun: the boss's Deathrattle triggers twice too (in the real game and in a game clone), and the power is not an option
+PASS B6 Jin'zo: Battle Totem is passive and the run player's Battlecry triggers twice (Novice Engineer draws 2; Elven Archer deals 2)  (yeti damage 2)
+PASS B7 it does not stack with the run player's Brann Bronzebeard (still twice), and Brann leaving does not end it  (with Brann 1)
+PASS B8 Jin'zo: Deathrattles are not doubled (Loot Hoarder draws 1)
+PASS B9 Jin'zo: the boss's Battlecry triggers twice, in the real game and in a game clone
+PASS B10 Vex: Totem of Chaos doubles the run player's Battlecries and Deathrattles
+PASS B11 Vex: and the boss's own
+PASS C1 Digest Magic is passive; the run player's spell summons one Tunnel Trogg (1/3) for the boss  (1 troggs)
+PASS C2 the boss's own spell summons nothing, and the power is never an option
+PASS C3 the Trogg arrives on the cast, before the spell resolves: Flamestrike kills the old one and the new one  (0 on board, 2 dead)
+PASS C4 with a full board nothing is summoned and nothing breaks
+PASS C5 Metabolized Magic is passive; the run player's spell draws the boss one card and it costs (1)  (hand 5->6 cost 1)
+PASS C6 the boss's own spell draws nothing
+PASS C7 with a full hand the drawn card is burned and nothing breaks
+PASS C8 Gluttonous Trogg (3/3 for 3) gains +1/+1 whenever its owner's opponent casts a spell, not from its owner's spells  (4/4)
+PASS D1 Charrrrrge! is passive; a minion the boss plays from hand gets Charge and attacks at once  (charge True hero damage 4)
+PASS D2 a summoned minion gets nothing
+PASS D3 a minion the run player plays gets nothing
+PASS E1 Ixlid starts at his own 20 Health; Sprouting Spore costs (2) and summons a Deadly Spore, a 1/1 with Poisonous  (health 20)
+PASS E2 with a full board the power is not offered
+PASS E3 the Spore deals damage to the run player's hero: the hero is destroyed and the boss wins  (COMPLETE 29)
+PASS E4 an Immune hero takes no damage and is not destroyed
+PASS E5 Poisonous: the Spore destroys the minion it damages (and dies to the 4 damage it takes)
+PASS E6 damage Armor absorbs is still damage dealt to the hero: destroyed through 5 Armor
+PASS E7 a Deadly Spore in the run player's hands destroys the boss's hero the same way
+PASS E8 the card: Deadly Spore, a scripted 1/1 for (1) with the Poisonous tag and the client's text
+PASS F1 Arcane Infusion costs (1) and adds Arcane Missiles to the boss's hand
+PASS F2 with a full hand it is not offered
+PASS G1 Giant Stomp costs (2) and deals 1 damage to every enemy minion (not the hero, not the boss's minions)
+PASS G2 it is not offered while the run player has no minion
+PASS H1 Fading Light costs (2) and gives a minion -1 Attack (its own enchantment)  (6->5)
+PASS H2 any minion with Attack left is a legal target (either side); a 0-Attack minion and the heroes are not  (CS2_182,CS2_182)
+PASS I1 Join the Fray costs (2): each player Recruits one minion of its own deck  (1/1)
+PASS I2 the summoned minions are the deck's own cards (the run player's becomes a public board minion; nothing else of the deck moves)
+PASS I3 a deck with no minion Recruits none: only the boss's minion arrives
+PASS I4 with the boss's board full only the run player Recruits; with both boards full the power is not offered
+PASS I5 in the boss's fair view the run player's deck is masked: Join the Fray takes nothing from it there (the search never reads the hidden deck)  (ok deck 26->26)
+PASS I6 the row is flagged bothPlayers and hiddenZone
+PASS J1 Mystic Barrier costs (1) and gains 3 Armor
+PASS K1 Three Wee Wishes costs (1): each player draws 3 cards  (boss 6->9, player 4->7)
+PASS K2 with the run player's hand full its three cards are burned
+PASS K3 an empty deck draws fatigue: the run player takes 1 + 2 + 3, the boss draws normally
+PASS K4 the boss's own empty deck: the boss takes the fatigue, the run player draws 3
+PASS K5 fatigue that kills the boss mid-power ends the fight cleanly (the run player wins)
+PASS L1 Fungal Infection costs (2) and gives the boss's minions +1/+1 (its own enchantment), not the run player's
+PASS L2 it is not offered while the boss has no minion
+PASS M1 The Floor is Lava is passive; a minion the run player plays takes 2 damage (a 2-Health minion dies)  (yeti damage 2)
+PASS M2 a Divine Shield absorbs it; a summoned minion is untouched
+PASS M3 the boss's own played minions take the 2 damage too; the power is never an option
+PASS M4 the Battlecry resolves first, then the lava (Novice Engineer draws, then dies)
+PASS N1 Alluring Tune costs (2); its only legal targets are enemy minions with 2 or less Attack  (CS2_120)
+PASS N2 the run player's board shrine (0 Attack) is never a legal target: a shrine does not change sides
+PASS N3 the boss gains control of the minion
+PASS N4 with no legal target (a 4-Attack minion and the shrine) it is not offered
+PASS N5 a dormant shrine is no target either
+PASS N6 with the boss's board full it is not offered
+PASS O1 Starving Crab (a 4/1 Beast for 3): at the start of its owner's turn it deals 5 damage to its owner's hero, not at the other turn  (boss damage 5)
+PASS O2 in the run player's hands it damages the run player's hero
+PASS O3 Reverberating Ooze (2/4 for 4): after it survives damage a copy of it is summoned beside it, with the same damage  (2 oozes)
+PASS O4 the copy reverberates in turn
+PASS O5 lethal damage summons nothing
+PASS O6 with a full board there is no copy and nothing breaks
+PASS O7 Shroomsayer (7/7 for 4): lethal damage destroys nothing else
+PASS O8 after it survives damage all minions are destroyed, on both boards, itself included  (0/1)
+PASS O9 the run player's board shrine goes dormant instead (as from any destroy effect): its dormant form holds its place on the board
+PASS P1 the shipped data validates with the seventeen family 08 rows
+PASS P2 family 08 holds exactly these seventeen rows  (loot_15_george_karl,loot_16_azun,loot_17_jinzo,loot_19_gutmook,loot_33_gutmook,loot_31_candlebeard,loot_36_ixlid,loot_37_lyris,loot_38_vex,loot_39_kraxx,loot_40_seriona,loot_41_whompwhisker,loot_42_jari,loot_43_jeeru,loot_46_flurgl,loot_47_lava_chamber,loot_51_russell)
+PASS P3 loot_15_george_karl: a Dungeon Run row of tier 3 whose plan is the row's (hero, power, a 30-card authentic deck, its own 30 Health), flags [forms]  (authentic health 30 flags forms)
+PASS P3 loot_16_azun: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags [passive,bothPlayers,doubleDeathrattle]  (authentic health 30 flags passive,bothPlayers,doubleDeathrattle)
+PASS P3 loot_17_jinzo: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags [passive,bothPlayers,doubleBattlecry]  (authentic health 30 flags passive,bothPlayers,doubleBattlecry)
+PASS P3 loot_19_gutmook: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive)
+PASS P3 loot_33_gutmook: a Dungeon Run row of tier 3 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive)
+PASS P3 loot_31_candlebeard: a Dungeon Run row of tier 3 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive)
+PASS P3 loot_36_ixlid: a Dungeon Run row of tier 3 whose plan is the row's (hero, power, a 30-card substituted deck, its own 20 Health), flags []  (substituted health 20 flags )
+PASS P3 loot_37_lyris: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags )
+PASS P3 loot_38_vex: a Dungeon Run row of tier 3 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags [passive,bothPlayers,doubleBattlecry,doubleDeathrattle]  (authentic health 30 flags passive,bothPlayers,doubleBattlecry,doubleDeathrattle)
+PASS P3 loot_39_kraxx: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags )
+PASS P3 loot_40_seriona: a Dungeon Run row of tier 1 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags )
+PASS P3 loot_41_whompwhisker: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health), flags [bothPlayers,hiddenZone]  (substituted health 30 flags bothPlayers,hiddenZone)
+PASS P3 loot_42_jari: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags )
+PASS P3 loot_43_jeeru: a Dungeon Run row of tier 3 whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health), flags [bothPlayers,hiddenZone]  (substituted health 30 flags bothPlayers,hiddenZone)
+PASS P3 loot_46_flurgl: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags )
+PASS P3 loot_47_lava_chamber: a Dungeon Run row of tier 3 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags [passive,bothPlayers]  (authentic health 30 flags passive,bothPlayers)
+PASS P3 loot_51_russell: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags )
+PASS P4 every power and card of the family is scripted by family 08 and keeps the client's text
+PASS P5 each has its own admission row: the powers and Tag Team a boss's only, the five boss deck minions a boss's and (taken from a boss) the run player's; none is ever generated
+PASS P6 the seven passive powers are in the passive registry (started at match start, never offered)
+PASS P7 the four substituted decks: only cards the engine does not script are replaced, each recorded (Wrath, Power of the Wild, Mogor's Champion, Fel Reaver)  (loot_36_ixlid: EX1_154>LOOT_051,EX1_160>CFM_614 | loot_41_whompwhisker: AT_088>CS2_200 | loot_42_jari: EX1_154>NEW1_007 | loot_43_jeeru: EX1_154>LOOT_051,GVG_016>UNG_087)
+PASS P8 the tag team's row: one script form (Karl and George, The Silver Hand, 30 Health), 4 Tag Teams; both Gutmooks share the wiki's one list (2 Gluttonous Troggs)
+PASS P9 Lyris's deck is the wiki's as it is: 20 Flamewakers, 5 Arcane Intellects, 4 Arcane Giants, Archmage Antonidas; Flurgl's holds 2 Murloc Tinyfins  (CS2_023,BRM_002,EX1_559,KAR_711)
+PASS P10 Trapped Room (family 01) now plays its two Shroomsayers: its deck is the wiki's list unchanged
+PASS P11 the tag team's row without its forms flag is refused  (boss loot_15_george_karl: flag forms and the forms must go together)
+PASS P12 a family 08 power asked for the run player is refused with its row's reason
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 113 passed, 0 failed

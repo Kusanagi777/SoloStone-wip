@@ -1,0 +1,38 @@
+T29 GILA_801   GILA_900h  player turns 9 played-turn 1 power-uses 0 decisions 13 fallbacks 0 boss-gila [] mine [GILA_801] boss lantern_thief
+T29 GILA_802   GILA_900h  player turns 11 played-turn 1 power-uses 0 decisions 17 fallbacks 0 boss-gila [] mine [GILA_802,GILA_803] boss lantern_thief
+T29 GILA_803   GILA_900h  player turns 9 played-turn 1 power-uses 0 decisions 13 fallbacks 0 boss-gila [] mine [GILA_803] boss lantern_thief
+T29 GILA_804   GILA_900h  player turns 9 played-turn 3 power-uses 0 decisions 12 fallbacks 0 boss-gila [] mine [GILA_804] boss lantern_thief
+T29 GILA_805   GILA_900h  boss turns 20 played-turn 0 power-uses 0 decisions 42 fallbacks 0 boss-gila [] mine [] boss lantern_thief
+T29 GILA_806   GILA_900h  boss turns 21 played-turn 1 power-uses 0 decisions 40 fallbacks 0 boss-gila [] mine [GILA_806] boss lantern_thief
+T29 GILA_810   GILA_500h3 boss turns 15 played-turn 1 power-uses 0 decisions 31 fallbacks 0 boss-gila [] mine [GILA_810] boss lantern_thief
+T29 GILA_811   GILA_500h3 boss turns 16 played-turn 1 power-uses 0 decisions 30 fallbacks 0 boss-gila [] mine [GILA_811] boss lantern_thief
+T29 GILA_812   GILA_500h3 player turns 5 played-turn 1 power-uses 0 decisions 6 fallbacks 0 boss-gila [] mine [GILA_812] boss lantern_thief
+T29 GILA_813   GILA_500h3 boss turns 15 played-turn 0 power-uses 0 decisions 28 fallbacks 0 boss-gila [] mine [] boss lantern_thief
+T29 GILA_814   GILA_500h3 boss turns 13 played-turn 0 power-uses 0 decisions 21 fallbacks 0 boss-gila [] mine [] boss lantern_thief
+T29 GILA_816a  GILA_600h  player turns 13 played-turn 1 power-uses 0 decisions 23 fallbacks 0 boss-gila [] mine [GILA_816a,GILA_816b] boss lantern_thief
+T29 GILA_816b  GILA_600h  player turns 11 played-turn 1 power-uses 0 decisions 15 fallbacks 0 boss-gila [] mine [GILA_816b,GILA_816c] boss lantern_thief
+T29 GILA_816c  GILA_600h  player turns 7 played-turn 1 power-uses 0 decisions 9 fallbacks 0 boss-gila [] mine [GILA_816c] boss lantern_thief
+T29 GILA_817   GILA_500h3 player turns 19 played-turn 1 power-uses 0 decisions 34 fallbacks 0 boss-gila [] mine [GILA_817,GILA_818,GILA_819] boss lantern_thief
+T29 GILA_818   GILA_500h3 player turns 17 played-turn 1 power-uses 0 decisions 28 fallbacks 0 boss-gila [] mine [GILA_818,GILA_819] boss lantern_thief
+T29 GILA_819   GILA_500h3 player turns 7 played-turn 1 power-uses 0 decisions 9 fallbacks 0 boss-gila [] mine [GILA_819] boss lantern_thief
+T29 GILA_820   GILA_400h  player turns 5 played-turn 1 power-uses 0 decisions 7 fallbacks 0 boss-gila [] mine [GILA_820] boss lantern_thief
+T29 GILA_821a  GILA_400h  player turns 13 played-turn 3 power-uses 0 decisions 21 fallbacks 0 boss-gila [] mine [GILA_821a] boss lantern_thief
+T29 GILA_821b  GILA_400h  player turns 15 played-turn 3 power-uses 0 decisions 26 fallbacks 0 boss-gila [] mine [GILA_821b,GILA_821c] boss lantern_thief
+T29 GILA_821c  GILA_400h  player turns 19 played-turn 1 power-uses 0 decisions 34 fallbacks 0 boss-gila [] mine [GILA_821c] boss lantern_thief
+T29 GILA_824   GILA_600h  player turns 13 played-turn 3 power-uses 0 decisions 22 fallbacks 0 boss-gila [] mine [GILA_824] boss lantern_thief
+T29 GILA_825   GILA_400h  boss turns 12 played-turn 3 power-uses 0 decisions 28 fallbacks 0 boss-gila [] mine [GILA_825] boss lantern_thief
+T29 GILA_826   GILA_400h  player turns 9 played-turn 1 power-uses 0 decisions 12 fallbacks 0 boss-gila [] mine [GILA_826] boss lantern_thief
+T29 GILA_827   GILA_400h  player turns 13 played-turn 1 power-uses 0 decisions 24 fallbacks 0 boss-gila [] mine [GILA_827] boss lantern_thief
+T29 GILA_850b  GILA_900h  player turns 7 played-turn 1 power-uses 0 decisions 11 fallbacks 0 boss-gila [] mine [GILA_850b] boss lantern_thief
+T29 GILA_851a  GILA_900h  player turns 9 played-turn 1 power-uses 0 decisions 13 fallbacks 0 boss-gila [] mine [GILA_851a] boss lantern_thief
+T29 GILA_851b  GILA_900h  player turns 7 played-turn 1 power-uses 0 decisions 9 fallbacks 0 boss-gila [] mine [GILA_851b] boss lantern_thief
+T29 GILA_851c  GILA_900h  player turns 7 played-turn 1 power-uses 0 decisions 10 fallbacks 0 boss-gila [] mine [GILA_851c] boss lantern_thief
+T29 GILA_852a  GILA_900h  boss turns 18 played-turn 1 power-uses 0 decisions 42 fallbacks 0 boss-gila [] mine [GILA_852a,GILA_852b,GILA_852c] boss lantern_thief
+T29 GILA_852b  GILA_900h  boss turns 17 played-turn 1 power-uses 0 decisions 45 fallbacks 0 boss-gila [] mine [GILA_852b,GILA_852c] boss lantern_thief
+T29 GILA_852c  GILA_900h  boss turns 16 played-turn 1 power-uses 0 decisions 40 fallbacks 0 boss-gila [] mine [GILA_852c] boss lantern_thief
+T29 GILA_853b  GILA_900h  player turns 7 played-turn 1 power-uses 0 decisions 10 fallbacks 0 boss-gila [] mine [GILA_853b] boss lantern_thief
+T29 GILA_854   GILA_900h  player turns 15 played-turn 1 power-uses 0 decisions 30 fallbacks 0 boss-gila [] mine [GILA_854] boss lantern_thief
+T30 GILA_906/561 player turns 11 played-turn 1 power-uses 0 decisions 12 fallbacks 0 boss-gila [GILA_821a,GILA_802,GILA_852a] mine [] boss cellar_matron
+T30 GILA_906/562 player turns 11 played-turn 1 power-uses 0 decisions 14 fallbacks 0 boss-gila [GILA_821a,GILA_816a] mine [] boss hedge_witch
+T30 GILA_906/563 player turns 9 played-turn 1 power-uses 0 decisions 9 fallbacks 0 boss-gila [GILA_821a,GILA_816a] mine [] boss hedge_witch
+404 passed, 0 failed

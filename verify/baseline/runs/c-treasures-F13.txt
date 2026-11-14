@@ -1,0 +1,19 @@
+T20 ULDA_005   DRUID_PRIEST     player turns 11 decisions 14 fallbacks 0 pass-turns 0 pass-acts 3 boss-acts-after 6 spell-power 0 boss bog_croaker
+T20 ULDA_007   MAGE_ROGUE       boss turns 18 decisions 30 fallbacks 0 pass-turns 0 pass-acts 4 boss-acts-after 18 spell-power 0 boss bog_croaker
+T20 ULDA_009   DRUID_PRIEST     player turns 11 decisions 12 fallbacks 0 pass-turns 0 pass-acts 3 boss-acts-after 4 spell-power 0 boss bog_croaker
+T20 ULDA_011   HUNTER_WARRIOR   boss turns 28 decisions 53 fallbacks 0 pass-turns 0 pass-acts 3 boss-acts-after 37 spell-power 0 boss bog_croaker
+T20 ULDA_014   HUNTER_WARRIOR   boss turns 28 decisions 53 fallbacks 0 pass-turns 0 pass-acts 3 boss-acts-after 37 spell-power 0 boss bog_croaker
+T20 ULDA_042   MAGE_ROGUE       boss turns 21 decisions 43 fallbacks 0 pass-turns 0 pass-acts 4 boss-acts-after 29 spell-power 0 boss bog_croaker
+T20 ULDA_046   PALADIN_SHAMAN   player turns 13 decisions 16 fallbacks 0 pass-turns 0 pass-acts 3 boss-acts-after 7 spell-power 0 boss bog_croaker
+T20 ULDA_101   HUNTER_WARRIOR   player turns 17 decisions 25 fallbacks 0 pass-turns 0 pass-acts 1 boss-acts-after 16 spell-power 0 boss bog_croaker
+T20 ULDA_102   HUNTER_WARRIOR   player turns 27 decisions 46 fallbacks 0 pass-turns 2 pass-acts 0 boss-acts-after 33 spell-power 0 boss bog_croaker
+T20 ULDA_103   MAGE_ROGUE       player turns 17 decisions 27 fallbacks 0 pass-turns 0 pass-acts 3 boss-acts-after 16 spell-power 0 boss bog_croaker
+T20 ULDA_116   PALADIN_SHAMAN   player turns 13 decisions 18 fallbacks 0 pass-turns 0 pass-acts 4 boss-acts-after 8 spell-power 0 boss bog_croaker
+T20 ULDA_117   MAGE_ROGUE       boss turns 18 decisions 36 fallbacks 0 pass-turns 0 pass-acts 4 boss-acts-after 24 spell-power 1 boss bog_croaker
+T20 ULDA_205   MAGE_ROGUE       boss turns 24 decisions 48 fallbacks 0 pass-turns 0 pass-acts 1 boss-acts-after 36 spell-power 0 boss bog_croaker
+T20 ULDA_208   PALADIN_SHAMAN   player turns 19 decisions 33 fallbacks 0 pass-turns 0 pass-acts 4 boss-acts-after 20 spell-power 0 boss bog_croaker
+T20 ULDA_508   MAGE_ROGUE       boss turns 20 decisions 43 fallbacks 0 pass-turns 0 pass-acts 4 boss-acts-after 30 spell-power 0 boss bog_croaker
+T21 ULDA_102/911 boss turns 27 decisions 40 fallbacks 0 pass-turns 2 pass-acts 0 boss-acts-after 27 spell-power 0 boss hedge_witch
+T21 ULDA_102/912 boss turns 20 decisions 37 fallbacks 0 pass-turns 2 pass-acts 0 boss-acts-after 28 spell-power 0 boss tunnel_rat
+T21 ULDA_102/913 player turns 23 decisions 37 fallbacks 0 pass-turns 2 pass-acts 0 boss-acts-after 26 spell-power 0 boss lantern_thief
+248 passed, 0 failed

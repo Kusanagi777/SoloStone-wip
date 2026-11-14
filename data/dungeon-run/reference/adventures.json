@@ -1,0 +1,7748 @@
+{
+ "meta": {
+  "source_sha256": "1615239cfee5332dd2f65a5dcbe17e6fa372bf53706f9836a662a7dbde8ef51e",
+  "generator": "ledger-dbf/extract.py (pure Python UnityFS + LZ4 + SerializedFile type-tree reader)",
+  "locale_note": "DbfLocValue columns are flattened to m_locValues[0] (enUS).",
+  "validation": {
+   "facts_file": "violet-hold-2026-09.json",
+   "cards_checked": 8333,
+   "dbf_match": 8187,
+   "dbf_mismatch": 1,
+   "dbf_mismatch_examples": [
+    {
+     "id": "ULDA_BOSS_72e",
+     "facts_dbf": 57568,
+     "client_dbf": 63097
+    }
+   ],
+   "missing_in_client": 145,
+   "enUS_name_match": 8167,
+   "enUS_name_differs": 21,
+   "name_differs_examples": [
+    {
+     "id": "CS2_017o",
+     "facts_name": "Claws",
+     "client_name": "Extra Attack"
+    },
+    {
+     "id": "EX1_084e",
+     "facts_name": "Charge",
+     "client_name": "Rush"
+    },
+    {
+     "id": "EX1_614",
+     "facts_name": "Illidan Stormrage",
+     "client_name": "Xavius"
+    },
+    {
+     "id": "EX1_614t",
+     "facts_name": "Flame of Azzinoth",
+     "client_name": "Xavian Satyr"
+    },
+    {
+     "id": "EX1_finkle",
+     "facts_name": "Finkle Einhorn",
+     "client_name": "Pip Quickwit"
+    }
+   ]
+  },
+  "not_client_side": [
+   "boss decks / player2 decks (no SCENARIO column, no DECK rows)",
+   "dungeon-crawl boss pools per wing (only WING.dungeonCrawlBosses counts)",
+   "loot BUCKET / treasure-pool memberships (no BUCKET/LOOT/DUNGEON/SHRINE table; SUBSET_CARD has 0 rows)",
+   "GAME_SAVE_SUBKEY rows (table present, 0 rows)"
+  ]
+ },
+ "adventures": [
+  {
+   "key": "dungeon-run",
+   "code": "LOOT",
+   "adventureId": 414,
+   "noteDesc": "Loot",
+   "name": "Kobolds & Catacombs",
+   "adventureData": [
+    {
+     "ID": 1158,
+     "noteDesc": "Loot Dungeon Crawl",
+     "adventureId": 414,
+     "modeId": 5,
+     "sortOrder": 0,
+     "name": "Kobolds & Catacombs",
+     "shortName": "Dungeon Run",
+     "description": "Within the twisting tunnels of the kobold empire await treasures beyond imagining. Choose your class and delve into the ever-shifting dungeon!",
+     "shortDescription": "Within the twisting tunnels of the kobold empire await treasures beyond imagining. Choose your class and delve into the ever-shifting dungeon!",
+     "lockedShortName": "",
+     "lockedDescription": "",
+     "lockedShortDescription": "",
+     "requirementsDescription": "Requires unlocking every class.",
+     "rewardsDescription": "",
+     "completeBannerText": "Dungeon cleared\nwith {0}!",
+     "showPlayableScenariosCount": 0,
+     "startingSubscene": 5,
+     "subsceneTransitionDirection": "INVALID",
+     "adventureSubDefPrefab": "AdventureSubDef_LootDungeonCrawl.prefab:870d0b24aaa287c44be72b4b27dfddac",
+     "gameSaveDataServerKeyId": 24,
+     "gameSaveDataClientKeyId": 42,
+     "dungeonCrawlSaveHeroUsingHeroDbId": 0,
+     "dungeonCrawlBossCardPrefab": "Card_DungeonCrawl_Boss.prefab:c7f700bb034424e46a7c2321e4621965",
+     "dungeonCrawlPickHeroFirst": 0,
+     "dungeonCrawlSkipHeroSelect": 0,
+     "dungeonCrawlMustPickShrine": 0,
+     "dungeonCrawlSelectChapter": 0,
+     "dungeonCrawlDisplayHeroWinsPerChapter": 0,
+     "dungeonCrawlIsRetireSupported": 0,
+     "dungeonCrawlShowBossKillCount": 1,
+     "dungeonCrawlDefaultToDeckFromUpcomingScenario": 0,
+     "ignoreHeroUnlockRequirement": 0,
+     "bossCardBackId": 119,
+     "hasSeenFeaturedModeOption": "",
+     "hasSeenNewModePopupOption": "",
+     "prefabShownOnComplete": "",
+     "anomalyModeDefaultCardId": 0,
+     "anomalyModeDefaultCardId_card": null,
+     "adventureBookMapPageLocation": 0,
+     "adventureBookRewardPageLocation": 1
+    }
+   ],
+   "wings": [
+    {
+     "wingId": 1644,
+     "noteDesc": "Loot",
+     "name": "",
+     "sortOrder": 0,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": null,
+     "allowsAnomaly": 1
+    }
+   ],
+   "counts": {
+    "scenarios": 1,
+    "scenarioBossHeroes": 1,
+    "bossHeroCardCandidates": 50,
+    "heroCardsWithPrefix": 50,
+    "bossDecks": 0,
+    "starterDecks": 0,
+    "otherPrefixedDecks": 0,
+    "heroPowers": 0,
+    "loadoutTreasures": 0,
+    "guestHeroes": 0,
+    "deckRulesets": 0
+   },
+   "scenarios": [
+    {
+     "scenarioId": 2663,
+     "noteDesc": "LOOTA_Dungeon",
+     "name": "",
+     "wingId": 1644,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 47366,
+      "id": "LOOTA_BOSS_18h",
+      "name": "Giant Rat"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-2663.asset:6ad4f8c37721442493af411c281b13c9",
+     "guestHeroes": [],
+     "classExclusions": [
+      "DEMONHUNTER",
+      "DEATHKNIGHT"
+     ],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 346,
+       "scenarioId": 2663,
+       "noteDesc": "Kobolds and Catacombs (LOOT) Dungeon Run",
+       "reqWingId": 1644,
+       "reqProgress": 0,
+       "reqFlags": 1,
+       "grantsWingId": 0,
+       "grantsProgress": 0,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    }
+   ],
+   "bossDecks": [],
+   "bossDecksNote": "SCENARIO has no player2 deck column and no DECK row is a boss deck for this adventure; dungeon-crawl boss decks and boss rotation are server-side.",
+   "heroCardsByPrefix": [
+    {
+     "dbf": 46264,
+     "id": "LOOTA_BOSS_04h",
+     "name": "Waxmancer Sturmi",
+     "bossInId": true
+    },
+    {
+     "dbf": 46269,
+     "id": "LOOTA_BOSS_05h",
+     "name": "Pathmaker Hamm",
+     "bossInId": true
+    },
+    {
+     "dbf": 46279,
+     "id": "LOOTA_BOSS_06h",
+     "name": "Blackseed",
+     "bossInId": true
+    },
+    {
+     "dbf": 46915,
+     "id": "LOOTA_BOSS_09h",
+     "name": "Frostfur",
+     "bossInId": true
+    },
+    {
+     "dbf": 46310,
+     "id": "LOOTA_BOSS_10h",
+     "name": "Graves the Cleric",
+     "bossInId": true
+    },
+    {
+     "dbf": 46311,
+     "id": "LOOTA_BOSS_11h",
+     "name": "Overseer Mogark",
+     "bossInId": true
+    },
+    {
+     "dbf": 46317,
+     "id": "LOOTA_BOSS_12h",
+     "name": "Candlebeard",
+     "bossInId": true
+    },
+    {
+     "dbf": 46321,
+     "id": "LOOTA_BOSS_13h",
+     "name": "Thaddock the Thief",
+     "bossInId": true
+    },
+    {
+     "dbf": 46323,
+     "id": "LOOTA_BOSS_15h",
+     "name": "George and Karl",
+     "bossInId": true
+    },
+    {
+     "dbf": 46337,
+     "id": "LOOTA_BOSS_16h",
+     "name": "Spiritspeaker Azun",
+     "bossInId": true
+    },
+    {
+     "dbf": 46338,
+     "id": "LOOTA_BOSS_17h",
+     "name": "Battlecrier Jin'zo",
+     "bossInId": true
+    },
+    {
+     "dbf": 47366,
+     "id": "LOOTA_BOSS_18h",
+     "name": "Giant Rat",
+     "bossInId": true
+    },
+    {
+     "dbf": 46329,
+     "id": "LOOTA_BOSS_19h",
+     "name": "Gutmook",
+     "bossInId": true
+    },
+    {
+     "dbf": 46339,
+     "id": "LOOTA_BOSS_20h",
+     "name": "Brimstone Warden",
+     "bossInId": true
+    },
+    {
+     "dbf": 46243,
+     "id": "LOOTA_BOSS_21h",
+     "name": "Gnosh the Greatworm",
+     "bossInId": true
+    },
+    {
+     "dbf": 46340,
+     "id": "LOOTA_BOSS_22h",
+     "name": "Tad",
+     "bossInId": true
+    },
+    {
+     "dbf": 46341,
+     "id": "LOOTA_BOSS_23h",
+     "name": "Bristlesnarl",
+     "bossInId": true
+    },
+    {
+     "dbf": 46344,
+     "id": "LOOTA_BOSS_24h",
+     "name": "The Mothergloop",
+     "bossInId": true
+    },
+    {
+     "dbf": 46349,
+     "id": "LOOTA_BOSS_25h",
+     "name": "Vustrasz the Ancient",
+     "bossInId": true
+    },
+    {
+     "dbf": 47410,
+     "id": "LOOTA_BOSS_26h",
+     "name": "Xol the Unscathed",
+     "bossInId": true
+    },
+    {
+     "dbf": 46266,
+     "id": "LOOTA_BOSS_27h",
+     "name": "Waxmancer Sturmi",
+     "bossInId": true
+    },
+    {
+     "dbf": 46270,
+     "id": "LOOTA_BOSS_28h",
+     "name": "Pathmaker Hamm",
+     "bossInId": true
+    },
+    {
+     "dbf": 46281,
+     "id": "LOOTA_BOSS_29h",
+     "name": "Blackseed",
+     "bossInId": true
+    },
+    {
+     "dbf": 46312,
+     "id": "LOOTA_BOSS_30h",
+     "name": "Overseer Mogark",
+     "bossInId": true
+    },
+    {
+     "dbf": 46318,
+     "id": "LOOTA_BOSS_31h",
+     "name": "Candlebeard",
+     "bossInId": true
+    },
+    {
+     "dbf": 46324,
+     "id": "LOOTA_BOSS_32h",
+     "name": "Karl and George",
+     "bossInId": true
+    },
+    {
+     "dbf": 46330,
+     "id": "LOOTA_BOSS_33h",
+     "name": "Gutmook",
+     "bossInId": true
+    },
+    {
+     "dbf": 46352,
+     "id": "LOOTA_BOSS_34h",
+     "name": "Azari, the Devourer",
+     "bossInId": true
+    },
+    {
+     "dbf": 46357,
+     "id": "LOOTA_BOSS_35h",
+     "name": "Elder Brandlemar",
+     "bossInId": true
+    },
+    {
+     "dbf": 46361,
+     "id": "LOOTA_BOSS_36h",
+     "name": "Ixlid",
+     "bossInId": true
+    },
+    {
+     "dbf": 46371,
+     "id": "LOOTA_BOSS_37h",
+     "name": "Lyris the Wild Mage",
+     "bossInId": true
+    },
+    {
+     "dbf": 47001,
+     "id": "LOOTA_BOSS_38h",
+     "name": "Voodoomaster Vex",
+     "bossInId": true
+    },
+    {
+     "dbf": 47258,
+     "id": "LOOTA_BOSS_39h",
+     "name": "Kraxx",
+     "bossInId": true
+    },
+    {
+     "dbf": 47261,
+     "id": "LOOTA_BOSS_40h",
+     "name": "Seriona",
+     "bossInId": true
+    },
+    {
+     "dbf": 47303,
+     "id": "LOOTA_BOSS_41h",
+     "name": "Whompwhisker",
+     "bossInId": true
+    },
+    {
+     "dbf": 47305,
+     "id": "LOOTA_BOSS_42h",
+     "name": "Elder Jari",
+     "bossInId": true
+    },
+    {
+     "dbf": 47307,
+     "id": "LOOTA_BOSS_43h",
+     "name": "Jeeru",
+     "bossInId": true
+    },
+    {
+     "dbf": 47309,
+     "id": "LOOTA_BOSS_44h",
+     "name": "Wee Whelp",
+     "bossInId": true
+    },
+    {
+     "dbf": 47316,
+     "id": "LOOTA_BOSS_45h",
+     "name": "Bink the Burglar",
+     "bossInId": true
+    },
+    {
+     "dbf": 47320,
+     "id": "LOOTA_BOSS_46h",
+     "name": "Fungalmancer Flurgl",
+     "bossInId": true
+    },
+    {
+     "dbf": 47322,
+     "id": "LOOTA_BOSS_47h",
+     "name": "Lava-Filled Chamber",
+     "bossInId": true
+    },
+    {
+     "dbf": 47328,
+     "id": "LOOTA_BOSS_48h",
+     "name": "Trapped Room",
+     "bossInId": true
+    },
+    {
+     "dbf": 47333,
+     "id": "LOOTA_BOSS_49h",
+     "name": "The Darkness",
+     "bossInId": true
+    },
+    {
+     "dbf": 47361,
+     "id": "LOOTA_BOSS_50h",
+     "name": "Mushhuckster Max",
+     "bossInId": true
+    },
+    {
+     "dbf": 47365,
+     "id": "LOOTA_BOSS_51h",
+     "name": "Russell the Bard",
+     "bossInId": true
+    },
+    {
+     "dbf": 47465,
+     "id": "LOOTA_BOSS_52h",
+     "name": "Treasure Vault",
+     "bossInId": true
+    },
+    {
+     "dbf": 47475,
+     "id": "LOOTA_BOSS_53h",
+     "name": "Chronomancer Inara",
+     "bossInId": true
+    },
+    {
+     "dbf": 47484,
+     "id": "LOOTA_BOSS_53h2",
+     "name": "Inara the Mage",
+     "bossInId": true
+    },
+    {
+     "dbf": 47495,
+     "id": "LOOTA_BOSS_54h",
+     "name": "A. F. Kay",
+     "bossInId": true
+    },
+    {
+     "dbf": 47210,
+     "id": "LOOTA_BOSS_99h",
+     "name": "King Togwaggle",
+     "bossInId": true
+    }
+   ],
+   "heroCardsByPrefixNote": "Not a client relation: CARD ids matching ^LOOTA_ whose CARDTYPE tag (202) is HERO (3). bossInId marks ids containing BOSS. Scenario bossHero is the only client-side boss link.",
+   "starterDecks": [],
+   "otherPrefixedDecks": [],
+   "otherPrefixedDecksNote": "DECK rows whose noteName starts with the adventure code but are not referenced by ADVENTURE_DECK.",
+   "heroPowers": [],
+   "loadoutTreasures": [],
+   "guestHeroes": [],
+   "deckRulesets": []
+  },
+  {
+   "key": "monster-hunt",
+   "code": "GIL",
+   "adventureId": 423,
+   "noteDesc": "Gilneas",
+   "name": "The Witchwood",
+   "adventureData": [
+    {
+     "ID": 1159,
+     "noteDesc": "Witchwood Dungeon Crawl",
+     "adventureId": 423,
+     "modeId": 5,
+     "sortOrder": 0,
+     "name": "The Witchwood",
+     "shortName": "Monster Hunt",
+     "description": "Find and defeat the terrible creatures that lurk within the Witchwood using four unique monster hunter heroes.",
+     "shortDescription": "Find and defeat the terrible creatures that lurk within the Witchwood using four unique monster hunter heroes.",
+     "lockedShortName": "",
+     "lockedDescription": "",
+     "lockedShortDescription": "",
+     "requirementsDescription": "Requires unlocking every class.",
+     "rewardsDescription": "",
+     "completeBannerText": "Monster hunt cleared\nwith {0}!",
+     "showPlayableScenariosCount": 0,
+     "startingSubscene": 5,
+     "subsceneTransitionDirection": "INVALID",
+     "adventureSubDefPrefab": "AdventureSubDef_GilneasDungeonCrawl.prefab:ac20ca3bca0a57345a49971cab6e5248",
+     "gameSaveDataServerKeyId": 31,
+     "gameSaveDataClientKeyId": 43,
+     "dungeonCrawlSaveHeroUsingHeroDbId": 0,
+     "dungeonCrawlBossCardPrefab": "Card_DungeonCrawl_Boss_Gil.prefab:4966dfc0194a4614bb8b217a816ee1d5",
+     "dungeonCrawlPickHeroFirst": 0,
+     "dungeonCrawlSkipHeroSelect": 0,
+     "dungeonCrawlMustPickShrine": 0,
+     "dungeonCrawlSelectChapter": 0,
+     "dungeonCrawlDisplayHeroWinsPerChapter": 0,
+     "dungeonCrawlIsRetireSupported": 0,
+     "dungeonCrawlShowBossKillCount": 1,
+     "dungeonCrawlDefaultToDeckFromUpcomingScenario": 0,
+     "ignoreHeroUnlockRequirement": 0,
+     "bossCardBackId": 131,
+     "hasSeenFeaturedModeOption": "",
+     "hasSeenNewModePopupOption": "",
+     "prefabShownOnComplete": "WoodenSign_Parchment_GIL_Hagatha.prefab:cb7fd0397b22879468a9b5738f9a8c72",
+     "anomalyModeDefaultCardId": 0,
+     "anomalyModeDefaultCardId_card": null,
+     "adventureBookMapPageLocation": 0,
+     "adventureBookRewardPageLocation": 1
+    },
+    {
+     "ID": 1162,
+     "noteDesc": "Witchwood Bonus Challenge",
+     "adventureId": 423,
+     "modeId": 6,
+     "sortOrder": 1,
+     "name": "Final Challenge",
+     "shortName": "Final Challenge",
+     "description": "It's the final showdown! Use the talents of all four monster hunter heroes to defeat Hagatha the Witch.",
+     "shortDescription": "It's the final showdown! Use the talents of all four monster hunter heroes to defeat Hagatha the Witch.",
+     "lockedShortName": "",
+     "lockedDescription": "Defeat the terrible power behind the Witchwood using all four monster hunting heroes.",
+     "lockedShortDescription": "Defeat the terrible power behind the Witchwood using all four monster hunting heroes.",
+     "requirementsDescription": "Unlock by completing the Monster Hunt.",
+     "rewardsDescription": "Defeat Hagatha to earn the Monster Hunter card back.",
+     "completeBannerText": "",
+     "showPlayableScenariosCount": 0,
+     "startingSubscene": 7,
+     "subsceneTransitionDirection": "INVALID",
+     "adventureSubDefPrefab": "AdventureSubDef_GilneasBonusChallenge.prefab:1ad16b7baefd69a4bb5f948704117038",
+     "gameSaveDataServerKeyId": 31,
+     "gameSaveDataClientKeyId": 43,
+     "dungeonCrawlSaveHeroUsingHeroDbId": 0,
+     "dungeonCrawlBossCardPrefab": "",
+     "dungeonCrawlPickHeroFirst": 0,
+     "dungeonCrawlSkipHeroSelect": 0,
+     "dungeonCrawlMustPickShrine": 0,
+     "dungeonCrawlSelectChapter": 0,
+     "dungeonCrawlDisplayHeroWinsPerChapter": 1,
+     "dungeonCrawlIsRetireSupported": 0,
+     "dungeonCrawlShowBossKillCount": 1,
+     "dungeonCrawlDefaultToDeckFromUpcomingScenario": 0,
+     "ignoreHeroUnlockRequirement": 0,
+     "bossCardBackId": 0,
+     "hasSeenFeaturedModeOption": "",
+     "hasSeenNewModePopupOption": "HAS_SEEN_GIL_BONUS_CHALLENGE",
+     "prefabShownOnComplete": "",
+     "anomalyModeDefaultCardId": 0,
+     "anomalyModeDefaultCardId_card": null,
+     "adventureBookMapPageLocation": 0,
+     "adventureBookRewardPageLocation": 1
+    }
+   ],
+   "wings": [
+    {
+     "wingId": 1646,
+     "noteDesc": "Witchwood",
+     "name": "",
+     "sortOrder": 0,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": null,
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 1647,
+     "noteDesc": "Witchwood Wing 2",
+     "name": "",
+     "sortOrder": 0,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": null,
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 1648,
+     "noteDesc": "Witchwood Wing 3",
+     "name": "",
+     "sortOrder": 0,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": null,
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 1649,
+     "noteDesc": "Witchwood Wing 4",
+     "name": "",
+     "sortOrder": 0,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": null,
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 1650,
+     "noteDesc": "Witchwood Hagatha Fight",
+     "name": "Showdown in\nThe Witchwood",
+     "sortOrder": 0,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": null,
+     "allowsAnomaly": 1
+    }
+   ],
+   "counts": {
+    "scenarios": 2,
+    "scenarioBossHeroes": 2,
+    "bossHeroCardCandidates": 48,
+    "heroCardsWithPrefix": 55,
+    "bossDecks": 0,
+    "starterDecks": 0,
+    "otherPrefixedDecks": 0,
+    "heroPowers": 0,
+    "loadoutTreasures": 0,
+    "guestHeroes": 4,
+    "deckRulesets": 0
+   },
+   "scenarios": [
+    {
+     "scenarioId": 2706,
+     "noteDesc": "GILA_Dungeon",
+     "name": "GILA_Dungeon",
+     "wingId": 1646,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 48998,
+      "id": "GILA_BOSS_65h",
+      "name": "Gobbles"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 348,
+       "scenarioId": 2706,
+       "noteDesc": "Witchwood (GIL) Monster Hunt",
+       "reqWingId": 1646,
+       "reqProgress": 0,
+       "reqFlags": 1,
+       "grantsWingId": 0,
+       "grantsProgress": 0,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 2821,
+     "noteDesc": "GILA_61_Hagatha",
+     "name": "Battle of the Witchwood",
+     "wingId": 1650,
+     "modeId": 6,
+     "players": 1,
+     "player1Hero": {
+      "dbf": 48420,
+      "id": "GILA_400h",
+      "name": "Houndmaster Shaw"
+     },
+     "bossHero": {
+      "dbf": 48954,
+      "id": "GILA_BOSS_61h",
+      "name": "Hagatha the Witch"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": {
+      "deckId": 1748,
+      "missing": true,
+      "note": "deck id not present in client DECK table"
+     },
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 349,
+       "scenarioId": 2821,
+       "noteDesc": "Witchwood (GIL) Hagatha Fight",
+       "reqWingId": 1650,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 1650,
+       "grantsProgress": 2,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    }
+   ],
+   "bossDecks": [],
+   "bossDecksNote": "SCENARIO has no player2 deck column and no DECK row is a boss deck for this adventure; dungeon-crawl boss decks and boss rotation are server-side.",
+   "heroCardsByPrefix": [
+    {
+     "dbf": 48420,
+     "id": "GILA_400h",
+     "name": "Houndmaster Shaw",
+     "bossInId": false
+    },
+    {
+     "dbf": 48486,
+     "id": "GILA_500h3",
+     "name": "Tess Greymane",
+     "bossInId": false
+    },
+    {
+     "dbf": 49566,
+     "id": "GILA_500h4",
+     "name": "Tess Greymane",
+     "bossInId": false
+    },
+    {
+     "dbf": 47787,
+     "id": "GILA_600h",
+     "name": "Darius Crowley",
+     "bossInId": false
+    },
+    {
+     "dbf": 49563,
+     "id": "GILA_600h2",
+     "name": "Darius Crowley",
+     "bossInId": false
+    },
+    {
+     "dbf": 48554,
+     "id": "GILA_900h",
+     "name": "Toki, Time-Tinker",
+     "bossInId": false
+    },
+    {
+     "dbf": 49564,
+     "id": "GILA_900h2",
+     "name": "Toki, Time-Tinker",
+     "bossInId": false
+    },
+    {
+     "dbf": 47903,
+     "id": "GILA_BOSS_20h",
+     "name": "A Mangy Wolf",
+     "bossInId": true
+    },
+    {
+     "dbf": 48046,
+     "id": "GILA_BOSS_21h",
+     "name": "Rottooth",
+     "bossInId": true
+    },
+    {
+     "dbf": 48070,
+     "id": "GILA_BOSS_22h",
+     "name": "Cutthroat Willie",
+     "bossInId": true
+    },
+    {
+     "dbf": 48144,
+     "id": "GILA_BOSS_23h",
+     "name": "Grubb the Swampdrinker",
+     "bossInId": true
+    },
+    {
+     "dbf": 48151,
+     "id": "GILA_BOSS_24h",
+     "name": "Groddo the Bogwarden",
+     "bossInId": true
+    },
+    {
+     "dbf": 48182,
+     "id": "GILA_BOSS_25h",
+     "name": "Manhunter Ivan",
+     "bossInId": true
+    },
+    {
+     "dbf": 48196,
+     "id": "GILA_BOSS_26h",
+     "name": "Gnomenapper",
+     "bossInId": true
+    },
+    {
+     "dbf": 48266,
+     "id": "GILA_BOSS_27h",
+     "name": "Experiment 3C",
+     "bossInId": true
+    },
+    {
+     "dbf": 48299,
+     "id": "GILA_BOSS_29h",
+     "name": "Sazzmi Gentlehorn",
+     "bossInId": true
+    },
+    {
+     "dbf": 48301,
+     "id": "GILA_BOSS_30h",
+     "name": "Blood Witch Gretta",
+     "bossInId": true
+    },
+    {
+     "dbf": 48311,
+     "id": "GILA_BOSS_31h",
+     "name": "Gnarlroot",
+     "bossInId": true
+    },
+    {
+     "dbf": 48314,
+     "id": "GILA_BOSS_32h",
+     "name": "Niira the Trickster",
+     "bossInId": true
+    },
+    {
+     "dbf": 48315,
+     "id": "GILA_BOSS_33h",
+     "name": "The Scarecrow",
+     "bossInId": true
+    },
+    {
+     "dbf": 48324,
+     "id": "GILA_BOSS_34h",
+     "name": "Inquisitor Hav'nixx",
+     "bossInId": true
+    },
+    {
+     "dbf": 48328,
+     "id": "GILA_BOSS_35h",
+     "name": "Chupacabran",
+     "bossInId": true
+    },
+    {
+     "dbf": 48337,
+     "id": "GILA_BOSS_36h",
+     "name": "Griselda",
+     "bossInId": true
+    },
+    {
+     "dbf": 48332,
+     "id": "GILA_BOSS_37h",
+     "name": "Wharrgarbl",
+     "bossInId": true
+    },
+    {
+     "dbf": 48580,
+     "id": "GILA_BOSS_38h",
+     "name": "Ravencaller Cozzlewurt",
+     "bossInId": true
+    },
+    {
+     "dbf": 48593,
+     "id": "GILA_BOSS_39h",
+     "name": "Forlorn Lovers",
+     "bossInId": true
+    },
+    {
+     "dbf": 48596,
+     "id": "GILA_BOSS_40h",
+     "name": "Splintergraft",
+     "bossInId": true
+    },
+    {
+     "dbf": 48600,
+     "id": "GILA_BOSS_41h",
+     "name": "Brushwood Centurion",
+     "bossInId": true
+    },
+    {
+     "dbf": 48601,
+     "id": "GILA_BOSS_42h",
+     "name": "Baran the Blind",
+     "bossInId": true
+    },
+    {
+     "dbf": 48611,
+     "id": "GILA_BOSS_43h",
+     "name": "Gravekeeper Damph",
+     "bossInId": true
+    },
+    {
+     "dbf": 48624,
+     "id": "GILA_BOSS_44h",
+     "name": "Doctor Sezavo",
+     "bossInId": true
+    },
+    {
+     "dbf": 48635,
+     "id": "GILA_BOSS_45h",
+     "name": "Cultist S'thara",
+     "bossInId": true
+    },
+    {
+     "dbf": 48730,
+     "id": "GILA_BOSS_46h",
+     "name": "Vitus the Exiled",
+     "bossInId": true
+    },
+    {
+     "dbf": 48738,
+     "id": "GILA_BOSS_47h",
+     "name": "Shudderwock",
+     "bossInId": true
+    },
+    {
+     "dbf": 48766,
+     "id": "GILA_BOSS_48h",
+     "name": "Infinite Toki",
+     "bossInId": true
+    },
+    {
+     "dbf": 48785,
+     "id": "GILA_BOSS_49h",
+     "name": "Glinda Crowskin",
+     "bossInId": true
+    },
+    {
+     "dbf": 48814,
+     "id": "GILA_BOSS_50h",
+     "name": "The Whisperer",
+     "bossInId": true
+    },
+    {
+     "dbf": 48868,
+     "id": "GILA_BOSS_51h",
+     "name": "Garrow, the Rancorous",
+     "bossInId": true
+    },
+    {
+     "dbf": 48875,
+     "id": "GILA_BOSS_52h",
+     "name": "Crooked Pete",
+     "bossInId": true
+    },
+    {
+     "dbf": 48874,
+     "id": "GILA_BOSS_52h2",
+     "name": "Beastly Pete",
+     "bossInId": true
+    },
+    {
+     "dbf": 48934,
+     "id": "GILA_BOSS_54h",
+     "name": "Cragtorr",
+     "bossInId": true
+    },
+    {
+     "dbf": 48936,
+     "id": "GILA_BOSS_55h",
+     "name": "Azalina Soulthief",
+     "bossInId": true
+    },
+    {
+     "dbf": 48940,
+     "id": "GILA_BOSS_56h",
+     "name": "Face Collector",
+     "bossInId": true
+    },
+    {
+     "dbf": 48942,
+     "id": "GILA_BOSS_57h",
+     "name": "Raeth Ghostsong",
+     "bossInId": true
+    },
+    {
+     "dbf": 48945,
+     "id": "GILA_BOSS_58h",
+     "name": "Grum",
+     "bossInId": true
+    },
+    {
+     "dbf": 48947,
+     "id": "GILA_BOSS_59h",
+     "name": "Lord Godfrey",
+     "bossInId": true
+    },
+    {
+     "dbf": 48951,
+     "id": "GILA_BOSS_60h",
+     "name": "Captain Shivers",
+     "bossInId": true
+    },
+    {
+     "dbf": 48954,
+     "id": "GILA_BOSS_61h",
+     "name": "Hagatha the Witch",
+     "bossInId": true
+    },
+    {
+     "dbf": 48995,
+     "id": "GILA_BOSS_62h",
+     "name": "Gustave, the Gutripper",
+     "bossInId": true
+    },
+    {
+     "dbf": 48996,
+     "id": "GILA_BOSS_63h",
+     "name": "Sephira Dusktalon",
+     "bossInId": true
+    },
+    {
+     "dbf": 48997,
+     "id": "GILA_BOSS_64h",
+     "name": "Winslow Tobtock",
+     "bossInId": true
+    },
+    {
+     "dbf": 48998,
+     "id": "GILA_BOSS_65h",
+     "name": "Gobbles",
+     "bossInId": true
+    },
+    {
+     "dbf": 49210,
+     "id": "GILA_BOSS_66h",
+     "name": "The Mute",
+     "bossInId": true
+    },
+    {
+     "dbf": 49353,
+     "id": "GILA_BOSS_67h",
+     "name": "Ratcatcher Hannigul",
+     "bossInId": true
+    },
+    {
+     "dbf": 49682,
+     "id": "GILA_BOSS_68h",
+     "name": "Plaguemaster Rancel",
+     "bossInId": true
+    }
+   ],
+   "heroCardsByPrefixNote": "Not a client relation: CARD ids matching ^GILA_ whose CARDTYPE tag (202) is HERO (3). bossInId marks ids containing BOSS. Scenario bossHero is the only client-side boss link.",
+   "starterDecks": [],
+   "otherPrefixedDecks": [],
+   "otherPrefixedDecksNote": "DECK rows whose noteName starts with the adventure code but are not referenced by ADVENTURE_DECK.",
+   "heroPowers": [],
+   "loadoutTreasures": [],
+   "guestHeroes": [
+    {
+     "guestHeroId": 1,
+     "card": {
+      "dbf": 47787,
+      "id": "GILA_600h",
+      "name": "Darius Crowley"
+     },
+     "name": "Cannoneer",
+     "id": 1,
+     "wingId": 1646,
+     "baseGuestHero": null,
+     "sortOrder": 2,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 2,
+     "card": {
+      "dbf": 48420,
+      "id": "GILA_400h",
+      "name": "Houndmaster Shaw"
+     },
+     "name": "Houndmaster",
+     "id": 2,
+     "wingId": 1647,
+     "baseGuestHero": null,
+     "sortOrder": 3,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 3,
+     "card": {
+      "dbf": 48486,
+      "id": "GILA_500h3",
+      "name": "Tess Greymane"
+     },
+     "name": "Tracker",
+     "id": 3,
+     "wingId": 1648,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 4,
+     "card": {
+      "dbf": 48554,
+      "id": "GILA_900h",
+      "name": "Toki, Time-Tinker"
+     },
+     "name": "Time-Tinker",
+     "id": 4,
+     "wingId": 1649,
+     "baseGuestHero": null,
+     "sortOrder": 4,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    }
+   ],
+   "deckRulesets": []
+  },
+  {
+   "key": "rumble-run",
+   "code": "TRL",
+   "adventureId": 432,
+   "noteDesc": "Troll",
+   "name": "Rastakhan's Rumble",
+   "adventureData": [
+    {
+     "ID": 1168,
+     "noteDesc": "Troll Dungeon Crawl",
+     "adventureId": 432,
+     "modeId": 5,
+     "sortOrder": 0,
+     "name": "Rastakhan's Rumble",
+     "shortName": "Rumble Run",
+     "description": "\"It is time to RUMBLE!\" Choose your team and lead Rikkar in colossal combat against the most powerful trolls of all time.",
+     "shortDescription": "\"It be time to RUMBLE!\" Choose your team and lead Rikkar in colossal combat against the most powerful trolls of all time.",
+     "lockedShortName": "",
+     "lockedDescription": "",
+     "lockedShortDescription": "",
+     "requirementsDescription": "Requires unlocking every class.",
+     "rewardsDescription": "",
+     "completeBannerText": "Rastakhan's Rumble Cleared!",
+     "showPlayableScenariosCount": 0,
+     "startingSubscene": 5,
+     "subsceneTransitionDirection": "INVALID",
+     "adventureSubDefPrefab": "AdventureSubDef_TRLDungeonCrawl.prefab:1e458622b5c09eb4b8e10ebadc5832cb",
+     "gameSaveDataServerKeyId": 51,
+     "gameSaveDataClientKeyId": 52,
+     "dungeonCrawlSaveHeroUsingHeroDbId": 0,
+     "dungeonCrawlBossCardPrefab": "Card_DungeonCrawl_Boss_Trl.prefab:43d2d64ad7b9e874fa20f49afa403183",
+     "dungeonCrawlPickHeroFirst": 0,
+     "dungeonCrawlSkipHeroSelect": 1,
+     "dungeonCrawlMustPickShrine": 1,
+     "dungeonCrawlSelectChapter": 0,
+     "dungeonCrawlDisplayHeroWinsPerChapter": 0,
+     "dungeonCrawlIsRetireSupported": 0,
+     "dungeonCrawlShowBossKillCount": 1,
+     "dungeonCrawlDefaultToDeckFromUpcomingScenario": 0,
+     "ignoreHeroUnlockRequirement": 0,
+     "bossCardBackId": 153,
+     "hasSeenFeaturedModeOption": "",
+     "hasSeenNewModePopupOption": "",
+     "prefabShownOnComplete": "",
+     "anomalyModeDefaultCardId": 0,
+     "anomalyModeDefaultCardId_card": null,
+     "adventureBookMapPageLocation": 0,
+     "adventureBookRewardPageLocation": 1
+    }
+   ],
+   "wings": [
+    {
+     "wingId": 1662,
+     "noteDesc": "Troll Dungeon Run Wing",
+     "name": "",
+     "sortOrder": 0,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": null,
+     "allowsAnomaly": 1
+    }
+   ],
+   "counts": {
+    "scenarios": 1,
+    "scenarioBossHeroes": 1,
+    "bossHeroCardCandidates": 0,
+    "heroCardsWithPrefix": 19,
+    "bossDecks": 0,
+    "starterDecks": 0,
+    "otherPrefixedDecks": 27,
+    "heroPowers": 0,
+    "loadoutTreasures": 0,
+    "guestHeroes": 10,
+    "deckRulesets": 0
+   },
+   "scenarios": [
+    {
+     "scenarioId": 2890,
+     "noteDesc": "TRLA_Dungeon",
+     "name": "TRLA_Dungeon",
+     "wingId": 1662,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 53229,
+      "id": "TRLA_207h",
+      "name": "Hex Lord Malacrass"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 390,
+       "scenarioId": 2890,
+       "noteDesc": "Rastakhan's Rumble Dungeon Run",
+       "reqWingId": 1662,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 0,
+       "grantsProgress": 0,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    }
+   ],
+   "bossDecks": [],
+   "bossDecksNote": "SCENARIO has no player2 deck column and no DECK row is a boss deck for this adventure; dungeon-crawl boss decks and boss rotation are server-side.",
+   "heroCardsByPrefix": [
+    {
+     "dbf": 53222,
+     "id": "TRLA_200h",
+     "name": "War Master Voone",
+     "bossInId": false
+    },
+    {
+     "dbf": 53223,
+     "id": "TRLA_201h",
+     "name": "Zentimo",
+     "bossInId": false
+    },
+    {
+     "dbf": 53224,
+     "id": "TRLA_202h",
+     "name": "Captain Hooktusk",
+     "bossInId": false
+    },
+    {
+     "dbf": 53225,
+     "id": "TRLA_203h",
+     "name": "High Priest Thekal",
+     "bossInId": false
+    },
+    {
+     "dbf": 53226,
+     "id": "TRLA_204h",
+     "name": "Zul'jin",
+     "bossInId": false
+    },
+    {
+     "dbf": 53227,
+     "id": "TRLA_205h",
+     "name": "Wardruid Loti",
+     "bossInId": false
+    },
+    {
+     "dbf": 53228,
+     "id": "TRLA_206h",
+     "name": "High Priestess Jeklik",
+     "bossInId": false
+    },
+    {
+     "dbf": 53229,
+     "id": "TRLA_207h",
+     "name": "Hex Lord Malacrass",
+     "bossInId": false
+    },
+    {
+     "dbf": 53230,
+     "id": "TRLA_208h",
+     "name": "Princess Talanji",
+     "bossInId": false
+    },
+    {
+     "dbf": 53959,
+     "id": "TRLA_209h",
+     "name": "Rikkar",
+     "bossInId": false
+    },
+    {
+     "dbf": 54057,
+     "id": "TRLA_209h_Druid",
+     "name": "Rikkar",
+     "bossInId": false
+    },
+    {
+     "dbf": 54058,
+     "id": "TRLA_209h_Hunter",
+     "name": "Rikkar",
+     "bossInId": false
+    },
+    {
+     "dbf": 54056,
+     "id": "TRLA_209h_Mage",
+     "name": "Rikkar",
+     "bossInId": false
+    },
+    {
+     "dbf": 54059,
+     "id": "TRLA_209h_Paladin",
+     "name": "Rikkar",
+     "bossInId": false
+    },
+    {
+     "dbf": 54060,
+     "id": "TRLA_209h_Priest",
+     "name": "Rikkar",
+     "bossInId": false
+    },
+    {
+     "dbf": 54061,
+     "id": "TRLA_209h_Rogue",
+     "name": "Rikkar",
+     "bossInId": false
+    },
+    {
+     "dbf": 54065,
+     "id": "TRLA_209h_Shaman",
+     "name": "Rikkar",
+     "bossInId": false
+    },
+    {
+     "dbf": 54067,
+     "id": "TRLA_209h_Warlock",
+     "name": "Rikkar",
+     "bossInId": false
+    },
+    {
+     "dbf": 54064,
+     "id": "TRLA_209h_Warrior",
+     "name": "Rikkar",
+     "bossInId": false
+    }
+   ],
+   "heroCardsByPrefixNote": "Not a client relation: CARD ids matching ^TRLA_ whose CARDTYPE tag (202) is HERO (3). bossInId marks ids containing BOSS. Scenario bossHero is the only client-side boss link.",
+   "starterDecks": [],
+   "otherPrefixedDecks": [
+    {
+     "deckId": 2041,
+     "noteName": "TRLA_113_Warlock_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "GIL_191",
+      "GVG_045",
+      "LOOT_043",
+      "EX1_320",
+      "CS2_065",
+      "GIL_508",
+      "TRL_509",
+      "KAR_712",
+      "GVG_018",
+      "EX1_596"
+     ]
+    },
+    {
+     "deckId": 2042,
+     "noteName": "TRLA_179_Warlock_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "NEW1_019",
+      "EX1_597",
+      "CS2_062",
+      "EX1_319",
+      "BOT_222",
+      "GIL_561",
+      "GIL_693",
+      "EX1_181",
+      "TRL_407",
+      "CFM_900"
+     ]
+    },
+    {
+     "deckId": 2043,
+     "noteName": "TRLA_106_Rogue_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_146",
+      "TRL_507",
+      "EX1_131",
+      "CFM_694",
+      "GIL_534",
+      "AT_029",
+      "NEW1_016",
+      "GVG_075",
+      "CS2_073",
+      "CS2_188"
+     ]
+    },
+    {
+     "deckId": 2044,
+     "noteName": "TRLA_116_Druid_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "TRL_407",
+      "TRL_243",
+      "TRL_507",
+      "ICC_079",
+      "EX1_570",
+      "AT_039",
+      "CS2_005",
+      "TRL_240",
+      "KAR_300",
+      "EX1_160"
+     ]
+    },
+    {
+     "deckId": 2045,
+     "noteName": "TRLA_115_Druid_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "LOE_050",
+      "KAR_300",
+      "EX1_160",
+      "LOOT_117",
+      "CS2_012",
+      "CS2_172",
+      "GIL_663",
+      "TRL_521",
+      "OG_249",
+      "CS2_131"
+     ]
+    },
+    {
+     "deckId": 2046,
+     "noteName": "TRLA_112_Druid_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "GVG_032",
+      "LOOT_048",
+      "TRL_010",
+      "EX1_154",
+      "OG_051",
+      "LOOT_051",
+      "TRL_407",
+      "TRL_535",
+      "GIL_637",
+      "AT_082"
+     ]
+    },
+    {
+     "deckId": 2047,
+     "noteName": "TRLA_162_Hunter_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "EX1_162",
+      "EX1_534",
+      "DS1_070",
+      "GVG_043",
+      "CS2_084",
+      "CFM_315",
+      "EX1_531",
+      "LOOT_078",
+      "TRL_348",
+      "NEW1_031"
+     ]
+    },
+    {
+     "deckId": 2048,
+     "noteName": "TRLA_163_Hunter_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "EX1_162",
+      "UNG_912",
+      "TRL_348",
+      "EX1_539",
+      "TRL_405",
+      "CFM_316",
+      "FP1_011",
+      "CS2_127",
+      "CS2_119",
+      "TRL_347"
+     ]
+    },
+    {
+     "deckId": 2049,
+     "noteName": "TRLA_110_Hunter_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DS1_185",
+      "CS2_084",
+      "EX1_610",
+      "BRM_013",
+      "NEW1_031",
+      "TRL_347",
+      "LOOT_222",
+      "CFM_669",
+      "BOT_402",
+      "TRL_349"
+     ]
+    },
+    {
+     "deckId": 2050,
+     "noteName": "TRLA_129_Mage_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CFM_021",
+      "CS2_033",
+      "ICC_855",
+      "EX1_283",
+      "KAR_036",
+      "TRL_533",
+      "UNG_818",
+      "GVG_002",
+      "CS2_024",
+      "EX1_275"
+     ]
+    },
+    {
+     "deckId": 2051,
+     "noteName": "TRLA_128_Mage_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "ICC_092",
+      "AT_003",
+      "AT_006",
+      "AT_083",
+      "CS2_029",
+      "GIL_561",
+      "AT_094",
+      "GIL_147",
+      "UNG_084",
+      "AT_004"
+     ]
+    },
+    {
+     "deckId": 2052,
+     "noteName": "TRLA_108_Mage_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "KAR_009",
+      "UNG_846",
+      "LOOT_101",
+      "AT_007",
+      "TRL_317",
+      "BOT_413",
+      "ICC_069",
+      "AT_097",
+      "CFM_619",
+      "CS2_025"
+     ]
+    },
+    {
+     "deckId": 2053,
+     "noteName": "TRLA_138_Paladin_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "TRL_307",
+      "EX1_371",
+      "OG_223",
+      "CS2_097",
+      "TRL_509",
+      "AT_074",
+      "LOOT_088",
+      "EX1_008",
+      "UNG_953",
+      "CS2_092"
+     ]
+    },
+    {
+     "deckId": 2054,
+     "noteName": "TRLA_105_Paladin_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CFM_759",
+      "CFM_753",
+      "GIL_685",
+      "CS2_131",
+      "TRL_304",
+      "OG_223",
+      "TRL_517",
+      "CS2_189",
+      "AT_105",
+      "TRL_514"
+     ]
+    },
+    {
+     "deckId": 2055,
+     "noteName": "TRLA_137_Paladin_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "TRL_543",
+      "BOT_447",
+      "TRL_307",
+      "EX1_082",
+      "GVG_057",
+      "LOOT_398",
+      "ICC_700",
+      "ICC_820",
+      "CS2_097",
+      "GVG_090"
+     ]
+    },
+    {
+     "deckId": 2056,
+     "noteName": "TRLA_147_Priest_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "TRL_128",
+      "CS2_117",
+      "EX1_011",
+      "CFM_659",
+      "GVG_012",
+      "TRL_407",
+      "AT_105",
+      "CS2_181",
+      "AT_055",
+      "EX1_621"
+     ]
+    },
+    {
+     "deckId": 2057,
+     "noteName": "TRLA_114_Priest_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "UNG_032",
+      "BOT_509",
+      "LOE_006",
+      "ICC_098",
+      "ICC_702",
+      "OG_335",
+      "ICC_802",
+      "EX1_556",
+      "CFM_120",
+      "UNG_037"
+     ]
+    },
+    {
+     "deckId": 2058,
+     "noteName": "TRLA_146_Priest_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "LOOT_353",
+      "EX1_345",
+      "LOOT_534",
+      "TRL_131",
+      "ICC_802",
+      "TRL_509",
+      "GVG_082",
+      "KAR_036",
+      "NEW1_020",
+      "CS2_004"
+     ]
+    },
+    {
+     "deckId": 2059,
+     "noteName": "TRLA_186_Rogue_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_146",
+      "UNG_061",
+      "EX1_145",
+      "EX1_126",
+      "CFM_630",
+      "EX1_128",
+      "AT_030",
+      "CFM_325",
+      "NEW1_018",
+      "CS2_072"
+     ]
+    },
+    {
+     "deckId": 2060,
+     "noteName": "TRLA_187_Rogue_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_072",
+      "CFM_630",
+      "KAR_036",
+      "TRL_312",
+      "EX1_129",
+      "LOE_012",
+      "EX1_126",
+      "BOT_087",
+      "CS2_075",
+      "CS2_142"
+     ]
+    },
+    {
+     "deckId": 2061,
+     "noteName": "TRLA_155_Shaman_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "KAR_073",
+      "CS2_053",
+      "EX1_248",
+      "CFM_310",
+      "TRL_351",
+      "EX1_055",
+      "TRL_509",
+      "TRL_522",
+      "GVG_038",
+      "BRM_011"
+     ]
+    },
+    {
+     "deckId": 2062,
+     "noteName": "TRLA_109_Shaman_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "EX1_259",
+      "UNG_928",
+      "EX1_251",
+      "BRM_012",
+      "CFM_061",
+      "EX1_247",
+      "LOE_046",
+      "CS2_168",
+      "EX1_258",
+      "ICC_220"
+     ]
+    },
+    {
+     "deckId": 2063,
+     "noteName": "TRLA_154_Shaman_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_042",
+      "EX1_259",
+      "TRL_012",
+      "UNG_809",
+      "GIL_836",
+      "UNG_938",
+      "TRL_514",
+      "UNG_803",
+      "ICC_466",
+      "OG_156"
+     ]
+    },
+    {
+     "deckId": 2065,
+     "noteName": "TRLA_104_Warrior_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_106",
+      "CFM_653",
+      "BOT_059",
+      "EX1_402",
+      "LOOT_367",
+      "TRL_526",
+      "TRL_010",
+      "TRL_323",
+      "TRL_407",
+      "ICC_062"
+     ]
+    },
+    {
+     "deckId": 2066,
+     "noteName": "TRLA_171_Warrior_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "GVG_051",
+      "EX1_603",
+      "EX1_412",
+      "EX1_393",
+      "EX1_607",
+      "OG_218",
+      "ICC_467",
+      "OG_312",
+      "CS2_108",
+      "CS2_104"
+     ]
+    },
+    {
+     "deckId": 2067,
+     "noteName": "TRLA_170_Warrior_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "TRL_362",
+      "TRL_323",
+      "NEW1_023",
+      "KAR_062",
+      "GIL_681",
+      "AT_017",
+      "CS2_106",
+      "TRL_523",
+      "ICC_027",
+      "LOOT_118"
+     ]
+    },
+    {
+     "deckId": 2069,
+     "noteName": "TRLA_178_Warlock_Player",
+     "name": "",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "EX1_308",
+      "EX1_306",
+      "TRL_245",
+      "OG_109",
+      "TRL_551",
+      "UNG_833",
+      "TRL_247",
+      "CS2_065",
+      "TRL_514",
+      "TRL_509"
+     ]
+    }
+   ],
+   "otherPrefixedDecksNote": "DECK rows whose noteName starts with the adventure code but are not referenced by ADVENTURE_DECK.",
+   "heroPowers": [],
+   "loadoutTreasures": [],
+   "guestHeroes": [
+    {
+     "guestHeroId": 15,
+     "card": {
+      "dbf": 54056,
+      "id": "TRLA_209h_Mage",
+      "name": "Rikkar"
+     },
+     "name": "Mage",
+     "id": 6,
+     "wingId": 1662,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 16,
+     "card": {
+      "dbf": 54057,
+      "id": "TRLA_209h_Druid",
+      "name": "Rikkar"
+     },
+     "name": "Druid",
+     "id": 7,
+     "wingId": 1662,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 17,
+     "card": {
+      "dbf": 54058,
+      "id": "TRLA_209h_Hunter",
+      "name": "Rikkar"
+     },
+     "name": "Hunter",
+     "id": 8,
+     "wingId": 1662,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 18,
+     "card": {
+      "dbf": 54059,
+      "id": "TRLA_209h_Paladin",
+      "name": "Rikkar"
+     },
+     "name": "Paladin",
+     "id": 9,
+     "wingId": 1662,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 19,
+     "card": {
+      "dbf": 54060,
+      "id": "TRLA_209h_Priest",
+      "name": "Rikkar"
+     },
+     "name": "Priest",
+     "id": 10,
+     "wingId": 1662,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 20,
+     "card": {
+      "dbf": 54061,
+      "id": "TRLA_209h_Rogue",
+      "name": "Rikkar"
+     },
+     "name": "Rogue",
+     "id": 11,
+     "wingId": 1662,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 21,
+     "card": {
+      "dbf": 54064,
+      "id": "TRLA_209h_Warrior",
+      "name": "Rikkar"
+     },
+     "name": "Warrior",
+     "id": 12,
+     "wingId": 1662,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 22,
+     "card": {
+      "dbf": 54065,
+      "id": "TRLA_209h_Shaman",
+      "name": "Rikkar"
+     },
+     "name": "Shaman",
+     "id": 13,
+     "wingId": 1662,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 23,
+     "card": {
+      "dbf": 54067,
+      "id": "TRLA_209h_Warlock",
+      "name": "Rikkar"
+     },
+     "name": "Warlock",
+     "id": 14,
+     "wingId": 1662,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 14,
+     "card": {
+      "dbf": 53959,
+      "id": "TRLA_209h",
+      "name": "Rikkar"
+     },
+     "name": "",
+     "id": 5,
+     "wingId": 1662,
+     "baseGuestHero": null,
+     "sortOrder": 2,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    }
+   ],
+   "deckRulesets": []
+  },
+  {
+   "key": "dalaran-heist",
+   "code": "DALA",
+   "adventureId": 438,
+   "noteDesc": "Dalaran",
+   "name": "The Dalaran Heist",
+   "adventureData": [
+    {
+     "ID": 1169,
+     "noteDesc": "Dalaran Dungeon Crawl",
+     "adventureId": 438,
+     "modeId": 5,
+     "sortOrder": 0,
+     "name": "The Dalaran Heist",
+     "shortName": "Normal",
+     "description": "Join the newly-formed League of E.V.I.L. in their attempt to subdue the magical, treasure-filled city of Dalaran!",
+     "shortDescription": "Join the newly-formed League of E.V.I.L. in their attempt to subdue the magical, treasure-filled city of Dalaran!",
+     "lockedShortName": "",
+     "lockedDescription": "",
+     "lockedShortDescription": "",
+     "requirementsDescription": "",
+     "rewardsDescription": "",
+     "completeBannerText": "",
+     "showPlayableScenariosCount": 1,
+     "startingSubscene": 5,
+     "subsceneTransitionDirection": "INVALID",
+     "adventureSubDefPrefab": "AdventureSubDef_DALDungeonCrawl.prefab:e524933b3f3320842ba3049f03b21395",
+     "gameSaveDataServerKeyId": 55,
+     "gameSaveDataClientKeyId": 56,
+     "dungeonCrawlSaveHeroUsingHeroDbId": 0,
+     "dungeonCrawlBossCardPrefab": "Card_DungeonCrawl_Boss_DAL.prefab:a39886c129d674b4c83571067afb328a",
+     "dungeonCrawlPickHeroFirst": 1,
+     "dungeonCrawlSkipHeroSelect": 0,
+     "dungeonCrawlMustPickShrine": 0,
+     "dungeonCrawlSelectChapter": 1,
+     "dungeonCrawlDisplayHeroWinsPerChapter": 1,
+     "dungeonCrawlIsRetireSupported": 0,
+     "dungeonCrawlShowBossKillCount": 1,
+     "dungeonCrawlDefaultToDeckFromUpcomingScenario": 0,
+     "ignoreHeroUnlockRequirement": 1,
+     "bossCardBackId": 168,
+     "hasSeenFeaturedModeOption": "",
+     "hasSeenNewModePopupOption": "",
+     "prefabShownOnComplete": "",
+     "anomalyModeDefaultCardId": 55878,
+     "anomalyModeDefaultCardId_card": "DALA_850",
+     "adventureBookMapPageLocation": 0,
+     "adventureBookRewardPageLocation": 1
+    },
+    {
+     "ID": 1247,
+     "noteDesc": "Dalaran Dungeon Crawl - Heroic",
+     "adventureId": 438,
+     "modeId": 7,
+     "sortOrder": 1,
+     "name": "The Dalaran Heist (Heroic)",
+     "shortName": "Heroic",
+     "description": "Heroic is VERY difficult and is not for the faint of heart!",
+     "shortDescription": "Heroic is VERY difficult and is not for the faint of heart!",
+     "lockedShortName": "",
+     "lockedDescription": "",
+     "lockedShortDescription": "",
+     "requirementsDescription": "Unlock by completing a Chapter in Normal mode.",
+     "rewardsDescription": "",
+     "completeBannerText": "Heroic The Dalaran Heist\nclearedwith {0}!",
+     "showPlayableScenariosCount": 1,
+     "startingSubscene": 5,
+     "subsceneTransitionDirection": "INVALID",
+     "adventureSubDefPrefab": "AdventureSubDef_DALHeroic.prefab:3ad2942935e37844ebdcae62e2653201",
+     "gameSaveDataServerKeyId": 344,
+     "gameSaveDataClientKeyId": 345,
+     "dungeonCrawlSaveHeroUsingHeroDbId": 0,
+     "dungeonCrawlBossCardPrefab": "Card_DungeonCrawl_Boss.prefab:c7f700bb034424e46a7c2321e4621965",
+     "dungeonCrawlPickHeroFirst": 1,
+     "dungeonCrawlSkipHeroSelect": 0,
+     "dungeonCrawlMustPickShrine": 0,
+     "dungeonCrawlSelectChapter": 1,
+     "dungeonCrawlDisplayHeroWinsPerChapter": 1,
+     "dungeonCrawlIsRetireSupported": 0,
+     "dungeonCrawlShowBossKillCount": 1,
+     "dungeonCrawlDefaultToDeckFromUpcomingScenario": 0,
+     "ignoreHeroUnlockRequirement": 1,
+     "bossCardBackId": 169,
+     "hasSeenFeaturedModeOption": "",
+     "hasSeenNewModePopupOption": "",
+     "prefabShownOnComplete": "",
+     "anomalyModeDefaultCardId": 55878,
+     "anomalyModeDefaultCardId_card": "DALA_850",
+     "adventureBookMapPageLocation": 0,
+     "adventureBookRewardPageLocation": 1
+    }
+   ],
+   "wings": [
+    {
+     "wingId": 1664,
+     "noteDesc": "Chapter 1: Dalaran Bank",
+     "name": "Chapter I: Dalaran Bank",
+     "sortOrder": 1,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": {
+      "dbf": 55455,
+      "id": "DALA_829",
+      "name": "Twist - The Coffers"
+     },
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 2213,
+     "noteDesc": "Chapter 2: The Violet Hold",
+     "name": "Chapter II: The Violet Hold",
+     "sortOrder": 2,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": {
+      "dbf": 53405,
+      "id": "DALA_832",
+      "name": "Twist - The Prisons"
+     },
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 2214,
+     "noteDesc": "Chapter 3: Streets of Dalaran",
+     "name": "Chapter III: Streets of Dalaran",
+     "sortOrder": 3,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": {
+      "dbf": 53406,
+      "id": "DALA_833",
+      "name": "Twist - The Carts"
+     },
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 2215,
+     "noteDesc": "Chapter 4: The Underbelly",
+     "name": "Chapter IV: The Underbelly",
+     "sortOrder": 4,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": {
+      "dbf": 53404,
+      "id": "DALA_831",
+      "name": "Twist - The Stench"
+     },
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 2216,
+     "noteDesc": "Chapter 5: Kirin Tor Citadel",
+     "name": "Chapter V: Kirin Tor Citadel",
+     "sortOrder": 5,
+     "dungeonCrawlBosses": 12,
+     "plotTwistCard": {
+      "dbf": 56961,
+      "id": "DALA_830",
+      "name": "Twist - The Finale"
+     },
+     "allowsAnomaly": 1
+    }
+   ],
+   "counts": {
+    "scenarios": 12,
+    "scenarioBossHeroes": 6,
+    "bossHeroCardCandidates": 78,
+    "heroCardsWithPrefix": 87,
+    "bossDecks": 0,
+    "starterDecks": 36,
+    "otherPrefixedDecks": 0,
+    "heroPowers": 27,
+    "loadoutTreasures": 0,
+    "guestHeroes": 9,
+    "deckRulesets": 0
+   },
+   "scenarios": [
+    {
+     "scenarioId": 3005,
+     "noteDesc": "DALA_Bank",
+     "name": "",
+     "wingId": 1664,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 54360,
+      "id": "DALA_BOSS_66h",
+      "name": "Marei Loom"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3005.asset:c37afe6cd3b542079cb2186b193cb19f",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 389,
+       "scenarioId": 3005,
+       "noteDesc": "DAL Chapter 1: Dalaran Bank",
+       "reqWingId": 1664,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 1664,
+       "grantsProgress": 2,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3188,
+     "noteDesc": "DALA_VioletHold",
+     "name": "",
+     "wingId": 2213,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 53776,
+      "id": "DALA_BOSS_19h",
+      "name": "Linzi Redgrin"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3188.asset:0d619409c1244c47ac266d85aeaf70b0",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 391,
+       "scenarioId": 3188,
+       "noteDesc": "DAL Chapter 2: The Violet Hold",
+       "reqWingId": 2213,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 2213,
+       "grantsProgress": 2,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3189,
+     "noteDesc": "DALA_Streets",
+     "name": "",
+     "wingId": 2214,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 53624,
+      "id": "DALA_BOSS_32h",
+      "name": "Kizi Copperclip"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3189.asset:63a4394962bd4c80a3c623d60f827e89",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 392,
+       "scenarioId": 3189,
+       "noteDesc": "DAL Chapter 3: Streets of Dalaran",
+       "reqWingId": 2214,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 2214,
+       "grantsProgress": 2,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3190,
+     "noteDesc": "DALA_Underbelly",
+     "name": "",
+     "wingId": 2215,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 53750,
+      "id": "DALA_BOSS_01h",
+      "name": "Chomper"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3190.asset:7a7e6c9c8dfd447c930cd96b00ca70a2",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 393,
+       "scenarioId": 3190,
+       "noteDesc": "DAL Chapter 4: The Underbelly",
+       "reqWingId": 2215,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 2215,
+       "grantsProgress": 2,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3191,
+     "noteDesc": "DALA_Citadel",
+     "name": "",
+     "wingId": 2216,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 53667,
+      "id": "DALA_BOSS_03h",
+      "name": "The Great Akazamzarak"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3191.asset:a28b661b79244e21a387d40d7ff005e5",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 394,
+       "scenarioId": 3191,
+       "noteDesc": "DAL Chapter 5: Kirin Tor Citadel",
+       "reqWingId": 2216,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 2216,
+       "grantsProgress": 2,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3236,
+     "noteDesc": "DALA_Tavern",
+     "name": "",
+     "wingId": 0,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 52913,
+      "id": "DALA_BOSS_99h",
+      "name": "Bartender Bob"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3236.asset:9fa5ccb1e4964adab95b192bf12ebc3d",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": []
+    },
+    {
+     "scenarioId": 3328,
+     "noteDesc": "DALA_Bank_Heroic",
+     "name": "",
+     "wingId": 1664,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 54360,
+      "id": "DALA_BOSS_66h",
+      "name": "Marei Loom"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3328.asset:56242e189b204cb997ddbdc849f6dd41",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 400,
+       "scenarioId": 3328,
+       "noteDesc": "DAL Chapter 1: Heroic Dalaran Bank",
+       "reqWingId": 1664,
+       "reqProgress": 2,
+       "reqFlags": 1,
+       "grantsWingId": 1664,
+       "grantsProgress": 3,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3329,
+     "noteDesc": "DALA_VioletHold_Heroic",
+     "name": "",
+     "wingId": 2213,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 53776,
+      "id": "DALA_BOSS_19h",
+      "name": "Linzi Redgrin"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3329.asset:7d763f7e7ea44c21ac964cbdaa4d85b2",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 401,
+       "scenarioId": 3329,
+       "noteDesc": "DAL Chapter 2: Heroic The Violet Hold",
+       "reqWingId": 2213,
+       "reqProgress": 2,
+       "reqFlags": 1,
+       "grantsWingId": 2213,
+       "grantsProgress": 3,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3330,
+     "noteDesc": "DALA_Streets_Heroic",
+     "name": "",
+     "wingId": 2214,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 53624,
+      "id": "DALA_BOSS_32h",
+      "name": "Kizi Copperclip"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3330.asset:92407c34d925430393d18179f7438b3b",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 402,
+       "scenarioId": 3330,
+       "noteDesc": "DAL Chapter 3: Heroic Streets of Dalaran",
+       "reqWingId": 2214,
+       "reqProgress": 2,
+       "reqFlags": 1,
+       "grantsWingId": 2214,
+       "grantsProgress": 3,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3331,
+     "noteDesc": "DALA_Underbelly_Heroic",
+     "name": "",
+     "wingId": 2215,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 53750,
+      "id": "DALA_BOSS_01h",
+      "name": "Chomper"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3331.asset:21afe54f17ce4169aa14f3e6a95770aa",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 403,
+       "scenarioId": 3331,
+       "noteDesc": "DAL Chapter 4: Heroic The Underbelly",
+       "reqWingId": 2215,
+       "reqProgress": 2,
+       "reqFlags": 1,
+       "grantsWingId": 2215,
+       "grantsProgress": 3,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3332,
+     "noteDesc": "DALA_Citadel_Heroic",
+     "name": "",
+     "wingId": 2216,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 53667,
+      "id": "DALA_BOSS_03h",
+      "name": "The Great Akazamzarak"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3332.asset:6d3f126f8c0c47788481ed9bc1570884",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 404,
+       "scenarioId": 3332,
+       "noteDesc": "DAL Chapter 5: Heroic Kirin Tor Citadel",
+       "reqWingId": 2216,
+       "reqProgress": 2,
+       "reqFlags": 1,
+       "grantsWingId": 2216,
+       "grantsProgress": 3,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3359,
+     "noteDesc": "DALA_Tavern_Heroic",
+     "name": "",
+     "wingId": 0,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 52913,
+      "id": "DALA_BOSS_99h",
+      "name": "Bartender Bob"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3359.asset:d05d33b0ebef4e12a69ed398a856f49f",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": []
+    }
+   ],
+   "bossDecks": [],
+   "bossDecksNote": "SCENARIO has no player2 deck column and no DECK row is a boss deck for this adventure; dungeon-crawl boss decks and boss rotation are server-side.",
+   "heroCardsByPrefix": [
+    {
+     "dbf": 53750,
+     "id": "DALA_BOSS_01h",
+     "name": "Chomper",
+     "bossInId": true
+    },
+    {
+     "dbf": 53779,
+     "id": "DALA_BOSS_02h",
+     "name": "Awilo, Cooking Trainer",
+     "bossInId": true
+    },
+    {
+     "dbf": 53667,
+     "id": "DALA_BOSS_03h",
+     "name": "The Great Akazamzarak",
+     "bossInId": true
+    },
+    {
+     "dbf": 53558,
+     "id": "DALA_BOSS_04h",
+     "name": "Kaye Toogie",
+     "bossInId": true
+    },
+    {
+     "dbf": 53572,
+     "id": "DALA_BOSS_05h",
+     "name": "The Amazing \"Bonepaw\"",
+     "bossInId": true
+    },
+    {
+     "dbf": 54434,
+     "id": "DALA_BOSS_06dk",
+     "name": "\"Scourgelord\" Dazzik",
+     "bossInId": true
+    },
+    {
+     "dbf": 53636,
+     "id": "DALA_BOSS_06h",
+     "name": "Dazzik \"Hellscream\"",
+     "bossInId": true
+    },
+    {
+     "dbf": 53607,
+     "id": "DALA_BOSS_07h",
+     "name": "Flight Master Belnaara",
+     "bossInId": true
+    },
+    {
+     "dbf": 53309,
+     "id": "DALA_BOSS_08h",
+     "name": "Applebough",
+     "bossInId": true
+    },
+    {
+     "dbf": 53562,
+     "id": "DALA_BOSS_09h",
+     "name": "Archivist Oshi",
+     "bossInId": true
+    },
+    {
+     "dbf": 53483,
+     "id": "DALA_BOSS_10h",
+     "name": "Mo Eniwhiskers",
+     "bossInId": true
+    },
+    {
+     "dbf": 53714,
+     "id": "DALA_BOSS_11h",
+     "name": "Noz Timbertail",
+     "bossInId": true
+    },
+    {
+     "dbf": 53783,
+     "id": "DALA_BOSS_12h",
+     "name": "Cravitz Lorent",
+     "bossInId": true
+    },
+    {
+     "dbf": 53734,
+     "id": "DALA_BOSS_13h",
+     "name": "Albin Eastoft",
+     "bossInId": true
+    },
+    {
+     "dbf": 53637,
+     "id": "DALA_BOSS_14h",
+     "name": "Tierra Blythe",
+     "bossInId": true
+    },
+    {
+     "dbf": 53567,
+     "id": "DALA_BOSS_15h",
+     "name": "Moon Priestess Nici",
+     "bossInId": true
+    },
+    {
+     "dbf": 53568,
+     "id": "DALA_BOSS_16h",
+     "name": "Alchemist Wendy",
+     "bossInId": true
+    },
+    {
+     "dbf": 53571,
+     "id": "DALA_BOSS_17h",
+     "name": "Tala Stonerage",
+     "bossInId": true
+    },
+    {
+     "dbf": 53528,
+     "id": "DALA_BOSS_18h",
+     "name": "Disidra Stormglory",
+     "bossInId": true
+    },
+    {
+     "dbf": 53776,
+     "id": "DALA_BOSS_19h",
+     "name": "Linzi Redgrin",
+     "bossInId": true
+    },
+    {
+     "dbf": 53521,
+     "id": "DALA_BOSS_20h",
+     "name": "Vas'no",
+     "bossInId": true
+    },
+    {
+     "dbf": 53560,
+     "id": "DALA_BOSS_21h",
+     "name": "Whirt the All-Knowing",
+     "bossInId": true
+    },
+    {
+     "dbf": 53538,
+     "id": "DALA_BOSS_22h",
+     "name": "Bookmaster Bae Chao",
+     "bossInId": true
+    },
+    {
+     "dbf": 53673,
+     "id": "DALA_BOSS_23h",
+     "name": "Sharky McFin",
+     "bossInId": true
+    },
+    {
+     "dbf": 53583,
+     "id": "DALA_BOSS_24h",
+     "name": "Ranger Ar'ha",
+     "bossInId": true
+    },
+    {
+     "dbf": 53541,
+     "id": "DALA_BOSS_25h",
+     "name": "Jepetto Joybuzz",
+     "bossInId": true
+    },
+    {
+     "dbf": 53566,
+     "id": "DALA_BOSS_26h",
+     "name": "Dalaran Fountain Golem",
+     "bossInId": true
+    },
+    {
+     "dbf": 53599,
+     "id": "DALA_BOSS_27h",
+     "name": "Rasil Fireborne",
+     "bossInId": true
+    },
+    {
+     "dbf": 53880,
+     "id": "DALA_BOSS_28h",
+     "name": "Xur'ios",
+     "bossInId": true
+    },
+    {
+     "dbf": 53584,
+     "id": "DALA_BOSS_29h",
+     "name": "Mama Diggs",
+     "bossInId": true
+    },
+    {
+     "dbf": 53601,
+     "id": "DALA_BOSS_30h",
+     "name": "The Rat King",
+     "bossInId": true
+    },
+    {
+     "dbf": 53587,
+     "id": "DALA_BOSS_31h",
+     "name": "Timothy Jones",
+     "bossInId": true
+    },
+    {
+     "dbf": 53624,
+     "id": "DALA_BOSS_32h",
+     "name": "Kizi Copperclip",
+     "bossInId": true
+    },
+    {
+     "dbf": 53564,
+     "id": "DALA_BOSS_33h",
+     "name": "Gold Elemental",
+     "bossInId": true
+    },
+    {
+     "dbf": 53802,
+     "id": "DALA_BOSS_34h",
+     "name": "Carousel Gryphon",
+     "bossInId": true
+    },
+    {
+     "dbf": 53622,
+     "id": "DALA_BOSS_35h",
+     "name": "Soothsayer Zoie",
+     "bossInId": true
+    },
+    {
+     "dbf": 53629,
+     "id": "DALA_BOSS_36h",
+     "name": "Draemus",
+     "bossInId": true
+    },
+    {
+     "dbf": 53810,
+     "id": "DALA_BOSS_37h",
+     "name": "Ol' Toomba",
+     "bossInId": true
+    },
+    {
+     "dbf": 53815,
+     "id": "DALA_BOSS_38h",
+     "name": "Tipsi Wobblerune",
+     "bossInId": true
+    },
+    {
+     "dbf": 53817,
+     "id": "DALA_BOSS_39h",
+     "name": "Aki the Brilliant",
+     "bossInId": true
+    },
+    {
+     "dbf": 53820,
+     "id": "DALA_BOSS_40h",
+     "name": "Oxana Demonslay",
+     "bossInId": true
+    },
+    {
+     "dbf": 53870,
+     "id": "DALA_BOSS_41h",
+     "name": "Ungan Oddkind",
+     "bossInId": true
+    },
+    {
+     "dbf": 53903,
+     "id": "DALA_BOSS_42h",
+     "name": "P.O.G.O.",
+     "bossInId": true
+    },
+    {
+     "dbf": 54155,
+     "id": "DALA_BOSS_43h",
+     "name": "Magistrix Norroa",
+     "bossInId": true
+    },
+    {
+     "dbf": 54303,
+     "id": "DALA_BOSS_44h",
+     "name": "Erekem",
+     "bossInId": true
+    },
+    {
+     "dbf": 54293,
+     "id": "DALA_BOSS_45h",
+     "name": "Moragg",
+     "bossInId": true
+    },
+    {
+     "dbf": 53604,
+     "id": "DALA_BOSS_46h",
+     "name": "Ichoron",
+     "bossInId": true
+    },
+    {
+     "dbf": 53597,
+     "id": "DALA_BOSS_47h",
+     "name": "Lavanthor",
+     "bossInId": true
+    },
+    {
+     "dbf": 53594,
+     "id": "DALA_BOSS_48h",
+     "name": "Zuramat the Obliterator",
+     "bossInId": true
+    },
+    {
+     "dbf": 53592,
+     "id": "DALA_BOSS_49h",
+     "name": "Cyanigosa",
+     "bossInId": true
+    },
+    {
+     "dbf": 54299,
+     "id": "DALA_BOSS_50h",
+     "name": "Nozari",
+     "bossInId": true
+    },
+    {
+     "dbf": 54306,
+     "id": "DALA_BOSS_51h",
+     "name": "Millificent Manastorm",
+     "bossInId": true
+    },
+    {
+     "dbf": 54334,
+     "id": "DALA_BOSS_52h",
+     "name": "Lieutenant Sinclari",
+     "bossInId": true
+    },
+    {
+     "dbf": 53556,
+     "id": "DALA_BOSS_53h",
+     "name": "Dancin' Deryl",
+     "bossInId": true
+    },
+    {
+     "dbf": 54336,
+     "id": "DALA_BOSS_54h",
+     "name": "Locksmith Zibb",
+     "bossInId": true
+    },
+    {
+     "dbf": 54338,
+     "id": "DALA_BOSS_55h",
+     "name": "Captain Hannigan",
+     "bossInId": true
+    },
+    {
+     "dbf": 54340,
+     "id": "DALA_BOSS_56h",
+     "name": "Queen Wagtoggle",
+     "bossInId": true
+    },
+    {
+     "dbf": 54342,
+     "id": "DALA_BOSS_57h",
+     "name": "Trade Prince Gallywix",
+     "bossInId": true
+    },
+    {
+     "dbf": 54344,
+     "id": "DALA_BOSS_58h",
+     "name": "Boommaster Flark",
+     "bossInId": true
+    },
+    {
+     "dbf": 54346,
+     "id": "DALA_BOSS_59h",
+     "name": "Madam Goya",
+     "bossInId": true
+    },
+    {
+     "dbf": 54348,
+     "id": "DALA_BOSS_60h",
+     "name": "Archmage Khadgar",
+     "bossInId": true
+    },
+    {
+     "dbf": 54350,
+     "id": "DALA_BOSS_61h",
+     "name": "Sael'orn",
+     "bossInId": true
+    },
+    {
+     "dbf": 54352,
+     "id": "DALA_BOSS_62h",
+     "name": "Haro Setting-Sun",
+     "bossInId": true
+    },
+    {
+     "dbf": 54354,
+     "id": "DALA_BOSS_63h",
+     "name": "Dagg Cruelmight",
+     "bossInId": true
+    },
+    {
+     "dbf": 54356,
+     "id": "DALA_BOSS_64h",
+     "name": "Banker Biggs",
+     "bossInId": true
+    },
+    {
+     "dbf": 54358,
+     "id": "DALA_BOSS_65h",
+     "name": "Valdera Highborne",
+     "bossInId": true
+    },
+    {
+     "dbf": 54360,
+     "id": "DALA_BOSS_66h",
+     "name": "Marei Loom",
+     "bossInId": true
+    },
+    {
+     "dbf": 54437,
+     "id": "DALA_BOSS_67h",
+     "name": "Archmage Vargoth",
+     "bossInId": true
+    },
+    {
+     "dbf": 54439,
+     "id": "DALA_BOSS_68h",
+     "name": "Lilayell Suntear",
+     "bossInId": true
+    },
+    {
+     "dbf": 54362,
+     "id": "DALA_BOSS_69h",
+     "name": "Archmage Kalec",
+     "bossInId": true
+    },
+    {
+     "dbf": 54364,
+     "id": "DALA_BOSS_70h",
+     "name": "Sky Captain Smiggs",
+     "bossInId": true
+    },
+    {
+     "dbf": 54441,
+     "id": "DALA_BOSS_71h",
+     "name": "Anarii Duskgrove",
+     "bossInId": true
+    },
+    {
+     "dbf": 54443,
+     "id": "DALA_BOSS_72h",
+     "name": "Kazamon Steelskin",
+     "bossInId": true
+    },
+    {
+     "dbf": 54445,
+     "id": "DALA_BOSS_73h",
+     "name": "Hesutu Stonewind",
+     "bossInId": true
+    },
+    {
+     "dbf": 54447,
+     "id": "DALA_BOSS_74h",
+     "name": "Kara Stamper",
+     "bossInId": true
+    },
+    {
+     "dbf": 54449,
+     "id": "DALA_BOSS_75h",
+     "name": "Commander Bolan",
+     "bossInId": true
+    },
+    {
+     "dbf": 56479,
+     "id": "DALA_BOSS_98h",
+     "name": "Bartendotron",
+     "bossInId": true
+    },
+    {
+     "dbf": 52913,
+     "id": "DALA_BOSS_99h",
+     "name": "Bartender Bob",
+     "bossInId": true
+    },
+    {
+     "dbf": 54550,
+     "id": "DALA_Barkeye",
+     "name": "Ol' Barkeye",
+     "bossInId": false
+    },
+    {
+     "dbf": 54546,
+     "id": "DALA_Chu",
+     "name": "Mr. Chu",
+     "bossInId": false
+    },
+    {
+     "dbf": 54548,
+     "id": "DALA_Eudora",
+     "name": "Captain Eudora",
+     "bossInId": false
+    },
+    {
+     "dbf": 54549,
+     "id": "DALA_George",
+     "name": "George the Fallen",
+     "bossInId": false
+    },
+    {
+     "dbf": 54554,
+     "id": "DALA_Kriziki",
+     "name": "Kriziki",
+     "bossInId": false
+    },
+    {
+     "dbf": 54553,
+     "id": "DALA_Rakanishu",
+     "name": "Rakanishu",
+     "bossInId": false
+    },
+    {
+     "dbf": 54551,
+     "id": "DALA_Squeamlish",
+     "name": "Squeamlish",
+     "bossInId": false
+    },
+    {
+     "dbf": 54552,
+     "id": "DALA_Tekahn",
+     "name": "Tekahn",
+     "bossInId": false
+    },
+    {
+     "dbf": 54547,
+     "id": "DALA_Vessina",
+     "name": "Vessina",
+     "bossInId": false
+    }
+   ],
+   "heroCardsByPrefixNote": "Not a client relation: CARD ids matching ^DALA_ whose CARDTYPE tag (202) is HERO (3). bossInId marks ids containing BOSS. Scenario bossHero is the only client-side boss link.",
+   "starterDecks": [
+    {
+     "adventureDeckId": 57,
+     "classId": 2,
+     "className": "DRUID",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 1947,
+     "noteName": "DALA_Druid_Deck1",
+     "name": "Ferocity",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "UNG_108",
+      "LOOT_218",
+      "DAL_354",
+      "DAL_733",
+      "UNG_078",
+      "LOOT_413",
+      "OG_313",
+      "DAL_351",
+      "LOOT_309",
+      "LOOT_056"
+     ]
+    },
+    {
+     "adventureDeckId": 58,
+     "classId": 2,
+     "className": "DRUID",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 86,
+     "unlockValue": 5,
+     "deckId": 1948,
+     "noteName": "DALA_Druid_Deck2",
+     "name": "Two Paths",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "LOE_115",
+      "LOOT_258",
+      "EX1_160",
+      "GVG_030",
+      "LOOT_351",
+      "FP1_005",
+      "EX1_155",
+      "OG_202",
+      "DAL_582",
+      "NEW1_007"
+     ]
+    },
+    {
+     "adventureDeckId": 59,
+     "classId": 2,
+     "className": "DRUID",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 86,
+     "unlockValue": 10,
+     "deckId": 1949,
+     "noteName": "DALA_Druid_Deck3",
+     "name": "Nature's Boon",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "KAR_300",
+      "CS2_005",
+      "BOT_419",
+      "CFM_659",
+      "BOT_420",
+      "CS2_007",
+      "DAL_355",
+      "AT_039",
+      "FP1_019",
+      "DAL_799"
+     ]
+    },
+    {
+     "adventureDeckId": 60,
+     "classId": 2,
+     "className": "DRUID",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 86,
+     "unlockValue": 15,
+     "deckId": 1982,
+     "noteName": "DALA_Druid_Random",
+     "name": "Random Druid Deck",
+     "description": "Start the run with a random Druid deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DALA_801"
+     ]
+    },
+    {
+     "adventureDeckId": 61,
+     "classId": 3,
+     "className": "HUNTER",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 1959,
+     "noteName": "DALA_Hunter_Deck1",
+     "name": "Beast Within",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "TRL_348",
+      "EX1_531",
+      "LOOT_078",
+      "CS2_125",
+      "DS1_070",
+      "DS1_185",
+      "EX1_610",
+      "NEW1_031",
+      "DS1_183",
+      "EX1_536"
+     ]
+    },
+    {
+     "adventureDeckId": 62,
+     "classId": 3,
+     "className": "HUNTER",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 96,
+     "unlockValue": 5,
+     "deckId": 1957,
+     "noteName": "DALA_Hunter_Deck2",
+     "name": "Locked and Loaded",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "OG_061",
+      "DAL_373",
+      "DAL_587",
+      "GIL_607t",
+      "AT_061",
+      "TRL_312",
+      "TRL_509",
+      "OG_325",
+      "LOOT_077",
+      "DAL_371"
+     ]
+    },
+    {
+     "adventureDeckId": 63,
+     "classId": 3,
+     "className": "HUNTER",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 96,
+     "unlockValue": 10,
+     "deckId": 1958,
+     "noteName": "DALA_Hunter_Deck3",
+     "name": "Tech and Death",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "BOT_445",
+      "GVG_082",
+      "FP1_011",
+      "BOT_038",
+      "GVG_043",
+      "LOOT_413",
+      "DAL_377",
+      "GIL_681",
+      "BOT_251",
+      "OG_216"
+     ]
+    },
+    {
+     "adventureDeckId": 64,
+     "classId": 3,
+     "className": "HUNTER",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 96,
+     "unlockValue": 15,
+     "deckId": 1981,
+     "noteName": "DALA_Hunter_Random",
+     "name": "Random Hunter Deck",
+     "description": "Start the run with a random Hunter deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DALA_802"
+     ]
+    },
+    {
+     "adventureDeckId": 65,
+     "classId": 4,
+     "className": "MAGE",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 1966,
+     "noteName": "DALA_Mage_Deck1",
+     "name": "Kindling Apprentice",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "KAR_036",
+      "DAL_608",
+      "NEW1_023",
+      "UNG_018",
+      "EX1_608",
+      "CS2_117",
+      "DAL_163",
+      "CS2_022",
+      "CS2_033",
+      "GIL_667"
+     ]
+    },
+    {
+     "adventureDeckId": 66,
+     "classId": 4,
+     "className": "MAGE",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 98,
+     "unlockValue": 5,
+     "deckId": 1965,
+     "noteName": "DALA_Mage_Deck2",
+     "name": "The Elements",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "UNG_809",
+      "EX1_393",
+      "CS2_024",
+      "DAL_182",
+      "UNG_941",
+      "UNG_845",
+      "LOOT_347",
+      "GIL_561",
+      "EX1_046",
+      "TRL_313"
+     ]
+    },
+    {
+     "adventureDeckId": 67,
+     "classId": 4,
+     "className": "MAGE",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 98,
+     "unlockValue": 10,
+     "deckId": 1967,
+     "noteName": "DALA_Mage_Deck3",
+     "name": "BURN!",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "TRL_363",
+      "CFM_066",
+      "AT_094",
+      "CS2_142",
+      "OG_083",
+      "LOOT_101",
+      "EX1_294",
+      "GIL_147",
+      "BOT_604",
+      "BOT_254"
+     ]
+    },
+    {
+     "adventureDeckId": 68,
+     "classId": 4,
+     "className": "MAGE",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 98,
+     "unlockValue": 15,
+     "deckId": 1979,
+     "noteName": "DALA_Mage_Random",
+     "name": "Random Mage Deck",
+     "description": "Start the run with a random mage deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DALA_800"
+     ]
+    },
+    {
+     "adventureDeckId": 69,
+     "classId": 5,
+     "className": "PALADIN",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 1950,
+     "noteName": "DALA_Paladin_Deck1",
+     "name": "Old Hero",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_087",
+      "OG_221",
+      "EX1_130",
+      "GVG_058",
+      "UNG_011",
+      "GIL_145",
+      "LOOT_124",
+      "CS2_094",
+      "BOT_911",
+      "CS2_097"
+     ]
+    },
+    {
+     "adventureDeckId": 70,
+     "classId": 5,
+     "className": "PALADIN",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 82,
+     "unlockValue": 5,
+     "deckId": 1951,
+     "noteName": "DALA_Paladin_Deck2",
+     "name": "Adventure",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "FP1_020",
+      "UNG_960",
+      "ICC_039",
+      "TRL_306",
+      "GVG_067",
+      "LOOT_286",
+      "GIL_685",
+      "DAL_727",
+      "EX1_093",
+      "CFM_639"
+     ]
+    },
+    {
+     "adventureDeckId": 71,
+     "classId": 5,
+     "className": "PALADIN",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 82,
+     "unlockValue": 10,
+     "deckId": 1952,
+     "noteName": "DALA_Paladin_Deck3",
+     "name": "Holy Flames",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DAL_141",
+      "DAL_570",
+      "DAL_086",
+      "NEW1_023",
+      "DAL_571",
+      "DAL_146",
+      "LOOT_398",
+      "CS2_093",
+      "EX1_043",
+      "DAL_147"
+     ]
+    },
+    {
+     "adventureDeckId": 72,
+     "classId": 5,
+     "className": "PALADIN",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 82,
+     "unlockValue": 15,
+     "deckId": 1983,
+     "noteName": "DALA_Paladin_Random",
+     "name": "Random Paladin Deck",
+     "description": "Start the run with a random Paladin deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DALA_803"
+     ]
+    },
+    {
+     "adventureDeckId": 73,
+     "classId": 6,
+     "className": "PRIEST",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 1953,
+     "noteName": "DALA_Priest_Deck1",
+     "name": "Disciplined",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "KAR_036",
+      "CS1_129",
+      "CS2_235",
+      "CS2_236",
+      "GIL_835",
+      "GIL_681",
+      "CFM_626",
+      "BOT_219",
+      "OG_335",
+      "CS1_112"
+     ]
+    },
+    {
+     "adventureDeckId": 74,
+     "classId": 6,
+     "className": "PRIEST",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 92,
+     "unlockValue": 5,
+     "deckId": 1960,
+     "noteName": "DALA_Priest_Deck2",
+     "name": "Shadows",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "BOT_447",
+      "CFM_603",
+      "ICC_802",
+      "ICC_210",
+      "UNG_029",
+      "AT_014",
+      "TRL_131",
+      "EX1_622",
+      "EX1_043",
+      "EX1_564"
+     ]
+    },
+    {
+     "adventureDeckId": 75,
+     "classId": 6,
+     "className": "PRIEST",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 92,
+     "unlockValue": 10,
+     "deckId": 1961,
+     "noteName": "DALA_Priest_Deck3",
+     "name": "Visions",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "OG_101",
+      "DAL_723",
+      "EX1_029",
+      "BRM_017",
+      "LOE_006",
+      "DAL_413",
+      "FP1_023",
+      "ICC_212",
+      "CS2_182",
+      "DAL_039"
+     ]
+    },
+    {
+     "adventureDeckId": 76,
+     "classId": 6,
+     "className": "PRIEST",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 92,
+     "unlockValue": 15,
+     "deckId": 1984,
+     "noteName": "DALA_Priest_Random",
+     "name": "Random Priest Deck",
+     "description": "Start the run with a random Priest deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DALA_804"
+     ]
+    },
+    {
+     "adventureDeckId": 77,
+     "classId": 7,
+     "className": "ROGUE",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 1963,
+     "noteName": "DALA_Rogue_Deck1",
+     "name": "Skulker",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_072",
+      "LOE_010",
+      "CS2_146",
+      "EX1_124",
+      "GVG_081",
+      "EX1_131",
+      "KAR_094",
+      "EX1_129",
+      "FP1_005",
+      "CFM_694"
+     ]
+    },
+    {
+     "adventureDeckId": 78,
+     "classId": 7,
+     "className": "ROGUE",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 88,
+     "unlockValue": 5,
+     "deckId": 1962,
+     "noteName": "DALA_Rogue_Deck2",
+     "name": "Dead Man's Tale",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "AT_029",
+      "TRL_074",
+      "EX1_182",
+      "OG_072",
+      "DAL_714",
+      "GVG_023",
+      "KAR_712",
+      "GIL_827",
+      "LOE_012",
+      "DAL_416"
+     ]
+    },
+    {
+     "adventureDeckId": 79,
+     "classId": 7,
+     "className": "ROGUE",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 88,
+     "unlockValue": 10,
+     "deckId": 1974,
+     "noteName": "DALA_Rogue_Deck3",
+     "name": "Kobold's Desire",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DAL_010",
+      "KAR_069",
+      "BOT_283",
+      "BOT_288",
+      "AT_031",
+      "AT_035",
+      "BOT_559",
+      "DAL_415",
+      "DAL_720",
+      "BRM_008"
+     ]
+    },
+    {
+     "adventureDeckId": 80,
+     "classId": 7,
+     "className": "ROGUE",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 88,
+     "unlockValue": 15,
+     "deckId": 1985,
+     "noteName": "DALA_Rogue_Random",
+     "name": "Random Rogue Deck",
+     "description": "Start the run with a random Rogue deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DALA_805"
+     ]
+    },
+    {
+     "adventureDeckId": 81,
+     "classId": 8,
+     "className": "SHAMAN",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 1969,
+     "noteName": "DALA_Shaman_Deck1",
+     "name": "Carve and Curse",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "UNG_019",
+      "NEW1_019",
+      "EX1_096",
+      "CS2_117",
+      "EX1_565",
+      "EX1_587",
+      "EX1_245",
+      "CS2_045",
+      "EX1_248",
+      "EX1_247"
+     ]
+    },
+    {
+     "adventureDeckId": 82,
+     "classId": 8,
+     "className": "SHAMAN",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 90,
+     "unlockValue": 5,
+     "deckId": 1968,
+     "noteName": "DALA_Shaman_Deck2",
+     "name": "Primal Storms",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "UNG_809",
+      "AT_052",
+      "GVG_037",
+      "UNG_938",
+      "EX1_258",
+      "GIL_622",
+      "EX1_238",
+      "DAL_432",
+      "EX1_259",
+      "TRL_352"
+     ]
+    },
+    {
+     "adventureDeckId": 83,
+     "classId": 8,
+     "className": "SHAMAN",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 90,
+     "unlockValue": 10,
+     "deckId": 1970,
+     "noteName": "DALA_Shaman_Deck3",
+     "name": "The Swamp",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DAL_433",
+      "LOOT_258",
+      "DAL_049",
+      "tt_004",
+      "GIL_678",
+      "OG_249",
+      "DAL_071",
+      "UNG_956",
+      "UNG_817",
+      "DAL_009"
+     ]
+    },
+    {
+     "adventureDeckId": 84,
+     "classId": 8,
+     "className": "SHAMAN",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 90,
+     "unlockValue": 15,
+     "deckId": 1986,
+     "noteName": "DALA_Shaman_Random",
+     "name": "Random Shaman Deck",
+     "description": "Start the run with a random Shaman deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DALA_806"
+     ]
+    },
+    {
+     "adventureDeckId": 85,
+     "classId": 9,
+     "className": "WARLOCK",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 1973,
+     "noteName": "DALA_Warlock_Deck1",
+     "name": "Sacrificial",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_065",
+      "OG_241",
+      "ICC_407",
+      "LOOT_413",
+      "ICC_041",
+      "BOT_222",
+      "GIL_508",
+      "CS2_117",
+      "DAL_563",
+      "CS2_062"
+     ]
+    },
+    {
+     "adventureDeckId": 86,
+     "classId": 9,
+     "className": "WARLOCK",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 94,
+     "unlockValue": 5,
+     "deckId": 1971,
+     "noteName": "DALA_Warlock_Deck2",
+     "name": "Seeker",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "UNG_809",
+      "EX1_302",
+      "LOOT_014",
+      "EX1_058",
+      "LOE_023",
+      "CS2_057",
+      "TRL_551",
+      "DAL_582",
+      "EX1_320",
+      "GVG_100"
+     ]
+    },
+    {
+     "adventureDeckId": 87,
+     "classId": 9,
+     "className": "WARLOCK",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 94,
+     "unlockValue": 10,
+     "deckId": 1972,
+     "noteName": "DALA_Warlock_Deck3",
+     "name": "Imp-ressive",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "GIL_608",
+      "EX1_319",
+      "LOE_007",
+      "GVG_018",
+      "DAL_007",
+      "EX1_597",
+      "BRM_005",
+      "OG_113",
+      "DAL_605",
+      "ICC_075"
+     ]
+    },
+    {
+     "adventureDeckId": 88,
+     "classId": 9,
+     "className": "WARLOCK",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 94,
+     "unlockValue": 15,
+     "deckId": 1987,
+     "noteName": "DALA_Warlock_Random",
+     "name": "Random Warlock Deck",
+     "description": "Start the run with a random Warlock deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DALA_807"
+     ]
+    },
+    {
+     "adventureDeckId": 89,
+     "classId": 10,
+     "className": "WARRIOR",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 1955,
+     "noteName": "DALA_Warrior_Deck1",
+     "name": "Tough Crowd",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "OG_312",
+      "DAL_769",
+      "EX1_393",
+      "OG_315",
+      "BRM_016",
+      "OG_218",
+      "CS2_104",
+      "AT_064",
+      "EX1_407",
+      "CS2_106"
+     ]
+    },
+    {
+     "adventureDeckId": 90,
+     "classId": 10,
+     "className": "WARRIOR",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 84,
+     "unlockValue": 5,
+     "deckId": 1954,
+     "noteName": "DALA_Warrior_Deck2",
+     "name": "Burning Fury",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "GIL_580",
+      "AT_082",
+      "NEW1_023",
+      "GIL_653",
+      "TRL_362",
+      "GIL_113",
+      "GIL_561",
+      "GIL_803",
+      "LOOT_144",
+      "EX1_408"
+     ]
+    },
+    {
+     "adventureDeckId": 91,
+     "classId": 10,
+     "className": "WARRIOR",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 84,
+     "unlockValue": 10,
+     "deckId": 1956,
+     "noteName": "DALA_Warrior_Deck3",
+     "name": "Boomin'",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "BOT_059",
+      "BOT_299",
+      "DAL_759",
+      "EX1_082",
+      "EX1_391",
+      "DAL_060",
+      "EX1_046",
+      "GVG_096",
+      "DAL_063",
+      "CFM_667"
+     ]
+    },
+    {
+     "adventureDeckId": 92,
+     "classId": 10,
+     "className": "WARRIOR",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 84,
+     "unlockValue": 15,
+     "deckId": 1988,
+     "noteName": "DALA_Warrior_Random",
+     "name": "Random Warrior Deck",
+     "description": "Start the run with a random Warrior deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DALA_808"
+     ]
+    }
+   ],
+   "otherPrefixedDecks": [],
+   "otherPrefixedDecksNote": "DECK rows whose noteName starts with the adventure code but are not referenced by ADVENTURE_DECK.",
+   "heroPowers": [
+    {
+     "id": 1,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "card": {
+      "dbf": 1123,
+      "id": "HERO_06bp",
+      "name": "Shapeshift"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 2,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "card": {
+      "dbf": 53275,
+      "id": "DALA_Druid_HP1",
+      "name": "Lifebloom"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Play Choose One Cards\n{0}/{1}",
+     "unlockedDescriptionText": "Played {0} Choose One Cards!",
+     "unlockGameSaveSubkeyId": 314,
+     "unlockValue": 15,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 3,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "card": {
+      "dbf": 53277,
+      "id": "DALA_Druid_HP2",
+      "name": "Touch of Bark"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Gain Attack\n{0}/{1}",
+     "unlockedDescriptionText": "Gained {0} Attack!",
+     "unlockGameSaveSubkeyId": 315,
+     "unlockValue": 25,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 4,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "card": {
+      "dbf": 229,
+      "id": "HERO_05bp",
+      "name": "Steady Shot"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 5,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "card": {
+      "dbf": 53279,
+      "id": "DALA_Hunter_HP1",
+      "name": "Opportunist"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Play Secrets\n{0}/{1}",
+     "unlockedDescriptionText": "Played {0} Secrets!",
+     "unlockGameSaveSubkeyId": 316,
+     "unlockValue": 15,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 6,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "card": {
+      "dbf": 53281,
+      "id": "DALA_Hunter_HP2",
+      "name": "Pet Training"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Summon Beasts\n{0}/{1}",
+     "unlockedDescriptionText": "Summoned {0} Beasts!",
+     "unlockGameSaveSubkeyId": 317,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 7,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "card": {
+      "dbf": 807,
+      "id": "HERO_08bp",
+      "name": "Fireblast"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 8,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "card": {
+      "dbf": 53283,
+      "id": "DALA_Mage_HP1",
+      "name": "Burning Wit"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Summon Elementals\n{0}/{1}",
+     "unlockedDescriptionText": "Summoned {0} Elementals!",
+     "unlockGameSaveSubkeyId": 318,
+     "unlockValue": 25,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 9,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "card": {
+      "dbf": 53285,
+      "id": "DALA_Mage_HP2",
+      "name": "Frostburn"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Freeze Minions\n{0}/{1}",
+     "unlockedDescriptionText": "Froze {0} Minions!",
+     "unlockGameSaveSubkeyId": 319,
+     "unlockValue": 25,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 10,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "card": {
+      "dbf": 472,
+      "id": "HERO_04bp",
+      "name": "Reinforce"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 11,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "card": {
+      "dbf": 53286,
+      "id": "DALA_Paladin_HP1",
+      "name": "Backup"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Equip Weapons\n{0}/{1}",
+     "unlockedDescriptionText": "Equipped {0} Weapons!",
+     "unlockGameSaveSubkeyId": 320,
+     "unlockValue": 10,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 12,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "card": {
+      "dbf": 53287,
+      "id": "DALA_Paladin_HP2",
+      "name": "Boon of Light"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Lose Divine Shield\n{0}/{1}",
+     "unlockedDescriptionText": "Lost {0} Divine Shields!",
+     "unlockGameSaveSubkeyId": 321,
+     "unlockValue": 25,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 13,
+     "classId": 6,
+     "className": "PRIEST",
+     "guestHero": null,
+     "card": {
+      "dbf": 479,
+      "id": "HERO_09bp",
+      "name": "Lesser Heal"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 14,
+     "classId": 6,
+     "className": "PRIEST",
+     "guestHero": null,
+     "card": {
+      "dbf": 53288,
+      "id": "DALA_Priest_HP1",
+      "name": "Distort"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Restore Health\n{0}/{1}",
+     "unlockedDescriptionText": "Restored {0} Health!",
+     "unlockGameSaveSubkeyId": 322,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 15,
+     "classId": 6,
+     "className": "PRIEST",
+     "guestHero": null,
+     "card": {
+      "dbf": 53289,
+      "id": "DALA_Priest_HP2",
+      "name": "Soothe"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Cast Spells\n{0}/{1}",
+     "unlockedDescriptionText": "Cast {0} Spells!",
+     "unlockGameSaveSubkeyId": 323,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 16,
+     "classId": 7,
+     "className": "ROGUE",
+     "guestHero": null,
+     "card": {
+      "dbf": 730,
+      "id": "HERO_03bp",
+      "name": "Dagger Mastery"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 17,
+     "classId": 7,
+     "className": "ROGUE",
+     "guestHero": null,
+     "card": {
+      "dbf": 53291,
+      "id": "DALA_Rogue_HP1",
+      "name": "Yoink!"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Summon Pirates\n{0}/{1}",
+     "unlockedDescriptionText": "Summoned {0} Pirates!",
+     "unlockGameSaveSubkeyId": 324,
+     "unlockValue": 25,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 18,
+     "classId": 7,
+     "className": "ROGUE",
+     "guestHero": null,
+     "card": {
+      "dbf": 53293,
+      "id": "DALA_Rogue_HP2",
+      "name": "Cut-less"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Draw Cards\n{0}/{1}",
+     "unlockedDescriptionText": "Drew {0} Cards!",
+     "unlockGameSaveSubkeyId": 325,
+     "unlockValue": 100,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 19,
+     "classId": 8,
+     "className": "SHAMAN",
+     "guestHero": null,
+     "card": {
+      "dbf": 687,
+      "id": "HERO_02bp",
+      "name": "Totemic Call"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 20,
+     "classId": 8,
+     "className": "SHAMAN",
+     "guestHero": null,
+     "card": {
+      "dbf": 53294,
+      "id": "DALA_Shaman_HP1",
+      "name": "Evolution"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Summon Totems\n{0}/{1}",
+     "unlockedDescriptionText": "Summoned {0} Totems!",
+     "unlockGameSaveSubkeyId": 326,
+     "unlockValue": 25,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 21,
+     "classId": 8,
+     "className": "SHAMAN",
+     "guestHero": null,
+     "card": {
+      "dbf": 53295,
+      "id": "DALA_Shaman_HP2",
+      "name": "Refresh"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Overload Mana\n{0}/{1}",
+     "unlockedDescriptionText": "Overloaded {0} Mana!",
+     "unlockGameSaveSubkeyId": 327,
+     "unlockValue": 25,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 22,
+     "classId": 9,
+     "className": "WARLOCK",
+     "guestHero": null,
+     "card": {
+      "dbf": 300,
+      "id": "HERO_07bp",
+      "name": "Life Tap"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 23,
+     "classId": 9,
+     "className": "WARLOCK",
+     "guestHero": null,
+     "card": {
+      "dbf": 53296,
+      "id": "DALA_Warlock_HP1",
+      "name": "Pain Split"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Use Hero Power\n{0}/{1}",
+     "unlockedDescriptionText": "Used Hero Power {0} Times!",
+     "unlockGameSaveSubkeyId": 328,
+     "unlockValue": 25,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 24,
+     "classId": 9,
+     "className": "WARLOCK",
+     "guestHero": null,
+     "card": {
+      "dbf": 53297,
+      "id": "DALA_Warlock_HP2",
+      "name": "The Pact"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Summon Demons\n{0}/{1}",
+     "unlockedDescriptionText": "Summoned {0} Demons!",
+     "unlockGameSaveSubkeyId": 329,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 25,
+     "classId": 10,
+     "className": "WARRIOR",
+     "guestHero": null,
+     "card": {
+      "dbf": 725,
+      "id": "HERO_01bp",
+      "name": "Armor Up!"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 26,
+     "classId": 10,
+     "className": "WARRIOR",
+     "guestHero": null,
+     "card": {
+      "dbf": 53299,
+      "id": "DALA_Warrior_HP1",
+      "name": "Invigorating Brew"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Damage Minions\n{0}/{1}",
+     "unlockedDescriptionText": "Damaged Minions {0} Times!",
+     "unlockGameSaveSubkeyId": 330,
+     "unlockValue": 100,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 27,
+     "classId": 10,
+     "className": "WARRIOR",
+     "guestHero": null,
+     "card": {
+      "dbf": 53301,
+      "id": "DALA_Warrior_HP2",
+      "name": "Undermine"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Gain Armor\n{0}/{1}",
+     "unlockedDescriptionText": "Gained {0} Armor!",
+     "unlockGameSaveSubkeyId": 331,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    }
+   ],
+   "loadoutTreasures": [],
+   "guestHeroes": [
+    {
+     "guestHeroId": 34,
+     "card": {
+      "dbf": 54553,
+      "id": "DALA_Rakanishu",
+      "name": "Rakanishu"
+     },
+     "name": "Mage",
+     "id": 22,
+     "wingId": 1664,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 28,
+     "card": {
+      "dbf": 54547,
+      "id": "DALA_Vessina",
+      "name": "Vessina"
+     },
+     "name": "Shaman",
+     "id": 16,
+     "wingId": 2213,
+     "baseGuestHero": null,
+     "sortOrder": 2,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter II",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 31,
+     "card": {
+      "dbf": 54550,
+      "id": "DALA_Barkeye",
+      "name": "Ol' Barkeye"
+     },
+     "name": "Hunter",
+     "id": 19,
+     "wingId": 2213,
+     "baseGuestHero": null,
+     "sortOrder": 3,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter II",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 35,
+     "card": {
+      "dbf": 54554,
+      "id": "DALA_Kriziki",
+      "name": "Kriziki"
+     },
+     "name": "Priest",
+     "id": 23,
+     "wingId": 2214,
+     "baseGuestHero": null,
+     "sortOrder": 4,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter III",
+     "comingSoonText": "Playable after week 2"
+    },
+    {
+     "guestHeroId": 29,
+     "card": {
+      "dbf": 54548,
+      "id": "DALA_Eudora",
+      "name": "Captain Eudora"
+     },
+     "name": "Rogue",
+     "id": 17,
+     "wingId": 2214,
+     "baseGuestHero": null,
+     "sortOrder": 5,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter III",
+     "comingSoonText": "Playable after week 2"
+    },
+    {
+     "guestHeroId": 27,
+     "card": {
+      "dbf": 54546,
+      "id": "DALA_Chu",
+      "name": "Mr. Chu"
+     },
+     "name": "Warrior",
+     "id": 15,
+     "wingId": 2215,
+     "baseGuestHero": null,
+     "sortOrder": 6,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter IV",
+     "comingSoonText": "Playable after week 3"
+    },
+    {
+     "guestHeroId": 32,
+     "card": {
+      "dbf": 54551,
+      "id": "DALA_Squeamlish",
+      "name": "Squeamlish"
+     },
+     "name": "Druid",
+     "id": 20,
+     "wingId": 2215,
+     "baseGuestHero": null,
+     "sortOrder": 7,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter IV",
+     "comingSoonText": "Playable after week 3"
+    },
+    {
+     "guestHeroId": 33,
+     "card": {
+      "dbf": 54552,
+      "id": "DALA_Tekahn",
+      "name": "Tekahn"
+     },
+     "name": "Warlock",
+     "id": 21,
+     "wingId": 2216,
+     "baseGuestHero": null,
+     "sortOrder": 8,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter V",
+     "comingSoonText": "Playable after week 4"
+    },
+    {
+     "guestHeroId": 30,
+     "card": {
+      "dbf": 54549,
+      "id": "DALA_George",
+      "name": "George the Fallen"
+     },
+     "name": "Paladin",
+     "id": 18,
+     "wingId": 2216,
+     "baseGuestHero": null,
+     "sortOrder": 9,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter V",
+     "comingSoonText": "Playable after week 4"
+    }
+   ],
+   "deckRulesets": []
+  },
+  {
+   "key": "tombs-of-terror",
+   "code": "ULDA",
+   "adventureId": 513,
+   "noteDesc": "Uldum",
+   "name": "Tombs of Terror",
+   "adventureData": [
+    {
+     "ID": 1197,
+     "noteDesc": "Uldum Dungeon Crawl",
+     "adventureId": 513,
+     "modeId": 5,
+     "sortOrder": 0,
+     "name": "Tombs of Terror",
+     "shortName": "Normal",
+     "description": "The League of Explorers reunites! Join them in their quest to secure powerful ancient treasures and save the world…",
+     "shortDescription": "The League of Explorers reunites! Join them in their quest to secure powerful ancient treasures and save the world…",
+     "lockedShortName": "",
+     "lockedDescription": "",
+     "lockedShortDescription": "",
+     "requirementsDescription": "",
+     "rewardsDescription": "",
+     "completeBannerText": "",
+     "showPlayableScenariosCount": 1,
+     "startingSubscene": 5,
+     "subsceneTransitionDirection": "INVALID",
+     "adventureSubDefPrefab": "AdventureSubDef_ULDDungeonCrawl.prefab:ae6001727e48ae641995ee4654679b78",
+     "gameSaveDataServerKeyId": 318,
+     "gameSaveDataClientKeyId": 90,
+     "dungeonCrawlSaveHeroUsingHeroDbId": 0,
+     "dungeonCrawlBossCardPrefab": "Card_DungeonCrawl_Boss_ULD.prefab:ac514b65dda8bfd4483ec66fef6cfff2",
+     "dungeonCrawlPickHeroFirst": 1,
+     "dungeonCrawlSkipHeroSelect": 0,
+     "dungeonCrawlMustPickShrine": 0,
+     "dungeonCrawlSelectChapter": 1,
+     "dungeonCrawlDisplayHeroWinsPerChapter": 1,
+     "dungeonCrawlIsRetireSupported": 0,
+     "dungeonCrawlShowBossKillCount": 1,
+     "dungeonCrawlDefaultToDeckFromUpcomingScenario": 0,
+     "ignoreHeroUnlockRequirement": 1,
+     "bossCardBackId": 178,
+     "hasSeenFeaturedModeOption": "",
+     "hasSeenNewModePopupOption": "",
+     "prefabShownOnComplete": "",
+     "anomalyModeDefaultCardId": 58856,
+     "anomalyModeDefaultCardId_card": "ULDA_713",
+     "adventureBookMapPageLocation": 0,
+     "adventureBookRewardPageLocation": 1
+    },
+    {
+     "ID": 1248,
+     "noteDesc": "Uldum Dungeon Crawl - Heroic",
+     "adventureId": 513,
+     "modeId": 7,
+     "sortOrder": 1,
+     "name": "Tombs of Terror (Heroic)",
+     "shortName": "Heroic",
+     "description": "Heroic is VERY difficult and is not for the faint of heart!",
+     "shortDescription": "Heroic is VERY difficult and is not for the faint of heart!",
+     "lockedShortName": "",
+     "lockedDescription": "",
+     "lockedShortDescription": "",
+     "requirementsDescription": "Unlock by completing a Chapter in Normal mode.",
+     "rewardsDescription": "",
+     "completeBannerText": "Tombs of Terror\nclearedwith {0}!",
+     "showPlayableScenariosCount": 1,
+     "startingSubscene": 5,
+     "subsceneTransitionDirection": "INVALID",
+     "adventureSubDefPrefab": "AdventureSubDef_ULDHeroic.prefab:3d26fc97673527a45b1dc245118fcf07",
+     "gameSaveDataServerKeyId": 380,
+     "gameSaveDataClientKeyId": 379,
+     "dungeonCrawlSaveHeroUsingHeroDbId": 0,
+     "dungeonCrawlBossCardPrefab": "Card_DungeonCrawl_Boss.prefab:c7f700bb034424e46a7c2321e4621965",
+     "dungeonCrawlPickHeroFirst": 1,
+     "dungeonCrawlSkipHeroSelect": 0,
+     "dungeonCrawlMustPickShrine": 0,
+     "dungeonCrawlSelectChapter": 1,
+     "dungeonCrawlDisplayHeroWinsPerChapter": 1,
+     "dungeonCrawlIsRetireSupported": 0,
+     "dungeonCrawlShowBossKillCount": 1,
+     "dungeonCrawlDefaultToDeckFromUpcomingScenario": 0,
+     "ignoreHeroUnlockRequirement": 1,
+     "bossCardBackId": 179,
+     "hasSeenFeaturedModeOption": "",
+     "hasSeenNewModePopupOption": "",
+     "prefabShownOnComplete": "",
+     "anomalyModeDefaultCardId": 58856,
+     "anomalyModeDefaultCardId_card": "ULDA_713",
+     "adventureBookMapPageLocation": 0,
+     "adventureBookRewardPageLocation": 1
+    }
+   ],
+   "wings": [
+    {
+     "wingId": 1992,
+     "noteDesc": "Chapter 1: The Lost City",
+     "name": "Chapter I: The Lost City",
+     "sortOrder": 1,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": {
+      "dbf": 56138,
+      "id": "ULDA_801",
+      "name": "Twist - Plague of Murlocs"
+     },
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 2246,
+     "noteDesc": "Chapter 2: The Scorching Dunes",
+     "name": "Chapter II: Scorching Dunes",
+     "sortOrder": 2,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": {
+      "dbf": 56143,
+      "id": "ULDA_802",
+      "name": "Twist - Plague of Madness"
+     },
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 2247,
+     "noteDesc": "Chapter 3: Khartut's Tomb",
+     "name": "Chapter III: Khartut's Tomb",
+     "sortOrder": 3,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": {
+      "dbf": 56205,
+      "id": "ULDA_804",
+      "name": "Twist - Plague of Death"
+     },
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 2248,
+     "noteDesc": "Chapter 4: The Halls of Origination",
+     "name": "Chapter IV: Halls of Origination",
+     "sortOrder": 4,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": {
+      "dbf": 56155,
+      "id": "ULDA_803",
+      "name": "Twist - Plague of Wrath"
+     },
+     "allowsAnomaly": 1
+    },
+    {
+     "wingId": 2249,
+     "noteDesc": "Chapter 5: The Inner Sanctum",
+     "name": "Chapter V: Do Not Play",
+     "sortOrder": 5,
+     "dungeonCrawlBosses": 8,
+     "plotTwistCard": {
+      "dbf": 56138,
+      "id": "ULDA_801",
+      "name": "Twist - Plague of Murlocs"
+     },
+     "allowsAnomaly": 0
+    }
+   ],
+   "counts": {
+    "scenarios": 12,
+    "scenarioBossHeroes": 6,
+    "bossHeroCardCandidates": 87,
+    "heroCardsWithPrefix": 92,
+    "bossDecks": 0,
+    "starterDecks": 16,
+    "otherPrefixedDecks": 12,
+    "heroPowers": 12,
+    "loadoutTreasures": 24,
+    "guestHeroes": 4,
+    "deckRulesets": 0
+   },
+   "scenarios": [
+    {
+     "scenarioId": 3428,
+     "noteDesc": "ULDA_City",
+     "name": "",
+     "wingId": 1992,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 57319,
+      "id": "ULDA_BOSS_15h",
+      "name": "Lt. Herring"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3428.asset:c71edc6b42be4f72bd83904cb057f5c6",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 395,
+       "scenarioId": 3428,
+       "noteDesc": "Uldum Chapter 1: City",
+       "reqWingId": 1992,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 1992,
+       "grantsProgress": 2,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3429,
+     "noteDesc": "ULDA_Desert",
+     "name": "",
+     "wingId": 2246,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 57377,
+      "id": "ULDA_BOSS_55h",
+      "name": "Water-Toting Murlocs"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3429.asset:1d4bca5f6b3e4382b2827461cf025003",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 405,
+       "scenarioId": 3429,
+       "noteDesc": "Uldum Chapter 2: Desert",
+       "reqWingId": 2246,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 2246,
+       "grantsProgress": 2,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3430,
+     "noteDesc": "ULDA_Tomb",
+     "name": "",
+     "wingId": 2247,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 57363,
+      "id": "ULDA_BOSS_41h",
+      "name": "Alda Petrik"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3430.asset:473612d533f0423f8b68800c1153d90d",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 406,
+       "scenarioId": 3430,
+       "noteDesc": "Uldum Chapter 3: Tomb",
+       "reqWingId": 2247,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 2247,
+       "grantsProgress": 2,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3431,
+     "noteDesc": "ULDA_Halls",
+     "name": "",
+     "wingId": 2248,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 57354,
+      "id": "ULDA_BOSS_32h",
+      "name": "Edra"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3431.asset:8fe69b67736543f1a3a8311e1b2d1174",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 407,
+       "scenarioId": 3431,
+       "noteDesc": "Uldum Chapter 4: Halls",
+       "reqWingId": 2248,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 2248,
+       "grantsProgress": 2,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3432,
+     "noteDesc": "ULDA_Sanctum",
+     "name": "",
+     "wingId": 2249,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": {
+      "dbf": 59212,
+      "id": "ULDA_Explorers",
+      "name": "Saviors of Uldum"
+     },
+     "bossHero": {
+      "dbf": 57388,
+      "id": "ULDA_BOSS_67h",
+      "name": "Tekahn, Plague Lord of Flame"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": {
+      "deckId": 2572,
+      "noteName": "ULDA_Reno_Tekanh_Deck_1",
+      "name": "The Magician",
+      "description": "All about the Spells",
+      "cardCount": 30,
+      "cardOrder": "linked-list",
+      "cards": [
+       "LOOT_231",
+       "EX1_124",
+       "EX1_124",
+       "UNG_027",
+       "EX1_278",
+       "EX1_608",
+       "EX1_608",
+       "CS2_023",
+       "CS2_023",
+       "GIL_827",
+       "BRM_002",
+       "BRM_002",
+       "EX1_137",
+       "CS2_029",
+       "ULD_286",
+       "ULD_286",
+       "LOE_003",
+       "LOE_003",
+       "OG_073",
+       "EX1_559",
+       "LOOT_204",
+       "ULD_329",
+       "ULD_329",
+       "ULD_216",
+       "ULD_239",
+       "ULD_186",
+       "ULD_186",
+       "ULD_328",
+       "ULD_328",
+       "ULD_280"
+      ]
+     },
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3432.asset:bcf529c4a3184ab6a37c10857edc8f4c",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 408,
+       "scenarioId": 3432,
+       "noteDesc": "Uldum Chapter 5: Sanctum",
+       "reqWingId": 2249,
+       "reqProgress": 1,
+       "reqFlags": 1,
+       "grantsWingId": 2249,
+       "grantsProgress": 2,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3433,
+     "noteDesc": "ULDA_City_Heroic",
+     "name": "",
+     "wingId": 1992,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 57319,
+      "id": "ULDA_BOSS_15h",
+      "name": "Lt. Herring"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3433.asset:980bc37f0c6648beafb9acdedaaa23be",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 409,
+       "scenarioId": 3433,
+       "noteDesc": "Uldum Chapter 1: Heroic City",
+       "reqWingId": 1992,
+       "reqProgress": 2,
+       "reqFlags": 1,
+       "grantsWingId": 1992,
+       "grantsProgress": 3,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3434,
+     "noteDesc": "ULDA_Desert_Heroic",
+     "name": "",
+     "wingId": 2246,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 57377,
+      "id": "ULDA_BOSS_55h",
+      "name": "Water-Toting Murlocs"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3434.asset:b13cf7f72b784464860731e2b7b30156",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 410,
+       "scenarioId": 3434,
+       "noteDesc": "Uldum Chapter 2: Heroic Desert",
+       "reqWingId": 2246,
+       "reqProgress": 2,
+       "reqFlags": 1,
+       "grantsWingId": 2246,
+       "grantsProgress": 3,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3435,
+     "noteDesc": "ULDA_Tomb_Heroic",
+     "name": "",
+     "wingId": 2247,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 57363,
+      "id": "ULDA_BOSS_41h",
+      "name": "Alda Petrik"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3435.asset:713cea88be224946b5454fe86d9f6958",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 411,
+       "scenarioId": 3435,
+       "noteDesc": "Uldum Chapter 3: Heroic Tomb",
+       "reqWingId": 2247,
+       "reqProgress": 2,
+       "reqFlags": 1,
+       "grantsWingId": 2247,
+       "grantsProgress": 3,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3436,
+     "noteDesc": "ULDA_Halls_Heroic",
+     "name": "",
+     "wingId": 2248,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 57354,
+      "id": "ULDA_BOSS_32h",
+      "name": "Edra"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3436.asset:fbbd8fe674a84752bac14ba36001b908",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 412,
+       "scenarioId": 3436,
+       "noteDesc": "Uldum Chapter 4: Heroic Halls",
+       "reqWingId": 2248,
+       "reqProgress": 2,
+       "reqFlags": 1,
+       "grantsWingId": 2248,
+       "grantsProgress": 3,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3437,
+     "noteDesc": "ULDA_Sanctum_Heroic",
+     "name": "",
+     "wingId": 2249,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": {
+      "dbf": 59212,
+      "id": "ULDA_Explorers",
+      "name": "Saviors of Uldum"
+     },
+     "bossHero": {
+      "dbf": 57388,
+      "id": "ULDA_BOSS_67h",
+      "name": "Tekahn, Plague Lord of Flame"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": {
+      "deckId": 2572,
+      "noteName": "ULDA_Reno_Tekanh_Deck_1",
+      "name": "The Magician",
+      "description": "All about the Spells",
+      "cardCount": 30,
+      "cardOrder": "linked-list",
+      "cards": [
+       "LOOT_231",
+       "EX1_124",
+       "EX1_124",
+       "UNG_027",
+       "EX1_278",
+       "EX1_608",
+       "EX1_608",
+       "CS2_023",
+       "CS2_023",
+       "GIL_827",
+       "BRM_002",
+       "BRM_002",
+       "EX1_137",
+       "CS2_029",
+       "ULD_286",
+       "ULD_286",
+       "LOE_003",
+       "LOE_003",
+       "OG_073",
+       "EX1_559",
+       "LOOT_204",
+       "ULD_329",
+       "ULD_329",
+       "ULD_216",
+       "ULD_239",
+       "ULD_186",
+       "ULD_186",
+       "ULD_328",
+       "ULD_328",
+       "ULD_280"
+      ]
+     },
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3437.asset:0664aa9c53484b5caf465215db62501c",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": [
+      {
+       "ID": 413,
+       "scenarioId": 3437,
+       "noteDesc": "Uldum Chapter 5: Heroic Sanctum",
+       "reqWingId": 2249,
+       "reqProgress": 2,
+       "reqFlags": 1,
+       "grantsWingId": 2249,
+       "grantsProgress": 3,
+       "grantsFlags": 0,
+       "bossDefAssetPath": "",
+       "classChallengePrefabPopup": ""
+      }
+     ]
+    },
+    {
+     "scenarioId": 3438,
+     "noteDesc": "Ulda_Tavern",
+     "name": "",
+     "wingId": 0,
+     "modeId": 5,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 57857,
+      "id": "ULDA_BOSS_99h",
+      "name": "Bazaar Bob"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3438.asset:7b43b2e4991d4a67ab8ee6709da91f7f",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": []
+    },
+    {
+     "scenarioId": 3439,
+     "noteDesc": "Ulda_Tavern_Heroic",
+     "name": "",
+     "wingId": 0,
+     "modeId": 7,
+     "players": 1,
+     "player1Hero": null,
+     "bossHero": {
+      "dbf": 57857,
+      "id": "ULDA_BOSS_99h",
+      "name": "Bazaar Bob"
+     },
+     "clientPlayer2Hero": null,
+     "clientPlayer2HeroPower": null,
+     "player1Deck": null,
+     "deckRulesetId": 0,
+     "useGuestHeroes": 0,
+     "gameSaveDataProgressSubkeyId": 0,
+     "scriptObject": "SCENARIO-3439.asset:8132d46f60ac4d778063e6d5fe630efd",
+     "guestHeroes": [],
+     "classExclusions": [],
+     "deckTemplateChoices": [],
+     "missions": []
+    }
+   ],
+   "bossDecks": [],
+   "bossDecksNote": "SCENARIO has no player2 deck column and no DECK row is a boss deck for this adventure; dungeon-crawl boss decks and boss rotation are server-side.",
+   "heroCardsByPrefix": [
+    {
+     "dbf": 57084,
+     "id": "ULDA_BOSS_01h",
+     "name": "Waste Wanderer Cardish",
+     "bossInId": true
+    },
+    {
+     "dbf": 57087,
+     "id": "ULDA_BOSS_02h",
+     "name": "Dark Ritualist Zafarr",
+     "bossInId": true
+    },
+    {
+     "dbf": 57088,
+     "id": "ULDA_BOSS_03h",
+     "name": "Vera Ridley",
+     "bossInId": true
+    },
+    {
+     "dbf": 57092,
+     "id": "ULDA_BOSS_04h",
+     "name": "Nash the Greatworm",
+     "bossInId": true
+    },
+    {
+     "dbf": 57093,
+     "id": "ULDA_BOSS_05h",
+     "name": "Glack the Scorpid",
+     "bossInId": true
+    },
+    {
+     "dbf": 57099,
+     "id": "ULDA_BOSS_06h",
+     "name": "Mister Chu",
+     "bossInId": true
+    },
+    {
+     "dbf": 57102,
+     "id": "ULDA_BOSS_07h",
+     "name": "Squeamlish",
+     "bossInId": true
+    },
+    {
+     "dbf": 57573,
+     "id": "ULDA_BOSS_08h",
+     "name": "Sinkhole",
+     "bossInId": true
+    },
+    {
+     "dbf": 57104,
+     "id": "ULDA_BOSS_09h",
+     "name": "Demolisher 3V-11",
+     "bossInId": true
+    },
+    {
+     "dbf": 57106,
+     "id": "ULDA_BOSS_10h",
+     "name": "Terraviss",
+     "bossInId": true
+    },
+    {
+     "dbf": 57313,
+     "id": "ULDA_BOSS_11h",
+     "name": "R.O.B.O.L.D.",
+     "bossInId": true
+    },
+    {
+     "dbf": 57315,
+     "id": "ULDA_BOSS_12h",
+     "name": "Pyramad",
+     "bossInId": true
+    },
+    {
+     "dbf": 57317,
+     "id": "ULDA_BOSS_13h",
+     "name": "Snakeflinger Scalesnout",
+     "bossInId": true
+    },
+    {
+     "dbf": 57318,
+     "id": "ULDA_BOSS_14h",
+     "name": "Sword Dancer Sirinell",
+     "bossInId": true
+    },
+    {
+     "dbf": 57319,
+     "id": "ULDA_BOSS_15h",
+     "name": "Lt. Herring",
+     "bossInId": true
+    },
+    {
+     "dbf": 57320,
+     "id": "ULDA_BOSS_16h",
+     "name": "Battrund",
+     "bossInId": true
+    },
+    {
+     "dbf": 57321,
+     "id": "ULDA_BOSS_17h",
+     "name": "Ichabod the Cursed",
+     "bossInId": true
+    },
+    {
+     "dbf": 57322,
+     "id": "ULDA_BOSS_18h",
+     "name": "Twizzleflux",
+     "bossInId": true
+    },
+    {
+     "dbf": 57323,
+     "id": "ULDA_BOSS_19h",
+     "name": "Sothis",
+     "bossInId": true
+    },
+    {
+     "dbf": 57324,
+     "id": "ULDA_BOSS_20h",
+     "name": "Kham",
+     "bossInId": true
+    },
+    {
+     "dbf": 57325,
+     "id": "ULDA_BOSS_21h",
+     "name": "Illidara Sunsdawn",
+     "bossInId": true
+    },
+    {
+     "dbf": 57344,
+     "id": "ULDA_BOSS_22h",
+     "name": "Colossus of the Sun",
+     "bossInId": true
+    },
+    {
+     "dbf": 57345,
+     "id": "ULDA_BOSS_23h",
+     "name": "Skarik",
+     "bossInId": true
+    },
+    {
+     "dbf": 57346,
+     "id": "ULDA_BOSS_24h",
+     "name": "Suspicious Palm Tree",
+     "bossInId": true
+    },
+    {
+     "dbf": 57347,
+     "id": "ULDA_BOSS_25h",
+     "name": "Beetle Herder Zenda",
+     "bossInId": true
+    },
+    {
+     "dbf": 57348,
+     "id": "ULDA_BOSS_26h",
+     "name": "Thudd Lockspring",
+     "bossInId": true
+    },
+    {
+     "dbf": 57349,
+     "id": "ULDA_BOSS_27h",
+     "name": "Ol' Toomba",
+     "bossInId": true
+    },
+    {
+     "dbf": 57350,
+     "id": "ULDA_BOSS_28h",
+     "name": "Sazin",
+     "bossInId": true
+    },
+    {
+     "dbf": 57351,
+     "id": "ULDA_BOSS_29h",
+     "name": "Ozara",
+     "bossInId": true
+    },
+    {
+     "dbf": 57352,
+     "id": "ULDA_BOSS_30h",
+     "name": "Ermavar",
+     "bossInId": true
+    },
+    {
+     "dbf": 57353,
+     "id": "ULDA_BOSS_31h",
+     "name": "Pillager Drasar",
+     "bossInId": true
+    },
+    {
+     "dbf": 57354,
+     "id": "ULDA_BOSS_32h",
+     "name": "Edra",
+     "bossInId": true
+    },
+    {
+     "dbf": 57355,
+     "id": "ULDA_BOSS_33h",
+     "name": "Runaway Ruby",
+     "bossInId": true
+    },
+    {
+     "dbf": 57356,
+     "id": "ULDA_BOSS_34h",
+     "name": "Dovo Fastfuse",
+     "bossInId": true
+    },
+    {
+     "dbf": 57357,
+     "id": "ULDA_BOSS_35h",
+     "name": "Earthrager Ptah",
+     "bossInId": true
+    },
+    {
+     "dbf": 57358,
+     "id": "ULDA_BOSS_36h",
+     "name": "Kasa Softspeaker",
+     "bossInId": true
+    },
+    {
+     "dbf": 57359,
+     "id": "ULDA_BOSS_37h",
+     "name": "Xatma, Plague Lord of Death",
+     "bossInId": true
+    },
+    {
+     "dbf": 59350,
+     "id": "ULDA_BOSS_37h2",
+     "name": "Xatma, Plague Lord of Death",
+     "bossInId": true
+    },
+    {
+     "dbf": 59351,
+     "id": "ULDA_BOSS_37h3",
+     "name": "Xatma, Plague Lord of Death",
+     "bossInId": true
+    },
+    {
+     "dbf": 57360,
+     "id": "ULDA_BOSS_38h",
+     "name": "K'zrath, Plague Lord of Madness",
+     "bossInId": true
+    },
+    {
+     "dbf": 59352,
+     "id": "ULDA_BOSS_38h2",
+     "name": "K'zrath, Plague Lord of Madness",
+     "bossInId": true
+    },
+    {
+     "dbf": 59353,
+     "id": "ULDA_BOSS_38h3",
+     "name": "K'zrath, Plague Lord of Madness",
+     "bossInId": true
+    },
+    {
+     "dbf": 56176,
+     "id": "ULDA_BOSS_39h",
+     "name": "Vesh, Plague Lord of Murlocs",
+     "bossInId": true
+    },
+    {
+     "dbf": 59354,
+     "id": "ULDA_BOSS_39h2",
+     "name": "Vesh, Plague Lord of Murlocs",
+     "bossInId": true
+    },
+    {
+     "dbf": 59355,
+     "id": "ULDA_BOSS_39h3",
+     "name": "Vesh, Plague Lord of Murlocs",
+     "bossInId": true
+    },
+    {
+     "dbf": 57361,
+     "id": "ULDA_BOSS_40h",
+     "name": "Icarax, Plague Lord of Wrath",
+     "bossInId": true
+    },
+    {
+     "dbf": 59356,
+     "id": "ULDA_BOSS_40h2",
+     "name": "Icarax, Plague Lord of Wrath",
+     "bossInId": true
+    },
+    {
+     "dbf": 59357,
+     "id": "ULDA_BOSS_40h3",
+     "name": "Icarax, Plague Lord of Wrath",
+     "bossInId": true
+    },
+    {
+     "dbf": 57363,
+     "id": "ULDA_BOSS_41h",
+     "name": "Alda Petrik",
+     "bossInId": true
+    },
+    {
+     "dbf": 57364,
+     "id": "ULDA_BOSS_42h",
+     "name": "Sandshaper Rhogi",
+     "bossInId": true
+    },
+    {
+     "dbf": 57365,
+     "id": "ULDA_BOSS_43h",
+     "name": "Jolene Knottley",
+     "bossInId": true
+    },
+    {
+     "dbf": 57366,
+     "id": "ULDA_BOSS_44h",
+     "name": "Trap Room",
+     "bossInId": true
+    },
+    {
+     "dbf": 57367,
+     "id": "ULDA_BOSS_45h",
+     "name": "Belloc Brightblade",
+     "bossInId": true
+    },
+    {
+     "dbf": 57368,
+     "id": "ULDA_BOSS_46h",
+     "name": "Wildtooth",
+     "bossInId": true
+    },
+    {
+     "dbf": 57369,
+     "id": "ULDA_BOSS_47h",
+     "name": "Totally Normal Jar",
+     "bossInId": true
+    },
+    {
+     "dbf": 57370,
+     "id": "ULDA_BOSS_48h",
+     "name": "Ilza Grimdrum",
+     "bossInId": true
+    },
+    {
+     "dbf": 57371,
+     "id": "ULDA_BOSS_49h",
+     "name": "Craz",
+     "bossInId": true
+    },
+    {
+     "dbf": 57372,
+     "id": "ULDA_BOSS_50h",
+     "name": "Ol' Barkeye",
+     "bossInId": true
+    },
+    {
+     "dbf": 57373,
+     "id": "ULDA_BOSS_51h",
+     "name": "Kasmut",
+     "bossInId": true
+    },
+    {
+     "dbf": 57374,
+     "id": "ULDA_BOSS_52h",
+     "name": "Lich Baz'hial",
+     "bossInId": true
+    },
+    {
+     "dbf": 57375,
+     "id": "ULDA_BOSS_53h",
+     "name": "Taskmaster Maru",
+     "bossInId": true
+    },
+    {
+     "dbf": 57376,
+     "id": "ULDA_BOSS_54h",
+     "name": "Janak",
+     "bossInId": true
+    },
+    {
+     "dbf": 57377,
+     "id": "ULDA_BOSS_55h",
+     "name": "Water-Toting Murlocs",
+     "bossInId": true
+    },
+    {
+     "dbf": 57378,
+     "id": "ULDA_BOSS_56h",
+     "name": "Sand Puffer Frog",
+     "bossInId": true
+    },
+    {
+     "dbf": 57379,
+     "id": "ULDA_BOSS_57h",
+     "name": "Winged Guardian",
+     "bossInId": true
+    },
+    {
+     "dbf": 57380,
+     "id": "ULDA_BOSS_58h",
+     "name": "Jythiros of Questions",
+     "bossInId": true
+    },
+    {
+     "dbf": 57381,
+     "id": "ULDA_BOSS_59h",
+     "name": "Dire Bat",
+     "bossInId": true
+    },
+    {
+     "dbf": 57382,
+     "id": "ULDA_BOSS_60h",
+     "name": "Zaraam",
+     "bossInId": true
+    },
+    {
+     "dbf": 57383,
+     "id": "ULDA_BOSS_61h",
+     "name": "Kyriss",
+     "bossInId": true
+    },
+    {
+     "dbf": 56207,
+     "id": "ULDA_BOSS_62h",
+     "name": "A Beautiful Oasis",
+     "bossInId": true
+    },
+    {
+     "dbf": 57384,
+     "id": "ULDA_BOSS_63h",
+     "name": "Vessina",
+     "bossInId": true
+    },
+    {
+     "dbf": 57386,
+     "id": "ULDA_BOSS_65h",
+     "name": "Thrud",
+     "bossInId": true
+    },
+    {
+     "dbf": 57387,
+     "id": "ULDA_BOSS_66h",
+     "name": "Siamat",
+     "bossInId": true
+    },
+    {
+     "dbf": 57388,
+     "id": "ULDA_BOSS_67h",
+     "name": "Tekahn, Plague Lord of Flame",
+     "bossInId": true
+    },
+    {
+     "dbf": 57389,
+     "id": "ULDA_BOSS_68h",
+     "name": "Weaponized Wasp",
+     "bossInId": true
+    },
+    {
+     "dbf": 57390,
+     "id": "ULDA_BOSS_69h",
+     "name": "Isiset",
+     "bossInId": true
+    },
+    {
+     "dbf": 57391,
+     "id": "ULDA_BOSS_70h",
+     "name": "Rajh",
+     "bossInId": true
+    },
+    {
+     "dbf": 57392,
+     "id": "ULDA_BOSS_71h",
+     "name": "Ammunae",
+     "bossInId": true
+    },
+    {
+     "dbf": 57393,
+     "id": "ULDA_BOSS_72h",
+     "name": "Setesh",
+     "bossInId": true
+    },
+    {
+     "dbf": 57394,
+     "id": "ULDA_BOSS_73h",
+     "name": "General Husam",
+     "bossInId": true
+    },
+    {
+     "dbf": 57395,
+     "id": "ULDA_BOSS_74h",
+     "name": "High Prophet Barim",
+     "bossInId": true
+    },
+    {
+     "dbf": 57396,
+     "id": "ULDA_BOSS_75h",
+     "name": "Avozu",
+     "bossInId": true
+    },
+    {
+     "dbf": 57397,
+     "id": "ULDA_BOSS_76h",
+     "name": "Tarkus",
+     "bossInId": true
+    },
+    {
+     "dbf": 57398,
+     "id": "ULDA_BOSS_77h",
+     "name": "Gorebite",
+     "bossInId": true
+    },
+    {
+     "dbf": 57399,
+     "id": "ULDA_BOSS_78h",
+     "name": "Octosari",
+     "bossInId": true
+    },
+    {
+     "dbf": 57400,
+     "id": "ULDA_BOSS_79h",
+     "name": "Armadillobot",
+     "bossInId": true
+    },
+    {
+     "dbf": 57857,
+     "id": "ULDA_BOSS_99h",
+     "name": "Bazaar Bob",
+     "bossInId": true
+    },
+    {
+     "dbf": 57583,
+     "id": "ULDA_Brann",
+     "name": "Brann Bronzebeard",
+     "bossInId": false
+    },
+    {
+     "dbf": 57582,
+     "id": "ULDA_Elise",
+     "name": "Elise Starseeker",
+     "bossInId": false
+    },
+    {
+     "dbf": 59212,
+     "id": "ULDA_Explorers",
+     "name": "Saviors of Uldum",
+     "bossInId": false
+    },
+    {
+     "dbf": 57581,
+     "id": "ULDA_Finley",
+     "name": "Sir Finley",
+     "bossInId": false
+    },
+    {
+     "dbf": 57580,
+     "id": "ULDA_Reno",
+     "name": "Reno Jackson",
+     "bossInId": false
+    }
+   ],
+   "heroCardsByPrefixNote": "Not a client relation: CARD ids matching ^ULDA_ whose CARDTYPE tag (202) is HERO (3). bossInId marks ids containing BOSS. Scenario bossHero is the only client-side boss link.",
+   "starterDecks": [
+    {
+     "adventureDeckId": 93,
+     "classId": 2,
+     "className": "DRUID",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 2564,
+     "noteName": "ULDA_Elise_Deck1",
+     "name": "Healing Help",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "ULD_265",
+      "KAR_300",
+      "GVG_012",
+      "ULD_271",
+      "ULD_196",
+      "EX1_154",
+      "ICC_079",
+      "BOT_420",
+      "LOE_050",
+      "AT_011"
+     ]
+    },
+    {
+     "adventureDeckId": 94,
+     "classId": 2,
+     "className": "DRUID",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 86,
+     "unlockValue": 8,
+     "deckId": 2565,
+     "noteName": "ULDA_Elise_Deck2",
+     "name": "Swarms",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DAL_354",
+      "CS1_130",
+      "DAL_733",
+      "EX1_160",
+      "UNG_034",
+      "ULD_185",
+      "ULD_134",
+      "ULD_250",
+      "TRL_131",
+      "LOOT_056"
+     ]
+    },
+    {
+     "adventureDeckId": 95,
+     "classId": 2,
+     "className": "DRUID",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 86,
+     "unlockValue": 16,
+     "deckId": 2566,
+     "noteName": "ULDA_Elise_Deck3",
+     "name": "Insight",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_004",
+      "BOT_558",
+      "ULD_136",
+      "ULD_309",
+      "BOT_219",
+      "CS2_009",
+      "ULD_188",
+      "LOOT_351",
+      "ULD_269",
+      "ULD_266"
+     ]
+    },
+    {
+     "adventureDeckId": 96,
+     "classId": 2,
+     "className": "DRUID",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 86,
+     "unlockValue": 24,
+     "deckId": 2614,
+     "noteName": "ULDA_Elise_Deck_Random",
+     "name": "Random Elise Deck",
+     "description": "Start the run with a random Elise deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "ULDA_900"
+     ]
+    },
+    {
+     "adventureDeckId": 97,
+     "classId": 3,
+     "className": "HUNTER",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 2611,
+     "noteName": "ULDA_Brann_Deck1",
+     "name": "Taming Dinos",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "TRL_505",
+      "UNG_914",
+      "UNG_915",
+      "ULD_174",
+      "EX1_391",
+      "UNG_910",
+      "ULD_430",
+      "UNG_075",
+      "ICC_064",
+      "UNG_957"
+     ]
+    },
+    {
+     "adventureDeckId": 98,
+     "classId": 3,
+     "className": "HUNTER",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 96,
+     "unlockValue": 8,
+     "deckId": 2612,
+     "noteName": "ULDA_Brann_Deck2",
+     "name": "Beastly Bodyguards",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "LOOT_258",
+      "CFM_316",
+      "CFM_940",
+      "AT_068",
+      "UNG_926",
+      "EX1_604",
+      "KAR_026",
+      "DAL_371",
+      "DS1_070",
+      "GVG_046"
+     ]
+    },
+    {
+     "adventureDeckId": 99,
+     "classId": 3,
+     "className": "HUNTER",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 96,
+     "unlockValue": 16,
+     "deckId": 2613,
+     "noteName": "ULDA_Brann_Deck3",
+     "name": "Call for Help",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "OG_314",
+      "BOT_299",
+      "OG_061",
+      "TRL_362",
+      "TRL_312",
+      "NEW1_031",
+      "ULD_429",
+      "LOOT_077",
+      "TRL_347",
+      "KAR_091"
+     ]
+    },
+    {
+     "adventureDeckId": 100,
+     "classId": 3,
+     "className": "HUNTER",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 96,
+     "unlockValue": 24,
+     "deckId": 2617,
+     "noteName": "ULDA_Brann_Deck_Random",
+     "name": "Random Brann Deck",
+     "description": "Start the run with a random Brann deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "ULDA_903"
+     ]
+    },
+    {
+     "adventureDeckId": 101,
+     "classId": 4,
+     "className": "MAGE",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 2605,
+     "noteName": "ULDA_Reno_Deck1",
+     "name": "Novice Spellslinger",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_072",
+      "KAR_009",
+      "EX1_182",
+      "EX1_055",
+      "EX1_608",
+      "TRL_156",
+      "UNG_057",
+      "GVG_003",
+      "AT_007",
+      "BOT_604"
+     ]
+    },
+    {
+     "adventureDeckId": 102,
+     "classId": 4,
+     "className": "MAGE",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 98,
+     "unlockValue": 8,
+     "deckId": 2606,
+     "noteName": "ULDA_Reno_Deck2",
+     "name": "Spell Seeker",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "TRL_074",
+      "KAR_036",
+      "BOT_101",
+      "ULD_328",
+      "EX1_124",
+      "NEW1_012",
+      "ULD_231",
+      "LOE_002",
+      "EX1_134",
+      "LOE_012"
+     ]
+    },
+    {
+     "adventureDeckId": 103,
+     "classId": 4,
+     "className": "MAGE",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 98,
+     "unlockValue": 16,
+     "deckId": 2607,
+     "noteName": "ULDA_Reno_Deck3",
+     "name": "Secret Traps",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DAL_608",
+      "CFM_066",
+      "ULD_186",
+      "ULD_240",
+      "LOOT_204",
+      "FP1_018",
+      "EX1_289",
+      "DAL_163",
+      "ULD_285",
+      "LOOT_026"
+     ]
+    },
+    {
+     "adventureDeckId": 104,
+     "classId": 4,
+     "className": "MAGE",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 98,
+     "unlockValue": 24,
+     "deckId": 2615,
+     "noteName": "ULDA_Reno_Deck_Random",
+     "name": "Random Reno Deck",
+     "description": "Start the run with a random Reno deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "ULDA_901"
+     ]
+    },
+    {
+     "adventureDeckId": 105,
+     "classId": 5,
+     "className": "PALADIN",
+     "sortOrder": 0,
+     "unlockCriteriaText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "deckId": 2608,
+     "noteName": "ULDA_Finley_Deck1",
+     "name": "Murloc Crusade",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "ULD_145",
+      "UNG_960",
+      "ULD_723",
+      "UNG_011",
+      "UNG_201",
+      "DAL_710",
+      "EX1_565",
+      "EX1_366",
+      "AT_076",
+      "UNG_817"
+     ]
+    },
+    {
+     "adventureDeckId": 106,
+     "classId": 5,
+     "className": "PALADIN",
+     "sortOrder": 1,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 82,
+     "unlockValue": 8,
+     "deckId": 2609,
+     "noteName": "ULDA_Finley_Deck2",
+     "name": "Mighty Morphing",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "GIL_836",
+      "OG_027",
+      "EX1_238",
+      "OG_026",
+      "ULD_439",
+      "CFM_753",
+      "EX1_248",
+      "EX1_258",
+      "LOE_017",
+      "LOE_016"
+     ]
+    },
+    {
+     "adventureDeckId": 107,
+     "classId": 5,
+     "className": "PALADIN",
+     "sortOrder": 2,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 82,
+     "unlockValue": 16,
+     "deckId": 2610,
+     "noteName": "ULDA_Finley_Deck3",
+     "name": "Back in Action",
+     "description": "",
+     "cardCount": 10,
+     "cardOrder": "linked-list",
+     "cards": [
+      "EX1_136",
+      "ICC_038",
+      "CS2_038",
+      "ULD_217",
+      "GVG_037",
+      "UNG_956",
+      "GIL_681",
+      "ULD_207",
+      "ULD_275",
+      "CFM_061"
+     ]
+    },
+    {
+     "adventureDeckId": 108,
+     "classId": 5,
+     "className": "PALADIN",
+     "sortOrder": 3,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockGameSaveSubkeyId": 82,
+     "unlockValue": 24,
+     "deckId": 2616,
+     "noteName": "ULDA_Finley_Deck_Random",
+     "name": "Random Finley Deck",
+     "description": "Start the run with a random Finley deck!",
+     "cardCount": 1,
+     "cardOrder": "linked-list",
+     "cards": [
+      "ULDA_902"
+     ]
+    }
+   ],
+   "otherPrefixedDecks": [
+    {
+     "deckId": 2569,
+     "noteName": "ULDA_Elise_Tekanh_Deck_1",
+     "name": "Tokens & Restoration",
+     "description": "Tokens & Restoration",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "DAL_733",
+      "DAL_733",
+      "EX1_160",
+      "EX1_154",
+      "EX1_154",
+      "DAL_351",
+      "DAL_355",
+      "DAL_558",
+      "ULD_262",
+      "AT_011",
+      "KAR_035",
+      "CS1_112",
+      "ULD_270",
+      "ULD_270",
+      "ULD_135",
+      "ULD_135",
+      "EX1_624",
+      "EX1_350",
+      "DAL_256",
+      "ULD_134",
+      "ULD_134",
+      "ULD_133",
+      "ULD_268",
+      "ULD_268",
+      "EX1_155",
+      "EX1_155",
+      "ULD_265",
+      "BOT_219",
+      "GVG_010",
+      "UNG_963"
+     ]
+    },
+    {
+     "deckId": 2570,
+     "noteName": "ULDA_Elise_Tekanh_Deck_2",
+     "name": "Spell Value",
+     "description": "Buffs & Spell Damage",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "BOT_558",
+      "BOT_558",
+      "UNG_034",
+      "UNG_034",
+      "LOOT_209",
+      "BOT_216",
+      "TRL_131",
+      "TRL_131",
+      "GVG_010",
+      "GVG_010",
+      "OG_044",
+      "TRL_254",
+      "TRL_254",
+      "OG_202",
+      "OG_202",
+      "CS2_012",
+      "CS2_012",
+      "UNG_963",
+      "OG_094",
+      "OG_094",
+      "GVG_014",
+      "EX1_164",
+      "EX1_164",
+      "BOT_258",
+      "EX1_178",
+      "EX1_178",
+      "ULD_273",
+      "EX1_573",
+      "TRL_408",
+      "TRL_408"
+     ]
+    },
+    {
+     "deckId": 2571,
+     "noteName": "ULDA_Elise_Tekanh_Deck_3",
+     "name": "Shadows",
+     "description": "Big, Deathrattle, Revive",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "ULD_265",
+      "BRM_017",
+      "BRM_017",
+      "LOOT_351",
+      "LOOT_187",
+      "LOOT_187",
+      "CS2_013",
+      "ULD_269",
+      "LOOT_054",
+      "LOOT_054",
+      "ICC_213",
+      "ICC_213",
+      "BOT_404",
+      "ULD_268",
+      "ULD_268",
+      "DAL_039",
+      "DAL_039",
+      "LOOT_329",
+      "TRL_258",
+      "TRL_258",
+      "LOE_104",
+      "LOE_104",
+      "EX1_016",
+      "LOOT_507",
+      "GVG_035",
+      "DAL_721",
+      "ICC_835",
+      "ICC_214",
+      "ICC_214",
+      "ICC_085"
+     ]
+    },
+    {
+     "deckId": 2572,
+     "noteName": "ULDA_Reno_Tekanh_Deck_1",
+     "name": "The Magician",
+     "description": "All about the Spells",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "LOOT_231",
+      "EX1_124",
+      "EX1_124",
+      "UNG_027",
+      "EX1_278",
+      "EX1_608",
+      "EX1_608",
+      "CS2_023",
+      "CS2_023",
+      "GIL_827",
+      "BRM_002",
+      "BRM_002",
+      "EX1_137",
+      "CS2_029",
+      "ULD_286",
+      "ULD_286",
+      "LOE_003",
+      "LOE_003",
+      "OG_073",
+      "EX1_559",
+      "LOOT_204",
+      "ULD_329",
+      "ULD_329",
+      "ULD_216",
+      "ULD_239",
+      "ULD_186",
+      "ULD_186",
+      "ULD_328",
+      "ULD_328",
+      "ULD_280"
+     ]
+    },
+    {
+     "deckId": 2573,
+     "noteName": "ULDA_Reno_Tekanh_Deck_2",
+     "name": "Weaponized Mage",
+     "description": "Weapons & Combo Plays",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_074",
+      "CS2_074",
+      "ICC_233",
+      "ICC_233",
+      "LOOT_542",
+      "KAR_069",
+      "LOOT_033",
+      "UNG_018",
+      "UNG_018",
+      "GVG_023",
+      "UNG_941",
+      "UNG_941",
+      "GVG_003",
+      "AT_033",
+      "AT_033",
+      "ULD_329",
+      "ULD_329",
+      "EX1_613",
+      "UNG_823",
+      "BOT_103",
+      "BOT_087",
+      "GVG_005",
+      "GVG_022",
+      "GVG_022",
+      "DAL_720",
+      "OG_080",
+      "LOOT_108",
+      "UNG_955",
+      "CS2_032",
+      "CS2_077"
+     ]
+    },
+    {
+     "deckId": 2574,
+     "noteName": "ULDA_Reno_Tekanh_Deck_3",
+     "name": "The Big Stuff",
+     "description": "Big Spells & Minion Generation",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "EX1_145",
+      "EX1_145",
+      "EX1_012",
+      "DAL_575",
+      "DAL_177",
+      "DAL_177",
+      "UNG_948",
+      "CS2_022",
+      "CS2_022",
+      "LOOT_130",
+      "LOOT_130",
+      "OG_090",
+      "OG_090",
+      "OG_291",
+      "OG_291",
+      "CS2_028",
+      "CS2_028",
+      "KAR_076",
+      "KAR_076",
+      "CFM_623",
+      "CFM_623",
+      "OG_120",
+      "DAL_578",
+      "DAL_578",
+      "AT_009",
+      "DAL_609",
+      "ULD_216",
+      "ULD_216",
+      "EX1_279",
+      "EX1_279"
+     ]
+    },
+    {
+     "deckId": 2575,
+     "noteName": "ULDA_Brann_Tekanh_Deck_1",
+     "name": "Rush to Victory",
+     "description": "Beasts, Rush, Mech",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "TRL_348",
+      "TRL_348",
+      "GIL_580",
+      "GIL_580",
+      "GIL_155",
+      "NEW1_031",
+      "NEW1_031",
+      "GIL_113",
+      "GIL_113",
+      "BOT_251",
+      "GIL_828",
+      "ULD_206",
+      "ULD_206",
+      "GIL_547",
+      "UNG_957",
+      "UNG_957",
+      "DAL_378",
+      "DAL_378",
+      "DAL_070",
+      "ULD_430",
+      "ULD_429",
+      "ULD_429",
+      "ULD_713",
+      "ULD_195",
+      "ULD_195",
+      "ULD_253",
+      "ULD_253",
+      "EX1_392",
+      "EX1_606",
+      "DS1_184"
+     ]
+    },
+    {
+     "deckId": 2576,
+     "noteName": "ULDA_Brann_Tekanh_Deck_2",
+     "name": "Face is the Place",
+     "description": "Weapons, Spells, Charge",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "EX1_607",
+      "EX1_607",
+      "DS1_185",
+      "DS1_185",
+      "OG_312",
+      "OG_312",
+      "BOT_033",
+      "BOT_033",
+      "CS2_105",
+      "CS2_105",
+      "AT_061",
+      "AT_061",
+      "EX1_604",
+      "EX1_604",
+      "EX1_539",
+      "EX1_539",
+      "EX1_538",
+      "EX1_538",
+      "DAL_063",
+      "DAL_063",
+      "DS1_178",
+      "DS1_178",
+      "EX1_534",
+      "EX1_534",
+      "GVG_049",
+      "OG_220",
+      "EX1_414",
+      "OG_211",
+      "OG_211",
+      "EX1_543"
+     ]
+    },
+    {
+     "deckId": 2577,
+     "noteName": "ULDA_Brann_Tekanh_Deck_3",
+     "name": "Control Huntwar",
+     "description": "Control and Big Value",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "LOOT_222",
+      "BOT_299",
+      "BOT_299",
+      "CS2_108",
+      "CS2_108",
+      "EX1_610",
+      "EX1_610",
+      "EX1_611",
+      "EX1_611",
+      "CS2_084",
+      "CS2_084",
+      "EX1_391",
+      "GIL_654",
+      "GIL_654",
+      "EX1_606",
+      "EX1_606",
+      "GIL_650",
+      "DAL_770",
+      "DAL_770",
+      "EX1_407",
+      "EX1_407",
+      "EX1_411",
+      "UNG_919",
+      "UNG_838",
+      "UNG_838",
+      "ICC_405",
+      "DAL_059",
+      "DAL_059",
+      "GIL_128",
+      "AT_072"
+     ]
+    },
+    {
+     "deckId": 2578,
+     "noteName": "ULDA_Finley_Tekanh_Deck_1",
+     "name": "Minion Swarm",
+     "description": "Swarms of Minions",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "OG_027",
+      "GIL_678",
+      "GIL_678",
+      "ULD_217",
+      "ULD_217",
+      "DAL_710",
+      "DAL_710",
+      "EX1_565",
+      "EX1_565",
+      "EX1_575",
+      "EX1_366",
+      "GVG_063",
+      "CS2_046",
+      "CS2_046",
+      "UNG_015",
+      "UNG_950",
+      "ULD_145",
+      "ULD_145",
+      "ULD_207",
+      "ULD_207",
+      "ULD_143",
+      "ULD_158",
+      "ULD_158",
+      "AT_053",
+      "CFM_313",
+      "CFM_313",
+      "AT_073",
+      "EX1_354",
+      "AT_076",
+      "AT_076"
+     ]
+    },
+    {
+     "deckId": 2579,
+     "noteName": "ULDA_Finley_Tekanh_Deck_2",
+     "name": "Buffs and Control",
+     "description": "Buffs and Control",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "CS2_041",
+      "EX1_363",
+      "BOT_236",
+      "CFM_696",
+      "CFM_696",
+      "UNG_011",
+      "UNG_011",
+      "TRL_306",
+      "TRL_306",
+      "DAL_568",
+      "LOOT_088",
+      "UNG_953",
+      "UNG_953",
+      "GIL_145",
+      "CS2_039",
+      "EX1_382",
+      "BOT_411",
+      "LOOT_373",
+      "AT_074",
+      "AT_074",
+      "CFM_815",
+      "TRL_085",
+      "CS2_092",
+      "CS2_092",
+      "LOE_017",
+      "TRL_351",
+      "TRL_351",
+      "UNG_952",
+      "UNG_952",
+      "LOOT_216"
+     ]
+    },
+    {
+     "deckId": 2580,
+     "noteName": "ULDA_Finley_Tekanh_Deck_3",
+     "name": "Big Value",
+     "description": "Big Spells & Minions",
+     "cardCount": 30,
+     "cardOrder": "linked-list",
+     "cards": [
+      "BOT_543",
+      "BOT_543",
+      "EX1_241",
+      "EX1_241",
+      "BRM_012",
+      "BRM_012",
+      "OG_024",
+      "OG_024",
+      "CS2_097",
+      "TRL_545",
+      "TRL_545",
+      "UNG_025",
+      "UNG_025",
+      "EX1_384",
+      "EX1_384",
+      "CS2_042",
+      "CS2_042",
+      "TRL_345",
+      "LOOT_500",
+      "DAL_431",
+      "NEW1_010",
+      "UNG_004",
+      "UNG_004",
+      "EX1_354",
+      "EX1_354",
+      "OG_229",
+      "EX1_383",
+      "DAL_047",
+      "DAL_047",
+      "GIL_820"
+     ]
+    }
+   ],
+   "otherPrefixedDecksNote": "DECK rows whose noteName starts with the adventure code but are not referenced by ADVENTURE_DECK.",
+   "heroPowers": [
+    {
+     "id": 28,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "card": {
+      "dbf": 57000,
+      "id": "ULDA_Elise_HP1",
+      "name": "Elise's Might"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 30,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "card": {
+      "dbf": 57002,
+      "id": "ULDA_Elise_HP3",
+      "name": "Starseeker"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Gain Armor\n{0}/{1}",
+     "unlockedDescriptionText": "Gained {0} Armor!",
+     "unlockGameSaveSubkeyId": 315,
+     "unlockValue": 100,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 29,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "card": {
+      "dbf": 57001,
+      "id": "ULDA_Elise_HP2",
+      "name": "Druidic Teaching"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Cast Spells\n{0}/{1}",
+     "unlockedDescriptionText": "Casted {0} Spells!",
+     "unlockGameSaveSubkeyId": 314,
+     "unlockValue": 100,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 31,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "card": {
+      "dbf": 57643,
+      "id": "ULDA_Brann_HP1",
+      "name": "Spread Shot"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 32,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "card": {
+      "dbf": 57644,
+      "id": "ULDA_Brann_HP2",
+      "name": "Well Equipped"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Deal damage to enemy heroes\n{0}/{1}\n",
+     "unlockedDescriptionText": "Dealt {0} damage!",
+     "unlockGameSaveSubkeyId": 316,
+     "unlockValue": 300,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 33,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "card": {
+      "dbf": 57645,
+      "id": "ULDA_Brann_HP3",
+      "name": "Dino Tracking"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Attack with a weapon\n{0}/{1}\n",
+     "unlockedDescriptionText": "Attacked {0} times!",
+     "unlockGameSaveSubkeyId": 317,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 34,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "card": {
+      "dbf": 57646,
+      "id": "ULDA_Reno_HP1",
+      "name": "Amateur Mage"
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 35,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "card": {
+      "dbf": 57647,
+      "id": "ULDA_Reno_HP2",
+      "name": "\"Relicologist\""
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Activate Combo effects\n{0}/{1}\n",
+     "unlockedDescriptionText": "Activated {0} Combos!",
+     "unlockGameSaveSubkeyId": 318,
+     "unlockValue": 30,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 36,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "card": {
+      "dbf": 57648,
+      "id": "ULDA_Reno_HP3",
+      "name": "Arcane Craftiness"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Deal damage with spells\n{0}/{1}\n",
+     "unlockedDescriptionText": "Dealt {0} Damage!",
+     "unlockGameSaveSubkeyId": 319,
+     "unlockValue": 250,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 39,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "card": {
+      "dbf": 57649,
+      "id": "ULDA_Finley_HP1",
+      "name": "New \"Recruits\""
+     },
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 38,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "card": {
+      "dbf": 57650,
+      "id": "ULDA_Finley_HP2",
+      "name": "Bubble Blower"
+     },
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Summon 1-Health minions\n{0}/{1}\n",
+     "unlockedDescriptionText": "Summoned {0} 1-Health minions!",
+     "unlockGameSaveSubkeyId": 320,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 37,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "card": {
+      "dbf": 57651,
+      "id": "ULDA_Finley_HP3",
+      "name": "Power Up!"
+     },
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Overload Mana Crystals\n{0}/{1}\n",
+     "unlockedDescriptionText": "Overloaded {0} Mana Crystals!",
+     "unlockGameSaveSubkeyId": 321,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    }
+   ],
+   "loadoutTreasures": [
+    {
+     "id": 8,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57011,
+      "id": "ULDA_303",
+      "name": "Starseeker's Tools"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 9,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57012,
+      "id": "ULDA_305",
+      "name": "Elise's Machete"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Bosses!",
+     "unlockGameSaveSubkeyId": 86,
+     "unlockValue": 5,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 10,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57015,
+      "id": "ULDA_003",
+      "name": "Addarah"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Damage Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Dealt {0} damage!",
+     "unlockGameSaveSubkeyId": 488,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 11,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57016,
+      "id": "ULDA_017",
+      "name": "Jr. Navigator"
+     },
+     "upgradedCard": {
+      "dbf": 57017,
+      "id": "ULDA_022",
+      "name": "Sr. Navigator"
+     },
+     "upgradedDescriptionText": "Defeated {0} different Plague Lords!",
+     "upgradeGameSaveSubkeyId": 492,
+     "upgradeValue": 4,
+     "sortOrder": 3,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat a Plague Lord\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lord!",
+     "unlockGameSaveSubkeyId": 87,
+     "unlockValue": 1,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 12,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57008,
+      "id": "ULDA_302",
+      "name": "Academic Research"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 4,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lords!",
+     "unlockGameSaveSubkeyId": 87,
+     "unlockValue": 2,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 13,
+     "classId": 2,
+     "className": "DRUID",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57013,
+      "id": "ULDA_304",
+      "name": "Staff of Renewal"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 5,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lords!",
+     "unlockGameSaveSubkeyId": 87,
+     "unlockValue": 3,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 15,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57608,
+      "id": "ULDA_401",
+      "name": "Ol' Faithful"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 16,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57603,
+      "id": "ULDA_402",
+      "name": "Brann's Saddle"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Bosses!",
+     "unlockGameSaveSubkeyId": 96,
+     "unlockValue": 5,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 17,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57606,
+      "id": "ULDA_404",
+      "name": "Titan-Forged Grapnel"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Damage Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Dealt {0} Damage!",
+     "unlockGameSaveSubkeyId": 486,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 18,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57605,
+      "id": "ULDA_018",
+      "name": "Jr. Excavator"
+     },
+     "upgradedCard": {
+      "dbf": 57604,
+      "id": "ULDA_023",
+      "name": "Sr. Excavator"
+     },
+     "upgradedDescriptionText": "Defeated {0} different Plague Lords!",
+     "upgradeGameSaveSubkeyId": 490,
+     "upgradeValue": 4,
+     "sortOrder": 3,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat a Plague Lord\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lord!",
+     "unlockGameSaveSubkeyId": 97,
+     "unlockValue": 1,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 19,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57607,
+      "id": "ULDA_002",
+      "name": "Flo Slatebrand"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 4,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lords!",
+     "unlockGameSaveSubkeyId": 97,
+     "unlockValue": 2,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 20,
+     "classId": 3,
+     "className": "HUNTER",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57601,
+      "id": "ULDA_405",
+      "name": "Brann's Epic Egg"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 5,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lords!",
+     "unlockGameSaveSubkeyId": 97,
+     "unlockValue": 3,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 1,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57615,
+      "id": "ULDA_203",
+      "name": "Reno's Lucky Hat"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 2,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57614,
+      "id": "ULDA_201",
+      "name": "Reno's Crafty Lasso"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Bosses!",
+     "unlockGameSaveSubkeyId": 98,
+     "unlockValue": 5,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 3,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57613,
+      "id": "ULDA_204",
+      "name": "Reno's Magical Torch"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Damage Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Dealt {0} damage!",
+     "unlockGameSaveSubkeyId": 487,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 4,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57612,
+      "id": "ULDA_016",
+      "name": "Jr. Tomb Diver"
+     },
+     "upgradedCard": {
+      "dbf": 57611,
+      "id": "ULDA_021",
+      "name": "Sr. Tomb Diver"
+     },
+     "upgradedDescriptionText": "Defeated {0} different Plague Lords!",
+     "upgradeGameSaveSubkeyId": 491,
+     "upgradeValue": 4,
+     "sortOrder": 3,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat a Plague Lord\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lord!",
+     "unlockGameSaveSubkeyId": 99,
+     "unlockValue": 1,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 5,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57610,
+      "id": "ULDA_206",
+      "name": "Lei Flamepaw"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 4,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lords!",
+     "unlockGameSaveSubkeyId": 99,
+     "unlockValue": 2,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 6,
+     "classId": 4,
+     "className": "MAGE",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57609,
+      "id": "ULDA_207",
+      "name": "The Gatling Wand"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 5,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lords!",
+     "unlockGameSaveSubkeyId": 99,
+     "unlockValue": 3,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 22,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57600,
+      "id": "ULDA_502",
+      "name": "Finley's Pith Helmet"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 0,
+     "isDefault": false,
+     "unlockCriteriaText": "",
+     "unlockedDescriptionText": "",
+     "unlockGameSaveSubkeyId": 0,
+     "unlockValue": 0,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 23,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57598,
+      "id": "ULDA_501",
+      "name": "Maxwell, Mighty Steed"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 1,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Bosses\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Bosses!",
+     "unlockGameSaveSubkeyId": 82,
+     "unlockValue": 5,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 24,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57602,
+      "id": "ULDA_505",
+      "name": "Truesilver Lance"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 2,
+     "isDefault": false,
+     "unlockCriteriaText": "Damage Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Dealt {0} damage!",
+     "unlockGameSaveSubkeyId": 489,
+     "unlockValue": 50,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 25,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57597,
+      "id": "ULDA_015",
+      "name": "Jr. Scout"
+     },
+     "upgradedCard": {
+      "dbf": 57596,
+      "id": "ULDA_020",
+      "name": "Sr. Scout"
+     },
+     "upgradedDescriptionText": "Defeated {0} different Plague Lords!",
+     "upgradeGameSaveSubkeyId": 493,
+     "upgradeValue": 4,
+     "sortOrder": 3,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat a Plague Lord\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lord!",
+     "unlockGameSaveSubkeyId": 83,
+     "unlockValue": 1,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 26,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 57595,
+      "id": "ULDA_507",
+      "name": "Karl the Lost"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 4,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lords!",
+     "unlockGameSaveSubkeyId": 83,
+     "unlockValue": 2,
+     "unlockAchievementId": 0
+    },
+    {
+     "id": 27,
+     "classId": 5,
+     "className": "PALADIN",
+     "guestHero": null,
+     "guestHeroVariantId": 0,
+     "card": {
+      "dbf": 58057,
+      "id": "ULDA_010",
+      "name": "Scales of Justice"
+     },
+     "upgradedCard": null,
+     "upgradedDescriptionText": "",
+     "upgradeGameSaveSubkeyId": 0,
+     "upgradeValue": 0,
+     "sortOrder": 5,
+     "isDefault": false,
+     "unlockCriteriaText": "Defeat Plague Lords\n{0}/{1}",
+     "unlockedDescriptionText": "Defeated {0} Plague Lords!",
+     "unlockGameSaveSubkeyId": 83,
+     "unlockValue": 3,
+     "unlockAchievementId": 0
+    }
+   ],
+   "guestHeroes": [
+    {
+     "guestHeroId": 81,
+     "card": {
+      "dbf": 57580,
+      "id": "ULDA_Reno",
+      "name": "Reno Jackson"
+     },
+     "name": "Mage / Rogue",
+     "id": 24,
+     "wingId": 1992,
+     "baseGuestHero": null,
+     "sortOrder": 1,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter 1",
+     "comingSoonText": "Playable after week 3"
+    },
+    {
+     "guestHeroId": 82,
+     "card": {
+      "dbf": 57581,
+      "id": "ULDA_Finley",
+      "name": "Sir Finley"
+     },
+     "name": "Paladin / Shaman",
+     "id": 25,
+     "wingId": 2246,
+     "baseGuestHero": null,
+     "sortOrder": 2,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter II",
+     "comingSoonText": ""
+    },
+    {
+     "guestHeroId": 83,
+     "card": {
+      "dbf": 57582,
+      "id": "ULDA_Elise",
+      "name": "Elise Starseeker"
+     },
+     "name": "Druid / Priest",
+     "id": 26,
+     "wingId": 2247,
+     "baseGuestHero": null,
+     "sortOrder": 3,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter III",
+     "comingSoonText": "Playable after week 2"
+    },
+    {
+     "guestHeroId": 84,
+     "card": {
+      "dbf": 57583,
+      "id": "ULDA_Brann",
+      "name": "Brann Bronzebeard"
+     },
+     "name": "Hunter / Warrior",
+     "id": 27,
+     "wingId": 2248,
+     "baseGuestHero": null,
+     "sortOrder": 4,
+     "customScenarioId": 0,
+     "unlockCriteriaText": "Requires unlocking of Chapter IV",
+     "comingSoonText": "Playable after week 4"
+    }
+   ],
+   "deckRulesets": []
+  }
+ ]
+}

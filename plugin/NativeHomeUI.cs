@@ -217,7 +217,7 @@ internal static class NativeHomeUI
     // The disabled fourth-mode face says Fan-made modes (community mods, modder toolkit); it stays inert like Arena.
     // Only the native face text changes, so font, plate and size stay native; the tooltip headline reads the same text.
     internal const string FanModesLabel = "Fan-made modes";
-    internal const string ArenaEntry = "home.arena", FanModesEntry = "home.battlegrounds";
+    internal const string ArenaEntry = "home.arena", FanModesEntry = "home.battlegrounds", ModesEntry = "home.modes";
 
     // One switch for the Fan-made modes relabel and the Arena/Fan-made modes slot swap: each follows its hidden-entry policy, so an
     // enabled (implemented) Arena or Battlegrounds is neither force-relabelled nor swapped. active: entry id -> policy applies.
@@ -227,6 +227,19 @@ internal static class NativeHomeUI
         bool campaigns = active == null || active(FanModesEntry), arena = active == null || active(ArenaEntry);
         if (campaigns) LabelFanModes(box, report); // Box.SetupButtonText rewrites the face on every HUB load
         if (campaigns && arena) SwapModeSlots(box, report); // native re-layout restores the authored slots
+    }
+
+    // Dungeon Run opens from the Fan-made modes face. Called by NativeUIProbe.ConfigureHomeButtons after DisableAllButtons and
+    // NativeHiddenEntries.Apply (whose DisableMode made the face inert), like Play: only the local press is freed here.
+    internal static void EnableDungeonRun(Box box)
+    {
+        var button = box?.m_BattleGroundsButton;
+        if (button == null || !NativeDungeonRunUI.HomeReady) return;
+        box.SetBoxButtonInteractions(true, button, true);
+        // SetBoxButtonInteractions restores only ROLLOVER/ROLLOUT; DisableMode's per-event PRESS/RELEASE disables
+        // (m_disabledEventTypes) stay until removed here, or TriggerRelease never reaches Box.OnButtonPressed.
+        button.SetEnabled(UIEventType.PRESS, true);
+        button.SetEnabled(UIEventType.RELEASE, true);
     }
 
     private static void LabelFanModes(Box box, Action<string> report)
@@ -327,10 +340,18 @@ internal static class NativeHomeUI
     }
 
     private static bool IsUnavailableMode(Box box, PegUIElement button) => box != null && button != null
-        && (button == box.m_ArenaButton || button == box.m_BattleGroundsButton || button == box.m_GameModesButton);
+        && (button == box.m_ArenaButton || button == box.m_GameModesButton
+            || button == box.m_BattleGroundsButton && !NativeDungeonRunUI.HomeReady);
 
     internal static bool ShowModeTooltip(Box box, PegUIElement button)
     {
+        // The Fan-made modes face opens Dungeon Run: its own tooltip, never the native Battlegrounds one.
+        if (box != null && button != null && button == box.m_BattleGroundsButton && NativeDungeonRunUI.HomeReady)
+        {
+            if (box.IsInStateWithButtons())
+                button.GetComponent<TooltipZone>()?.ShowBoxTooltip(FanModesLabel, NativeDungeonRunText.HomeTooltip);
+            return false;
+        }
         if (!IsUnavailableMode(box, button)) return true;
         if (box.IsInStateWithButtons())
             button.GetComponent<TooltipZone>()?.ShowBoxTooltip(((BoxMenuButton)button).GetText(), "Not done yet! In the backlog");

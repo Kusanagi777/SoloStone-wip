@@ -171,6 +171,8 @@ internal static partial class NativeUIProbe
         NativeDeckRecord.Initialize(logger);
         NativePackFlip.Initialize(logger);
         NativeAchievements.Initialize(harmony, logger);
+        NativeDungeonRunUI.Initialize(harmony, logger);
+        NativeDungeonRunPicker.Initialize(harmony, logger);
         Hook(harmony, typeof(Options), "GetBoolImpl", nameof(OnboardingOption), new[] { typeof(Option), typeof(bool).MakeByRefType() });
         Hook(harmony, typeof(BnetBarMenuButton), "UpdateHighlight", nameof(HiddenMenuHighlight), Type.EmptyTypes);
         publisher = NativeUIProjection.ResolvePublisher(typeof(NetCache));
@@ -241,6 +243,9 @@ internal static partial class NativeUIProbe
         Hook(harmony, typeof(Box), "OnButtonMouseOut", nameof(HomeModeOut), new[] { typeof(UIEvent) });
         Hook(harmony, typeof(BoxScrollButton), "TriggerOver", nameof(HomeScrollHover));
         Hook(harmony, typeof(BoxScrollButton), "TriggerOut", nameof(HomeScrollOut));
+        // The Fan-made modes face is a BoxScrollButton: with its retail feature inactive (always, offline) TriggerRelease
+        // returns before PegUIElement, so Box.OnButtonPressed (HomeButtonGate) never sees the click. Dungeon Run is opened here.
+        Hook(harmony, typeof(BoxScrollButton), "TriggerRelease", nameof(HomeScrollRelease));
         harmony.Patch(Required(typeof(StoreButton), "OnButtonOver", new[] { typeof(UIEvent) }),
             postfix: new HarmonyMethod(typeof(NativeUIProbe), nameof(HomeStoreTooltip)));
         harmony.Patch(Required(typeof(Box), "UpdateUIEvents"),
@@ -350,8 +355,11 @@ internal static partial class NativeUIProbe
     private static void Fail(Exception error)
     {
         if (failure.Length != 0) return;
+        // A block on the Dungeon Run picker's own path (entering, in ADVENTURE, on the way back) becomes its fallback to the HUB menu.
+        if (NativeDungeonRunPicker.Recover(error)) { sceneWaiting = false; return; }
         failure = error.ToString(); ready = false; sceneWaiting = false;
         log.LogError("NATIVE_UI_BLOCKED " + failure); State("Blocked");
+        NativeDungeonRunPicker.Blocked(); // the UI stops ticking: an open picker session (at the HUB) stands down
         ScreenCapture.CaptureScreenshot(Path.Combine(Reports, "native-ui-blocked.png"));
     }
     public static void Update(bool bridgeReady)
@@ -375,6 +383,8 @@ internal static partial class NativeUIProbe
                 Bootstrap();
             }
             if (!ready) return;
+            // First, so a subsystem below that throws every frame (each one recovered by the picker) cannot stop the way back.
+            NativeDungeonRunPicker.Update();
             if (AtHome()) NativeHomeUI.UpdateJournal(Box.Get(), message => log.LogInfo(message), NativeHiddenEntries.Active);
             if (sceneWaiting && SplashScreen.Get() == null && !SceneMgr.Get().IsTransitioning() && SceneMgr.Get().GetMode() == target)
             {
@@ -390,6 +400,7 @@ internal static partial class NativeUIProbe
             NativeCollectionStatus.Update();
             NativeFormatLock.Update();
             NativeHelpUI.Update(AtHome());
+            NativeDungeonRunUI.Update();
             RoutePendingRewardHome();
             RouteFinishedMatchToPicker();
             BindPicker();
@@ -448,7 +459,8 @@ internal static partial class NativeUIProbe
         bool stable = active && ready && !sceneWaiting && !SceneMgr.Get().IsTransitioning() && !NativeRewardUI.Active;
         if (LocalRewardPresentation.ShouldRouteFinishedToPicker(stable, Profile?.PendingRewardPresentation != null,
             Profile?.Pending != null, LocalLadder.Screen, SceneMgr.Get().GetMode() == SceneMgr.Mode.GAMEPLAY))
-            Navigate(SceneMgr.Mode.TOURNAMENT);
+            // A finished Dungeon Run fight returns to the hub, where the run screen reopens; ladder matches go to the picker.
+            Navigate(DungeonRunRuntime.TakeReturnToRunHub() ? SceneMgr.Mode.HUB : SceneMgr.Mode.TOURNAMENT);
     }
 
     // The picker opens on the deck just played, also after a restart (lastSelectedId is session-only).
@@ -650,6 +662,9 @@ internal static partial class NativeUIProbe
     private static bool PreviewTag(EntityBase __instance, GAME_TAG __0, ref int __result) => PreviewTagInt(__instance, (int)__0, ref __result);
     private static bool PreviewTagInt(EntityBase __instance, int __0, ref int __result)
     {
+        // The native Dungeon Run picker's power cards show their run cost (definitions only, only while the picker is open).
+        if (__0 == (int)GAME_TAG.COST && DungeonRunRuntime.PickerOpen && __instance is EntityDef pickerDefinition
+            && DungeonRunRuntime.TryPickerCost(pickerDefinition.GetCardId(), out int pickerCost)) { __result = pickerCost; return false; }
 #if STANDARD_PROOF
         if (__instance is EntityDef proofDefinition && NativeUIProjection.UseOriginalProofDefinition(proofDefinition.GetCardId())) return true;
 #endif
@@ -1186,7 +1201,13 @@ internal static partial class NativeUIProbe
         {
             var type = (Type)pair.GetType().GetProperty("Key").GetValue(pair, null);
             var request = pair.GetType().GetProperty("Value").GetValue(pair, null);
-            if (!NativeUIProjection.AllowedCache(type.Name)) { Fail(new InvalidOperationException("Unknown cache batch: " + type.FullName + "\n" + Environment.StackTrace)); return false; }
+            if (!NativeUIProjection.AllowedCache(type.Name))
+            {
+                // During the Dungeon Run picker an unknown batch is its fallback to the HUB menu, not a block.
+                if (!NativeDungeonRunPicker.RefuseCache(type))
+                    Fail(new InvalidOperationException("Unknown cache batch: " + type.FullName + "\n" + Environment.StackTrace));
+                return false;
+            }
             AccessTools.Field(request.GetType(), "m_reload").SetValue(request, false);
         }
         return true;
@@ -1195,7 +1216,9 @@ internal static partial class NativeUIProbe
     {
         if (!active) return true;
         if (cache.TryGetValue(__0, out object dto)) Publish(dto);
-        else if (__0 != typeof(NetCache.NetCacheCollection) || ready) Fail(new InvalidOperationException("Missing local cache: " + __0.FullName));
+        // On the Dungeon Run picker's path a missing cache is its fallback to the HUB menu, as for an unknown batch.
+        else if ((__0 != typeof(NetCache.NetCacheCollection) || ready) && !NativeDungeonRunPicker.RefuseCache(__0))
+            Fail(new InvalidOperationException("Missing local cache: " + __0.FullName));
         return false;
     }
     private static bool ReloadCache(Type __1) => RequestCache(__1);
@@ -1441,21 +1464,48 @@ internal static partial class NativeUIProbe
     }
 
     // Gated while a native presentation owns HUB input; stale receipt phases still do not block it.
-    private static bool HomeButtonGate() => !NativeRewardUI.BlocksHome && !NativeAchievements.Active
-        && !NativeProfileSelector.BlocksHome;
+    private static bool HomeButtonGate(Box __instance, UIEvent __0)
+    {
+        if (NativeRewardUI.BlocksHome || NativeAchievements.Active || NativeProfileSelector.BlocksHome || NativeDungeonRunUI.BlocksHome)
+            return false;
+        // Dungeon Run on the Fan-made modes face: routed here, before Box.OnButtonPressed reaches the still-blocked
+        // Battlegrounds handlers, so neither a retail handler nor a box press route (GuardBoxRoute) is freed.
+        if (AtHome() && __instance != null && __0 != null && __instance.m_BattleGroundsButton != null
+            && __0.GetElement() == __instance.m_BattleGroundsButton && NativeDungeonRunUI.HomeReady)
+        {
+            if (__instance.IsInStateWithButtons() && DialogManager.Get()?.ShowingDialog() != true)
+                NativeDungeonRunPicker.Open(); // the native class picker with no run, else the dialog over the HUB
+            return false;
+        }
+        return true;
+    }
     private static bool HomePacks(Box __instance)
     {
-        if (NativeRewardUI.BlocksHome || NativeAchievements.Active || NativeProfileSelector.BlocksHome) return false;
+        if (NativeRewardUI.BlocksHome || NativeAchievements.Active || NativeProfileSelector.BlocksHome || NativeDungeonRunUI.BlocksHome) return false;
         if (!AtHome()) return true;
         __instance.FireButtonPressEvent(Box.ButtonType.OPEN_PACKS); return false;
     }
     private static bool AtHome() => active && ready && SceneMgr.IsInitialized() && SceneMgr.Get().GetMode() == SceneMgr.Mode.HUB;
-    private static bool HomeModeHover(UIEvent __0) => !AtHome() || NativeHomeUI.ShowModeTooltip(Box.Get(), __0.GetElement());
+    private static bool HomeModeHover(UIEvent __0) => !AtHome() || !NativeDungeonRunUI.BlocksHome && NativeHomeUI.ShowModeTooltip(Box.Get(), __0.GetElement());
     private static bool HomeModeOut(UIEvent __0) => !AtHome() || NativeHomeUI.HideModeTooltip(Box.Get(), __0.GetElement());
     private static void HomeStoreTooltip(StoreButton __instance) { if (AtHome()) NativeHomeUI.StoreTooltip(__instance); }
     // BoxScrollButton bypasses Box hover events when the retail mode feature is unavailable.
     private static bool HomeScrollHover(BoxScrollButton __instance) => !AtHome() || NativeHomeUI.ShowModeTooltip(Box.Get(), __instance);
     private static bool HomeScrollOut(BoxScrollButton __instance) => !AtHome() || NativeHomeUI.HideModeTooltip(Box.Get(), __instance);
+    // Releases on the Fan-made modes face open Dungeon Run; every other BoxScrollButton keeps its native behaviour.
+    private static bool HomeScrollRelease(BoxScrollButton __instance)
+    {
+        var box = AtHome() ? Box.Get() : null;
+        if (box == null || __instance == null || __instance != box.m_BattleGroundsButton || !NativeDungeonRunUI.HomeReady) return true;
+        if (NativeRewardUI.BlocksHome || NativeAchievements.Active || NativeProfileSelector.BlocksHome || NativeDungeonRunUI.BlocksHome)
+            return false;
+        if (box.IsInStateWithButtons() && DialogManager.Get()?.ShowingDialog() != true)
+        {
+            NativeHomeUI.HideModeTooltip(box, __instance);
+            NativeDungeonRunPicker.Open(); // the native class picker with no run, else the dialog over the HUB
+        }
+        return false;
+    }
 
     private static bool LocalHubStart()
     {
@@ -1502,6 +1552,7 @@ internal static partial class NativeUIProbe
         }
         else if (route == NativeMenuTarget.Pack) Navigate(SceneMgr.Mode.PACKOPENING);
         else if (route == NativeMenuTarget.LocalShop) { } // NativeShop raised this press after opening the local shop.
+        else if (route == NativeMenuTarget.DungeonRun) NativeDungeonRunPicker.Open(); // native class picker, or the HUB dialog
         else log.LogWarning("NATIVE_MENU unsupported home control blocked: " + button);
     }
     private static IEnumerable<CodeInstruction> CollectionExitOnlineCheck(IEnumerable<CodeInstruction> instructions)
@@ -1538,6 +1589,7 @@ internal static partial class NativeUIProbe
         __instance.SetButtonEnabled(true, __instance.m_OpenPacksButton);
         __instance.SetButtonEnabled(true, __instance.m_CollectionButton);
         NativeHiddenEntries.Apply(__instance);
+        NativeHomeUI.EnableDungeonRun(__instance); // after Apply's DisableMode: frees only the Fan-made modes press
         NativeHomeUI.RefreshDrawer(__instance, Profile.UnopenedPacks, message => log.LogInfo(message));
         NativeShop.RefreshHomeStore();
         if (report) log.LogInfo("NATIVE_MENU home enabled=TRADITIONAL,OPEN_PACKS,COLLECTION; unsupported modes disabled with backlog tooltips; journal hidden");
@@ -1549,7 +1601,10 @@ internal static partial class NativeUIProbe
         {
             if (!ready || sceneWaiting || replayRunning || LocalLadder.Screen == "Playing" || LocalLadder.Screen == "Starting") return;
             if (!NativeResultsUI.CanNavigate(mode == SceneMgr.Mode.HUB)) return;
-            if (mode != SceneMgr.Mode.HUB && mode != SceneMgr.Mode.PACKOPENING && mode != SceneMgr.Mode.COLLECTIONMANAGER && mode != SceneMgr.Mode.TOURNAMENT)
+            // ADVENTURE only for the Dungeon Run picker's own entry (borrowed dungeon-crawl screens, NativeDungeonRunPicker).
+            bool adventure = mode == SceneMgr.Mode.ADVENTURE && NativeDungeonRunPicker.Entering;
+            if (mode != SceneMgr.Mode.HUB && mode != SceneMgr.Mode.PACKOPENING && mode != SceneMgr.Mode.COLLECTIONMANAGER
+                && mode != SceneMgr.Mode.TOURNAMENT && !adventure)
                 throw new ArgumentException("Unsupported native UI target");
             if (mode == SceneMgr.Mode.PACKOPENING)
             {
@@ -2006,16 +2061,23 @@ internal static partial class NativeUIProbe
     private static bool Preferences(List<GameSaveKeyId> __0, GameSaveDataManager.OnRequestDataResponseDelegate __1)
     {
         if (!active) return true;
-        bool valid = __0 != null && __0.Count > 0 && __0.All(k => NativeUIProjection.AllowedPreference(k.ToString()));
+        // The Dungeon Run picker's two borrowed adventure keys are answered too, only while it requests them or is on its
+        // borrowed screens (empty: a new run).
+        bool valid = __0 != null && __0.Count > 0
+            && __0.All(k => NativeUIProjection.AllowedPreference(k.ToString()) || NativeDungeonRunPicker.AllowsKey(k));
+        bool picker = NativeDungeonRunPicker.ClaimRequest(__0, valid); // the picker's own request: a refusal is its fallback
         if (valid) foreach (var key in __0) EnsurePreference(key);
-        else Fail(new InvalidOperationException("Unknown preference request: " + string.Join(",", __0 ?? new List<GameSaveKeyId>())));
+        else if (!picker)
+            Fail(new InvalidOperationException("Unknown preference request: " + string.Join(",", __0 ?? new List<GameSaveKeyId>())));
         callbacks.Enqueue(() => __1?.Invoke(valid)); return false;
     }
     private static bool SavePreferences(List<GameSaveDataManager.SubkeySaveRequest> __0, GameSaveDataManager.OnSaveDataResponseDelegate __1, ref bool __result)
     {
         if (!active) return true;
         bool valid = __0 != null && __0.Count > 0 && __0.All(r => r != null
-            && NativeUIProjection.AllowedPreferenceSave(r.Key.ToString(), r.Subkey.ToString(), r.Long_Values));
+            && (NativeUIProjection.AllowedPreferenceSave(r.Key.ToString(), r.Subkey.ToString(), r.Long_Values)
+                || NativeDungeonRunPicker.AllowsSave(r.Key, r.Subkey)));
+        if (__0 != null) foreach (var request in __0) NativeDungeonRunPicker.NoteSave(request, valid);
         try
         {
             if (valid) foreach (var request in __0)
@@ -2479,4 +2541,7 @@ internal static partial class NativeUIProbe
         });
 #endif
     }
+    // Read by NativeDungeonRunPicker (kept after the iterators so their compiler names stay put).
+    internal static bool SceneWaiting => sceneWaiting;
+    internal static bool IsLoading(SceneMgr.Mode mode) => sceneWaiting && target == mode;
 }

@@ -178,6 +178,8 @@ namespace SabberStoneCore.Model.Zones
                 ? entity.AppliedEnchantments?.Where(e => e.Card.Id == "JAIL_453e").Sum(e => e[GameTag.TAG_SCRIPT_DATA_NUM_1]) ?? 0 : 0;
             ((Playable)entity).ResetCost();
             if (ownReduction > 0) entity.Cost = Math.Max(0, entity.Card.Cost - ownReduction);
+            // A Dungeon Run card's tavern enchantments stay attached on leaving the hand: keep their cost effects too.
+            SabberStoneCore.CardSets.DungeonRun.DungeonRunSetup.ReplayDeckCostEnchantments((Playable)entity);
             FollowRules.HandExit(entity);
 			entity.AppliedEnchantments?.ForEach(p => { if (!FollowRules.IsGrant(p)) p.ActivatedTrigger?.Remove(); });
 			int before = _count;

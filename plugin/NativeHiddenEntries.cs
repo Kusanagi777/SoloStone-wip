@@ -153,6 +153,8 @@ internal static class NativeHiddenEntries
     private static bool Applies(Entry entry) => (entry.Id != "home.store" || !NativeShop.HomeStoreReady)
         && (!entry.OutsideMatch || !SceneMgr.IsInitialized() || SceneMgr.Get().GetMode() != SceneMgr.Mode.GAMEPLAY);
     // The drawer Journal slot stays visible as SoloStone's Feats entry; its retail routes and handlers stay blocked.
+    // Dungeon Run opens from the Fan-made modes face (home.battlegrounds) through NativeUIProbe.HomeButtonGate, before the
+    // press reaches any retail handler: that entry and home.modes stay fully in force, so every retail route stays blocked.
     private static bool Hides(Entry entry) => entry.Id != "home.journal" || !NativeAchievements.HomeJournalReady;
     // True while the entry's policy is in force (its release-policy row exists and applies here).
     internal static bool Active(string id) => Entries.Any(entry => entry.Id == id && Applies(entry) && Hides(entry));

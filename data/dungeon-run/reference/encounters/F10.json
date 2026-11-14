@@ -1,0 +1,1828 @@
+{
+ "schemaVersion": 1,
+ "family": "10",
+ "description": "Monster Hunt bosses A (phase 8 family 10): fifteen encounters of The Witchwood's Monster Hunt with a clickable hero power (A Mangy Wolf, Rottooth, Cutthroat Willie, Grubb the Swampdrinker, Gnomenapper, Experiment 3C, Sazzmi Gentlehorn, Gnarlroot, Niira the Trickster, The Scarecrow, Inquisitor Hav'nixx, Chupacabran, Griselda, Wharrgarbl, Ravencaller Cozzlewurt) and their nine boss-only cards. Boss deck lists are transcribed from hearthstone.wiki.gg boss pages (read 2026-11-13), by card name; tools/dungeon-run-catalog (step 'encounters') resolves the names against facts/violet-hold-2026-09.json, checks every card and writes data/dungeon-run/encounters-v1.json. The tier is the printed Health of the hero card (15: tier 1; 25 and 30: tier 2; 35 and 40: tier 3; 50 and 60: tier 4).",
+ "method": "The wiki's MediaWiki API (action=parse, prop=wikitext) was read for each page and the one deck table of the page transcribed in table order with the table's own counts. Each page was transcribed twice; the two transcriptions agree and each table sums to the count recorded in the row's adaptation note (10 for A Mangy Wolf and Rottooth, 30 for The Scarecrow and Inquisitor Hav'nixx, 32 for Gnomenapper, 45 for Experiment 3C, 20 for the others). Boss-only cards carry their id; the wiki's row names \"Amalgamate (boss)\", \"Witchwood's Touch (2)\" and \"Silence (card)\" are written as the card names. The boss pages state no rules beyond the card texts (no notes or strategy sections): what a text leaves open is decided in the row's adaptation notes. The round of each boss is from https://hearthstone.wiki.gg/wiki/Monster_Hunt (read 2026-11-13).",
+ "bosses": [
+  {
+   "id": "gila_20_mangy_wolf",
+   "name": "A Mangy Wolf",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_20h",
+   "power": "GILA_BOSS_20p",
+   "tier": "1",
+   "archetype": "aggro",
+   "level": {
+    "source": "printed-health",
+    "original": 15
+   },
+   "cards": [
+    "GILA_BOSS_20e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/A_Mangy_Wolf",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Claw",
+       "count": 1
+      },
+      {
+       "name": "Spreading Plague",
+       "count": 1
+      },
+      {
+       "name": "Timber Wolf",
+       "count": 1
+      },
+      {
+       "name": "Infest",
+       "count": 1
+      },
+      {
+       "name": "Dire Frenzy",
+       "count": 1
+      },
+      {
+       "name": "Flanking Strike",
+       "count": 1
+      },
+      {
+       "name": "Infested Wolf",
+       "count": 2
+      },
+      {
+       "name": "Dire Wolf Alpha",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "fillers": [
+    "Kindly Grandmother",
+    "Alleycat",
+    "Scavenging Hyena",
+    "Jungle Panther",
+    "Worgen Infiltrator",
+    "Bloodfen Raptor",
+    "Ironfur Grizzly",
+    "Starving Buzzard",
+    "River Crocolisk"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 1 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (15: tier 1), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 10 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the curated fillers named in the row."
+    },
+    {
+     "kind": "power",
+     "note": "Guttural Howl (1) picks one minion the boss holds by the game RNG and is offered only while it holds a minion."
+    }
+   ]
+  },
+  {
+   "id": "gila_21_rottooth",
+   "name": "Rottooth",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_21h",
+   "power": "GILA_BOSS_21p",
+   "tier": "1",
+   "archetype": "aggro",
+   "level": {
+    "source": "printed-health",
+    "original": 15
+   },
+   "cards": [
+    "GILA_BOSS_21e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Rottooth",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Savagery",
+       "count": 1
+      },
+      {
+       "name": "Addled Grizzly",
+       "count": 2
+      },
+      {
+       "name": "Anodized Robo Cub",
+       "count": 1
+      },
+      {
+       "name": "Mark of Y'Shaarj",
+       "count": 1
+      },
+      {
+       "name": "Wild Growth",
+       "count": 1
+      },
+      {
+       "name": "Savage Combatant",
+       "count": 1
+      },
+      {
+       "name": "Bearshark",
+       "count": 1
+      },
+      {
+       "name": "Dire Mole",
+       "count": 1
+      },
+      {
+       "name": "Ironfur Grizzly",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "fillers": [
+    "Claw",
+    "Gnash",
+    "Pounce",
+    "Bite",
+    "Druid of the Saber",
+    "Mounted Raptor",
+    "Bloodfen Raptor",
+    "Jungle Panther",
+    "River Crocolisk"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 1 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (15: tier 1), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 10 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the curated fillers named in the row."
+    }
+   ]
+  },
+  {
+   "id": "gila_22_willie",
+   "name": "Cutthroat Willie",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_22h",
+   "power": "GILA_BOSS_22p",
+   "tier": "2",
+   "archetype": "tempo",
+   "level": {
+    "source": "printed-health",
+    "original": 25
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Cutthroat_Willie",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Backstab",
+       "count": 1
+      },
+      {
+       "name": "Counterfeit Coin",
+       "count": 3
+      },
+      {
+       "name": "Bladed Cultist",
+       "count": 1
+      },
+      {
+       "name": "Cutpurse",
+       "count": 1
+      },
+      {
+       "name": "Defias Ringleader",
+       "count": 1
+      },
+      {
+       "name": "Eviscerate",
+       "count": 1
+      },
+      {
+       "name": "Gang Up",
+       "count": 1
+      },
+      {
+       "name": "Patient Assassin",
+       "count": 1
+      },
+      {
+       "name": "Burgle",
+       "count": 1
+      },
+      {
+       "name": "Shadowblade",
+       "count": 1
+      },
+      {
+       "name": "Assassinate",
+       "count": 1
+      },
+      {
+       "name": "Assassin's Blade",
+       "count": 1
+      },
+      {
+       "name": "Dark Iron Skulker",
+       "count": 1
+      },
+      {
+       "name": "Sprint",
+       "count": 1
+      },
+      {
+       "name": "Trade Prince Gallywix",
+       "count": 1
+      },
+      {
+       "name": "Worgen Infiltrator",
+       "count": 1
+      },
+      {
+       "name": "Burgly Bully",
+       "count": 1
+      },
+      {
+       "name": "Ravenholdt Assassin",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "fillers": [
+    "Sap",
+    "SI:7 Agent",
+    "Fan of Knives",
+    "Deadly Poison",
+    "Southsea Deckhand"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 2-3 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (25: tier 2), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 20 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the curated fillers named in the row."
+    }
+   ]
+  },
+  {
+   "id": "gila_23_grubb",
+   "name": "Grubb the Swampdrinker",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_23h",
+   "power": "GILA_BOSS_23p",
+   "tier": "4",
+   "archetype": "midrange",
+   "level": {
+    "source": "printed-health",
+    "original": 50
+   },
+   "flags": [
+    "start"
+   ],
+   "start": {
+    "bossDeckAdd": [
+     "GILA_BOSS_23t"
+    ]
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Grubb_the_Swampdrinker",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Ogre Ninja",
+       "count": 1
+      },
+      {
+       "name": "Inner Rage",
+       "count": 1
+      },
+      {
+       "name": "Execute",
+       "count": 1
+      },
+      {
+       "name": "Iron Hide",
+       "count": 2
+      },
+      {
+       "name": "Slam",
+       "count": 1
+      },
+      {
+       "name": "Bash",
+       "count": 1
+      },
+      {
+       "name": "Battle Rage",
+       "count": 1
+      },
+      {
+       "name": "Rampage",
+       "count": 1
+      },
+      {
+       "name": "Fierce Monkey",
+       "count": 2
+      },
+      {
+       "name": "Ogre Warmaul",
+       "count": 1
+      },
+      {
+       "name": "Brass Knuckles",
+       "count": 1
+      },
+      {
+       "name": "Brawl",
+       "count": 1
+      },
+      {
+       "name": "Ogre Brute",
+       "count": 1
+      },
+      {
+       "name": "Boulderfist Ogre",
+       "count": 1
+      },
+      {
+       "name": "Hungry Ettin",
+       "count": 1
+      },
+      {
+       "name": "Mogor the Ogre",
+       "count": 1
+      },
+      {
+       "name": "Mogor's Champion",
+       "count": 1
+      },
+      {
+       "name": "Sabretooth Stalker",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "replacements": {
+    "Ogre Ninja": "Stranglethorn Tiger",
+    "Ogre Brute": "Ogre Magi",
+    "Mogor the Ogre": "Boulderfist Ogre",
+    "Mogor's Champion": "Hungry Ettin"
+   },
+   "fillers": [
+    "Fiery War Axe",
+    "Bloodhoof Brave",
+    "Frothing Berserker",
+    "Tar Creeper"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 3-4 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (50: tier 4), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 20 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the curated fillers named in the row."
+    },
+    {
+     "kind": "deck",
+     "note": "Four Ogres of the wiki's list are collectible cards with no script in this engine (Ogre Ninja, Ogre Brute, Mogor the Ogre, Mogor's Champion: the 50% wrong-target Ogres no phase 8 family scripts). Curated replacements: Stranglethorn Tiger, Ogre Magi, a second Boulderfist Ogre and a second Hungry Ettin. Ogre Warmaul keeps the wrong-target rule in the deck."
+    },
+    {
+     "kind": "start",
+     "note": "Chuck, the 6-Cost spell (GILA_BOSS_23t, \"Discard all minions from your hand and deal their Attack to the enemy hero.\"), is Grubb's boss card in the client data but in no row of the wiki's deck table. One copy is shuffled into his deck after the mulligan (the row's start block), so the card is met in this mode; each discarded minion's Attack is dealt as one hit, in hand order."
+    }
+   ]
+  },
+  {
+   "id": "gila_26_gnomenapper",
+   "name": "Gnomenapper",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_26h",
+   "power": "GILA_BOSS_26p",
+   "tier": "3",
+   "archetype": "tempo",
+   "level": {
+    "source": "printed-health",
+    "original": 40
+   },
+   "cards": [
+    "GILA_BOSS_26t"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Gnomenapper",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Sack of Gnomes",
+       "count": 4,
+       "id": "GILA_BOSS_26t2"
+      },
+      {
+       "name": "Sorcerer's Apprentice",
+       "count": 2
+      },
+      {
+       "name": "Wee Spellstopper",
+       "count": 1
+      },
+      {
+       "name": "Silence",
+       "count": 3
+      },
+      {
+       "name": "Shrinkmeister",
+       "count": 1
+      },
+      {
+       "name": "Patient Assassin",
+       "count": 1
+      },
+      {
+       "name": "Sap",
+       "count": 2
+      },
+      {
+       "name": "Burgle",
+       "count": 2
+      },
+      {
+       "name": "Gnomeferatu",
+       "count": 1
+      },
+      {
+       "name": "Rin, the First Disciple",
+       "count": 1
+      },
+      {
+       "name": "Wilfred Fizzlebang",
+       "count": 1
+      },
+      {
+       "name": "Rampage",
+       "count": 2
+      },
+      {
+       "name": "Shieldmaiden",
+       "count": 1
+      },
+      {
+       "name": "Clockwork Gnome",
+       "count": 1
+      },
+      {
+       "name": "Leper Gnome",
+       "count": 1
+      },
+      {
+       "name": "Knife Juggler",
+       "count": 1
+      },
+      {
+       "name": "Millhouse Manastorm",
+       "count": 1
+      },
+      {
+       "name": "Tinkmaster Overspark",
+       "count": 1
+      },
+      {
+       "name": "Defender of Argus",
+       "count": 2
+      },
+      {
+       "name": "Mind Control Tech",
+       "count": 1
+      },
+      {
+       "name": "Gelbin Mekkatorque",
+       "count": 1
+      },
+      {
+       "name": "Mekgineer Thermaplugg",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "fillers": [
+    "Gnomish Inventor",
+    "Gnomeregan Infantry",
+    "Gnomish Experimenter",
+    "Backstab",
+    "Eviscerate"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 6-7 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (40: tier 3), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 32 cards. A combat tier fights with 30: the first 30 usable cards in table order; the rest is left out (recorded as over-size)."
+    },
+    {
+     "kind": "deck",
+     "note": "Wee Spellstopper has no script in this engine and is left out, so of the wiki's 32 cards the first 30 usable ones are the deck and only the last row (Mekgineer Thermaplugg) is cut as over-size."
+    },
+    {
+     "kind": "power",
+     "note": "Nab (2) summons a Stuffed Sack (0/3) for the boss that holds the minion out of play; the wiki gives no rules for it. Here: the minion itself is set aside, with its damage and enchantments, and returns to its own controller's board when the sack's Deathrattle resolves, whoever controls the sack; with that board full it is lost, and a silenced, transformed or bounced sack never returns it. Nab needs a free slot on the boss's board. A run player's board shrine is never a legal target (a shrine never enters a sack)."
+    },
+    {
+     "kind": "power",
+     "note": "Sack of Gnomes (4), \"Fill your board with random Gnomes\": the client data names no pool. Here one random minion per free slot from the collectible Gnomes by name at the time of The Witchwood (Leper Gnome, Clockwork Gnome, Gnomish Inventor, Gnomish Experimenter, Gnomeregan Infantry, Gnomeferatu), those scripted and allowed by the run's generation filter."
+    }
+   ]
+  },
+  {
+   "id": "gila_27_experiment_3c",
+   "name": "Experiment 3C",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_27h",
+   "power": "GILA_BOSS_27p",
+   "tier": "4",
+   "archetype": "midrange",
+   "level": {
+    "source": "printed-health",
+    "original": 60
+   },
+   "cards": [
+    "GILA_BOSS_27t2"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Experiment_3C",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Witchwood's Touch",
+       "count": 2,
+       "id": "GILA_BOSS_99t2"
+      },
+      {
+       "name": "Amalgamate",
+       "count": 3,
+       "id": "GILA_BOSS_27t"
+      },
+      {
+       "name": "Wild Growth",
+       "count": 2
+      },
+      {
+       "name": "Addled Grizzly",
+       "count": 1
+      },
+      {
+       "name": "Nourish",
+       "count": 2
+      },
+      {
+       "name": "Alleycat",
+       "count": 1
+      },
+      {
+       "name": "Crackling Razormaw",
+       "count": 1
+      },
+      {
+       "name": "Scavenging Hyena",
+       "count": 1
+      },
+      {
+       "name": "Metaltooth Leaper",
+       "count": 1
+      },
+      {
+       "name": "Unleash the Hounds",
+       "count": 1
+      },
+      {
+       "name": "Savannah Highmane",
+       "count": 1
+      },
+      {
+       "name": "Murloc Knight",
+       "count": 1
+      },
+      {
+       "name": "Iron Sensei",
+       "count": 1
+      },
+      {
+       "name": "Flametongue Totem",
+       "count": 1
+      },
+      {
+       "name": "Primalfin Totem",
+       "count": 1
+      },
+      {
+       "name": "Primal Talismans",
+       "count": 1
+      },
+      {
+       "name": "Everyfin is Awesome",
+       "count": 1
+      },
+      {
+       "name": "Bane of Doom",
+       "count": 1
+      },
+      {
+       "name": "Voidlord",
+       "count": 1
+      },
+      {
+       "name": "Fierce Monkey",
+       "count": 1
+      },
+      {
+       "name": "Murloc Tidecaller",
+       "count": 1
+      },
+      {
+       "name": "Patches the Pirate",
+       "count": 1
+      },
+      {
+       "name": "Faerie Dragon",
+       "count": 1
+      },
+      {
+       "name": "Rockpool Hunter",
+       "count": 1
+      },
+      {
+       "name": "Coldlight Seer",
+       "count": 1
+      },
+      {
+       "name": "Murloc Warleader",
+       "count": 1
+      },
+      {
+       "name": "Southsea Captain",
+       "count": 1
+      },
+      {
+       "name": "Zoobot",
+       "count": 3
+      },
+      {
+       "name": "Mechwarper",
+       "count": 1
+      },
+      {
+       "name": "Azure Drake",
+       "count": 1
+      },
+      {
+       "name": "Cobalt Scalebane",
+       "count": 1
+      },
+      {
+       "name": "Finja, the Flying Star",
+       "count": 1
+      },
+      {
+       "name": "Bone Drake",
+       "count": 1
+      },
+      {
+       "name": "The Curator",
+       "count": 2
+      },
+      {
+       "name": "Primordial Drake",
+       "count": 1
+      },
+      {
+       "name": "Ysera",
+       "count": 1
+      },
+      {
+       "name": "Deathwing",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "replacements": {
+    "Witchwood's Touch": "Shield Block"
+   },
+   "fillers": [
+    "Nightmare Amalgam",
+    "Murloc Tidehunter",
+    "Bluegill Warrior",
+    "Twilight Drake"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 7 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (60: tier 4), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 45 cards. A combat tier fights with 30: the first 30 usable cards in table order; the rest is left out (recorded as over-size)."
+    },
+    {
+     "kind": "deck",
+     "note": "Witchwood's Touch (GILA_BOSS_99t2, \"Draw 2 cards. Gain 8 Armor.\") is family 23's boss card; until it is scripted its two copies are Shield Block (rerun the encounters step then)."
+    },
+    {
+     "kind": "power",
+     "note": "Amalgamate (8) adds up the Attack and the remaining Health of every minion of both boards, destroys them (they leave and their Deathrattles resolve; a run player's board shrine goes dormant), then summons one Amalgamation with those stats for the caster; with no minion on a board it summons nothing."
+    }
+   ]
+  },
+  {
+   "id": "gila_29_sazzmi",
+   "name": "Sazzmi Gentlehorn",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_29h",
+   "power": "GILA_BOSS_29p",
+   "tier": "3",
+   "archetype": "control",
+   "level": {
+    "source": "printed-health",
+    "original": 35
+   },
+   "cards": [
+    "GILA_BOSS_29e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Sazzmi_Gentlehorn",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Enchanting Tune",
+       "count": 2,
+       "id": "GILA_BOSS_29t"
+      },
+      {
+       "name": "Rat Pack",
+       "count": 3
+      },
+      {
+       "name": "Humility",
+       "count": 1
+      },
+      {
+       "name": "Aldor Peacekeeper",
+       "count": 1
+      },
+      {
+       "name": "Shrinkmeister",
+       "count": 1
+      },
+      {
+       "name": "Cabal Shadow Priest",
+       "count": 1
+      },
+      {
+       "name": "Mind Control",
+       "count": 1
+      },
+      {
+       "name": "Sonya Shadowdancer",
+       "count": 1
+      },
+      {
+       "name": "Possessed Villager",
+       "count": 3
+      },
+      {
+       "name": "Dirty Rat",
+       "count": 2
+      },
+      {
+       "name": "Sewer Crawler",
+       "count": 3
+      },
+      {
+       "name": "Barnes",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "fillers": [
+    "Shadow Madness",
+    "Potion of Madness",
+    "Pint-Size Potion",
+    "Mind Control Tech",
+    "Sylvanas Windrunner",
+    "Wax Elemental",
+    "Shadow Word: Pain"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 3 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (35: tier 3), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 20 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the curated fillers named in the row."
+    },
+    {
+     "kind": "power",
+     "note": "Infatuation (1) and Enchanting Tune (4) take the enemy minions in board order; one taken while the boss's board is full is destroyed (the engine's rule for a control change). A run player's board shrine never changes sides and is left as it is. Infatuation is offered only while an enemy minion with 1 or less Attack is on the board."
+    }
+   ]
+  },
+  {
+   "id": "gila_31_gnarlroot",
+   "name": "Gnarlroot",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_31h",
+   "power": "GILA_BOSS_31p",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "printed-health",
+    "original": 30
+   },
+   "cards": [
+    "GIL_663t"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Gnarlroot",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Mark of the Wild",
+       "count": 2
+      },
+      {
+       "name": "Power of the Wild",
+       "count": 1
+      },
+      {
+       "name": "Wild Growth",
+       "count": 1
+      },
+      {
+       "name": "Soul of the Forest",
+       "count": 2
+      },
+      {
+       "name": "Poison Seeds",
+       "count": 2
+      },
+      {
+       "name": "Force of Nature",
+       "count": 2
+      },
+      {
+       "name": "Pit Snake",
+       "count": 1
+      },
+      {
+       "name": "Corrupting Mist",
+       "count": 2
+      },
+      {
+       "name": "Acidic Swamp Ooze",
+       "count": 1
+      },
+      {
+       "name": "Echoing Ooze",
+       "count": 1
+      },
+      {
+       "name": "Stubborn Gastropod",
+       "count": 1
+      },
+      {
+       "name": "Giant Wasp",
+       "count": 1
+      },
+      {
+       "name": "Fen Creeper",
+       "count": 1
+      },
+      {
+       "name": "Moat Lurker",
+       "count": 1
+      },
+      {
+       "name": "Bog Creeper",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "replacements": {
+    "Power of the Wild": "Mark of the Lotus"
+   },
+   "fillers": [
+    "Living Roots",
+    "Swipe",
+    "Ironbark Protector",
+    "Druid of the Claw",
+    "Keeper of the Grove"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 2-3 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (30: tier 2), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 20 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the curated fillers named in the row."
+    },
+    {
+     "kind": "deck",
+     "note": "Power of the Wild's original printing (EX1_160) has no script of its own in this engine: its copy is Mark of the Lotus (\"Give your minions +1/+1.\")."
+    },
+    {
+     "kind": "power",
+     "note": "Splinter (1) needs a free board slot (it is not offered with a full board); the Treant is The Witchwood's 2/2 Treant token (GIL_663t)."
+    }
+   ]
+  },
+  {
+   "id": "gila_32_niira",
+   "name": "Niira the Trickster",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_32h",
+   "power": "GILA_BOSS_32p",
+   "tier": "2",
+   "archetype": "aggro",
+   "level": {
+    "source": "printed-health",
+    "original": 25
+   },
+   "cards": [
+    "GILA_BOSS_32e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Niira_the_Trickster",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Enchanted Raven",
+       "count": 1
+      },
+      {
+       "name": "Living Roots",
+       "count": 1
+      },
+      {
+       "name": "Addled Grizzly",
+       "count": 1
+      },
+      {
+       "name": "Mark of the Lotus",
+       "count": 2
+      },
+      {
+       "name": "Power of the Wild",
+       "count": 1
+      },
+      {
+       "name": "Grimestreet Outfitter",
+       "count": 2
+      },
+      {
+       "name": "Dire Mole",
+       "count": 1
+      },
+      {
+       "name": "Fire Fly",
+       "count": 2
+      },
+      {
+       "name": "Swamp Leech",
+       "count": 2
+      },
+      {
+       "name": "Lost Spirit",
+       "count": 2
+      },
+      {
+       "name": "Boisterous Bard",
+       "count": 1
+      },
+      {
+       "name": "Spawn of N'Zoth",
+       "count": 1
+      },
+      {
+       "name": "Big Game Hunter",
+       "count": 1
+      },
+      {
+       "name": "Mukla's Champion",
+       "count": 1
+      },
+      {
+       "name": "Gruul",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "replacements": {
+    "Power of the Wild": "Mark of the Lotus"
+   },
+   "fillers": [
+    "Vicious Fledgling",
+    "Blowgill Sniper",
+    "Wisp",
+    "Stonetusk Boar",
+    "Argent Squire"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 2-3 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (25: tier 2), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 20 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the curated fillers named in the row."
+    },
+    {
+     "kind": "deck",
+     "note": "Power of the Wild's original printing (EX1_160) has no script of its own in this engine: its copy is Mark of the Lotus (\"Give your minions +1/+1.\")."
+    }
+   ]
+  },
+  {
+   "id": "gila_33_scarecrow",
+   "name": "The Scarecrow",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_33h",
+   "power": "GILA_BOSS_33p",
+   "tier": "3",
+   "archetype": "midrange",
+   "level": {
+    "source": "printed-health",
+    "original": 40
+   },
+   "flags": [
+    "start"
+   ],
+   "cards": [
+    "GILA_BOSS_33e2"
+   ],
+   "start": {
+    "bossWeapon": "GILA_BOSS_33t"
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/The_Scarecrow",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Enchanted Raven",
+       "count": 2
+      },
+      {
+       "name": "Zap!",
+       "count": 2
+      },
+      {
+       "name": "Bouncing Blade",
+       "count": 2
+      },
+      {
+       "name": "Harvest Golem",
+       "count": 3
+      },
+      {
+       "name": "Iron Sensei",
+       "count": 2
+      },
+      {
+       "name": "Piloted Shredder",
+       "count": 2
+      },
+      {
+       "name": "Mechwarper",
+       "count": 2
+      },
+      {
+       "name": "Unpowered Steambot",
+       "count": 3
+      },
+      {
+       "name": "Antique Healbot",
+       "count": 2
+      },
+      {
+       "name": "Spiteful Smith",
+       "count": 3
+      },
+      {
+       "name": "Upgraded Repair Bot",
+       "count": 2
+      },
+      {
+       "name": "Piloted Sky Golem",
+       "count": 2
+      },
+      {
+       "name": "Foe Reaper 4000",
+       "count": 1
+      },
+      {
+       "name": "Force-Tank MAX",
+       "count": 1
+      },
+      {
+       "name": "Sneed's Old Shredder",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "fillers": [
+    "Annoy-o-Tron",
+    "Mechanical Yeti",
+    "Spider Tank",
+    "Tinkertown Technician"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 7-8 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (40: tier 3), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "start",
+     "note": "The wiki lists Scythe (GILA_BOSS_33t) as the boss's special card and no deck row holds it: the boss starts the fight with it equipped (the row's start block, after the mulligan). \"Doesn't lose Durability\" is the weapon being Immune to the loss an attack causes (Runeforge Haunter's rule); a destroy effect still removes it. It gains +1 Attack after its hero attacked a minion that is dead from the attack."
+    }
+   ]
+  },
+  {
+   "id": "gila_34_havnixx",
+   "name": "Inquisitor Hav'nixx",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_34h",
+   "power": "GILA_BOSS_34p",
+   "tier": "3",
+   "archetype": "control",
+   "level": {
+    "source": "printed-health",
+    "original": 40
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Inquisitor_Hav'nixx",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Witchwood's Touch",
+       "count": 2,
+       "id": "GILA_BOSS_99t2"
+      },
+      {
+       "name": "Mind Vision",
+       "count": 1
+      },
+      {
+       "name": "Shadowbomber",
+       "count": 2
+      },
+      {
+       "name": "Mind Blast",
+       "count": 2
+      },
+      {
+       "name": "Shadow Word: Death",
+       "count": 1
+      },
+      {
+       "name": "Shadow Word: Pain",
+       "count": 2
+      },
+      {
+       "name": "Shadowfiend",
+       "count": 2
+      },
+      {
+       "name": "Thoughtsteal",
+       "count": 1
+      },
+      {
+       "name": "Mindgames",
+       "count": 1
+      },
+      {
+       "name": "Shadow Word: Horror",
+       "count": 1
+      },
+      {
+       "name": "Shifting Shade",
+       "count": 1
+      },
+      {
+       "name": "Devour Mind",
+       "count": 1
+      },
+      {
+       "name": "Power Word: Tentacles",
+       "count": 1
+      },
+      {
+       "name": "Mind Control",
+       "count": 1
+      },
+      {
+       "name": "Curse of Weakness",
+       "count": 2
+      },
+      {
+       "name": "Demonfire",
+       "count": 1
+      },
+      {
+       "name": "Hellfire",
+       "count": 1
+      },
+      {
+       "name": "Spreading Madness",
+       "count": 1
+      },
+      {
+       "name": "Pit Lord",
+       "count": 1
+      },
+      {
+       "name": "Cyclopian Horror",
+       "count": 1
+      },
+      {
+       "name": "Maiden of the Lake",
+       "count": 1
+      },
+      {
+       "name": "Emperor Thaurissan",
+       "count": 1
+      },
+      {
+       "name": "Eldritch Horror",
+       "count": 1
+      },
+      {
+       "name": "Ysera",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "replacements": {
+    "Witchwood's Touch": "Shield Block"
+   },
+   "fillers": [
+    "Shadow Madness",
+    "Holy Nova",
+    "Cabal Shadow Priest",
+    "Auchenai Soulpriest",
+    "Twilight Drake"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 4-5 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (40: tier 3), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "Witchwood's Touch (GILA_BOSS_99t2, \"Draw 2 cards. Gain 8 Armor.\") is family 23's boss card; until it is scripted its two copies are Shield Block (rerun the encounters step then)."
+    },
+    {
+     "kind": "power",
+     "note": "Devour Soul (4), \"Halve the enemy hero's Health\": not damage. The hero keeps the larger half (rounded up; a hero at 1 Health stays at 1), Armor is untouched, and it is offered only while the enemy hero has more than 1 Health."
+    }
+   ]
+  },
+  {
+   "id": "gila_35_chupacabran",
+   "name": "Chupacabran",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_35h",
+   "power": "GILA_BOSS_35p",
+   "tier": "2",
+   "archetype": "aggro",
+   "level": {
+    "source": "printed-health",
+    "original": 30
+   },
+   "cards": [
+    "GILA_BOSS_35e2"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Chupacabran",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Vampiric Fangs",
+       "count": 2,
+       "id": "GILA_BOSS_35t"
+      },
+      {
+       "name": "Gnash",
+       "count": 1
+      },
+      {
+       "name": "Swipe",
+       "count": 2
+      },
+      {
+       "name": "Bite",
+       "count": 1
+      },
+      {
+       "name": "Duskhaven Hunter",
+       "count": 2
+      },
+      {
+       "name": "Rabid Worgen",
+       "count": 2
+      },
+      {
+       "name": "Stonetusk Boar",
+       "count": 2
+      },
+      {
+       "name": "Duskboar",
+       "count": 1
+      },
+      {
+       "name": "Wolfrider",
+       "count": 2
+      },
+      {
+       "name": "Hungry Ettin",
+       "count": 1
+      },
+      {
+       "name": "Sabretooth Stalker",
+       "count": 2
+      },
+      {
+       "name": "Furious Ettin",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "fillers": [
+    "Swamp Leech",
+    "Vicious Scalehide",
+    "Worgen Infiltrator",
+    "Jungle Panther",
+    "Bloodfen Raptor",
+    "Pounce",
+    "Savage Roar"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 4-5 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (30: tier 2), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 20 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the curated fillers named in the row."
+    },
+    {
+     "kind": "power",
+     "note": "Bloodthirst (1) can only be aimed at a minion of the boss that has no Lifesteal yet."
+    }
+   ]
+  },
+  {
+   "id": "gila_36_griselda",
+   "name": "Griselda",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_36h",
+   "power": "GILA_BOSS_36p",
+   "tier": "2",
+   "archetype": "tempo",
+   "level": {
+    "source": "printed-health",
+    "original": 30
+   },
+   "cards": [
+    "hexfrog"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Griselda",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Arcane Artificer",
+       "count": 2
+      },
+      {
+       "name": "Flame Geyser",
+       "count": 2
+      },
+      {
+       "name": "Frostbolt",
+       "count": 2
+      },
+      {
+       "name": "Shimmering Tempest",
+       "count": 2
+      },
+      {
+       "name": "Volcanic Potion",
+       "count": 1
+      },
+      {
+       "name": "Steam Surger",
+       "count": 1
+      },
+      {
+       "name": "Water Elemental",
+       "count": 1
+      },
+      {
+       "name": "Bonfire Elemental",
+       "count": 1
+      },
+      {
+       "name": "Arcane Anomaly",
+       "count": 1
+      },
+      {
+       "name": "Fire Fly",
+       "count": 2
+      },
+      {
+       "name": "Igneous Elemental",
+       "count": 2
+      },
+      {
+       "name": "Witch's Cauldron",
+       "count": 2
+      },
+      {
+       "name": "Cauldron Elemental",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "fillers": [
+    "Tar Creeper",
+    "Fire Plume Phoenix",
+    "Servant of Kalimos",
+    "Blazecaller",
+    "Fireball",
+    "Tol'vir Stoneshaper"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 2-3 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (30: tier 2), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 20 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the curated fillers named in the row."
+    },
+    {
+     "kind": "power",
+     "note": "Witch's Kiss (2) picks among the minions of both boards by the game RNG and is offered only while a minion is on a board. A run player's board shrine picked by it is destroyed instead of transformed (it goes dormant)."
+    }
+   ]
+  },
+  {
+   "id": "gila_37_wharrgarbl",
+   "name": "Wharrgarbl",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_37h",
+   "power": "GILA_BOSS_37p",
+   "tier": "2",
+   "archetype": "aggro",
+   "level": {
+    "source": "printed-health",
+    "original": 30
+   },
+   "cards": [
+    "GILA_BOSS_37e2"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Wharrgarbl",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Murloc Infestation",
+       "count": 2,
+       "id": "GILA_BOSS_37t"
+      },
+      {
+       "name": "Anyfin Can Happen",
+       "count": 1
+      },
+      {
+       "name": "Unite the Murlocs",
+       "count": 1
+      },
+      {
+       "name": "Primalfin Totem",
+       "count": 1
+      },
+      {
+       "name": "Call in the Finishers",
+       "count": 1
+      },
+      {
+       "name": "Everyfin is Awesome",
+       "count": 1
+      },
+      {
+       "name": "Murloc Tinyfin",
+       "count": 1
+      },
+      {
+       "name": "Hungry Crab",
+       "count": 1
+      },
+      {
+       "name": "Murloc Tidecaller",
+       "count": 1
+      },
+      {
+       "name": "Murloc Tidehunter",
+       "count": 1
+      },
+      {
+       "name": "Rockpool Hunter",
+       "count": 2
+      },
+      {
+       "name": "Coldlight Oracle",
+       "count": 1
+      },
+      {
+       "name": "Coldlight Seer",
+       "count": 2
+      },
+      {
+       "name": "Murloc Warleader",
+       "count": 1
+      },
+      {
+       "name": "Primalfin Lookout",
+       "count": 2
+      },
+      {
+       "name": "Corrupted Seer",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "fillers": [
+    "Bluegill Warrior",
+    "Grimscale Oracle",
+    "Murloc Raider",
+    "Blowgill Sniper",
+    "Bilefin Tidehunter"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 3 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (30: tier 2), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 20 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the curated fillers named in the row."
+    },
+    {
+     "kind": "power",
+     "note": "It's Raining Fin (2) draws up to three random Murlocs of the boss's deck and is offered whenever its hand has room (with no Murloc left it does nothing). Murloc Infestation's Deathrattle summons a random scripted Murloc the run's generation filter allows."
+    }
+   ]
+  },
+  {
+   "id": "gila_38_cozzlewurt",
+   "name": "Ravencaller Cozzlewurt",
+   "provenance": "GIL",
+   "family": "10",
+   "hero": "GILA_BOSS_38h",
+   "power": "GILA_BOSS_38p",
+   "tier": "1",
+   "archetype": "tempo",
+   "level": {
+    "source": "printed-health",
+    "original": 15
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Ravencaller_Cozzlewurt",
+    "read": "2026-11-13"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Enchanted Raven",
+       "count": 3
+      },
+      {
+       "name": "Raven Idol",
+       "count": 2
+      },
+      {
+       "name": "Wrath",
+       "count": 2
+      },
+      {
+       "name": "Nourish",
+       "count": 1
+      },
+      {
+       "name": "Kill Command",
+       "count": 1
+      },
+      {
+       "name": "Raven Familiar",
+       "count": 2
+      },
+      {
+       "name": "Vex Crow",
+       "count": 2
+      },
+      {
+       "name": "Angry Chicken",
+       "count": 2
+      },
+      {
+       "name": "Novice Engineer",
+       "count": 2
+      },
+      {
+       "name": "Gnomish Experimenter",
+       "count": 1
+      },
+      {
+       "name": "Hobgoblin",
+       "count": 1
+      },
+      {
+       "name": "Nesting Roc",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "replacements": {
+    "Wrath": "Living Roots",
+    "Gnomish Experimenter": "Gnomish Inventor"
+   },
+   "fillers": [
+    "Argent Squire",
+    "Young Dragonhawk",
+    "Stonetusk Boar",
+    "Elven Archer",
+    "Abusive Sergeant",
+    "Wisp",
+    "Murloc Raider"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The wiki's Monster Hunt page lists the boss in round 2-3 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (15: tier 1), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists a deck of 20 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the curated fillers named in the row."
+    },
+    {
+     "kind": "deck",
+     "note": "Wrath's original printing (EX1_154) has no script of its own in this engine (as in family 07's Blackseed rows): its two copies are Living Roots. Gnomish Experimenter has no script either: Gnomish Inventor."
+    },
+    {
+     "kind": "power",
+     "note": "Call of the Raven (1) adds a random scripted 1-Cost minion of any class that the run's generation filter allows for the boss, and is offered only while its hand has room."
+    }
+   ]
+  }
+ ],
+ "rejected": []
+}

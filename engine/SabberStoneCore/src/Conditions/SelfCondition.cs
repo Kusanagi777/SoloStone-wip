@@ -29,6 +29,8 @@ namespace SabberStoneCore.Conditions
 		public static readonly SelfCondition IsNotImmune = new SelfCondition(me => me is ICharacter && !((ICharacter)me).IsImmune);
 		public static readonly SelfCondition IsSilenced = new SelfCondition(me => me is ICharacter && ((ICharacter)me).IsSilenced);
 		public static readonly SelfCondition IsBoardFull = new SelfCondition(me => me.Controller.BoardZone.IsFull);
+		/// <summary>An awake Rumble Run board shrine (phase 7, Actions.ShrineRules): upgrade auras and adjacency read it.</summary>
+		public static readonly SelfCondition IsRunShrine = new SelfCondition(me => Actions.ShrineRules.IsAwake(me));
 		public static readonly SelfCondition IsHandEmpty = new SelfCondition(me => me.Controller.HandZone.IsEmpty);
 		public static readonly SelfCondition IsDeckEmpty = new SelfCondition(me => me.Controller.DeckZone.IsEmpty);
 		public static readonly SelfCondition IsOpDeckNotEmpty = new SelfCondition(me => !me.Controller.Opponent.DeckZone.IsEmpty);
@@ -89,7 +91,18 @@ namespace SabberStoneCore.Conditions
 			me.Game.HistoryFacts.Query.AttacksFinished(me.Game.HistoryFacts.Query.ThisTurn).Count(f => f.AttackerId == ch.Id && f.ReachedCombat) == number);
 		public static SelfCondition IsCardId(string cardId) => new SelfCondition(me => me.Card.Id == cardId);
 		public static SelfCondition IsNotCardClass(CardClass cardClass) => new SelfCondition(me => me.Card.Class != cardClass);
-		public static SelfCondition IsNotStartInDeck => new SelfCondition(me => me.Id > (me.Controller.DeckCards.Count + me.Controller.Opponent.DeckCards.Count + 7));
+		/// <summary>
+		/// The entity did not start the game in its controller's deck. Read from the history's frozen starting decks, so
+		/// any deck size is right (run decks are 10 to 40 cards); a fair view whose origin for the entity was erased, or a
+		/// game whose history is not frozen yet, falls back to the old id bound (30-card decks).
+		/// </summary>
+		public static SelfCondition IsNotStartInDeck => new SelfCondition(me =>
+		{
+			var history = me.Game.HistoryFacts;
+			bool? started = history != null && history.InitialFrozen ? history.Origin(me.Id, me.Controller.Id) : null;
+			return started.HasValue ? !started.Value
+				: me.Id > (me.Controller.DeckCards.Count + me.Controller.Opponent.DeckCards.Count + 7);
+		});
 
 		public static SelfCondition MinionsPlayedThisTurn(int number) => new SelfCondition(me => me.Controller.NumMinionsPlayedThisTurn == number && me.Controller == me.Game.CurrentPlayer);
 

@@ -1,0 +1,15 @@
+plan hero=HERO_05b power=trapper_snare deck=CATA_558,CATA_558,CFM_315,CS2_084,CS2_084,GIL_607t,OG_325,OG_325,BOT_039,GIL_562,AT_105,TRL_509,UNG_847,CORE_UNG_912,LOE_020,TIME_605 boss=tunnel_rat matchSeed=1115859163
+floor 3 boss=tunnel_rat power=trapper_snare matchSeed=1115859163
+floor 3 treasure offered=frost_lantern,healing_spring,keen_eye
+floor 3 bundle offered=bundle_hunter_beast,bundle_neutral_mechanical,bundle_neutral_taunt
+floor 4 boss=tollkeeper power=trapper_snare matchSeed=680943760
+floor 4 bundle offered=bundle_neutral_beast,bundle_neutral_deathrattle,bundle_neutral_dragon
+floor 5 boss=frostwarden power=trapper_snare matchSeed=1576853604
+floor 5 treasure offered=hunting_net,spare_crystal,spark_lantern
+floor 5 bundle offered=bundle_hunter_spells,bundle_neutral_elemental,bundle_neutral_mechanical
+floor 6 boss=golemancer power=trapper_snare matchSeed=1496611475
+floor 6 bundle offered=bundle_hunter_deathrattle,bundle_neutral_deathrattle,bundle_neutral_murloc
+floor 7 boss=clockwork_tyrant power=trapper_snare matchSeed=1472566834
+floor 7 bundle offered=bundle_neutral_elemental,bundle_neutral_mechanical,bundle_neutral_taunt
+floor 8 boss=gilded_king power=trapper_snare matchSeed=86520493
+end phase=Victory deck=33 treasures=champions_banner,frost_lantern,hunting_net

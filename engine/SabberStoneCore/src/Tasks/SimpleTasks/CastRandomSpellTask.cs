@@ -38,8 +38,10 @@ namespace SabberStoneCore.Tasks.SimpleTasks
             if (target is BoardObject) return TaskState.STOP;
 			// Uncached: the old process cache ignored format, and a conditional cache hit fell through
 			// to the unconditional pool.
+			Game self = game; // run games never cast a generated Secret for a side that excludes them (Game.BlocksGenerated)
 			Card[] cards = Cards.FormatTypeCards(game.FormatType)
-				.Where(card => card.Type == CardType.SPELL && (_condition != null ? _condition(card) : !card.IsQuest))
+				.Where(card => card.Type == CardType.SPELL && (_condition != null ? _condition(card) : !card.IsQuest)
+					&& !self.BlocksGenerated(card))
 				.ToArray();
 
 			Controller c = source.Controller;

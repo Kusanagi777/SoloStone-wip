@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="3">
+  <Profile>
+    <Heroes>
+      <DungeonRunHeroStats Class="HUNTER" Runs="1" Wins="1" BestFloor="8" />
+    </Heroes>
+    <Unlocked>
+      <string>challenge</string>
+      <string>druid_floor3</string>
+      <string>hunter_floor3</string>
+      <string>mage_floor3</string>
+      <string>paladin_floor3</string>
+      <string>priest_floor3</string>
+      <string>rogue_floor3</string>
+      <string>shaman_floor3</string>
+      <string>warlock_floor3</string>
+      <string>warrior_floor3</string>
+      <string>deathknight_floor3</string>
+      <string>demonhunter_floor3</string>
+      <string>mage_rogue_floor3</string>
+      <string>druid_floor4</string>
+      <string>hunter_floor4</string>
+      <string>mage_floor4</string>
+      <string>paladin_floor4</string>
+      <string>priest_floor4</string>
+      <string>rogue_floor4</string>
+      <string>shaman_floor4</string>
+      <string>warlock_floor4</string>
+      <string>warrior_floor4</string>
+      <string>deathknight_floor4</string>
+      <string>demonhunter_floor4</string>
+      <string>mage_rogue_floor4</string>
+      <string>druid_floor5</string>
+      <string>hunter_floor5</string>
+      <string>mage_floor5</string>
+      <string>paladin_floor5</string>
+      <string>priest_floor5</string>
+      <string>rogue_floor5</string>
+      <string>shaman_floor5</string>
+      <string>warlock_floor5</string>
+      <string>warrior_floor5</string>
+      <string>deathknight_floor5</string>
+      <string>demonhunter_floor5</string>
+      <string>mage_rogue_floor5</string>
+      <string>druid_win</string>
+      <string>hunter_win</string>
+      <string>mage_win</string>
+      <string>paladin_win</string>
+      <string>priest_win</string>
+      <string>rogue_win</string>
+      <string>shaman_win</string>
+      <string>warlock_win</string>
+      <string>warrior_win</string>
+      <string>deathknight_win</string>
+      <string>demonhunter_win</string>
+      <string>mage_rogue_win</string>
+    </Unlocked>
+    <Archive>
+      <DungeonRunArchiveEntry Class="HUNTER" StarterDeck="hunter_kennel" Power="DS1h_292" Seed="0000000000012D4B" TypedSeed="false" FloorReached="8" Won="true" LastBoss="hollow_sovereign">
+        <Treasures>
+          <string>hearty_tonic</string>
+          <string>grave_candle</string>
+          <string>lucky_coin</string>
+        </Treasures>
+      </DungeonRunArchiveEntry>
+    </Archive>
+  </Profile>
+  <Active DataVersion="dungeon-run/2" CatalogVersion="1" Seed="77131" TypedSeed="false" Class="HUNTER" StarterDeck="hunter_kennel" Power="DS1h_292" Floor="8" Phase="Victory" Attempt="1" DraftsWithoutDominant="0">
+    <Deck>
+      <string>DS1_175</string>
+      <string>CFM_315</string>
+      <string>CFM_315</string>
+      <string>UNG_915</string>
+      <string>UNG_915</string>
+      <string>EX1_531</string>
+      <string>OG_325</string>
+      <string>LOOT_078</string>
+      <string>OG_216</string>
+      <string>DS1_178</string>
+      <string>DS1_070</string>
+      <string>UNG_916</string>
+      <string>TRL_405</string>
+      <string>EX1_096</string>
+      <string>ICC_415</string>
+      <string>AT_063t</string>
+      <string>GVG_048</string>
+      <string>GVG_085</string>
+      <string>GVG_096</string>
+      <string>OG_313</string>
+      <string>CS2_222</string>
+      <string>EX1_531</string>
+      <string>AT_105</string>
+      <string>TRL_509</string>
+      <string>UNG_847</string>
+      <string>GIL_155</string>
+      <string>UNG_925</string>
+      <string>UNG_835</string>
+      <string>LOOT_511</string>
+      <string>UNG_087</string>
+      <string>UNG_099</string>
+    </Deck>
+    <Treasures>
+      <string>hearty_tonic</string>
+      <string>grave_candle</string>
+      <string>lucky_coin</string>
+    </Treasures>
+    <ActiveTreasures />
+    <Upgrades />
+    <BossSequence>
+      <string>cellar_matron</string>
+      <string>bog_croaker</string>
+      <string>lantern_thief</string>
+      <string>pit_champion</string>
+      <string>storm_herald</string>
+      <string>ashen_abbess</string>
+      <string>ember_matron</string>
+      <string>hollow_sovereign</string>
+    </BossSequence>
+    <TakenBundles>
+      <string>bundle_neutral_battlecry</string>
+    </TakenBundles>
+    <BucketTakes>
+      <DungeonRunTake Id="rr.hunter.beast-training" Count="1" />
+      <DungeonRunTake Id="dr.hunter.tracker" Count="1" />
+      <DungeonRunTake Id="rr.hunter.scrapyard" Count="1" />
+      <DungeonRunTake Id="mh.houndmaster-shaw.pack-mentality" Count="1" />
+      <DungeonRunTake Id="mh.houndmaster-shaw.exotic-beasts" Count="1" />
+      <DungeonRunTake Id="dr.hunter.big-beasts" Count="1" />
+    </BucketTakes>
+    <BundleCooldowns>
+      <string>dh.hunter.empowering@3</string>
+      <string>bundle_neutral_deathrattle@3</string>
+      <string>bundle_neutral_battlecry@4</string>
+      <string>mh.houndmaster-shaw.stalking@4</string>
+      <string>dh.hunter.big-beasts@5</string>
+      <string>bundle_hunter_spells@5</string>
+      <string>bundle_neutral_beast@6</string>
+      <string>rr.hunter.fresh-meat@6</string>
+      <string>dh.hunter.big-beasts@7</string>
+      <string>dh.hunter.secretive@7</string>
+      <string>dh.hunter.battlecry@8</string>
+      <string>dr.hunter.wee-beasts@8</string>
+      <string>bundle_neutral_murloc@9</string>
+      <string>mh.houndmaster-shaw.companions@9</string>
+    </BundleCooldowns>
+    <DraftedThemes>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>discover</string>
+      <string>discover</string>
+      <string>discover</string>
+      <string>mechanical</string>
+      <string>mechanical</string>
+      <string>mechanical</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>battlecry</string>
+      <string>battlecry</string>
+      <string>battlecry</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+    </DraftedThemes>
+    <Drafts>
+      <DungeonRunDraft Floor="1" Kind="treasure" Picked="hearty_tonic">
+        <Offered>
+          <string>healing_spring</string>
+          <string>hearty_tonic</string>
+          <string>stoneskin_idol</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="1" Kind="bundle" Picked="rr.hunter.beast-training">
+        <Offered>
+          <string>dh.hunter.empowering</string>
+          <string>rr.hunter.beast-training</string>
+          <string>bundle_neutral_deathrattle</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.hunter.empowering" Label="Empowering" Theme="buff" Kind="pool" Source="DH">
+            <Cards>
+              <string>AT_057</string>
+              <string>EX1_531</string>
+              <string>CFM_335</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.hunter.beast-training" Label="Beast Training" Theme="beast" Kind="pool" Source="RR">
+            <Cards>
+              <string>DS1_070</string>
+              <string>UNG_916</string>
+              <string>TRL_405</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_neutral_deathrattle" Label="Deathrattle" Theme="deathrattle" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>BOT_031</string>
+              <string>TLC_831</string>
+              <string>UNG_010</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="2" Kind="bundle" Picked="dr.hunter.tracker">
+        <Offered>
+          <string>bundle_neutral_battlecry</string>
+          <string>mh.houndmaster-shaw.stalking</string>
+          <string>dr.hunter.tracker</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="bundle_neutral_battlecry" Label="Battlecry" Theme="battlecry" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>AT_105</string>
+              <string>TRL_509</string>
+              <string>UNG_847</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.houndmaster-shaw.stalking" Label="Stalking" Theme="stealth" Kind="pool" Source="MH">
+            <Cards>
+              <string>GIL_905</string>
+              <string>ICC_415</string>
+              <string>FP1_010</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.hunter.tracker" Label="Tracker" Theme="discover" Kind="pool" Source="DR">
+            <Cards>
+              <string>EX1_096</string>
+              <string>ICC_415</string>
+              <string>AT_063t</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="treasure" Picked="grave_candle">
+        <Offered>
+          <string>gilded_idol</string>
+          <string>grave_candle</string>
+          <string>swift_hound</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="bundle" Picked="rr.hunter.scrapyard">
+        <Offered>
+          <string>rr.hunter.scrapyard</string>
+          <string>dh.hunter.big-beasts</string>
+          <string>bundle_hunter_spells</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="rr.hunter.scrapyard" Label="Scrapyard" Theme="mechanical" Kind="pool" Source="RR">
+            <Cards>
+              <string>GVG_048</string>
+              <string>GVG_085</string>
+              <string>GVG_096</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.hunter.big-beasts" Label="Big Beasts" Theme="beast" Kind="pool" Source="DH">
+            <Cards>
+              <string>OG_308</string>
+              <string>LOOT_153</string>
+              <string>LOOT_511</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_hunter_spells" Label="Spells" Theme="spells" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CATA_554</string>
+              <string>UNG_917</string>
+              <string>MEND_307</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="4" Kind="bundle" Picked="mh.houndmaster-shaw.pack-mentality">
+        <Offered>
+          <string>bundle_neutral_beast</string>
+          <string>mh.houndmaster-shaw.pack-mentality</string>
+          <string>rr.hunter.fresh-meat</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="bundle_neutral_beast" Label="Beast" Theme="beast" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CFM_095</string>
+              <string>TLC_242</string>
+              <string>UNG_002</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.houndmaster-shaw.pack-mentality" Label="Pack Mentality" Theme="beast" Kind="pool" Source="MH">
+            <Cards>
+              <string>OG_313</string>
+              <string>CS2_222</string>
+              <string>EX1_531</string>
+            </Cards>
+            <Grants>
+              <string>OG_313</string>
+            </Grants>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.hunter.fresh-meat" Label="Fresh Meat" Theme="aggro" Kind="pool" Source="RR">
+            <Cards>
+              <string>TRL_348</string>
+              <string>LOOT_078</string>
+              <string>FP1_011</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="5" Kind="treasure" Picked="lucky_coin">
+        <Offered>
+          <string>deep_satchel</string>
+          <string>lucky_coin</string>
+          <string>spark_lantern</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="5" Kind="bundle" Picked="bundle_neutral_battlecry">
+        <Offered>
+          <string>dh.hunter.big-beasts</string>
+          <string>dh.hunter.secretive</string>
+          <string>bundle_neutral_battlecry</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.hunter.big-beasts" Label="Big Beasts" Theme="beast" Kind="pool" Source="DH">
+            <Cards>
+              <string>EX1_534</string>
+              <string>DAL_589</string>
+              <string>UNG_919</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.hunter.secretive" Label="Secretive" Theme="secret" Kind="pool" Source="DH">
+            <Cards>
+              <string>LOOT_079</string>
+              <string>GVG_089</string>
+              <string>EX1_610</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_neutral_battlecry" Label="Battlecry" Theme="battlecry" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>AT_105</string>
+              <string>TRL_509</string>
+              <string>UNG_847</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="6" Kind="bundle" Picked="mh.houndmaster-shaw.exotic-beasts">
+        <Offered>
+          <string>mh.houndmaster-shaw.exotic-beasts</string>
+          <string>dh.hunter.battlecry</string>
+          <string>dr.hunter.wee-beasts</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="mh.houndmaster-shaw.exotic-beasts" Label="Exotic Beasts" Theme="beast" Kind="pool" Source="MH">
+            <Cards>
+              <string>GIL_155</string>
+              <string>UNG_925</string>
+              <string>UNG_835</string>
+            </Cards>
+            <Grants>
+              <string>GIL_155</string>
+              <string>UNG_925</string>
+              <string>UNG_835</string>
+            </Grants>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.hunter.battlecry" Label="Battlecry" Theme="battlecry" Kind="pool" Source="DH">
+            <Cards>
+              <string>UNG_915</string>
+              <string>LOE_077</string>
+              <string>DAL_546</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.hunter.wee-beasts" Label="Wee Beasts" Theme="beast" Kind="pool" Source="DR">
+            <Cards>
+              <string>KAR_005</string>
+              <string>ICC_419</string>
+              <string>FP1_002</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="7" Kind="bundle" Picked="dr.hunter.big-beasts">
+        <Offered>
+          <string>bundle_neutral_murloc</string>
+          <string>dr.hunter.big-beasts</string>
+          <string>mh.houndmaster-shaw.companions</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="bundle_neutral_murloc" Label="Murloc" Theme="murloc" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CORE_EX1_509</string>
+              <string>GVG_064</string>
+              <string>OG_161</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.hunter.big-beasts" Label="Big Beasts" Theme="beast" Kind="pool" Source="DR">
+            <Cards>
+              <string>LOOT_511</string>
+              <string>UNG_087</string>
+              <string>UNG_099</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.houndmaster-shaw.companions" Label="Companions" Theme="swarm" Kind="pool" Source="MH">
+            <Cards>
+              <string>OG_211</string>
+              <string>GIL_828</string>
+              <string>AT_040</string>
+            </Cards>
+            <Grants>
+              <string>AT_040</string>
+            </Grants>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+    </Drafts>
+    <Matches>
+      <DungeonRunMatchSummary Floor="1" Boss="cellar_matron" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="2" Boss="bog_croaker" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="3" Boss="lantern_thief" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="4" Boss="pit_champion" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="5" Boss="storm_herald" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="6" Boss="ashen_abbess" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="7" Boss="ember_matron" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="8" Boss="hollow_sovereign" Outcome="Win" Attempt="1" />
+    </Matches>
+    <UnlockedThisRun />
+  </Active>
+</DungeonRun>

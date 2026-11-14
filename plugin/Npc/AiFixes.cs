@@ -5,7 +5,7 @@ using System.Linq;
 // Immutable per-profile switches. Registry entries default ON; never depend on game information or RNG.
 public sealed class AiFixes
 {
-    public static IReadOnlyList<string> Registered { get; } = Array.AsReadOnly(new[] { "selftest", "survival-scoring", "commit-useful-plays", "attack-allocation", "plan-reuse", "carried-cards", "recurring-value", "settle-fallback", "reuse-mistake-rate", "lethal-recheck", "face-tiebreak", "doomed-minions", "death-value", "death-measured", "death-chip", "death-held", "starved-replies", "replan-reserve", "trigger-value", "trigger-attack", "trigger-plays", "trigger-damage", "own-deck-value", "carried-reuse" });
+    public static IReadOnlyList<string> Registered { get; } = Array.AsReadOnly(new[] { "selftest", "survival-scoring", "commit-useful-plays", "attack-allocation", "plan-reuse", "carried-cards", "recurring-value", "settle-fallback", "reuse-mistake-rate", "lethal-recheck", "face-tiebreak", "doomed-minions", "death-value", "death-measured", "death-chip", "death-held", "starved-replies", "replan-reserve", "trigger-value", "trigger-attack", "trigger-plays", "trigger-damage", "own-deck-value", "carried-reuse", "secret-worlds" });
     public IReadOnlyList<string> Disabled { get; }
     public AiFixes(IEnumerable<string> disabled = null)
     {

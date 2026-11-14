@@ -323,6 +323,8 @@ namespace SabberStoneCore.Enchants
                         return Type == CardType.MINION ? _data[6] : 0;
 					case GameTag.POISONOUS:
                         return Type == CardType.MINION && _data.Length > MinionLength + 2 ? _data[MinionLength + 2] : 0;
+					case GameTag.STEALTH:
+                        return Type == CardType.MINION && _data.Length > MinionLength + 3 ? _data[MinionLength + 3] : 0;
                     case GameTag.IMMUNE:
 						return Immune;
                     case GameTag.LIFESTEAL when Type == CardType.MINION:
@@ -377,6 +379,13 @@ namespace SabberStoneCore.Enchants
                         if (_data.Length <= MinionLength + 2) Array.Resize(ref _data, MinionLength + 3);
                         _data[MinionLength + 2] = value;
                         return;
+					case GameTag.STEALTH:
+                        if (Type != CardType.MINION) return;
+                        // Aura-granted Stealth (LOOTA_832 Cloak of Invisibility): a slot grown only when used, so arrays
+                        // and hashes of games that never grant it are unchanged. Character.HasStealth reads it.
+                        if (_data.Length <= MinionLength + 3) Array.Resize(ref _data, MinionLength + 4);
+                        _data[MinionLength + 3] = value;
+                        return;
                     case GameTag.IMMUNE:
 						Immune = value;
 						return;
@@ -427,6 +436,8 @@ namespace SabberStoneCore.Enchants
                 hash.Append(";combat:").Append(data[legacyLength]).Append(',').Append(data[legacyLength + 1]);
             if (Type == CardType.MINION && data.Length > MinionLength + 2 && data[MinionLength + 2] != 0)
                 hash.Append(";poison:").Append(data[MinionLength + 2]);
+            if (Type == CardType.MINION && data.Length > MinionLength + 3 && data[MinionLength + 3] != 0)
+                hash.Append(";stealth:").Append(data[MinionLength + 3]);
             HashSets(hash, _setEffects);
 			hash.Append("]");
 			return hash.ToString();

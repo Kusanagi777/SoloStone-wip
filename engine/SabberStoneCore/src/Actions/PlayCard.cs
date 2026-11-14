@@ -323,6 +323,9 @@ namespace SabberStoneCore.Actions
 					{
 						hero.ActivateTask(PowerActivation.POWER, target);
 					}
+					// TRLA_154 Tribute from the Tides: additional resolutions (BattlecryRules).
+					for (int extra = BattlecryRules.Additional(c); extra > 0; extra--)
+						hero.ActivateTask(PowerActivation.POWER, target);
 					if (hero.HeroPower.IsPassiveHeroPower)  // Valeera, ad hoc for now; Maybe revisit here for Bosses
 						hero.HeroPower.ActivateTask();
 					game.ProcessTasks();
@@ -463,7 +466,7 @@ namespace SabberStoneCore.Actions
                     if (minion.Card.Id == "TLC_522")
                     {
                         // Opu's Combo is an additional effect, not the legacy replacement branch.
-                        int repeats = DarkGifts.DoublesBattlecry(minion) || c.ExtraBattlecry ? 2 : 1;
+                        int repeats = (DarkGifts.DoublesBattlecry(minion) || c.ExtraBattlecry ? 2 : 1) + BattlecryRules.Additional(c);
                         for (int i = 0; i < repeats && game.State != State.COMPLETE; i++)
                         {
                             minion.ActivateTask(PowerActivation.POWER, target);
@@ -485,6 +488,10 @@ namespace SabberStoneCore.Actions
                         if(activation==PowerActivation.COMBO) game.Facts.ComboActivated(minion);
                         minion.ActivateTask(activation, target, chooseOne);
                         minion.ActivateTask(activation, target, chooseOne);
+                        // TRLA_154 Tribute from the Tides: additional Battlecry resolutions (BattlecryRules).
+                        if (activation == PowerActivation.POWER && minion.HasBattleCry)
+                            for (int extra = BattlecryRules.Additional(c); extra > 0; extra--)
+                                minion.ActivateTask(PowerActivation.POWER, target, chooseOne);
                     }
                     else
                     {
@@ -503,6 +510,10 @@ namespace SabberStoneCore.Actions
                         {
                             minion.ActivateTask(PowerActivation.POWER, target, chooseOne);
                         }
+                        // TRLA_154 Tribute from the Tides: additional Battlecry resolutions (BattlecryRules).
+                        if (minion.HasBattleCry)
+                            for (int extra = BattlecryRules.Additional(c); extra > 0; extra--)
+                                minion.ActivateTask(PowerActivation.POWER, target, chooseOne);
                     }
 
 					OverloadBlock(EitherSideRules.Supports(minion.Card) ? minion.Controller : c, minion, game.History);
@@ -718,6 +729,9 @@ namespace SabberStoneCore.Actions
 					weapon.ActivateTask(PowerActivation.POWER, target, chooseOne);
 					if (c.ExtraBattlecry && weapon.Card[GameTag.BATTLECRY] == 1)
 						weapon.ActivateTask(PowerActivation.POWER, target, chooseOne);
+					if (weapon.Card[GameTag.BATTLECRY] == 1)
+						for (int extra = BattlecryRules.Additional(c); extra > 0; extra--)
+							weapon.ActivateTask(PowerActivation.POWER, target, chooseOne);
 					game.ProcessTasks();
 					game.TaskQueue.EndEvent();
 				}

@@ -1,0 +1,2 @@
+NOTE ledger: 1713 bucket-member rows; 1713 offered by a reachable catalog entry, 0 admitted only for a disabled dual pair, 0 not admitted in any entry
+127 passed, 0 failed

@@ -155,7 +155,13 @@ namespace SabberStoneCore.Tasks
 								right = (Minion)Entity.FromCard(c, Cards.FromId("CFM_668"));
 							break;
 						default:
-							throw new NotImplementedException();
+							// Phase 8 wave 1: another minion repeating this Battlecry (GIL_820 Shudderwock) summons 2 copies of
+							// itself ("this minion" is the repeater). This case threw NotImplementedException.
+							if (space > 0)
+								left = (Minion)Entity.FromCard(c, s.Card);
+							if (space > 1)
+								right = (Minion)Entity.FromCard(c, s.Card);
+							break;
 					}
 					if (left != null)
 					{
@@ -470,6 +476,8 @@ namespace SabberStoneCore.Tasks
 				new IncludeTask(EntityType.GRAVEYARD),
 				new FuncPlayablesTask(list =>
 				{
+					// An empty graveyard (cast before any card was spent) resurrects nothing; list[0] would throw.
+					if (list.Count == 0) return list;
 					list[0].Game.OnRandomHappened(true);
 					Util.DeepCloneableRandom rnd = list[0].Game.Random;
 					return list
@@ -731,8 +739,11 @@ namespace SabberStoneCore.Tasks
 				if (!secretClasses.Contains(cls))
 					cls = CardClass.MAGE;
 
-				Card[] candidates = GetFormatTypeClassSecrets(source.Game.FormatType, cls)
-					.Where(c => !existing.Contains(c.AssetId)).ToArray();
+				// Run games never generate a Secret for a side that excludes them (GameConfig.Player1/Player2ExcludeGeneratedSecrets).
+				if (source.Game.ExcludesGeneratedSecretsFor(source.Controller.PlayerId)) return 0;
+				Game game = source.Game;
+				Card[] candidates = GetFormatTypeClassSecrets(game.FormatType, cls)
+					.Where(c => !existing.Contains(c.AssetId) && !(game.FiltersGenerated && game.BlocksGenerated(c))).ToArray();
 
 				Card[] choices = candidates.ChooseNElements(3, source.Game.Random);
 
@@ -749,10 +760,18 @@ namespace SabberStoneCore.Tasks
 			{
 				// Preserve legacy-only casting; modern quests share the secret capacity.
 				if (c.SecretZone.ModernQuests.Count != 0 && c.SecretZone.IsFull) return;
+				if (g.ExcludesGeneratedSecretsFor(c.PlayerId)) return; // run games never generate a Secret for a side that excludes them
 				int[] activeSecrets = c.SecretZone.Select(secret => secret.Card.AssetId).ToArray();
-				Card[] cardsList = GetFormatTypeClassSecrets(g.FormatType, cardClass)
-					.Where(card => !activeSecrets.Contains(card.AssetId)).ToArray();
-				if ((cardClass == CardClass.DEMONHUNTER || cardClass == CardClass.DEATHKNIGHT) && cardsList.Length == 0) return;
+				// A run game's listed ids (ExcludedGeneratedIds: unscripted Secrets among them) are never cast either.
+				// Phase 8: a run boss whose encounter row turned its generated Secrets on (Game.BossNamesSecrets). Its boss-only
+				// generation list holds every Secret, so a boss deck card that names "a random <class> Secret" (ICC_204 Professor
+				// Putricide) reads the pool the run validator closed instead, as the boss powers do: the scripted Secrets of that
+				// class less the ids no side generates (DungeonRunContent.RandomSecretCandidates).
+				Card[] cardsList = g.BossNamesSecrets(c)
+					? CardSets.DungeonRun.DungeonRunContent.RandomSecretCandidates(c, cardClass).Where(card => !activeSecrets.Contains(card.AssetId)).ToArray()
+					: GetFormatTypeClassSecrets(g.FormatType, cardClass)
+						.Where(card => !activeSecrets.Contains(card.AssetId) && !(g.FiltersGenerated && g.BlocksGenerated(card))).ToArray();
+				if ((cardClass == CardClass.DEMONHUNTER || cardClass == CardClass.DEATHKNIGHT || g.FiltersGenerated) && cardsList.Length == 0) return;
 				Spell spell = (Spell)Entity.FromCard(c, cardsList.Choose(g.Random));
 				Generic.CastSpell(c, g, spell, null, 0);
 				g.OnRandomHappened(true);
@@ -985,8 +1004,9 @@ namespace SabberStoneCore.Tasks
 				{
 					for (int i = choiceIndices.Length - 1; i >= 0; i--)
 						c.SetasideZone.Add(c.DeckZone.Remove(choiceIndices[i]));
+					// Offer the three set-aside minions, not every minion in the deck.
 					Generic.CreateChoice(c, p, ChoiceType.GENERAL, ChoiceAction.HAND,
-						minions.Select(q => q.Id).ToList());
+						choices.Select(q => q.Id).ToList());
 					c.Game.Facts.MarkDiscover(c);
 				}
 
@@ -1149,7 +1169,8 @@ namespace SabberStoneCore.Tasks
 				controller.SetasideZone.Add(controller.Hero.HeroPower);
 				controller.Hero.HeroPower = heroPower;
 
-				var cards = Cards.FormatTypeClassCards(game.FormatType)[randClass].Where(p => p.Class == randClass && !p.IsQuest).ToArray();
+				Game self = game; // run games never generate a Secret for a side that excludes them (Game.BlocksGenerated)
+				var cards = Cards.FormatTypeClassCards(game.FormatType)[randClass].Where(p => p.Class == randClass && !p.IsQuest && !self.BlocksGenerated(p)).ToArray();
 
 				// replace cards in hand
 				for (int i = 0; i < controller.HandZone.Count; i++)

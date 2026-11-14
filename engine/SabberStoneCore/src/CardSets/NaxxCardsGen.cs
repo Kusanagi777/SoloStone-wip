@@ -166,7 +166,7 @@ namespace SabberStoneCore.CardSets
 			{
 				DeathrattleTask = ComplexTask.Create(
 					new RandomTask(1, EntityType.MINIONS),
-					new AddEnchantmentTask("FP1_023e", EntityType.TARGET))
+					new AddEnchantmentTask("FP1_023e", EntityType.STACK))
 			}));
 
 		}
@@ -245,6 +245,7 @@ namespace SabberStoneCore.CardSets
 					new IncludeTask(EntityType.HAND),
 					new FilterStackTask(SelfCondition.IsRace(Race.DEMON)),
 					new RandomTask(1, EntityType.STACK),
+					new RemoveFromHand(EntityType.STACK),
 					new SummonTask())
 			}));
 
@@ -401,7 +402,9 @@ namespace SabberStoneCore.CardSets
 					new IncludeTask(EntityType.OP_DECK),
 					new FilterStackTask(SelfCondition.IsMinion),
 					new RandomTask(1, EntityType.STACK),
-					new SummonStackTask())
+					// Phase 8 wave 1: the minion leaves the opponent's deck (removeFromZone). Without it the entity stayed listed in
+					// the deck while on the board, and the fair search and the Rewind baseline faulted on the doubled entity.
+					new SummonStackTask(true))
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL

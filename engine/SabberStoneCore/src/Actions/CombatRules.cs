@@ -23,7 +23,9 @@ namespace SabberStoneCore.Actions
         public static bool IgnoresTaunt(ICharacter source) => source.Controller.BoardZone
             .Any(m => Active(m) && m[IgnoreTauntAura] > 0);
 
-        public static int AttackLimit(ICharacter source) => source[GameTag.MEGA_WINDFURY] > 0 ? 4 : source.HasWindfury ? 2 : 1;
+        // A hero's Mega-Windfury may come from its weapon (LOOTA_821 Vorpal Dagger), as its Windfury does (Hero.HasWindfury).
+        public static int AttackLimit(ICharacter source) => source[GameTag.MEGA_WINDFURY] > 0 || source is Hero hero && hero.WeaponHasMegaWindfury
+            ? 4 : source.HasWindfury ? 2 : 1;
 
         public static bool PreventsFire(CardType sourceType, int school, ICharacter target) =>
             sourceType == CardType.SPELL && school == 2 && target[FireImmune] > 0
@@ -52,9 +54,31 @@ namespace SabberStoneCore.Actions
             return true;
         }
 
+        /// <summary>
+        /// TRL_535 Snapjaw Shellfighter (phase 6 F10): "Whenever an adjacent minion takes damage, this minion takes it instead."
+        /// The active Shellfighter next to <paramref name="damaged"/> (the left one when both neighbours are), or null. Read by
+        /// Character.TakeDamage for a hit on a minion in play before its own prevention (Divine Shield, Immune); the redirected
+        /// hit is dealt with outgoingApplied, so it is not redirected again.
+        /// </summary>
+        internal static Minion Shellfighter(Minion damaged)
+        {
+            if (!(damaged.Zone is Model.Zones.BoardZone board) || damaged.Card.Id == ShellfighterId) return null;
+            bool any = false;
+            foreach (Minion m in board) if (m.Card.Id == ShellfighterId) { any = true; break; }
+            if (!any) return null;
+            foreach (Minion m in damaged.GetAdjacentMinions())
+                if (m.Card.Id == ShellfighterId && Active(m) && !m.IsDormant && m.Zone == board) return m;
+            return null;
+        }
+
+        private const string ShellfighterId = "TRL_535";
+
         internal static Minion[] CleaveTargets(ICharacter source, ICharacter target)
         {
-            if (!(target is Minion defender) || source[Cleave] == 0 || source[GameTag.SILENCED] > 0)
+            // A hero cleaves while its weapon has Cleave (phase 6 F3: GILA_500t3 Blunderbuss, "Also damages the minions next to
+            // whomever your hero attacks").
+            bool weaponCleave = source is Hero hero && hero.Weapon != null && hero.Weapon.Card[Cleave] != 0 && hero.Weapon[GameTag.SILENCED] == 0;
+            if (!(target is Minion defender) || (source[Cleave] == 0 || source[GameTag.SILENCED] > 0) && !weaponCleave)
                 return Array.Empty<Minion>();
             return defender.GetAdjacentMinions();
         }

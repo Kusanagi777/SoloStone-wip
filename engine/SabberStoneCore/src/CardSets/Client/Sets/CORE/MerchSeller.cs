@@ -17,7 +17,9 @@ namespace SabberStoneCore.CardSets.Client.Sets
             card.Power=new Power { Trigger=new Trigger(TriggerType.TURN_END) {
                 SingleTask=new CustomTask((g,c,s,t,stack)=>{
                     if(c.Opponent.DeckZone.IsFull) return;
-                    var pick=OfflineCardPools.Pick(g,Pool(),c.HeroClass,DbfId, PoolDestination.Deck);
+                    Card pick;
+                    // The spell is the opponent's: both sides' run generation filters apply (Game.GenerateFor).
+                    using (g.GenerateFor(c.Opponent)) pick=OfflineCardPools.Pick(g,Pool(),c.HeroClass,DbfId, PoolDestination.Deck);
                     if(pick!=null) c.Opponent.DeckZone.AddGenerated(pick,s);
                 }) } };
         }

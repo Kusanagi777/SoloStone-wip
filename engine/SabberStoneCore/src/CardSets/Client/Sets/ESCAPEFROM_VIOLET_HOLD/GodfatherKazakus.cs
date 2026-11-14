@@ -71,7 +71,7 @@ namespace SabberStoneCore.CardSets.Client.Sets
         internal static void Destruction(Card card) => ConfigurePart(card,new CustomTask(ForceAll));
         [StandardCard("CAP_405t2",132849)]
         internal static void Conspiracy(Card card) => ConfigurePart(card,new CustomTask((g,c,s,t,stack) => {
-            var candidates=c.Opponent.BoardZone.Where(m=>!m.Untouchable && !m.IsDead).ToArray();
+            var candidates=c.Opponent.BoardZone.Where(m=>!m.Untouchable && !m.IsDead && SabberStoneCore.Actions.ShrineRules.CanChangeController(m)).ToArray();
             if(candidates.Length>0) new ControlTask(EntityType.TARGET).Process(g,c,s,candidates[g.Random.Next(candidates.Length)]);
         }));
         [StandardCard("CAP_405t3",132843)]

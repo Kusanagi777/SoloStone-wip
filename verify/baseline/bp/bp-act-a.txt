@@ -1,0 +1,43 @@
+tunnel_rat         b1 floor 1 DRUID/druid_thicket/CS2_017                      deck 10 -> boss     turns  16 decisions  28 fallbacks  0 health 30 mana+0 mods  0 flags 0
+tunnel_rat         b1 floor 1 HUNTER/hunter_kennel/DS1h_292                    deck 10 -> player   turns  13 decisions  22 fallbacks  0 health 30 mana+0 mods  0 flags 0
+bog_croaker        b1 floor 1 MAGE/mage_rimeward/CS2_034                       deck 10 -> boss     turns  24 decisions  44 fallbacks  0 health 30 mana+0 mods  0 flags 0
+bog_croaker        b1 floor 1 PALADIN/paladin_gleaming/CS2_101                 deck 10 -> player   turns  13 decisions  16 fallbacks  0 health 30 mana+0 mods  0 flags 0
+lantern_thief      b1 floor 1 PRIEST/priest_mending/CS1h_001                   deck 10 -> boss     turns  12 decisions  30 fallbacks  0 health 30 mana+0 mods  0 flags 0
+lantern_thief      b1 floor 1 ROGUE/rogue_backalley/CS2_083b                   deck 10 -> boss     turns  16 decisions  36 fallbacks  0 health 30 mana+0 mods  0 flags 0
+mire_brute         b1 floor 1 SHAMAN/shaman_stormdebt/CS2_049                  deck 10 -> boss     turns  21 decisions  40 fallbacks  0 health 30 mana+0 mods  0 flags 0
+mire_brute         b1 floor 1 WARLOCK/warlock_fiendpact/CS2_056                deck 10 -> boss     turns  18 decisions  28 fallbacks  0 health 30 mana+0 mods  0 flags 0
+hedge_witch        b1 floor 1 WARRIOR/warrior_plated/CS2_102                   deck 10 -> boss     turns  20 decisions  48 fallbacks  0 health 30 mana+0 mods  0 flags 0
+hedge_witch        b1 floor 1 DEATHKNIGHT/deathknight_bones/HERO_11bp          deck 10 -> boss     turns  11 decisions  14 fallbacks  0 health 30 mana+0 mods  0 flags 0
+cellar_matron      b1 floor 1 DEMONHUNTER/demonhunter_glaives/HERO_10bp        deck 10 -> player   turns  17 decisions  24 fallbacks  0 health 30 mana+0 mods  0 flags 0
+cellar_matron      b1 floor 1 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 11 -> player   turns  17 decisions  28 fallbacks  0 health 30 mana+0 mods  0 flags 0
+ashen_abbess       b2 floor 6 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 28 -> player   turns  13 decisions  16 fallbacks  0 health 45 mana+0 mods  2 flags 0
+ashen_abbess       b2 floor 6 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 26 -> player   turns  17 decisions  30 fallbacks  0 health 40 mana+0 mods  0 flags 0
+tollkeeper         b2 floor 6 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 26 -> boss     turns  13 decisions  22 fallbacks  0 health 43 mana+0 mods  0 flags 0
+tollkeeper         b2 floor 6 GILA_500h3/mh_tess_scavenger/GILA_500p2          deck 28 -> boss     turns  15 decisions  24 fallbacks  0 health 43 mana+0 mods  0 flags 0
+golemancer         b2 floor 6 GILA_600h/mh_darius_militia/GILA_600p            deck 26 -> player   turns  21 decisions  29 fallbacks  0 health 43 mana+0 mods  0 flags 1
+golemancer         b2 floor 6 GILA_400h/mh_shaw_kennel/GILA_400p               deck 28 -> player   turns  19 decisions  28 fallbacks  0 health 43 mana+0 mods  1 flags 0
+storm_herald       b2 floor 6 GILA_900h/mh_toki_workshop/CS2_034               deck 27 -> boss     turns  12 decisions  26 fallbacks  0 health 43 mana+0 mods  1 flags 0
+storm_herald       b2 floor 6 DALA_Rakanishu/heist_mage_1/CS2_034              deck 27 -> player   turns  27 decisions  50 fallbacks  0 health 40 mana+1 mods  1 flags 1
+frostwarden        b2 floor 6 DALA_Barkeye/heist_hunter_1/DS1h_292             deck 22 -> player   turns  25 decisions  42 fallbacks  0 health 40 mana+0 mods  0 flags 0
+frostwarden        b2 floor 6 DALA_Vessina/heist_shaman_1/CS2_049              deck 25 -> player   turns  23 decisions  52 fallbacks  0 health 40 mana+1 mods  0 flags 0
+pit_champion       b2 floor 6 DALA_Kriziki/heist_priest_1/CS1h_001             deck 30 -> player   turns  25 decisions  46 fallbacks  0 health 55 mana+0 mods  4 flags 0
+pit_champion       b2 floor 6 DALA_Eudora/heist_rogue_1/CS2_083b               deck 25 -> player   turns  27 decisions  50 fallbacks  0 health 55 mana+0 mods  2 flags 0
+hollow_regent      b3 floor 5 DALA_Chu/heist_warrior_1/CS2_102                 deck 22 -> boss     turns  12 decisions  28 fallbacks  0 health 40 mana+1 mods  1 flags 0
+hollow_regent      b3 floor 5 DALA_Squeamlish/heist_druid_1/CS2_017            deck 23 -> boss     turns  10 decisions  22 fallbacks  0 health 40 mana+1 mods  0 flags 0
+lady_of_thorns     b3 floor 5 DALA_Tekahn/heist_warlock_1/CS2_056              deck 23 -> boss     turns  16 decisions  51 fallbacks  0 health 40 mana+1 mods  1 flags 0
+lady_of_thorns     b3 floor 5 DALA_George/heist_paladin_1/CS2_101              deck 23 -> boss     turns  10 decisions  33 fallbacks  0 health 40 mana+1 mods  0 flags 0
+clockwork_tyrant   b3 floor 5 TRLA_209h_Mage/rumble_mage_108/CS2_034           deck 25 -> boss     turns  10 decisions  18 fallbacks  0 health 40 mana+1 mods  0 flags 0
+clockwork_tyrant   b3 floor 5 TRLA_209h_Druid/rumble_druid_112/CS2_017         deck 27 -> boss     turns  18 decisions  54 fallbacks  0 health 40 mana+1 mods  0 flags 1
+ember_matron       b3 floor 5 TRLA_209h_Hunter/rumble_hunter_110/DS1h_292      deck 25 -> boss     turns  20 decisions  52 fallbacks  0 health 40 mana+1 mods  1 flags 0
+ember_matron       b3 floor 5 TRLA_209h_Paladin/rumble_paladin_105/CS2_101     deck 24 -> boss     turns  12 decisions  36 fallbacks  0 health 40 mana+1 mods  0 flags 1
+devouring_maw      bF floor 15 TRLA_209h_Priest/rumble_priest_114/CS1h_001      deck 48 -> boss     turns  12 decisions  44 fallbacks  0 health 70 mana+3 mods  1 flags 2
+devouring_maw      bF floor 15 TRLA_209h_Rogue/rumble_rogue_106/CS2_083b        deck 27 -> boss     turns  17 decisions  29 fallbacks  0 health 75 mana+3 mods  2 flags 1
+gilded_king        bF floor 15 TRLA_209h_Shaman/rumble_shaman_109/CS2_049       deck 36 -> boss     turns  16 decisions  43 fallbacks  0 health 73 mana+3 mods  2 flags 0
+gilded_king        bF floor 15 TRLA_209h_Warlock/rumble_warlock_113/CS2_056     deck 46 -> boss     turns  14 decisions  36 fallbacks  0 health 70 mana+3 mods  4 flags 0
+sleepless_one      bF floor 15 TRLA_209h_Warrior/rumble_warrior_104/CS2_102     deck 49 -> player   turns  33 decisions 128 fallbacks  0 health 75 mana+3 mods  7 flags 1
+sleepless_one      bF floor 15 DRUID/druid_barkbough/druid_rootcall             deck 35 -> boss     turns   8 decisions  23 fallbacks  0 health 70 mana+3 mods  7 flags 0
+hollow_sovereign   bF floor 15 HUNTER/hunter_scrapyard/trapper_snare            deck 32 -> boss     turns  12 decisions  31 fallbacks  0 health 80 mana+3 mods  4 flags 0
+hollow_sovereign   bF floor 15 MAGE/mage_kindled/carto_survey                   deck 38 -> boss     turns   7 decisions  27 fallbacks  0 health 80 mana+3 mods  5 flags 0
+act run: acts-v2 schedule, boss health from the act curve, the start-mana bonus applied (DungeonRunSetup.ApplyAfterStart), tavern purchases on the walk (deck enchantments and opening flags in the plan)
+catalog run: widened priors DALA_Barkeye=13 DALA_Chu=0 DALA_Eudora=16 DALA_George=11 DALA_Kriziki=0 DALA_Rakanishu=41 DALA_Squeamlish=0 DALA_Tekahn=0 DALA_Vessina=0 DEATHKNIGHT=0 DEMONHUNTER=0 DRUID=0 DRUID_PRIEST=1 GILA_400h=13 GILA_500h3=16 GILA_600h=0 GILA_900h=41 HUNTER=13 HUNTER_WARRIOR=14 MAGE=41 MAGE_ROGUE=31 PALADIN=11 PALADIN_SHAMAN=12 PRIEST=0 ROGUE=16 SHAMAN=0 TRLA_209h_Druid=0 TRLA_209h_Hunter=13 TRLA_209h_Mage=41 TRLA_209h_Paladin=11 TRLA_209h_Priest=0 TRLA_209h_Rogue=16 TRLA_209h_Shaman=0 TRLA_209h_Warlock=0 TRLA_209h_Warrior=0 WARLOCK=0 WARRIOR=0; games with a player Secret in play 5
+games 40, boss wins 26, faults 0, fallbacks 0, games with a Secret in play 3, decks 40, powers 21, swallowed leaf exceptions 0

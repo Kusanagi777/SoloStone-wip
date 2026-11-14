@@ -11,6 +11,8 @@ A	UnityEngine.PhysicsModule
 A	UnityEngine.ScreenCaptureModule			
 A	blizzard.bgsclient			
 C	*	Blizzard.Commerce.TransactionData	.ctor	(Blizzard.Commerce.ProductId,System.String,System.UInt32,System.Boolean)
+C	Assembly-CSharp	AdventureDeckDbfRecord	.ctor	System.Void()
+C	Assembly-CSharp	AdventureHeroPowerDbfRecord	.ctor	System.Void()
 C	Assembly-CSharp	AlertPopup+PopupInfo	.ctor	System.Void()
 C	Assembly-CSharp	AlertPopup+ResponseCallback	.ctor	System.Void(System.Object,System.IntPtr)
 C	Assembly-CSharp	ArcaneDustRewardData	.ctor	System.Void(System.Int32)
@@ -28,6 +30,7 @@ C	Assembly-CSharp	DbfLocValue	.ctor	System.Void()
 C	Assembly-CSharp	DeckHelper+DelCompleteCallback	.ctor	System.Void(System.Object,System.IntPtr)
 C	Assembly-CSharp	DialogBase+HideCallback	.ctor	System.Void(System.Object,System.IntPtr)
 C	Assembly-CSharp	DialogManager+DialogProcessCallback	.ctor	System.Void(System.Object,System.IntPtr)
+C	Assembly-CSharp	GameSaveDataManager+OnRequestDataResponseDelegate	.ctor	System.Void(System.Object,System.IntPtr)
 C	Assembly-CSharp	GameSaveDataManager+SubkeySaveRequest	.ctor	System.Void(GameSaveKeyId,GameSaveKeySubkeyId,System.Int64[])
 C	Assembly-CSharp	GoldRewardData	.ctor	System.Void(System.Int64)
 C	Assembly-CSharp	Hearthstone.DataModels.AchievementCategoryDataModel	.ctor	System.Void()
@@ -168,6 +171,16 @@ F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_heroName	*
 F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_heroPowerActor	*
 F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_heroPowerContainer	*
 F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_playButton	*
+F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_selectedHeroButton	*
+F	Assembly-CSharp	AdventureConfig	m_SubSceneBackStack	*
+F	Assembly-CSharp	AdventureDungeonCrawlDisplay	m_currentLoadoutState	*
+F	Assembly-CSharp	AdventureDungeonCrawlDisplay	m_dungeonCrawlData	*
+F	Assembly-CSharp	AdventureDungeonCrawlDisplay	m_dungeonCrawlDeckSelect	*
+F	Assembly-CSharp	AdventureDungeonCrawlDisplay	m_instance	*
+F	Assembly-CSharp	AdventureDungeonCrawlDisplay	m_playMat	*
+F	Assembly-CSharp	AdventureDungeonCrawlPlayMat	m_deckOptions	*
+F	Assembly-CSharp	AdventureDungeonCrawlPlayMat	m_heroPowerOptions	*
+F	Assembly-CSharp	AdventureOptionWidget	m_databaseId	*
 F	Assembly-CSharp	AlertPopup	m_alertText	*
 F	Assembly-CSharp	AlertPopup	m_body	NineSliceElement
 F	Assembly-CSharp	AlertPopup	m_buttonContainer	MultiSliceElement
@@ -339,6 +352,7 @@ F	Assembly-CSharp	CurrencyManager+CurrencyCache	m_status	*
 F	Assembly-CSharp	DeckOptionsMenu	m_deck	*
 F	Assembly-CSharp	DeckPickerTrayDisplay	m_currentPageIndex	*
 F	Assembly-CSharp	DeckPickerTrayDisplay	m_formatTypePickerWidget	*
+F	Assembly-CSharp	DeckPickerTrayDisplay	m_heroChosen	*
 F	Assembly-CSharp	DeckPickerTrayDisplay	m_leftArrow	*
 F	Assembly-CSharp	DeckPickerTrayDisplay	m_playButton	*
 F	Assembly-CSharp	DeckPickerTrayDisplay	m_replayableTutorial	*
@@ -368,6 +382,7 @@ F	Assembly-CSharp	DeckTrayHeroSkinContent	m_currentDeck	*
 F	Assembly-CSharp	DeckTrayPetContent	m_currentDeck	*
 F	Assembly-CSharp	DeckTrayReorderableContent	m_draggingDeckBox	*
 F	Assembly-CSharp	DeckTrayReorderableContent	m_scrollbar	UIBScrollable
+F	Assembly-CSharp	DefLoader	m_entityDefCache	*
 F	Assembly-CSharp	DialogBase	m_originalScale	*
 F	Assembly-CSharp	DialogBase	m_showAnimState	*
 F	Assembly-CSharp	DialogManager	m_currentDialog	*
@@ -398,9 +413,13 @@ F	Assembly-CSharp	EndGameScreen	m_transformOverride	TransformOverride
 F	Assembly-CSharp	EndGameScreen	m_twoScoop	EndGameTwoScoop
 F	Assembly-CSharp	EndGameScreen	s_instance	*
 F	Assembly-CSharp	EnemyEmoteHandler	m_emote1	*
+F	Assembly-CSharp	EntityDef	m_cachedEntityName	*
 F	Assembly-CSharp	EventListener`1	m_callback	*
 F	Assembly-CSharp	Game.PackOpening.HiddenCards	m_cards	*
 F	Assembly-CSharp	GameDbf	AchievementCategory	Dbf`1<AchievementCategoryDbfRecord>
+F	Assembly-CSharp	GameDbf	AdventureDeck	Dbf`1<AdventureDeckDbfRecord>
+F	Assembly-CSharp	GameDbf	AdventureGuestHeroes	Dbf`1<AdventureGuestHeroesDbfRecord>
+F	Assembly-CSharp	GameDbf	AdventureHeroPower	Dbf`1<AdventureHeroPowerDbfRecord>
 F	Assembly-CSharp	GameDbf	Board	Dbf`1<BoardDbfRecord>
 F	Assembly-CSharp	GameDbf	Booster	Dbf`1<BoosterDbfRecord>
 F	Assembly-CSharp	GameDbf	BoxDressing	Dbf`1<BoxDressingDbfRecord>
@@ -414,6 +433,7 @@ F	Assembly-CSharp	GameDbf	League	Dbf`1<LeagueDbfRecord>
 F	Assembly-CSharp	GameDbf	Pet	Dbf`1<PetDbfRecord>
 F	Assembly-CSharp	GameDbf	PetLevel	Dbf`1<PetLevelDbfRecord>
 F	Assembly-CSharp	GameDbf	PetVariant	Dbf`1<PetVariantDbfRecord>
+F	Assembly-CSharp	GameDbf	Scenario	Dbf`1<ScenarioDbfRecord>
 F	Assembly-CSharp	GameDbf	SellableDeck	Dbf`1<SellableDeckDbfRecord>
 F	Assembly-CSharp	GameDbf	SideboardCard	Dbf`1<SideboardCardDbfRecord>
 F	Assembly-CSharp	GameMenu	m_concedeButton	*
@@ -471,6 +491,7 @@ F	Assembly-CSharp	Hearthstone.UI.SpawnableLibrary	m_itemData	*
 F	Assembly-CSharp	Hearthstone.UI.StateActionImplementation	<StateAction>k__BackingField	*
 F	Assembly-CSharp	Hearthstone.UI.VisualController	m_stateCollection	*
 F	Assembly-CSharp	Hearthstone.UI.WeakAssetReference	AssetString	System.String
+F	Assembly-CSharp	HeroPickerButton	m_heroClass	*
 F	Assembly-CSharp	HistoryItem	m_mainCardActor	Actor
 F	Assembly-CSharp	HistoryManager	m_currentBigCard	*
 F	Assembly-CSharp	HistoryManager	m_pendingBigCardEntry	*
@@ -492,6 +513,7 @@ F	Assembly-CSharp	MultiSliceElement+Slice	m_slice	UnityEngine.GameObject
 F	Assembly-CSharp	MultiSliceElement+Slice	m_useMeshRenderers	System.Boolean
 F	Assembly-CSharp	MultiSliceElement+Slice	m_useTextSize	System.Boolean
 F	Assembly-CSharp	MultiSliceElement+Slice	m_useWidgetTransform	System.Boolean
+F	Assembly-CSharp	Navigation	m_history	*
 F	Assembly-CSharp	NetCache	FavoritePetChanged	*
 F	Assembly-CSharp	NetCache	FavoritePetVariantChanged	*
 F	Assembly-CSharp	NetCache	PetsXpLevelChanged	*
@@ -701,6 +723,9 @@ M	*	UberText	GetLocalizedFont	()
 M	*	UberText	GetTextBounds	()
 M	*	UberText	UpdateNow	(System.Boolean)
 M	*	iTween	Count	(UnityEngine.GameObject)
+M	Assembly-CSharp	AbsDeckPickerTrayDisplay	OnPlayButtonPressed_SaveHeroAndAdvanceToDungeonRunIfNecessary	()
+M	Assembly-CSharp	AbsDeckPickerTrayDisplay	SetHeroButtonsEnabled	(System.Boolean)
+M	Assembly-CSharp	AbsDeckPickerTrayDisplay	SetPlayButtonEnabled	(System.Boolean)
 M	Assembly-CSharp	AchievementCategoryDbfRecord	get_Icon	System.String()
 M	Assembly-CSharp	AchievementCategoryDbfRecord	get_Subcategories	System.Collections.Generic.List`1<AchievementSubcategoryDbfRecord>()
 M	Assembly-CSharp	AchievementSubcategoryDbfRecord	get_Icon	System.String()
@@ -713,6 +738,83 @@ M	Assembly-CSharp	Actor	GetPremium	TAG_PREMIUM()
 M	Assembly-CSharp	Actor	GetSpell	*
 M	Assembly-CSharp	Actor	IsColliderEnabled	System.Boolean()
 M	Assembly-CSharp	Actor	IsShown	System.Boolean()
+M	Assembly-CSharp	AdventureConfig	Get	AdventureConfig()
+M	Assembly-CSharp	AdventureConfig	GetMission	ScenarioDbId()
+M	Assembly-CSharp	AdventureConfig	GetSelectedAdventure	AdventureDbId()
+M	Assembly-CSharp	AdventureConfig	GetSelectedMode	AdventureModeDbId()
+M	Assembly-CSharp	AdventureConfig	GetSubSceneFromMode	Assets.AdventureData+Adventuresubscene(AdventureDbId,AdventureModeDbId)
+M	Assembly-CSharp	AdventureConfig	GuestHeroesExistForCurrentAdventure	()
+M	Assembly-CSharp	AdventureConfig	GuestHeroesExistForCurrentAdventure	System.Boolean()
+M	Assembly-CSharp	AdventureConfig	IsAdventureEventActive	System.Boolean(AdventureDbId)
+M	Assembly-CSharp	AdventureConfig	IsChapterSelectedBeforeDungeonCrawlScreenForSelectedAdventure	()
+M	Assembly-CSharp	AdventureConfig	OnAdventureSceneAwake	()
+M	Assembly-CSharp	AdventureConfig	RequestGameSaveDataKeysForSelectedAdventure	System.Void(GameSaveDataManager+OnRequestDataResponseDelegate)
+M	Assembly-CSharp	AdventureConfig	ResetLoadout	System.Void()
+M	Assembly-CSharp	AdventureConfig	ResetSubScene	System.Void(Assets.AdventureData+Adventuresubscene)
+M	Assembly-CSharp	AdventureConfig	SetPropertiesForAdventureAndMode	()
+M	Assembly-CSharp	AdventureConfig	SetSelectedAdventureMode	System.Void(AdventureDbId,AdventureModeDbId)
+M	Assembly-CSharp	AdventureConfig	ShouldDisplayAdventure	(AdventureDbId)
+M	Assembly-CSharp	AdventureConfig	SubSceneGoBack	(System.Boolean)
+M	Assembly-CSharp	AdventureConfig	get_CurrentSubScene	Assets.AdventureData+Adventuresubscene()
+M	Assembly-CSharp	AdventureConfig	get_SelectedDeckId	System.Int64()
+M	Assembly-CSharp	AdventureConfig	get_SelectedHeroCardDbId	System.Int64()
+M	Assembly-CSharp	AdventureConfig	get_SelectedHeroPowerDbId	System.Int64()
+M	Assembly-CSharp	AdventureConfig	set_SelectedAdventure	(AdventureDbId)
+M	Assembly-CSharp	AdventureConfig	set_SelectedMode	(AdventureModeDbId)
+M	Assembly-CSharp	AdventureDataDbfRecord	get_BossCardBack	System.Int32()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_DungeonCrawlDefaultToDeckFromUpcomingScenario	System.Boolean()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_DungeonCrawlIsRetireSupported	System.Boolean()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_DungeonCrawlMustPickShrine	System.Boolean()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_DungeonCrawlPickHeroFirst	System.Boolean()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_DungeonCrawlSaveHeroUsingHeroDbId	System.Boolean()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_DungeonCrawlSelectChapter	System.Boolean()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_DungeonCrawlSkipHeroSelect	System.Boolean()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_GameSaveDataClientKey	System.Int32()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_GameSaveDataServerKey	System.Int32()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_IgnoreHeroUnlockRequirement	System.Boolean()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_Name	DbfLocValue()
+M	Assembly-CSharp	AdventureDataDbfRecord	get_StartingSubscene	Assets.AdventureData+Adventuresubscene()
+M	Assembly-CSharp	AdventureDeckDbfRecord	get_AdventureId	System.Int32()
+M	Assembly-CSharp	AdventureDeckDbfRecord	get_ClassId	System.Int32()
+M	Assembly-CSharp	AdventureDeckDbfRecord	get_DeckId	System.Int32()
+M	Assembly-CSharp	AdventureDeckDbfRecord	get_DisplayTexture	System.String()
+M	Assembly-CSharp	AdventureDeckDbfRecord	get_SortOrder	System.Int32()
+M	Assembly-CSharp	AdventureDeckDbfRecord	get_UnlockGameSaveSubkey	System.Int32()
+M	Assembly-CSharp	AdventureDeckDbfRecord	get_UnlockValue	System.Int32()
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	GoBackFromDeckTemplateSelection	()
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	GoBackFromHeroPower	()
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	GoBackToTreasureLoadoutSelection	()
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	GoToNextLoadoutState	()
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	OnNavigateBack	()
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	OnNavigateBackFromCurrentLoadoutState	()
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	OnPlayButtonPress	(UIEvent)
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	SetHero	(System.String,TAG_PREMIUM)
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	SetHeroPower	(System.String)
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	SetUpDeckList	*
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	ShowDeckOptionsWhenReady	()
+M	Assembly-CSharp	AdventureDungeonCrawlDisplay	ShowHeroPowerOptionsWhenReady	()
+M	Assembly-CSharp	AdventureDungeonCrawlPlayMat	DeselectAllDeckOptionsWithoutId	System.Void(System.Int32)
+M	Assembly-CSharp	AdventureDungeonCrawlPlayMat	GetPlayMatState	AdventureDungeonCrawlPlayMat+PlayMatState()
+M	Assembly-CSharp	AdventureDungeonCrawlPlayMat	PlayDeckOptionSelected	System.Void()
+M	Assembly-CSharp	AdventureDungeonCrawlPlayMat	PlayHeroPowerOptionSelected	()
+M	Assembly-CSharp	AdventureDungeonCrawlPlayMat	get_PlayButton	PlayButton()
+M	Assembly-CSharp	AdventureGuestHeroesDbfRecord	get_AdventureId	System.Int32()
+M	Assembly-CSharp	AdventureHeroPowerDbfRecord	get_AdventureId	System.Int32()
+M	Assembly-CSharp	AdventureHeroPowerDbfRecord	get_CardId	System.Int32()
+M	Assembly-CSharp	AdventureHeroPowerDbfRecord	get_ClassId	System.Int32()
+M	Assembly-CSharp	AdventureHeroPowerDbfRecord	get_GuestHeroId	System.Int32()
+M	Assembly-CSharp	AdventureHeroPowerDbfRecord	get_SortOrder	System.Int32()
+M	Assembly-CSharp	AdventureHeroPowerDbfRecord	get_UnlockAchievement	System.Int32()
+M	Assembly-CSharp	AdventureHeroPowerDbfRecord	get_UnlockGameSaveSubkey	System.Int32()
+M	Assembly-CSharp	AdventureHeroPowerDbfRecord	get_UnlockValue	System.Int32()
+M	Assembly-CSharp	AdventureOptionWidget	Deselect	System.Void()
+M	Assembly-CSharp	AdventureOptionWidget	get_IsOutroPlaying	System.Boolean()
+M	Assembly-CSharp	AdventureProgressMgr	Get	AdventureProgressMgr()
+M	Assembly-CSharp	AdventureUtils	GetGuestHeroIdFromHeroCardDbId	(Hearthstone.DungeonCrawl.IDungeonCrawlData,System.Int32)
+M	Assembly-CSharp	AdventureUtils	GetGuestHeroesForAdventure	(AdventureDbId)
+M	Assembly-CSharp	AdventureUtils	GetGuestHeroesForAdventure	System.Collections.Generic.List`1<Hearthstone.DungeonCrawl.GuestHero>(AdventureDbId)
+M	Assembly-CSharp	AdventureUtils	GetHeroCardIdFromClassForDungeonCrawl	(Hearthstone.DungeonCrawl.IDungeonCrawlData,TAG_CLASS)
+M	Assembly-CSharp	AdventureUtils	GetHeroCardIdFromClassForDungeonCrawl	System.String(Hearthstone.DungeonCrawl.IDungeonCrawlData,TAG_CLASS)
 M	Assembly-CSharp	AlertPopup	ButtonPress	*
 M	Assembly-CSharp	AlertPopup	GetInfo	AlertPopup+PopupInfo()
 M	Assembly-CSharp	AlertPopup	Hide	*
@@ -829,6 +931,7 @@ M	Assembly-CSharp	BoxProductBanner	UnfurlPayload	*
 M	Assembly-CSharp	BoxRailroadManager	ShouldDisableButtonType	*
 M	Assembly-CSharp	BoxScrollButton	TriggerOut	*
 M	Assembly-CSharp	BoxScrollButton	TriggerOver	*
+M	Assembly-CSharp	BoxScrollButton	TriggerRelease	*
 M	Assembly-CSharp	ButtonListMenu	Awake	System.Void()
 M	Assembly-CSharp	ButtonListMenu	CreateMenuButton	UIBButton(System.String,System.String,UIEvent+Handler)
 M	Assembly-CSharp	ButtonListMenu	Hide	*
@@ -872,6 +975,7 @@ M	Assembly-CSharp	CardTextBuilder	GetDefaultCardName	System.String(EntityDef)
 M	Assembly-CSharp	CardTextBuilder	GetRawCardName	System.String(EntityDef)
 M	Assembly-CSharp	CardTextBuilder	GetRawCardTextInHand	(System.String)
 M	Assembly-CSharp	CardTextBuilder	GetRawCardTextInHand	*
+M	Assembly-CSharp	CardWithPremiumStatus	ConvertList	System.Collections.Generic.List`1<CardWithPremiumStatus>(System.Collections.Generic.List`1<System.Int64>)
 M	Assembly-CSharp	CatalogNetworkPage	AddSection	System.Void(Network+ShopSection)
 M	Assembly-CSharp	CatalogNetworkPage	Clear	System.Void()
 M	Assembly-CSharp	CatalogNetworkPages	GetOrCreatePage	*
@@ -887,6 +991,7 @@ M	Assembly-CSharp	ChoiceCardMgr	GetSubOptionParentCard	Card()
 M	Assembly-CSharp	ChoiceCardMgr	GetToggleButton	NormalButton()
 M	Assembly-CSharp	ChoiceCardMgr	HasChoices	System.Boolean()
 M	Assembly-CSharp	ChoiceCardMgr	IsFriendlyWaitingToStartChoices	System.Boolean()
+M	Assembly-CSharp	ClassExclusionsDbfRecord	get_ClassId	System.Int32()
 M	Assembly-CSharp	CollectibleCard	get_CardId	System.String()
 M	Assembly-CSharp	CollectibleCard	get_DefaultMaxCopiesPerDeck	System.Int32()
 M	Assembly-CSharp	CollectibleCard	get_IsCraftableDisenchantCount	System.Int32()
@@ -984,9 +1089,11 @@ M	Assembly-CSharp	CollectionManager	GetNumCopiesInCollection	System.Int32(System
 M	Assembly-CSharp	CollectionManager	GetOwnedCount	System.Int32(System.String,TAG_PREMIUM)
 M	Assembly-CSharp	CollectionManager	GetTotalOwnedCount	System.Int32(System.String)
 M	Assembly-CSharp	CollectionManager	GetTrialCardCount	System.Int32(System.String,TAG_PREMIUM)
+M	Assembly-CSharp	CollectionManager	GetVanillaHero	System.String(TAG_CLASS)
 M	Assembly-CSharp	CollectionManager	Init	System.Void()
 M	Assembly-CSharp	CollectionManager	IsFullyLoaded	System.Boolean()
 M	Assembly-CSharp	CollectionManager	IsInEditMode	System.Boolean()
+M	Assembly-CSharp	CollectionManager	LoadDeckFromDBF	*
 M	Assembly-CSharp	CollectionManager	NotifyOfBoxTransitionStart	System.Void()
 M	Assembly-CSharp	CollectionManager	OnAchievesLoaded	*
 M	Assembly-CSharp	CollectionManager	OnCardsModified	System.Void(System.Collections.Generic.List`1<CollectionManager+CardModification>)
@@ -1059,6 +1166,10 @@ M	Assembly-CSharp	Dbf`1	AddRecord	System.Void(DbfRecord)
 M	Assembly-CSharp	Dbf`1	CreateNewRecord	DbfRecord()
 M	Assembly-CSharp	Dbf`1	GetRecord	!0(System.Int32)
 M	Assembly-CSharp	Dbf`1	GetRecords	System.Collections.Generic.List`1<!0>()
+M	Assembly-CSharp	DeckCardDbfRecord	get_CardId	System.Int32()
+M	Assembly-CSharp	DeckCardDbfRecord	get_NextCard	System.Int32()
+M	Assembly-CSharp	DeckDbfRecord	get_Name	DbfLocValue()
+M	Assembly-CSharp	DeckDbfRecord	get_TopCardId	System.Int32()
 M	Assembly-CSharp	DeckHelper	Get	DeckHelper()
 M	Assembly-CSharp	DeckHelper	HasChoicesToOffer	(CollectionDeck)
 M	Assembly-CSharp	DeckHelper	HasChoicesToOffer	*
@@ -1069,6 +1180,7 @@ M	Assembly-CSharp	DeckOptionsMenu	OnDeleteButtonConfirmationResponse	*
 M	Assembly-CSharp	DeckOptionsMenu	ShowConvertButton	()
 M	Assembly-CSharp	DeckOptionsMenu	ShowConvertButton	*
 M	Assembly-CSharp	DeckPickerTrayDisplay	GetSelectedCollectionDeck	CollectionDeck()
+M	Assembly-CSharp	DeckPickerTrayDisplay	OnPlayGameButtonReleased	(UIEvent)
 M	Assembly-CSharp	DeckPickerTrayDisplay	OverridePlayButtonCallback	System.Void(UIEvent+Handler)
 M	Assembly-CSharp	DeckPickerTrayDisplay	SetReplayableTutorialActive	*
 M	Assembly-CSharp	DeckPickerTrayDisplay	ShowFormatTypePickerPopup	()
@@ -1164,6 +1276,7 @@ M	Assembly-CSharp	DialogManager	add_OnDialogHidden	System.Void(System.Action)
 M	Assembly-CSharp	DialogManager	remove_OnDialogHidden	System.Void(System.Action)
 M	Assembly-CSharp	DisenchantButton	OnRelease	*
 M	Assembly-CSharp	DropdownControl	isMenuShown	System.Boolean()
+M	Assembly-CSharp	DungeonCrawlDeckSelect	get_playButton	PlayButton()
 M	Assembly-CSharp	EmoteHandler	Get	EmoteHandler()
 M	Assembly-CSharp	EmoteHandler	IsValidEmoteTypeForOpponent	System.Boolean(EmoteType)
 M	Assembly-CSharp	EndGameScreen	Awake	*
@@ -1259,6 +1372,9 @@ M	Assembly-CSharp	GameMenu	OnSkipTutorialButtonReleased	*
 M	Assembly-CSharp	GameMenu	RestartButtonPressed	*
 M	Assembly-CSharp	GameMenu	Show	*
 M	Assembly-CSharp	GameMenu	ShowLoginTooltipIfNeeded	*
+M	Assembly-CSharp	GameMgr	FindGame	*
+M	Assembly-CSharp	GameMgr	FindGameInternal	*
+M	Assembly-CSharp	GameMgr	FindGameWithHero	*
 M	Assembly-CSharp	GameMgr	Get	GameMgr()
 M	Assembly-CSharp	GameMgr	GetGameSetup	Network+GameSetup()
 M	Assembly-CSharp	GameMgr	GetGameType	PegasusShared.GameType()
@@ -1268,10 +1384,14 @@ M	Assembly-CSharp	GameMgr	IsAI	System.Boolean()
 M	Assembly-CSharp	GameMgr	IsBattlegroundsMatchOrTutorial	System.Boolean()
 M	Assembly-CSharp	GameMgr	IsTraditionalTutorial	System.Boolean()
 M	Assembly-CSharp	GameMgr	LoadTransitionPopup	(System.String)
+M	Assembly-CSharp	GameMgr	RestartGame	()
 M	Assembly-CSharp	GameMgr	ShowTransitionPopup	(System.String,System.Int32)
+M	Assembly-CSharp	GameModeUtils	HasUnlockedAllDefaultHeroes	System.Boolean()
 M	Assembly-CSharp	GameSaveDataManager	ApplyGameSaveDataUpdate	System.Void(PegasusShared.GameSaveDataUpdate)
+M	Assembly-CSharp	GameSaveDataManager	ClearLocalData	System.Void(GameSaveKeyId)
 M	Assembly-CSharp	GameSaveDataManager	Get	*
 M	Assembly-CSharp	GameSaveDataManager	Get	GameSaveDataManager()
+M	Assembly-CSharp	GameSaveDataManager	GetSubkeyValue	System.Boolean(GameSaveKeyId,GameSaveKeySubkeyId,System.Int64&)
 M	Assembly-CSharp	GameSaveDataManager	IsDataReady	System.Boolean(GameSaveKeyId)
 M	Assembly-CSharp	GameSaveDataManager	Request	*
 M	Assembly-CSharp	GameSaveDataManager	SaveSubkeyToLocalCache	*
@@ -1316,6 +1436,7 @@ M	Assembly-CSharp	GameState	SetBusy	System.Void(System.Boolean)
 M	Assembly-CSharp	GameState	WasConcedeRequested	System.Boolean()
 M	Assembly-CSharp	GameStrings	Format	System.String(System.String,System.Object[])
 M	Assembly-CSharp	GameStrings	Get	System.String(System.String)
+M	Assembly-CSharp	GameUtils	GetAdventureDataRecord	AdventureDataDbfRecord(System.Int32,System.Int32)
 M	Assembly-CSharp	GameUtils	GetAllCollectibleCardIds	*
 M	Assembly-CSharp	GameUtils	GetAllCollectibleCardIds	System.Collections.Generic.List`1<System.String>()
 M	Assembly-CSharp	GameUtils	GetAllWildPlayableSets	TAG_CARD_SET[]()
@@ -1329,6 +1450,7 @@ M	Assembly-CSharp	GameUtils	GetFakePackCount	*
 M	Assembly-CSharp	GameUtils	GetStandardSets	TAG_CARD_SET[]()
 M	Assembly-CSharp	GameUtils	Instantiate	UnityEngine.Object(UnityEngine.GameObject,UnityEngine.GameObject,System.Boolean)
 M	Assembly-CSharp	GameUtils	InstantiateGameObject	UnityEngine.Object(System.String,UnityEngine.GameObject,System.Boolean)
+M	Assembly-CSharp	GameUtils	IsAdventureRotated	System.Boolean(AdventureDbId)
 M	Assembly-CSharp	GameUtils	IsCardCollectible	(System.String)
 M	Assembly-CSharp	GameUtils	IsCardCollectible	*
 M	Assembly-CSharp	GameUtils	IsCardGameplayEventActive	(EntityDef)
@@ -1339,6 +1461,7 @@ M	Assembly-CSharp	GameUtils	IsGameTypeRanked	()
 M	Assembly-CSharp	GameUtils	IsLegacySet	System.Boolean(TAG_CARD_SET)
 M	Assembly-CSharp	GameUtils	IsMatchmadeGameType	System.Boolean(PegasusShared.GameType,System.Nullable`1<System.Int32>)
 M	Assembly-CSharp	GameUtils	IsSetRotated	System.Boolean(TAG_CARD_SET)
+M	Assembly-CSharp	GameUtils	IsVanillaHero	System.Boolean(System.String)
 M	Assembly-CSharp	GameUtils	ReplayTraditionalTutorial	*
 M	Assembly-CSharp	GameUtils	TranslateCardIdToDbId	System.Int32(System.String,System.Boolean)
 M	Assembly-CSharp	GameUtils	TranslateDbIdToCardId	System.String(System.Int32,System.Boolean)
@@ -1461,6 +1584,18 @@ M	Assembly-CSharp	Hearthstone.DataModels.ShopButtonDataModel	set_HasNewItems	Sys
 M	Assembly-CSharp	Hearthstone.DataModels.ShopTabDataModel	get_Id	System.String()
 M	Assembly-CSharp	Hearthstone.DataModels.WalletDataModel	get_AllowRealMoneyPurchases	System.Boolean()
 M	Assembly-CSharp	Hearthstone.DataModels.WalletDataModel	set_AllowRealMoneyPurchases	System.Void(System.Boolean)
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.DungeonCrawlDataAdventureAdapter	AdventureDeckIsUnlocked	*
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.DungeonCrawlDataAdventureAdapter	AdventureHeroPowerIsUnlocked	*
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.DungeonCrawlDataAdventureAdapter	GetDecksForClass	(TAG_CLASS)
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.DungeonCrawlDataAdventureAdapter	GetHeroPowersForClass	(TAG_CLASS)
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.IDungeonCrawlData	GetSelectedAdventure	AdventureDbId()
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.IDungeonCrawlData	SelectableHeroPowersAndDecksExist	System.Boolean()
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.IDungeonCrawlData	SelectableLoadoutTreasuresExist	System.Boolean()
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.IDungeonCrawlData	get_SelectedDeckId	System.Int64()
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.IDungeonCrawlData	get_SelectedHeroCardDbId	System.Int64()
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.IDungeonCrawlData	get_SelectedHeroPowerDbId	System.Int64()
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.IDungeonCrawlData	set_SelectedDeckId	System.Void(System.Int64)
+M	Assembly-CSharp	Hearthstone.DungeonCrawl.IDungeonCrawlData	set_SelectedHeroPowerDbId	System.Void(System.Int64)
 M	Assembly-CSharp	Hearthstone.HearthstoneApplication	Exit	()
 M	Assembly-CSharp	Hearthstone.Login.DesktopLoginTokenFetcher	GetTokenIfAvailable	*
 M	Assembly-CSharp	Hearthstone.Login.LoginService	StartLogin	*
@@ -1619,6 +1754,7 @@ M	Assembly-CSharp	HearthstoneTelemetry.TelemetryClient	SendShopStatus	*
 M	Assembly-CSharp	HearthstoneTelemetry.TelemetryClient	SendShopVisit	*
 M	Assembly-CSharp	HeraldCardTextBuilder	GetHeraldColossalName	(Entity)
 M	Assembly-CSharp	HeraldCardTextBuilder	GetHeraldColossalName	*
+M	Assembly-CSharp	HeroPickerButton	get_HeroCardDbId	System.Int32()
 M	Assembly-CSharp	HeroSkinInfoManager	Get	HeroSkinInfoManager()
 M	Assembly-CSharp	HeroSkinUtils	GetCollectionManagerHeroSkinPurchaseProductData	(System.String)
 M	Assembly-CSharp	HeroSkinUtils+HeroSkinProductData	set_CurrencyType	System.Void(Assets.CardHero+PortraitCurrency)
@@ -1695,6 +1831,8 @@ M	Assembly-CSharp	MultiSliceElement	UpdateSlices	System.Void()
 M	Assembly-CSharp	NarrativeManager	Get	NarrativeManager()
 M	Assembly-CSharp	NarrativeManager	OnArenaRewardsShown	*
 M	Assembly-CSharp	Navigation	GoBack	System.Boolean()
+M	Assembly-CSharp	Navigation	Push	System.Void(Navigation+NavigateBackHandler)
+M	Assembly-CSharp	Navigation	PushUnique	System.Void(Navigation+NavigateBackHandler)
 M	Assembly-CSharp	Navigation	RemoveHandler	System.Boolean(Navigation+NavigateBackHandler)
 M	Assembly-CSharp	NetCache	Get	*
 M	Assembly-CSharp	NetCache	Get	NetCache()
@@ -2065,6 +2203,7 @@ M	Assembly-CSharp	PetsManager	GetRewardPresenter	Hearthstone.Progression.RewardP
 M	Assembly-CSharp	PetsManager	ShowNextReward	System.Boolean(System.Action)
 M	Assembly-CSharp	PlatformDependentValue`1	op_Implicit	!0(PlatformDependentValue`1<!0>)
 M	Assembly-CSharp	PlayButton	Disable	System.Void(System.Boolean)
+M	Assembly-CSharp	PlayButton	Enable	System.Void()
 M	Assembly-CSharp	Player	GetPlayerId	System.Int32()
 M	Assembly-CSharp	Player	GetRank	()
 M	Assembly-CSharp	Player	GetSide	Player+Side()
@@ -2161,6 +2300,11 @@ M	Assembly-CSharp	RewardUtils	RewardItemTypeToCurrencyType	CurrencyType(RewardIt
 M	Assembly-CSharp	SPJEntryButton	Awake	*
 M	Assembly-CSharp	SPJEntryButton	ShowButton	*
 M	Assembly-CSharp	SPJEntryButton	ShowSpj	*
+M	Assembly-CSharp	ScenarioDbfRecord	get_AdventureId	System.Int32()
+M	Assembly-CSharp	ScenarioDbfRecord	get_ClassExclusions	System.Collections.Generic.List`1<ClassExclusionsDbfRecord>()
+M	Assembly-CSharp	ScenarioDbfRecord	get_ModeId	System.Int32()
+M	Assembly-CSharp	ScenarioDbfRecord	get_Name	DbfLocValue()
+M	Assembly-CSharp	ScenarioDbfRecord	get_WingId	System.Int32()
 M	Assembly-CSharp	SceneMgr	Get	SceneMgr()
 M	Assembly-CSharp	SceneMgr	GetMode	SceneMgr+Mode()
 M	Assembly-CSharp	SceneMgr	GetPrevMode	SceneMgr+Mode()
@@ -2860,6 +3004,19 @@ T	Assembly-CSharp	AbsDeckPickerTrayDisplay
 T	Assembly-CSharp	AchievementCategoryDbfRecord		
 T	Assembly-CSharp	AchievementSubcategoryDbfRecord		
 T	Assembly-CSharp	Actor		
+T	Assembly-CSharp	AdventureConfig		
+T	Assembly-CSharp	AdventureDataDbfRecord		
+T	Assembly-CSharp	AdventureDbId		
+T	Assembly-CSharp	AdventureDeckDbfRecord		
+T	Assembly-CSharp	AdventureDungeonCrawlDisplay		
+T	Assembly-CSharp	AdventureDungeonCrawlPlayMat		
+T	Assembly-CSharp	AdventureDungeonCrawlPlayMat+PlayMatState		
+T	Assembly-CSharp	AdventureGuestHeroesDbfRecord		
+T	Assembly-CSharp	AdventureHeroPowerDbfRecord		
+T	Assembly-CSharp	AdventureModeDbId		
+T	Assembly-CSharp	AdventureOptionWidget		
+T	Assembly-CSharp	AdventureProgressMgr		
+T	Assembly-CSharp	AdventureUtils		
 T	Assembly-CSharp	AlertPopup		
 T	Assembly-CSharp	AlertPopup+Header		
 T	Assembly-CSharp	AlertPopup+PopupInfo		
@@ -2872,6 +3029,8 @@ T	Assembly-CSharp	AnimatedLowPolyPack
 T	Assembly-CSharp	ArcaneDustAmount		
 T	Assembly-CSharp	ArcaneDustRewardData		
 T	Assembly-CSharp	AssetLoader		
+T	Assembly-CSharp	Assets.AdventureData		
+T	Assembly-CSharp	Assets.AdventureData+Adventuresubscene		
 T	Assembly-CSharp	Assets.BoxDressing		
 T	Assembly-CSharp	Assets.BoxDressing+BoxDressingType		
 T	Assembly-CSharp	Assets.CardHero		
@@ -2921,12 +3080,14 @@ T	Assembly-CSharp	CardRewardData
 T	Assembly-CSharp	CardSetDbfRecord		
 T	Assembly-CSharp	CardTextBuilder		
 T	Assembly-CSharp	CardValueDbfRecord		
+T	Assembly-CSharp	CardWithPremiumStatus		
 T	Assembly-CSharp	CatalogNetworkPage		
 T	Assembly-CSharp	CatalogNetworkPages		
 T	Assembly-CSharp	CheckBox		
 T	Assembly-CSharp	ChoiceCardMgr		
 T	Assembly-CSharp	ChoiceCardMgr+ChoiceState		
 T	Assembly-CSharp	ChoiceCardMgr+ChoiceState+ChoiceDisplayType		
+T	Assembly-CSharp	ClassExclusionsDbfRecord		
 T	Assembly-CSharp	CollectibleCard		
 T	Assembly-CSharp	CollectibleDisplay		
 T	Assembly-CSharp	CollectiblePageManager		
@@ -2995,6 +3156,7 @@ T	Assembly-CSharp	DialogManager+DialogProcessCallback
 T	Assembly-CSharp	DialogManager+DialogRequest		
 T	Assembly-CSharp	DisenchantButton		
 T	Assembly-CSharp	DropdownControl		
+T	Assembly-CSharp	DungeonCrawlDeckSelect		
 T	Assembly-CSharp	EditableDeckTray		
 T	Assembly-CSharp	EmoteHandler		
 T	Assembly-CSharp	EmoteOption		
@@ -3023,6 +3185,7 @@ T	Assembly-CSharp	GameEntityOption
 T	Assembly-CSharp	GameEntityOptions		
 T	Assembly-CSharp	GameMenu		
 T	Assembly-CSharp	GameMgr		
+T	Assembly-CSharp	GameModeUtils		
 T	Assembly-CSharp	GameSaveDataManager		
 T	Assembly-CSharp	GameSaveDataManager+OnRequestDataResponseDelegate		
 T	Assembly-CSharp	GameSaveDataManager+OnSaveDataResponseDelegate		
@@ -3060,6 +3223,9 @@ T	Assembly-CSharp	Hearthstone.DataModels.ShopBrowserButtonDataModel
 T	Assembly-CSharp	Hearthstone.DataModels.ShopButtonDataModel		
 T	Assembly-CSharp	Hearthstone.DataModels.ShopTabDataModel		
 T	Assembly-CSharp	Hearthstone.DataModels.WalletDataModel		
+T	Assembly-CSharp	Hearthstone.DungeonCrawl.DungeonCrawlDataAdventureAdapter		
+T	Assembly-CSharp	Hearthstone.DungeonCrawl.GuestHero		
+T	Assembly-CSharp	Hearthstone.DungeonCrawl.IDungeonCrawlData		
 T	Assembly-CSharp	Hearthstone.HearthstoneApplication		
 T	Assembly-CSharp	Hearthstone.Login.DesktopLoginTokenFetcher		
 T	Assembly-CSharp	Hearthstone.Login.LoginService		
@@ -3116,6 +3282,7 @@ T	Assembly-CSharp	Hearthstone.UI.WidgetInstance+LoadingPolicy
 T	Assembly-CSharp	Hearthstone.UI.WidgetTemplate		
 T	Assembly-CSharp	Hearthstone.UI.WidgetTransform		
 T	Assembly-CSharp	HeraldCardTextBuilder		
+T	Assembly-CSharp	HeroPickerButton		
 T	Assembly-CSharp	HeroSkinInfoManager		
 T	Assembly-CSharp	HeroSkinUtils		
 T	Assembly-CSharp	HeroSkinUtils+HeroSkinProductData		
@@ -3265,6 +3432,8 @@ T	Assembly-CSharp	RewardItemType
 T	Assembly-CSharp	RewardPackage		
 T	Assembly-CSharp	RewardUtils		
 T	Assembly-CSharp	RuleInvalidReason		
+T	Assembly-CSharp	ScenarioDbId		
+T	Assembly-CSharp	ScenarioDbfRecord		
 T	Assembly-CSharp	SceneMgr		
 T	Assembly-CSharp	SceneMgr+Mode		
 T	Assembly-CSharp	SceneMgr+OnSceneLoadCompleteForSceneDrivenTransition		

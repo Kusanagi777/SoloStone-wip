@@ -1,0 +1,52 @@
+{
+  "scheduleVersion": 1,
+  "default": "acts-v1",
+  "schedules": {
+    "acts-v1": {
+      "deckMin": 10, "deckMax": 50,
+      "acts": [
+        {"id": "I", "name": "The Delve", "floors": 5,
+         "combat": [{"pool": "band1", "count": 4}], "major": {"pool": "band3"},
+         "bossHealth": [30, 32, 34, 36, 40], "bossMana": [0, 0, 0, 0, 1],
+         "treasureAfter": [1, 3], "passiveAtStart": false,
+         "taverns": [3], "modifierAtStart": false,
+         "draft": {"options": 3, "takes": 3},
+         "tavern": {"gold": 2, "offers": 3}},
+        {"id": "II", "name": "Rumble and Heist", "floors": 5,
+         "combat": [{"pool": "band2", "count": 4}], "major": {"pool": "band3"},
+         "bossHealth": [40, 43, 46, 50, 55], "bossMana": [0, 0, 0, 1, 2],
+         "treasureAfter": [2], "passiveAtStart": true,
+         "taverns": [2, 4], "modifierAtStart": true,
+         "draft": {"options": 3, "takes": 2},
+         "tavern": {"gold": 2, "offers": 4}},
+        {"id": "III", "name": "Tombs", "floors": 5,
+         "combat": [{"pool": "leftover", "count": 4}], "major": {"pool": "final"},
+         "bossHealth": [55, 58, 62, 66, 70], "bossMana": [0, 0, 1, 2, 3],
+         "treasureAfter": [2], "passiveAtStart": true,
+         "taverns": [2, 4], "modifierAtStart": true,
+         "draft": {"options": 3, "takes": 2},
+         "tavern": {"gold": 3, "offers": 4}}
+      ],
+      "finale": {"enabled": false, "fixedBosses": [], "heroRelay": false}
+    },
+    "act1": {
+      "deckMin": 10, "deckMax": 50,
+      "acts": [
+        {"id": "I", "name": "The Delve", "floors": 5,
+         "combat": [{"pool": "band1", "count": 4}], "major": {"pool": "band3"},
+         "bossHealth": [30, 32, 34, 36, 40], "bossMana": [0, 0, 0, 0, 1],
+         "treasureAfter": [1, 3], "passiveAtStart": false,
+         "taverns": [3], "modifierAtStart": false,
+         "draft": {"options": 3, "takes": 3},
+         "tavern": {"gold": 2, "offers": 3}}
+      ],
+      "finale": {"enabled": false, "fixedBosses": [], "heroRelay": false}
+    }
+  },
+  "modifiers": [
+    {"id": "mod_iron_bosses", "name": "Iron Bosses", "bossHealthDelta": 5, "extraTreasureAfterMajor": true},
+    {"id": "mod_lean_supply", "name": "Lean Supply", "draftOptionsDelta": -1, "tavernGoldDelta": 1},
+    {"id": "mod_hot_start", "name": "Hot Start", "bossManaDelta": 1, "playerHealthDelta": 10},
+    {"id": "mod_open_road", "name": "Open Road", "openingHandBonus": 1, "bossHealthDelta": 3}
+  ]
+}

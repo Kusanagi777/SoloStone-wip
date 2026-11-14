@@ -73,6 +73,12 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 		_wl_WEAPON_ANOTHERCLASS,
 		_wr_WEAPON_ANOTHERCLASS,
 		HEISTBARON_TOGWAGGLE,
+		/// <summary>A friendly Deathrattle minion that died this game (DAL_377 Nine Lives), to the hand.</summary>
+		FRIENDLY_DEATHRATTLE_DIED,
+		/// <summary>A scripted Choose One card of the class pools (ULD_136 Worthy Expedition).</summary>
+		SCRIPTED_CHOOSE_ONE,
+		/// <summary>A scripted 4-Cost card of the class pools (ULD_188 Golden Scarab).</summary>
+		SCRIPTED_FOUR_COST,
 	}
 
 	public class DiscoverTask : SimpleTask
@@ -163,6 +169,16 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 				choiceAction = _choiceAction;
 			}
 
+			if (game.FiltersGenerated)
+			{
+				// Run games never offer a Secret to a side that excludes them (Game.BlocksGenerated) or a listed id (ExcludedGeneratedIds). A
+				// per-set draw (three sets) needs every set filled, so an emptied set merges the draw into one pool.
+				Game self = game;
+				cardsToDiscover = cardsToDiscover.Select(set => set.Where(card => !self.BlocksGenerated(card)).ToArray()).ToArray();
+				if (cardsToDiscover.Length == 3 && cardsToDiscover.Any(set => set.Length == 0))
+					cardsToDiscover = new[] { cardsToDiscover.SelectMany(set => set).ToArray() };
+			}
+
 			if (cardsToDiscover.Length == 1)
 				cardsToDiscover[0] = cardsToDiscover[0].Distinct().ToArray();
 
@@ -199,6 +215,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 				}
                 // Keep-all selections still count when delivery runs out of hand space.
                 if (IsDiscover) for (; i < result.Length; i++) AutoPlayRules.AdvanceDiscoverQuest(controller);
+                if (IsDiscover) CardSets.DungeonRun.RunPlayerRules.DeliverDiscovered(controller);
 
 				return TaskState.COMPLETE;
 			}
@@ -523,7 +540,29 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 					choiceAction = ChoiceAction.SUMMON;
 					Card[][] cardSets =
 					{
-						controller.GraveyardZone.Where(p => p.ToBeDestroyed && p.Card.Type == CardType.MINION)
+						controller.GraveyardZone.Where(p => p.ToBeDestroyed && p.Card.Type == CardType.MINION && !Actions.ShrineRules.IsCorpse(p))
+							.Select(p => p.Card).ToArray()
+					};
+					return cardSets;
+				}
+				// Phase 6 F10: the class pools still list unscripted ids; these Discovers offer only Implemented cards.
+				case DiscoverType.SCRIPTED_CHOOSE_ONE:
+				{
+					choiceAction = ChoiceAction.HAND;
+					return GetFilter(in format, in controller, list => list.Where(p => p.Implemented && p[GameTag.CHOOSE_ONE] == 1));
+				}
+				case DiscoverType.SCRIPTED_FOUR_COST:
+				{
+					choiceAction = ChoiceAction.HAND;
+					return GetFilter(in format, in controller, list => list.Where(p => p.Implemented && p[GameTag.COST] == 4));
+				}
+				case DiscoverType.FRIENDLY_DEATHRATTLE_DIED:
+				{
+					// Phase 6 F10: the owner's dead minions with a printed Deathrattle (the graveyard is public), one offer per card.
+					choiceAction = ChoiceAction.HAND;
+					Card[][] cardSets =
+					{
+						controller.GraveyardZone.Where(p => p.ToBeDestroyed && p.Card.Type == CardType.MINION && p.Card[GameTag.DEATHRATTLE] == 1 && !Actions.ShrineRules.IsCorpse(p))
 							.Select(p => p.Card).ToArray()
 					};
 					return cardSets;

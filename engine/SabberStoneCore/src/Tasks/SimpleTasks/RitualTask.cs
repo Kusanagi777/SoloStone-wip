@@ -61,6 +61,11 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			// hand and board that aren't silenced
 
 			IPlayable proxyCthun;
+			// A bot search's fair view can mask the set-aside proxy and give its id to another actor (seen in phase 7 S3 shrine
+			// runs: an enchantment): the view then makes a fresh proxy, as for a first ritual, instead of buffing that actor.
+			if (controller.SeenCthun && (!game.IdEntityDic.TryGetValue(controller.ProxyCthun, out var known)
+				|| known is Enchantment || known.Card.Id != "OG_279"))
+				controller.SeenCthun = false;
 			if (!controller.SeenCthun)
 			{
 				proxyCthun = Entity.FromCard(in controller, Cards.FromId("OG_279"));
@@ -88,7 +93,8 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 							Generic.AddEnchantmentBlock(game, BuffEnchantmentCard, (IPlayable) source, p,
 								0, 0, 0);
 
-							((OngoingEnchant) p.OngoingEffect).Count += _amount - 1;
+							// The block can attach nothing (seen in a bot search clone, phase 6 F10 act runs): then there is no count to raise.
+							if (p.OngoingEffect is OngoingEnchant added) added.Count += _amount - 1;
 						}
 
 						break;
@@ -99,7 +105,8 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 						{
 							Generic.AddEnchantmentBlock(game, BuffEnchantmentCard, (IPlayable) source, p,
 								0, 0, 0);
-							((OngoingEnchant) p.OngoingEffect).Count += _amount - 1;
+							// The block can attach nothing (seen in a bot search clone, phase 6 F10 act runs): then there is no count to raise.
+							if (p.OngoingEffect is OngoingEnchant added) added.Count += _amount - 1;
 						}
 						else
 						{

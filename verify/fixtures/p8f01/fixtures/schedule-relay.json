@@ -1,0 +1,144 @@
+{
+  "scheduleVersion": 3,
+  "default": "acts-v2",
+  "about": "Phase 8 (scheduleVersion 3) adds acts-v3h and acts-v3t: encounter pool sets, the provenance-mix draw, anomaly nodes and the finale act. acts-v1, acts-v2 and act1 ship unchanged and keep stamp 2 (\"version\"), so a new run on them is a version-2 run. \"default\" stays acts-v2 until the encounter families have filled the pools and enabled the finales; the close-out then sets \"defaults\" to defaultsPending (a new run rolls one of them from its seed).",
+  "defaultsPending": ["acts-v3h", "acts-v3t"],
+  "poolSets": {
+    "mix-1": ["band1", "enc-t1"],
+    "mix-2": ["band1", "enc-t2"],
+    "mix-3": ["band2", "enc-t2"],
+    "mix-4": ["band2", "enc-t3"],
+    "mix-5": ["leftover", "enc-t3"],
+    "mix-6": ["leftover", "enc-t4"],
+    "major-1": ["band3", "enc-major1"],
+    "major-2": ["band3", "enc-major2"],
+    "major-3": ["final", "enc-major3"]
+  },
+  "schedules": {
+    "acts-v1": {
+      "version": 2,
+      "deckMin": 10, "deckMax": 50,
+      "acts": [
+        {"id": "I", "name": "The Delve", "floors": 5,
+         "combat": [{"pool": "band1", "count": 4}], "major": {"pool": "band3"},
+         "bossHealth": [30, 32, 34, 36, 40], "bossMana": [0, 0, 0, 0, 1],
+         "treasureAfter": [1, 3], "passiveAtStart": false,
+         "taverns": [3], "modifierAtStart": false,
+         "draft": {"options": 3, "takes": 3},
+         "tavern": {"gold": 2, "offers": 3}},
+        {"id": "II", "name": "Rumble and Heist", "floors": 5,
+         "combat": [{"pool": "band2", "count": 4}], "major": {"pool": "band3"},
+         "bossHealth": [40, 43, 46, 50, 55], "bossMana": [0, 0, 0, 1, 2],
+         "treasureAfter": [2], "passiveAtStart": true,
+         "taverns": [2, 4], "modifierAtStart": true,
+         "draft": {"options": 3, "takes": 2},
+         "tavern": {"gold": 2, "offers": 4}},
+        {"id": "III", "name": "Tombs", "floors": 5,
+         "combat": [{"pool": "leftover", "count": 4}], "major": {"pool": "final"},
+         "bossHealth": [55, 58, 62, 66, 70], "bossMana": [0, 0, 1, 2, 3],
+         "treasureAfter": [2], "passiveAtStart": true,
+         "taverns": [2, 4], "modifierAtStart": true,
+         "draft": {"options": 3, "takes": 2},
+         "tavern": {"gold": 3, "offers": 4}}
+      ],
+      "finale": {"enabled": false, "fixedBosses": [], "heroRelay": false}
+    },
+    "acts-v2": {
+      "version": 2,
+      "deckMin": 10, "deckMax": 50,
+      "acts": [
+        {"id": "I", "name": "The Delve", "floors": 5,
+         "combat": [{"pool": "band1", "count": 4}], "major": {"pool": "band3"},
+         "bossHealth": [30, 32, 34, 36, 40], "bossMana": [0, 0, 0, 0, 1],
+         "teammateAfter": [2, 4], "shrineUpgradeAfter": [5],
+         "treasureAfter": [1, 3], "passiveAtStart": false,
+         "taverns": [3], "modifierAtStart": false,
+         "draft": {"options": 3, "takes": 3},
+         "tavern": {"gold": 2, "offers": 3}},
+        {"id": "II", "name": "Rumble and Heist", "floors": 5,
+         "combat": [{"pool": "band2", "count": 4}], "major": {"pool": "band3"},
+         "bossHealth": [40, 43, 46, 50, 55], "bossMana": [0, 0, 0, 1, 2],
+         "teammateAfter": [3], "shrineUpgradeAfter": [5],
+         "treasureAfter": [2], "passiveAtStart": true,
+         "taverns": [2, 4], "modifierAtStart": true,
+         "draft": {"options": 3, "takes": 2},
+         "tavern": {"gold": 2, "offers": 4}},
+        {"id": "III", "name": "Tombs", "floors": 5,
+         "combat": [{"pool": "leftover", "count": 4}], "major": {"pool": "final"},
+         "bossHealth": [55, 58, 62, 66, 70], "bossMana": [0, 0, 1, 2, 3],
+         "teammateAfter": [3], "shrineUpgradeAfter": [],
+         "treasureAfter": [2], "passiveAtStart": true,
+         "taverns": [2, 4], "modifierAtStart": true,
+         "draft": {"options": 3, "takes": 2},
+         "tavern": {"gold": 3, "offers": 4}}
+      ],
+      "finale": {"enabled": false, "fixedBosses": [], "heroRelay": false}
+    },
+    "act1": {
+      "version": 2,
+      "deckMin": 10, "deckMax": 50,
+      "acts": [
+        {"id": "I", "name": "The Delve", "floors": 5,
+         "combat": [{"pool": "band1", "count": 4}], "major": {"pool": "band3"},
+         "bossHealth": [30, 32, 34, 36, 40], "bossMana": [0, 0, 0, 0, 1],
+         "treasureAfter": [1, 3], "passiveAtStart": false,
+         "taverns": [3], "modifierAtStart": false,
+         "draft": {"options": 3, "takes": 3},
+         "tavern": {"gold": 2, "offers": 3}}
+      ],
+      "finale": {"enabled": false, "fixedBosses": [], "heroRelay": false}
+    },
+    "acts-v3h": {
+      "deckMin": 10, "deckMax": 50, "draw": "provenance-mix",
+      "acts": [
+        {"id": "I", "name": "The Delve", "floors": 5,
+         "combat": [{"pool": "mix-1", "count": 2}, {"pool": "mix-2", "count": 2}], "major": {"pool": "major-1"},
+         "bossHealth": [30, 32, 34, 36, 40], "bossMana": [0, 0, 0, 0, 1],
+         "teammateAfter": [2, 4], "shrineUpgradeAfter": [5],
+         "treasureAfter": [1, 3], "passiveAtStart": false,
+         "taverns": [3], "modifierAtStart": false, "anomalyAtStart": true,
+         "twist": {"pool": [], "chance": 0},
+         "draft": {"options": 3, "takes": 3},
+         "tavern": {"gold": 2, "offers": 3}},
+        {"id": "II", "name": "Rumble and Heist", "floors": 5,
+         "combat": [{"pool": "mix-3", "count": 2}, {"pool": "mix-4", "count": 2}], "major": {"pool": "major-2"},
+         "bossHealth": [40, 43, 46, 50, 55], "bossMana": [0, 0, 0, 1, 2],
+         "teammateAfter": [3], "shrineUpgradeAfter": [5],
+         "treasureAfter": [2], "passiveAtStart": true,
+         "taverns": [2, 4], "modifierAtStart": true, "anomalyAtStart": true,
+         "twist": {"pool": [], "chance": 0},
+         "draft": {"options": 3, "takes": 2},
+         "tavern": {"gold": 2, "offers": 4}},
+        {"id": "III", "name": "Tombs", "floors": 5,
+         "combat": [{"pool": "mix-5", "count": 2}, {"pool": "mix-6", "count": 2}], "major": {"pool": "major-3"},
+         "bossHealth": [55, 58, 62, 66, 70], "bossMana": [0, 0, 1, 2, 3],
+         "teammateAfter": [3], "shrineUpgradeAfter": [],
+         "treasureAfter": [2], "passiveAtStart": true,
+         "taverns": [2, 4], "modifierAtStart": true, "anomalyAtStart": true,
+         "twist": {"pool": [], "chance": 0},
+         "draft": {"options": 3, "takes": 2},
+         "tavern": {"gold": 3, "offers": 4}}
+      ],
+      "finale": {"enabled": false, "fixedBosses": [], "heroRelay": false, "tavernBefore": true,
+                 "id": "IV", "name": "The Heist", "bossHealth": [70], "bossMana": [3], "tavern": {"gold": 3, "offers": 4},
+                 "pending": ["dala_43_norroa", "dala_67_vargoth", "dala_69_kalec", "dala_60_khadgar"]}
+    },
+    "acts-v3t": {
+      "deckMin": 10, "deckMax": 50, "draw": "provenance-mix", "sameActsAs": "acts-v3h",
+      "finale": {"enabled": true, "fixedBosses": ["fx_relay"], "heroRelay": true, "tavernBefore": true,
+                 "id": "IV", "name": "The Inner Sanctum", "bossHealth": [70], "bossMana": [3], "tavern": {"gold": 3, "offers": 4},
+                 "pending": ["ulda_67_tekahn"], "pendingHeroRelay": true}
+    }
+  },
+  "rules": [
+    {"id": "DALA_850", "kind": "anomaly", "provenance": "DALA", "scope": "act", "effect": "match", "weight": 1, "status": "admitted"},
+    {"id": "DALA_864", "kind": "anomaly", "provenance": "DALA", "scope": "act", "effect": "match", "weight": 1, "status": "admitted"},
+    {"id": "DALA_866", "kind": "anomaly", "provenance": "DALA", "scope": "act", "effect": "match", "weight": 1, "status": "admitted"}
+  ],
+  "modifiers": [
+    {"id": "mod_iron_bosses", "name": "Iron Bosses", "bossHealthDelta": 5, "extraTreasureAfterMajor": true},
+    {"id": "mod_lean_supply", "name": "Lean Supply", "draftOptionsDelta": -1, "tavernGoldDelta": 1},
+    {"id": "mod_hot_start", "name": "Hot Start", "bossManaDelta": 1, "playerHealthDelta": 10},
+    {"id": "mod_open_road", "name": "Open Road", "openingHandBonus": 1, "bossHealthDelta": 3}
+  ]
+}

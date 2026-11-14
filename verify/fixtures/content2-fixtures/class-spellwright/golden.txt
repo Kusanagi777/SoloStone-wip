@@ -1,0 +1,15 @@
+plan hero=HERO_08 power=CS2_034 deck=KAR_009,KAR_009,CATA_484,JAIL_312,JAIL_312,EX1_608,GVG_123,GVG_123,BOT_604,TIME_856,TB_CoOpv3_005,DAL_182,MEND_506,GIL_664,CATA_556,LOOT_144,TRL_569 boss=cellar_matron matchSeed=467210068
+floor 3 boss=cellar_matron power=CS2_034 matchSeed=467210068
+floor 3 treasure offered=charm_seedling,iron_skin,thrifty_gloves
+floor 3 bundle offered=bundle_mage_battlecry,bundle_mage_elemental,bundle_neutral_deathrattle
+floor 4 boss=frostwarden power=CS2_034 matchSeed=1337886019
+floor 4 bundle offered=bundle_neutral_battlecry,bundle_neutral_beast,bundle_neutral_taunt
+floor 5 boss=golemancer power=CS2_034 matchSeed=1503131896
+floor 5 treasure offered=deep_satchel,ember_brand,warden_golem
+floor 5 bundle offered=bundle_mage_elemental,bundle_neutral_deathrattle,bundle_neutral_murloc
+floor 6 boss=tollkeeper power=CS2_034 matchSeed=848763599
+floor 6 bundle offered=bundle_mage_spells,bundle_neutral_elemental,bundle_neutral_taunt
+floor 7 boss=lady_of_thorns power=CS2_034 matchSeed=32231062
+floor 7 bundle offered=bundle_neutral_beast,bundle_neutral_mechanical,bundle_neutral_murloc
+floor 8 boss=gilded_king power=CS2_034 matchSeed=1896408436
+end phase=Victory deck=33 treasures=deep_satchel,frost_lantern,charm_blooming

@@ -68,6 +68,17 @@ namespace SabberStoneCore.Model
 
 		private readonly GameConfig _gameConfig;
 
+		// Entity id of each GameConfig.Player1Deck card, by its index in the list as given (a Dungeon Run deck slot). Immutable
+		// once built, so a copied game shares it.
+		private int[] _player1DeckSlotIds;
+
+		/// <summary>
+		/// The entity id of each <see cref="GameConfig.Player1Deck"/> card, indexed by its position in the list as the config
+		/// gave it (before an unshuffled deck is reversed): the Dungeon Run's per-card records find their entity in whatever zone
+		/// it is now (DungeonRunSetup.ApplyAfterStart). Empty when player 1 had no configured deck.
+		/// </summary>
+		public IReadOnlyList<int> Player1DeckSlotIds => _player1DeckSlotIds ?? Array.Empty<int>();
+
 		private Controller _currentPlayer;
 
 		/// <summary>
@@ -125,6 +136,88 @@ namespace SabberStoneCore.Model
 
 		internal void RestoreOfflinePools(OfflinePoolManifest manifest) => OfflinePools = manifest;
 		internal bool LegacyPoolReplay => _gameConfig.LegacyPoolReplay;
+
+		/// <summary>
+		/// Generated cards never include Secrets in this game, whoever generates (<see cref="GameConfig.ExcludeGeneratedSecrets"/>:
+		/// both players' flags are set).
+		/// </summary>
+		public bool ExcludeGeneratedSecrets => _gameConfig.ExcludeGeneratedSecrets;
+
+		/// <summary>
+		/// Generation by player <paramref name="playerId"/> (1 or 2) never yields a Secret in this game
+		/// (<see cref="GameConfig.Player1ExcludeGeneratedSecrets"/>, <see cref="GameConfig.Player2ExcludeGeneratedSecrets"/>).
+		/// </summary>
+		public bool ExcludesGeneratedSecretsFor(int playerId) => _gameConfig.ExcludesGeneratedSecrets(playerId);
+
+		/// <summary>
+		/// Generation by the current generating controller never yields a Secret; while a task generates for the other side
+		/// (<see cref="GenerateFor"/>), the receiver's rule applies too.
+		/// </summary>
+		internal bool ExcludesGeneratedSecretsNow => _gameConfig.ExcludesGeneratedSecrets(GeneratorPlayer)
+			|| OtherReceiver != 0 && _gameConfig.ExcludesGeneratedSecrets(OtherReceiver);
+
+		/// <summary>Card ids generation never yields in this game, whoever generates (<see cref="GameConfig.ExcludedGeneratedIds"/>).</summary>
+		public IReadOnlyCollection<string> ExcludedGeneratedIds => _gameConfig.ExcludedGeneratedIds;
+
+		// The generating controller: the controller of the task being processed, else the player whose turn it is.
+		// Run matches block some ids only for one side's generation (GameConfig.Player2ExcludedGeneratedIds: the boss).
+		private int GeneratorPlayer => (TaskQueue?.CurrentController ?? _currentPlayer)?.PlayerId ?? 0;
+
+		// The player a generated card goes to while a task generates for a side other than its controller (Spellslinger's card
+		// for the opponent, Merch Seller's spell for the opponent's deck); 0 outside such a read. Set only for the duration of
+		// the pool read (GenerateFor), never across tasks, so a clone starts without it.
+		[NonSerialized] private int _generationReceiver;
+		private int OtherReceiver => _generationReceiver != 0 && _generationReceiver != GeneratorPlayer ? _generationReceiver : 0;
+
+		/// <summary>
+		/// Marks the generation inside the returned scope as made for <paramref name="receiver"/> (null: the generator itself).
+		/// While the receiver is the other side, a card passes the generation filter only when both sides' rules allow it, so
+		/// one side's effects never give the other a card that side excludes (a run boss: a Secret, a boss-only rejection).
+		/// </summary>
+		internal GenerationReceiverScope GenerateFor(Controller receiver) => new GenerationReceiverScope(this, receiver?.PlayerId ?? 0);
+
+		internal readonly struct GenerationReceiverScope : IDisposable
+		{
+			private readonly Game _game;
+			private readonly int _previous;
+			internal GenerationReceiverScope(Game game, int receiver)
+			{
+				_game = game;
+				_previous = game._generationReceiver;
+				if (receiver != 0) game._generationReceiver = receiver;
+			}
+			public void Dispose() { if (_game != null) _game._generationReceiver = _previous; }
+		}
+
+		private bool BlocksGeneratedFor(Card card, int player) =>
+			card.IsSecret && _gameConfig.ExcludesGeneratedSecrets(player) || _gameConfig.ExcludesGenerated(card.Id, player);
+
+		/// <summary>
+		/// True when <paramref name="card"/> may not be generated in this game by the current generating controller, or, inside
+		/// <see cref="GenerateFor"/> the other side, for that receiver.
+		/// </summary>
+		internal bool BlocksGenerated(Card card) => card != null &&
+			(BlocksGeneratedFor(card, GeneratorPlayer) || OtherReceiver != 0 && BlocksGeneratedFor(card, OtherReceiver));
+
+		/// <summary>
+		/// Phase 8: <paramref name="c"/> is a run boss whose encounter row turned its generated Secrets on (player 2 generates
+		/// under its own id list, GameConfig.Player2ExcludedGeneratedIds, with GameConfig.Player2ExcludeGeneratedSecrets off). That
+		/// list holds every Secret, because a boss's Discovers and random cards never yield one; an effect that names "a random
+		/// &lt;class&gt; Secret" reads DungeonRunContent.RandomSecretCandidates instead (SpecificTask.CastRandomSecret). False in
+		/// every game outside such a fight.
+		/// </summary>
+		internal bool BossNamesSecrets(Controller c) =>
+			c.PlayerId == 2 && !_gameConfig.ExcludesGeneratedSecrets(2) && _gameConfig.Player2ExcludedGeneratedIds.Count > 0;
+
+		/// <summary>Generation is filtered in this game (Secrets, listed ids, or both).</summary>
+		internal bool FiltersGenerated => _gameConfig.ExcludesAnyGeneratedSecrets || _gameConfig.HasExcludedGeneratedIds;
+
+		/// <summary>True when generation is filtered by listed ids, for any controller.</summary>
+		internal bool FiltersGeneratedIds => _gameConfig.HasExcludedGeneratedIds;
+
+		/// <summary>Stable key of what <see cref="BlocksGenerated"/> filters now, for filtered-pool caches.</summary>
+		internal string GeneratedFilterKey => (ExcludesGeneratedSecretsNow ? "S:" : "-:") + _gameConfig.ExcludedGeneratedKey(GeneratorPlayer)
+			+ (OtherReceiver != 0 ? "+" + _gameConfig.ExcludedGeneratedKey(OtherReceiver) : "");
 
 		internal Util.DeepCloneableRandom Random { get; set; }
 
@@ -365,11 +458,17 @@ namespace SabberStoneCore.Model
 
 			if (setupHeroes)
 			{
-				_players[0].AddHeroAndPower(gameConfig.Player1HeroCard ?? Cards.HeroCard(gameConfig.Player1HeroClass));
-				_players[0].BaseClass = _players[0].HeroClass;
+				ValidateRunSetup(gameConfig);
 
-				_players[1].AddHeroAndPower(gameConfig.Player2HeroCard ?? Cards.HeroCard(gameConfig.Player2HeroClass));
+				_players[0].AddHeroAndPower(gameConfig.Player1HeroCard ?? Cards.HeroCard(gameConfig.Player1HeroClass),
+					gameConfig.Player1HeroPower);
+				_players[0].BaseClass = _players[0].HeroClass;
+				if (gameConfig.Player1HeroHealth is int player1Health) _players[0].Hero.BaseHealth = player1Health;
+
+				_players[1].AddHeroAndPower(gameConfig.Player2HeroCard ?? Cards.HeroCard(gameConfig.Player2HeroClass),
+					gameConfig.Player2HeroPower);
 				_players[1].BaseClass = _players[1].HeroClass;
+				if (gameConfig.Player2HeroHealth is int player2Health) _players[1].Hero.BaseHealth = player2Health;
 			}
 
 			TaskQueue = new TaskQueue(this);
@@ -377,17 +476,23 @@ namespace SabberStoneCore.Model
 			OneTurnEffects = new List<(int, IEffect)>();
 			OneTurnEffectEnchantments = new List<Enchantment>();
 
-			if (!gameConfig.Shuffle && !gameConfig.DrawWithRandom)
+			bool reversedDecks = !gameConfig.Shuffle && !gameConfig.DrawWithRandom;
+			if (reversedDecks)
 			{
 				gameConfig.Player1Deck?.Reverse();
 				gameConfig.Player2Deck?.Reverse();
 			}
 
 			// setting up the decks ...
+			int player1DeckCount = gameConfig.Player1Deck?.Count ?? 0, player1Created = 0;
+			if (player1DeckCount > 0) _player1DeckSlotIds = new int[player1DeckCount];
 			gameConfig.Player1Deck?.ForEach(p =>
 			{
 				Player1.DeckCards.Add(p);
-				FromCard(Player1, p, null, Player1.DeckZone);
+				IPlayable created = FromCard(Player1, p, null, Player1.DeckZone);
+				// The slot is the card's index in the list as given: an unshuffled deck was just reversed.
+				_player1DeckSlotIds[reversedDecks ? player1DeckCount - 1 - player1Created : player1Created] = created.Id;
+				player1Created++;
 			});
 			gameConfig.Player2Deck?.ForEach(p =>
 			{
@@ -436,7 +541,9 @@ namespace SabberStoneCore.Model
 			GamesEventManager = new GameEventManager(this);
 
 			OfflinePools = game.OfflinePools;
+			_player1DeckSlotIds = game._player1DeckSlotIds;
 			_gameConfig = game._gameConfig.Clone();
+			CopyRunState(game);
 			EnableCorpses = game.EnableCorpses;
 			_gameConfig.EnableCorpses = EnableCorpses;
 			_gameConfig.Logging = logging;
@@ -523,8 +630,10 @@ namespace SabberStoneCore.Model
 				Map(pair.Value.ActivatedTrigger, IdEntityDic[pair.Key].ActivatedTrigger);
 			for (int i = 0; i < source.Auras.Count; i++) Map(source.Auras[i], Auras[i]);
 			// Ancillary triggers are registered independently of ActivatedTrigger.
+			// A trigger whose owner left the registry (a fair view dropped the hidden entity) has nothing to clone onto: it is
+			// left out of the copy rather than failing the clone.
 			foreach (Trigger trigger in source.Triggers)
-				if (!copies.ContainsKey(trigger)) Map(trigger, trigger.Clone(this));
+				if (!copies.ContainsKey(trigger) && trigger.HasLiveSource(source)) Map(trigger, trigger.Clone(this));
 			TriggerManager.RestoreCloneSubscriptions(source.TriggerManager, copies, this);
 			foreach (var pair in source.IdEntityDic)
 				if (pair.Value is Character character)
@@ -581,6 +690,9 @@ namespace SabberStoneCore.Model
         public bool Process(PlayerTask gameTask)
         {
             if (AutonomousTurnRules.IsActive(this) && !(gameTask is ConcedeTask)) return false;
+            // A Dungeon Run forced pass (ULDA_102 Disks of Swiftness): only End Turn, a choice already open, or a concession.
+            if (gameTask?.Controller != null && !(gameTask is EndTurnTask || gameTask is ChooseTask || gameTask is ConcedeTask)
+                && CardSets.DungeonRun.RunPlayerRules.MustPass(ControllerById(gameTask.Controller.Id))) return false;
             bool result = Process(gameTask, preserveHistory: false);
             if (result) AutonomousTurnRules.Run(this);
             return result;
@@ -747,6 +859,7 @@ namespace SabberStoneCore.Model
         internal void CheckDeadHeroes()
         {
             Actions.CorpseRules.ResurrectHeroes(this);
+            Actions.EncounterRules.ResolveHeroForms(this);
 			// check dead heroes here again (TODO)
 			if (State != State.COMPLETE)
 			{
@@ -880,14 +993,25 @@ namespace SabberStoneCore.Model
 			{
 				// quest draw if there is
 				IPlayable quest = p.DeckZone.FirstOrDefault(q => q is Spell spell && spell.IsQuest && spell.Card[(GameTag)1192] == 0);
-				if (quest != null) Generic.Draw(p, quest); else Deal(p);
-				Deal(p);
-				Deal(p);
+				// Run-mode opening flags (player 1 only): those cards fill the base opening slots the quest leaves, in slot
+				// order, before the ordinary deals. Empty for every game without flags, which then deals exactly as before.
+				Queue<IPlayable> openers = p == Player1 ? OpeningFlagged(p, quest, (p != FirstPlayer ? 4 : 3) - (quest != null ? 1 : 0)) : null;
+				void DealNext(Controller c)
+				{
+					if (openers != null && openers.Count > 0) Generic.Draw(c, openers.Dequeue()); else Deal(c);
+				}
+				if (quest != null) Generic.Draw(p, quest); else DealNext(p);
+				DealNext(p);
+				DealNext(p);
+
+				// Run-mode opening bonus (e.g. a Dungeon Run treasure): dealt like any opening card, so it can be mulliganed.
+				int bonus = p == Player1 ? _gameConfig.Player1OpeningHandBonus : _gameConfig.Player2OpeningHandBonus;
+				for (int i = 0; i < bonus; i++) Deal(p);
 
 				if (p != FirstPlayer)
 				{
 					// 4th card for second player
-					Deal(p);
+					DealNext(p);
 
 					IPlayable coin = FromCard(FirstPlayer.Opponent, Cards.FromId("GAME_005"), new EntityData
 					{
@@ -909,6 +1033,37 @@ namespace SabberStoneCore.Model
 				PowerHistory.Add(PowerHistoryBuilder.BlockEnd());
 
 			NextStep = _gameConfig.SkipMulligan ? Step.MAIN_BEGIN : Step.BEGIN_MULLIGAN;
+		}
+
+		/// <summary>
+		/// Player 1's opening-flag cards (<see cref="GameConfig.Player1OpeningSlots"/>) still in the deck, in slot order, at most
+		/// <paramref name="room"/> of them: the quest keeps its slot (engine priority, as on retail), and a self-removing Start
+		/// of Game source is never dealt (<see cref="StartOfGameRules"/>). Flags past the room stay in the deck (logged). Null
+		/// when no slot is flagged; reads no RNG either way.
+		/// </summary>
+		private Queue<IPlayable> OpeningFlagged(Controller p, IPlayable quest, int room)
+		{
+			int[] slots = _gameConfig.Player1OpeningSlots;
+			if (slots == null || slots.Length == 0 || _player1DeckSlotIds == null) return null;
+			var openers = new Queue<IPlayable>();
+			foreach (int slot in slots)
+			{
+				if (slot < 0 || slot >= _player1DeckSlotIds.Length) continue;
+				IPlayable entity = IdEntityDic[_player1DeckSlotIds[slot]];
+				if (entity == null || entity.Zone != p.DeckZone || entity == quest || openers.Contains(entity)) continue;
+				if (StartOfGameRules.NeverDealt(entity))
+				{
+					Log(LogLevel.INFO, BlockType.PLAY, "Game", !Logging ? "" : $"Opening flag {entity} skipped: a self-removing Start of Game source.");
+					continue;
+				}
+				if (openers.Count >= room)
+				{
+					Log(LogLevel.INFO, BlockType.PLAY, "Game", !Logging ? "" : $"Opening flag {entity} stays in the deck: no opening slot left.");
+					continue;
+				}
+				openers.Enqueue(entity);
+			}
+			return openers;
 		}
 
 		/// <summary>
@@ -938,6 +1093,69 @@ namespace SabberStoneCore.Model
 		}
 
 		/// <summary>
+		/// Rejects run-mode hero setup the client could not show or the rules could not hold,
+		/// before any entity is created.
+		/// </summary>
+		private static void ValidateRunSetup(GameConfig config)
+		{
+			void Power(Card power, int player)
+			{
+				if (power != null && power.Type != CardType.HERO_POWER)
+					throw new ArgumentException($"Player{player}HeroPower {power.Id} is not a hero power card.");
+			}
+			void Health(int? health, int player)
+			{
+				if (health is int value && value < 1)
+					throw new ArgumentOutOfRangeException($"Player{player}HeroHealth", value, "Hero health must be at least 1.");
+			}
+			void Bonus(int bonus, int player)
+			{
+				// The player the config names as first holds 3 cards and no Coin: one more extra card fits (ULDA_715 Bountiful).
+				int max = config.StartPlayer == player ? GameConfig.MaxFirstOpeningHandBonus : GameConfig.MaxOpeningHandBonus;
+				if (bonus < 0 || bonus > max)
+					throw new ArgumentOutOfRangeException($"Player{player}OpeningHandBonus", bonus,
+						$"Opening hand bonus must be 0 to {max}.");
+			}
+			Power(config.Player1HeroPower, 1);
+			Power(config.Player2HeroPower, 2);
+			Health(config.Player1HeroHealth, 1);
+			Health(config.Player2HeroHealth, 2);
+			Bonus(config.Player1OpeningHandBonus, 1);
+			Bonus(config.Player2OpeningHandBonus, 2);
+			int[] slots = config.Player1OpeningSlots;
+			if (slots != null && slots.Length > 0)
+			{
+				if (slots.Length > GameConfig.MaxOpeningSlots)
+					throw new ArgumentOutOfRangeException(nameof(GameConfig.Player1OpeningSlots), slots.Length,
+						$"At most {GameConfig.MaxOpeningSlots} opening-flag slots.");
+				int count = config.Player1Deck?.Count ?? 0;
+				foreach (int slot in slots)
+					if (slot < 0 || slot >= count)
+						throw new ArgumentOutOfRangeException(nameof(GameConfig.Player1OpeningSlots), slot, $"Opening-flag slot outside the {count}-card deck.");
+				if (slots.Distinct().Count() != slots.Length)
+					throw new ArgumentException("Opening-flag slots repeat.", nameof(GameConfig.Player1OpeningSlots));
+			}
+		}
+
+		/// <summary>
+		/// A starting hero power registered as a start-of-game passive (Dungeon Run boss powers) runs its
+		/// power once, after Start of Game effects, first player first. Hero cards played later keep the
+		/// existing activation in <see cref="Actions.Generic"/>'s play path.
+		/// </summary>
+		private void ActivateStartingPassiveHeroPowers()
+		{
+			foreach (Controller player in new[] { FirstPlayer, FirstPlayer.Opponent })
+			{
+				HeroPower power = player.Hero?.HeroPower;
+				if (power == null || !HeroPower.ActivatesAtGameStart(power.Card)) continue;
+				if (History) PowerHistory.Add(PowerHistoryBuilder.BlockStart(BlockType.TRIGGER, power.Id, "", 0, 0));
+				power.ActivateTask();
+				ProcessTasks();
+				if (History) PowerHistory.Add(PowerHistoryBuilder.BlockEnd());
+			}
+		}
+
+		/// <summary>
 		/// Part of the state machine.
 		/// Runs when STATE = RUNNING &amp;&amp; NEXTSTEP = MAIN_BEGIN
 		/// </summary>
@@ -949,6 +1167,8 @@ namespace SabberStoneCore.Model
 			//Generic.DrawCard(FirstPlayer.Opponent, Cards.FromId("GAME_005"));
 
 			StartOfGameRules.Resolve(this);
+			Actions.EncounterRules.ResolveStart(this);
+			ActivateStartingPassiveHeroPowers();
 			if (Player1[NativeTailRules.NozdormuEnabled] != 0) Player1.TimeOut = 15;
 			if (Player2[NativeTailRules.NozdormuEnabled] != 0) Player2.TimeOut = 15;
 
@@ -1007,7 +1227,8 @@ namespace SabberStoneCore.Model
 			// De-activate combo buff
 			CurrentPlayer.IsComboActive = false;
 
-			CurrentPlayer.SecretZone.ForEach(s => s.IsExhausted = true);
+			// A Secret that can trigger on its owner's turn stays live (OwnTurnSecretRules).
+			CurrentPlayer.SecretZone.ForEach(s => s.IsExhausted = Actions.OwnTurnSecretRules.ExhaustedOnOwnTurn(s));
 
 			CurrentPlayer.NumMinionsPlayerKilledThisTurn = 0;
 			CurrentOpponent.NumMinionsPlayerKilledThisTurn = 0;
@@ -1075,8 +1296,10 @@ namespace SabberStoneCore.Model
 			// remove temp mana
 			c.TemporaryMana = 0;
 
-			// overload
-			c.OverloadLocked = c.OverloadOwed;
+			// overload: never more crystals locked than the player has (Hearthstone drops the excess). Before phase 7 only a
+			// player's own Overload could be owed, which never exceeded its crystals here; TRLA_160 Naga Tonguelasher overloads
+			// the opponent's crystals and can owe more.
+			c.OverloadLocked = Math.Min(c.OverloadOwed, Math.Max(0, c.BaseMana));
 			c.OverloadOwed = 0;
             TemporaryRules.ControllerStart(c);
 
@@ -1379,6 +1602,8 @@ namespace SabberStoneCore.Model
 					Facts.Died(minion, deathCosts[minion.Id]);
 					TriggerManager.OnDeathTrigger(minion);
 					bool reborn = minion[GameTag.REBORN] == 1 && minion[GameTag.HAS_BEEN_REBORN] == 0;
+					// A run shrine (phase 7) goes dormant in the slot it leaves (Actions.ShrineRules).
+					int shrineSlot = minion[Actions.ShrineRules.RunShrine] == 1 ? minion.ZonePosition : -1;
 
 					minion.Zone.Remove(minion);
 
@@ -1386,6 +1611,7 @@ namespace SabberStoneCore.Model
 						minion.ActivateTask(PowerActivation.DEATHRATTLE);
 
 					minion.Controller.GraveyardZone.Add(minion);
+					if (shrineSlot >= 0) Actions.ShrineRules.ReplaceWithDormant(minion, shrineSlot);
 					minion.Controller.NumFriendlyMinionsThatDiedThisTurn++;
 					CurrentPlayer.NumMinionsPlayerKilledThisTurn++;
 					NumMinionsKilledThisTurn++;
@@ -1405,6 +1631,7 @@ namespace SabberStoneCore.Model
 			}
 
             Actions.CorpseRules.ResurrectHeroes(this);
+            Actions.EncounterRules.ResolveHeroForms(this);
 
 			if (Player1.Hero.ToBeDestroyed)
 			{
@@ -1475,6 +1702,7 @@ namespace SabberStoneCore.Model
             Actions.Generic.RefreshRetainedSpells(this);
             CardSets.Client.Sets.Isiset.Refresh(this);
             Actions.DormantRules.CheckConditions(this);
+            Actions.EncounterRules.RefreshCosts(this);
             RefreshHistoryDisplays();
         }
 
@@ -1565,6 +1793,11 @@ namespace SabberStoneCore.Model
 			} while (DeadMinions.Count != 0 || DeadBoardObjects.Count != 0);
 			TaskQueue.EndEvent();
             if (Actions.LifecycleRules.ContinueDeaths(this)) DeathProcessingAndAuraUpdate();
+            // Deathrattles resolved above can summon. Fire their SUMMON ("whenever you summon") triggers now, so a
+            // single death pass (combat) does not leave them queued until the next player action.
+            else if (SummonedMinions.Count != 0 && TriggerManager.HasOnSummonTrigger
+                && Player1.Choice == null && Player2.Choice == null && !Resolution.HasSuspendedEffect)
+                DeathProcessingAndAuraUpdate();
 
 			AuraUpdate();	// Aura Update (Other) step(Not implemented)
             Actions.Generic.ResolveDeferredSummons(this);

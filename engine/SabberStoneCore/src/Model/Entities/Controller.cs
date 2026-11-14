@@ -405,6 +405,8 @@ namespace SabberStoneCore.Model.Entities
 
 			//	EndTurnTask
 			var allOptions = new List<PlayerTask>(20) { EndTurnTask.Any(this) };
+			// A Dungeon Run forced pass (ULDA_102 Disks of Swiftness): End Turn is the only option.
+			if (CardSets.DungeonRun.RunPlayerRules.MustPass(this)) return allOptions;
 
 			#region PlayCardTasks
 			int mana = RemainingMana;
@@ -458,6 +460,15 @@ namespace SabberStoneCore.Model.Entities
 					if (heroPowerCard.IsPlayableByCardReq(this))
 					{
 						Character[] targets = GetTargets(heroPowerCard);
+						// A hero power's own target rule (phase 8 family 10: Nab never aims at a run shrine), as a hand card's below and as Playable.TargetingRequirements.
+						if (targets != null && heroPowerCard.SourceTargetingPredicate != null)
+						{
+							var source = power;
+							targets = targets.Where(t => heroPowerCard.SourceTargetingPredicate(source, t)).ToArray();
+						}
+						// A run shrine cannot change controller (phase 7): a take-control hero power is never offered on it either (phase 8 family 08, LOOTA_BOSS_51p).
+						if (targets != null && targets.Length != 0 && heroPowerCard.TakesControlOfTarget)
+							targets = targets.Where(t => !Actions.ShrineRules.BlocksControl(t)).ToArray();
 						if (targets != null)
 							for (int i = 0; i < targets.Length; i++)
 								allOptions.Add(HeroPowerTask.Any(this, targets[i], skipPrePhase: true, heroPowerId: powerId));
@@ -602,6 +613,9 @@ namespace SabberStoneCore.Model.Entities
                         var source = playable;
                         targets = targets.Where(t => card.SourceTargetingPredicate(source, t)).ToArray();
                     }
+                    // A run shrine cannot change controller (phase 7): a take-control play is never offered on it (Card.TargetingRequirements).
+                    if (targets != null && targets.Length != 0 && card.TakesControlOfTarget)
+                        targets = targets.Where(t => !Actions.ShrineRules.BlocksControl(t)).ToArray();
 
 					// Card doesn't require any targets
 					if (targets == null)

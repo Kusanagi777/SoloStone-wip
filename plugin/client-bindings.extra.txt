@@ -447,10 +447,10 @@ site NativeTurnTimerOption.Initialize | Patch | (target not known from the IL) #
 row F DeckTemplatePicker m_currentSelectedDeck # recipe guide: which template is selected
 site NativeUIProbe+<>c__DisplayClass162_0.<CurrentRecipeGuide>b__0 | Field | (unknown type) # FindCurrentRecipeGuide reads the picker's selected template; recipe guide only
 
-# NativeUIProbe+<MassBoosterOpened>d__373.MoveNext
+# NativeUIProbe+<MassBoosterOpened>d__374.MoveNext
 row F PackOpeningDirector m_massPackOpeningHighlights # mass pack opening: the widgets must have loaded before the receipt is fed
 row F PackOpeningDirector m_massPackOpeningSummary # mass pack opening: the widgets must have loaded before the receipt is fed
-site NativeUIProbe+<MassBoosterOpened>d__373.MoveNext | Field | (unknown type) # director is a local typed PackOpeningDirector; rows above. A miss fails the pack opening closed
+site NativeUIProbe+<MassBoosterOpened>d__374.MoveNext | Field | (unknown type) # director is a local typed PackOpeningDirector; rows above. A miss fails the pack opening closed
 
 # NativeUIProbe.Batch
 row F NetCache+NetCacheBatchRequest m_requests # cache batch requests are made non-reloading while the probe is active

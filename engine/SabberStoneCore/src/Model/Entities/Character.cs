@@ -354,6 +354,20 @@ namespace SabberStoneCore.Model.Entities
 			if (minion != null && (minion.Zone.Type != Enums.Zone.PLAY || minion.Untouchable))
 				return 0;
 
+			// TRL_535 Snapjaw Shellfighter: an adjacent Shellfighter takes the hit instead (phase 6 F10, CombatRules.Shellfighter).
+			if (minion != null && !outgoingApplied && damage > 0 && Actions.CombatRules.Shellfighter(minion) is Minion shellfighter)
+				return shellfighter.TakeDamage(source, damage, combat, outgoingApplied: true);
+
+			// TRLA_179 Hir'eek's Hunger (phase 7 S3): damage to its owner's hero on the owner's turn hits the enemy hero instead.
+			if (hero != null && damage > 0 && !IsImmune && CardSets.DungeonRun.DungeonRunShrines.HungerRedirect(hero) is Hero enemy)
+				return CardSets.DungeonRun.DungeonRunShrines.Redirect(enemy, source, damage);
+
+			// ULDA_714 In the Face (phase 8 family 06): "Heroes take double damage" (EncounterRules.HeroDamageDouble), before the cap below.
+			if (hero != null && damage > 0) damage = Actions.EncounterRules.HeroDamageTaken(hero, damage);
+
+			// LOE_119 Animated Armor (phase 8 family 02): "Your hero can only take 1 damage at a time" (EncounterRules.HeroDamageCap).
+			if (hero != null && damage > 1) damage = Actions.EncounterRules.CapHeroDamage(hero, damage);
+
 			using var damageHistory = _history ? game.PowerHistory.EffectSource(source, this) : null;
             using var visual = _history && !combat ? game.PowerHistory.Visual(game,
                 Presentation.VisualPhase.Damage, source, this) : null;
@@ -492,12 +506,18 @@ namespace SabberStoneCore.Model.Entities
 			game.TriggerManager.OnDealDamageTrigger(source);
 
 			// Check if the source is Overkill
-			if (source.HasOverkill && source.Controller == game.CurrentPlayer && Health < 0)
+			if (Health < 0 && source.Controller == game.CurrentPlayer && source.HasOverkill)
 			{
 				game.Log(LogLevel.VERBOSE, BlockType.TRIGGER, "TakeDamage", !_logging ? "" : $"{source}' Overkill is triggered.");
 
-				ISimpleTask task = source is Hero h ? h.Weapon.Card.Power.OverkillTask : source.Card.Power.OverkillTask;
-				game.TaskQueue.Enqueue(task, source.Controller, source, null);
+				// The card's own Overkill (a hero's weapon's), then every Overkill an aura grants the minion (OverkillRules).
+				if (source is Hero || source.Card.Overkill)
+				{
+					ISimpleTask task = source is Hero h ? h.Weapon.Card.Power.OverkillTask : source.Card.Power.OverkillTask;
+					game.TaskQueue.Enqueue(task, source.Controller, source, null);
+				}
+				foreach (ISimpleTask granted in Actions.OverkillRules.Granted(source))
+					game.TaskQueue.Enqueue(granted, source.Controller, source, null);
 			}
 
 			game.ProcessTasks();
@@ -587,6 +607,8 @@ namespace SabberStoneCore.Model.Entities
 		/// <param name="armor"></param>
 		public void GainArmor(IPlayable source, int armor)
 		{
+			// TRLA_175 Seasoned Pitbrawler: "gain twice as much", one gain (DungeonRunShrines.ArmorGain).
+			armor = CardSets.DungeonRun.DungeonRunShrines.ArmorGain(this, armor);
 			Game.Log(LogLevel.INFO, BlockType.ACTION, "Character", !Game.Logging? "":$"{this} gaining armor for {armor}.");
 			Armor += armor;
 			EventMetaData temp = Game.CurrentEventData;
@@ -999,7 +1021,10 @@ namespace SabberStoneCore.Model.Entities
 
 		public bool HasStealth
 		{
-			get => _modifiedStealth ?? (_modifiedStealth = Card.Stealth).Value;
+			// A minion's own Stealth, or Stealth an aura grants it (LOOTA_832 Cloak of Invisibility: permanent, so neither an
+			// attack nor a Silence, which clear the own flag, removes it while the aura lasts).
+			get => (_modifiedStealth ?? (_modifiedStealth = Card.Stealth).Value)
+				|| (this is Minion && AuraEffects != null && AuraEffects[GameTag.STEALTH] > 0);
 			set
 			{
 				base[GameTag.STEALTH] = value ? 1 : 0;

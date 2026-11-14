@@ -117,6 +117,20 @@ namespace SabberStoneCore.Loader
 		public static readonly AvailabilityPredicate ReqFriendlyMinionDiedThisGame
 			= (c, card) => c.GraveyardZone.Any(q => q is Minion m && m.ToBeDestroyed);
 
+		/// <summary>REQ_FRIENDLY_DEATHRATTLE_MINION_DIED_THIS_GAME (DAL_377 Nine Lives): a friendly minion with a printed Deathrattle died.</summary>
+		public static readonly AvailabilityPredicate ReqFriendlyDeathrattleMinionDiedThisGame
+			= (c, card) => c.GraveyardZone.Any(q => q is Minion m && m.ToBeDestroyed && m.Card[GameTag.DEATHRATTLE] == 1);
+
+		/// <summary>REQ_TARGET_IF_AVAILABLE_AND_MINIMUM_SPELLS_PLAYED_THIS_TURN (TRL_522 Wartbringer): the owner played at least
+		/// <paramref name="value"/> spells this turn.</summary>
+		public static AvailabilityPredicate MinimumSpellsPlayedThisTurn(int value)
+			=> (c, card) =>
+			{
+				int spells = 0;
+				foreach (Card played in c.CardsPlayedThisTurn) if (played.Type == CardType.SPELL) spells++;
+				return spells >= value;
+			};
+
 		public static AvailabilityPredicate ReqFriendlyMinionOfRaceDiedThisTurn(Race race)
 		{
 			return (c, card) =>

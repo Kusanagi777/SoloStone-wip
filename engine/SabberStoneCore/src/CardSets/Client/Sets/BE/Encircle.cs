@@ -21,7 +21,9 @@ namespace SabberStoneCore.CardSets.Client.Sets
                 for (int i = 0; i < 5 && !c.BoardZone.IsFull; i++) ctx.Summon("BE_873t");
                 // A full enemy board has no slot: no pick and no RNG (as Undefeated Champion).
                 if (c.Opponent.BoardZone.IsFull) return;
-                var chosen = ctx.PickRandomCard(BEPools.OneCostMinion(), recipeDbfId: DbfId);
+                Card chosen;
+                // The minion is the opponent's: both sides' run generation filters apply (Game.GenerateFor).
+                using (g.GenerateFor(c.Opponent)) chosen = ctx.PickRandomCard(BEPools.OneCostMinion(), recipeDbfId: DbfId);
                 if (chosen == null) return;
                 var generated = Entity.FromCard(c.Opponent, chosen);
                 generated[GameTag.DISPLAYED_CREATOR] = s.Id;

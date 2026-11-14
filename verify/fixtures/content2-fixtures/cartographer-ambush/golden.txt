@@ -1,0 +1,17 @@
+plan hero=HERO_08a power=carto_ambush deck=KAR_009,CORE_BT_701,CATA_484,CORE_EX1_278,JAIL_312,EX1_522,GVG_123,CFM_636,BOT_604,AT_028,TB_CoOpv3_011,TB_CoOpv3_001,DAL_182,MEND_506,GIL_664 boss=mire_brute matchSeed=1414901621
+floor 2 boss=mire_brute power=carto_ambush matchSeed=1414901621
+floor 2 bundle offered=bundle_neutral_beast,bundle_neutral_murloc,bundle_rogue_spells
+floor 3 boss=lantern_thief power=carto_ambush matchSeed=90174819
+floor 3 treasure offered=champions_banner,mending_charm,stoneskin_idol
+floor 3 bundle offered=bundle_neutral_battlecry,bundle_rogue_deathrattle,bundle_rogue_weapons
+floor 4 boss=pit_champion power=carto_ambush matchSeed=564557304
+floor 4 bundle offered=bundle_neutral_murloc,bundle_neutral_taunt,bundle_rogue_battlecry
+floor 5 boss=golemancer power=carto_ambush matchSeed=2105819241
+floor 5 treasure offered=charm_seedling,lucky_coin,old_map
+floor 5 bundle offered=bundle_mage_spells,bundle_neutral_mechanical,bundle_rogue_spells
+floor 6 boss=storm_herald power=carto_ambush matchSeed=96598921
+floor 6 bundle offered=bundle_mage_battlecry,bundle_mage_elemental,bundle_rogue_deathrattle
+floor 7 boss=ember_matron power=carto_ambush matchSeed=423654074
+floor 7 bundle offered=bundle_neutral_elemental,bundle_rogue_battlecry,bundle_rogue_weapons
+floor 8 boss=gilded_king power=carto_ambush matchSeed=801600973
+end phase=Victory deck=34 treasures=champions_banner,sig_field_atlas,blazing_rod,charm_sprouting

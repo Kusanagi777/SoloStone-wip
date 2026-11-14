@@ -46,6 +46,8 @@ namespace SabberStoneCore.Actions
         {
             if (selected != null && selected.Zone != controller.DeckZone)
                 return DrawFrom(controller, selected.Controller, selected);
+            // Phase 8 family 09: a special-room boss that holds no cards (Tad, the Treasure Vault) never draws and never fatigues.
+            if (EncounterRules.NeverDraws(controller)) return null;
             if (!PreDrawPhase(controller)) return null;
             return CompleteDraw(controller, controller.DeckZone.Draw(selected));
         };
@@ -129,6 +131,8 @@ namespace SabberStoneCore.Actions
         private static bool PreDrawPhase(Controller controller, bool emptySource = false)
         {
             if (!emptySource && !controller.DeckZone.IsEmpty) return true;
+            // A run passive (DALA_747 Elixir of Vim): its owner is Immune to Fatigue, so an empty draw does nothing.
+            if (CardSets.DungeonRun.RunPlayerRules.IsFatigueImmune(controller)) return false;
             int fatigueDamage = controller.Hero.Fatigue == 0 ? 1 : controller.Hero.Fatigue + 1;
             if (controller.Game.History)
                 controller.Game.PowerHistory.Add(PowerHistoryBuilder.BlockStart(BlockType.FATIGUE, controller.Hero.Id, "", -1, 0));

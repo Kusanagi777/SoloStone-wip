@@ -132,6 +132,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 					int zonePosition = SummonTask.GetPosition(in source, _side, stack?.Number ?? 0, ref alternateCount);
 
 					var copy = (Minion)Entity.FromCard(in controller, minion.Card, tags);
+					SabberStoneCore.Actions.ShrineRules.ClearMark(copy);
 					minion.CopyInternalAttributes(copy);
                     PayloadRules.MarkCopy(minion, copy);
                     if (DormantRules.HasState(minion))
@@ -150,7 +151,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 					if (minion.AppliedEnchantments != null)
 						foreach (Enchantment e in minion.AppliedEnchantments)
 						{
-                            if (DormantRules.IsHelper(e)) continue;
+                            if (DormantRules.IsHelper(e) || SabberStoneCore.Actions.ShrineRules.IsUpgradeGrant(e)) continue;
 							Enchantment instance = Enchantment.CopyAttachment(controller, copy, copy, e);
 							if (e[GameTag.TAG_SCRIPT_DATA_NUM_1] > 0)
 							{

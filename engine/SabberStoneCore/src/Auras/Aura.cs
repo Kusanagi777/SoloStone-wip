@@ -96,6 +96,9 @@ namespace SabberStoneCore.Auras
 
 		public IPlayable Owner => _owner ?? (_owner = Game.IdEntityDic[_ownerId]);
 
+		/// <summary>This aura is applied to the entity <paramref name="entityId"/> now (Actions.OverkillRules reads granted Overkill).</summary>
+		internal bool AppliesTo(int entityId) => AppliedEntityIdCollection != null && AppliedEntityIdCollection.Contains(entityId);
+
 		public Aura(AuraType type, params IEffect[] effects)
 		{
 			Type = type;

@@ -168,6 +168,8 @@ internal sealed class OwnDeckLedger
         // Snapshot-only callers can recover visible cards; absent observations stay unknown.
         foreach (var actor in player.HandZone.Concat(player.BoardZone.Slots).Concat(player.GraveyardZone))
             Remember(actor.Id, actor.Card.Id);
+        // A player knows the Secrets in its own Secret zone (phase 8: Sample reads this for a Secret put there from the deck).
+        foreach (var secret in player.SecretZone) Remember(secret.Id, secret.Card.Id);
         foreach (int id in player.Choice?.Choices ?? new List<int>())
         {
             var offer = game.IdEntityDic[id];
@@ -204,6 +206,7 @@ internal sealed class OwnDeckLedger
         var residences = facts.OfType<ResidenceChangedFact>().ToLookup(f => f.EntityId);
         var publicCards = facts.OfType<HistoryCardFact>().Where(f => f.ControllerId == player.Id && f.DefinitionKnown).ToLookup(f => f.EntityId);
         var publicGraveyard = new HashSet<int>(player.GraveyardZone.Select(c => c.Id));
+        var ownSecrets = new HashSet<int>(player.SecretZone.Select(c => c.Id));
         // Hogger's declared copies are known from the decklist, including originals already drawn at game start.
         var copies = player.DeckCards.Where(c => c.Id == "JAIL_384").SelectMany(_ =>
             player.DeckCards.Where(c => c.Id != "JAIL_384" && c[GameTag.ELITE] == 1)).Select(c => c.Id).OrderBy(id => id, StringComparer.Ordinal).ToArray();
@@ -239,8 +242,19 @@ internal sealed class OwnDeckLedger
             return slot.Definition == druidSlot ? new Slot(SampleDruid(), slot.Original) : slot;
         }
         var transforms = facts.OfType<CardPlayedFact>().Where(f => neutralTransforms.Contains(f.Sequence));
+        // Dungeon Run encounters (phase 8): an own-deck fact (EncounterRules.DeckReplaced / DeckRewritten: a boss form's deck
+        // replacement, a deck-wide rewrite) restarts the bag from the list its owner knows. It applies before the first move
+        // recorded after it; none exists outside an encounter match, so every other game samples exactly as before.
+        var deckFacts = new Queue<SabberStoneCore.CardSets.DungeonRun.RunDeckFact>(game.RunDeckFacts.Where(f => f.ControllerId == player.Id
+            && f.Kind != SabberStoneCore.CardSets.DungeonRun.RunDeckFactKind.TopKnown).OrderBy(f => f.HistorySequence));
+        void ApplyDeckFacts(long before)
+        {
+            while (deckFacts.Count > 0 && deckFacts.Peek().HistorySequence < before)
+                bag = deckFacts.Dequeue().Definitions.Select(d => new Slot(d, false)).ToList();
+        }
         foreach (var operation in moves.Where(f => !initial.Contains(f.Sequence)).Cast<HistoryFact>().Concat(transforms).OrderBy(f => f.Sequence))
         {
+            ApplyDeckFacts(operation.Sequence);
             if (operation is CardPlayedFact)
             {
                 // Envoy's public battlecry changes neutral slots, but never reveals their replacement identities.
@@ -273,6 +287,13 @@ internal sealed class OwnDeckLedger
                 || destination == null && publicGraveyard.Contains(move.EntityId);
             string departure = moveDefinitions.TryGetValue(move.Sequence, out string frozenDeparture) ? frozenDeparture
                 : appearance != null && (destination == null || appearance.Sequence < destination.Sequence) ? Cards.FromAssetId(appearance.DbfId).Id : null;
+            // Phase 8 (the boss's own-deck ledger for removals): a Secret that goes from its owner's deck straight into its
+            // owner's Secret zone (Mad Scientist, Manhunter Ivan's Trap Preparation, Trap Room's Tricks and Traps) is face down
+            // for the opponent only. Its owner saw which card left the deck, so that definition leaves the bag, not a random one.
+            // (A Secret zone entry records no residence, so the move is the entity's last one and it sits in that zone now.)
+            if (departure == null && (destination == null || destination.Entered && destination.Zone == EngineZone.SECRET && destination.ControllerId == player.Id)
+                && ownSecrets.Contains(move.EntityId) && definitions.TryGetValue(move.EntityId, out string ownSecret))
+            { observed = true; departure = ownSecret; }
             bool departed = departure != null && Original(move.EntityId);
             if ((observed || moveDefinitions.ContainsKey(move.Sequence)) && departure != null
                 && (Remove(departure, departed) || bag.Any(s => s.Definition == druidSlot)
@@ -283,6 +304,7 @@ internal sealed class OwnDeckLedger
             if (retained != null && game.IdEntityDic.TryGetValue(move.EntityId, out var actor)
                 && actor.Zone == player.SetasideZone && SabberStoneCore.Actions.PayloadRules.IsStored(actor)) retained.Add(removed.Definition);
         }
+        ApplyDeckFacts(long.MaxValue);
         // Counts remain observable even when a restored snapshot has no definition witness.
         while (bag.Count > player.DeckZone.Count) RemoveUnknown();
         var sampled = bag.Select(s => s.Definition == druidSlot ? new Slot(SampleDruid(), s.Original) : s).Where(s => s.Definition != null).ToArray();

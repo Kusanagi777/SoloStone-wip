@@ -1,0 +1,158 @@
+PASS A1 TRLA_108: scripted with its form TRLA_108t (3-turn sleeper pointing back), admitted for the run player only, never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_mage_108 has board shrine TRLA_108 (plan: one copy; not a power, treasure or deck card)  (TRLA_108 TRLA_108)
+PASS A1 TRLA_128: scripted with its form TRLA_128t (3-turn sleeper pointing back), admitted for the run player only, never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_mage_128 has board shrine TRLA_128 (plan: one copy; not a power, treasure or deck card)  (TRLA_128 TRLA_128)
+PASS A1 TRLA_129: scripted with its form TRLA_129t (3-turn sleeper pointing back), admitted for the run player only, never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_mage_129 has board shrine TRLA_129 (plan: one copy; not a power, treasure or deck card)  (TRLA_129 TRLA_129)
+PASS A1 TRLA_105: scripted with its form TRLA_105t (3-turn sleeper pointing back), admitted for the run player only, never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_paladin_105 has board shrine TRLA_105 (plan: one copy; not a power, treasure or deck card)  (TRLA_105 TRLA_105)
+PASS A1 TRLA_137: scripted with its form TRLA_137t (3-turn sleeper pointing back), admitted for the run player only, never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_paladin_137 has board shrine TRLA_137 (plan: one copy; not a power, treasure or deck card)  (TRLA_137 TRLA_137)
+PASS A1 TRLA_138: scripted with its form TRLA_138t (3-turn sleeper pointing back), admitted for the run player only, never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_paladin_138 has board shrine TRLA_138 (plan: one copy; not a power, treasure or deck card)  (TRLA_138 TRLA_138)
+PASS A1 TRLA_114: scripted with its form TRLA_114t (3-turn sleeper pointing back), admitted for the run player only, never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_priest_114 has board shrine TRLA_114 (plan: one copy; not a power, treasure or deck card)  (TRLA_114 TRLA_114)
+PASS A1 TRLA_146: scripted with its form TRLA_146t (3-turn sleeper pointing back), admitted for the run player only, never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_priest_146 has board shrine TRLA_146 (plan: one copy; not a power, treasure or deck card)  (TRLA_146 TRLA_146)
+PASS A1 TRLA_147: scripted with its form TRLA_147t (3-turn sleeper pointing back), admitted for the run player only, never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_priest_147 has board shrine TRLA_147 (plan: one copy; not a power, treasure or deck card)  (TRLA_147 TRLA_147)
+PASS A3 the client enchantment record TRLA_128e is scripted (no effect of its own; the shrine carries it)
+PASS A3 the client enchantment record TRLA_114e is scripted (no effect of its own; the shrine carries it)
+PASS A3 the client enchantment record TRLA_147e is scripted (no effect of its own; the shrine carries it)
+PASS A4 TRLA_129s Frostfire: a scripted 0-cost targeted Mage spell, admitted for the run player only (shrine-token), never generated  (0 True shrine-token)
+PASS A4 the shrine-card table names Frostfire as Progeny's
+PASS A5 the validator passes the shipped data (shrines included)
+PASS A6 the boss's FairBotState sees Shirvallah's Vengeance as an awake run shrine on the run player's board
+PASS A7 each of the nine has its shrine engine value in the evaluator table (none falls back to the default)
+PASS A8 the run's generation never yields Frostfire, a shrine or a form (RunMatchPlan.ExcludedGenerated)
+PASS A9 the shrine-model private tags (32610-32629) cover the S2 working tags
+PASS M1 Jan'alai's Mantle lands at Start of Game: 0/5  (TRLA_108 5)
+PASS M2 no spell in hand: Spell Damage 0  (0 0)
+PASS M3 three spells (and a minion) in hand: Spell Damage +3  (3 3)
+PASS M4 Frostbolt cast from that hand deals 3 + 2 (the cast spell has left the hand): War Golem 7/7 -> 7/2  (golem 2 sp 2)
+PASS M5 a 0-cost Frostfire from the same hand also gets the count: 1 + 2 (Arcane Explosion, Mirror Image stay)  (4)
+PASS M6 the boss's spells in hand do not count (the shrine reads its owner's hand)
+PASS M7 silenced, it has no Spell Damage whatever the hand (still a run shrine)
+PASS M8 Jan'alai's Flame lands: 0/8; the run's Fireblast costs (0) (printed 2)  (TRLA_128 CS2_034 cost 0)
+PASS M8 the boss's hero power keeps its cost
+PASS M9 with no Mana, Fireblast kills a 1/1 Wisp and is refreshed (usable again this turn)  (True exhausted False)
+PASS M10 the refreshed power kills a second Wisp and refreshes again
+PASS M11 a hit that does not kill (Yeti 4/5 -> 4/4) leaves it spent
+PASS M12 a hit that only pops a Divine Shield kills nothing: spent
+PASS M13 a hit on the enemy hero kills no minion: spent
+PASS M14 the boss's hero power is not made free on its own turn  (2)
+PASS M15 the Flame dormant: Fireblast costs (2) again  (2)
+PASS M16 Jan'alai's Progeny lands: 0/7
+PASS M17 Frostbolt freezes a minion: one Frostfire into the owner's hand (created by the shrine)  (1)
+PASS M18 Frost Nova freezes three enemy minions: three more Frostfires  (4)
+PASS M19 freezing the enemy hero counts too (a character)
+PASS M20 Frostfire costs (0), deals 1 (the Wisp dies) and freezes nothing (no new Frostfire)  (mana 3->3 ff 4)
+PASS M21 a Water Elemental's attack freezes (HistoryFacts.Freeze path): one Frostfire  (1)
+PASS M22 the boss freezing the run player's minion gives the run player nothing
+PASS M23 no freezer is left on a character after its freeze event
+PASS P1 Shirvallah's Protection lands: 0/4
+PASS P2 a friendly Yeti survives 2 damage: it gains Divine Shield
+PASS P3 the next hit is absorbed by that shield (Health stays 3)
+PASS P3 and surviving again shields it again
+PASS P4 a minion that does not survive gains nothing (the Wisp dies)
+PASS P5 an enemy minion that survives gains nothing
+PASS P6 the shrine itself is a friendly minion: survives 1 damage, gains Divine Shield
+PASS P7 a boss AoE: each friendly survivor gains Divine Shield (Raptor 3/2 dies; Croc 2/3 -> 2/1 shielded)  (True 1 True)
+PASS P8 Shirvallah's Vengeance lands: 0/5
+PASS P9 after the run player's hero takes 6, the boss's hero takes 5  (me 30->24 boss 30->25)
+PASS P10 damage to a friendly minion does not answer
+PASS P11 damage to the boss's own hero does not answer (one 6, no 5 back)  (25->19)
+PASS P12 a boss-side copy (plain minion): 6 to the run player, 5 back to the boss, the copy's answer to that 5 is held (recursion guard)  (me 24->18 boss 19->14)
+PASS P12 the guard is cleared after it
+PASS P13 the run player's own Fireball on the boss: the copy answers with 5 to the run player, whose Vengeance does not answer that  (boss 14->8 me 18->13)
+PASS P14 Shirvallah's Grace lands: 0/5
+PASS P15 Blessing of Kings on a friendly Yeti: the Yeti 8/9 and a copy cast on the shrine 4/9  (yeti 8/9 shrine 4/9)
+PASS P16 cast on the shrine itself: the spell and its copy both land (4/9 -> 12/17), one hand cast counted, no copy of the copy  (12/17)
+PASS P17 cast on an enemy minion: no copy
+PASS P18 an untargeted spell: no copy (the shrine takes nothing from Consecration)
+PASS P19 Hand of Protection on a friendly Raptor: both shielded
+PASS P20 Humility on a friendly minion: the copy sets the shrine's Attack to 1 as well (a copy, not only buffs)  (1 1)
+PASS P21 the boss buffing its own minion casts nothing on the run player's shrine
+PASS R1 Bwonsamdi's Sanctum lands: 0/3; the owner's Deathrattles repeat 1 + 2  (3)
+PASS R2 a Leper Gnome dies: its Deathrattle three times (6 to the boss's hero)  (30->24)
+PASS R3 the boss's Leper Gnome: once (2 to the run player)  (30->28)
+PASS R4 a Haunted Creeper: three Deathrattles, six Spiders (the board holds them beside the shrine)  (7)
+PASS R5 the Sanctum dormant: Deathrattles trigger once
+PASS R6 Bwonsamdi's Tome lands: 0/5
+PASS R7 after the owner casts a spell, one random Priest spell joins the hand  (DS1_233)
+PASS R8 six more casts, six more Priest spells; none the run's generation filter rejects  (UNG_854,ICC_235,KAR_013,EX1_334,GVG_012,BOT_529)
+PASS R9 deterministic: the same run seed yields the same spell
+PASS R10 the boss casting a spell adds nothing for the boss
+PASS R11 Bwonsamdi's Covenant lands: 0/8
+PASS R12 Flash Heal on an enemy Yeti (4/5) deals 5 instead: it dies
+PASS R13 Flash Heal on the owner's damaged Yeti heals it (4/2 -> 4/5)
+PASS R14 Circle of Healing: the enemy Yeti takes 4 (4/1), the owner's Yeti is healed (4/5)  (enemy 1 mine 5)
+PASS R15 the Priest power (Lesser Heal, restore 2) aimed at the boss's hero deals 2  (30->28)
+PASS R16 the boss healing its own Yeti damages it instead (4/4 -> Flash Heal 4 -> 4/0, dead): the Covenant turns any healing of its owner's enemies  (-1)
+PASS R17 silenced, the Covenant turns nothing: the enemy Yeti is healed
+PASS L1 TRLA_108 killed: its TRLA_108t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_108t 3)
+PASS L2 TRLA_108's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_108 revives at the start of the owner's turn 7  (t3:TRLA_108t t5:TRLA_108t t7:TRLA_108)
+PASS L4 TRLA_108 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_108's aura or trigger works again after the revival
+PASS L1 TRLA_128 killed: its TRLA_128t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_128t 3)
+PASS L2 TRLA_128's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_128 revives at the start of the owner's turn 7  (t3:TRLA_128t t5:TRLA_128t t7:TRLA_128)
+PASS L4 TRLA_128 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_128's aura or trigger works again after the revival
+PASS L1 TRLA_129 killed: its TRLA_129t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_129t 3)
+PASS L2 TRLA_129's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_129 revives at the start of the owner's turn 7  (t3:TRLA_129t t5:TRLA_129t t7:TRLA_129)
+PASS L4 TRLA_129 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_129's aura or trigger works again after the revival
+PASS L1 TRLA_105 killed: its TRLA_105t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_105t 3)
+PASS L2 TRLA_105's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_105 revives at the start of the owner's turn 7  (t3:TRLA_105t t5:TRLA_105t t7:TRLA_105)
+PASS L4 TRLA_105 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_105's aura or trigger works again after the revival
+PASS L1 TRLA_137 killed: its TRLA_137t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_137t 3)
+PASS L2 TRLA_137's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_137 revives at the start of the owner's turn 7  (t3:TRLA_137t t5:TRLA_137t t7:TRLA_137)
+PASS L4 TRLA_137 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_137's aura or trigger works again after the revival
+PASS L1 TRLA_138 killed: its TRLA_138t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_138t 3)
+PASS L2 TRLA_138's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_138 revives at the start of the owner's turn 7  (t3:TRLA_138t t5:TRLA_138t t7:TRLA_138)
+PASS L4 TRLA_138 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_138's aura or trigger works again after the revival
+PASS L1 TRLA_114 killed: its TRLA_114t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_114t 3)
+PASS L2 TRLA_114's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_114 revives at the start of the owner's turn 7  (t3:TRLA_114t t5:TRLA_114t t7:TRLA_114)
+PASS L4 TRLA_114 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_114's aura or trigger works again after the revival
+PASS L1 TRLA_146 killed: its TRLA_146t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_146t 3)
+PASS L2 TRLA_146's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_146 revives at the start of the owner's turn 7  (t3:TRLA_146t t5:TRLA_146t t7:TRLA_146)
+PASS L4 TRLA_146 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_146's aura or trigger works again after the revival
+PASS L1 TRLA_147 killed: its TRLA_147t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_147t 3)
+PASS L2 TRLA_147's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_147 revives at the start of the owner's turn 7  (t3:TRLA_147t t5:TRLA_147t t7:TRLA_147)
+PASS L4 TRLA_147 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_147's aura or trigger works again after the revival
+PASS L6 Hex on Shirvallah's Grace: dormant (no Frog)
+PASS L7 Mind Control on Bwonsamdi's Covenant does nothing: it stays the run player's
+PASS L8 Faceless copies the Covenant for the boss as a plain minion: the boss's heal on the run player's Yeti damages it
+PASS L8 killed, the copy dies for good (no dormant form)
+PASS L9 a boss-side copy of the Flame makes the boss's own hero power free, not the run player's twice
+PASS X1 Robe of the Magi (+3) and the Mantle (+1 for the spell left in hand): Frostbolt deals 3 + 4 (golem 7/7 -> 7/0)  (0 sp 4)
+PASS X2 Justicar's Ring upgrades Fireblast and the Flame still makes it cost (0)  (AT_132_MAGE cost 0)
+PASS X2 the upgraded power kills nothing on the Croc first (2 into 3): spent
+PASS X3 Totem of the Dead with the Sanctum: 1 + 1 + 2 = 4
+PASS X3 a Leper Gnome: 4 x 2 = 8 to the boss's hero  (30->22)
+PASS X4 TRLA_804: two Sanctums, 1 + 2 + 2 = 5  (5)
+PASS X4 one Sanctum dormant: 1 + 2 = 3
+PASS X5 Scrying Orb reaches the Tome's spell in hand: (1) less, floor (0)  (TRL_500 2)
+PASS X6 TRLA_805 with Shirvallah's Vengeance: 2 turns, revived at the start of turn 5  (t1:2 t3:TRLA_137t t5:TRLA_137)
+PASS X6 the revived Vengeance answers again
+PASS X7 Cloak of Invisibility: the shrine and the Yeti are stealthed
+PASS X7 a boss AoE on stealthed minions: both survive and are shielded  (yeti 3 shrine 2)
+PASS X8 TRLA_804: two Graces, each casts its own copy on itself (4/9 each), never on the other  (4/9,4/9)
+PASS X8 cast on one Grace: it gets the spell and its own copy (12/17), the other one copy (8/13)  (12/17,8/13)
+PASS X9 TRLA_804: two Progenies, one freeze, two Frostfires  (2)
+SUMMARY checks passed 157 failed 0

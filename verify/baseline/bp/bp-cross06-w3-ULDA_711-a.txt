@@ -1,0 +1,14 @@
+loot_22_tad        LOOT t3      floor  8 DRUID/druid_thicket/CS2_017                    deck 26 -> player   turns   9 decisions  11 fallbacks  0 health  20 mana+0 power  3 checks ok rule ULDA_711 seen 82
+loot_52_vault      LOOT t3      floor  8 HUNTER/hunter_kennel/DS1h_292                  deck 25 -> player   turns   9 decisions   4 fallbacks  0 health  60 mana+0 power  0 checks ok rule ULDA_711 seen 270
+loot_54_kay        LOOT t2      floor  3 MAGE/mage_rimeward/CS2_034                     deck 16 -> boss     turns  14 decisions  18 fallbacks  0 health  34 mana+0 power  0 checks ok rule ULDA_711 seen 177
+loot_53_inara      LOOT t3      floor  8 PALADIN/paladin_gleaming/CS2_101               deck 34 -> boss     turns  14 decisions  37 fallbacks  0 health  46 mana+1 power  0 checks ok rule ULDA_711 seen 126
+loot_49_darkness   LOOT tmajor1 floor  5 PRIEST/priest_mending/CS1h_001                 deck 22 -> boss     turns   8 decisions  16 fallbacks  0 health  50 mana+1 power  3 checks ok rule ULDA_711 seen 55
+loot_34_azari      LOOT tmajor1 floor  5 ROGUE/rogue_backalley/CS2_083b                 deck 22 -> boss     turns  12 decisions  19 fallbacks  0 health  50 mana+1 power  0 checks ok rule ULDA_711 seen 123
+loot_99_togwaggle  LOOT tmajor1 floor  5 SHAMAN/shaman_stormdebt/CS2_049                deck 26 -> boss     turns  10 decisions  24 fallbacks  0 health  50 mana+1 power  2 checks ok rule ULDA_711 seen 144
+gila_26_gnomenapper GIL  t3      floor  8 WARLOCK/warlock_fiendpact/CS2_056              deck 24 -> boss     turns  12 decisions  26 fallbacks  0 health  46 mana+0 power  2 checks ok rule ULDA_711 seen 229
+gila_27_experiment_3c GIL  t4      floor 13 WARRIOR/warrior_plated/CS2_102                 deck 48 -> player   turns  13 decisions  18 fallbacks  0 health  62 mana+1 power  2 checks ok rule ULDA_711 seen 191
+gila_29_sazzmi     GIL  t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 28 -> boss     turns  16 decisions  45 fallbacks  0 health  46 mana+0 power  3 checks ok rule ULDA_711 seen 437
+gila_33_scarecrow  GIL  t3      floor  8 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 31 -> player   turns  14 decisions  23 fallbacks  0 health  46 mana+1 power  1 checks ok rule ULDA_711 seen 244
+gila_34_havnixx    GIL  t3      floor  8 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 33 -> player   turns   7 decisions  12 fallbacks  0 health  46 mana+1 power  2 checks ok rule ULDA_711 seen 136
+encounter run: schedule acts-v3h, rule ULDA_711; power unused: loot_54_kay; form unreached: -
+games 12, boss wins 7, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 1, form-unreached 0, rule-seen 2214, rule-unseen -

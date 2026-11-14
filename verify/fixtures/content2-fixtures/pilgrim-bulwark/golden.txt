@@ -1,0 +1,12 @@
+plan hero=HERO_04d power=shrine_bulwark_2 deck=BOT_906,BOT_906,CORE_ICC_038,CS2_089,CS2_089,YOD_010,AT_075,AT_075,ICC_820,GIL_545,TB_CoOpv3_001,BOT_020,BOT_312,TIME_035,BOT_031,TLC_831,UNG_010,AT_105,TRL_509,UNG_847 boss=ashen_abbess matchSeed=546875674
+floor 4 boss=ashen_abbess power=shrine_bulwark_2 matchSeed=546875674
+floor 4 bundle offered=bundle_neutral_beast,bundle_paladin_battlecry,bundle_paladin_spells
+floor 5 boss=frostwarden power=shrine_bulwark_2 matchSeed=1660842774
+floor 5 treasure offered=healing_spring,hearty_tonic,warden_golem
+floor 5 bundle offered=bundle_neutral_elemental,bundle_neutral_murloc,bundle_paladin_deathrattle
+floor 6 boss=storm_herald power=shrine_bulwark_2 matchSeed=1234057165
+floor 6 bundle offered=bundle_neutral_dragon,bundle_neutral_taunt,bundle_paladin_battlecry
+floor 7 boss=clockwork_tyrant power=shrine_bulwark_3 matchSeed=703749473
+floor 7 bundle offered=bundle_neutral_murloc,bundle_paladin_deathrattle,bundle_paladin_weapons
+floor 8 boss=sleepless_one power=shrine_bulwark_3 matchSeed=484087896
+end phase=Victory deck=33 treasures=deep_satchel,blazing_rod,healing_spring

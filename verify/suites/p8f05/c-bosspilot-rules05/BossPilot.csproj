@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NuGetAudit>false</NuGetAudit>
+    <AssemblyName>AiHarness</AssemblyName>
+    <DefineConstants>$(DefineConstants);ENGINE_SOURCE</DefineConstants>
+    <NoWarn>CS0618;CS8632;CS0162;CS0168;CS0219;CS0649;CS0169;CS0414</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(SoloStoneRoot)plugin/Npc/**/*.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/DungeonRun/*.cs" Exclude="$(SoloStoneRoot)plugin/DungeonRun/DungeonRunRuntime.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/StableSeed.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/NativeDungeonRunText.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/LocalDecks.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/FairBotState.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/BotDriver.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/BotSearch.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/LocalDeckCards.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/LadderRules.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/LocalCardCatalog.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/LocalBot.cs" />
+    <Reference Include="SabberStoneCore"><HintPath>$(EngineDll)</HintPath></Reference>
+  </ItemGroup>
+</Project>

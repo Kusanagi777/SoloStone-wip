@@ -2677,6 +2677,7 @@ namespace SabberStoneCore.CardSets.Standard
 			{
 				Trigger = new Trigger(TriggerType.PLAY_CARD)
 				{
+					TriggerSource = TriggerSource.FRIENDLY,
 					Condition = SelfCondition.IsOverloadCard,
 					SingleTask = new AddEnchantmentTask("EX1_258e", EntityType.SOURCE)
 				}
@@ -4507,6 +4508,8 @@ namespace SabberStoneCore.CardSets.Standard
 					new IncludeTask(EntityType.OP_MINIONS),
 					new ConditionTask(EntityType.SOURCE, new SelfCondition(LegacyPoweredUpRules.FourEnemyMinions)),
 					new FlagTask(false, new FuncPlayablesTask(p => new List<IPlayable>())),
+					// The run shrine counts for the 4 but is never taken (ShrineRules: it cannot change controller).
+					Actions.ShrineRules.DropUncontrollable,
 					new RandomTask(1, EntityType.STACK),
 					new ConditionTask(EntityType.SOURCE, SelfCondition.IsBoardFull),
 					new FlagTask(false, new ControlTask(EntityType.STACK)),

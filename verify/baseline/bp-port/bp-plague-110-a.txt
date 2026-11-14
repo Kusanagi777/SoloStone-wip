@@ -1,0 +1,4 @@
+ulda_40_icarax     ULDA tmajor3 floor 15 DRUID/druid_thicket/CS2_017                    deck 32 -> boss     turns  19 decisions  38 fallbacks  0 health 200 mana+3 power  0 checks ok form 1>1 left 200 banked 190
+ulda_40_icarax     ULDA tmajor3 floor 15 HUNTER/hunter_kennel/DS1h_292                  deck 28 -> boss     turns  12 decisions  24 fallbacks  0 health 200 mana+3 power  0 checks ok form 1>1 left 188 banked 188
+encounter run: schedule acts-v3h, carried 110; power unused: ulda_40_icarax; form unreached: -
+games 2, boss wins 2, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 1, form-unreached 0

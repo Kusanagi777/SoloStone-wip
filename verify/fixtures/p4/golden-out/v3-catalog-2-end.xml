@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="3">
+  <Profile>
+    <Heroes>
+      <DungeonRunHeroStats Class="MAGE" Runs="1" Wins="1" BestFloor="8" />
+    </Heroes>
+    <Unlocked>
+      <string>challenge</string>
+      <string>druid_floor3</string>
+      <string>hunter_floor3</string>
+      <string>mage_floor3</string>
+      <string>paladin_floor3</string>
+      <string>priest_floor3</string>
+      <string>rogue_floor3</string>
+      <string>shaman_floor3</string>
+      <string>warlock_floor3</string>
+      <string>warrior_floor3</string>
+      <string>deathknight_floor3</string>
+      <string>demonhunter_floor3</string>
+      <string>mage_rogue_floor3</string>
+      <string>druid_floor4</string>
+      <string>hunter_floor4</string>
+      <string>mage_floor4</string>
+      <string>paladin_floor4</string>
+      <string>priest_floor4</string>
+      <string>rogue_floor4</string>
+      <string>shaman_floor4</string>
+      <string>warlock_floor4</string>
+      <string>warrior_floor4</string>
+      <string>deathknight_floor4</string>
+      <string>demonhunter_floor4</string>
+      <string>mage_rogue_floor4</string>
+      <string>druid_floor5</string>
+      <string>hunter_floor5</string>
+      <string>mage_floor5</string>
+      <string>paladin_floor5</string>
+      <string>priest_floor5</string>
+      <string>rogue_floor5</string>
+      <string>shaman_floor5</string>
+      <string>warlock_floor5</string>
+      <string>warrior_floor5</string>
+      <string>deathknight_floor5</string>
+      <string>demonhunter_floor5</string>
+      <string>mage_rogue_floor5</string>
+      <string>druid_win</string>
+      <string>hunter_win</string>
+      <string>mage_win</string>
+      <string>paladin_win</string>
+      <string>priest_win</string>
+      <string>rogue_win</string>
+      <string>shaman_win</string>
+      <string>warlock_win</string>
+      <string>warrior_win</string>
+      <string>deathknight_win</string>
+      <string>demonhunter_win</string>
+      <string>mage_rogue_win</string>
+    </Unlocked>
+    <Archive>
+      <DungeonRunArchiveEntry Class="MAGE" StarterDeck="mage_rimeward" Power="CS2_034" Seed="0000000000012DCE" TypedSeed="false" FloorReached="8" Won="true" LastBoss="hollow_sovereign">
+        <Treasures>
+          <string>deep_satchel</string>
+          <string>charm_blooming</string>
+          <string>frost_lantern</string>
+        </Treasures>
+      </DungeonRunArchiveEntry>
+    </Archive>
+  </Profile>
+  <Active DataVersion="dungeon-run/2" CatalogVersion="1" Seed="77262" TypedSeed="false" Class="MAGE" StarterDeck="mage_rimeward" Power="CS2_034" Floor="8" Phase="Victory" Attempt="1" DraftsWithoutDominant="1">
+    <Deck>
+      <string>DAL_577</string>
+      <string>DAL_577</string>
+      <string>ICC_836</string>
+      <string>CS2_024</string>
+      <string>ICC_068</string>
+      <string>GVG_002</string>
+      <string>ICC_252</string>
+      <string>CS2_026</string>
+      <string>CS2_033</string>
+      <string>CFM_671</string>
+      <string>LOOT_108</string>
+      <string>EX1_096</string>
+      <string>EX1_284</string>
+      <string>CORE_UNG_205</string>
+      <string>UNG_845</string>
+      <string>UNG_813</string>
+      <string>TB_CoOpv3_010</string>
+      <string>CORE_EX1_509</string>
+      <string>GVG_064</string>
+      <string>OG_161</string>
+      <string>AT_004</string>
+      <string>BOT_254</string>
+      <string>EX1_563</string>
+      <string>TB_CoOpv3_005</string>
+      <string>CATA_556</string>
+      <string>LOOT_144</string>
+      <string>TRL_569</string>
+      <string>EX1_015</string>
+      <string>LOOT_108</string>
+      <string>EX1_095</string>
+      <string>ICC_093</string>
+      <string>EX1_584</string>
+      <string>AT_006</string>
+    </Deck>
+    <Treasures>
+      <string>deep_satchel</string>
+    </Treasures>
+    <ActiveTreasures>
+      <string>charm_blooming</string>
+      <string>frost_lantern</string>
+    </ActiveTreasures>
+    <Upgrades />
+    <BossSequence>
+      <string>bog_croaker</string>
+      <string>hedge_witch</string>
+      <string>lantern_thief</string>
+      <string>ashen_abbess</string>
+      <string>pit_champion</string>
+      <string>golemancer</string>
+      <string>ember_matron</string>
+      <string>hollow_sovereign</string>
+    </BossSequence>
+    <TakenBundles>
+      <string>bundle_neutral_elemental</string>
+      <string>bundle_neutral_murloc</string>
+      <string>bundle_neutral_dragon</string>
+    </TakenBundles>
+    <BucketTakes>
+      <DungeonRunTake Id="mh.toki-time-tinker.knowledge" Count="2" />
+      <DungeonRunTake Id="rr.mage.spell-power" Count="1" />
+      <DungeonRunTake Id="dh.mage.powered-up" Count="1" />
+    </BucketTakes>
+    <BundleCooldowns>
+      <string>dh.mage.technology@3</string>
+      <string>rr.mage.fire@3</string>
+      <string>dh.mage.coldsnap@4</string>
+      <string>rr.mage.elementals@4</string>
+      <string>dr.mage.arcane@5</string>
+      <string>bundle_mage_elemental@5</string>
+      <string>mh.toki-time-tinker.knowledge@6</string>
+      <string>bundle_mage_battlecry@6</string>
+      <string>dh.mage.coldsnap@7</string>
+      <string>rr.mage.heroic-power@7</string>
+      <string>mh.toki-time-tinker.chaos@8</string>
+      <string>dh.mage.go-big@8</string>
+      <string>dh.mage.elements@9</string>
+      <string>dr.mage.magical-friends@9</string>
+    </BundleCooldowns>
+    <DraftedThemes>
+      <string>discover</string>
+      <string>discover</string>
+      <string>discover</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>murloc</string>
+      <string>murloc</string>
+      <string>murloc</string>
+      <string>spell-damage</string>
+      <string>spell-damage</string>
+      <string>spell-damage</string>
+      <string>dragon</string>
+      <string>dragon</string>
+      <string>dragon</string>
+      <string>discover</string>
+      <string>discover</string>
+      <string>discover</string>
+      <string>hero-power</string>
+      <string>hero-power</string>
+      <string>hero-power</string>
+    </DraftedThemes>
+    <Drafts>
+      <DungeonRunDraft Floor="1" Kind="treasure" Picked="deep_satchel">
+        <Offered>
+          <string>deep_satchel</string>
+          <string>gilded_idol</string>
+          <string>mending_charm</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="1" Kind="bundle" Picked="mh.toki-time-tinker.knowledge">
+        <Offered>
+          <string>dh.mage.technology</string>
+          <string>mh.toki-time-tinker.knowledge</string>
+          <string>rr.mage.fire</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.mage.technology" Label="Technology" Theme="mechanical" Kind="pool" Source="DH">
+            <Cards>
+              <string>BOT_907</string>
+              <string>BOT_548</string>
+              <string>GVG_123</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.toki-time-tinker.knowledge" Label="Knowledge" Theme="discover" Kind="pool" Source="MH">
+            <Cards>
+              <string>LOOT_108</string>
+              <string>EX1_096</string>
+              <string>EX1_284</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.mage.fire" Label="Fire" Theme="spells" Kind="pool" Source="RR">
+            <Cards>
+              <string>UNG_809</string>
+              <string>TRL_390</string>
+              <string>GIL_645</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="2" Kind="bundle" Picked="bundle_neutral_elemental">
+        <Offered>
+          <string>dh.mage.coldsnap</string>
+          <string>rr.mage.elementals</string>
+          <string>bundle_neutral_elemental</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.mage.coldsnap" Label="Coldsnap" Theme="freeze" Kind="pool" Source="DH">
+            <Cards>
+              <string>EX1_275</string>
+              <string>ICC_252</string>
+              <string>CS2_024</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.mage.elementals" Label="Elementals" Theme="elemental" Kind="pool" Source="RR">
+            <Cards>
+              <string>GIL_645</string>
+              <string>EX1_298</string>
+              <string>TRL_313</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_neutral_elemental" Label="Elemental" Theme="elemental" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CORE_UNG_205</string>
+              <string>UNG_845</string>
+              <string>UNG_813</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="treasure" Picked="charm_seedling">
+        <Offered>
+          <string>charm_seedling</string>
+          <string>ember_brand</string>
+          <string>iron_skin</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="bundle" Picked="bundle_neutral_murloc">
+        <Offered>
+          <string>bundle_neutral_murloc</string>
+          <string>dr.mage.arcane</string>
+          <string>bundle_mage_elemental</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="bundle_neutral_murloc" Label="Murloc" Theme="murloc" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CORE_EX1_509</string>
+              <string>GVG_064</string>
+              <string>OG_161</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.mage.arcane" Label="Arcane" Theme="spells" Kind="pool" Source="DR">
+            <Cards>
+              <string>CS2_027</string>
+              <string>AT_005</string>
+              <string>LOOT_231</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_mage_elemental" Label="Elemental" Theme="elemental" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CORE_DRG_107</string>
+              <string>TLC_226</string>
+              <string>TRL_311</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="4" Kind="bundle" Picked="rr.mage.spell-power">
+        <Offered>
+          <string>mh.toki-time-tinker.knowledge</string>
+          <string>rr.mage.spell-power</string>
+          <string>bundle_mage_battlecry</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="mh.toki-time-tinker.knowledge" Label="Knowledge" Theme="discover" Kind="pool" Source="MH">
+            <Cards>
+              <string>GIL_548</string>
+              <string>EX1_050</string>
+              <string>GIL_640</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.mage.spell-power" Label="Spell Power" Theme="spell-damage" Kind="pool" Source="RR">
+            <Cards>
+              <string>AT_004</string>
+              <string>BOT_254</string>
+              <string>EX1_563</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_mage_battlecry" Label="Battlecry" Theme="battlecry" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CATA_484</string>
+              <string>CATA_483</string>
+              <string>TIME_858</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="5" Kind="treasure" Picked="frost_lantern">
+        <Offered>
+          <string>frost_lantern</string>
+          <string>iron_ward</string>
+          <string>stoneskin_idol</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="5" Kind="bundle" Picked="bundle_neutral_dragon">
+        <Offered>
+          <string>dh.mage.coldsnap</string>
+          <string>rr.mage.heroic-power</string>
+          <string>bundle_neutral_dragon</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.mage.coldsnap" Label="Coldsnap" Theme="freeze" Kind="pool" Source="DH">
+            <Cards>
+              <string>UNG_205</string>
+              <string>GIL_801</string>
+              <string>EX1_295</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.mage.heroic-power" Label="Heroic Power" Theme="hero-power" Kind="pool" Source="RR">
+            <Cards>
+              <string>TRL_316</string>
+              <string>TRL_319</string>
+              <string>GIL_646</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_neutral_dragon" Label="Dragon" Theme="dragon" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CATA_556</string>
+              <string>LOOT_144</string>
+              <string>TRL_569</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="6" Kind="bundle" Picked="mh.toki-time-tinker.knowledge">
+        <Offered>
+          <string>mh.toki-time-tinker.knowledge</string>
+          <string>mh.toki-time-tinker.chaos</string>
+          <string>dh.mage.go-big</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="mh.toki-time-tinker.knowledge" Label="Knowledge" Theme="discover" Kind="pool" Source="MH">
+            <Cards>
+              <string>EX1_015</string>
+              <string>LOOT_108</string>
+              <string>EX1_095</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.toki-time-tinker.chaos" Label="Chaos" Theme="random" Kind="pool" Source="MH">
+            <Cards>
+              <string>LOE_003</string>
+              <string>LOOT_537</string>
+              <string>UNG_028</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.mage.go-big" Label="Go Big" Theme="big" Kind="pool" Source="DH">
+            <Cards>
+              <string>BOT_257</string>
+              <string>UNG_955</string>
+              <string>EX1_279</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="7" Kind="bundle" Picked="dh.mage.powered-up">
+        <Offered>
+          <string>dh.mage.elements</string>
+          <string>dh.mage.powered-up</string>
+          <string>dr.mage.magical-friends</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.mage.elements" Label="Elements" Theme="elemental" Kind="pool" Source="DH">
+            <Cards>
+              <string>BOT_604</string>
+              <string>UNG_021</string>
+              <string>OG_120</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.mage.powered-up" Label="Powered Up" Theme="hero-power" Kind="pool" Source="DH">
+            <Cards>
+              <string>ICC_093</string>
+              <string>EX1_584</string>
+              <string>AT_006</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.mage.magical-friends" Label="Magical Friends" Theme="spell-damage" Kind="pool" Source="DR">
+            <Cards>
+              <string>NEW1_026</string>
+              <string>EX1_563</string>
+              <string>BRM_002</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+    </Drafts>
+    <Matches>
+      <DungeonRunMatchSummary Floor="1" Boss="bog_croaker" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="2" Boss="hedge_witch" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="3" Boss="lantern_thief" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="4" Boss="ashen_abbess" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="5" Boss="pit_champion" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="6" Boss="golemancer" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="7" Boss="ember_matron" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="8" Boss="hollow_sovereign" Outcome="Win" Attempt="1" />
+    </Matches>
+    <UnlockedThisRun />
+  </Active>
+</DungeonRun>

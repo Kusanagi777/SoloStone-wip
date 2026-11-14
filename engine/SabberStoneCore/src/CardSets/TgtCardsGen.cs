@@ -941,9 +941,7 @@ namespace SabberStoneCore.CardSets
 			// --------------------------------------------------------
 			cards.Add("AT_079", new CardDef(new Power
 			{
-				// TODO [AT_079] Mysterious Challenger && Test: Mysterious Challenger_AT_079
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = DungeonRun.DungeonRunEncounters.MysteriousChallenger
 			}));
 
 			// --------------------------------------- MINION - PALADIN
@@ -959,10 +957,8 @@ namespace SabberStoneCore.CardSets
 			// --------------------------------------------------------
 			cards.Add("AT_081", new CardDef(new Power
 			{
-				// TODO [AT_081] Eadric the Pure && Test: Eadric the Pure_AT_081
 				InfoCardId = "AT_081e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new AddEnchantmentTask("AT_081e", EntityType.OP_MINIONS)
 			}));
 
 			// --------------------------------------- MINION - PALADIN
@@ -1112,9 +1108,7 @@ namespace SabberStoneCore.CardSets
 			// --------------------------------------------------------
 			cards.Add("AT_081e", new CardDef(new Power
 			{
-				// TODO [AT_081e] Purified && Test: Purified_AT_081e
-				//PowerTask = null,
-				//Trigger = null,
+				Enchant = new Enchant(Effects.SetAttack(1))
 			}));
 
 		}
@@ -1769,6 +1763,7 @@ namespace SabberStoneCore.CardSets
 				Trigger = TriggerBuilder
 					.Type(TriggerType.DISCARD)
 					.SetTask(new AddEnchantmentTask("AT_021e", EntityType.SOURCE))
+					.SetSource(TriggerSource.FRIENDLY)
 					.GetTrigger()
 			}));
 
@@ -1817,10 +1812,15 @@ namespace SabberStoneCore.CardSets
 			// --------------------------------------------------------
 			cards.Add("AT_027", new CardDef(new Power
 			{
-				// TODO [AT_027] Wilfred Fizzlebang && Test: Wilfred Fizzlebang_AT_027
+				// A card its owner draws while a Hero Power of theirs resolves (the executing task's source) costs (0).
 				InfoCardId = "AT_027e",
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.DRAW)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					Condition = new SelfCondition(p => p.Game.Facts.ExecutingSource is HeroPower power && power.Controller == p.Controller),
+					FastExecution = true,
+					SingleTask = new AddEnchantmentTask("AT_027e", EntityType.TARGET)
+				}
 			}));
 
 			// ---------------------------------------- SPELL - WARLOCK
@@ -1903,9 +1903,7 @@ namespace SabberStoneCore.CardSets
 			// --------------------------------------------------------
 			cards.Add("AT_027e", new CardDef(new Power
 			{
-				// TODO [AT_027e] Master Summoner && Test: Master Summoner_AT_027e
-				//PowerTask = null,
-				//Trigger = null,
+				Enchant = new Enchant(Effects.SetCost(0))
 			}));
 
 		}
@@ -2651,12 +2649,11 @@ namespace SabberStoneCore.CardSets
 			// PlayReq:
 			// - REQ_MINION_TARGET = 0
 			// --------------------------------------------------------
-			cards.Add("AT_115", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_MINION_TARGET,0}}, new Power
+			cards.Add("AT_115", new CardDef(new Power
 			{
-				// TODO [AT_115] Fencing Coach && Test: Fencing Coach_AT_115
+				// A player enchantment: it follows the owner through a Hero Power change and ends with their next use.
 				InfoCardId = "AT_115e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new AddEnchantmentTask("AT_115e", EntityType.CONTROLLER)
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -3181,9 +3178,13 @@ namespace SabberStoneCore.CardSets
 			// --------------------------------------------------------
 			cards.Add("AT_115e", new CardDef(new Power
 			{
-				// TODO [AT_115e] Fencing Practice && Test: Fencing Practice_AT_115e
-				//PowerTask = null,
-				//Trigger = null,
+				// Ends with its owner's next Hero Power use (an Inspire of that player; the opponent's use is not it).
+				Aura = new Aura(AuraType.HEROPOWER, Effects.ReduceCost(2)),
+				Trigger = new Trigger(TriggerType.INSPIRE)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					SingleTask = RemoveEnchantmentTask.Task
+				}
 			}));
 
 			// ---------------------------------- ENCHANTMENT - NEUTRAL

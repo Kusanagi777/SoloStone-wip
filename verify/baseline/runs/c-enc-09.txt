@@ -1,0 +1,168 @@
+PASS A1 the row's plan: Brimstone Warden with Dispel Ward, four Stone Golems to start, no bonus Mana Crystals, the wiki's 30 cards (11 Stone Golems, 4 Looming Presences)  (30 0)
+PASS A2 after both mulligans four Stone Golems (15/5, 2 Mana, Can't attack) stand on his board; Dispel Ward (5) is never an option  (4 golems)
+PASS A3 below 5 Mana nothing is cast: the Golems cannot attack and the power is not offered
+PASS A4 a Stone Golem that dies costs its owner a Mana Crystal (3 to 2)  (mana 2)
+PASS A5 at the start of his turn with 5 Mana Dispel Ward is cast by rule: the 5 Mana are paid and his minions are silenced  (casts 1 left 0)
+PASS A6 a silenced Stone Golem can attack (15 Attack), and it no longer costs a Mana Crystal when it dies
+PASS A7 it hits the run hero for 15; a silenced Golem's death leaves the Mana Crystals alone
+PASS A8 with every minion silenced already the power is not cast again (the Mana stays)
+PASS A9 a new Stone Golem brings the next cast (its Can't attack lifted); a clone taken before replays it on its own  (casts 2/1)
+PASS B1 the row's plan: Tad with Catch and Release at his own 20 Health, no bonus Mana Crystals, and the wiki's ten minions as a ten-card deck (flag listedDeck)  (LOOTA_102:3,UNG_852:10,OG_024:4,EX1_250:5,UNG_919:7,EX1_543:9,UNG_085:1,NEW1_029:2,EX1_110:6,EX1_298:8)
+PASS B2 at the first turn start the hand he was dealt is back in his deck: no hand, ten cards in the deck, the room's rules on him, and a deck fact gives his own-deck ledger the exact list  (0/10 rules 7)
+PASS B3 his turn: he draws nothing and takes no Fatigue; his only options are the hero power (0 Mana, clickable) and ending the turn  (2 options)
+PASS B4 Catch and Release at 1 Mana Crystal pulls Emerald Hive Queen from his deck (the wiki's order, not a random minion); once a turn
+PASS B5 turn by turn the minion whose Cost equals his Mana Crystals: Queen, Millhouse, Starving Crab, Flamewreathed Faceless, Earth Elemental, Cairne, Swamp King Dred, Ragnaros, King Krush, Tyrantus  (UNG_085,NEW1_029,LOOTA_102,OG_024,EX1_250,EX1_110,UNG_919,EX1_298,EX1_543,UNG_852)
+PASS B6 with his deck empty he still neither draws nor fatigues; on this eleventh turn the undamaged Tad has summoned his Sunken Chest, and the power (offered by board room alone) summons nothing more  (damage 0 fatigue 0 offered True board 1 deck 0)
+PASS B7 a draw effect does nothing for him either (no card, no Fatigue); the run player draws as ever
+PASS B8 with no minion of the matching Cost (0 Mana Crystals) a random minion of his deck is pulled
+PASS B9 with a full board the power is not offered
+PASS B10 an undamaged Tad summons the Sunken Chest (0/1) at the start of his eleventh turn, not before  (turns 11)
+PASS B11 only once: no second Chest on his twelfth turn
+PASS B12 breaking the Sunken Chest: Tad loses the game and Tad's Pole is asked for the run deck (a run deck edit)  (COMPLETE add:LOOTA_BOSS_22t)
+PASS B13 a Tad that carries damage summons no Chest
+PASS B14 a Sunken Chest on the run player's side: its owner loses the game, and nothing is added to the run deck
+PASS B15 Tad's Pole (a 1-Mana weapon): at the end of its owner's turn a minion of the opponent's deck leaves that deck and joins its owner's board  (deck 26->24 (one pulled, one drawn by its owner))
+PASS B16 only at the end of its owner's turn (nothing at the end of the opponent's)
+PASS B17 nothing with a full board (the opponent's deck loses only its own draw)
+PASS B18 nothing when the opponent's deck holds no minion
+PASS B19 in a boss's hands it pulls from the run player's deck the same way: one public minion, the deck one card shorter  (26->24)
+PASS C1 the row's plan: Vustrasz with Vindictive Breath, a major of act I (the act curve's Health plus 10), five Master Chests to start, the wiki's 30 cards  (health 40)
+PASS C2 five Master Chests (0/8) stand on his board; with none missing Vindictive Breath (0) is not offered
+PASS C3 a Master Chest that dies gives the run player one of Marin's four treasures  (LOOT_998h)
+PASS C4 with one Chest missing it deals 1 damage to all enemies (the run hero and its minions), not to his own side
+PASS C5 once a turn
+PASS C6 with three missing: 3 damage to all enemies  (missing 3)
+PASS C7 a clone counts its own Chests (4 missing there, 3 here)
+PASS C8 never below none missing (more than five Chests count as five)
+PASS C9 Chromatic Dragonkin (2/3 for 2): whenever its owner's opponent casts a spell it gains +2/+2 (Draconic Lineage)
+PASS C10 its owner's own spell gives it nothing
+PASS D1 the row's plan: Xol with the passive Beam Me Up! (in the passive registry, never an option), a major of act I, the wiki's 30 cards (4 Howlfiends, Lakkari Sacrifice)
+PASS D2 at the end of her turn one of the six Beams (3-Mana spells) joins her hand; nothing at the end of the run player's turn  (LOOTA_BOSS_26p2)
+PASS D3 over sixty turns every one of the six Beams is given  (LOOTA_BOSS_26p2,LOOTA_BOSS_26p3,LOOTA_BOSS_26p4,LOOTA_BOSS_26p5,LOOTA_BOSS_26p6,LOOTA_BOSS_26p7)
+PASS D4 a full hand gets none
+PASS D5 Beam of Frost freezes a random enemy minion and the minions next to it (two at an edge, three in the middle), never her own  (True,True,False)
+PASS D6 a lone minion is frozen alone; with no enemy minion the Beams can be cast and do nothing
+PASS D7 Beam of Death destroys all damaged enemy minions: the undamaged one and her own damaged one stay
+PASS D8 Beam of Fire deals 2 damage to all enemy minions (not the hero, not her own); Beam of Decay destroys one of the opponent's Mana Crystals (4 to 3)  (2 mana 3)
+PASS D9 Beam of Confusion takes control of a random enemy minion
+PASS D10 a run shrine is never the pick (alone it stays; beside a minion the minion is taken); nothing with a full board
+PASS D11 Beam of Fear shuffles a random enemy minion into its owner's deck
+PASS D12 a run shrine is destroyed instead of shuffled: it goes dormant on the board and the deck is unchanged
+PASS D13 a Beam in the run player's hands (a steal) works for the run player: Beam of Fire damages the boss's minions
+PASS D14 the boss's fair view holds her Beams and plays them: Beam of Fire there damages the run player's minion
+PASS E1 the row's plan: Azari with Devour (0; cast by rule, never an option), a major of act I, the wiki's 30 cards
+PASS E2 at the start of his turn the top 2 cards of the run player's deck go to the run player's graveyard (face up); the power is not an option  (26->24)
+PASS E3 the boss's fair view: the two burned cards are known in the graveyard, the deck is two shorter there too, and the rest of the deck and the hand stay masked  (view deck 24 known 0)
+PASS E4 every turn of his: two more (the run player's own draw in between)
+PASS E5 with one card left it burns that one
+PASS E6 with the deck empty nothing is cast (and Devour itself never fatigues the run player)
+PASS E7 a clone (an AI simulation) burns in the clone only
+PASS F1 the row's plan: The Darkness with Encroaching Darkness, a major of act I, three Luminous Candles for the run player's hand (never in the run deck), the wiki's 30 cards (4 Looming Presences)
+PASS F2 after both mulligans the run player holds three Luminous Candles (0 Mana)
+PASS F3 Encroaching Darkness (0) summons a 5/5 Darkspawn; once a turn
+PASS F4 a Luminous Candle destroys all Darkspawns, on both boards, and nothing else
+PASS F5 with no Darkspawn in play a Candle does nothing
+PASS F6 with a full board the power is not offered
+PASS F7 with a hand too full for all three the rest are shuffled into the deck for this fight (three Candles in hand and deck together)  (2+1)
+PASS G1 the row's plan: Mushhuckster Max with Mushroom, Mushroom (2), the wiki's 30 cards (2 Shroomsayers, 4 Fungalmancers, Eater of Secrets); nine ingredients, the 1-Cost Kazakus effects  (LOOTA_107,CFM_603,EX1_622,OG_234,CFM_120,EX1_059)
+PASS G2 the power opens a Discover among three different ingredients  (CFM_621t2,CFM_621t3,CFM_621t10)
+PASS G3 then a second Discover among three of the other ingredients (never the first pick)  (CFM_621t3,CFM_621t5,CFM_621t37)
+PASS G4 the Mushroom Potion (1 Mana) of the two picks, in order, joins his hand; no choice is left open  (CFM_621t2+CFM_621t5)
+PASS G5 a clone taken in the middle of the craft finishes it on its own, with its own picks
+PASS G6 over forty crafts every one of the nine ingredients is offered; with a full hand the power is not offered  (9 seen)
+PASS G7 Heart of Fire + Stonescale Oil: the potion takes a target (any character; never untargeted), deals 3 damage to it and gives 4 Armor  (2 options, damage 3)
+PASS G8 Felbloom + Goldthorn: no target (one untargeted option); 2 damage to all minions, then his own minions get +2 Health  (5/3)
+PASS G9 Icecap + Kingsblood: a random enemy minion is frozen and he draws a card
+PASS G10 Shadow Oil + Netherbloom: a random Demon joins his hand and a 2/2 Demon is summoned  (BOT_224)
+PASS G11 Ichor of Undeath + Stonescale Oil: a friendly minion that died this game is summoned, and 4 Armor
+PASS G12 the order is the potion's: Stonescale Oil then Heart of Fire, aimed at the run hero (3 damage)
+PASS G13 a potion is two different ingredients of the table (anything else is refused); none is made for a full hand
+PASS G14 the boss's fair view holds the potion with its two ingredients and plays it there
+PASS G15 a potion in the run player's hands (a steal) works for the run player
+PASS G16 a potion's ingredients are tags of its entity, carried by every clone
+PASS G17 Eater of Secrets played by the boss destroys the run player's Secrets and gains +1/+1 for each
+PASS G18 Eater of Secrets is admitted for a boss deck only (its own row): the run player's pools and generation keep it out, as before
+PASS H1 the row's plan: the Treasure Vault with Doors Are Closing at its own 60 Health, seven Treasure Coffers to start, no bonus Mana Crystals, a curated ten-card deck it never draws  (curated)
+PASS H2 seven Treasure Coffers (0/10, 1 Mana) fill its board; it holds no cards (ten in the deck), and its power (5) is never an option
+PASS H3 its turn: no draw, no Fatigue, and ending the turn is its only option
+PASS H4 a Treasure Coffer that dies asks the run for one random treasure of the run's own treasure pool (a run deck edit)  (1 edits, pool 40)
+PASS H5 the Player is the run player whoever controls the Coffer: one on the run player's side adds a treasure too (three so far)
+PASS H6 a clone's Coffer writes into the clone's own result (4 there, 3 here)
+PASS H7 through its fourth turn (4 Mana Crystals) the fight goes on
+PASS H8 at the start of its fifth turn (5 Mana Crystals) the doors close: the game ends with no loss for the run player (the run player is the winner on the table, the no-loss mark is set)  (COMPLETE WON)
+PASS H9 the Vault can be destroyed too: an ordinary win, no no-loss mark
+PASS H10 a clone (an AI simulation) closes on its own; the real game goes on
+PASS H11 outside a run match a Coffer has no pool: nothing is added
+PASS H12 a card that reaches its hand cannot be played (the room's rule), whatever its Mana
+PASS I1 the row's plan: Chronomancer Inara with Stolen Time (10; cast by rule, never an option), the wiki's 30 cards (Medivh's Astral Portal, Archmage's Apprentice and Archmage's Insight, 4 Looming Presences)
+PASS I2 at 9 Mana nothing is cast
+PASS I3 at the start of her turn with 10 Mana Stolen Time is cast by rule: all her Mana is spent and three Mana Crystals are destroyed (7 left, none to spend)  (base 7 left 0)
+PASS I4 she takes an extra turn, with 8 Mana and no second cast
+PASS I5 then the run player plays; a clone replays the cast on its own
+PASS I6 Archmage's Insight (3): her spells cost (0) this turn only; minions keep their Cost  (cost 4)
+PASS I7 Astral Portal (1) summons a random Legendary minion; it needs a free board slot  (BOT_700)
+PASS I8 Archmage's Apprentice (2/4 for 2): whenever its owner casts a spell a copy of it is shuffled into its owner's deck
+PASS I9 the opponent's spell is not copied
+PASS J1 the row's plan: A. F. Kay with Idle (2), the wiki's 30 cards with Bag of Stuffing and Boots of Haste (2 each); the two Fel Reavers the engine does not script are Bittertide Hydras
+PASS J2 the room's rule is on her from the first turn start; she keeps her hand and draws as ever
+PASS J3 her first turn with 10 Mana: no card of her hand can be played; Idle (2, clickable) and attacks stay
+PASS J4 Idle does nothing (2 Mana paid, nothing else changes); a minion given to her attacks
+PASS J5 through her fifth turn she plays no card
+PASS J6 from her sixth turn her hand is playable
+PASS J7 a clone taken on her fifth turn frees her on its own sixth
+PASS K1 the row's plan: King Togwaggle with Magic Candle (3), a major of act I, the wiki's 30 cards; sixteen Treasures to find
+PASS K2 Magic Candle puts one of his sixteen Treasures into his hand; once a turn; 3 Mana  (LOOTA_819)
+PASS K3 over 240 turns every one of the sixteen is found  (16: )
+PASS K4 at the start of his turn he casts Rakanishu (4 damage to a random enemy) now and then: about one turn in four  (44 of 240)
+PASS K5 with a full hand the power is not offered
+PASS K6 Rakanishu (0 Mana), cast by the power, deals 4 damage to a random enemy (the lone run hero here), never to his own side; the client card cannot be played from a hand
+PASS K7 it is a spell: Spell Damage adds to it (5)
+PASS K8 a clone finds its Treasure in the clone only
+PASS L0 each of the sixteen is admitted for a boss on a catalog run and stays the run player's; the legacy verdict of the fifteen run treasures is unchanged (the run player's only)
+PASS L1 Wand of Disintegration: the run player's minions are silenced and destroyed, his own stay
+PASS L2 Boots of Haste: his minions cost (0) this turn only
+PASS L3 Party Portal: his spell summons a random minion of the same Cost (4)  (CS2_197)
+PASS L4 Archmage Staff: at the start of his turn a random scripted Mage spell joins his hand  (CS2_024)
+PASS L5 Vorpal Dagger: a Poisonous weapon with Mega-Windfury on his hero
+PASS L6 Bag of Stuffing: he draws until his hand is full
+PASS L7 Portable Ice Wall: a 3/15 Taunt that cannot attack
+PASS L8 Embers of Ragnaros: three fireballs of 8 at random enemies (24 at the lone run hero)  (damage 24)
+PASS L9 Greedy Pickaxe: after his hero attacks he gains an empty Mana Crystal (5 to 6)  (mana 6)
+PASS L10 Bag of Coins: his hand is full of Coins
+PASS L11 Dr. Boom's Boombox: seven Boom Bots
+PASS L12 Scroll of Confusion: every minion picks a side; none is lost and the run shrine never changes sides  (3/4)
+PASS L13 Hilt of Quel'Delar: a minion gets +3/+3
+PASS L14 THE CANDLE: 4 damage to the run player's minions, and it shuffles itself into his deck
+PASS L15 Mask of Mimicry: the minions in his hand become copies of the chosen minion
+PASS L16 Golden Kobold (6/6 Taunt): his hand is replaced by Legendary minions  (DAL_431,TRL_096,BOT_548,DAL_752,ULD_304,EX1_062,EX1_543,TRL_126)
+PASS N1 the Vault's closing is recorded as won with the no-loss mark and no boss kill credit; the run goes on
+PASS N2 the two treasures its Coffers added are in the run deck (origin match)  (10->12 LOOTA_827,TB_Coopv3_101)
+PASS N3 a no-loss ending reported as a loss is recorded the same way
+PASS N4 a destroyed Vault is an ordinary win with its kill credit
+PASS N5 breaking the Sunken Chest wins the fight (with kill credit) and Tad's Pole joins the run deck through the run's deck checks  ( )
+PASS N6 a fight that is really lost (a concession) keeps nothing of the Coffers and ends the run
+PASS M1 the shipped data validates with the eleven family 09 rows
+PASS M2 family 09 holds exactly these eleven rows  (loot_20_brimstone,loot_22_tad,loot_50_max,loot_52_vault,loot_53_inara,loot_54_kay,loot_25_vustrasz,loot_26_xol,loot_34_azari,loot_49_darkness,loot_99_togwaggle)
+PASS M3 loot_20_brimstone: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags [start,boardStart,passive]  (authentic health 30 flags start,boardStart,passive)
+PASS M3 loot_22_tad: a Dungeon Run row of tier 3 whose plan is the row's (hero, power, a 10-card authentic deck, its own 20 Health), flags [listedDeck]  (authentic health 20 flags listedDeck)
+PASS M3 loot_50_max: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags )
+PASS M3 loot_52_vault: a Dungeon Run row of tier 3 whose plan is the row's (hero, power, a 10-card curated deck, its own 60 Health), flags [start,boardStart,listedDeck,noLoss,passive]  (curated health 60 flags start,boardStart,listedDeck,noLoss,passive)
+PASS M3 loot_53_inara: a Dungeon Run row of tier 3 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive)
+PASS M3 loot_54_kay: a Dungeon Run row of tier 2 whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags )
+PASS M3 loot_25_vustrasz: a Dungeon Run row of tier major1 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health plus 10), flags [start,boardStart]  (authentic health 40 flags start,boardStart)
+PASS M3 loot_26_xol: a Dungeon Run row of tier major1 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health plus 10), flags [passive]  (authentic health 40 flags passive)
+PASS M3 loot_34_azari: a Dungeon Run row of tier major1 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health plus 10), flags [hiddenZone,passive]  (authentic health 40 flags hiddenZone,passive)
+PASS M3 loot_49_darkness: a Dungeon Run row of tier major1 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health plus 10), flags [start]  (authentic health 40 flags start)
+PASS M3 loot_99_togwaggle: a Dungeon Run row of tier major1 whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health plus 10), flags []  (authentic health 40 flags )
+PASS M4 every power and card of the family is scripted by family 09 and keeps the client's text
+PASS M5 each has its own admission row: the eleven powers a boss's only, the boss cards a boss's and (held by the run player) the run player's; none is ever generated
+PASS M6 the five rule-cast and passive powers are in the passive registry (never offered); Catch and Release, Idle and Magic Candle are clickable powers whose trigger is started at match start
+PASS M7 Tad's ten-card deck is allowed by the flag listedDeck alone: without it the combat-tier row is refused (30 cards expected)  (boss loot_22_tad: deck enc-loot_22_tad has 10 cards, expected 30)
+PASS M8 a listedDeck row still needs 10 to 60 cards  (boss loot_22_tad: deck enc-loot_22_tad has 9 cards, expected 10 to 60)
+PASS M9 a run treasure no row admits for a boss (Wax Rager) is refused in a boss deck  (LOOTA_840: admission run-treasure: treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F2 T4-T33); lifted by none: a run treasure; no boss deck or generation pool offers it (boss loot_54_kay))
+PASS M10 a family 09 power asked for the run player is refused with its row's reason
+PASS M11 the start blocks: Brimstone 4 Stone Golems, Vustrasz 5 Master Chests, the Vault 7 Coffers (boss board); The Darkness 3 Candles (the run player's hand); Tad, Brimstone and the Vault pin the boss's bonus Mana at 0
+PASS M12 Inara the Mage (LOOTA_BOSS_53h2) is a portrait support card: a hero card with her Health and power, no row of its own
+PASS M13 the private tag of the room rules is in the encounter range (never sent to the client)
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 166 passed, 0 failed

@@ -1,0 +1,5 @@
+A6 digest DDE3676B5A519BEE
+NOTE A6 classes whose catalog runs dry before the last draft (none since phase 6 F16): 
+NOTE A12 DEATHKNIGHT: 3 decks x 3 pick policies x 300 seeds, 3 offers on all 14 floors; with Lean Supply 103 of 280 floors cut to 2 offers, none short
+NOTE A12 DEMONHUNTER: 3 decks x 3 pick policies x 300 seeds, 3 offers on all 14 floors; with Lean Supply 103 of 280 floors cut to 2 offers, none short
+181 passed, 0 failed

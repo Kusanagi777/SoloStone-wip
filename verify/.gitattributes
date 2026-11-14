@@ -1,0 +1,4 @@
+# Everything under verify/ is LF in git and in every checkout (Linux and Windows): the bash runners break on CRLF, and the
+# fixtures and baselines are compared byte for byte or line for line. A check that compares a fixture with XML written
+# at run time reads it through VerifyPaths.ReadText, which turns LF into the platform's line end.
+* text=auto eol=lf

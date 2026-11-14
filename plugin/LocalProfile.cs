@@ -92,6 +92,12 @@ public sealed class LocalMatchRecord
     // rewards, ladder, XP, quest/achievement, pet, rival or stats change. Written only while true (no version bump).
     public bool DebugScenario;
     public bool ShouldSerializeDebugScenario() => DebugScenario;
+    // A Dungeon Run fight (docs/design/dungeon-run.md R12): Pending records only, gated exactly like DebugScenario. It never
+    // settles and never recovers as Abandoned; the run's own sidecar (dungeon-run.xml) records the outcome. Written only while true.
+    public bool DungeonRun;
+    public bool ShouldSerializeDungeonRun() => DungeonRun;
+    // Either flag: a Pending that must leave no trace in history, ladder, rewards, XP, achievements, pets or rivals.
+    internal bool NeverSettles => DebugScenario || DungeonRun;
     // NPC world encounter (additive, optional; absent in older saves). Opponent stays the deck id.
     public string NpcId;
     public string NpcDeckId;
@@ -492,6 +498,8 @@ public sealed partial class LocalProfile : IDisposable
     private const int MaximumTurns = 1000000;
     private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(LocalProfileData));
     private readonly string path;
+    /// <summary>The folder holding this profile's file; per-profile sidecars (dungeon-run.xml) live here.</summary>
+    internal string DirectoryPath => Path.GetDirectoryName(Path.GetFullPath(path));
     private readonly FileStream lease;
     private readonly bool backups;
     private readonly ProfileOptions profileOptions;
@@ -670,9 +678,11 @@ public sealed partial class LocalProfile : IDisposable
         if (firstPlayer != 1 && firstPlayer != 2) throw new ArgumentOutOfRangeException(nameof(firstPlayer));
         armedFirstPlayer = firstPlayer;
     }
-    private bool armedDebugScenario;
+    private bool armedDebugScenario, armedDungeonRun;
     internal void ArmDebugScenario() { armedDebugScenario = true; }
-    internal void DisarmDebugScenario() { armedDebugScenario = false; armedFirstPlayer = null; }
+    internal void DisarmDebugScenario() { armedDebugScenario = false; armedDungeonRun = false; armedFirstPlayer = null; }
+    // One-shot: the NEXT Begin is a Dungeon Run fight (never settles, no pet). The caller disarms in a finally.
+    internal void ArmDungeonRun() { armedDungeonRun = true; }
 
     private LocalMatchRecord Begin(string deck, string opponent, int seed, string npcId, string npcDeckId, double? npcRating,
         bool unstarted, LocalAchievementPendingContext achievementContext, string mode)
@@ -680,6 +690,7 @@ public sealed partial class LocalProfile : IDisposable
         // One-shot: the armed test pacing applies to this Begin only, whether or not it succeeds.
         int? pacing = armedPetPacing; armedPetPacing = null;
         bool debugScenario = armedDebugScenario; armedDebugScenario = false;
+        bool dungeonRun = armedDungeonRun; armedDungeonRun = false;
         int firstPlayer = armedFirstPlayer ?? StableSeed.MatchFirstPlayer(seed); armedFirstPlayer = null;
         if (!ValidNpcFields(npcId, npcDeckId, npcRating)) throw new ArgumentException("Invalid NPC encounter.");
         if (mode != null && !CasualRules.IsCasual(mode)) throw new ArgumentException("Unknown match mode.");
@@ -692,12 +703,13 @@ public sealed partial class LocalProfile : IDisposable
             LocalCustomDeck saved = deck == "custom" ? CustomDeck : data.CustomDecks.SingleOrDefault(d => "custom:" + d.Id == deck);
             if (saved == null || !IsDeckComplete(saved.Id)) throw new InvalidOperationException("The saved deck is incomplete.");
         }
-        var chosenPet = DeckPet(deck, seed);
+        // A run fight carries no pet: no treats, likes or XP animation that would suggest progression (design R12).
+        var chosenPet = dungeonRun ? null : DeckPet(deck, seed);
         var next = Snapshot();
         next.Pending = new LocalMatchRecord {
             Id = Guid.NewGuid().ToString(), Deck = deck, DeckHero = ResolveDeckHero(deck, data), Opponent = opponent, Seed = seed, FirstPlayer = firstPlayer,
             StartedUtc = DateTime.UtcNow.ToString("o"), RewardVersion = LocalEconomy.RollRewardVersion, GrindTier = GrindTier.Id, RewardFacts = DefaultFacts(), Unstarted = unstarted, DebugScenario = debugScenario,
-            NpcId = npcId, NpcDeckId = npcDeckId, NpcRating = npcRating, Mode = mode,
+            DungeonRun = dungeonRun, NpcId = npcId, NpcDeckId = npcDeckId, NpcRating = npcRating, Mode = mode,
             Pet = chosenPet, PetXpBefore = chosenPet != null && data.OwnedPets.Contains(LocalShop.Default.PetFamily(chosenPet))
                 ? (int?)PetXp(LocalShop.Default.PetFamily(chosenPet)) : null
         };
@@ -786,7 +798,7 @@ public sealed partial class LocalProfile : IDisposable
             throw new InvalidOperationException("Invalid terminal result.");
         // The one central settlement gate for debug scenario matches: the pending record is dropped and nothing else moves
         // (no Matches row, gold, dust, packs, ladder, XP, quests/achievements, pets, rivals, stats, backup, reward presentation).
-        if (data.Pending != null && data.Pending.Id == id && data.Pending.DebugScenario)
+        if (data.Pending != null && data.Pending.Id == id && data.Pending.NeverSettles)
         {
             var unsettled = Copy(data.Pending);
             unsettled.SettledUtc = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
@@ -879,9 +891,10 @@ public sealed partial class LocalProfile : IDisposable
     public void RecoverInterrupted()
     {
         if (data.Pending == null) return;
-        if (data.Pending.DebugScenario)
+        if (data.Pending.NeverSettles)
         {
-            // A scenario match interrupted by a quit or crash is dropped, never booked as an Abandoned ladder loss.
+            // A scenario or Dungeon Run match interrupted by a quit or crash is dropped, never booked as an Abandoned
+            // ladder loss. A run's own sidecar resumes that floor (DungeonRun.Resume).
             var dropped = Snapshot();
             dropped.Pending = null;
             Commit(dropped);
@@ -2448,7 +2461,7 @@ public sealed partial class LocalProfile : IDisposable
         MasteryGrants = match.MasteryGrants?.Select(LocalCardMastery.Clone).ToList(),
         ClassRewardGrants = match.ClassRewardGrants?.Select(Copy).ToList(), PortraitGrants = match.PortraitGrants?.Select(Copy).ToList(),
         TierRewards = match.TierRewards?.Select(Copy).ToList(), Packs = match.Packs?.Select(Copy).ToList(),
-        RewardFacts = Copy(match.RewardFacts), Unstarted = match.Unstarted, DebugScenario = match.DebugScenario,
+        RewardFacts = Copy(match.RewardFacts), Unstarted = match.Unstarted, DebugScenario = match.DebugScenario, DungeonRun = match.DungeonRun,
         CosmeticCoin = match.CosmeticCoin, CosmeticCoinCardId = match.CosmeticCoinCardId,
         Pet = match.Pet, PetXpBefore = match.PetXpBefore, PetXpAfter = match.PetXpAfter, PetRules = match.PetRules,
         PetSmall = match.PetSmall, PetMedium = match.PetMedium, PetLarge = match.PetLarge, PetPacingPercent = match.PetPacingPercent,

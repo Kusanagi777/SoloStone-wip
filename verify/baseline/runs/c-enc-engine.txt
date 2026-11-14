@@ -1,0 +1,124 @@
+PASS A1 phase 1: the row's hero and power at 300 Health, form 0
+PASS A2 at 201 it is still phase 1
+PASS A3 at 195 it becomes phase 2: a new hero and power, 200 maximum Health with 195 left, the game goes on  (ULDA_BOSS_40h2 195/200)
+PASS A4 the old hero and power sit in the set-aside zone; the controller's hero entity is the new one
+PASS A5 its deck is replaced by the phase's list and 3 cards are drawn
+PASS A6 the deck replacement is recorded as an own-deck fact of the boss
+PASS A7 the boss's own-deck ledger samples the new list (27 River Crocolisks), not the old deck  (CS2_120x27)
+PASS A8 Wrath Smash's cost aura is live from the swap (2, no damaged minion)
+PASS A9 one hit across the next threshold: phase 3 with 45 of 100 left and the phase-3 deck
+PASS A10 the harvest: 45 Health left in form 2 after 2 changes
+PASS A11 at 0 in its last phase it dies and the run player wins
+PASS A12 one hit across two thresholds lands in phase 3 (50 left), both decks replaced in turn
+PASS A13 a killing blow from phase 1 kills it (Health forms never revive)
+PASS A14 carried into phase 2: the phase-2 hero, power and deck from the start, 180 of 200
+PASS A15 and it goes on to phase 3 at 95
+PASS A16 carried damage inside phase 1
+PASS A17 a clone is in the same form with the same deck, and changes form by the same rule
+PASS A18 the clone's change does not touch the real game
+PASS A19 a plan without forms: the config has no encounter and the boss just takes damage
+PASS B1 a death form does nothing while the boss lives
+PASS B2 when it dies it becomes the next form at full Health instead of losing
+PASS B3 the deck stays when the form names none
+PASS B4 a power-only form keeps the hero entity: full Health of the form, the new power
+PASS B5 with no form left it dies
+PASS B6 SwapForm (a script form) changes hero and power now, at the form's full Health
+PASS B7 and back (Tag Team, Belnaara): form 0 again
+PASS B8 a script form is never entered by Health or death
+PASS B9 after the change the boss plays cards of its new deck on its turn
+PASS C1 before the mulligan nothing of the start block exists; the boss was dealt 2 more cards  (boss mulligan 7 vs 5)
+PASS C2 carried damage is on the run hero from the start
+PASS C3 after both mulligans: the boss's two minions, the player's minion, the weapon and the Armor
+PASS C4 the deck adds are in the decks, the hand adds in the hands
+PASS C5 the start block lands once (a second resolve does nothing, in the game or a clone)
+PASS C6 Configure refuses an opening bonus out of range, an unscripted boss shrine and an unscripted rule
+PASS D1 when the run hero dies the first relay hero enters: its portrait and power at its own Health, the game goes on
+PASS D2 its hand and deck are its own list (4 drawn of 12); the old cards are set aside  (4 -> 4)
+PASS D3 the board and the Mana Crystals stay; the boss keeps its Health
+PASS D4 the boss's beliefs about the old hand and deck are reset, and the new deck is an own-deck fact of the player
+PASS D5 the second relay hero follows
+PASS D6 the harvest lists the three heroes in order
+PASS D7 with no relay hero left the run player loses
+PASS D8 a concession is never relayed
+PASS E1 TRLA_104: armed in the boss's set-aside zone before the mulligan, on no board
+PASS E2 TRLA_104: on the boss's board after both mulligans, marked, awake, and none on the player's
+PASS E3 TRLA_104: dies into its dormant form in its slot
+PASS E4 TRLA_104: revives at the start of its owner's third turn
+PASS E1 TRLA_170: armed in the boss's set-aside zone before the mulligan, on no board
+PASS E2 TRLA_170: on the boss's board after both mulligans, marked, awake, and none on the player's
+PASS E3 TRLA_170: dies into its dormant form in its slot
+PASS E4 TRLA_170: revives at the start of its owner's third turn
+PASS E1 TRLA_171: armed in the boss's set-aside zone before the mulligan, on no board
+PASS E2 TRLA_171: on the boss's board after both mulligans, marked, awake, and none on the player's
+PASS E3 TRLA_171: dies into its dormant form in its slot
+PASS E4 TRLA_171: revives at the start of its owner's third turn
+PASS E5 TRLA_104 on the boss's side: its Attack is the boss's Armor  (attack 6)
+PASS E6 TRLA_170 on the boss's side: after the boss summons a Dragon, the Dragons in its hand cost (1) less  (cost 3)
+PASS E7 Typhoon is played
+PASS E8 the other minions left both boards for the decks; the shrine went dormant in its slot and is in no deck
+PASS E9 a dormant shrine stays where it is through Typhoon
+PASS E10 without a shrine Typhoon is unchanged: both minions are shuffled into decks
+PASS F1 Prediction costs (1) and is clickable
+PASS F2 it puts one Secret into the boss's Secret zone
+PASS F3 a scripted Mage Secret of the validator's closed pool, admitted for a boss, live as if cast  (CFM_620)
+PASS F4 used again it adds a different Secret each time (never one it holds), all from the pool  (CFM_620,EX1_289,ULD_239,EX1_294,UNG_024)
+PASS F5 the engine's pool for the boss is the validator's  (14 vs 14)
+PASS F6 the run player's side still generates from its own lists (both sides on)
+PASS F7 on a plan that keeps the boss side off the power would do nothing (which is why the validator refuses that row)
+PASS G1 DALA_866: its player enchantment is on both players before the mulligan
+PASS G2 at the start of the boss's turn the boss's hero is healed 2, the run player's is not
+PASS G3 at the start of the run player's turn the run player's hero is healed 2
+PASS G4 applying a rule twice stacks nothing
+PASS G5 DALA_864: at the end of the run player's turn only its minions gain +1/+1
+PASS G6 at the end of the boss's turn the boss's minions gain +1/+1
+PASS G7 DALA_850: spells in both hands cost (2) less (never below 0), minions do not  (2 2 4 0)
+PASS G7b a repeatable spell is never brought below (1): Unstable Evolution ("Repeatable this turn") stays (1), Sound the Bells! (Echo, 2) costs (1)  (1 1)
+PASS G8 two rules are both on both players, in the plan's order
+PASS G9 a clone plays under the same rule
+PASS G10 DALA_850: the rule card and its enchantment carry the client's text
+PASS G10 DALA_864: the rule card and its enchantment carry the client's text
+PASS G10 DALA_866: the rule card and its enchantment carry the client's text
+PASS H1 Commanding Scream costs (1)
+PASS H2 its minions cannot be reduced below 1 Health this turn
+PASS H3 the protection ends with the turn
+PASS H4 Wrath Smash: (2) with no damaged minion, and no legal target
+PASS H5 it costs (1) more for each damaged minion on either board  (cost 4)
+PASS H6 it destroys a damaged minion and only a damaged one
+PASS H7 the cost follows the board (one damaged minion left: 3)
+PASS H8 Hand of Defiance costs (0) and swaps a minion's Attack and Health
+PASS H9 ULDA_BOSS_40p1 is scripted and keeps the client's text
+PASS H9 ULDA_BOSS_40p2 is scripted and keeps the client's text
+PASS H9 ULDA_BOSS_40p3 is scripted and keeps the client's text
+PASS H9 DALA_BOSS_21p is scripted and keeps the client's text
+PASS H9 GILA_BOSS_61t is scripted and keeps the client's text
+PASS H9 GILA_BOSS_61t3 is scripted and keeps the client's text
+PASS H9 GILA_500h4 is scripted and keeps the client's text
+PASS H9 GILA_600h2 is scripted and keeps the client's text
+PASS H9 LOEA_01 is scripted and keeps the client's text
+PASS H9 LOEA_01H is scripted and keeps the client's text
+PASS H10 Hagatha starts with 2 Mana Crystals more and an unclickable, started Bewitch
+PASS H11 the boss cannot click it
+PASS H12 after the boss plays a minion a random Shaman spell joins its hand
+PASS H13 outside an encounter start the collectible passive is as it was (not started by the run setup's list only when listed)
+PASS H14 Ritual Dagger: a 3/4 Lifesteal weapon for (2)
+PASS H15 after the boss casts a spell it gains +1 Durability
+PASS H16 Ominous Fog costs (2) and corrupts the enemy minions only
+PASS H17 they live through the run player's turn
+PASS H18 and are destroyed at the start of the boss's next turn; its own minion is not
+PASS H19 Looming Presence (Heroic): draw 3 cards, gain 6 Armor
+PASS H20 Looming Presence: draw 2 cards, gain 4 Armor
+PASS I1 before the mulligan the hero cards are nowhere
+PASS I2 after the mulligan both hero cards are in the run player's hand, at their printed Costs (5 and 8)
+PASS I3 Darius's card is played
+PASS I4 its Battlecry first offers the hunter's three passives
+PASS I5 the pick is accepted
+PASS I6 the hero and power changed for this match: Darius with Fire!, the Health and damage carried, 5 Armor
+PASS I7 then 5 damage to all minions, with the passive already in force: the run player's 4/5 Yeti (4/7 with Entrenchment) survives at 2, the War Golem is at 2  (mine 2 zone PLAY theirs 2 base 7 ench GILA_805e)
+PASS I8 the chosen passive is a player enchantment of this match (Entrenchment: +2 Health)
+PASS I9 the hunter's 12 cards joined the deck
+PASS I10 the harvest names both heroes
+PASS I11 Tess's card after it: Tess with Scavenge, 8 damage to all minions, the second 12 cards, a second passive
+PASS I12 the plan's own lists were never written
+PASS I13 with no encounter data the card deals its damage at once and changes the hero
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 122 passed, 0 failed

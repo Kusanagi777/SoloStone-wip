@@ -26,7 +26,6 @@ namespace SabberStoneCore.CardSets.Client.Sets
                     var shot = ComplexTask.DamageRandomTargets(1, EntityType.ENEMIES, 1);
                     for (int i = 0, shots = fire ? 6 : 3; i < shots; i++)
                         shot.Process(g, c, s, null, new TaskStack());
-                    new SetGameTagTask(GameTag.LOCATION_ACTION_COOLDOWN, 1, EntityType.SOURCE).Process(g, c, s, null, new TaskStack());
                 })
             } };
         }

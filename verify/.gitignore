@@ -1,0 +1,10 @@
+# Everything a build or a run writes stays out of git: the engine build, the tool builds, every log and temp file.
+.out/
+# Per-suite build output (dotnet build -o out) and intermediates; c-shrine-core's out/save-fixture is under out/ too.
+obj/
+out/
+*.dll
+*.exe
+*.pdb
+# The repository's .gitignore ignores every bin/ folder (build output); verify/bin holds the runner scripts.
+!/bin/

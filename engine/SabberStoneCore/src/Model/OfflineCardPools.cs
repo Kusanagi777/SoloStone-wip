@@ -64,13 +64,35 @@ namespace SabberStoneCore.Model
 
         public static IReadOnlyList<Card> Candidates(Game game, CardClass heroClass,
             OfflinePoolFilter filter, int sourceDbfId, PoolDestination destination = PoolDestination.Hand, int? sourceClassMask = null) =>
-            Candidates(Manifest(game), heroClass, filter, sourceDbfId, destination, sourceClassMask);
+            ForGame(game, Candidates(Manifest(game), heroClass, filter, sourceDbfId, destination, sourceClassMask));
 
         public static Card[] SampleDistinct(Game game, OfflinePoolFilter filter, CardClass heroClass, int sourceDbfId, PoolDestination destination = PoolDestination.Hand, int? sourceClassMask = null) =>
-            SampleDistinct(Manifest(game), game.Random, filter, heroClass, sourceDbfId, destination, sourceClassMask);
+            SampleDistinct(Manifest(game), game.Random, filter, heroClass, sourceDbfId, destination, sourceClassMask, game.ExcludesGeneratedSecretsNow, game);
 
         public static Card Pick(Game game, OfflinePoolFilter filter, CardClass heroClass, int sourceDbfId, PoolDestination destination = PoolDestination.Hand) =>
-            Pick(Manifest(game), game.Random, filter, heroClass, sourceDbfId, destination);
+            Pick(Manifest(game), game.Random, filter, heroClass, sourceDbfId, destination, game.ExcludesGeneratedSecretsNow, game);
+
+        // Run games (GameConfig.Player1/Player2ExcludeGeneratedSecrets, per generating controller) never generate Secrets. The filtered list is kept per pool list,
+        // and the pool lists are themselves cached, so each filtered pool is built once.
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<IReadOnlyList<Card>, IReadOnlyList<Card>> WithoutSecrets =
+            new System.Runtime.CompilerServices.ConditionalWeakTable<IReadOnlyList<Card>, IReadOnlyList<Card>>();
+
+        // Run games may also list card ids generation never yields (GameConfig.ExcludedGeneratedIds). With no ids the
+        // Secret-only path above is used unchanged; with ids, each filtered pool is kept per pool list and per id set.
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<IReadOnlyList<Card>, System.Collections.Concurrent.ConcurrentDictionary<string, IReadOnlyList<Card>>> WithoutListed =
+            new System.Runtime.CompilerServices.ConditionalWeakTable<IReadOnlyList<Card>, System.Collections.Concurrent.ConcurrentDictionary<string, IReadOnlyList<Card>>>();
+
+        private static IReadOnlyList<Card> ForGame(Game game, IReadOnlyList<Card> pool)
+        {
+            if (!game.FiltersGenerated) return pool;
+            if (!game.FiltersGeneratedIds) return game.ExcludesGeneratedSecretsNow ? NoSecrets(pool) : pool;
+            var byKey = WithoutListed.GetValue(pool, _ => new System.Collections.Concurrent.ConcurrentDictionary<string, IReadOnlyList<Card>>(StringComparer.Ordinal));
+            return byKey.GetOrAdd(game.GeneratedFilterKey, _ =>
+                pool.Any(game.BlocksGenerated) ? Array.AsReadOnly(pool.Where(card => !game.BlocksGenerated(card)).ToArray()) : pool);
+        }
+
+        private static IReadOnlyList<Card> NoSecrets(IReadOnlyList<Card> pool) =>
+            WithoutSecrets.GetValue(pool, list => list.Any(card => card.IsSecret) ? Array.AsReadOnly(list.Where(card => !card.IsSecret).ToArray()) : list);
 
         private static bool Matches(OfflinePoolPolicy.Member m, CardClass heroClass, OfflinePoolFilter f)
         {
@@ -120,10 +142,13 @@ namespace SabberStoneCore.Model
         }
 
         internal static Card[] SampleDistinct(OfflinePoolManifest manifest, Util.DeepCloneableRandom random,
-            OfflinePoolFilter filter, CardClass heroClass, int sourceDbfId, PoolDestination destination = PoolDestination.Hand, int? sourceClassMask = null)
+            OfflinePoolFilter filter, CardClass heroClass, int sourceDbfId, PoolDestination destination = PoolDestination.Hand, int? sourceClassMask = null,
+            bool noSecrets = false, Game game = null)
         {
             if (random == null) throw new ArgumentNullException(nameof(random));
             var candidates = Candidates(manifest, heroClass, filter, sourceDbfId, destination, sourceClassMask);
+            if (game != null) candidates = ForGame(game, candidates);
+            else if (noSecrets) candidates = NoSecrets(candidates);
             if (candidates.Count <= 3) return candidates.ToArray();
             var indices = Enumerable.Range(0, candidates.Count).ToArray();
             var result = new Card[3];
@@ -138,10 +163,13 @@ namespace SabberStoneCore.Model
         }
 
         internal static Card Pick(OfflinePoolManifest manifest, Util.DeepCloneableRandom random,
-            OfflinePoolFilter filter, CardClass heroClass, int sourceDbfId, PoolDestination destination = PoolDestination.Hand)
+            OfflinePoolFilter filter, CardClass heroClass, int sourceDbfId, PoolDestination destination = PoolDestination.Hand,
+            bool noSecrets = false, Game game = null)
         {
             if (random == null) throw new ArgumentNullException(nameof(random));
             var candidates = Candidates(manifest, heroClass, filter, sourceDbfId, destination, false);
+            if (game != null) candidates = ForGame(game, candidates);
+            else if (noSecrets) candidates = NoSecrets(candidates);
             return candidates.Count == 0 ? null : candidates[random.Next(candidates.Count)];
         }
     }

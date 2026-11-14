@@ -1,0 +1,15 @@
+plan hero=HERO_09 power=CS1h_001 deck=GVG_009,GVG_009,CS2_235,CS2_236,CS2_236,JAIL_942,ICC_212,ICC_212,AT_012,GIL_156,CFM_095,TLC_242,UNG_002,AT_097,EX1_396,TRL_550 boss=tunnel_rat matchSeed=1264117344
+floor 3 boss=tunnel_rat power=CS1h_001 matchSeed=1264117344
+floor 3 treasure offered=ember_brand,mending_charm,spark_lantern
+floor 3 bundle offered=bundle_neutral_dragon,bundle_neutral_elemental,bundle_priest_deathrattle
+floor 4 boss=storm_herald power=CS1h_001 matchSeed=1107147597
+floor 4 bundle offered=bundle_neutral_deathrattle,bundle_neutral_murloc,bundle_priest_spells
+floor 5 boss=ashen_abbess power=CS1h_001 matchSeed=844988149
+floor 5 treasure offered=bottomless_tome,spare_crystal,swift_hound
+floor 5 bundle offered=bundle_neutral_mechanical,bundle_priest_battlecry,bundle_priest_deathrattle
+floor 6 boss=tollkeeper power=CS1h_001 matchSeed=225489505
+floor 6 bundle offered=bundle_neutral_elemental,bundle_neutral_murloc,bundle_priest_elemental
+floor 7 boss=ember_matron power=CS1h_001 matchSeed=59734776
+floor 7 bundle offered=bundle_priest_battlecry,bundle_priest_deathrattle,bundle_priest_spells
+floor 8 boss=devouring_maw power=CS1h_001 matchSeed=80516604
+end phase=Victory deck=32 treasures=deep_satchel,ember_brand,bottomless_tome

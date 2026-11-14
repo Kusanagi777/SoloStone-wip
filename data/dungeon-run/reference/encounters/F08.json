@@ -1,0 +1,1709 @@
+{
+  "schemaVersion": 1,
+  "family": "08",
+  "description": "Dungeon Run bosses B (phase 8 family 08): seventeen Kobolds and Catacombs Dungeon Run encounters whose hero powers are passives, triggers and both-player effects (the tag team of George and Karl, Spiritspeaker Azun, Battlecrier Jin'zo, the two Gutmooks, Candlebeard, Ixlid, Lyris the Wild Mage, Voodoomaster Vex, Kraxx, Seriona, Whompwhisker, Elder Jari, Jeeru, Fungalmancer Flurgl, the Lava-Filled Chamber, Russell the Bard). Boss deck lists are transcribed from the hearthstone.wiki.gg boss pages (read 2026-11-13), by card name; the rounds each boss appears in are the Bosses table of https://hearthstone.wiki.gg/wiki/Dungeon_Run (same date). tools/dungeon-run-catalog (step 'encounters') resolves the names against facts/violet-hold-2026-09.json and writes data/dungeon-run/encounters-v1.json.",
+  "method": "Each boss page's wikitext (MediaWiki API, action=parse, prop=wikitext) was read and its Decks table transcribed in table order with the table's own counts (every table totals 30). Level: the first round of the Dungeon Run page's Bosses table (rounds 2-3 = tier 1, 4-5 = tier 2, 6-7 = tier 3); Health is the act curve except where the wiki states a Health of the boss's own (George and Karl: 30 each; Ixlid: 20). Boss-only cards carry their id.",
+  "bosses": [
+    {
+      "id": "loot_15_george_karl",
+      "name": "George and Karl",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_15h",
+      "power": "LOOTA_BOSS_15p",
+      "tier": "3",
+      "archetype": "aggro",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 6
+      },
+      "health": 30,
+      "fixedHealth": true,
+      "incompatibleModifiers": [
+        "mod_iron_bosses",
+        "mod_open_road"
+      ],
+      "forms": [
+        {
+          "hero": "LOOTA_BOSS_32h",
+          "power": "AT_132_PALADIN",
+          "health": 30,
+          "at": {
+            "script": true
+          }
+        }
+      ],
+      "flags": [
+        "forms"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/George_and_Karl",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Tag Team",
+              "count": 4,
+              "id": "LOOTA_BOSS_110"
+            },
+            {
+              "name": "Lost in the Jungle",
+              "count": 2
+            },
+            {
+              "name": "Equality",
+              "count": 2
+            },
+            {
+              "name": "Aldor Peacekeeper",
+              "count": 2
+            },
+            {
+              "name": "Consecration",
+              "count": 2
+            },
+            {
+              "name": "Divine Favor",
+              "count": 1
+            },
+            {
+              "name": "Lightfused Stegodon",
+              "count": 2
+            },
+            {
+              "name": "Muster for Battle",
+              "count": 2
+            },
+            {
+              "name": "Rallying Blade",
+              "count": 2
+            },
+            {
+              "name": "Warhorse Trainer",
+              "count": 2
+            },
+            {
+              "name": "Grimestreet Enforcer",
+              "count": 2
+            },
+            {
+              "name": "Stand Against Darkness",
+              "count": 2
+            },
+            {
+              "name": "Quartermaster",
+              "count": 2
+            },
+            {
+              "name": "Vinecleaver",
+              "count": 2
+            },
+            {
+              "name": "Blood Knight",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "power",
+          "note": "One tag-team encounter for the client's two hero cards (LOOTA_BOSS_15h George and Karl with Divinity, LOOTA_BOSS_32h Karl and George with The Silver Hand). As the wiki's Dungeon Run table states (\"30 HP each. Starts with George and switches to Karl on defeat\"; round 6 only), each of the two has its own 30 Health: Tag Team swaps the active hero with the benched one, each keeping its own damage, and when the active one is defeated the other takes over if it still stands. Armor, the weapon and the board stay with the side; the hero power is fresh after a swap, as after every hero power replacement. Tag Team does nothing once the benched hero is defeated."
+        },
+        {
+          "kind": "health",
+          "note": "Identity Health: 30 for each of the two heroes at every floor (the wiki: 30 HP each, where most round 6 bosses have 50), so fixedHealth; the act curve and the modifiers' bossHealthDelta do not apply."
+        },
+        {
+          "kind": "power",
+          "note": "Divinity is not offered when every minion of the boss has Divine Shield already (it would do nothing)."
+        }
+      ]
+    },
+    {
+      "id": "loot_16_azun",
+      "name": "Spiritspeaker Azun",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_16h",
+      "power": "LOOTA_BOSS_16p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "flags": [
+        "passive",
+        "bothPlayers",
+        "doubleDeathrattle"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Spiritspeaker_Azun",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Awaken the Makers",
+              "count": 1
+            },
+            {
+              "name": "Crystalline Oracle",
+              "count": 2
+            },
+            {
+              "name": "Shadow Word: Death",
+              "count": 2
+            },
+            {
+              "name": "Shadow Word: Pain",
+              "count": 2
+            },
+            {
+              "name": "Holy Nova",
+              "count": 1
+            },
+            {
+              "name": "Tortollan Shellraiser",
+              "count": 2
+            },
+            {
+              "name": "Eternal Servitude",
+              "count": 2
+            },
+            {
+              "name": "Onyx Bishop",
+              "count": 1
+            },
+            {
+              "name": "Shifting Shade",
+              "count": 2
+            },
+            {
+              "name": "Shadow Essence",
+              "count": 2
+            },
+            {
+              "name": "Obsidian Statue",
+              "count": 2
+            },
+            {
+              "name": "Mistress of Mixtures",
+              "count": 2
+            },
+            {
+              "name": "Loot Hoarder",
+              "count": 2
+            },
+            {
+              "name": "Shallow Gravedigger",
+              "count": 2
+            },
+            {
+              "name": "Arfus",
+              "count": 1
+            },
+            {
+              "name": "Spiritsinger Umbra",
+              "count": 1
+            },
+            {
+              "name": "Barnes",
+              "count": 1
+            },
+            {
+              "name": "Bone Drake",
+              "count": 1
+            },
+            {
+              "name": "N'Zoth, the Corruptor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      }
+    },
+    {
+      "id": "loot_17_jinzo",
+      "name": "Battlecrier Jin'zo",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_17h",
+      "power": "LOOTA_BOSS_17p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "flags": [
+        "passive",
+        "bothPlayers",
+        "doubleBattlecry"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Battlecrier_Jin%27zo",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Battle Rage",
+              "count": 1
+            },
+            {
+              "name": "Bring It On!",
+              "count": 2
+            },
+            {
+              "name": "Cruel Taskmaster",
+              "count": 2
+            },
+            {
+              "name": "Shield Block",
+              "count": 2
+            },
+            {
+              "name": "Blubber Baron",
+              "count": 2
+            },
+            {
+              "name": "Ravaging Ghoul",
+              "count": 2
+            },
+            {
+              "name": "Brawl",
+              "count": 2
+            },
+            {
+              "name": "Iron Juggernaut",
+              "count": 1
+            },
+            {
+              "name": "Dirty Rat",
+              "count": 2
+            },
+            {
+              "name": "Novice Engineer",
+              "count": 2
+            },
+            {
+              "name": "Coldlight Oracle",
+              "count": 2
+            },
+            {
+              "name": "Grimestreet Smuggler",
+              "count": 2
+            },
+            {
+              "name": "Saboteur",
+              "count": 2
+            },
+            {
+              "name": "Defender of Argus",
+              "count": 2
+            },
+            {
+              "name": "Refreshment Vendor",
+              "count": 2
+            },
+            {
+              "name": "Mind Control Tech",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      }
+    },
+    {
+      "id": "loot_19_gutmook",
+      "name": "Gutmook",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_19h",
+      "power": "LOOTA_BOSS_19p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "flags": [
+        "passive"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Gutmook",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Gluttonous Trogg",
+              "count": 2,
+              "id": "LOOTA_109"
+            },
+            {
+              "name": "Tunnel Trogg",
+              "count": 2
+            },
+            {
+              "name": "Ancestral Knowledge",
+              "count": 2
+            },
+            {
+              "name": "Crushing Hand",
+              "count": 2
+            },
+            {
+              "name": "Lava Shock",
+              "count": 2
+            },
+            {
+              "name": "Stormforged Axe",
+              "count": 2
+            },
+            {
+              "name": "Totem Golem",
+              "count": 2
+            },
+            {
+              "name": "Lightning Storm",
+              "count": 2
+            },
+            {
+              "name": "Flamewreathed Faceless",
+              "count": 2
+            },
+            {
+              "name": "Volcano",
+              "count": 1
+            },
+            {
+              "name": "Snowfury Giant",
+              "count": 2
+            },
+            {
+              "name": "Millhouse Manastorm",
+              "count": 1
+            },
+            {
+              "name": "King Mukla",
+              "count": 1
+            },
+            {
+              "name": "Burly Rockjaw Trogg",
+              "count": 2
+            },
+            {
+              "name": "Hoarding Dragon",
+              "count": 2
+            },
+            {
+              "name": "Burgly Bully",
+              "count": 2
+            },
+            {
+              "name": "Troggzor the Earthinator",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "schedule",
+          "note": "The wiki lists Gutmook twice with one deck: rounds 4-5 with Digest Magic (LOOTA_BOSS_19h, this row) and rounds 6-7 with Metabolized Magic (LOOTA_BOSS_33h, row loot_33_gutmook)."
+        }
+      ]
+    },
+    {
+      "id": "loot_33_gutmook",
+      "name": "Gutmook",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_33h",
+      "power": "LOOTA_BOSS_33p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 6
+      },
+      "flags": [
+        "passive"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Gutmook",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Gluttonous Trogg",
+              "count": 2,
+              "id": "LOOTA_109"
+            },
+            {
+              "name": "Tunnel Trogg",
+              "count": 2
+            },
+            {
+              "name": "Ancestral Knowledge",
+              "count": 2
+            },
+            {
+              "name": "Crushing Hand",
+              "count": 2
+            },
+            {
+              "name": "Lava Shock",
+              "count": 2
+            },
+            {
+              "name": "Stormforged Axe",
+              "count": 2
+            },
+            {
+              "name": "Totem Golem",
+              "count": 2
+            },
+            {
+              "name": "Lightning Storm",
+              "count": 2
+            },
+            {
+              "name": "Flamewreathed Faceless",
+              "count": 2
+            },
+            {
+              "name": "Volcano",
+              "count": 1
+            },
+            {
+              "name": "Snowfury Giant",
+              "count": 2
+            },
+            {
+              "name": "Millhouse Manastorm",
+              "count": 1
+            },
+            {
+              "name": "King Mukla",
+              "count": 1
+            },
+            {
+              "name": "Burly Rockjaw Trogg",
+              "count": 2
+            },
+            {
+              "name": "Hoarding Dragon",
+              "count": 2
+            },
+            {
+              "name": "Burgly Bully",
+              "count": 2
+            },
+            {
+              "name": "Troggzor the Earthinator",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      }
+    },
+    {
+      "id": "loot_31_candlebeard",
+      "name": "Candlebeard",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_31h",
+      "power": "LOOTA_BOSS_31p",
+      "tier": "3",
+      "archetype": "aggro",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 6
+      },
+      "flags": [
+        "passive"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Candlebeard",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Pit Snake",
+              "count": 2
+            },
+            {
+              "name": "Swashburglar",
+              "count": 2
+            },
+            {
+              "name": "Cutpurse",
+              "count": 2
+            },
+            {
+              "name": "Shady Dealer",
+              "count": 2
+            },
+            {
+              "name": "Dark Iron Skulker",
+              "count": 2
+            },
+            {
+              "name": "Xaril, Poisoned Mind",
+              "count": 1
+            },
+            {
+              "name": "Vanish",
+              "count": 1
+            },
+            {
+              "name": "Ship's Cannon",
+              "count": 2
+            },
+            {
+              "name": "Magma Rager",
+              "count": 2
+            },
+            {
+              "name": "Stoneskin Basilisk",
+              "count": 2
+            },
+            {
+              "name": "Vicious Fledgling",
+              "count": 2
+            },
+            {
+              "name": "Genzo, the Shark",
+              "count": 1
+            },
+            {
+              "name": "Piloted Shredder",
+              "count": 2
+            },
+            {
+              "name": "Piloted Sky Golem",
+              "count": 2
+            },
+            {
+              "name": "Wind-up Burglebot",
+              "count": 2
+            },
+            {
+              "name": "Sneed's Old Shredder",
+              "count": 1
+            },
+            {
+              "name": "Sea Giant",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "schedule",
+          "note": "The wiki lists Candlebeard twice with one deck: rounds 2-3 with the clickable Charge! (another hero card, family 07) and rounds 6-7 with the passive Charrrrrge! (LOOTA_BOSS_31h, this row)."
+        }
+      ]
+    },
+    {
+      "id": "loot_36_ixlid",
+      "name": "Ixlid",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_36h",
+      "power": "LOOTA_BOSS_36p",
+      "tier": "3",
+      "archetype": "aggro",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 6
+      },
+      "health": 20,
+      "fixedHealth": true,
+      "incompatibleModifiers": [
+        "mod_iron_bosses",
+        "mod_open_road"
+      ],
+      "cards": [
+        "LOOTA_105"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Ixlid",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Living Roots",
+              "count": 2
+            },
+            {
+              "name": "Mark of the Wild",
+              "count": 2
+            },
+            {
+              "name": "Power of the Wild",
+              "count": 2
+            },
+            {
+              "name": "Wrath",
+              "count": 2
+            },
+            {
+              "name": "Addled Grizzly",
+              "count": 2
+            },
+            {
+              "name": "Mark of Nature",
+              "count": 2
+            },
+            {
+              "name": "Poison Seeds",
+              "count": 2
+            },
+            {
+              "name": "Savage Combatant",
+              "count": 2
+            },
+            {
+              "name": "Webweave",
+              "count": 2
+            },
+            {
+              "name": "Tentacle of N'Zoth",
+              "count": 2
+            },
+            {
+              "name": "Bittertide Hydra",
+              "count": 2
+            },
+            {
+              "name": "Defender of Argus",
+              "count": 2
+            },
+            {
+              "name": "Ticking Abomination",
+              "count": 2
+            },
+            {
+              "name": "Mukla's Champion",
+              "count": 2
+            },
+            {
+              "name": "Corridor Creeper",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "replacements": {
+        "Wrath": "Lesser Jasper Spellstone",
+        "Power of the Wild": "Mark of the Lotus"
+      },
+      "adaptations": [
+        {
+          "kind": "health",
+          "note": "Identity Health: the wiki states Ixlid always starts with 20 Health (most round 6 bosses have 50), so fixedHealth 20 at every floor."
+        },
+        {
+          "kind": "power",
+          "note": "The wiki marks Sprouting Spore (2) as auto-cast. Here the boss's AI chooses when to pay for it like any hero power, and it is not offered when it would do nothing (a full board)."
+        }
+      ]
+    },
+    {
+      "id": "loot_37_lyris",
+      "name": "Lyris the Wild Mage",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_37h",
+      "power": "LOOTA_BOSS_37p",
+      "tier": "2",
+      "archetype": "tempo",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Lyris_the_Wild_Mage",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Arcane Intellect",
+              "count": 5
+            },
+            {
+              "name": "Flamewaker",
+              "count": 20
+            },
+            {
+              "name": "Archmage Antonidas",
+              "count": 1
+            },
+            {
+              "name": "Arcane Giant",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "power",
+          "note": "Arcane Infusion is not offered with a full hand (it would add nothing)."
+        }
+      ]
+    },
+    {
+      "id": "loot_38_vex",
+      "name": "Voodoomaster Vex",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_38h",
+      "power": "LOOTA_BOSS_38p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 6
+      },
+      "flags": [
+        "passive",
+        "bothPlayers",
+        "doubleBattlecry",
+        "doubleDeathrattle"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Voodoomaster_Vex",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Unearthed Raptor",
+              "count": 2
+            },
+            {
+              "name": "Xaril, Poisoned Mind",
+              "count": 1
+            },
+            {
+              "name": "Shadowcaster",
+              "count": 2
+            },
+            {
+              "name": "Mistress of Mixtures",
+              "count": 2
+            },
+            {
+              "name": "Explosive Sheep",
+              "count": 2
+            },
+            {
+              "name": "Shallow Gravedigger",
+              "count": 2
+            },
+            {
+              "name": "Piloted Shredder",
+              "count": 2
+            },
+            {
+              "name": "Rattling Rascal",
+              "count": 2
+            },
+            {
+              "name": "Ticking Abomination",
+              "count": 2
+            },
+            {
+              "name": "Abomination",
+              "count": 2
+            },
+            {
+              "name": "Bomb Squad",
+              "count": 2
+            },
+            {
+              "name": "Carnivorous Cube",
+              "count": 2
+            },
+            {
+              "name": "Corpse Raiser",
+              "count": 2
+            },
+            {
+              "name": "Tomb Lurker",
+              "count": 2
+            },
+            {
+              "name": "Aya Blackpaw",
+              "count": 1
+            },
+            {
+              "name": "Sylvanas Windrunner",
+              "count": 1
+            },
+            {
+              "name": "Sneed's Old Shredder",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      }
+    },
+    {
+      "id": "loot_39_kraxx",
+      "name": "Kraxx",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_39h",
+      "power": "LOOTA_BOSS_39p",
+      "tier": "2",
+      "archetype": "control",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Kraxx",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Execute",
+              "count": 2
+            },
+            {
+              "name": "Shield Slam",
+              "count": 2
+            },
+            {
+              "name": "Armorsmith",
+              "count": 2
+            },
+            {
+              "name": "Bash",
+              "count": 2
+            },
+            {
+              "name": "Bladed Gauntlet",
+              "count": 2
+            },
+            {
+              "name": "Drywhisker Armorer",
+              "count": 2
+            },
+            {
+              "name": "Fiery War Axe",
+              "count": 2
+            },
+            {
+              "name": "Shield Block",
+              "count": 2
+            },
+            {
+              "name": "Sleep with the Fishes",
+              "count": 2
+            },
+            {
+              "name": "Alley Armorsmith",
+              "count": 2
+            },
+            {
+              "name": "Arcanite Reaper",
+              "count": 2
+            },
+            {
+              "name": "Gemstudded Golem",
+              "count": 3
+            },
+            {
+              "name": "Unidentified Shield",
+              "count": 2
+            },
+            {
+              "name": "Crush",
+              "count": 2
+            },
+            {
+              "name": "Geosculptor Yip",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "power",
+          "note": "Giant Stomp is not offered while the run player has no minion (it would do nothing)."
+        }
+      ]
+    },
+    {
+      "id": "loot_40_seriona",
+      "name": "Seriona",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_40h",
+      "power": "LOOTA_BOSS_40p",
+      "tier": "1",
+      "archetype": "control",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 2
+      },
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Seriona",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Flash Heal",
+              "count": 2
+            },
+            {
+              "name": "Potion of Madness",
+              "count": 2
+            },
+            {
+              "name": "Twilight Whelp",
+              "count": 2
+            },
+            {
+              "name": "Spirit Lash",
+              "count": 2
+            },
+            {
+              "name": "Shadow Madness",
+              "count": 2
+            },
+            {
+              "name": "Duskbreaker",
+              "count": 2
+            },
+            {
+              "name": "Shadow Word: Horror",
+              "count": 2
+            },
+            {
+              "name": "Dragonfire Potion",
+              "count": 2
+            },
+            {
+              "name": "Netherspite Historian",
+              "count": 2
+            },
+            {
+              "name": "Blackwing Corruptor",
+              "count": 2
+            },
+            {
+              "name": "Twilight Drake",
+              "count": 2
+            },
+            {
+              "name": "Twilight Guardian",
+              "count": 2
+            },
+            {
+              "name": "Book Wyrm",
+              "count": 2
+            },
+            {
+              "name": "Sleepy Dragon",
+              "count": 2
+            },
+            {
+              "name": "Ysera",
+              "count": 1
+            },
+            {
+              "name": "Deathwing, Dragonlord",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "power",
+          "note": "Fading Light can only be aimed at a minion that has Attack left (on a 0-Attack minion it would do nothing)."
+        }
+      ]
+    },
+    {
+      "id": "loot_41_whompwhisker",
+      "name": "Whompwhisker",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_41h",
+      "power": "LOOTA_BOSS_41p",
+      "tier": "2",
+      "archetype": "control",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "flags": [
+        "bothPlayers",
+        "hiddenZone"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Whompwhisker",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Giant Sand Worm",
+              "count": 2
+            },
+            {
+              "name": "Execute",
+              "count": 2
+            },
+            {
+              "name": "Brawl",
+              "count": 2
+            },
+            {
+              "name": "Crush",
+              "count": 2
+            },
+            {
+              "name": "Tar Lord",
+              "count": 2
+            },
+            {
+              "name": "Rotface",
+              "count": 1
+            },
+            {
+              "name": "Sen'jin Shieldmasta",
+              "count": 2
+            },
+            {
+              "name": "Pit Fighter",
+              "count": 2
+            },
+            {
+              "name": "Validated Doomsayer",
+              "count": 2
+            },
+            {
+              "name": "Mogor's Champion",
+              "count": 2
+            },
+            {
+              "name": "Silver Vanguard",
+              "count": 2
+            },
+            {
+              "name": "War Golem",
+              "count": 2
+            },
+            {
+              "name": "Eldritch Horror",
+              "count": 2
+            },
+            {
+              "name": "Gruul",
+              "count": 1
+            },
+            {
+              "name": "Sleepy Dragon",
+              "count": 2
+            },
+            {
+              "name": "Ultrasaur",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "replacements": {
+        "Mogor's Champion": "Boulderfist Ogre"
+      },
+      "adaptations": [
+        {
+          "kind": "power",
+          "note": "The wiki marks Join the Fray (2) as auto-cast. Here the boss's AI chooses when to pay for it like any hero power, and it is not offered when it would do nothing (both boards full)."
+        }
+      ]
+    },
+    {
+      "id": "loot_42_jari",
+      "name": "Elder Jari",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_42h",
+      "power": "LOOTA_BOSS_42p",
+      "tier": "2",
+      "archetype": "control",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Elder_Jari",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Innervate",
+              "count": 2
+            },
+            {
+              "name": "Lesser Jasper Spellstone",
+              "count": 2
+            },
+            {
+              "name": "Earthen Scales",
+              "count": 2
+            },
+            {
+              "name": "Wild Growth",
+              "count": 2
+            },
+            {
+              "name": "Wrath",
+              "count": 2
+            },
+            {
+              "name": "Greedy Sprite",
+              "count": 2
+            },
+            {
+              "name": "Swipe",
+              "count": 2
+            },
+            {
+              "name": "Branching Paths",
+              "count": 2
+            },
+            {
+              "name": "Ironwood Golem",
+              "count": 2
+            },
+            {
+              "name": "Nourish",
+              "count": 2
+            },
+            {
+              "name": "Druid of the Claw",
+              "count": 2
+            },
+            {
+              "name": "Ancient of War",
+              "count": 2
+            },
+            {
+              "name": "Tree of Life",
+              "count": 1
+            },
+            {
+              "name": "Kun the Forgotten King",
+              "count": 1
+            },
+            {
+              "name": "Tyrantus",
+              "count": 1
+            },
+            {
+              "name": "Ultimate Infestation",
+              "count": 2
+            },
+            {
+              "name": "Ysera",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "replacements": {
+        "Wrath": "Starfall"
+      }
+    },
+    {
+      "id": "loot_43_jeeru",
+      "name": "Jeeru",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_43h",
+      "power": "LOOTA_BOSS_43p",
+      "tier": "3",
+      "archetype": "control",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 6
+      },
+      "flags": [
+        "bothPlayers",
+        "hiddenZone"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Jeeru",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Moonfire",
+              "count": 2
+            },
+            {
+              "name": "Living Roots",
+              "count": 2
+            },
+            {
+              "name": "Wrath",
+              "count": 2
+            },
+            {
+              "name": "Grove Tender",
+              "count": 2
+            },
+            {
+              "name": "Swipe",
+              "count": 1
+            },
+            {
+              "name": "Lunar Visions",
+              "count": 2
+            },
+            {
+              "name": "Recycle",
+              "count": 2
+            },
+            {
+              "name": "Spreading Plague",
+              "count": 2
+            },
+            {
+              "name": "Starfire",
+              "count": 2
+            },
+            {
+              "name": "Ultimate Infestation",
+              "count": 2
+            },
+            {
+              "name": "Dirty Rat",
+              "count": 2
+            },
+            {
+              "name": "Nat, the Darkfisher",
+              "count": 1
+            },
+            {
+              "name": "Acolyte of Pain",
+              "count": 2
+            },
+            {
+              "name": "Arcane Golem",
+              "count": 2
+            },
+            {
+              "name": "Coldlight Oracle",
+              "count": 2
+            },
+            {
+              "name": "Fel Reaver",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "replacements": {
+        "Wrath": "Lesser Jasper Spellstone",
+        "Fel Reaver": "Bittertide Hydra"
+      },
+      "adaptations": [
+        {
+          "kind": "power",
+          "note": "The wiki marks Three Wee Wishes (1) as auto-cast. Here the boss's AI chooses when to pay for it like any hero power."
+        }
+      ]
+    },
+    {
+      "id": "loot_46_flurgl",
+      "name": "Fungalmancer Flurgl",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_46h",
+      "power": "LOOTA_BOSS_46p",
+      "tier": "2",
+      "archetype": "aggro",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Fungalmancer_Flurgl",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Totemic Might",
+              "count": 1
+            },
+            {
+              "name": "Flametongue Totem",
+              "count": 2
+            },
+            {
+              "name": "Ice Fishing",
+              "count": 2
+            },
+            {
+              "name": "Kobold Hermit",
+              "count": 2
+            },
+            {
+              "name": "Primalfin Totem",
+              "count": 2
+            },
+            {
+              "name": "Totem Golem",
+              "count": 2
+            },
+            {
+              "name": "Tuskarr Totemic",
+              "count": 2
+            },
+            {
+              "name": "Vitality Totem",
+              "count": 1
+            },
+            {
+              "name": "Call in the Finishers",
+              "count": 2
+            },
+            {
+              "name": "Mana Tide Totem",
+              "count": 1
+            },
+            {
+              "name": "Primal Talismans",
+              "count": 2
+            },
+            {
+              "name": "Murloc Tinyfin",
+              "count": 2
+            },
+            {
+              "name": "Murloc Tidecaller",
+              "count": 2
+            },
+            {
+              "name": "Bilefin Tidehunter",
+              "count": 2
+            },
+            {
+              "name": "Murloc Tidehunter",
+              "count": 2
+            },
+            {
+              "name": "Murloc Warleader",
+              "count": 2
+            },
+            {
+              "name": "Finja, the Flying Star",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "power",
+          "note": "Fungal Infection is not offered while the boss has no minion (it would do nothing)."
+        }
+      ]
+    },
+    {
+      "id": "loot_47_lava_chamber",
+      "name": "Lava-Filled Chamber",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_47h",
+      "power": "LOOTA_BOSS_47p",
+      "tier": "3",
+      "archetype": "control",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 6
+      },
+      "flags": [
+        "passive",
+        "bothPlayers"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Lava-Filled_Chamber",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Forbidden Flame",
+              "count": 2
+            },
+            {
+              "name": "Flame Geyser",
+              "count": 2
+            },
+            {
+              "name": "Explosive Runes",
+              "count": 2
+            },
+            {
+              "name": "Volcanic Potion",
+              "count": 2
+            },
+            {
+              "name": "Fireball",
+              "count": 2
+            },
+            {
+              "name": "Firelands Portal",
+              "count": 2
+            },
+            {
+              "name": "Flamestrike",
+              "count": 2
+            },
+            {
+              "name": "Pyroblast",
+              "count": 2
+            },
+            {
+              "name": "Lava Shock",
+              "count": 2
+            },
+            {
+              "name": "Lava Burst",
+              "count": 2
+            },
+            {
+              "name": "Fireguard Destroyer",
+              "count": 2
+            },
+            {
+              "name": "Volcano",
+              "count": 2
+            },
+            {
+              "name": "Fire Elemental",
+              "count": 2
+            },
+            {
+              "name": "Kalimos, Primal Lord",
+              "count": 1
+            },
+            {
+              "name": "Fire Plume Phoenix",
+              "count": 2
+            },
+            {
+              "name": "Ragnaros the Firelord",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      }
+    },
+    {
+      "id": "loot_51_russell",
+      "name": "Russell the Bard",
+      "provenance": "LOOT",
+      "family": "08",
+      "hero": "LOOTA_BOSS_51h",
+      "power": "LOOTA_BOSS_51p",
+      "tier": "2",
+      "archetype": "tempo",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Russell_the_Bard",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Backstab",
+              "count": 2
+            },
+            {
+              "name": "Counterfeit Coin",
+              "count": 2
+            },
+            {
+              "name": "Swashburglar",
+              "count": 2
+            },
+            {
+              "name": "Evasion",
+              "count": 2
+            },
+            {
+              "name": "Eviscerate",
+              "count": 2
+            },
+            {
+              "name": "Perdition's Blade",
+              "count": 2
+            },
+            {
+              "name": "Elven Minstrel",
+              "count": 2
+            },
+            {
+              "name": "Lesser Onyx Spellstone",
+              "count": 2
+            },
+            {
+              "name": "Shado-Pan Rider",
+              "count": 2
+            },
+            {
+              "name": "Thistle Tea",
+              "count": 2
+            },
+            {
+              "name": "Annoy-o-Tron",
+              "count": 2
+            },
+            {
+              "name": "Knife Juggler",
+              "count": 2
+            },
+            {
+              "name": "Questing Adventurer",
+              "count": 2
+            },
+            {
+              "name": "Antique Healbot",
+              "count": 1
+            },
+            {
+              "name": "Barnes",
+              "count": 1
+            },
+            {
+              "name": "Stampeding Kodo",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "power",
+          "note": "Alluring Tune can never be aimed at a run shrine (a shrine does not change sides), and needs a free slot on the boss's board."
+        }
+      ]
+    }
+  ],
+  "rejected": []
+}

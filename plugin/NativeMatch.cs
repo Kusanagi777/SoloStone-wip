@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using PegasusGame;
+using SabberStoneCore.CardSets.DungeonRun;
 using SabberStoneCore.Config;
 using SabberStoneCore.Enums;
 using SabberStoneCore.Kettle;
@@ -520,6 +521,47 @@ public sealed class NativeMatch
         seed = fixtureSeed;
     }
 
+    // Dungeon Run fight (docs/design/dungeon-run.md): the player's run deck (10 to deckMax cards: 40 on a legacy run, the
+    // schedule's deckMax on an act run, DungeonRun.DeckMax) and the boss come from the run plan,
+    // never from LocalDecks or LocalProfile.PlayableDeck; the boss is piloted by the injected profile and plan, never by a
+    // catalog or world lookup. DungeonRunSetup fills the GameConfig and applies treasures after StartGame.
+    private readonly RunMatchPlan runPlan;
+    private readonly NpcProfile runBossProfile;
+    private readonly DeckPlan runBossPlan;
+    private readonly IReadOnlyDictionary<string, double> runBossSecretPrior;
+    internal bool IsDungeonRun => runPlan != null;
+    /// <summary>
+    /// What the finished run match asks the run to keep (phase 6: run deck edits, slot logs, a power override, a next-fight
+    /// bonus; RunHelpers fills it on the authoritative game), or null. The run layer applies it after a won fight only.
+    /// </summary>
+    internal RunMatchResult DungeonRunResult => IsDungeonRun ? Game?.RunResult : null;
+    /// <summary>
+    /// Phase 8: what the fight leaves for the run (the boss's remaining Health and form, the run hero's damage, the heroes
+    /// used), harvested from the authoritative game; null outside a run match.
+    /// </summary>
+    internal RunMatchEnd DungeonRunEnd => IsDungeonRun && Game != null ? DungeonRunSetup.Harvest(Game) : null;
+
+    internal NativeMatch(Action<int, IProtoBuf> send, RunMatchPlan plan, DungeonRunBossPilot boss, int seed, int deckMax = DungeonRun.LegacyDeckMax) : this(send)
+    {
+        if (plan == null) throw new ArgumentNullException(nameof(plan));
+        if (boss == null) throw new ArgumentNullException(nameof(boss));
+        if (plan.PlayerHero == null || plan.PlayerHero.Type != CardType.HERO) throw new ArgumentException("Run hero is invalid.", nameof(plan));
+        if (plan.PlayerDeck == null || plan.PlayerDeck.Count < 10 || plan.PlayerDeck.Count > deckMax || plan.PlayerDeck.Any(card => card == null))
+            throw new ArgumentException("Run deck must hold 10 to " + deckMax + " cards.", nameof(plan));
+        // Phase 8: an imported encounter keeps its original deck size (a major, a finale boss, a boss form: 10 to 60 cards).
+        if (plan.BossDeck == null || plan.BossDeck.Any(card => card == null)
+            || (plan.EncounterDeck ? plan.BossDeck.Count < 10 || plan.BossDeck.Count > 60 : plan.BossDeck.Count != 30))
+            throw new ArgumentException(plan.EncounterDeck ? "An encounter's deck must hold 10 to 60 cards." : "Boss deck must hold 30 cards.", nameof(plan));
+        runPlan = plan;
+        runBossProfile = boss.Profile;
+        runBossPlan = boss.Plan;
+        runBossSecretPrior = boss.SecretPrior;
+        opponentDeck = boss.Deck;
+        playerHero = plan.PlayerHero;
+        playerCards = new List<EngineCard>(plan.PlayerDeck);
+        this.seed = seed;
+    }
+
     // One-shot debug scenario: opening overrides before offers; remaining settings after both mulligans.
     internal DebugScenario DebugScenario { get; set; }
     internal Action<string> DebugScenarioLog { get; set; }
@@ -718,14 +760,23 @@ public sealed class NativeMatch
             if (variant > 0 && family > 0) { opponentPetVariant = variant; opponentPetFamilyId = family; opponentPetEntityId = nextDeckChoiceId--; }
             else OpponentPetCard = null;
         }
-        npcProfile = NpcCatalog.ForDeck(opponentDeck?.Id);
-        if (npcProfile != null) npcPilot = NpcPilots.Create(npcProfile, line => BotTrace?.Invoke(line));
+        if (runPlan != null)
+        {
+            if (DebugScenario != null) throw new InvalidOperationException("A Dungeon Run fight cannot carry a debug scenario.");
+            npcProfile = runBossProfile;
+            npcPilot = new GoldenPilot(runBossProfile, runBossPlan, null, runBossSecretPrior);
+        }
+        else
+        {
+            npcProfile = NpcCatalog.ForDeck(opponentDeck?.Id);
+            if (npcProfile != null) npcPilot = NpcPilots.Create(npcProfile, line => BotTrace?.Invoke(line));
+        }
         EngineCard hero = playerHero ?? ResolveHero("HERO_08");
         EngineCard ordinaryBotHero = ResolveHero(opponentDeck == null ? "HERO_08" : opponentDeck.Hero);
         EngineCard botHero = ResolveHero(DebugScenario?.NpcSkin != null ? HeroSkinData.All[DebugScenario.NpcSkin].BaseHero
             : ordinaryBotHero.Id);
         var humanCards = playerCards == null ? BuildDeck() : new List<EngineCard>(playerCards);
-        var botCards = opponentDeck == null ? BuildDeck() : opponentDeck.Build();
+        var botCards = runPlan != null ? new List<EngineCard>(runPlan.BossDeck) : opponentDeck == null ? BuildDeck() : opponentDeck.Build();
         int firstPlayer = StartingPlayer ?? StableSeed.MatchFirstPlayer(seed);
 #if MATCH_TESTS
         // Preserve legacy fixtures' exact raw StartPlayer; production-path seat tests clear the fixture override.
@@ -755,6 +806,13 @@ public sealed class NativeMatch
 #endif
             Logging = false
         };
+        if (runPlan != null)
+        {
+            // After the seat rules above: the run player always goes first (R9). Heroes, decks, powers, health,
+            // opening bonus and boss sideboards all come from the plan.
+            DungeonRunSetup.Configure(config, runPlan);
+            config.Player2Name = OpponentName = runBossProfile.DisplayName;
+        }
         Game = new EngineGame(config);
         OpponentPlateName = NpcMemoryText.Plate(OpponentName, npcProfile != null ? NpcMemory : null);
 
@@ -794,6 +852,12 @@ public sealed class NativeMatch
             Game.StartGame();
         }
 #endif
+        if (runPlan != null)
+        {
+            // After any re-create above and before the first history send, so treasures ship in the opening batch.
+            if (Game.FirstPlayer != Game.Player1) throw new InvalidOperationException("The Dungeon Run player must go first.");
+            DungeonRunSetup.ApplyAfterStart(Game, runPlan);
+        }
         IdentifyStartingCoin();
         if (npcProfile != null)
             npcPresentation = new NpcPresentation(npcProfile, PresentationSettings, MatchId, Game.Player2.PlayerId,
@@ -814,12 +878,7 @@ public sealed class NativeMatch
 #if ENGINE_SOURCE
         var botDecision = Game.GetPendingDecisions().Single(d => d.ControllerId == Game.Player2.Id);
 #endif
-        var npc = NpcCatalog.ForDeck(opponentDeck?.Id);
-        // A world profile whose plan does not resolve keeps an empty mulligan (and the legacy search).
-        var botKeeps = npc == null || DeckPlans.ForId(npc.PlanId) == null ? new List<int>() : new List<int>(BotDriver.Mulligan(
-            new MulliganView(Game.Player2.Choice.Choices.Select(id => new MulliganCard(id,
-                Game.IdEntityDic[id].Card.Id, Game.IdEntityDic[id].Card.Cost)), Game.FirstPlayer == Game.Player1,
-                opponentDeck.CardIds, Game.Player1.Hero.Card.Class), BotMulliganPolicy(npc)));
+        var botKeeps = BotOpeningKeeps();
         send(17, ToNativeChoice(botChoices));
 #if ENGINE_SOURCE
         AnswerDecision(botDecision.Id, botDecision.ControllerId, botKeeps);
@@ -1174,6 +1233,26 @@ public sealed class NativeMatch
     // Test control only (debug instant loss): the human loses now as a plain loss. The engine's concede task ends the game,
     // but nothing records a concession (HumanConceded, LocalLadder.MarkConcede), so it settles like a lost game.
     internal void LoseForTest() => EndForTest(Game?.Player1, npc: false);
+
+    // Dungeon Run only (design R9/R10): the engine has no turn limit, so the run caps a fight at this many game turns
+    // (both players' turns count, as Game.Turn does) and the boss wins. Deckdelve's TURN_CAP.
+    internal const int DungeonRunTurnCap = 100;
+    // Why a run fight was ended from outside the rules: "turn-limit" or "fault" (the boss AI failed). Null otherwise.
+    internal string DungeonRunEnding { get; private set; }
+
+    // Ends a run fight that the rules cannot finish: the player's hero concedes on the engine side, so the client shows the
+    // end of the game and LocalLadder records the run outcome from DungeonRunEnding, never as a concede.
+    internal void EndDungeonRunFight(string reason)
+    {
+        if (runPlan == null) throw new InvalidOperationException("Not a Dungeon Run fight.");
+        if (reason != "turn-limit" && reason != "fault") throw new ArgumentException("Unknown run ending.", nameof(reason));
+        if (Game == null || Game.State == State.COMPLETE || DungeonRunEnding != null) return;
+        DungeonRunEnding = reason;
+        StopNpc();
+        npcConcessionPending = false;
+        Process(ConcedeTask.Any(Game.Player1));
+        SendHistory(Game.PowerHistory.Last);
+    }
 
     // Test control only: seed real corpse-spending evidence; victory, evaluation and grants still run normally.
     internal void PrimeAchievementForTest(string id)
@@ -1873,7 +1952,9 @@ public sealed class NativeMatch
 #else
             (task.Target?.Id ?? 0) == target &&
 #endif
-            (!(task is PlayCardTask play) || play.ChooseOne == wantedChooseOne)).ToList();
+            (!(task is PlayCardTask play) || play.ChooseOne == wantedChooseOne) &&
+            // A Choose One hero power (ULDA_Elise_HP1) lists one task per choice; its sub-option picks the choice.
+            (task.PlayerTaskType != PlayerTaskType.HERO_POWER || (wantedChooseOne < 0 ? task.ChooseOne <= 0 : task.ChooseOne == wantedChooseOne))).ToList();
         bool minionPlay = matches.Any(task => task is PlayCardTask play && (play.Source is Minion
 #if ENGINE_SOURCE
             || play.Source is BoardObject
@@ -1982,11 +2063,7 @@ public sealed class NativeMatch
                 if (choice.ChoiceType == ChoiceType.MULLIGAN)
                 {
                     mulliganChoice = PowerChoicesBuilder.EntityChoices(Game, choice);
-                    var npc = NpcCatalog.ForDeck(opponentDeck?.Id);
-                    var keeps = npc == null || DeckPlans.ForId(npc.PlanId) == null ? new List<int>() : new List<int>(BotDriver.Mulligan(
-                        new MulliganView(choice.Choices.Select(id => new MulliganCard(id,
-                            Game.IdEntityDic[id].Card.Id, Game.IdEntityDic[id].Card.Cost)), Game.FirstPlayer == Game.Player1,
-                            opponentDeck.CardIds, Game.Player1.Hero.Card.Class), BotMulliganPolicy(npc)));
+                    var keeps = BotOpeningKeeps();
                     send(17, ToNativeChoice(mulliganChoice));
                     task = ChooseTask.Mulligan(Game.Player2, keeps);
                 }
@@ -2289,6 +2366,19 @@ public sealed class NativeMatch
     // NPC World seam S4: a skill-aware mulligan for world encounters. The wrapper guards Keep() itself, because
     // BotDriver.Mulligan runs it unguarded at match start: a throwing or invalid hook policy (not offered, duplicate,
     // coin) falls back to the plan mulligan instead of aborting the match or freezing the NPC.
+    // The bot's opening keeps. A ladder opponent resolves its profile and plan through the catalog (a profile whose plan does
+    // not resolve keeps an empty mulligan, and the legacy search); a Dungeon Run boss uses its injected plan, with no hook.
+    private List<int> BotOpeningKeeps()
+    {
+        var choice = Game.Player2.Choice;
+        MulliganView View() => new MulliganView(choice.Choices.Select(id => new MulliganCard(id,
+            Game.IdEntityDic[id].Card.Id, Game.IdEntityDic[id].Card.Cost)), Game.FirstPlayer == Game.Player1,
+            opponentDeck.CardIds, Game.Player1.Hero.Card.Class);
+        if (runPlan != null) return new List<int>(BotDriver.Mulligan(View(), new DeckPlanMulligan(runBossPlan)));
+        var npc = NpcCatalog.ForDeck(opponentDeck?.Id);
+        return npc == null || DeckPlans.ForId(npc.PlanId) == null ? new List<int>() : new List<int>(BotDriver.Mulligan(View(), BotMulliganPolicy(npc)));
+    }
+
     internal static MulliganPolicy BotMulliganPolicy(NpcProfile npc)
     {
         var plan = DeckPlans.ForId(npc.PlanId);
@@ -6714,6 +6804,8 @@ public sealed class NativeMatch
             || tag == SabberStoneCore.Actions.ColossalRules.RealizedFactor
             || SabberStoneCore.Actions.DormantRules.IsPrivateTag(tag) || SabberStoneCore.Actions.TemporaryRules.IsPrivateTag(tag)
             || SabberStoneCore.Actions.PlayLockRules.IsPrivateTag(tag)
+            || SabberStoneCore.Actions.ShrineRules.IsPrivateTag(tag)
+            || SabberStoneCore.Actions.EncounterRules.IsPrivateTag(tag)
             || SabberStoneCore.Actions.PayloadRules.IsInternalTag(tag)
             || SabberStoneCore.Actions.AuraSpellRules.IsInternalTag(tag)
             || SabberStoneCore.Actions.HealingRules.IsInternalTag(tag) || SabberStoneCore.Actions.ShatterRules.IsInternalTag(tag) || SabberStoneCore.Actions.HandProgressRules.IsInternalTag(tag)

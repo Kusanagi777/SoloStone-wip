@@ -76,6 +76,9 @@ namespace SabberStoneCore.src.Loader
 			StandardProofCardsGen.AddAll(_cardDefsDic);
 			DormantCardsGen.AddAll(_cardDefsDic);
 
+			// Dungeon Run mode: boss powers, boss passives, treasure enchantments (docs/design/dungeon-run.md).
+			CardSets.DungeonRun.DungeonRunCardsGen.AddAll(_cardDefsDic);
+
 
 		}
 

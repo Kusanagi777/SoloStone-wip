@@ -1,0 +1,140 @@
+PASS A1 17 new T1 teammates (TRLA_124/125/127 were scripted with the shrine model)  (17)
+PASS A2 TRLA_122 Direhorn Stomper: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (DRUID)
+PASS A3 TRLA_122: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_123 Succoring Skyscreamer: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (DRUID)
+PASS A3 TRLA_123: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_165 Battlestarved Lynx: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (HUNTER)
+PASS A3 TRLA_165: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_166 Troll Harbinger: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (HUNTER)
+PASS A3 TRLA_166: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_167 Rabid Saurolisk: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (HUNTER)
+PASS A3 TRLA_167: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_168 Streetsmuggler: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (HUNTER)
+PASS A3 TRLA_168: admitted for the run player (its secret-generated row: catalog runs admit the run player, and since phase 8 a boss with the generated-Secrets need)  (secret-generated True)
+PASS A2 TRLA_169 Slamma Jamma: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (HUNTER)
+PASS A3 TRLA_169: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_130 Razzle Dazzler: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (MAGE)
+PASS A3 TRLA_130: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_131 Glyph Guardian: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (MAGE)
+PASS A3 TRLA_131: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_132 Frostweaver: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (MAGE)
+PASS A3 TRLA_132: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_133 Fireslinger: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (MAGE)
+PASS A3 TRLA_133: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_134 Showstopping Conjurer: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (MAGE)
+PASS A3 TRLA_134: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_140 Blessed One: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (PALADIN)
+PASS A3 TRLA_140: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_141 Lightchucker: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (PALADIN)
+PASS A3 TRLA_141: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_142 The Walking Fort: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (PALADIN)
+PASS A3 TRLA_142: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_143 Gloryseeker: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (PALADIN)
+PASS A3 TRLA_143: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A2 TRLA_144 Exactor of Justice: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (PALADIN)
+PASS A3 TRLA_144: admitted for the run player only (teammate row, never generated)  (teammate True)
+PASS A4 enchantment TRLA_124e is scripted
+PASS A4 enchantment TRLA_125e is scripted
+PASS A4 enchantment TRLA_131e is scripted
+PASS A4 enchantment TRLA_169e is scripted
+PASS A5 Fireslinger casts the classic Fireball, Razzle Dazzler adds the classic Arcane Missiles (both scripted)
+PASS A6 a new DRUID Rikkar run's teammate pool is its five scripted teammates and its companion TRLA_121 (phase 7 D: start-of-game-draw, admitted)  (TRLA_121,TRLA_122,TRLA_123,TRLA_124,TRLA_125,TRLA_127)
+PASS A6 a new HUNTER Rikkar run's teammate pool is its five scripted teammates and its companion TRLA_164 (phase 7 D: start-of-game-draw, admitted)  (TRLA_164,TRLA_165,TRLA_166,TRLA_167,TRLA_168,TRLA_169)
+PASS A6 a new MAGE Rikkar run's teammate pool is its five scripted teammates and its companion TRLA_135 (phase 7 D: start-of-game-draw, admitted)  (TRLA_130,TRLA_131,TRLA_132,TRLA_133,TRLA_134,TRLA_135)
+PASS A6 a new PALADIN Rikkar run's teammate pool is its five scripted teammates and its companion TRLA_139 (phase 7 D: start-of-game-draw, admitted)  (TRLA_139,TRLA_140,TRLA_141,TRLA_142,TRLA_143,TRLA_144)
+PASS A7 no teammate is still unscripted (T2 and D scripted the rest); every one is admitted for the run player  (0: )
+PASS D1 TRLA_122 Direhorn Stomper: Rush; Overkill summons the deck's highest-Attack minion (Boulderfist Ogre over Yeti and Wisp)  (True deck CS2_231,CS2_182)
+PASS D2 the summon is a summon: Gonk's Mark (TRLA_115) gives the Ogre +1/+1  (7/8)
+PASS D3 with a full board the Overkill summons nothing (the deck keeps its cards)  (deck 2->2)
+PASS D4 an exact kill (4 into 4 Health) is no Overkill: nothing is summoned
+PASS D5 TRLA_123 Succoring Skyscreamer: gaining Armor (Shapeshift) draws a card that costs (2) less (LOOT_204e)  (cost 4)
+PASS D6 with TRLA_112 on the board the same Armor gain also refreshes the owner's Mana Crystals  (used 3 -> 0)
+PASS D7 with a full hand the draw burns and nothing is discounted  (burned)
+PASS D8 the boss gaining Armor draws nothing for the owner
+PASS D9 with the shrine dormant the Skyscreamer still draws (discounted) and nothing refreshes the Mana  (used 3->5)
+PASS D10 the Halazzi's Gift shrine revives on the owner's third turn after its death  (turn 5->11)
+PASS D11 after the revival one Armor gain both draws (discounted) and refreshes the Mana again  (used 0)
+PASS H1 TRLA_165 Battlestarved Lynx: draws every Beast of the deck (two Bloodfen Raptors, a River Crocolisk) and nothing else  (CS2_120,CS2_172,CS2_172)
+PASS H2 until the hand is full: 6 cards in hand, 4 Beasts drawn, the rest stay in the deck  (hand 10 deck 4)
+PASS H3 with Battle Totem (LOOTA_846) both Battlecries run and the deck's Beasts are all drawn once
+PASS H4 TRLA_166 Troll Harbinger: after a minion dies, a random Hunter spell joins the owner's hand (through the run's generation filter)  (ICC_200)
+PASS H5 the run shrine's death (it goes dormant) counts as a minion death: one more Hunter spell
+PASS H5b the shrine revives (a fresh entity, no death): no Hunter spell for it  (hand 2->2)
+PASS H6 its own death adds nothing
+PASS H7 deterministic: the same run seed gives the same spell
+PASS H8 TRLA_167 Rabid Saurolisk: Deathrattle deals 1 to every enemy, and its Poisonous counts (the damage is the Saurolisk's): the boss's hero -1, the 4/5 Yeti destroyed, the 1-Health fixture shrine dies and goes dormant  (hero 30->29 yeti 4 GRAVEYARD TRLA_107t)
+PASS H9 the dormant fixture form is untouchable: the second Deathrattle hits the hero and destroys the new Yeti only  (TRLA_107t dmg 0 hero 29->28 yeti GRAVEYARD)
+PASS H10 Poisonous: its 4 into a Boulderfist Ogre destroys it
+PASS H11 with Totem of the Dead (LOOTA_845) the Deathrattle runs twice: the boss's hero -2 (the Yeti destroyed)  (30->28 yeti 3)
+PASS H12 setup: Explosive Trap is the owner's one Secret
+PASS H13 TRLA_168 Streetsmuggler: after the Trap is revealed, a random scripted Hunter Secret is put into the battlefield  (EX1_610)
+PASS H14 with Halazzi's Trap (TRLA_110) a spell puts a Secret first  (1)
+PASS H15 the boss's Secret revealing puts nothing for the owner
+PASS H16 TRLA_168 is admitted for the run player of a catalog run (a board-shrine run is one)
+PASS H17 TRLA_169 Slamma Jamma: the other friendly minions' Attack doubles (Wisp 2, Yeti 8; the shrine's 0 stays 0), not its own or the boss's  (2 8 5 ench [TRLA_169e] zone PLAY impl True bc CustomTask)
+PASS H18 with Battle Totem the Battlecry runs twice (Yeti 4 -> 16); the dormant shrine form is not among 'your minions'  (16)
+PASS M0 TRLA_130 Razzle Dazzler: Taunt; the Battlecry fills the hand with Arcane Missiles (8 beside the two Wisps)  (8)
+PASS M1 with Jan'alai's Mantle (TRLA_108) the shrine's Spell Damage follows the spells in hand: +8  (8)
+PASS M2 a second Dazzler fills only the free slots (ToHand set two cards aside to fit it): the hand full, every other card a Missile  (EX1_277,EX1_277,EX1_277,EX1_277,EX1_277,EX1_277,EX1_277,EX1_277,EX1_277,EX1_277)
+PASS M3 TRLA_131 Glyph Guardian: a character is Frozen -> Spell Damage +1 (TRLA_131e)  (0->1)
+PASS M4 with Jan'alai's Progeny (TRLA_129) the same freeze also makes a Frostfire
+PASS M5 any freezer counts: the boss Freezing the owner's Wisp gives +1 more  (2)
+PASS M6 Silence removes the gained Spell Damage  (0)
+PASS M7 TRLA_132 Frostweaver: the Hero Power aimed at a Frozen minion destroys it  (1 GRAVEYARD)
+PASS M8 with Jan'alai's Flame (TRLA_128) that destroy is the Hero Power's kill: it is refreshed (and costs 0)
+PASS M9 the next use Freezes an unfrozen target (and deals its 1); no kill, so no refresh
+PASS M10 a hero target is Frozen  (exh True weaver 1 hp 29)
+PASS M11 with Jan'alai's Progeny (TRLA_129) the Hero Power's freeze is the owner's: a Frostfire
+PASS M12 the boss's Hero Power is not the owner's: no freeze
+PASS M13 TRLA_133 Fireslinger: after a spell, a Fireball hits a random enemy (the boss's hero, the only one): 6 damage, once  (30->24)
+PASS M14 with an enemy minion the target is random among the enemies (one of them took 6)  (yeti True hero 24->24)
+PASS M15 two Fireslingers: exactly two Fireballs (12), no chain  (24->12)
+PASS M16 the owner's Spell Damage applies: Robe of the Magi +3 and Jan'alai's Mantle +2 (two spells in hand) -> 11  (30->19)
+PASS M17 the boss casting a spell casts nothing
+PASS M18 TRLA_134 Showstopping Conjurer: Rush; Overkill draws a spell from the deck (the one Frostbolt)
+PASS M19 no spell left in the deck: nothing is drawn
+PASS P1 TRLA_140 Blessed One: draws every spell of the deck (three) and no minion
+PASS P2 until the hand is full (7 cards: 3 drawn, 3 left)  (10/3)
+PASS P3 TRLA_141 Lightchucker: a heal that heals nothing (full Health) destroys nothing
+PASS P4 after a character is healed, a random enemy minion is destroyed (one of the two)
+PASS P5 any character counts (the boss's hero healed); the boss's TRLA_107 fixture, its only minion, is destroyed and goes dormant  (TRLA_107t)
+PASS P6 the dormant form is untouchable: no enemy minion to destroy, nothing happens
+PASS P7 with Fortified Spirit (TRLA_803) the shrine's turn-start full heal destroys a random enemy minion  (dmg 0 True)
+PASS P8 TRLA_142 The Walking Fort: Taunt; a 6-damage Fireball takes 1  (4)
+PASS P9 a 6-Attack Ogre's hit takes 1; the Fort's 2 is dealt back
+PASS P10 Silenced, it takes the whole hit and dies
+PASS P11 with Shirvallah's Protection (TRLA_105) the capped hit leaves it alive, so it gets Divine Shield
+PASS P12 the next hit pops the shield (no damage)
+PASS P13 TRLA_143 Gloryseeker: a Fireball on it hits the owner's hero instead (hero -6, the 3/1 untouched)  (30->24 dmg 0)
+PASS P14 the hero's Armor absorbs first (4 Armor, 2 Health)
+PASS P15 a Poisonous attacker's hit goes to the hero: the Gloryseeker survives, its 3 kills the Cobra
+PASS P16 with Shirvallah's Vengeance (TRLA_137) the redirected hit is hero damage: the boss's hero takes 5  (30->24 boss 30->25)
+PASS P17 Silenced, it takes the hit itself and dies
+PASS P18 setup: Exactor of Justice has Divine Shield
+PASS P19 TRLA_144 Exactor of Justice: the Boar pops the shield, the Overkill gives it back
+PASS P20 an Overkill on the boss's TRLA_107 fixture shrine (1 Health, Taunt): Divine Shield again; the fixture goes dormant
+PASS P21 an exact kill is no Overkill: no shield
+PASS R1 DRUID: four teammate drafts (I.2, I.4, II.3, III.3) offer 3 each of its six teammates (the companion included), never one already taken  (f2:teammate[TRLA_121,TRLA_122,TRLA_123] f4:teammate[TRLA_122,TRLA_123,TRLA_127] f8:teammate[TRLA_123,TRLA_124,TRLA_127] f13:teammate[TRLA_124,TRLA_125,TRLA_127])
+PASS R2 DRUID: the four picks are distinct deck records with origin "teammate"  (TRLA_121,TRLA_122,TRLA_123,TRLA_124)
+PASS R3 DRUID: the next fight's plan deck holds the four teammates
+PASS R4 DRUID: the match deals them to the run player (deck or hand), with the board shrine on the board
+PASS R5 DRUID: the drafted TRLA_121 plays from the run deck onto the board  (PLAY)
+PASS R1 HUNTER: four teammate drafts (I.2, I.4, II.3, III.3) offer 3 each of its six teammates (the companion included), never one already taken  (f2:teammate[TRLA_165,TRLA_166,TRLA_167] f4:teammate[TRLA_166,TRLA_167,TRLA_169] f8:teammate[TRLA_164,TRLA_168,TRLA_169] f13:teammate[TRLA_167,TRLA_168,TRLA_169])
+PASS R2 HUNTER: the four picks are distinct deck records with origin "teammate"  (TRLA_165,TRLA_166,TRLA_164,TRLA_167)
+PASS R3 HUNTER: the next fight's plan deck holds the four teammates
+PASS R4 HUNTER: the match deals them to the run player (deck or hand), with the board shrine on the board
+PASS R5 HUNTER: the drafted TRLA_165 plays from the run deck onto the board  (PLAY)
+PASS R1 MAGE: four teammate drafts (I.2, I.4, II.3, III.3) offer 3 each of its six teammates (the companion included), never one already taken  (f2:teammate[TRLA_130,TRLA_132,TRLA_135] f4:teammate[TRLA_131,TRLA_134,TRLA_135] f8:teammate[TRLA_132,TRLA_133,TRLA_135] f13:teammate[TRLA_133,TRLA_134,TRLA_135])
+PASS R2 MAGE: the four picks are distinct deck records with origin "teammate"  (TRLA_130,TRLA_131,TRLA_132,TRLA_133)
+PASS R3 MAGE: the next fight's plan deck holds the four teammates
+PASS R4 MAGE: the match deals them to the run player (deck or hand), with the board shrine on the board
+PASS R5 MAGE: the drafted TRLA_130 plays from the run deck onto the board  (PLAY)
+PASS R1 PALADIN: four teammate drafts (I.2, I.4, II.3, III.3) offer 3 each of its six teammates (the companion included), never one already taken  (f2:teammate[TRLA_140,TRLA_142,TRLA_143] f4:teammate[TRLA_139,TRLA_142,TRLA_143] f8:teammate[TRLA_141,TRLA_142,TRLA_143] f13:teammate[TRLA_142,TRLA_143,TRLA_144])
+PASS R2 PALADIN: the four picks are distinct deck records with origin "teammate"  (TRLA_140,TRLA_139,TRLA_141,TRLA_142)
+PASS R3 PALADIN: the next fight's plan deck holds the four teammates
+PASS R4 PALADIN: the match deals them to the run player (deck or hand), with the board shrine on the board
+PASS R5 PALADIN: the drafted TRLA_140 plays from the run deck onto the board  (PLAY)
+PASS R6 a Mage run saved with its floor-2 teammate draft open resumes with the same stored offer  (TRLA_130,TRLA_131,TRLA_133)
+PASS R7 the pick after the resume joins the deck
+PASS R8 the validator passes the shipped data (teammate table, registry)
+SUMMARY checks passed 139 failed 0

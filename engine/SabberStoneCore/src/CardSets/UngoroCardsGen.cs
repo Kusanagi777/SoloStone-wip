@@ -1713,8 +1713,8 @@ namespace SabberStoneCore.CardSets
 				PowerTask = ComplexTask.Create(
 					new ConditionTask(EntityType.SOURCE, SelfCondition.ElementalPlayedLastTurn),
 					new FlagTask(true, ComplexTask.Create(
-						new SummonTask("UNG_809t1", SummonSide.LEFT),
-						new SummonTask("UNG_809t1", SummonSide.RIGHT)))),
+						new SummonTask("UNG_208t", SummonSide.LEFT),
+						new SummonTask("UNG_208t", SummonSide.RIGHT)))),
 			}));
 
 			// ---------------------------------------- MINION - SHAMAN

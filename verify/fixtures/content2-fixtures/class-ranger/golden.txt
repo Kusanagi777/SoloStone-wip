@@ -1,0 +1,15 @@
+plan hero=HERO_05 power=DS1h_292 deck=CATA_558,CATA_558,CFM_315,CS2_084,CS2_084,GIL_607t,OG_325,OG_325,BOT_039,GIL_562,AT_105,TRL_509,UNG_847,CORE_UNG_912,LOE_020,TIME_605 boss=bog_croaker matchSeed=1662641489
+floor 3 boss=bog_croaker power=DS1h_292 matchSeed=1662641489
+floor 3 treasure offered=deep_satchel,mending_charm,quiet_satchel
+floor 3 bundle offered=bundle_hunter_beast,bundle_neutral_murloc,bundle_neutral_taunt
+floor 4 boss=pit_champion power=DS1h_292 matchSeed=1074810554
+floor 4 bundle offered=bundle_hunter_deathrattle,bundle_neutral_beast,bundle_neutral_mechanical
+floor 5 boss=tollkeeper power=DS1h_292 matchSeed=1730277078
+floor 5 treasure offered=frost_lantern,iron_ward,quake_stone
+floor 5 bundle offered=bundle_neutral_dragon,bundle_neutral_elemental,bundle_neutral_taunt
+floor 6 boss=golemancer power=DS1h_292 matchSeed=1214746668
+floor 6 bundle offered=bundle_neutral_beast,bundle_neutral_mechanical,bundle_neutral_murloc
+floor 7 boss=ember_matron power=DS1h_292 matchSeed=324045492
+floor 7 bundle offered=bundle_hunter_spells,bundle_neutral_deathrattle,bundle_neutral_elemental
+floor 8 boss=sleepless_one power=DS1h_292 matchSeed=1451869197
+end phase=Victory deck=32 treasures=champions_banner,deep_satchel,frost_lantern

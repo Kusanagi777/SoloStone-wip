@@ -73,6 +73,8 @@ namespace SabberStoneCore.Tasks.SimpleTasks
                 bool wasSilenced = minionSource.IsSilenced;
 				EntityData sourceTags = minionSource._data;
 				sourceTags.CopyFrom(in minionTarget._data);
+				// A copy of a run shrine is a plain minion (phase 7): the raw tag copy must not carry the run-shrine mark.
+				ShrineRules.ClearMark(minionSource);
                 if (copySource != 0) sourceTags[PayloadRules.CopySourceController] = copySource;
                 else sourceTags.Remove(PayloadRules.CopySourceController);
                 // Raw tag copying bypasses setters; publish changed statuses to the client.
@@ -107,7 +109,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			if (minionTarget.AppliedEnchantments != null)
 				foreach (Enchantment e in minionTarget.AppliedEnchantments)
 				{
-					if (DormantRules.IsHelper(e) || preserveBoardState && Generic.AuraAttachment(e.Creator?.OngoingEffect, e.Card)) continue;
+					if (DormantRules.IsHelper(e) || ShrineRules.IsUpgradeGrant(e) || preserveBoardState && Generic.AuraAttachment(e.Creator?.OngoingEffect, e.Card)) continue;
 					Enchantment instance = Enchantment.CopyAttachment(in controller, preserveBoardState ? e.Creator : minionSource, minionSource, e);
 					if (preserveBoardState ? e.NativeTags.ContainsKey(GameTag.TAG_SCRIPT_DATA_NUM_1) : e[GameTag.TAG_SCRIPT_DATA_NUM_1] > 0)
 					{

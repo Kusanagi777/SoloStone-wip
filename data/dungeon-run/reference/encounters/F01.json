@@ -1,0 +1,1758 @@
+{
+ "schemaVersion": 1,
+ "family": "01",
+ "description": "Encounter foundation (phase 8 family 01): one imported encounter per mechanism of the encounter model, and the four Secret bosses (Elder Brandlemar, Trapped Room, Manhunter Ivan, Trap Room). Boss deck lists and the Hagatha fight's player lists are transcribed from hearthstone.wiki.gg boss pages (read 2026-11-12), by card name; tools/dungeon-run-catalog (step 'encounters') resolves the names against facts/violet-hold-2026-09.json (collectible original printing preferred), checks every card (scripted, client card, boss admission on a catalog run) and writes data/dungeon-run/encounters-v1.json.",
+ "method": "The wiki's MediaWiki API (action=parse, prop=wikitext) was read for each page and the deck tables transcribed in table order, rowspan-aware. Counts are the tables' own; a pool table without counts lists each card once. Boss-only cards whose name is ambiguous in the card data carry their id.",
+ "bosses": [
+  {
+   "id": "ulda_40_icarax",
+   "name": "Icarax, Plague Lord of Wrath",
+   "provenance": "ULDA",
+   "family": "24",
+   "hero": "ULDA_BOSS_40h",
+   "power": "ULDA_BOSS_40p1",
+   "tier": "major3",
+   "archetype": "midrange",
+   "level": {
+    "source": "printed-health",
+    "original": 300
+   },
+   "health": 300,
+   "fixedHealth": true,
+   "flags": [
+    "forms",
+    "persistentDamage",
+    "deckReplace"
+   ],
+   "incompatibleModifiers": [
+    "mod_iron_bosses",
+    "mod_open_road"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Icarax,_Plague_Lord_of_Wrath",
+    "read": "2026-11-12"
+   },
+   "lists": [
+    {
+     "label": "Normal phase 1",
+     "cards": [
+      {
+       "name": "Battle Rage",
+       "count": 2
+      },
+      {
+       "name": "Redband Wasp",
+       "count": 2
+      },
+      {
+       "name": "Bloodsworn Mercenary",
+       "count": 2
+      },
+      {
+       "name": "Frothing Berserker",
+       "count": 2
+      },
+      {
+       "name": "Kobold Barbarian",
+       "count": 2
+      },
+      {
+       "name": "Rabid Worgen",
+       "count": 2
+      },
+      {
+       "name": "Militia Commander",
+       "count": 2
+      },
+      {
+       "name": "Restless Mummy",
+       "count": 2
+      },
+      {
+       "name": "Death Revenant",
+       "count": 2
+      },
+      {
+       "name": "Plague of Wrath",
+       "count": 1
+      },
+      {
+       "name": "Sudden Genesis",
+       "count": 2
+      },
+      {
+       "name": "Akali, the Rhino",
+       "count": 1
+      },
+      {
+       "name": "Grommash Hellscream",
+       "count": 1
+      },
+      {
+       "name": "Rotface",
+       "count": 1
+      },
+      {
+       "name": "Woecleaver",
+       "count": 1
+      },
+      {
+       "name": "The Boomship",
+       "count": 1
+      },
+      {
+       "name": "Siamat",
+       "count": 1
+      },
+      {
+       "name": "Batterhead",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Normal phase 2",
+     "cards": [
+      {
+       "name": "Looming Presence (Heroic)",
+       "id": "LOEA_01H",
+       "count": 2
+      },
+      {
+       "name": "Devastate",
+       "count": 2
+      },
+      {
+       "name": "Into the Fray",
+       "count": 2
+      },
+      {
+       "name": "Frothing Berserker",
+       "count": 2
+      },
+      {
+       "name": "Bloodhoof Brave",
+       "count": 2
+      },
+      {
+       "name": "Brawl",
+       "count": 1
+      },
+      {
+       "name": "Plague of Wrath",
+       "count": 1
+      },
+      {
+       "name": "Sudden Genesis",
+       "count": 2
+      },
+      {
+       "name": "Armagedillo",
+       "count": 1
+      },
+      {
+       "name": "Tomb Warden",
+       "count": 2
+      },
+      {
+       "name": "King Mosh",
+       "count": 1
+      },
+      {
+       "name": "Bone Wraith",
+       "count": 2
+      },
+      {
+       "name": "Phalanx Commander",
+       "count": 2
+      },
+      {
+       "name": "Sludge Belcher",
+       "count": 2
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      },
+      {
+       "name": "Worgen Abomination",
+       "count": 2
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      },
+      {
+       "name": "Soggoth the Slitherer",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Normal phase 3",
+     "cards": [
+      {
+       "name": "Looming Presence (Heroic)",
+       "id": "LOEA_01H",
+       "count": 2
+      },
+      {
+       "name": "Cruel Taskmaster",
+       "count": 2
+      },
+      {
+       "name": "Execute",
+       "count": 2
+      },
+      {
+       "name": "Rampage",
+       "count": 2
+      },
+      {
+       "name": "Warpath",
+       "count": 2
+      },
+      {
+       "name": "Bloodsworn Mercenary",
+       "count": 2
+      },
+      {
+       "name": "Frothing Berserker",
+       "count": 2
+      },
+      {
+       "name": "Darius Crowley",
+       "count": 1
+      },
+      {
+       "name": "Plague of Wrath",
+       "count": 2
+      },
+      {
+       "name": "Supercollider",
+       "count": 1
+      },
+      {
+       "name": "Akali, the Rhino",
+       "count": 1
+      },
+      {
+       "name": "Grommash Hellscream",
+       "count": 1
+      },
+      {
+       "name": "Gruul",
+       "count": 1
+      },
+      {
+       "name": "Rotface",
+       "count": 1
+      },
+      {
+       "name": "King Mosh",
+       "count": 1
+      },
+      {
+       "name": "Cobalt Scalebane",
+       "count": 2
+      },
+      {
+       "name": "Gurubashi Berserker",
+       "count": 2
+      },
+      {
+       "name": "The Boogeymonster",
+       "count": 1
+      },
+      {
+       "name": "Colossus of the Moon",
+       "count": 1
+      },
+      {
+       "name": "Y'Shaarj, Rage Unbound",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal phase 1"
+   },
+   "forms": [
+    {
+     "hero": "ULDA_BOSS_40h2",
+     "power": "ULDA_BOSS_40p2",
+     "health": 200,
+     "at": {
+      "healthAtMost": 200
+     },
+     "keepExcess": true,
+     "deck": {
+      "list": "Normal phase 2"
+     },
+     "draw": 3
+    },
+    {
+     "hero": "ULDA_BOSS_40h3",
+     "power": "ULDA_BOSS_40p3",
+     "health": 100,
+     "at": {
+      "healthAtMost": 100
+     },
+     "keepExcess": true,
+     "deck": {
+      "list": "Normal phase 3"
+     },
+     "draw": 3
+    }
+   ],
+   "fillers": [
+    "Amani Berserker",
+    "Raging Worgen",
+    "Acolyte of Pain",
+    "Armorsmith",
+    "Kor'kron Elite",
+    "Ravaging Ghoul",
+    "Slam",
+    "Whirlwind",
+    "Inner Rage",
+    "Grim Patron",
+    "Death's Bite",
+    "Tentacle of N'Zoth"
+   ],
+   "adaptations": [
+    {
+     "kind": "health",
+     "note": "The three phases are forms of one row with one falling Health total (300, phase 2 at 200 or less, phase 3 at 100 or less); damage carries over a lost fight at profile scope (DungeonRunProfile.BossDamage), because a lost fight ends the run."
+    },
+    {
+     "kind": "deck",
+     "note": "A phase change replaces the deck with the phase's list and draws 3 cards from it; the wiki's three extra cards of the 33-card phase decks (Brawl, Plague of Wrath, The Boomship; Brawl, King Mosh, The Boomship) are not added."
+    },
+    {
+     "kind": "power",
+     "note": "Commanding Scream uses Commanding Shout's rule and enchantment (NEW1_036e2/NEW1_036e), so the shown enchantment is Commanding Shout's, not ULDA_BOSS_40p1e1."
+    }
+   ]
+  },
+  {
+   "id": "gila_61_hagatha",
+   "name": "Hagatha the Witch",
+   "provenance": "GIL",
+   "family": "23",
+   "hero": "GILA_BOSS_61h",
+   "power": "GIL_504h",
+   "tier": "major2",
+   "archetype": "midrange",
+   "level": {
+    "source": "printed-health",
+    "original": 100
+   },
+   "health": 100,
+   "fixedHealth": true,
+   "bossManaCap": 2,
+   "flags": [
+    "passive",
+    "heroSwitch"
+   ],
+   "incompatibleModifiers": [
+    "mod_iron_bosses",
+    "mod_open_road",
+    "mod_hot_start"
+   ],
+   "cards": [
+    "GILA_BOSS_61te"
+   ],
+   "start": {
+    "bossMana": 2
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Hagatha_the_Witch_(boss)",
+    "read": "2026-11-12"
+   },
+   "lists": [
+    {
+     "label": "Boss",
+     "cards": [
+      {
+       "name": "Ominous Fog",
+       "id": "GILA_BOSS_61t3",
+       "count": 2
+      },
+      {
+       "name": "Ritual Dagger",
+       "id": "GILA_BOSS_61t",
+       "count": 2
+      },
+      {
+       "name": "Amalgamate",
+       "id": "GILA_BOSS_27t",
+       "count": 2
+      },
+      {
+       "name": "Duskfallen Aviana",
+       "count": 1
+      },
+      {
+       "name": "Hadronox",
+       "count": 1
+      },
+      {
+       "name": "Face Collector",
+       "count": 1
+      },
+      {
+       "name": "Totem Golem",
+       "count": 2
+      },
+      {
+       "name": "The Mistcaller",
+       "count": 1
+      },
+      {
+       "name": "Al'Akir the Windlord",
+       "count": 1
+      },
+      {
+       "name": "Witchwood Imp",
+       "count": 2
+      },
+      {
+       "name": "Blood Witch",
+       "count": 2
+      },
+      {
+       "name": "Shadowflame",
+       "count": 1
+      },
+      {
+       "name": "Glinda Crowskin",
+       "count": 1
+      },
+      {
+       "name": "Lord Godfrey",
+       "count": 1
+      },
+      {
+       "name": "Nightmare Amalgam",
+       "count": 2
+      },
+      {
+       "name": "Twilight Drake",
+       "count": 2
+      },
+      {
+       "name": "Dollmaster Dorian",
+       "count": 1
+      },
+      {
+       "name": "Doppelgangster",
+       "count": 2
+      },
+      {
+       "name": "Emperor Thaurissan",
+       "count": 1
+      },
+      {
+       "name": "Red Mana Wyrm",
+       "count": 2
+      },
+      {
+       "name": "Witchwood Grizzly",
+       "count": 2
+      },
+      {
+       "name": "Bog Creeper",
+       "count": 1
+      },
+      {
+       "name": "Troggzor the Earthinator",
+       "count": 1
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      },
+      {
+       "name": "Malygos",
+       "count": 1
+      },
+      {
+       "name": "Arcane Giant",
+       "count": 2
+      },
+      {
+       "name": "Mountain Giant",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Player: Darius Crowley",
+     "cards": [
+      {
+       "name": "Execute"
+      },
+      {
+       "name": "Warpath"
+      },
+      {
+       "name": "Mountainfire Armor"
+      },
+      {
+       "name": "Bloodhoof Brave"
+      },
+      {
+       "name": "Death's Bite"
+      },
+      {
+       "name": "Brawl"
+      },
+      {
+       "name": "Marsh Drake"
+      },
+      {
+       "name": "Maiden of the Lake"
+      },
+      {
+       "name": "Muck Hunter"
+      },
+      {
+       "name": "Mukla's Champion"
+      },
+      {
+       "name": "Sludge Belcher"
+      },
+      {
+       "name": "Kodorider"
+      }
+     ]
+    },
+    {
+     "label": "Player: Tess Greymane",
+     "cards": [
+      {
+       "name": "Bear Trap"
+      },
+      {
+       "name": "Freezing Trap"
+      },
+      {
+       "name": "Eaglehorn Bow"
+      },
+      {
+       "name": "Undercity Huckster"
+      },
+      {
+       "name": "Shaku, the Collector"
+      },
+      {
+       "name": "Spectral Cutlass"
+      },
+      {
+       "name": "Xaril, Poisoned Mind"
+      },
+      {
+       "name": "Ethereal Peddler"
+      },
+      {
+       "name": "Vilespine Slayer"
+      },
+      {
+       "name": "Questing Adventurer"
+      },
+      {
+       "name": "Sneed's Old Shredder"
+      },
+      {
+       "name": "Arcane Giant"
+      }
+     ]
+    },
+    {
+     "label": "Player: Toki, Time-Tinker",
+     "cards": [
+      {
+       "name": "Arcane Missiles"
+      },
+      {
+       "name": "Mana Wyrm"
+      },
+      {
+       "name": "Primordial Glyph"
+      },
+      {
+       "name": "Flamewaker"
+      },
+      {
+       "name": "Cabalist's Tome"
+      },
+      {
+       "name": "Deck of Wonders"
+      },
+      {
+       "name": "Blizzard"
+      },
+      {
+       "name": "Archmage Antonidas"
+      },
+      {
+       "name": "Rhonin"
+      },
+      {
+       "name": "Mad Bomber"
+      },
+      {
+       "name": "Piloted Shredder"
+      },
+      {
+       "name": "Blingtron 3000"
+      }
+     ]
+    },
+    {
+     "label": "Player: Houndmaster Shaw",
+     "cards": [
+      {
+       "name": "Webspinner"
+      },
+      {
+       "name": "Crackling Razormaw"
+      },
+      {
+       "name": "Glaivezooka"
+      },
+      {
+       "name": "Hunting Mastiff"
+      },
+      {
+       "name": "Animal Companion"
+      },
+      {
+       "name": "Kill Command"
+      },
+      {
+       "name": "Flanking Strike"
+      },
+      {
+       "name": "Savannah Highmane"
+      },
+      {
+       "name": "Call of the Wild"
+      },
+      {
+       "name": "Infested Tauren"
+      },
+      {
+       "name": "Rotten Applebaum"
+      },
+      {
+       "name": "Sludge Belcher"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Boss"
+   },
+   "heroCards": [
+    {
+     "hero": "GILA_600h2",
+     "deck": {
+      "list": "Player: Darius Crowley"
+     },
+     "passives": [
+      "GILA_603",
+      "GILA_607",
+      "GILA_805"
+     ],
+     "skipFor": [
+      "GILA_600h"
+     ]
+    },
+    {
+     "hero": "GILA_500h4",
+     "deck": {
+      "list": "Player: Tess Greymane"
+     },
+     "passives": [
+      "GILA_513",
+      "GILA_511",
+      "LOOTA_832"
+     ],
+     "skipFor": [
+      "GILA_500h3"
+     ]
+    }
+   ],
+   "fillers": [
+    "Witch's Cauldron",
+    "Witchwood Piper",
+    "Hex",
+    "Lightning Storm",
+    "Fire Elemental",
+    "Bog Creeper"
+   ],
+   "adaptations": [
+    {
+     "kind": "start",
+     "note": "The original fight starts the player as Houndmaster Shaw with the other three hunters as hero cards. Here the run keeps its own hero and deck and is given the hunters' hero cards after the mulligan (Darius, Tess; not the run's own hunter). Toki's card (GILA_900h2) is left out: her power GILA_900p Temporal Loop restarts the turn (phase 9). Shaw has no hero card in the client data, so a run that is not Shaw's never becomes Shaw."
+    },
+    {
+     "kind": "power",
+     "note": "A hunter's passive is chosen by the hero card's Battlecry (a Discover among the hunter's three passives), then the damage is dealt, as the wiki states; the starting hero chooses no passive (the run has its own treasures)."
+    }
+   ]
+  },
+  {
+   "id": "dala_21_whirt",
+   "name": "Whirt the All-Knowing",
+   "provenance": "DALA",
+   "family": "01",
+   "hero": "DALA_BOSS_21h",
+   "power": "DALA_BOSS_21p",
+   "tier": "3",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "flags": [
+    "secrets"
+   ],
+   "bossGeneratedSecrets": true,
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Whirt_the_All-Knowing",
+    "read": "2026-11-12"
+   },
+   "lists": [
+    {
+     "label": "Normal and Heroic (level 6)",
+     "cards": [
+      {
+       "name": "Babbling Book",
+       "count": 2
+      },
+      {
+       "name": "Mana Cyclone",
+       "count": 2
+      },
+      {
+       "name": "Arcane Intellect",
+       "count": 2
+      },
+      {
+       "name": "Animated Armor",
+       "count": 2
+      },
+      {
+       "name": "Meteorologist",
+       "count": 1
+      },
+      {
+       "name": "Crystallizer",
+       "count": 2
+      },
+      {
+       "name": "Young Priestess",
+       "count": 2
+      },
+      {
+       "name": "Arcane Servant",
+       "count": 2
+      },
+      {
+       "name": "Sunreaver Spy",
+       "count": 1
+      },
+      {
+       "name": "Brainstormer",
+       "count": 2
+      },
+      {
+       "name": "Coldlight Oracle",
+       "count": 2
+      },
+      {
+       "name": "Coldlight Seer",
+       "count": 2
+      },
+      {
+       "name": "Earthen Ring Farseer",
+       "count": 2
+      },
+      {
+       "name": "Illuminator",
+       "count": 2
+      },
+      {
+       "name": "Thrallmar Farseer",
+       "count": 2
+      },
+      {
+       "name": "Corrupted Seer",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal and Heroic (level 6)"
+   },
+   "fillers": [
+    "Kirin Tor Mage",
+    "Ethereal Arcanist",
+    "Medivh's Valet",
+    "Arcanologist",
+    "Secretkeeper",
+    "Mad Scientist"
+   ]
+  },
+  {
+   "id": "trl_200_voone",
+   "name": "War Master Voone",
+   "provenance": "TRL",
+   "family": "13",
+   "hero": "TRLA_200h",
+   "power": "HERO_01bp",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "rumble-round",
+    "original": 3
+   },
+   "flags": [
+    "shrine"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/War_Master_Voone_(boss)",
+    "read": "2026-11-12"
+   },
+   "lists": [
+    {
+     "label": "Challenge 1-2 (Akali's Horn)",
+     "cards": [
+      {
+       "name": "Cruel Taskmaster"
+      },
+      {
+       "name": "Frothing Berserker"
+      },
+      {
+       "name": "Bloodhoof Brave"
+      },
+      {
+       "name": "Magnataur Alpha"
+      },
+      {
+       "name": "Militia Commander"
+      },
+      {
+       "name": "Darius Crowley"
+      },
+      {
+       "name": "Festeroot Hulk"
+      },
+      {
+       "name": "Fool's Bane"
+      },
+      {
+       "name": "Grommash Hellscream"
+      },
+      {
+       "name": "Gurubashi Chicken"
+      },
+      {
+       "name": "Deathspeaker"
+      },
+      {
+       "name": "Omega Defender"
+      },
+      {
+       "name": "Mosh'Ogg Announcer"
+      },
+      {
+       "name": "Gemstudded Golem"
+      },
+      {
+       "name": "Linecracker"
+      },
+      {
+       "name": "Foe Reaper 4000"
+      },
+      {
+       "name": "The Boogeymonster"
+      }
+     ]
+    },
+    {
+     "label": "Challenge 3-5 (Akali's War Drum)",
+     "cards": [
+      {
+       "name": "Devastate",
+       "count": 1
+      },
+      {
+       "name": "Redcrest Rocker",
+       "count": 1
+      },
+      {
+       "name": "Alexstrasza's Champion",
+       "count": 1
+      },
+      {
+       "name": "Dead Man's Hand",
+       "count": 1
+      },
+      {
+       "name": "Dragon Roar",
+       "count": 1
+      },
+      {
+       "name": "Fierce Monkey",
+       "count": 1
+      },
+      {
+       "name": "Smolderthorn Lancer",
+       "count": 1
+      },
+      {
+       "name": "Herald of Flame",
+       "count": 1
+      },
+      {
+       "name": "Brawl",
+       "count": 1
+      },
+      {
+       "name": "Direhorn Hatchling",
+       "count": 1
+      },
+      {
+       "name": "Emberscale Drake",
+       "count": 1
+      },
+      {
+       "name": "Sul'thraze",
+       "count": 1
+      },
+      {
+       "name": "Crush",
+       "count": 1
+      },
+      {
+       "name": "Woecleaver",
+       "count": 1
+      },
+      {
+       "name": "The Boomship",
+       "count": 1
+      },
+      {
+       "name": "Nightmare Amalgam",
+       "count": 1
+      },
+      {
+       "name": "Ebon Dragonsmith",
+       "count": 1
+      },
+      {
+       "name": "Kazakus",
+       "count": 1
+      },
+      {
+       "name": "Twilight Drake",
+       "count": 1
+      },
+      {
+       "name": "Twilight Guardian",
+       "count": 1
+      },
+      {
+       "name": "Cobalt Scalebane",
+       "count": 1
+      },
+      {
+       "name": "Dragonmaw Scorcher",
+       "count": 1
+      },
+      {
+       "name": "Bone Drake",
+       "count": 1
+      },
+      {
+       "name": "Book Wyrm",
+       "count": 1
+      },
+      {
+       "name": "Crowd Roaster",
+       "count": 1
+      },
+      {
+       "name": "The Curator",
+       "count": 1
+      },
+      {
+       "name": "Primordial Drake",
+       "count": 1
+      },
+      {
+       "name": "Ysera",
+       "count": 1
+      },
+      {
+       "name": "Deathwing",
+       "count": 1
+      },
+      {
+       "name": "Deathwing, Dragonlord",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Challenge 6-8 (Akali's Champion)",
+     "cards": [
+      {
+       "name": "Execute",
+       "count": 2
+      },
+      {
+       "name": "Shield Slam",
+       "count": 2
+      },
+      {
+       "name": "Armorsmith",
+       "count": 2
+      },
+      {
+       "name": "Cruel Taskmaster",
+       "count": 1
+      },
+      {
+       "name": "Shield Block",
+       "count": 2
+      },
+      {
+       "name": "Weapons Project",
+       "count": 2
+      },
+      {
+       "name": "Frothing Berserker",
+       "count": 2
+      },
+      {
+       "name": "Mountainfire Armor",
+       "count": 2
+      },
+      {
+       "name": "Ironforge Portal",
+       "count": 2
+      },
+      {
+       "name": "Seasoned Pitbrawler",
+       "count": 1
+      },
+      {
+       "name": "Alley Armorsmith",
+       "count": 2
+      },
+      {
+       "name": "Ironhorn Drummer",
+       "count": 1
+      },
+      {
+       "name": "Shieldmaiden",
+       "count": 2
+      },
+      {
+       "name": "Heavy Metal!",
+       "count": 2
+      },
+      {
+       "name": "Sul'thraze",
+       "count": 1
+      },
+      {
+       "name": "Geosculptor Yip",
+       "count": 1
+      },
+      {
+       "name": "Unbound Punisher",
+       "count": 1
+      },
+      {
+       "name": "Crystallizer",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Challenge 6-8 (Akali's Champion)"
+   },
+   "variants": [
+    {
+     "id": "horn",
+     "shrine": "TRLA_171",
+     "deck": {
+      "list": "Challenge 1-2 (Akali's Horn)"
+     }
+    },
+    {
+     "id": "drum",
+     "shrine": "TRLA_170",
+     "deck": {
+      "list": "Challenge 3-5 (Akali's War Drum)"
+     }
+    },
+    {
+     "id": "champion",
+     "shrine": "TRLA_104",
+     "deck": {
+      "list": "Challenge 6-8 (Akali's Champion)"
+     }
+    }
+   ],
+   "fillers": [
+    "Amani Berserker",
+    "Kor'kron Elite",
+    "Arcanite Reaper",
+    "Fiery War Axe",
+    "Slam",
+    "Whirlwind",
+    "Armorsmith",
+    "Acolyte of Pain",
+    "Twilight Drake",
+    "Azure Drake",
+    "Chillwind Yeti",
+    "Boulderfist Ogre"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The three Rumble Run challenge ranges are three shrine variants of one row; a fight draws its variant from the run seed and the floor, not from the round."
+    }
+   ]
+  },
+  {
+   "id": "loot_35_brandlemar",
+   "name": "Elder Brandlemar",
+   "provenance": "LOOT",
+   "family": "01",
+   "hero": "LOOTA_BOSS_35h",
+   "power": "LOOTA_BOSS_35p",
+   "tier": "1",
+   "archetype": "midrange",
+   "level": {
+    "source": "printed-health",
+    "original": 20
+   },
+   "flags": [
+    "secrets"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Elder_Brandlemar",
+    "read": "2026-11-12"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Ancestral Healing",
+       "count": 2
+      },
+      {
+       "name": "Frost Shock",
+       "count": 2
+      },
+      {
+       "name": "Rockbiter Weapon",
+       "count": 2
+      },
+      {
+       "name": "Windfury",
+       "count": 2
+      },
+      {
+       "name": "Hex",
+       "count": 2
+      },
+      {
+       "name": "Stonetusk Boar",
+       "count": 2
+      },
+      {
+       "name": "Frostwolf Grunt",
+       "count": 2
+      },
+      {
+       "name": "Raid Leader",
+       "count": 2
+      },
+      {
+       "name": "Wolfrider",
+       "count": 2
+      },
+      {
+       "name": "Chillwind Yeti",
+       "count": 2
+      },
+      {
+       "name": "Sen'jin Shieldmasta",
+       "count": 2
+      },
+      {
+       "name": "Booty Bay Bodyguard",
+       "count": 2
+      },
+      {
+       "name": "Frostwolf Warlord",
+       "count": 2
+      },
+      {
+       "name": "Boulderfist Ogre",
+       "count": 2
+      },
+      {
+       "name": "Reckless Rocketeer",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "adaptations": [
+    {
+     "kind": "power",
+     "note": "The wiki marks Dampen Magic (2) as auto-cast. Here the boss's AI chooses when to pay for it like any hero power, and it is not offered while Counterspell is already in play (one Secret of a name) or the Secret zone is full."
+    }
+   ]
+  },
+  {
+   "id": "loot_48_trapped_room",
+   "name": "Trapped Room",
+   "provenance": "LOOT",
+   "family": "01",
+   "hero": "LOOTA_BOSS_48h",
+   "power": "LOOTA_BOSS_48p",
+   "tier": "2",
+   "archetype": "control",
+   "level": {
+    "source": "printed-health",
+    "original": 40
+   },
+   "flags": [
+    "passive",
+    "secrets"
+   ],
+   "cards": [
+    "LOOTA_BOSS_48t"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Trapped_Room",
+    "read": "2026-11-12"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Shroomsayer",
+       "id": "LOOTA_107",
+       "count": 2
+      },
+      {
+       "name": "Bear Trap",
+       "count": 1
+      },
+      {
+       "name": "Cat Trick",
+       "count": 1
+      },
+      {
+       "name": "Dart Trap",
+       "count": 1
+      },
+      {
+       "name": "Explosive Trap",
+       "count": 1
+      },
+      {
+       "name": "Freezing Trap",
+       "count": 1
+      },
+      {
+       "name": "Misdirection",
+       "count": 1
+      },
+      {
+       "name": "Snake Trap",
+       "count": 1
+      },
+      {
+       "name": "Snipe",
+       "count": 1
+      },
+      {
+       "name": "Venomstrike Trap",
+       "count": 1
+      },
+      {
+       "name": "Wandering Monster",
+       "count": 1
+      },
+      {
+       "name": "Counterspell",
+       "count": 1
+      },
+      {
+       "name": "Explosive Runes",
+       "count": 1
+      },
+      {
+       "name": "Frozen Clone",
+       "count": 1
+      },
+      {
+       "name": "Mana Bind",
+       "count": 1
+      },
+      {
+       "name": "Mirror Entity",
+       "count": 1
+      },
+      {
+       "name": "Potion of Polymorph",
+       "count": 1
+      },
+      {
+       "name": "Spellbender",
+       "count": 1
+      },
+      {
+       "name": "Vaporize",
+       "count": 1
+      },
+      {
+       "name": "Ethereal Arcanist",
+       "count": 2
+      },
+      {
+       "name": "Eye for an Eye",
+       "count": 1
+      },
+      {
+       "name": "Noble Sacrifice",
+       "count": 1
+      },
+      {
+       "name": "Repentance",
+       "count": 1
+      },
+      {
+       "name": "Sacred Trial",
+       "count": 1
+      },
+      {
+       "name": "Evasion",
+       "count": 1
+      },
+      {
+       "name": "Sudden Betrayal",
+       "count": 1
+      },
+      {
+       "name": "Secretkeeper",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "replacements": {
+    "Shroomsayer": "Mad Scientist"
+   },
+   "fillers": [
+    "Mad Scientist",
+    "Kirin Tor Mage",
+    "Medivh's Valet"
+   ]
+  },
+  {
+   "id": "gila_25_ivan",
+   "name": "Manhunter Ivan",
+   "provenance": "GIL",
+   "family": "01",
+   "hero": "GILA_BOSS_25h",
+   "power": "GILA_BOSS_25p",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "printed-health",
+    "original": 25
+   },
+   "flags": [
+    "secrets"
+   ],
+   "bossGeneratedSecrets": true,
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Manhunter_Ivan",
+    "read": "2026-11-12"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Lock and Load",
+       "count": 1
+      },
+      {
+       "name": "Flare",
+       "count": 1
+      },
+      {
+       "name": "Hunter's Mark",
+       "count": 1
+      },
+      {
+       "name": "Tracking",
+       "count": 1
+      },
+      {
+       "name": "Webspinner",
+       "count": 1
+      },
+      {
+       "name": "Bear Trap",
+       "count": 1
+      },
+      {
+       "name": "Cat Trick",
+       "count": 1
+      },
+      {
+       "name": "Dart Trap",
+       "count": 1
+      },
+      {
+       "name": "Explosive Trap",
+       "count": 1
+      },
+      {
+       "name": "Freezing Trap",
+       "count": 1
+      },
+      {
+       "name": "Hidden Cache",
+       "count": 1
+      },
+      {
+       "name": "Rat Trap",
+       "count": 1
+      },
+      {
+       "name": "Snake Trap",
+       "count": 1
+      },
+      {
+       "name": "Snipe",
+       "count": 1
+      },
+      {
+       "name": "Wandering Monster",
+       "count": 1
+      },
+      {
+       "name": "Animal Companion",
+       "count": 2
+      },
+      {
+       "name": "Cloaked Huntress",
+       "count": 1
+      },
+      {
+       "name": "Eaglehorn Bow",
+       "count": 2
+      },
+      {
+       "name": "Professor Putricide",
+       "count": 1
+      },
+      {
+       "name": "Explosive Shot",
+       "count": 1
+      },
+      {
+       "name": "Lesser Emerald Spellstone",
+       "count": 2
+      },
+      {
+       "name": "Call of the Wild",
+       "count": 1
+      },
+      {
+       "name": "Secretkeeper",
+       "count": 1
+      },
+      {
+       "name": "Hired Gun",
+       "count": 2
+      },
+      {
+       "name": "Bittertide Hydra",
+       "count": 1
+      },
+      {
+       "name": "Cobalt Scalebane",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "fillers": [
+    "Mad Scientist",
+    "Kill Command",
+    "Unleash the Hounds"
+   ]
+  },
+  {
+   "id": "ulda_44_trap_room",
+   "name": "Trap Room",
+   "provenance": "ULDA",
+   "family": "01",
+   "hero": "ULDA_BOSS_44h",
+   "power": "ULDA_BOSS_44p",
+   "tier": "3",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "flags": [
+    "secrets"
+   ],
+   "bossGeneratedSecrets": true,
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Trap_Room",
+    "read": "2026-11-12"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 6)",
+     "cards": [
+      {
+       "name": "Overflow",
+       "count": 1
+      },
+      {
+       "name": "Dart Trap",
+       "count": 2
+      },
+      {
+       "name": "Explosive Trap",
+       "count": 2
+      },
+      {
+       "name": "Freezing Trap",
+       "count": 2
+      },
+      {
+       "name": "Pressure Plate",
+       "count": 2
+      },
+      {
+       "name": "Snake Trap",
+       "count": 2
+      },
+      {
+       "name": "Snipe",
+       "count": 2
+      },
+      {
+       "name": "Sunreaver Spy",
+       "count": 2
+      },
+      {
+       "name": "Venomstrike Trap",
+       "count": 2
+      },
+      {
+       "name": "Professor Putricide",
+       "count": 1
+      },
+      {
+       "name": "Lesser Emerald Spellstone",
+       "count": 1
+      },
+      {
+       "name": "Ball of Spiders",
+       "count": 2
+      },
+      {
+       "name": "Crushing Walls",
+       "count": 2
+      },
+      {
+       "name": "Sacred Trial",
+       "count": 2
+      },
+      {
+       "name": "Commander Rhyssa",
+       "count": 1
+      },
+      {
+       "name": "Secretkeeper",
+       "count": 4
+      }
+     ]
+    },
+    {
+     "label": "Heroic (level 6)",
+     "cards": [
+      {
+       "name": "Cat Trick",
+       "count": 1
+      },
+      {
+       "name": "Freezing Trap",
+       "count": 1
+      },
+      {
+       "name": "Pressure Plate",
+       "count": 1
+      },
+      {
+       "name": "Rat Trap",
+       "count": 1
+      },
+      {
+       "name": "Venomstrike Trap",
+       "count": 1
+      },
+      {
+       "name": "Wandering Monster",
+       "count": 1
+      },
+      {
+       "name": "Professor Putricide",
+       "count": 1
+      },
+      {
+       "name": "Lesser Emerald Spellstone",
+       "count": 1
+      },
+      {
+       "name": "Arcane Flakmage",
+       "count": 2
+      },
+      {
+       "name": "Medivh's Valet",
+       "count": 2
+      },
+      {
+       "name": "Counterspell",
+       "count": 1
+      },
+      {
+       "name": "Duplicate",
+       "count": 1
+      },
+      {
+       "name": "Effigy",
+       "count": 1
+      },
+      {
+       "name": "Explosive Runes",
+       "count": 1
+      },
+      {
+       "name": "Flame Ward",
+       "count": 1
+      },
+      {
+       "name": "Ice Block",
+       "count": 1
+      },
+      {
+       "name": "Mirror Entity",
+       "count": 1
+      },
+      {
+       "name": "Spellbender",
+       "count": 1
+      },
+      {
+       "name": "Splitting Image",
+       "count": 1
+      },
+      {
+       "name": "Cloud Prince",
+       "count": 2
+      },
+      {
+       "name": "Kabal Crystal Runner",
+       "count": 2
+      },
+      {
+       "name": "Commander Rhyssa",
+       "count": 1
+      },
+      {
+       "name": "Bellringer Sentry",
+       "count": 2
+      },
+      {
+       "name": "Mysterious Challenger",
+       "count": 1
+      },
+      {
+       "name": "Subject 9",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 6)"
+   },
+   "replacements": {
+    "Commander Rhyssa": "Mad Scientist"
+   },
+   "fillers": [
+    "Mad Scientist",
+    "Cloaked Huntress",
+    "Eaglehorn Bow"
+   ],
+   "adaptations": [
+    {
+     "kind": "power",
+     "note": "Tricks and Traps \"plays\" its Secret as an effect cast without payment (the engine's rule for an effect play): the Secret enters play as a cast Secret does, but cards that react to a Secret being played from hand (Secretkeeper, Professor Putricide, Lesser Emerald Spellstone) do not react to it, and the run player's Counterspell does not see it."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's list is the level 6 deck; on level 5 the original removes 5 random cards. Here the row always uses the level 6 list. The four copies of Secretkeeper are kept as listed."
+    }
+   ]
+  }
+ ],
+ "rejected": [
+  {
+   "id": "GILA_900h2",
+   "name": "Toki, Time-Tinker (Hagatha fight hero card)",
+   "power": "GILA_900p",
+   "reason": "her hero power Temporal Loop restarts the turn, which needs a run-owned turn restart",
+   "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)",
+   "cards": []
+  }
+ ]
+}

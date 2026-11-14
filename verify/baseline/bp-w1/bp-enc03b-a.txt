@@ -1,0 +1,26 @@
+fix03_warrior      ULDA t3      floor  8 DRUID/druid_thicket/CS2_017                    deck 31 -> boss     turns  12 decisions  38 fallbacks  0 health  46 mana+4 power  1 checks ok
+fix03_warrior      ULDA t3      floor  8 HUNTER/hunter_kennel/DS1h_292                  deck 30 -> boss     turns  14 decisions  30 fallbacks  0 health  46 mana+4 power  1 checks ok
+fix03_warrior      ULDA t3      floor  8 MAGE/mage_rimeward/CS2_034                     deck 27 -> boss     turns  14 decisions  29 fallbacks  0 health  46 mana+4 power  3 checks ok
+fix03_warrior      ULDA t3      floor  8 PALADIN/paladin_gleaming/CS2_101               deck 21 -> boss     turns  14 decisions  37 fallbacks  0 health  46 mana+4 power  2 checks ok
+fix03_warrior      ULDA t3      floor  8 PRIEST/priest_mending/CS1h_001                 deck 32 -> boss     turns  12 decisions  34 fallbacks  0 health  46 mana+4 power  2 checks ok
+fix03_warrior      ULDA t3      floor  8 ROGUE/rogue_backalley/CS2_083b                 deck 32 -> boss     turns  10 decisions  22 fallbacks  0 health  46 mana+4 power  1 checks ok
+fix03_warrior      ULDA t3      floor  8 SHAMAN/shaman_stormdebt/CS2_049                deck 32 -> boss     turns  16 decisions  46 fallbacks  0 health  46 mana+4 power  3 checks ok
+fix03_warrior      ULDA t3      floor  8 WARLOCK/warlock_fiendpact/CS2_056              deck 32 -> boss     turns   8 decisions  16 fallbacks  0 health  46 mana+4 power  1 checks ok
+fix03_mage         ULDA t4      floor 13 WARRIOR/warrior_plated/CS2_102                 deck 49 -> boss     turns  16 decisions  48 fallbacks  0 health  62 mana+6 power  5 checks ok
+fix03_mage         ULDA t4      floor 13 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 46 -> boss     turns  32 decisions  88 fallbacks  0 health  65 mana+6 power  4 checks ok
+fix03_mage         ULDA t4      floor 13 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 22 -> boss     turns  41 decisions  79 fallbacks  0 health  62 mana+6 power 13 checks ok
+fix03_mage         ULDA t4      floor 13 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 49 -> boss     turns  12 decisions  36 fallbacks  0 health  62 mana+6 power  2 checks ok
+fix03_mage         ULDA t4      floor 13 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 31 -> boss     turns  12 decisions  33 fallbacks  0 health  62 mana+6 power  3 checks ok
+fix03_mage         ULDA t4      floor 13 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 45 -> boss     turns  18 decisions  49 fallbacks  0 health  65 mana+6 power  3 checks ok
+fix03_mage         ULDA t4      floor 13 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 42 -> boss     turns   8 decisions  18 fallbacks  0 health  62 mana+6 power  1 checks ok
+fix03_mage         ULDA t4      floor 13 GILA_500h3/mh_tess_scavenger/GILA_500p2        deck 44 -> boss     turns  26 decisions  60 fallbacks  0 health  62 mana+6 power  8 checks ok
+fix03_priest       ULDA t4      floor 13 GILA_600h/mh_darius_militia/GILA_600p          deck 46 -> boss     turns  12 decisions  28 fallbacks  0 health  62 mana+4 power  4 checks ok
+fix03_priest       ULDA t4      floor 13 GILA_400h/mh_shaw_kennel/GILA_400p             deck 45 -> player   turns  23 decisions  42 fallbacks  0 health  65 mana+4 power 10 checks ok
+fix03_priest       ULDA t4      floor 13 GILA_900h/mh_toki_workshop/CS2_034             deck 42 -> boss     turns  14 decisions  42 fallbacks  0 health  65 mana+4 power  3 checks ok
+fix03_priest       ULDA t4      floor 13 DALA_Rakanishu/heist_mage_1/CS2_034            deck 39 -> boss     turns  13 decisions  27 fallbacks  0 health  62 mana+4 power  4 checks ok
+fix03_priest       ULDA t4      floor 13 DALA_Barkeye/heist_hunter_1/DS1h_292           deck 38 -> boss     turns  24 decisions  58 fallbacks  0 health  67 mana+4 power  6 checks ok
+fix03_priest       ULDA t4      floor 13 DALA_Vessina/heist_shaman_1/CS2_049            deck 24 -> boss     turns  14 decisions  40 fallbacks  0 health  62 mana+4 power  2 checks ok
+fix03_priest       ULDA t4      floor 13 DALA_Kriziki/heist_priest_1/CS1h_001           deck 41 -> boss     turns  12 decisions  34 fallbacks  0 health  62 mana+4 power  4 checks ok
+fix03_priest       ULDA t4      floor 13 DALA_Eudora/heist_rogue_1/CS2_083b             deck 40 -> boss     turns  18 decisions  39 fallbacks  0 health  62 mana+4 power  5 checks ok
+encounter run: schedule acts-v3h; power unused: -; form unreached: -
+games 24, boss wins 23, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched ULD_131 x0 ULD_135 x0 ULD_138 x0 ULD_143 x0 ULD_151 x0 ULD_154 x0 ULD_158 x1 ULD_169 x0 ULD_172 x0 ULD_173 x0 ULD_177 x1 ULD_179 x5 ULD_194 x1 ULD_195 x5 ULD_205 x0 ULD_206 x9 ULD_208 x7 ULD_209 x9 ULD_212 x0 ULD_215 x13 ULD_216 x9 ULD_236 x9 ULD_239 x6 ULD_253 x3 ULD_256 x4 ULD_258 x2 ULD_262 x5 ULD_268 x11 ULD_270 x5 ULD_274 x1, most boss Secrets 2

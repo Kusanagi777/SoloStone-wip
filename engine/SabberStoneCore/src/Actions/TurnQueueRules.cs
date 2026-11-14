@@ -40,7 +40,7 @@ namespace SabberStoneCore.Actions
         private static GameTag OpeningSlot(int index) => (GameTag)(60000 + index);
         internal static void CaptureOpening(Game game)
         {
-            if (!CardSets.Client.Sets.TheFinsBeyondTime.RequiresOpening(game)) return;
+            if (!CardSets.Client.Sets.TheFinsBeyondTime.RequiresOpening(game) && !EncounterRules.CapturesOpening(game)) return;
             foreach (var owner in new[] { game.Player1, game.Player2 })
             {
                 owner[OpeningCount] = owner.HandZone.Count;

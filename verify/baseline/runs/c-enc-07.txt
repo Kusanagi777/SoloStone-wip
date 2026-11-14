@@ -1,0 +1,163 @@
+PASS A1 Sculpt Wax (1) "Summon a 1/1 copy of a minion.": clickable, aimed at any minion of either board, never at a hero
+PASS A2 a 1/1 copy of the run player's Boulderfist Ogre joins the boss's board (Waxed); the original is untouched; the power costs (1) and is spent
+PASS A3 with a full board Sculpt Wax is not offered
+PASS A3b with no minion in play it is not offered
+PASS A4 Harden Sculpture (3) "Summon a copy of a minion.": an exact copy (Attack, Health, damage, enchantments) on the boss's board
+PASS A5 with a full board Harden Sculpture is not offered
+PASS A6 Unstable Explosion (1) "Deal 1 damage to two random enemies.": untargeted; exactly two different enemies (hero or minions) take 1; the boss's own side is untouched
+PASS A7 with the enemy hero alone it deals 1 damage once
+PASS A8 Unstable Demolition (2) "Deal 2 damage to three random enemies.": three different enemies take 2
+PASS A9 with two enemies each is hit once (never one twice)
+PASS A10 over 24 seeds the two picks are always different, every enemy (the hero and each minion) is picked at some seed, and one seed gives one result
+PASS A11 Evolvomancy (0) "Transform a minion into a random one that costs (1) more.": the run player's 4-Cost Yeti becomes a scripted 5-Cost minion where it stood
+PASS A12 aimed at the boss's own 0-Cost Wisp it makes a 1-Cost minion on the boss's board
+PASS A13 over 30 seeds the result is always a scripted collectible 5-Cost minion outside the run's generation rejects, and it varies; the pool holds no rejected card
+PASS A13b with no scripted minion that costs (1) more the minion stays as it is
+PASS A14 Greater Evolution (1) "Transform a minion into a random one that costs (3) more.": the Yeti becomes a scripted 7-Cost minion
+PASS A15 Freeze (2) "Freeze a minion.": aimed at any minion; the run player's Yeti is Frozen and cannot attack on its owner's next turn
+PASS A15b the Freeze wears off: the Yeti can attack on the turn after
+PASS A15c with no minion in play Freeze is not offered
+PASS A16 Light's Will (0) "Restore #2 Health to all minions.": every damaged minion of both boards is healed 2 (never above full); the heroes are not healed
+PASS A16b the heal is a real heal: Lightwarden gains Attack for each minion healed
+PASS A17 Cruel Words (1) "Deal 1 damage to a friendly minion and give it +2 Attack.": aimed at the boss's own minions only
+PASS A18 the Ogre takes 1 damage and has +2 Attack (Whipped Into Shape)
+PASS A19 a 1-Health minion dies of it
+PASS A19b with no minion of its own the power is not offered
+PASS A20 Searing Lash (1) "Deal 1 damage to a friendly minion and give it +5 Attack.": 1 damage and +5 Attack (Whipped into Frenzy), the boss's own minions only
+PASS A21 Charge! (1) "Give a minion Charge.": aimed at any minion; the Ogre the boss just played has Charge and attacks the run player's hero at once
+PASS A21b it may be aimed at an enemy minion too, which then has Charge
+PASS B1 Tactical Retreat (1) "Return a friendly minion to your hand.": aimed at the boss's own minions only
+PASS B2 the Ogre is back in the boss's hand as a fresh card (undamaged); the run player's hand and board are untouched
+PASS B3 with a full hand the returned minion is destroyed (the engine's bounce rule)
+PASS A22 Rat Race (2) "Summon two 1/1 Rats.": two 1/1 Rats (Beasts) on the boss's board
+PASS A23 with one free slot it summons one Rat; with a full board it is not offered
+PASS A24 Swallow Whole (2) "Destroy the minion with the highest Attack.": untargeted; of both boards the boss's own 6-Attack Ogre dies, the others stay
+PASS A24b used again the run player's 4-Attack Yeti is the highest and dies
+PASS A24c the minion dies a real death (Loot Hoarder's Deathrattle draws)
+PASS A25 among minions with the same highest Attack exactly one is destroyed, and over 20 seeds either is picked
+PASS A26 with no minion in play Swallow Whole is not offered
+PASS B4 Hunter's Call (3) "Reduce the Cost of cards in your hand by (1).": every card the boss holds costs (1) less (never below 0), shown as Imperial Favor; the run player's hand is unchanged
+PASS B5 used again it stacks: the Ogre costs (4), the Fireball (2)
+PASS B5b the discounted card is paid at its reduced Cost and the minion on the board is a plain Ogre
+PASS B6 with an empty hand it is still offered (as the original) and does nothing but cost (3)
+PASS B7 Gloop (2) "Give minions in your hand +1/+1.": each minion the boss holds has +1/+1 (Glooped), a spell is untouched, the run player's hand is unchanged
+PASS B8 a Glooped minion keeps +1/+1 on the board
+PASS B9 used again it stacks (+2/+2), and a minion on the board is not touched
+PASS A27 Baby Breath (2) "Deal 2 damage.": aimed at any character (both heroes, every minion); the run player's hero takes 2
+PASS A28 aimed at a minion it deals 2 damage to it
+PASS A29 Coin (0) "Gain 1 Mana Crystal this turn only.": on its first turn the boss has one more Mana to spend, its Mana Crystals unchanged; once a turn
+PASS A29b a 2-Cost card is playable on turn 1 with it
+PASS A30 the Mana Crystal lasts this turn only: next turn the boss has its 2 crystals and the power is offered again
+PASS C1 Rat (LOOTA_BOSS_18t) is a scripted 1/1 Beast token with no text
+PASS C2 Growing Ooze (ICCA07_004) "At the start of your turn, gain +1/+1.": a 1/1 that grows at the start of its owner's turns only (2/2, then 3/3)
+PASS C3 The Mothergloop's deck holds two Growing Oozes
+PASS C4 LOOTA_BOSS_04e is a scripted enchantment of family 07
+PASS C4 LOOTA_BOSS_11e is a scripted enchantment of family 07
+PASS C4 LOOTA_BOSS_12e is a scripted enchantment of family 07
+PASS C4 LOOTA_BOSS_24e is a scripted enchantment of family 07
+PASS C4 LOOTA_BOSS_30e is a scripted enchantment of family 07
+PASS C4 ICCA07_004e is a scripted enchantment of family 07
+PASS D1 Evolvomancy aimed at the run player's awake shrine: the shrine is destroyed instead of transformed and goes dormant (no 1-Cost minion takes its place)
+PASS D2 the dormant form cannot be aimed at (the boss's Wisp is the only target)
+PASS D3 Greater Evolution: the same (destroyed, dormant)
+PASS D4 Sculpt Wax on the shrine: the boss gets a plain 1/1 copy (no shrine mark: it dies for good), the shrine stays awake
+PASS D4b the copy dies like any minion (no dormant form on the boss's board)
+PASS D5 Harden Sculpture on the shrine: a plain copy for the boss, the shrine stays
+PASS D6 Swallow Whole with the shrine as the only minion: it dies (a real death) and goes dormant
+PASS D7 with only the dormant form in play Swallow Whole is not offered; with another minion it destroys that one and the form stays
+PASS D7b ... the Wisp dies, the dormant form stays
+PASS D8 Unstable Explosion with a dormant form on the run player's board: only the hero is hit
+PASS D9 Tactical Retreat and Cruel Words cannot be aimed at the run player's shrine
+PASS D10 Baby Breath damages an awake shrine like any minion (2 damage, still awake)
+PASS D11 Freeze on an awake shrine is an ordinary Freeze
+PASS F1 Life Tap with Emberroot Destroyer against one Axe Flinger ends: 2 (Life Tap), then 3 to the Flinger, 2 back, 3 to the Flinger (dead), 2 back, and no further pick
+PASS F2 against two Axe Flingers it ends too: each takes two hits and dies (2 + 4 x 2 damage to the run player's hero)
+PASS E1 the shipped data validates with the 18 rows of family 07
+PASS E2 loot_04_sturmi: Waxmancer Sturmi, Dungeon Run, tier 2 by its printed Health 30, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_04p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_04_sturmi: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_04p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_05_hamm: Pathmaker Hamm, Dungeon Run, tier 1 by its printed Health 20, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_05p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_05_hamm: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_05p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_06_blackseed: Blackseed, Dungeon Run, tier 2 by its printed Health 40, a 30-card deck (substituted), its wiki page recorded
+PASS E3 LOOTA_BOSS_06p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_06_blackseed: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_06p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_09_frostfur: Frostfur, Dungeon Run, tier 1 by its printed Health 20, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_09p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_09_frostfur: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_09p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_10_graves: Graves the Cleric, Dungeon Run, tier 1 by its printed Health 20, a 30-card deck (substituted), its wiki page recorded
+PASS E3 LOOTA_BOSS_10p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_10_graves: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_10p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_11_mogark: Overseer Mogark, Dungeon Run, tier 1 by its printed Health 20, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_11p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_11_mogark: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_11p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_12_candlebeard: Candlebeard, Dungeon Run, tier 1 by its printed Health 20, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_12p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_12_candlebeard: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_12p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_13_thaddock: Thaddock the Thief, Dungeon Run, tier 2 by its printed Health 40, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_13p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_13_thaddock: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_13p: admitted for a boss by family 07's row (boss-power-own-hand), on legacy data too; never the run player's, never generated
+PASS E2 loot_18_giant_rat: Giant Rat, Dungeon Run, tier 1 by its printed Health 10, a 30-card deck (extended), its wiki page recorded
+PASS E3 LOOTA_BOSS_18p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_18_giant_rat: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_18p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_21_gnosh: Gnosh the Greatworm, Dungeon Run, tier 2 by its printed Health 40, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_21p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_21_gnosh: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_21p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_23_bristlesnarl: Bristlesnarl, Dungeon Run, tier 3 by its printed Health 50, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_23p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_23_bristlesnarl: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_23p: admitted for a boss by family 07's row (boss-power-own-hand), on legacy data too; never the run player's, never generated
+PASS E2 loot_24_mothergloop: The Mothergloop, Dungeon Run, tier 3 by its printed Health 50, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_24p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_24_mothergloop: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_24p: admitted for a boss by family 07's row (boss-power-own-hand), on legacy data too; never the run player's, never generated
+PASS E2 loot_27_sturmi: Waxmancer Sturmi, Dungeon Run, tier 3 by its printed Health 50, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_27p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_27_sturmi: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_27p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_28_hamm: Pathmaker Hamm, Dungeon Run, tier 3 by its printed Health 60, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_28p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_28_hamm: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_28p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_29_blackseed: Blackseed, Dungeon Run, tier 3 by its printed Health 60, a 30-card deck (substituted), its wiki page recorded
+PASS E3 LOOTA_BOSS_29p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_29_blackseed: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_29p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_30_mogark: Overseer Mogark, Dungeon Run, tier 3 by its printed Health 60, a 30-card deck (authentic), its wiki page recorded
+PASS E3 LOOTA_BOSS_30p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_30_mogark: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_30p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_44_wee_whelp: Wee Whelp, Dungeon Run, tier 1 by its printed Health 10, a 30-card deck (extended), its wiki page recorded
+PASS E3 LOOTA_BOSS_44p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_44_wee_whelp: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_44p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E2 loot_45_bink: Bink the Burglar, Dungeon Run, tier 1 by its printed Health 10, a 30-card deck (extended), its wiki page recorded
+PASS E3 LOOTA_BOSS_45p is a scripted clickable power of family 07 with the client's text and Cost
+PASS E4 loot_45_bink: the run's plan is the row's (hero, power, deck, no boss shrine, no forms) and its tier pool draws it
+PASS E5 LOOTA_BOSS_45p: admitted for a boss by family 07's row (boss-power-public), on legacy data too; never the run player's, never generated
+PASS E6 Sturmi's two ranks share the page's one list (30 cards, unchanged): Savannah Highmane x2, N'Zoth x1
+PASS E7 Hamm's list keeps the wiki's counts (Mad Bomber x8, Madder Bomber x5, Frothing Berserker x4)
+PASS E8 the three level-1 decks are the wiki's 10 cards twice plus 10 curated fillers (kind extended)
+PASS E9 Graves the Cleric: the 14 cards this client has are kept, the 16 it does not have are curated (recorded as unknown)
+PASS E10 the substitution for an unscripted card is recorded: Wrath (Blackseed); Gnosh keeps Gluttonous Trogg x2 and The Mothergloop Reverberating Ooze x5 and Shroomsayer x2 (family 08's cards)
+PASS E11 on acts-v3h every one of the 18 rows is drawn by some run of 400 seeds
+PASS E11 on acts-v3t every one of the 18 rows is drawn by some run of 400 seeds
+PASS E12 a run on acts-v1 never draws an imported row
+PASS E12 a run on acts-v2 never draws an imported row
+PASS E12 a run on act1 never draws an imported row
+PASS E13 a row whose pool is not its tier's is refused
+PASS E14 a combat-tier deck that is not 30 cards is refused
+PASS E15 LOOTA_BOSS_18t: a boss-only card (boss-token), never generated
+PASS E15 ICCA07_004: a boss-only card (boss-token), never generated
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 161 passed, 0 failed

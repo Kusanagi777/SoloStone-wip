@@ -324,10 +324,9 @@ namespace SabberStoneCore.Tasks
 
 		public static ISimpleTask Secret(params ISimpleTask[] list)
 		{
-			var secretList = list.ToList();
-			secretList.Add(new SetGameTagTask(GameTag.REVEALED, 1, EntityType.SOURCE));
-			secretList.Add(new MoveToGraveYard(EntityType.SOURCE));
-			return StateTaskList.Chain(secretList.ToArray());
+			// The effect steps, then the reveal and the graveyard move, as one chain; the effect runs twice for an owner whose
+			// Secrets trigger twice (phase 8 family 02: DAL_573 Commander Rhyssa, Actions.SecretTriggerTask).
+			return new SabberStoneCore.Actions.SecretTriggerTask(list.ToArray());
 		}
 
 		public static ISimpleTask SummonRandomMinionNumberTag(GameTag tag)
@@ -412,6 +411,8 @@ namespace SabberStoneCore.Tasks
 					if (!graveyard[i].ToBeDestroyed) continue;
 					if (graveyard[i].Card.Type != CardType.MINION) continue;
 					j++;
+					// A dead run shrine counts as a death but is never resummoned (phase 7).
+					if (Actions.ShrineRules.IsCorpse(graveyard[i])) continue;
 					if ((!condition?.Eval(graveyard[i]) ?? false)) continue;
 					buffer[k++] = i;
 				}

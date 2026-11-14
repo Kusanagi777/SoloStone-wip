@@ -36,6 +36,9 @@ public sealed class FairOptions
     public bool ShowPublicCaptures;
     // AiFixes "death-chip" (golden factory): the search-free fallbacks score with the pilot's own evaluator. Null keeps the legacy one-ply score.
     public IStateEvaluator FallbackEvaluator;
+    // Closed, design-time pool of the Secrets the opponent can hold, with prior weights (DungeonRunAdmission.SecretPrior).
+    // Never built from the opponent's drafted deck. Null keeps the open pool (class collectibles and CardFrequencies).
+    public IReadOnlyDictionary<string, double> OpponentSecretPrior;
 }
 
 internal sealed class SimulationFailureException : Exception
@@ -94,6 +97,11 @@ public sealed class FairCard
 #if ENGINE_SOURCE
         Untouchable = (card as EngineMinion)?.Untouchable ?? false;
         RushOnly = (card as EngineMinion)?.AttackableByRush ?? false;
+        // Phase 7: a Rumble Run board shrine (awake, or its dormant form) is a public board fact; the mark is engine state.
+        if (card is EngineMinion shrine && card.Zone?.Type == EngineZone.PLAY && SabberStoneCore.Actions.ShrineRules.IsMarked(card)) {
+            IsRunShrine = true;
+            ShrineDormantTurns = SabberStoneCore.Actions.ShrineRules.TurnsLeft(shrine);
+        }
 #endif
         var minion = card as EngineMinion;
         if (minion != null && card.Zone?.Type == EngineZone.PLAY) {
@@ -138,6 +146,9 @@ public sealed class FairCard
     public readonly IReadOnlyList<string> Held;
     public readonly bool CantAttack, CantAttackHeroes, Stealth, Immune, Untouchable, RushOnly;
     public readonly int AttacksThisTurn, AttackLimit;
+    /// <summary>Phase 7: a run board shrine on a board (awake or dormant), and the owner's turns its dormant form has left (0 awake).</summary>
+    public readonly bool IsRunShrine;
+    public readonly int ShrineDormantTurns;
 }
 
 // Value-only summaries of public card definitions; never execute tasks or inspect creator/payload identities.
@@ -458,6 +469,7 @@ public sealed class FairBotState
     {
         state.FaultReporter = FaultReporter;
         state.fallbackEvaluator = fallbackEvaluator;
+        state.opponentSecretPrior = opponentSecretPrior;
         state.deckRoots = deckRoots;
         state.opaqueQuestRewards = opaqueQuestRewards.Where(p => state.game.IdEntityDic.TryGetValue(p.Key, out var card)
             && card.Zone?.Type == EngineZone.HAND).ToDictionary(p => p.Key, p => p.Value);
@@ -476,6 +488,22 @@ public sealed class FairBotState
     private readonly DeckStyle style;
     private readonly int opponentSecretCount;
     private readonly int[] opponentSecretSlots;
+    // FairOptions.OpponentSecretPrior, carried to every derived view by InheritReporter.
+    private IReadOnlyDictionary<string, double> opponentSecretPrior;
+    internal IReadOnlyDictionary<string, double> OpponentSecretPrior => opponentSecretPrior;
+    // The reserved Unknown slots that stand for the opponent's masked Secrets (diagnostics and tests).
+    internal IReadOnlyList<int> OpponentSecretSlots => opponentSecretSlots;
+    // One prior source for world ordering, world weights and certificates: the closed pool's weight, else the
+    // opponent class's CardFrequencies weight, else .001.
+    internal double SecretPrior(string id)
+    {
+        if (opponentSecretPrior != null) return opponentSecretPrior.TryGetValue(id, out double weight) ? weight : .001;
+        if (cardFrequencyPrior == null)
+            cardFrequencyPrior = CardFrequencies.ForOrEmpty(Bot.Opponent.BaseClass).GroupBy(f => f.CardId, StringComparer.Ordinal)
+                .ToDictionary(g => g.Key, g => g.Last().Weight, StringComparer.Ordinal);
+        return cardFrequencyPrior.TryGetValue(id, out double frequency) ? frequency : .001;
+    }
+    private Dictionary<string, double> cardFrequencyPrior;
     private readonly IReadOnlyDictionary<string, int> ownDeckKnowledge;
     private readonly bool materializeOwnDeckTriggers;
     internal BotAction RewindKeep { get; }
@@ -492,6 +520,32 @@ public sealed class FairBotState
     }
     public static FairBotState Create(EngineGame source, int owner, int artificialSeed, DeckStyle style, FairOptions options = null)
         => CreateCore(source, owner, artificialSeed, style, options, false);
+    /// <summary>
+    /// Dungeon Run belief resets (phase 6, RunHelpers.BeliefReset, design H8): a run card rewrote <paramref name="controllerId"/>'s
+    /// hidden hand (LOOTA_820 Aleatoric Cube, DALA_709 Golden Candle), so what the bot learned about a card that was in that hand
+    /// at the reset no longer holds. Each such card leaves the public hand knowledge unless a public fact names it after the reset.
+    /// The hidden deck needs nothing: its cards are always private actors of the fair view. Returns how many entries it dropped.
+    /// </summary>
+    internal static int ForgetResetHand<T>(EngineGame source, int controllerId, IDictionary<int, T> publicHand)
+    {
+#if ENGINE_SOURCE
+        var resets = source.RunBeliefResets;
+        if (resets.Count == 0 || publicHand.Count == 0) return 0;
+        int dropped = 0;
+        foreach (var reset in resets.Where(r => r.ControllerId == controllerId && (r.Zones & SabberStoneCore.CardSets.DungeonRun.RunBeliefZones.Hand) != 0))
+            foreach (int id in reset.EntityIds)
+            {
+                if (!publicHand.ContainsKey(id)) continue;
+                bool seenSince = source.HistoryFacts.Query.Events<HistoryCardFact>()
+                    .Any(f => f.EntityId == id && f.DefinitionKnown && f.Sequence > reset.HistorySequence);
+                if (!seenSince && publicHand.Remove(id)) dropped++;
+            }
+        return dropped;
+#else
+        return 0;
+#endif
+    }
+
     // Bound the optional public-hand reconstruction, never the ability to make a move.
     internal const int RootHistoryLimit = 8192;
     internal const int RootPacketHistoryLimit = 65536;
@@ -556,6 +610,7 @@ public sealed class FairBotState
                     player.PendingQuestRewards.Enqueue((recipe.Reward, reward.CreatorId));
         }
         var publicHand = exact || !reconstructHand ? null : PublicHandKnowledge.Read(source, opponent, copy.HistoryFacts.ProjectForFairView(copy, owner), options?.ShowPublicCaptures == true);
+        if (publicHand != null) ForgetResetHand(source, opponent.PlayerId, publicHand);
         // Retain the public quest as the prior's source, not the privately crafted reward identity.
         var opaqueRewards = publicHand?.Where(p => p.Value.OpaqueQuest != null).ToDictionary(p => p.Key, p => p.Value.OpaqueQuest)
             ?? new Dictionary<int, string>();
@@ -590,6 +645,9 @@ public sealed class FairBotState
         try { copy = source.Clone(logging:false, resetRandomSeed:true, history:false); }
         finally { source.NextCloneIndex = cloneIndex; }
 #endif
+        // A pending Rewind skips the Secret refusal above, so its view must not keep the opponent's live Secrets either
+        // (legacy BotDriver/NativeMatch/NativePlaytest paths). Reply views keep the bot's own Secrets (KeepOpponentSecrets).
+        bool removeOpp = options?.RemoveOpponentSecrets == true || keep != null && options?.KeepOpponentSecrets != true;
         // Resolve dependents before replacing parents: some Choose One options have no privacy tag.
         var privateActors = new HashSet<int>(new[] { copy.Player1, copy.Player2 }.SelectMany(player =>
             player.DeckZone.Where(card => !offered.Contains(card.Id)
@@ -724,7 +782,7 @@ public sealed class FairBotState
 #endif
             if (player.PlayerId != owner)
             {
-                if (options?.RemoveOpponentSecrets == true)
+                if (removeOpp)
                     foreach (var secret in player.SecretZone.Where(card => card.IsSecret).ToArray())
                     {
                         secret.ActivatedTrigger?.Remove();
@@ -744,9 +802,18 @@ public sealed class FairBotState
                         || c[SabberStoneCore.Actions.Generic.PrivateDecisionOfferTag] == player.PlayerId)).ToArray()) Mask(copy, player, card);
 #endif
             }
+            // The starting deck list (DeckCards) is the opponent's secret but the owner's own knowledge, as its deck multiset
+            // is (TrackOwnDeck): conditions on it (CompositeLocationRules.Eligible, TLC_100) must see what the real game sees.
+            // The owner's list is put in card-id order so a permuted decklist gives the same view.
             int count = player.DeckCards.Count;
-            player.DeckCards.Clear();
-            player.DeckCards.AddRange(Enumerable.Repeat(EngineUnknown.UnknownCard, count));
+            if (player.PlayerId != owner) {
+                player.DeckCards.Clear();
+                player.DeckCards.AddRange(Enumerable.Repeat(EngineUnknown.UnknownCard, count));
+            } else {
+                var ordered = player.DeckCards.OrderBy(card => card.Id, StringComparer.Ordinal).ToList();
+                player.DeckCards.Clear();
+                player.DeckCards.AddRange(ordered);
+            }
         }
         foreach (int id in privateActors.OrderBy(id => id))
             if (copy.IdEntityDic.TryGetValue(id, out var actor) && !(actor is EngineUnknown)
@@ -784,6 +851,9 @@ public sealed class FairBotState
                 copy.IdEntityDic[pair.Key][GameTag.COST] = pair.Value.Cost;
             }
         var canonicalIds = exact ? null : CanonicalizePrivateActors(copy, retainedSlots.Select(s => s.Id));
+        // A dropped or re-registered hidden actor's sequence triggers (Shifting Scroll's LOOT_104e in the opponent's hand)
+        // would fire for an entity the view does not hold and fail the next clone (Game.RestoreCloneSubscriptions).
+        copy.RemoveDetachedTriggersForFairView();
         if (!exact)
         {
             if (choices != null) copyChooser.Choice.Choices = offered.ToList();
@@ -855,7 +925,7 @@ public sealed class FairBotState
             }
         }
 #endif
-        var secretSlots = options?.RemoveOpponentSecrets == true && secretCount > 0 ? new int[secretCount] : Array.Empty<int>();
+        var secretSlots = removeOpp && secretCount > 0 ? new int[secretCount] : Array.Empty<int>();
 #if ENGINE_SOURCE
         // Reserve from the public count after canonicalization, never the hidden actors' allocation history.
         for (int i = 0; i < secretSlots.Length; i++) {
@@ -878,6 +948,7 @@ public sealed class FairBotState
             new ReadOnlyDictionary<string, int>(new SortedDictionary<string, int>(known, StringComparer.Ordinal)),
             options?.MaterializeOwnDeckTriggers == true, secretSlots);
         result.fallbackEvaluator = options?.FallbackEvaluator;
+        result.opponentSecretPrior = options?.OpponentSecretPrior;
         if (!exact && options?.TrackOwnDeck == true) {
             result.deckRoots = new[] { copy.Player1, copy.Player2 }.ToDictionary(p => p.PlayerId, p => new HashSet<int>(p.DeckZone.Select(c => c.Id)));
         }
@@ -950,17 +1021,25 @@ public sealed class FairBotState
         complete = true;
         priorMass = 1;
         if (opponentSecretCount == 0 || Bot.Opponent.SecretZone.Any(c => c.IsSecret)) return Array.Empty<string[]>();
-        var prior = CardFrequencies.ForOrEmpty(Bot.Opponent.BaseClass).Where(f => Cards.FromId(f.CardId).IsSecret)
+        // Closed-pool mode: the run's public, design-time Secret pool is the whole hypothesis space. A deck-pull Secret
+        // (Mad Scientist, Kirin Tor, Mysterious Challenger) is a deck card, and the deck is a subset of the pool.
+        bool closed = opponentSecretPrior != null;
+        var prior = closed ? opponentSecretPrior.Where(p => p.Value > 0).ToDictionary(p => p.Key, p => p.Value, StringComparer.Ordinal)
+            : CardFrequencies.ForOrEmpty(Bot.Opponent.BaseClass).Where(f => Cards.FromId(f.CardId).IsSecret)
             .ToDictionary(f => f.CardId, f => f.Weight, StringComparer.Ordinal);
-        var pool = new HashSet<string>(SecretPool(Bot.Opponent.BaseClass), StringComparer.Ordinal);
-        pool.UnionWith(prior.Keys);
+        var pool = closed ? new HashSet<string>(prior.Keys, StringComparer.Ordinal)
+            : new HashSet<string>(SecretPool(Bot.Opponent.BaseClass), StringComparer.Ordinal);
+        if (!closed) pool.UnionWith(prior.Keys);
         bool broad = game.HistoryFacts.RecordCount > RootHistoryLimit;
         if (broad) complete = false; // The work cap must not turn a partial history into a certificate.
         else {
             var history = game.HistoryFacts.Query;
             var publicCards = history.Events<HistoryCardFact>().Where(f => f.DefinitionKnown).ToArray();
-            pool.UnionWith(publicCards.Where(f => f.ControllerId == Bot.Opponent.Id && Cards.FromAssetId(f.DbfId).IsSecret)
-                .Select(f => Cards.FromAssetId(f.DbfId).Id));
+            var publicSecrets = publicCards.Where(f => f.ControllerId == Bot.Opponent.Id && Cards.FromAssetId(f.DbfId).IsSecret)
+                .Select(f => Cards.FromAssetId(f.DbfId).Id).ToArray();
+            // A revealed Secret outside the closed pool proves the pool does not cover this opponent.
+            bool outsidePool = closed && publicSecrets.Any(id => !prior.ContainsKey(id));
+            pool.UnionWith(publicSecrets);
             var knownNonSecrets = new HashSet<int>(publicCards.Where(f => f.EntityId != 0
                 && !Cards.FromAssetId(f.DbfId).IsSecret).Select(f => f.EntityId));
             long firstTurn = history.Events<TurnStartedFact>().Select(f => f.Sequence).DefaultIfEmpty(0).First();
@@ -968,22 +1047,34 @@ public sealed class FairBotState
             long lastSecretPlay = hiddenPlays.Length == opponentSecretCount ? hiddenPlays.Max(f => f.Sequence) : long.MaxValue;
             // Coin and ordinary hero powers do not create off-class Secrets. Unexplained installation,
             // generation, transfer or shuffle widens to every implemented Secret, including historical sets.
-            broad = firstTurn == 0
-                || hiddenPlays.Length != opponentSecretCount
+            broad = firstTurn == 0 || outsidePool
+                || !closed && hiddenPlays.Length != opponentSecretCount
                 || history.HandEntries().Any(f => f.Sequence > firstTurn && f.Sequence <= lastSecretPlay && f.ControllerId == Bot.Opponent.Id
                     && f.EntryKind == HistoryHandEntryKind.Generated && !knownNonSecrets.Contains(f.EntityId))
                 || history.Events<ShuffleOperationFact>().Any(f => f.Sequence > firstTurn && f.Sequence <= lastSecretPlay && f.DestinationControllerId == Bot.Opponent.Id)
                 || history.Events<CardTransferredFact>().Any(f => f.ControllerId == Bot.Opponent.Id)
                 || publicCards.Any(f => Cards.FromAssetId(f.DbfId).Id == "TIME_860");
         }
-        if (broad || pool.Count < opponentSecretCount) pool.UnionWith(AllImplementedSecrets.Value);
+        if (broad || pool.Count < opponentSecretCount) {
+            pool.UnionWith(AllImplementedSecrets.Value);
+            // A widened closed pool is no longer the run's pool: it can still order work, never certify.
+            if (closed) complete = false;
+        }
+        // The closed pool lists the run's deck sources (DungeonRunAdmission.DeckSourceCards); it certifies only while the
+        // opponent's generation cannot add a Secret (GameConfig.Player1ExcludeGeneratedSecrets, on in a legacy run match). A
+        // catalog run's player may generate Secrets: its widened prior (DungeonRunAdmission.CatalogSecretPrior) orders the
+        // work and holds every Secret the player's generation yields in a run class, and in the class of each Secret generator
+        // its deck sources hold (Professor Putricide's Hunter Secrets in a Rogue run), but never certifies.
+        if (closed && !game.ExcludesGeneratedSecretsFor(Bot.Opponent.PlayerId)) complete = false;
         // Priors order work only: even tiny-prior blockers remain in exhaustive certification.
-        var ordered = pool.OrderByDescending(id => prior.TryGetValue(id, out double weight) ? weight : 0)
-            .ThenBy(id => id, StringComparer.Ordinal).ToArray();
+        var ordered = closed
+            ? pool.OrderByDescending(id => SecretPrior(id)).ThenBy(id => id, StringComparer.Ordinal).ToArray()
+            : pool.OrderByDescending(id => prior.TryGetValue(id, out double weight) ? weight : 0)
+                .ThenBy(id => id, StringComparer.Ordinal).ToArray();
         // Include omitted assignments in the denominator without enumerating them (ordered, distinct weighted draws).
         var mass = new double[opponentSecretCount + 1]; mass[0] = 1;
         foreach (string id in ordered) {
-            double weight = prior.TryGetValue(id, out double frequency) ? frequency : .001;
+            double weight = closed ? SecretPrior(id) : prior.TryGetValue(id, out double frequency) ? frequency : .001;
             for (int n = opponentSecretCount; n > 0; n--) mass[n] += mass[n - 1] * weight;
         }
         priorMass = mass[opponentSecretCount];
@@ -1019,11 +1110,16 @@ public sealed class FairBotState
         for (int i = 0; i < secrets.Count; i++) {
             var actor = EngineEntity.FromCard(state.Bot.Opponent, Cards.FromId(secrets[i]),
                 zone: state.Bot.Opponent.SecretZone, id: opponentSecretSlots[i]);
+            // The state the engine leaves a live Secret in: CastSpell activates the trigger and exhausts it, the owner's turn
+            // end readies it (Game.cs MainEnd) and the owner's next turn start exhausts it again (MainReady). Trigger.Validate
+            // ignores an exhausted Secret, so a world installed on the bot's turn must be ready, as the real one is. A Secret
+            // that can trigger on its owner's turn (OwnTurnSecretRules: ULDA_045t) stays live on that turn too.
             actor.Card.Power?.Trigger?.Activate(actor);
+            if (state.Bot.Opponent == state.game.CurrentPlayer) actor.IsExhausted = SabberStoneCore.Actions.OwnTurnSecretRules.ExhaustedOnOwnTurn(actor);
         }
         return state;
     }
-    private static int StableHash(IEnumerable<string> ids, int seed)
+    internal static int StableHash(IEnumerable<string> ids, int seed)
     {
         unchecked
         {
@@ -1047,6 +1143,7 @@ public sealed class FairBotState
             if (free.Count == 0) { bot.SetasideZone.Add(old); Mask(game, bot, old); continue; }
             var fresh = EngineEntity.FromCard(bot, Cards.FromId(free[random.Next(free.Count)]), zone: bot.SecretZone, id: old.Id);
             fresh.Card.Power?.Trigger?.Activate(fresh);
+            if (bot == game.CurrentPlayer) fresh.IsExhausted = SabberStoneCore.Actions.OwnTurnSecretRules.ExhaustedOnOwnTurn(fresh);
         }
     }
     private static void RedactHiddenTargetEnchantments(EngineGame game)
@@ -1265,6 +1362,8 @@ public sealed class FairBotState
                 || HasBoundaryState(player) || HasBoundaryState(player.Hero) || HasBoundaryState(player.Hero.HeroPower)
                 || player.Hero.Weapon != null && (player.Hero.Weapon.ToBeDestroyed || player.Hero.Weapon.Durability <= 0
                     || HasBoundaryState(player.Hero.Weapon))) return true;
+            // A run shrine (phase 7): the engine projection reproduces its dormancy and revival, so it is never modelled twice.
+            if (SabberStoneCore.Actions.ShrineRules.Of(player).Count != 0) return true;
             foreach (var minion in player.BoardZone)
                 if (minion.IsFrozen || minion.IsDormant || minion.ToBeDestroyed || minion.Health <= 0
                     || HasBoundaryState(minion)) return true;

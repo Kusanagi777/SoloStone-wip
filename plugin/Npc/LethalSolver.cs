@@ -53,6 +53,40 @@ public sealed class LethalJob : INodeJob
         ? totalWeight > 0 ? Math.Max(0, Math.Min(1, 1 - testedReplyWeight / totalWeight)) : 1 : 0;
     internal double? SecretHeuristicValue => evaluate != null && State.Facts.OpponentSecretCount > 0 && replayWeight > 0
         ? (replayValue + (totalWeight - replayWeight) * baselineValue) / totalWeight : (double?)null;
+    // secret-worlds settlement (TurnPlanner): replay one finalist over the W most likely opponent Secret worlds, one
+    // seed each, and score every endpoint. A non-win never stops the job; the result is the prior-weighted mean.
+    private bool settle;
+    private int settleTurnSeed;
+    internal const double SettleClamp = 10000;
+    internal static double ClampValue(double value) => Math.Max(-SettleClamp, Math.Min(SettleClamp, value));
+    internal int SettledWorlds { get; private set; }
+    internal double? SettledValue => settle && replayWeight > 0 ? replayValue / replayWeight : (double?)null;
+    // The settlement order: descending world prior (product of SecretPrior), then the ordinal-joined ids.
+    internal static IReadOnlyList<string[]> SettleWorlds(FairBotState state, int limit)
+    {
+#if ENGINE_SOURCE
+        var worlds = state.PlausibleOpponentSecretWorlds(out _, out _);
+        return worlds.Select(w => new { World = w, Weight = w.Aggregate(1.0, (a, id) => a * state.SecretPrior(id)), Key = string.Join("|", w) })
+            .OrderByDescending(x => x.Weight).ThenBy(x => x.Key, StringComparer.Ordinal)
+            .Take(Math.Max(0, limit)).Select(x => x.World).ToArray();
+#else
+        return Array.Empty<string[]>();
+#endif
+    }
+    internal static int SettleSeed(IReadOnlyList<string> world, int turnSeed) => FairBotState.StableHash(world, turnSeed);
+    internal static LethalJob Settle(FairBotState state, IReadOnlyList<BotAction> line, int cap, Func<FairBotState, double> evaluate,
+        int worlds, int turnSeed)
+    {
+        if (evaluate == null) throw new ArgumentNullException(nameof(evaluate));
+        var job = new LethalJob(state, cap);
+        job.frontier.Clear(); job.candidate = line.ToArray(); job.sample = 1; job.evaluate = evaluate;
+        job.settle = true; job.settleTurnSeed = turnSeed;
+        job.secretWorlds = SettleWorlds(state, worlds);
+        job.worldWeights = job.secretWorlds.Select(w => w.Aggregate(1.0, (a, id) => a * state.SecretPrior(id))).ToArray();
+        job.worldsLoaded = true;
+        if (job.candidate.Length == 0 || job.secretWorlds.Count == 0) job.Finish(LethalOutcome.None);
+        return job;
+    }
 
     private readonly Action charge;
     private readonly BotAction[] rootActions;
@@ -146,6 +180,7 @@ public sealed class LethalJob : INodeJob
 
     private void ReplayNode()
     {
+        if (settle) { SettleNode(); return; }
         // Replay every candidate, including apparently deterministic actions with random triggers.
         // Each replay action costs one scheduler node; never hide an entire line inside one step.
         if (!worldsLoaded) {
@@ -160,9 +195,7 @@ public sealed class LethalJob : INodeJob
             worldsLoaded = true;
             if ((evaluate != null || measureReplies) && State.Facts.OpponentSecretCount > 0 && secretWorlds.Count > 0) {
                 if (evaluate != null) baselineValue = Math.Max(-10000, Math.Min(10000, evaluate(State)));
-                var prior = CardFrequencies.ForOrEmpty(State.ReplyClass).ToDictionary(f => f.CardId, f => f.Weight);
-                worldWeights = secretWorlds.Select(world => world.Aggregate(1.0,
-                    (weight, id) => weight * (prior.TryGetValue(id, out double frequency) ? frequency : .001))).ToArray();
+                worldWeights = secretWorlds.Select(world => world.Aggregate(1.0, (weight, id) => weight * State.SecretPrior(id))).ToArray();
                 totalWeight = 4 * (priorMass > 0 ? priorMass : 1);
             }
             if (measureReplies && totalWeight <= 0) totalWeight = 4 * Math.Max(1, secretWorlds.Count);
@@ -195,6 +228,36 @@ public sealed class LethalJob : INodeJob
             || action.Type == PlayerTaskType.END_TURN || replay.Facts.Turn != turn) ReplayFailed();
     }
 
+    private void SettleNode()
+    {
+        if (replay == null) {
+#if ENGINE_SOURCE
+            replay = State.WithOpponentSecrets(secretWorlds[secretWorld], SettleSeed(secretWorlds[secretWorld], settleTurnSeed));
+#else
+            replay = State.WithArtificialSeed(sample);
+#endif
+        }
+        var action = candidate[replayIndex];
+        // A Secret can make a later action illegal (a killed attacker, a countered card): score the truncation state.
+        if (!replay.Actions.Contains(action)) { SettleEndpoint(); return; }
+        replay = replay.Apply(action);
+        replayIndex++;
+        var facts = replay.Facts;
+        if (facts.Own.PlayState != PlayState.PLAYING || replayIndex == candidate.Length || !replay.CanExpand
+            || action.Type == PlayerTaskType.END_TURN || facts.Turn != turn) SettleEndpoint();
+    }
+    private void SettleEndpoint()
+    {
+        double value;
+        try { value = ClampValue(evaluate(replay)); }
+        catch (Exception error) when (!(error is OutOfMemoryException)) { value = double.NaN; }
+        if (!double.IsNaN(value)) {
+            double weight = worldWeights[secretWorld];
+            replayValue += weight * value; replayWeight += weight; SettledWorlds++;
+        }
+        secretWorld++; replayIndex = 0; replay = null;
+        if (secretWorld >= secretWorlds.Count) Finish(LethalOutcome.None);
+    }
     private void ReplayFailed()
     {
         if (measureReplies) { AdvanceReplay(false); return; }
@@ -230,6 +293,8 @@ public sealed class LethalJob : INodeJob
 
     private void RejectCandidate()
     {
+        // Settlement: an action the fair view refuses (private boundary, simulation fault) ends that world's replay.
+        if (settle) { if (candidate != null && replay != null) SettleEndpoint(); else if (candidate != null) { secretWorld++; replayIndex = 0; if (secretWorld >= secretWorlds.Count) Finish(LethalOutcome.None); } return; }
         if (measureReplies && candidate != null) {
             if (worldsLoaded && replay != null) AdvanceReplay(null);
             else Finish(LethalOutcome.Incomplete);

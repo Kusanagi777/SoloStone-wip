@@ -1,0 +1,18 @@
+tunnel_rat         solostone t       floor  1 DRUID/druid_thicket/CS2_017                    deck 10 -> player   turns  11 decisions  21 fallbacks  0 health  30 mana+0 power  2 checks ok rule DALA_859 seen 1
+tunnel_rat         solostone t       floor  1 HUNTER/hunter_kennel/DS1h_292                  deck 10 -> player   turns  11 decisions  19 fallbacks  0 health  30 mana+0 power  2 checks ok rule DALA_859 seen 1
+loot_35_brandlemar LOOT t1      floor  1 MAGE/mage_rimeward/CS2_034                     deck 10 -> boss     turns  15 decisions  32 fallbacks  0 health  30 mana+0 power  4 checks ok rule DALA_859 seen 1
+loot_35_brandlemar LOOT t1      floor  1 PALADIN/paladin_gleaming/CS2_101               deck 10 -> player   turns  11 decisions  19 fallbacks  0 health  30 mana+0 power  2 checks ok rule DALA_859 seen 1
+gila_25_ivan       GIL  t2      floor  3 PRIEST/priest_mending/CS1h_001                 deck 16 -> boss     turns  16 decisions  38 fallbacks  0 health  34 mana+0 power  3 checks ok rule DALA_859 seen 1
+gila_25_ivan       GIL  t2      floor  3 ROGUE/rogue_backalley/CS2_083b                 deck 17 -> boss     turns  12 decisions  35 fallbacks  0 health  34 mana+0 power  2 checks ok rule DALA_859 seen 1
+trl_200_voone      TRL  t2      floor  3 SHAMAN/shaman_stormdebt/CS2_049                deck 17 -> boss     turns   8 decisions  20 fallbacks  0 health  34 mana+0 power  0 checks ok variant horn shrine TRLA_171 rule DALA_859 seen 1
+trl_200_voone      TRL  t2      floor  3 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 18 -> boss     turns   8 decisions  18 fallbacks  0 health  34 mana+0 power  1 checks ok variant horn shrine TRLA_171 rule DALA_859 seen 1
+trl_200_voone      TRL  t2      floor  3 DALA_Barkeye/heist_hunter_1/DS1h_292           deck 17 -> boss     turns  14 decisions  26 fallbacks  0 health  34 mana+0 power  0 checks ok variant drum shrine TRLA_170 rule DALA_859 seen 1
+trl_200_voone      TRL  t2      floor  3 DALA_Squeamlish/heist_druid_1/CS2_017          deck 16 -> boss     turns  24 decisions  56 fallbacks  0 health  34 mana+0 power  5 checks ok variant drum shrine TRLA_170 rule DALA_859 seen 1
+trl_200_voone      TRL  t2      floor  3 DALA_Tekahn/heist_warlock_1/CS2_056            deck 16 -> boss     turns   8 decisions  17 fallbacks  0 health  34 mana+0 power  2 checks ok variant champion shrine TRLA_104 rule DALA_859 seen 1
+trl_200_voone      TRL  t2      floor  3 TRLA_209h_Mage/rumble_mage_108/CS2_034         deck 17 -> boss     turns   8 decisions  19 fallbacks  0 health  34 mana+0 power  2 checks ok variant champion shrine TRLA_104 rule DALA_859 seen 1
+dala_21_whirt      DALA t3      floor  8 TRLA_209h_Druid/rumble_druid_112/CS2_017       deck 33 -> boss     turns  32 decisions  83 fallbacks  0 health  51 mana+0 power 16 checks ok rule DALA_859 seen 1
+dala_21_whirt      DALA t3      floor  8 TRLA_209h_Hunter/rumble_hunter_110/DS1h_292    deck 34 -> player   turns  29 decisions  62 fallbacks  0 health  46 mana+0 power 13 checks ok rule DALA_859 seen 1
+ulda_44_trap_room  ULDA t3      floor  8 TRLA_209h_Paladin/rumble_paladin_105/CS2_101   deck 32 -> player   turns  17 decisions  38 fallbacks  0 health  46 mana+1 power  5 checks ok rule DALA_859 seen 1
+ulda_44_trap_room  ULDA t3      floor  8 TRLA_209h_Priest/rumble_priest_114/CS1h_001    deck 35 -> player   turns  31 decisions  69 fallbacks  0 health  46 mana+0 power  9 checks ok rule DALA_859 seen 1
+encounter run: schedule acts-v3h, rule DALA_859; power unused: -; form unreached: -
+games 16, boss wins 10, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, rule-seen 16, rule-unseen -

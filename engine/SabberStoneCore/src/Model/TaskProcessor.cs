@@ -117,6 +117,11 @@ namespace SabberStoneCore.Model
 			_eventStack.Count == 0 && CurrentTask == null && !_hasPendingTask && _executionDepth == 0;
 
 		public ISimpleTask CurrentTask { get; private set; }
+		/// <summary>
+		/// The controller of the task being processed (queued or executed), or null between tasks. Run-mode generation
+		/// filters read it as the generating controller (<see cref="Game.BlocksGenerated"/>).
+		/// </summary>
+		internal Controller CurrentController { get; private set; }
         internal IPlayable CurrentTarget => CurrentTask != null && CurrentQueue?.Count > 0 ? CurrentQueue.Peek().Target : null;
 
 		public void StartEvent()
@@ -273,7 +278,9 @@ namespace SabberStoneCore.Model
 				_game.Facts.DeathrattleResolved(deathId > 0 ? deathId : deathId < 0 ? -deathId : source?.Id ?? 0, source, controller, deathId <= 0);
 			}
             ISimpleTask temp = CurrentTask;
+			Controller tempController = CurrentController;
 			CurrentTask = task;
+			CurrentController = controller;
 
 			//if (currentTask is StateTaskList tasks)
 			//	tasks.Stack = new TaskStack(_game);
@@ -327,6 +334,7 @@ namespace SabberStoneCore.Model
 
 			CurrentQueue.Dequeue();
 			CurrentTask = temp;
+			CurrentController = tempController;
 
 			_game.Resolution.Resolved(observation);
             // The recipe owns its remaining work; the surrounding legacy queue still finishes atomically.
@@ -355,12 +363,14 @@ namespace SabberStoneCore.Model
             }
 
 			_executionDepth++;
+			Controller outerController = CurrentController;
+			CurrentController = controller;
 			try
             {
                 using var visual = _game.History ? _game.PowerHistory.Visual(_game, Presentation.VisualPhase.BoardBuff) : null;
                 task.Process(in _game, in controller, source, target);
             }
-			finally { _executionDepth--; }
+			finally { _executionDepth--; CurrentController = outerController; }
             _game.Resolution.Resolved(observation);
 
 			if (controller.Game.History && !DiscardUnfiredSecret(historyTrigger || task.IsTrigger, source, historyStart, parentHadEffects))

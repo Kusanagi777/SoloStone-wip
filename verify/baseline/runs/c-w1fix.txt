@@ -1,0 +1,24 @@
+PASS W1 Deathlord (run player's): one minion of the boss's deck is on the boss's board  (board 0->1)
+PASS W1 the boss's deck is one card shorter and no longer lists the summoned minion  (deck 26->25)
+PASS W1 no entity is listed in two zones
+PASS W1 an exact clone carries the same zones
+PASS W1 played and destroyed by tasks: the game saves and loads as a snapshot (the history's residence links validate)  (played True cast True board 1 deck 26->23 )
+PASS W2 Deathlord (boss's): one minion of the run player's deck is on the run player's board, the deck one card shorter  (board 0->1 deck 26->25)
+PASS W2 no entity is listed in two zones
+PASS W3 a full opposing board: nothing leaves the deck  (deck 26->26)
+PASS W3 a deck without minions: nothing is summoned
+PASS W4 two Deathlords: two different minions of the boss's deck are on its board  (deck 26->24)
+PASS W4 the next two turns draw from the shorter decks and no entity is listed in two zones  (deck 23; )
+PASS W5 Doppelgangster played: itself and its two copies  (CFM_668t,CFM_668,CFM_668t2)
+PASS W5 Shudderwock repeats it: 2 copies of Shudderwock (three on the board), no exception  ( board CFM_668t 2/2,CFM_668 2/2,CFM_668t2 2/2,GIL_820 6/6,GIL_820 6/6,GIL_820 6/6)
+PASS W5 the game goes on (the boss's turn, then the run player's)
+PASS W5 after a round the board still holds the three Shudderwocks
+PASS W6 room for one copy: exactly one more Shudderwock, a full board  (CFM_668t,CFM_668,CFM_668t2,CS2_231,CS2_231,GIL_820,GIL_820)
+PASS W6 no room: Shudderwock alone, no copy, no exception
+PASS W7 Sudden Betrayal in play, the boss's hero attacks the run player's hero: the attack lands, no exception  (secret True axe True attacked True  health 30->27)
+PASS W7 the Secret did not trigger (a hero is not a minion): still in play  (LOOT_210)
+PASS W8 an enemy minion with a neighbour attacks the run player's hero: it attacks the neighbour instead, the Secret is spent  (health 30->30 left -4 right -4 secrets 0)
+PASS W9 a lone enemy minion attacks the hero: no neighbour, the attack lands and the Secret stays  (health 30->26)
+PASS W9 the boss's Sudden Betrayal: the run player's hero attack lands and leaves the Secret  ( boss health 30->27 secrets 1)
+PASS W9 the run player's minion with a neighbour attacks the boss's hero: it hits the neighbour, the boss's Secret is spent  (boss health 27 a -4 b -4)
+RESULT 23 passed, 0 failed

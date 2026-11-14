@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
+  <Profile>
+    <Heroes />
+    <Unlocked />
+    <Archive />
+  </Profile>
+  <Active DataVersion="dungeon-run/1" Seed="6491657387877867522" TypedSeed="false" Hero="cartographer" Power="carto_ambush" Signature="sig_field_atlas" Floor="2" Phase="PreMatch" Attempt="0" DraftsWithoutDominant="0">
+    <Deck>
+      <string>KAR_009</string>
+      <string>CORE_BT_701</string>
+      <string>CATA_484</string>
+      <string>CORE_EX1_278</string>
+      <string>JAIL_312</string>
+      <string>EX1_522</string>
+      <string>GVG_123</string>
+      <string>CFM_636</string>
+      <string>BOT_604</string>
+      <string>AT_028</string>
+      <string>TB_CoOpv3_011</string>
+      <string>TB_CoOpv3_001</string>
+      <string>DAL_182</string>
+      <string>MEND_506</string>
+      <string>GIL_664</string>
+    </Deck>
+    <Treasures />
+    <ActiveTreasures>
+      <string>sig_field_atlas</string>
+      <string>blazing_rod</string>
+    </ActiveTreasures>
+    <Upgrades />
+    <BossSequence>
+      <string>tunnel_rat</string>
+      <string>mire_brute</string>
+      <string>lantern_thief</string>
+      <string>pit_champion</string>
+      <string>golemancer</string>
+      <string>storm_herald</string>
+      <string>ember_matron</string>
+      <string>gilded_king</string>
+    </BossSequence>
+    <TakenBundles>
+      <string>bundle_mage_beast</string>
+    </TakenBundles>
+    <BundleCooldowns>
+      <string>bundle_neutral_taunt@3</string>
+      <string>bundle_rogue_weapons@3</string>
+    </BundleCooldowns>
+    <DraftedThemes>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+    </DraftedThemes>
+    <Drafts>
+      <DungeonRunDraft Floor="1" Kind="treasure" Picked="blazing_rod">
+        <Offered>
+          <string>blazing_rod</string>
+          <string>quake_stone</string>
+          <string>spark_lantern</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="1" Kind="bundle" Picked="bundle_mage_beast">
+        <Offered>
+          <string>bundle_mage_beast</string>
+          <string>bundle_neutral_taunt</string>
+          <string>bundle_rogue_weapons</string>
+        </Offered>
+      </DungeonRunDraft>
+    </Drafts>
+    <Matches>
+      <DungeonRunMatchSummary Floor="1" Boss="tunnel_rat" Outcome="Win" Attempt="1" />
+    </Matches>
+  </Active>
+</DungeonRun>

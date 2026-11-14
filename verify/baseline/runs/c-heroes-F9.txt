@@ -1,0 +1,14 @@
+T22 ULDA_Reno_HP1     tombs_reno_spellslinger  boss turns 12 power-uses 5 player-choices 0 moonfires 0 decisions 20 fallbacks 0 boss hedge_witch
+T22 ULDA_Reno_HP2     tombs_reno_random        boss turns 30 power-uses 15 player-choices 0 moonfires 0 decisions 50 fallbacks 0 boss hedge_witch
+T22 ULDA_Reno_HP3     tombs_reno_random        player turns 19 power-uses 9 player-choices 0 moonfires 0 decisions 28 fallbacks 0 boss hedge_witch
+T22 ULDA_Finley_HP1   tombs_finley_murloc_crusade player turns 23 power-uses 9 player-choices 1 moonfires 0 decisions 36 fallbacks 0 boss hedge_witch
+T22 ULDA_Finley_HP2   tombs_finley_random      boss turns 12 power-uses 6 player-choices 6 moonfires 0 decisions 25 fallbacks 0 boss hedge_witch
+T22 ULDA_Finley_HP3   tombs_finley_random      boss turns 12 power-uses 5 player-choices 0 moonfires 0 decisions 27 fallbacks 0 boss hedge_witch
+T22 ULDA_Elise_HP1    tombs_elise_healing_help boss turns 14 power-uses 6 player-choices 0 moonfires 0 decisions 34 fallbacks 0 boss hedge_witch
+T22 ULDA_Elise_HP2    tombs_elise_random       boss turns 12 power-uses 5 player-choices 1 moonfires 0 decisions 27 fallbacks 0 boss hedge_witch
+T22 ULDA_Elise_HP3    tombs_elise_random       boss turns 12 power-uses 0 player-choices 1 moonfires 1 decisions 23 fallbacks 0 boss hedge_witch
+T22 ULDA_Brann_HP1    tombs_brann_taming_dinos boss turns 10 power-uses 4 player-choices 0 moonfires 0 decisions 20 fallbacks 0 boss hedge_witch
+T22 ULDA_Brann_HP2    tombs_brann_random       boss turns 14 power-uses 6 player-choices 0 moonfires 0 decisions 17 fallbacks 0 boss hedge_witch
+T22 ULDA_Brann_HP3    tombs_brann_random       player turns 23 power-uses 2 player-choices 9 moonfires 0 decisions 29 fallbacks 0 boss hedge_witch
+T22 ULDA_039          tombs_reno_spellslinger  boss turns 12 power-uses 5 player-choices 5 moonfires 0 decisions 23 fallbacks 0 boss hedge_witch
+292 passed, 0 failed

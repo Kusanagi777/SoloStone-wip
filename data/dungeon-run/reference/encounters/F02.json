@@ -1,0 +1,8 @@
+{
+ "schemaVersion": 1,
+ "family": "02",
+ "description": "Unscripted collectibles A (phase 8 family 02): 33 collectible cards that had no engine script (AT_027, AT_079, AT_081, AT_115, BOT_436, DAL_573, DAL_729, DAL_731, EX1_112, GIL_655, GVG_017, GVG_025, GVG_050, GVG_054, GVG_097, GVG_107, GVG_108, GVG_111, GVG_113, GVG_119, LOE_009, LOE_022, LOE_029, LOE_047, LOE_053, LOE_061, LOE_092, LOE_107, LOE_119, TRL_318, and the Tekahn finale-deck cards DAL_431, GVG_014, GVG_049). The family transcribes no boss: its cards reach a run through the catalog buckets (data/dungeon-run/reference/buckets.json; catalog-v1.json offers all 33 once they are scripted) and through the boss decks of other families' rows, which name them on their own wiki lists (family 01's rows so far: Whirt the All-Knowing lists Animated Armor, Trap Room lists Commander Rhyssa, War Master Voone lists Fierce Monkey, Festeroot Hulk and Foe Reaper 4000). Rerunning the encounters step after this family lands turns those cards from substitutions into listed cards.",
+ "method": "No wiki page was read for this family. Card texts and tags are the client's (facts/violet-hold-2026-09.json).",
+ "bosses": [],
+ "rejected": []
+}

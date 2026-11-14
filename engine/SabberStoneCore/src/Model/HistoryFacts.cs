@@ -410,6 +410,8 @@ namespace SabberStoneCore.Model
 		}
 		internal void RequirePrivateIdentity() { if(_projected) throw new NotSupportedException("Private historical identity is unavailable in a fair view."); }
 		internal bool WasInitial(int entity)=>_initial.ContainsKey(entity);
+		/// <summary>The starting decks are recorded (<see cref="FreezeInitial"/>, turn 1).</summary>
+		internal bool InitialFrozen=>_initialFrozen;
 		internal bool StartedInDeck(int entity,int owner)
 		{
 			var origin=Origin(entity,owner);

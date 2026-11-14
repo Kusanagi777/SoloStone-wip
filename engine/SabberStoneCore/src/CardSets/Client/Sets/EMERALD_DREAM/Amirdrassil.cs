@@ -33,7 +33,6 @@ namespace SabberStoneCore.CardSets.Client.Sets
                     context.Draw(n);
                     context.RefreshMana(n);
                     s[GameTag.TAG_SCRIPT_DATA_NUM_1] = n + 1;
-                    s[GameTag.LOCATION_ACTION_COOLDOWN] = 1;
                 })
             } };
         }

@@ -1,0 +1,159 @@
+PASS A1 TRLA_106: scripted with its form TRLA_106t (3-turn sleeper pointing back), admitted for the run player only (board-shrine), never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_rogue_106 has board shrine TRLA_106 (plan: one copy; not a power, treasure or deck card)  (TRLA_106 TRLA_106)
+PASS A1 TRLA_186: scripted with its form TRLA_186t (3-turn sleeper pointing back), admitted for the run player only (hidden-steal), never generated  (hidden-steal True)
+PASS A2 a new Rikkar run on rumble_rogue_186 has board shrine TRLA_186 (plan: one copy; not a power, treasure or deck card)  (TRLA_186 TRLA_186)
+PASS A1 TRLA_187: scripted with its form TRLA_187t (3-turn sleeper pointing back), admitted for the run player only (board-shrine), never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_rogue_187 has board shrine TRLA_187 (plan: one copy; not a power, treasure or deck card)  (TRLA_187 TRLA_187)
+PASS A1 TRLA_109: scripted with its form TRLA_109t (3-turn sleeper pointing back), admitted for the run player only (board-shrine), never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_shaman_109 has board shrine TRLA_109 (plan: one copy; not a power, treasure or deck card)  (TRLA_109 TRLA_109)
+PASS A1 TRLA_154: scripted with its form TRLA_154t (3-turn sleeper pointing back), admitted for the run player only (board-shrine), never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_shaman_154 has board shrine TRLA_154 (plan: one copy; not a power, treasure or deck card)  (TRLA_154 TRLA_154)
+PASS A1 TRLA_155: scripted with its form TRLA_155t (3-turn sleeper pointing back), admitted for the run player only (board-shrine), never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_shaman_155 has board shrine TRLA_155 (plan: one copy; not a power, treasure or deck card)  (TRLA_155 TRLA_155)
+PASS A1 TRLA_113: scripted with its form TRLA_113t (3-turn sleeper pointing back), admitted for the run player only (board-shrine), never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_warlock_113 has board shrine TRLA_113 (plan: one copy; not a power, treasure or deck card)  (TRLA_113 TRLA_113)
+PASS A1 TRLA_178: scripted with its form TRLA_178t (3-turn sleeper pointing back), admitted for the run player only (board-shrine), never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_warlock_178 has board shrine TRLA_178 (plan: one copy; not a power, treasure or deck card)  (TRLA_178 TRLA_178)
+PASS A1 TRLA_179: scripted with its form TRLA_179t (3-turn sleeper pointing back), admitted for the run player only (board-shrine), never generated  (board-shrine True)
+PASS A2 a new Rikkar run on rumble_warlock_179 has board shrine TRLA_179 (plan: one copy; not a power, treasure or deck card)  (TRLA_179 TRLA_179)
+PASS A3 the client enchantment record TRLA_106e is scripted
+PASS A3 the client enchantment record TRLA_109e is scripted
+PASS A3 the client enchantment record TRLA_113e is scripted
+PASS A4 the hidden-steal row (TRLA_186) states the hidden zone: the boss's deck, its own-deck ledger and the masked hand
+PASS A4 every one of the 27 shrines is scripted (no deck plays without its shrine any more)
+PASS A5 the validator passes the shipped data (shrines included)
+PASS A6 the boss's FairBotState sees Hir'eek's Hunger as an awake run shrine on the run player's board
+PASS A7 each of the nine has its shrine engine value in the evaluator table
+PASS A8 the run's generation never yields a shrine or a form (RunMatchPlan.ExcludedGenerated)
+PASS A9 the Hunger's working tag is a shrine-model private tag
+PASS G1 Bottled Terror lands: 0/2, and does not stealth itself  (TRLA_106 2 stealth False)
+PASS G2 the run player's other minions have Stealth; the boss's do not
+PASS G3 a Yeti that attacks keeps the aura Stealth  (stealth True enemy 1)
+PASS G4 the boss cannot target the stealthed Yeti with a Fireball  (played False yeti 1)
+PASS G5 a boss AoE kills Bottled Terror (0/2) and the 4/1 Yeti: the shrine dormant in its slot, the form unbuffed  (TRLA_106t 0 True)
+PASS G6 killed: dormant; its Deathrattle fires once: Yeti 6/5, Croc 4/3, the Stealth gone; the form is not buffed  (6 4 False 0)
+PASS G7 silenced, Bottled Terror's aura ends: the Yeti loses Stealth (still a run shrine)
+PASS G7 a silenced Terror's Deathrattle is gone too: no +2 Attack when it goes dormant
+PASS G8 Treasure from Below lands: 0/2
+PASS G9 the boss's turn start steals nothing for anyone
+PASS G10 at the start of the run player's turn: one card of the boss's deck is now theirs, in hand, from the boss's deck (count - 1)  (1 CS2_119 deck 24->23)
+PASS G11 the stolen card costs (2) less (LOOT_204e, floor 0)  (CS2_119 4->2)
+PASS G12 the boss's fair view masks the stolen card like the rest of the run player's hand
+PASS G13 the boss's own-deck ledger stays consistent after the steal: every sample has the deck's count, drawn from its own list  (22/22 22/22 22/22 22/22 22/22 22/22)
+PASS G13 the boss's fair view plays the run player's next turn start with the steal (an Unknown deck slot moves to their hand)  (ok deck 22->21 hand 7->9)
+PASS G14 with a full hand the stolen card is burned (to the run player's graveyard, still out of the boss's deck)  (deck 24->23)
+PASS G15 the boss's deck empty: nothing is stolen (the run player only draws)  (5->6)
+PASS G16 Pirate's Mark lands: 0/5
+PASS G17 Arcane Shot on the boss's hero is cast again on it: 2 + 2, one hand cast counted  (30->26)
+PASS G18 Frostbolt on a War Golem: 3 + 3 on the same minion (7/7 -> 7/1), frozen  (1)
+PASS G19 the first cast kills the target: the copy loses its target and hits nothing else
+PASS G20 an untargeted spell is cast again: Fan of Knives twice (Croc 2/3 -> 2/1, Yeti 4/5 -> 4/3), two cards drawn  (1 3 deck 6->4)
+PASS G21 Choose One: the recast keeps the chosen option (Wrath's 1 damage and a draw, twice)  (3 deck 4->2)
+PASS G22 the boss's spell is not cast again
+PASS S1 Krag'wa's Lure lands: 0/2
+PASS S2 Lightning Bolt (Overload 1): the run player's minions, the shrine included, gain +1 Attack (TRLA_109e); the boss's do not  (yeti 5 shrine 1)
+PASS S3 Lava Burst (Overload 2): +2 more (Yeti 7, shrine 3)  (7 3)
+PASS S4 a weapon's Overload counts too (Stormforged Axe: +1)
+PASS S5 a minion's own Overload buffs it too (Dust Devil 3 -> 5) and the rest (+2)  (5 10)
+PASS S6 the boss's Overload buffs nothing of the run player's
+PASS S7 Tribute from the Tides lands: 0/3; the run player's Battlecries resolve 1 + 2 times, the boss's once  (3)
+PASS S8 Elven Archer: its Battlecry three times on the same target (3 to the boss's hero)  (30->27)
+PASS S9 Novice Engineer: three draws  (0->3)
+PASS S10 a minion without a Battlecry: nothing extra
+PASS S11 the boss's Elven Archer: once (1 to the run player)
+PASS S12 silenced, Tribute from the Tides adds nothing
+PASS S13 Krag'wa's Grace lands: 0/10
+PASS S14 the run player's spells cost (2) less, floor (0) (Fireball 4 -> 2, Arcane Shot 1 -> 0); minions do not  (2 0 4)
+PASS S15 Fireball is paid at (2)
+PASS S16 the boss's spells keep their cost
+PASS S17 the Grace dormant: spells cost their printed cost again
+PASS W1 Blood Pact lands: 0/10
+PASS W2 the run player's spells are paid with Health
+PASS W3 Fireball: 4 Health paid, no Mana spent, 6 to the boss  (me 30->26 mana 10->10)
+PASS W4 minions are still paid with Mana
+PASS W5 a spell that would cost all the hero's Health cannot be played (4 Health, Fireball 4)
+PASS W6 the boss's spells cost Mana
+PASS W7 the Pact dormant: spells cost Mana again
+PASS W8 Dark Reliquary lands: 0/4
+PASS W9 Soulfire discards a card: one random Demon is summoned (scripted, not one the run's generation filter rejects)  (DAL_751)
+PASS W10 Doomguard discards two: two Demons (beside the Doomguard)  (CORE_EX1_310,GIL_608)
+PASS W11 Soulfire with an empty hand discards nothing: no Demon
+PASS W12 a full board: the discard summons nothing
+PASS W13 the boss's discard summons nothing for anyone
+PASS W14 deterministic: the same run seed summons the same Demon
+PASS W15 Hir'eek's Hunger lands: 0/8; the run's power is Life Tap  (CS2_056)
+PASS W16 Life Tap on the run player's turn: the boss's hero takes the 2, the run player's none  (me 30->30 boss 30->28)
+PASS W17 Hellfire: the boss's hero takes 3 + the run player's 3; the run player's hero none; minions take theirs  (me 30->30 boss 28->22 yeti 2)
+PASS W18 the hero attacks a Yeti: the Yeti's 4 goes to the boss's hero; the run player's Armor stays 5  (boss 22->18 armor 5)
+PASS W19 on the boss's turn the run player's hero takes damage as usual (Arcane Shot: 2 off the Armor)
+PASS W20 silenced, the Hunger redirects nothing (Life Tap hurts its owner)
+PASS W21 a boss copy (plain minion) on the boss's turn: the boss's 3 goes to the run player (3 + 3), the boss's hero none  (me 30->24 boss 30->30)
+PASS W21 the guard is cleared after the redirect
+PASS W22 then on the run player's turn their Life Tap goes to the boss (the copy does not send it back)
+PASS W23 Blood Pact's Health payment is not damage: the Hunger copy redirects none of it (run player -2, boss 0)  (me 30->28 boss 30->30)
+PASS W23 Life Tap's damage beside it is redirected (boss -2)
+PASS L1 TRLA_106 killed: its TRLA_106t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_106t 3)
+PASS L2 TRLA_106's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_106 revives at the start of the owner's turn 7  (t3:TRLA_106t t5:TRLA_106t t7:TRLA_106)
+PASS L4 TRLA_106 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_106's aura or trigger works again after the revival
+PASS L1 TRLA_186 killed: its TRLA_186t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_186t 3)
+PASS L2 TRLA_186's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_186 revives at the start of the owner's turn 7  (t3:TRLA_186t t5:TRLA_186t t7:TRLA_186)
+PASS L4 TRLA_186 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_186's aura or trigger works again after the revival
+PASS L1 TRLA_187 killed: its TRLA_187t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_187t 3)
+PASS L2 TRLA_187's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_187 revives at the start of the owner's turn 7  (t3:TRLA_187t t5:TRLA_187t t7:TRLA_187)
+PASS L4 TRLA_187 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_187's aura or trigger works again after the revival
+PASS L1 TRLA_109 killed: its TRLA_109t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_109t 3)
+PASS L2 TRLA_109's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_109 revives at the start of the owner's turn 7  (t3:TRLA_109t t5:TRLA_109t t7:TRLA_109)
+PASS L4 TRLA_109 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_109's aura or trigger works again after the revival
+PASS L1 TRLA_154 killed: its TRLA_154t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_154t 3)
+PASS L2 TRLA_154's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_154 revives at the start of the owner's turn 7  (t3:TRLA_154t t5:TRLA_154t t7:TRLA_154)
+PASS L4 TRLA_154 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_154's aura or trigger works again after the revival
+PASS L1 TRLA_155 killed: its TRLA_155t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_155t 3)
+PASS L2 TRLA_155's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_155 revives at the start of the owner's turn 7  (t3:TRLA_155t t5:TRLA_155t t7:TRLA_155)
+PASS L4 TRLA_155 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_155's aura or trigger works again after the revival
+PASS L1 TRLA_113 killed: its TRLA_113t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_113t 3)
+PASS L2 TRLA_113's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_113 revives at the start of the owner's turn 7  (t3:TRLA_113t t5:TRLA_113t t7:TRLA_113)
+PASS L4 TRLA_113 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_113's aura or trigger works again after the revival
+PASS L1 TRLA_178 killed: its TRLA_178t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_178t 3)
+PASS L2 TRLA_178's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_178 revives at the start of the owner's turn 7  (t3:TRLA_178t t5:TRLA_178t t7:TRLA_178)
+PASS L4 TRLA_178 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_178's aura or trigger works again after the revival
+PASS L1 TRLA_179 killed: its TRLA_179t form in the slot it left, untouchable, 3 turns; the corpse stays out of resurrect pools  (TRLA_179t 3)
+PASS L2 TRLA_179's dormant form does nothing (its aura or trigger is asleep)
+PASS L3 TRLA_179 revives at the start of the owner's turn 7  (t3:TRLA_179t t5:TRLA_179t t7:TRLA_179)
+PASS L4 TRLA_179 revived at full Health as a fresh entity, generation 1
+PASS L5 TRLA_179's aura or trigger works again after the revival
+PASS X1 Battle Totem with Tribute from the Tides: 1 + 1 + 2 = 4  (4)
+PASS X1 Elven Archer: four Battlecries (4 to the boss's hero)  (30->26)
+PASS X1 Fire Elemental: 4 x 3 = 12  (26->14)
+PASS X2 TRLA_804: two Tributes, 1 + 2 + 2 = 5
+PASS X2 one Tribute dormant: 1 + 2 = 3
+PASS X3 Brann Bronzebeard with Tribute: 1 + 1 + 2 = 4 Battlecries  (30->26)
+PASS X4 Totem of the Dead doubles Bottled Terror's Deathrattle: the Yeti +4 Attack (8/5)  (8)
+PASS X5 Cloak of Invisibility stealths the shrine itself (Bottled Terror does not), and the Yeti
+PASS X5 the Terror dormant, the Cloak's Stealth stays on the Yeti (+2 Attack from the Deathrattle)
+PASS X6 Hex on Bottled Terror: dormant (no Frog), and its Deathrattle fires (Yeti 6/5, no Stealth)  (TRLA_106t 6)
+PASS X7 Sap on Bottled Terror: destroyed instead of bounced, dormant, Deathrattle fired
+PASS X8 Scrying Orb (1) and Krag'wa's Grace (2) stack: Fireball 4 -> 1, Frostbolt 2 -> 0  (1 0)
+PASS X9 Scrying Orb with Blood Pact: Fireball is paid with 3 Health  (30->27)
+PASS X10 TRLA_804: two Pirate's Marks, each casts the spell once more (3 Arcane Shots: 6), never a recast of a recast  (30->24)
+PASS X11 TRLA_805 with Treasure from Below: 2 turns, revived at the start of turn 5, and it steals that very turn  (t1:2 t3:TRLA_186t t5:TRLA_186)
+PASS X12 TRLA_804: two Hungers redirect a hit once (the boss takes 2, not 4)
+PASS X13 Mind Control on Krag'wa's Lure does nothing: it stays the run player's
+PASS X14 a boss copy of the Lure (plain minion) buffs the boss's minions after the boss's Overload, not the run player's
+PASS X14 killed, the copy dies for good (no dormant form)
+SUMMARY checks passed 158 failed 0

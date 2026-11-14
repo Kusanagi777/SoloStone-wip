@@ -1776,12 +1776,12 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("GIL_655", new CardDef(new Power
 			{
-				// TODO
-				//Trigger = new Trigger(TriggerType.AFTER_ATTACK)
-				//{
-				//	TriggerSource = TriggerSource.MINIONS,
-				//	SingleTask = new AddEnchantmentTask("GIL_655e", EntityType.SOURCE)
-				//}
+				// Any friendly minion's attack counts, its own included.
+				Trigger = new Trigger(TriggerType.AFTER_ATTACK)
+				{
+					TriggerSource = TriggerSource.MINIONS,
+					SingleTask = new AddEnchantmentTask("GIL_655e", EntityType.SOURCE)
+				}
 			}));
 
 			// --------------------------------------- MINION - WARRIOR

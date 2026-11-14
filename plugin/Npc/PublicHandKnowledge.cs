@@ -46,6 +46,14 @@ internal static class PublicHandKnowledge
                     appearances[actor.EntityId] = definition.Id;
             }
             if (fact is MinionFormChangedFact form) appearances[form.NewEntityId] = Cards.FromAssetId(form.NewDefinition.DbfId).Id;
+            // A card the observer's own hand gave the enemy (a hand-to-hand transfer: Gloves of Mugging, Impetuous Companion's
+            // hand swap) is one the observer held, so it knows it. The transfer fact follows the card's hand entry.
+            if (fact is CardTransferredFact moved && moved.ControllerId == enemy.Id && moved.FromControllerId != enemy.Id
+                && moved.FromZone == EngineZone.HAND && moved.DefinitionKnown) {
+                string given = Cards.FromAssetId(moved.DbfId).Id;
+                known[moved.EntityId] = new Card { Id = given, Cost = Cards.FromId(given).Cost };
+                continue;
+            }
             if (!(fact is HandEnteredFact hand) || hand.ControllerId != enemy.Id) continue;
             known.Remove(hand.EntityId);
             string id = null, opaqueQuest = null;

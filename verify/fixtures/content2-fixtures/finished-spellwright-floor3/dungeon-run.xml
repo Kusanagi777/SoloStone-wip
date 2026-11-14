@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
+  <Profile>
+    <Heroes>
+      <DungeonRunHeroStats Hero="spellwright" Archetype="class" Runs="1" Wins="0" BestFloor="3" />
+    </Heroes>
+    <Unlocked />
+    <Archive>
+      <DungeonRunArchiveEntry Hero="spellwright" Seed="5A17000000003001" TypedSeed="false" FloorReached="3" Won="false" LastBoss="mire_brute">
+        <Treasures>
+          <string>gilded_idol</string>
+        </Treasures>
+      </DungeonRunArchiveEntry>
+    </Archive>
+  </Profile>
+</DungeonRun>

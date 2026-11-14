@@ -1,0 +1,30 @@
+{
+  "lanes": 3,
+  "repoExtraDirs": ["references"],
+  "repoSkipDirNames": [".git", ".vs", "bin", "obj", "out", "packages", "__pycache__"],
+  "spInclude": [
+    "audit-verify", "content2-fixtures",
+    "p6f15", "p6f16", "p6f18",
+    "p7", "p7s1", "p7s2", "p7s3", "p7u", "p7t1", "p7t2", "p7d", "p7f",
+    "p8f01", "p8f01b", "p8map",
+    "ledger-before.csv",
+    "p4/golden-out",
+    "p5/d12golden/d12-golden.txt",
+    "p6f0/catalog-v1.before.json",
+    "p6f6/run-v1.before.json",
+    "p6f9/run-v1.before.json",
+    "p6f10/before/catalog-v1.before.json"
+  ],
+  "spSkipDirNames": ["obj", "bin", "out", "__pycache__"],
+  "spNeverMergeDirNames": ["engine-out"],
+  "spNeverMergeExt": [".dll", ".exe", ".pdb"],
+  "spSkipNewLogGlobs": ["build-*.txt", "run-*.txt", "err-*.txt"],
+  "spNeverMergeGlobs": ["build-*.txt", "run-*.txt", "err-*.txt", "fixture-p8f*.txt", "fixture-err-p8f*.txt"],
+  "generated": [
+    "data/dungeon-run/encounters-v1.json",
+    "data/dungeon-run/catalog-v1.json",
+    "docs/design/dungeon-run-catalog.md",
+    "docs/design/restoration-ledger.csv",
+    "docs/design/restoration-ledger.md"
+  ]
+}

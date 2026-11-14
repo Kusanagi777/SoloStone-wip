@@ -46,7 +46,7 @@ namespace SabberStoneCore.CardSets
 			cards.Add("LOOT_048", new CardDef(new Power
 			{
 				//Aura = new AdaptiveEffect(GameTag.CANT_ATTACK, EffectOperator.SET, p => p.Controller.Hero.Armor > 2 ? 0 : 1)
-				Aura = new AdaptiveEffect(new SelfCondition(p => p.Controller.Hero.Armor <= 3), GameTag.CANT_ATTACK)
+				Aura = new AdaptiveEffect(new SelfCondition(p => p.Controller.Hero.Armor < 3), GameTag.CANT_ATTACK)
 			}));
 
 			// ----------------------------------------- MINION - DRUID
@@ -1684,6 +1684,10 @@ namespace SabberStoneCore.CardSets
 			{
 				Trigger = new Trigger(TriggerType.ATTACK)
 				{
+					// Phase 8 wave 1: "When a minion attacks your hero": an enemy minion only. Without the source the Secret also
+					// answered a hero's attack (IncludeAdjacentTask then threw "Can't obtain adjacent minions of non-minion") and
+					// its owner's own minions attacking the enemy hero.
+					TriggerSource = TriggerSource.OP_MINIONS,
 					Condition = SelfCondition.IsProposedDefender(CardType.HERO),
 					SingleTask = ComplexTask.Create(
 						new ConditionTask(EntityType.TARGET, SelfCondition.IsBoardCount(1)),

@@ -313,7 +313,10 @@ namespace SabberStoneCore.Model
         }
         internal void Freeze(ICharacter target,IEntity source)
         {
-            bool wasFrozen=target.IsFrozen;target.IsFrozen=true;if(!wasFrozen && target.IsFrozen) Frozen(target,source);
+            bool wasFrozen=target.IsFrozen;
+            // The freezer rides on the character for the event (TRLA_129 "whenever you Freeze": ShrineRules.Freezer).
+            Actions.ShrineRules.Freezing(target,source?.Controller,()=>target.IsFrozen=true);
+            if(!wasFrozen && target.IsFrozen) Frozen(target,source);
         }
         // Records only: callers that write FROZEN through the tag indexer raise their own freeze event.
         internal void Frozen(ICharacter target,IEntity source)
@@ -471,6 +474,9 @@ namespace SabberStoneCore.Model
         private void RecordTransfer(IPlayable card)
         {
             var scope=_transfer;if(scope==null || scope.Card.Id!=card.Id || scope.FromController==card.Controller.Id) return;
+            // A bot search's fair view holds an unmaterialized hidden card as an Unknown (no definition to record): taking one
+            // from the other deck (TRLA_186 Treasure from Below's steal) records only its residence change, as a draw would.
+            if(card is Unknown) return;
             Store.Append(new CardTransferredFact(Seq,Turn,card.Controller.Id,Active,card.Id,Store.Definition(card.Card),card.Card,Original(card),
                 Store.NextOperation++,scope.FromController,scope.FromZone,scope.Source?.Id??0,scope.Source?.Controller?.Id??0,
                 CastId(scope.Source as IPlayable),_game.Resolution.Current.SequenceId));

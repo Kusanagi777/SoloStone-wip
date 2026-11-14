@@ -1,0 +1,19 @@
+T21 DALA_728   DALA_Chu         boss turns 23 decisions 45 fallbacks 0 max-plays 2 health-paid 0 boss-curses 0 power CS2_102 fatigue 5 boss bog_croaker
+T21 DALA_731   DALA_Barkeye     player turns 21 decisions 33 fallbacks 0 max-plays 3 health-paid 0 boss-curses 0 power DS1h_292 fatigue 4 boss bog_croaker
+T21 DALA_733   DALA_Rakanishu   boss turns 23 decisions 45 fallbacks 0 max-plays 6 health-paid 0 boss-curses 0 power CS2_034 fatigue 5 boss bog_croaker
+T21 DALA_735   DALA_Rakanishu   player turns 13 decisions 17 fallbacks 0 max-plays 2 health-paid 0 boss-curses 0 power CS2_034 fatigue 0 boss bog_croaker
+T21 DALA_736   DALA_Tekahn      boss turns 15 decisions 24 fallbacks 0 max-plays 3 health-paid 0 boss-curses 0 power CS2_056 fatigue 5 boss bog_croaker
+T21 DALA_737   DALA_Chu         boss turns 22 decisions 41 fallbacks 0 max-plays 3 health-paid 0 boss-curses 0 power CS2_102 fatigue 4 boss bog_croaker
+T21 DALA_738   DALA_Kriziki     boss turns 20 decisions 45 fallbacks 0 max-plays 2 health-paid 0 boss-curses 0 power ICC_831p fatigue 3 boss bog_croaker
+T21 DALA_739   DALA_Rakanishu   boss turns 15 decisions 24 fallbacks 0 max-plays 2 health-paid 0 boss-curses 0 power CS2_034 fatigue 8 boss bog_croaker
+T21 DALA_741   DALA_Vessina     player turns 13 decisions 22 fallbacks 0 max-plays 3 health-paid 0 boss-curses 0 power CS2_049 fatigue 0 boss bog_croaker
+T21 DALA_743   DALA_Barkeye     player turns 13 decisions 17 fallbacks 0 max-plays 3 health-paid 0 boss-curses 0 power DS1h_292 fatigue 0 boss bog_croaker
+T21 DALA_744   DALA_Squeamlish  player turns 15 decisions 21 fallbacks 0 max-plays 2 health-paid 0 boss-curses 0 power CS2_017 fatigue 1 boss bog_croaker
+T21 DALA_745   DALA_Tekahn      boss turns 18 decisions 28 fallbacks 0 max-plays 2 health-paid 0 boss-curses 2 power CS2_056 fatigue 5 boss bog_croaker
+T21 DALA_746   DALA_Vessina     boss turns 28 decisions 69 fallbacks 0 max-plays 3 health-paid 0 boss-curses 0 power CS2_049 fatigue 0 boss bog_croaker
+T21 DALA_747   DALA_Kriziki     boss turns 18 decisions 38 fallbacks 0 max-plays 3 health-paid 0 boss-curses 0 power CS1h_001 fatigue 0 boss bog_croaker
+T21 DALA_748   DALA_Rakanishu   player turns 17 decisions 29 fallbacks 0 max-plays 4 health-paid 5 boss-curses 0 power CS2_034 fatigue 2 boss bog_croaker
+T22 DALA_745/911 player turns 13 decisions 22 fallbacks 0 max-plays 2 health-paid 0 boss-curses 2 power CS2_056 fatigue 1 boss hedge_witch
+T22 DALA_745/912 boss turns 17 decisions 33 fallbacks 0 max-plays 3 health-paid 0 boss-curses 2 power CS2_056 fatigue 5 boss tunnel_rat
+T22 DALA_745/913 boss turns 16 decisions 30 fallbacks 0 max-plays 3 health-paid 0 boss-curses 2 power CS2_056 fatigue 4 boss lantern_thief
+256 passed, 0 failed

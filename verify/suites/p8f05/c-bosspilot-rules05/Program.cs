@@ -1,0 +1,440 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using SabberStoneCore.Actions;
+using SabberStoneCore.CardSets.DungeonRun;
+using SabberStoneCore.Config;
+using SabberStoneCore.Enums;
+using SabberStoneCore.Model;
+using SabberStoneCore.Model.Entities;
+using SabberStoneCore.Tasks.PlayerTasks;
+
+// Phase 8 encounter bosspilot (from audit-verify\c-bosspilot): every listed encounter is played in a real engine game through
+// the run setup path (DungeonRun.BuildPlan -> DungeonRunBossPilot.Build -> DungeonRunSetup.Configure / ApplyAfterStart) with
+// the fair AI piloting the boss. A run on acts-v3h walks its real nodes to the first floor whose pool set holds the boss's
+// tier; the boss is then put on that floor (as the older harness does).
+//   BOSS=id,id        only these encounters           FAMILY=NN        only rows of that family
+//   BOSS_FROM=id      start at this row               BOSS_COUNT=n     at most n rows
+//   RULE=id           that global rule is active in every fight (injected as an anomaly of the fight's act)
+//   CARRIED=n         a persistent-damage boss starts with n damage banked in the profile (its phase follows)
+//   SCHEDULE=id       the schedule to walk (default acts-v3h)          SEED_BASE=n   seed base (default 9000)
+//   SCHEDULE_JSON / ENCOUNTERS_JSON = path   fixture data files instead of the shipped ones (finale and relay fixtures)
+//   FINALE=1          play the schedule's finale act in order (one game per fixed boss) instead of the rows
+//   PLAYER_HEALTH=n   the run hero starts with n Health left (relay fixtures: every relay hero enters)
+//   GAMES=n           games per boss (or per variant); the first argument does the same (default 2)
+//   WATCH=id,id       counts how often the boss played each of these cards from hand and how many Secrets the boss held at most
+//                     (the final line then ends with "watched ..."; a fixture mode asserts the card under test was really played)
+// A boss with shrine variants plays its games once per variant (the seeds that roll that variant).
+// Family 05 variant (p8f05/make_bp_rules.py): BOSS may name a custom boss, and with RULE a probe watches each game for the
+// rule's own effect (RuleProbe below): a missing start state is a failed check; each line ends with "seen N", the last line
+// with "rule-seen N" and the bosses whose games never showed the rule.
+static object FromJson(System.Text.Json.JsonElement e)
+{
+    switch (e.ValueKind)
+    {
+        case System.Text.Json.JsonValueKind.Object: { var d = new Dictionary<string, object>(); foreach (var p in e.EnumerateObject()) d[p.Name] = FromJson(p.Value); return d; }
+        case System.Text.Json.JsonValueKind.Array: { var l = new List<object>(); foreach (var x in e.EnumerateArray()) l.Add(FromJson(x)); return l; }
+        case System.Text.Json.JsonValueKind.String: return e.GetString();
+        case System.Text.Json.JsonValueKind.Number: return e.TryGetInt64(out long v) ? (object)v : e.GetDouble();
+        case System.Text.Json.JsonValueKind.True: return true;
+        case System.Text.Json.JsonValueKind.False: return false;
+        default: return null;
+    }
+}
+NpcWorldJson.Parser = text => { using var doc = System.Text.Json.JsonDocument.Parse(text); return FromJson(doc.RootElement); };
+
+string Env(string name) => Environment.GetEnvironmentVariable(name) is string v && v.Length > 0 ? v : null;
+string root = VerifyPaths.Data;
+var data = DungeonRunData.Parse(File.ReadAllText(Path.Combine(root, "dungeon-run", "run-v1.json")),
+    File.ReadAllText(Path.Combine(root, "dungeon-run", "pool-v1.json")), File.ReadAllText(Path.Combine(root, "npc", "decks-v1.json")),
+    File.ReadAllText(Path.Combine(root, "dungeon-run", "catalog-v1.json")),
+    File.ReadAllText(Env("SCHEDULE_JSON") ?? Path.Combine(root, "dungeon-run", "schedule-v1.json")),
+    File.ReadAllText(Path.Combine(root, "dungeon-run", "tavern-v1.json")),
+    File.ReadAllText(Env("ENCOUNTERS_JSON") ?? Path.Combine(root, "dungeon-run", "encounters-v1.json")));
+var run = new DungeonRun(data);
+var all = new DungeonRunProfile(); all.Unlocked.AddRange(data.Unlocks.Keys);
+int gamesPerBoss = args.Length > 0 ? int.Parse(args[0]) : Env("GAMES") is string gm ? int.Parse(gm) : 2;
+var testBudget = new Budget(6000, 2000, 300, 6, 3, 100, 8, turnSearchSeconds: 6, turnWallSeconds: 8);
+string scheduleId = Env("SCHEDULE") ?? "acts-v3h";
+var schedule = data.Schedules.Find(scheduleId) ?? throw new Exception("unknown schedule " + scheduleId);
+string forcedRule = Env("RULE");
+int carried = Env("CARRIED") is string cd ? int.Parse(cd) : 0;
+int playerHealth = Env("PLAYER_HEALTH") is string ph ? int.Parse(ph) : 0;
+bool finale = Env("FINALE") == "1";
+string[] watch = Env("WATCH")?.Split(',').Select(id => id.Trim()).ToArray();
+var watched = new Dictionary<string, int>(StringComparer.Ordinal); int mostSecrets = 0;
+long seedBase = Env("SEED_BASE") is string sb ? long.Parse(sb) : 9000;
+
+// The pool of each fight floor of the schedule, in floor order (a finale floor: its fixed boss id).
+var floorPools = new List<string>();
+foreach (var act in schedule.Acts)
+{
+    if (act.IsFinale) { floorPools.AddRange(act.FixedBosses.Select(id => "=" + id)); continue; }
+    foreach (var slot in act.Combat) floorPools.AddRange(Enumerable.Repeat(slot.Pool, slot.Count));
+    floorPools.Add(act.MajorPool);
+}
+int FloorOf(DungeonRunBoss boss)
+{
+    // FINALE=1 fights a fixed boss on its finale floor (it may sit in an earlier pool too); otherwise the first floor that draws it.
+    int fixedFloor = floorPools.IndexOf("=" + boss.Id);
+    if (fixedFloor >= 0 && (finale || !floorPools.Any(p => !p.StartsWith("=") && data.Schedules.Member(boss, p)))) return fixedFloor + 1;
+    for (int f = 0; f < floorPools.Count; f++)
+        if (!floorPools[f].StartsWith("=") && data.Schedules.Member(boss, floorPools[f])) return f + 1;
+    throw new Exception("no floor of " + scheduleId + " draws " + boss.Id + " (tier " + boss.Tier + ")");
+}
+
+int sweep = 0;
+DungeonRunState ReachFloor(DungeonRunClass cls, int floor, long seed)
+{
+    int k = sweep++;
+    int n = data.Classes.Count;
+    var s = run.NewRun(all, cls.Id, cls.Decks[(k / n) % cls.Decks.Count], cls.Powers[((k / n) + (k / (3 * n))) % cls.Powers.Count], seed,
+        schedule: scheduleId, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), seed).FirstOrDefault());
+    var scratch = new DungeonRunProfile();
+    if (!s.IsActRun || s.ScheduleVersion != schedule.StampVersion) throw new Exception("not a run of " + scheduleId);
+    while (!(s.Floor == floor && s.Phase == DungeonRunPhase.PreMatch))
+    {
+        switch (s.Phase)
+        {
+            case DungeonRunPhase.PreMatch: run.BeginMatch(s); run.RecordOutcome(s, scratch, DungeonRunOutcome.Win); break;
+            case DungeonRunPhase.TreasureDraft: run.PickTreasure(s, s.OpenDraft.Offered[0]); break;
+            // An anomaly node: no rule on the walk (RULE injects the one under test at the fight); a modifier node: the first.
+            case DungeonRunPhase.Modifier:
+                run.PickModifier(s, s.ModifierOffer.Kind == DungeonRunGlobalRule.KindAnomaly ? DungeonRunGlobalRule.None : s.ModifierOffer.Offered[0]);
+                break;
+            case DungeonRunPhase.Tavern:
+                foreach (string offer in s.Tavern.Offers.ToList())
+                {
+                    var bought = DungeonRunTavernNode.Buy(run, s, offer);
+                    while (bought.Ok && s.Tavern.Pending != null) bought = DungeonRunTavernNode.Choose(run, s, s.Tavern.Pending.Candidates[0]);
+                    if (s.Tavern.Pending != null) DungeonRunTavernNode.Back(s);
+                }
+                run.LeaveTavern(s);
+                break;
+            case DungeonRunPhase.BundleDraft:
+                if (s.OpenDraft.Takes == 0) { run.PickBundle(s, s.OpenDraft.Offered[0]); break; }
+                string bundle = s.OpenDraft.Choosing ?? s.OpenDraft.Offered[0];
+                var left = run.OfferCards(s.OpenDraft, bundle);
+                foreach (string kept in s.OpenDraft.Chosen) left.Remove(kept);
+                run.PickDraftCard(s, bundle, left[0]);
+                break;
+            default: throw new Exception("act walk stopped at " + s.Phase);
+        }
+    }
+    return s;
+}
+
+string Identity(DungeonRunState s) => string.Join("|", s.Class, s.StarterDeck, s.Power, s.PowerOverride ?? "-", string.Join(",", s.Deck),
+    string.Join(",", s.Cards.Select(c => c.Uid + ":" + c.Id)), string.Join(",", s.Treasures), string.Join(",", s.ActiveTreasures), s.BoardShrine ?? "-");
+
+var bosses = finale ? schedule.Acts.Where(a => a.IsFinale).SelectMany(a => a.FixedBosses).Select(data.Boss).ToList() : data.Encounters.ToList();
+if (!finale)
+{
+    if (Env("BOSS") is string only) bosses = only.Split(',').Select(id => data.Boss(id.Trim())).ToList();
+    if (Env("FAMILY") is string fam) bosses = bosses.Where(b => b.Family == fam).ToList();
+    if (Env("BOSS_FROM") is string from) bosses = bosses.SkipWhile(b => b.Id != from).ToList();
+    if (Env("BOSS_COUNT") is string count) bosses = bosses.Take(int.Parse(count)).ToList();
+}
+
+int faults = 0, games = 0, bossWins = 0, totalFallbacks = 0, failed = 0;
+var powerUnused = new List<string>(); var formUnreached = new List<string>();
+int ruleSeen = 0; var ruleUnseen = new List<string>();
+void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(what); }
+foreach (var boss in bosses)
+{
+    int floor = FloorOf(boss);
+    int variants = Math.Max(1, boss.Variants.Count);
+    int powerUses = 0, formChangesSeen = 0, bossSeen = 0; bool clickable = false;
+    for (int v = 0; v < variants; v++)
+    {
+        int played = 0;
+        for (int g = 0; played < gamesPerBoss && g < 400; g++)
+        {
+            var hero = data.Classes[sweep % data.Classes.Count];
+            long seed = seedBase + data.Bosses.IndexOf(boss) * 1000 + v * 100 + g;
+            var s = ReachFloor(hero, floor, seed);
+            s.BossSequence[floor - 1] = boss.Id;
+            // The seeds that roll this variant (a boss without variants plays every seed).
+            if (boss.Variants.Count > 0 && run.CurrentVariant(s).Id != boss.Variants[v].Id) continue;
+            played++;
+            if (forcedRule != null)
+            {
+                s.ActiveRules.RemoveAll(r => r.Kind != null);
+                s.ActiveRules.Add(new DungeonRunRule { Id = forcedRule, Act = run.CurrentNode(s).Act, FromNode = -1, Kind = DungeonRunGlobalRule.KindAnomaly });
+            }
+            var profile = new DungeonRunProfile(); profile.Unlocked.AddRange(data.Unlocks.Keys);
+            if (carried > 0 && boss.HasFlag(DungeonRunEncounterData.PersistentDamage))
+                profile.BossDamage.Add(new DungeonRunBossDamage { Boss = boss.Id, Remaining = (boss.Health ?? 0) - carried, Attempts = 1 });
+            string result; int turns = 0, decisions = 0, fallbacks = 0, health = 0, uses = 0, mana = -1; long ms;
+            var problems = new List<string>();
+            string extra = "";
+            var sw = Stopwatch.StartNew();
+            try
+            {
+                var plan = run.BuildPlan(s, profile);
+                health = plan.BossHealth;
+                mana = plan.BossStartManaBonus;
+                var variant = run.CurrentVariant(s);
+                Check(boss.IsEncounter ? plan.EncounterId == boss.Id && plan.EncounterDeck : plan.EncounterId == null && !plan.EncounterDeck, "plan is not the boss's", problems);
+                Check(plan.BossGeneratedSecrets == boss.BossGeneratedSecrets, "plan boss generated Secrets", problems);
+                Check(plan.GlobalRules.SequenceEqual(forcedRule == null ? new string[0] : new[] { forcedRule }), "plan global rules", problems);
+                var pilot = DungeonRunBossPilot.Build(boss, plan, data, runClasses: run.MatchClasses(s));
+                var npcProfile = pilot.Profile.WithBudget(testBudget);
+                var golden = new GoldenPilot(npcProfile, pilot.Plan, null, pilot.SecretPrior);
+                var cfg = new GameConfig { RandomSeed = run.MatchSeed(s), Shuffle = true, SkipMulligan = false, History = false, Logging = false, FormatType = FormatType.FT_WILD };
+                DungeonRunSetup.Configure(cfg, plan);
+                var game = new Game(cfg);
+                game.StartGame();
+                if (game.FirstPlayer != game.Player1) throw new Exception("player not first");
+                DungeonRunSetup.ApplyAfterStart(game, plan);
+                if (playerHealth > 0) game.Player1.Hero.Damage = Math.Max(0, game.Player1.Hero.BaseHealth - playerHealth);
+                // Start assertions: the boss is the row (or the form its carried damage puts it in), with its power.
+                var startForm = plan.BossFormStart > 0 ? boss.Forms[plan.BossFormStart - 1] : null;
+                Check(game.Player2.Hero.Card.Id == (startForm?.Hero ?? boss.HeroCard), "boss hero at start is " + game.Player2.Hero.Card.Id, problems);
+                Check(game.Player2.Hero.HeroPower.Card.Id == DungeonRunSetup.PowerCardId(startForm?.Power ?? boss.Power), "boss power at start is " + game.Player2.Hero.HeroPower.Card.Id, problems);
+                Check(game.Player2.Hero.Health == health - plan.BossCarriedDamage, "boss Health at start is " + game.Player2.Hero.Health, problems);
+                Check(game.Player2[EncounterRules.FormIndex] == plan.BossFormStart, "boss form at start", problems);
+                if (DungeonRunEncounters.NeedsActivation(game.Player2.Hero.HeroPower.Card.Id))
+                    Check(game.Player2.Hero.HeroPower[EncounterRules.PowerActive] == 1, "the boss power's trigger or aura is not started", problems);
+                clickable |= !game.Player2.Hero.HeroPower.IsPassiveHeroPower;
+                foreach (string rule in plan.GlobalRules)
+                    Check(DungeonRunGlobalRules.IsActive(game.Player1, rule) && DungeonRunGlobalRules.IsActive(game.Player2, rule), "rule " + rule + " is not on both players", problems);
+                string before = Identity(s);
+                run.BeginMatch(s);
+                Check((s.HeroSwitch != null) == (plan.PlayerHeroCards.Count + plan.PlayerRelay.Count > 0), "hero switch state", problems);
+                game.Process(ChooseTask.Mulligan(game.Player1, new List<int>()));
+                var choice = game.Player2.Choice;
+                var view = new MulliganView(choice.Choices.Select(id => new MulliganCard(id, game.IdEntityDic[id].Card.Id, game.IdEntityDic[id].Card.Cost)),
+                    false, pilot.Deck.CardIds, game.Player1.Hero.Card.Class);
+                game.Process(ChooseTask.Mulligan(game.Player2, BotDriver.Mulligan(view, new DeckPlanMulligan(pilot.Plan)).ToList()));
+                game.MainBegin();
+                // After MainBegin: the boss's shrine is on its board, the start block landed, the hero cards are in hand.
+                if (variant?.Shrine != null)
+                    Check(ShrineRules.Of(game.Player2).Any(m => m.Card.Id == variant.Shrine), "the boss shrine " + variant.Shrine + " is not on its board", problems);
+                if (boss.Start != null)
+                {
+                    foreach (string id in boss.Start.BossBoard.Distinct())
+                        Check(game.Player2.BoardZone.Count(m => m.Card.Id == id) >= 1, "start: " + id + " is not on the boss board", problems);
+                    foreach (string id in boss.Start.PlayerBoard.Distinct())
+                        Check(game.Player1.BoardZone.Count(m => m.Card.Id == id) >= 1, "start: " + id + " is not on the player board", problems);
+                    if (boss.Start.BossWeapon != null) Check(game.Player2.Hero.Weapon?.Card.Id == boss.Start.BossWeapon, "start: the boss weapon", problems);
+                }
+                foreach (var option in plan.PlayerHeroCards)
+                    Check(game.Player1.HandZone.Concat(game.Player1.DeckZone).Any(c => c.Card.Id == option.Hero.Id), "hero card " + option.Hero.Id + " was not given", problems);
+                var probe = forcedRule == null ? null : new RuleProbe(forcedRule, game);
+                probe?.Start(problems);
+                int decisionIndex = 0, actions = 0;
+                var recent = new Queue<string>();
+                void Act(PlayerTask task, string who)
+                {
+                    recent.Enqueue($"t{game.Turn} {who}: {task}");
+                    probe?.Before(task);
+                    if (recent.Count > 10) recent.Dequeue();
+                    if (++actions > 1500) throw new Exception("stuck after 1500 actions | " + string.Join(" | ", recent));
+                    if (task is ChooseTask pick && game.Step != Step.BEGIN_MULLIGAN)
+                    {
+                        var decision = game.GetPendingDecisions().Single(d => d.ControllerId == task.Controller.Id);
+                        if (!game.TryAnswer(new SabberStoneCore.Model.Decisions.DecisionAnswer(decision.Id, decision.ControllerId, pick.Choices.ToArray()), out var why))
+                            throw new Exception($"engine rejected {who} choice ({why}) | " + string.Join(" | ", recent));
+                    }
+                    else if (!game.Process(task)) throw new Exception($"engine rejected {who} task | " + string.Join(" | ", recent));
+                    probe?.After(task, problems);
+                }
+                while (game.State != State.COMPLETE && game.Turn <= 100)
+                {
+                    if (game.CurrentPlayer == game.Player2)
+                    {
+                        var (task, trace) = BotDriver.Decide(game, game.Player2.PlayerId, pilot.Deck.Style,
+                            st => golden.DecidePilot(st, new GoldenContext(game.Turn, decisionIndex, unchecked(997 * game.Turn + decisionIndex * 31), npcProfile)),
+                            ref decisionIndex, golden.Options);
+                        decisions++;
+                        if (trace?.Kind == "fallback") { fallbacks++; Console.Error.WriteLine($"  FALLBACK {boss.Id} t{game.Turn}: {trace.FallbackReason}"); }
+                        if (task is HeroPowerTask) uses++;
+                        if (watch != null && task is PlayCardTask played0 && played0.Source != null && watch.Contains(played0.Source.Card.Id))
+                            watched[played0.Source.Card.Id] = watched.TryGetValue(played0.Source.Card.Id, out int seen0) ? seen0 + 1 : 1;
+                        Act(task, "boss");
+                        if (watch != null) mostSecrets = Math.Max(mostSecrets, game.Player2.SecretZone.Count);
+                    }
+                    else
+                    {
+                        // The run player plays a fight-only hero card as soon as it can (the hero-switch path), else the local bot's pick.
+                        var options = game.Player1.Options();
+                        var heroCard = options.FirstOrDefault(t => t is PlayCardTask play && play.Source is Hero);
+                        Act(heroCard ?? LocalBot.Choose(options), "player");
+                    }
+                }
+                turns = game.Turn;
+                result = game.State != State.COMPLETE ? "turn-cap" : game.Player2.PlayState == PlayState.WON ? "boss" : game.Player1.PlayState == PlayState.WON ? "player" : "tie";
+                if (result == "boss") bossWins++;
+                // The harvest and what the run keeps of it.
+                var end = DungeonRunSetup.Harvest(game);
+                bool bossDead = game.Player2.Hero.ToBeDestroyed || game.Player2.Hero.Health <= 0;
+                Check(end.BossRemainingHealth == (bossDead ? 0 : game.Player2.Hero.Health), "harvest: boss remaining Health", problems);
+                Check(end.BossForm == game.Player2[EncounterRules.FormIndex], "harvest: boss form", problems);
+                if (boss.Forms.Count > 0)
+                {
+                    var form = end.BossForm > 0 ? boss.Forms[end.BossForm - 1] : null;
+                    Check(game.Player2.Hero.Card.Id == (boss.Forms.Take(end.BossForm).Select(f => f.Hero).LastOrDefault(h => h != null) ?? boss.HeroCard), "the boss hero is not its form's", problems);
+                    if (form != null && form.HealthAtMost > 0 && !bossDead) Check(game.Player2.Hero.Health <= form.HealthAtMost, "the boss's Health is above its form's threshold", problems);
+                    if (!bossDead && end.BossForm + 1 <= boss.Forms.Count && boss.Forms[end.BossForm].HealthAtMost > 0)
+                        Check(game.Player2.Hero.Health > boss.Forms[end.BossForm].HealthAtMost, "the boss should be in its next form", problems);
+                    formChangesSeen += end.BossFormChanges;
+                }
+                powerUses += uses;
+                var outcome = result == "player" ? DungeonRunOutcome.Win : result == "turn-cap" ? DungeonRunOutcome.TurnLimit : result == "tie" ? DungeonRunOutcome.Tie : DungeonRunOutcome.Loss;
+                run.RecordOutcome(s, profile, outcome, game.RunResult, end);
+                Check(s.HeroSwitch == null, "the hero switch outlived the fight", problems);
+                if (outcome != DungeonRunOutcome.Win) Check(Identity(s) == before, "a lost fight changed the run's identity", problems);
+                Check(s.Class == hero.Id && run.RunClass(s).HeroCard == hero.HeroCard, "the run's class changed", problems);
+                if (boss.HasFlag(DungeonRunEncounterData.PersistentDamage))
+                {
+                    var record = profile.DamageOf(boss.Id);
+                    if (outcome == DungeonRunOutcome.Win) Check(record == null, "a won fight left boss damage", problems);
+                    else Check(end.BossRemainingHealth >= (boss.Health ?? 0) ? record == null || carried > 0 : record != null && record.Remaining <= Math.Max(1, end.BossRemainingHealth) && record.Remaining >= 1,
+                        "persistent boss damage record", problems);
+                    extra += $" form {plan.BossFormStart}>{end.BossForm} left {end.BossRemainingHealth} banked {profile.DamageOf(boss.Id)?.Remaining.ToString() ?? "-"}";
+                }
+                if (plan.PlayerHeroCards.Count + plan.PlayerRelay.Count > 0) extra += $" heroes {string.Join(">", end.HeroesUsed)}";
+                if (variant != null) extra += $" variant {variant.Id} shrine {variant.Shrine ?? "-"}";
+                if (probe != null) { probe.End(problems); bossSeen += probe.Seen; ruleSeen += probe.Seen; extra += " rule " + forcedRule + " seen " + probe.Seen; }
+            }
+            catch (Exception e) { result = "FAULT " + e.GetType().Name + ": " + e.Message.Split('\n')[0]; faults++; }
+            ms = sw.ElapsedMilliseconds; games++; totalFallbacks += fallbacks;
+            if (problems.Count > 0) { failed += problems.Count; foreach (string p in problems) Console.Error.WriteLine($"  CHECK {boss.Id}: {p}"); }
+            Console.WriteLine($"{boss.Id,-18} {boss.Provenance,-4} t{boss.Tier,-6} floor {floor,2} {hero.Id + "/" + s.StarterDeck + "/" + s.Power,-46} deck {s.Deck.Count,2} -> {result,-8} turns {turns,3} decisions {decisions,3} fallbacks {fallbacks,2} health {health,3} mana+{mana} power {uses,2} checks {(problems.Count == 0 ? "ok" : "FAIL " + problems.Count)}{extra} {ms / 1000.0,6:F1}s");
+        }
+        if (played < gamesPerBoss) { Console.Error.WriteLine($"  CHECK {boss.Id}: variant {v} rolled only {played} times in 400 seeds"); failed++; }
+    }
+    if (clickable && powerUses == 0) powerUnused.Add(boss.Id);
+    if (forcedRule != null && bossSeen == 0) ruleUnseen.Add(boss.Id);
+    if (boss.Forms.Count > 0 && formChangesSeen == 0 && carried == 0) formUnreached.Add(boss.Id);
+}
+foreach (var kv in SearchTelemetry.Details()) Console.Error.WriteLine($"SWALLOWED {kv.Value} x {kv.Key}");
+Console.WriteLine($"encounter run: schedule {scheduleId}{(forcedRule != null ? ", rule " + forcedRule : "")}{(carried > 0 ? ", carried " + carried : "")}{(finale ? ", finale" : "")}; power unused: {(powerUnused.Count == 0 ? "-" : string.Join(",", powerUnused))}; form unreached: {(formUnreached.Count == 0 ? "-" : string.Join(",", formUnreached))}");
+Console.WriteLine($"games {games}, boss wins {bossWins}, faults {faults}, fallbacks {totalFallbacks}, failed checks {failed}, swallowed leaf exceptions {SearchTelemetry.SwallowedLeafErrors}, power-unused {powerUnused.Count}, form-unreached {formUnreached.Count}"
+    + (watch == null ? "" : ", watched " + string.Join(" ", watch.Select(id => id + " x" + (watched.TryGetValue(id, out int n) ? n : 0))) + ", most boss Secrets " + mostSecrets)
+    + (forcedRule == null ? "" : ", rule-seen " + ruleSeen + ", rule-unseen " + (ruleUnseen.Count == 0 ? "-" : string.Join(",", ruleUnseen))));
+return faults + failed + SearchTelemetry.SwallowedLeafErrors;
+
+// What a global rule visibly does in a game (family 05). Start: what the rule places after both mulligans (a failed check
+// when it is missing). Before / After: one probe per rule around every action of either player; Seen counts the rule's own
+// effect. End: what must still hold when the game is over.
+sealed class RuleProbe
+{
+    private readonly string rule; private readonly Game game;
+    private readonly HashSet<int> known = new HashSet<int>();
+    private int handBefore, spellCost = -1, targetDamage, recasts; private bool hadPrison1, hadPrison2;
+    private IPlayable played; private ICharacter aimed; private Controller actor;
+    public int Seen;
+    public RuleProbe(string rule, Game game) { this.rule = rule; this.game = game; }
+    private IEnumerable<Minion> Boards => game.Player1.BoardZone.Concat(game.Player2.BoardZone);
+    private static bool Has(IPlayable p, string enchantment) => p.AppliedEnchantments?.Any(e => e.Card.Id == enchantment) == true;
+    private int Recasts() => game.IdEntityDic.Values.Count(e => e is Spell s && RecastRules.IsRecast(s));
+    private void Fail(List<string> problems, bool ok, string what) { if (!ok) problems.Add("rule " + rule + ": " + what); }
+
+    public void Start(List<string> problems)
+    {
+        Controller p1 = game.Player1, p2 = game.Player2;
+        switch (rule)
+        {
+            case "DALA_829": Fail(problems, p2.BoardZone.Count(m => m.Card.Id == "DALA_829t") == 1 && p1.BoardZone.All(m => m.Card.Id != "DALA_829t"), "the boss does not start with one Cache of Cash"); break;
+            case "DALA_832":
+                // The run player's first turn has started: a prisoner that costs 0 or 1 is out already.
+                hadPrison1 = p1.BoardZone.Any(m => m.Card.Id == "DALA_832t"); hadPrison2 = p2.BoardZone.Any(m => m.Card.Id == "DALA_832t");
+                Fail(problems, (hadPrison1 || p1.BoardZone.Count >= 1) && hadPrison2 && EncounterRules.Imprisoned(p2.BoardZone.First(m => m.Card.Id == "DALA_832t")) != null, "each player does not start with a Violet Prison");
+                if (!hadPrison1) Seen++;
+                break;
+            case "DALA_833":
+                Fail(problems, EncounterRules.Blockers(p1, DungeonRunEncounters.Carts) == 3 && EncounterRules.Blockers(p2, DungeonRunEncounters.Carts) == 3, "each player does not start with three Carts");
+                break;
+            case "DALA_859":
+                // The run player's first turn: 1 + 2 Mana Crystals; the boss starts with its 2 and what its floor gives.
+                Fail(problems, p1.BaseMana >= 3 && p2.BaseMana >= 2, "the two extra Mana Crystals are missing");
+                Seen++;
+                break;
+            case "DALA_863":
+                Fail(problems, p1.DeckZone.Concat(p1.HandZone).Count(c => c.Card.Id == "UNG_856") == 10 && p2.DeckZone.Concat(p2.HandZone).Count(c => c.Card.Id == "UNG_856") == 10, "each deck does not hold ten Hallucinations");
+                break;
+            case "DALA_852": Fail(problems, p1.ExtraBattlecry && p2.ExtraBattlecry, "Battlecries do not trigger twice for both players"); break;
+            // At least twice: a run shrine (TRLA_114 Bwonsamdi's Sanctum) adds two more for its owner.
+            case "DALA_853": Fail(problems, DeathrattleRules.Repeats(p1, null) >= 2 && DeathrattleRules.Repeats(p2, null) >= 2, "Deathrattles do not trigger twice for both players"); break;
+        }
+        foreach (var m in Boards) known.Add(m.Id);
+        Look(null);
+    }
+
+    public void Before(PlayerTask task)
+    {
+        actor = game.CurrentPlayer; played = null; aimed = null; spellCost = -1;
+        handBefore = actor.HandZone.Count;
+        if (task is PlayCardTask play && play.Source != null)
+        {
+            played = play.Source;
+            if (rule == "DALA_856" && played is Spell) recasts = Recasts();
+        }
+        if (task is MinionAttackTask attack && attack.Target != null) { aimed = attack.Target; targetDamage = aimed.Damage + (aimed is Minion m && m.HasDivineShield ? 1000 : 0) + (aimed is Hero h ? 100000 - h.Armor : 0); }
+    }
+
+    public void After(PlayerTask task, List<string> problems)
+    {
+        switch (rule)
+        {
+            case "DALA_851":
+                if (played is Spell spell && !spell.IsCountered)
+                {
+                    int cost = spell[GameTag.TAG_LAST_KNOWN_COST_IN_HAND];
+                    if (actor.BoardZone.Any(m => !known.Contains(m.Id) && m.Card.Cost == cost)) Seen++;
+                }
+                break;
+            case "DALA_852": if (played is Minion battlecry && battlecry.Card[GameTag.BATTLECRY] == 1 && actor.ExtraBattlecry) Seen++; break;
+            case "DALA_855": if (task is EndTurnTask && actor.HandZone.Count > handBefore) Seen++; break;
+            case "DALA_856": if (played is Spell && Recasts() > recasts) Seen++; break;
+            case "DALA_858": if (task is EndTurnTask && game.CurrentPlayer.BoardZone.Any(m => !known.Contains(m.Id) && m.Card.IsRace(Race.MURLOC))) Seen++; break;
+            case "DALA_861":
+                // The aimed defender is untouched although the attack happened: the minion attacked the wrong enemy.
+                if (aimed != null && game.State != State.COMPLETE && aimed.Zone?.Type == Zone.PLAY
+                    && aimed.Damage + (aimed is Minion m && m.HasDivineShield ? 1000 : 0) + (aimed is Hero h ? 100000 - h.Armor : 0) == targetDamage) Seen++;
+                break;
+            case "DALA_862": if (task is EndTurnTask && actor.HandZone.Any(c => c.Cost < c.Card.Cost)) Seen++; break;
+            case "DALA_863": if (played != null && played.Card.Id == "UNG_856") Seen++; break;
+        }
+        Look(problems);
+    }
+
+    // The boards after an action: what arrived, and what the rule gave it.
+    private void Look(List<string> problems)
+    {
+        foreach (var m in Boards)
+        {
+            bool isNew = known.Add(m.Id);
+            switch (rule)
+            {
+                case "DALA_854": if (isNew && !m.Card.Untouchable && m.AttackDamage == 1 && m.BaseHealth == 1 && (m.Card.ATK != 1 || m.Card.Health != 1) && !ReferenceEquals(played, m)) Seen++; break;
+                case "DALA_860": if (isNew && m.Card.Id == "LOOT_209t") Seen++; break;
+                case "DALA_865": if (isNew && Has(m, "DALA_865e2")) Seen++; break;
+                case "DALA_867": if (isNew && !m.Untouchable && (m.HasTaunt && !m.Card.Taunt || m.HasDivineShield && m.Card[GameTag.DIVINE_SHIELD] == 0 || m.IsRush && !m.Card.Rush || m.HasWindfury && m.Card[GameTag.WINDFURY] == 0)) Seen++; break;
+                case "DALA_831": if (isNew && !m.Untouchable && m.Card.ATK != m.Card.Health && m.BaseHealth == m.Card.ATK) Seen++; break;
+            }
+        }
+        if (rule == "DALA_833" && problems != null)
+            Fail(problems, game.Player1.BoardZone.CountExceptUntouchables <= 4 && game.Player2.BoardZone.CountExceptUntouchables <= 4, "a player has more than four minions");
+        if (rule == "DALA_833" && (game.Player1.BoardZone.IsFull || game.Player2.BoardZone.IsFull)) Seen++;
+        if (rule == "DALA_832")
+        {
+            if (hadPrison1 && game.Player1.BoardZone.All(m => m.Card.Id != "DALA_832t")) { hadPrison1 = false; Seen++; }
+            if (hadPrison2 && game.Player2.BoardZone.All(m => m.Card.Id != "DALA_832t")) { hadPrison2 = false; Seen++; }
+        }
+    }
+
+    public void End(List<string> problems)
+    {
+        switch (rule)
+        {
+            case "DALA_833": Fail(problems, EncounterRules.Blockers(game.Player1, DungeonRunEncounters.Carts) == 3 && EncounterRules.Blockers(game.Player2, DungeonRunEncounters.Carts) == 3, "a Cart left the board"); break;
+            case "DALA_829": if (game.Player2.GraveyardZone.Any(c => c.Card.Id == "DALA_829t")) Seen++; break;
+            case "DALA_853": Seen += game.Player1.GraveyardZone.Concat(game.Player2.GraveyardZone).Count(c => c is Minion m && m.Card[GameTag.DEATHRATTLE] == 1); break;
+        }
+    }
+}

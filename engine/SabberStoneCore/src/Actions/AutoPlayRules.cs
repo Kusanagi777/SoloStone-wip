@@ -85,6 +85,9 @@ namespace SabberStoneCore.Actions
         {
             var c = card.Controller; var game = c.Game;
             if (game.State == State.COMPLETE) return false;
+            // A bot search's fair view holds an unmaterialized hidden card as an Unknown (EDR_031 Ohn'ahra auto-playing the top
+            // card of its owner's deck, which the view does not know): nothing is played and the card stays where it is.
+            if (card is Unknown && game.HistoryFacts.IsProjected) return false;
             if ((card is Minion || card is BoardObject) && c.BoardZone.IsFull)
             {
                 if (drawWhenFull && card.Zone == c.DeckZone) Generic.Draw(c, card);
@@ -157,6 +160,10 @@ namespace SabberStoneCore.Actions
                         card.ActivateTask(PowerActivation.POWER, target, mode);
                         if (DarkGifts.DoublesBattlecry(card) || c.ExtraBattlecry && card.Card[GameTag.BATTLECRY] != 0)
                             card.ActivateTask(PowerActivation.POWER, target, mode);
+                        // TRLA_154 Tribute from the Tides: additional Battlecry resolutions (BattlecryRules).
+                        if (card.Card[GameTag.BATTLECRY] != 0)
+                            for (int extra = BattlecryRules.Additional(c); extra > 0; extra--)
+                                card.ActivateTask(PowerActivation.POWER, target, mode);
                     }
                 }
                 game.ProcessTasks();

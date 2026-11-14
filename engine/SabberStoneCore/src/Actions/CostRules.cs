@@ -277,7 +277,11 @@ namespace SabberStoneCore.Actions
             if (source.Zone == source.Controller.HandZone)
                 amount -= source.AppliedEnchantments?.Where(e => e.Card.Id == "TIME_030e1")
                     .Sum(e => e[GameTag.TAG_SCRIPT_DATA_NUM_1]) ?? 0;
-            return Math.Max(0, amount - DeathwingDiscount(source));
+            // TRLA_128 Jan'alai's Flame: "Your Hero Power costs (0)." wins over an older set cost (LOOTA_802 Justicar's Ring's (1)):
+            // the shrine always lands after the run's passives.
+            if (source is HeroPower && CardSets.DungeonRun.DungeonRunShrines.FreeHeroPower(source.Controller)) return 0;
+            // A run passive's halved hand cost (DALA_735 Robes of Gaudiness) applies after every other change.
+            return CardSets.DungeonRun.RunPlayerRules.AdjustHandCost(source, Math.Max(0, amount - DeathwingDiscount(source)));
         }
 
         public static int EffectiveCost(IPlayable source) => source.Cost;

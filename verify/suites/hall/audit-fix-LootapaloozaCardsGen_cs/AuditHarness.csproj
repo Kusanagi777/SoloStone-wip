@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NuGetAudit>false</NuGetAudit>
+    <!-- SabberStoneCore grants InternalsVisibleTo this assembly name -->
+    <AssemblyName>AiHarness</AssemblyName>
+    <NoWarn>CS0618;CS8632;CS0162</NoWarn>
+    <!-- Engine path: override with -p:EngineDir=... when a copy carries its own build -->
+    <EngineDir Condition="'$(EngineDir)' == ''">$(MSBuildThisFileDirectory)engine-out</EngineDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="suite-*/**" />
+    <!-- run data parser (boss decks, starter decks, bundles), read-only -->
+    <Compile Include="$(SoloStoneRoot)plugin/DungeonRun/DungeonRunData.cs" />
+    <Compile Include="$(SoloStoneRoot)plugin/Npc/World/NpcWorldJson.cs" />
+    <Reference Include="SabberStoneCore">
+      <HintPath>$(EngineDir)/SabberStoneCore.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,93 @@
+PASS A1 the eight upgrades are scripted with their client player enchantment and grant
+PASS A2 all 21 ids of the family are engine scripts (Implemented; every enchantment with its Power; the passives are run rewards with no in-game power)
+PASS A3 the upgrades are Passive spells of the client data (DUNGEON_PASSIVE_BUFF 783, CARDTYPE spell), never hero powers
+PASS A4 admission: the eight are the run player's only (never the boss's, never generated), family shrine-upgrade
+PASS A5 TRLA_809 Windfall Blessing is admitted for the run player since phase 7 D (deck-wide-change; never the boss's, never generated)
+PASS A6 generation never yields an upgrade
+PASS A7 a shrine run's shrine-upgrade pool is the nine (TRLA_809 since phase 7 D), ordinal  (TRLA_801,TRLA_802,TRLA_803,TRLA_804,TRLA_805,TRLA_806,TRLA_807,TRLA_808,TRLA_809)
+PASS A7 an upgrade held leaves the pool
+PASS A8 a run with no board shrine has no pool (the upgrades are offered only with a shrine)
+PASS A9 no treasure pool lists an upgrade
+PASS A10 the plan carries the upgrade beside the shrine, not among the passive treasures
+PASS A11 the reward-schedule decision is recorded in curation.json (shrineUpgradeSchedule, acts-v2 nodes, not treasureAfter/passiveAtStart)
+PASS A12 the act I shrine-upgrade draft offers 3 distinct scripted upgrades, ordinal  (f5 [TRLA_802,TRLA_803,TRLA_808])
+PASS A12 the offer is drawn from the run seed (the same run seed, the same offer)
+PASS A12 over 30 runs every one of the nine is offered (TRLA_809 since phase 7 D)  (TRLA_801,TRLA_802,TRLA_803,TRLA_804,TRLA_805,TRLA_806,TRLA_807,TRLA_808,TRLA_809)
+PASS A13 save and resume keep the open shrine-upgrade draft and its offer
+PASS A14 the pick joins ShrineUpgrades (not Treasures), then the bundle draft
+PASS A15 the act II draft offers 3 more, never the one held  (f10 [TRLA_801,TRLA_804,TRLA_805])
+PASS A16 a later fight's plan carries both picks in order
+PASS A16 that fight: the player enchantments attached, each shrine carries the grants in pick order  ([TRLA_808,TRLA_801] grants [TRLA_808e2,TRLA_801e])
+PASS A17 the boss holds no upgrade and its shrines would get no grant
+PASS S1 the player enchantment TRLA_801e2 is attached; the shrine carries TRLA_801e Sacred  (TRLA_801e)
+PASS S1 the owner's spells cost (1) less (Fireball 3, Moonfire stays 0), minions do not, the boss's spells do not  (3 0 4 boss 4)
+PASS S1 a spell that enters the hand later is discounted too (Flamestrike 7 -> 6)  (6)
+PASS S1 the discount pays: Fireball for 3 Mana  (played True mana 0)
+PASS S2 a dormant shrine has no grant: spells cost their own Cost (Fireball 4)  (4)
+PASS S2 revived at the start of turn 7 with Sacred again: Fireball 3  (TRLA_112 3)
+PASS S3 Silence removes the grant (Fireball back to 4); the shrine stays an awake run shrine  (4)
+PASS S3 it revives un-silenced with the grant (Fireball 3)  (3)
+PASS S4 TRLA_804: two shrines, each with Sacred: spells cost (2) less (Fireball 2)  (2)
+PASS S4 one dormant: (1) less (Fireball 3)  (3)
+PASS S5 a Faceless copy of the shrine is a plain minion without the grant: still (1) less, not (2)  (copy TRLA_112 grants [] fireball 3)
+PASS S6 with Khadgar's Scrying Orb (spells cost (1) less): Fireball 2, Arcane Explosion floors at 0  (2 0)
+PASS S6 with Krag'wa's Grace (its spells (2) less) and Sacred on it: Fireball 1, Flamestrike 4  (1 4)
+PASS S6 with Blood Pact (spells cost Health): Fireball costs 3, paid as 3 Health with no Mana  (cast True cost 3 30->27)
+PASS F1 the shrine carries Favored (TRLA_802e) and the player TRLA_802e2
+PASS F1 the minion next to the shrine has Taunt; the one beyond does not; the shrine itself does not  (TRLA_112*,CS2_182T,CS2_120)
+PASS F1 a minion summoned on the shrine's other side gains Taunt too; the old neighbour keeps it  (CS2_172T,TRLA_112*,CS2_182T,CS2_120)
+PASS F1 the boss's attacker must attack a Taunt neighbour (not the hero, not the shrine)  (CS2_172,CS2_182)
+PASS F1 a silenced neighbour keeps the aura's Taunt (Silence does not remove an aura)
+PASS F2 the shrine goes dormant: no neighbour has Taunt; the dormant form has none  (CS2_172,TRLA_112t*,CS2_182,CS2_120)
+PASS F2 revived: the neighbours have Taunt again  (CS2_172T,TRLA_112*,CS2_182T,CS2_120)
+PASS F2 when a neighbour dies the board closes up: the minion beyond it, now adjacent, gains Taunt  (CS2_172T,TRLA_112*,CS2_120T)
+PASS F3 Silence on the shrine takes the Taunt off its neighbour  (TRLA_112*,CS2_182)
+PASS F3 TRLA_804: two shrines side by side taunt each other and the minion after them  (TRLA_112*T,TRLA_112*T,CS2_182T)
+PASS F3 one dormant: the awake one still taunts the minion; the dormant form has no Taunt; the awake one is not next to an awake shrine  (TRLA_112t*,TRLA_112*,CS2_182T)
+PASS F4 Start of Game: shrine, then three Boom Bots; only the first bot (adjacent) has Taunt  (TRLA_112*,GVG_110tT,GVG_110t,GVG_110t)
+PASS H1 the shrine carries Fortified (TRLA_803e)
+PASS H1 an undamaged shrine is not healed (no Cleric draw at the boss's turn start)  (4->4)
+PASS H1 damaged to 2
+PASS H1 at the start of the owner's turn it is restored to full (5), an ordinary heal (Cleric draws: 1 + the turn's draw)  (5 hand 4->6)
+PASS H1 at the start of the boss's turn too (each turn)  (5)
+PASS H2 the dormant form is untouched by the heal (asleep, untouchable)
+PASS H2 the revived shrine carries Fortified again and is restored next turn  (TRLA_112 5)
+PASS H2 silenced: no heal  (3)
+PASS H3 TRLA_804: both shrines restored  (5,5)
+PASS H3 with Bwonsamdi's Covenant (its heal inversion is enemy-only): the own shrine is healed to full  (8/8)
+PASS H3 with TRLA_805: revived at turn 5 with Fortified, healed next turn  (TRLA_112 5)
+PASS W1 the shrine carries the granted Deathrattle TRLA_806e2 (it has Deathrattle)
+PASS W1 the shrine dies: Deathrattle: the boss's Tribal Shrine is destroyed and goes dormant; its other minion and hero are untouched  (p2 TRLA_107t*,CS2_182 p1 TRLA_112t*)
+PASS W1 the boss's shrine death counts as a death (its corpse is in the graveyard, out of resurrect pools)
+PASS W2 an enemy shrine already dormant is not a target (its timer unchanged)  (3 -> 3)
+PASS W3 Hex on the run shrine: it goes dormant and Wrath fires: the fixture goes dormant, the plain copy (a Shrine card) dies for good  (p2 TRLA_107t* p1 TRLA_112t*)
+PASS W4 a copy of the shrine has no Wrath: killing it leaves the fixture awake  (p2 TRLA_107*T)
+PASS W4 a silenced shrine has no Wrath: the fixture survives its death  (TRLA_107*T)
+PASS W5 with Totem of the Dead (twice): one destroy, the second finds no awake Shrine; the fixture dormant once  (TRLA_107t*)
+PASS W5 with TRLA_805: revived at turn 5 carrying Wrath again
+PASS B1 the shrine carries TRLA_807e2
+PASS B1 Deathrattle: the owner draws until the hand is full (3 -> 10, 7 cards from the deck)  (hand 10 deck 18->11)
+PASS B2 an empty deck stops it: no card, no fatigue (as Bag of Stuffing)  (1 30->30)
+PASS B3 with Totem of the Dead: the second run draws nothing more (hand full), no burn  (hand 10 deck 18->9)
+PASS B4 with Bottled Terror: its own Deathrattle (+2 Attack) and the granted one (draw to full) both fire  (atk 4->6 hand 10)
+PASS B5 Mind Control on the shrine: still the owner's, grant kept, no Deathrattle
+PASS B5 Sap on the shrine: destroyed instead (dormant), and the Deathrattle draws the owner to full on the boss's turn  (10)
+PASS R1 the shrine carries TRLA_808e2
+PASS R1 Deathrattle: the cards in hand cost (2) less (Fireball 2, Yeti 2, Moonfire stays 0)  (2 2 0)
+PASS R1 a card that enters the hand afterwards is full price
+PASS R1 the boss's hand is untouched
+PASS R2 with Totem of the Dead: twice, (4) less (Deathwing 10 -> 6)  (6)
+PASS R2 TRLA_804: both shrines die at once, two Deathrattles, (4) less  (6)
+PASS R3 with two Bwonsamdi's Sanctums: one dies while the other lives (Deathrattles trigger 2 more times): 3 x (2) less (Deathwing 4)  (4)
+PASS R4 with Sacred Ritual the Fireball costs 3
+PASS R4 the shrine dies: Sacred's (1) goes with it, Roaring Edifice's (2) stays: Fireball 2  (2)
+PASS D1 TRLA_804 with two grant upgrades: two shrines, each with both grants in pick order  (TRLA_806e2,TRLA_807e2;TRLA_806e2,TRLA_807e2)
+PASS D1 one dies: the fixture goes dormant, the hand fills; the other shrine stays awake with its grants
+PASS D2 TRLA_805 alone has no grant (its effect is the revival timer)
+PASS D2 the dormant form shows 2 turns
+PASS N1 History=false: both shrines carry the six grants as entities  (TRLA_801e,TRLA_802e,TRLA_803e,TRLA_806e2,TRLA_807e2,TRLA_808e2;TRLA_801e,TRLA_802e,TRLA_803e,TRLA_806e2,TRLA_807e2,TRLA_808e2)
+PASS N1 History=false: Sacred x2 (Fireball 2), Favor (the neighbour and both shrines have Taunt)  (2 TRLA_112*T,TRLA_112*T,CS2_182T)
+PASS N1 History=false: Fortified heals
+PASS N1 History=false: the granted Deathrattles fire (fixture dormant, hand full, the Deathwing in hand (2) less: 8)  (TRLA_107t hand 10 dw 8)
+PASS N2 a game clone (the AI's search) keeps the grants and their effects
+SUMMARY checks passed 92 failed 0

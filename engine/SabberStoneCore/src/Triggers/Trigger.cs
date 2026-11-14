@@ -120,6 +120,13 @@ namespace SabberStoneCore.Triggers
 
 		internal Trigger Clone(Game game) => Activate(game.IdEntityDic[_sourceId], cloning: true, asAncillary: IsAncillaryTrigger);
 
+		/// <summary>
+		/// The trigger's owner is still the entity registered under its id in <paramref name="game"/>. A fair view that drops
+		/// a hidden entity (or reuses its id for another one) leaves its registered triggers detached.
+		/// </summary>
+		internal bool HasLiveSource(Game game) =>
+			game.IdEntityDic.TryGetValue(_sourceId, out IPlayable live) && ReferenceEquals(live, _owner);
+
 		// Retained callbacks can outlive ActivatedTrigger (for example on a replaced hero).
 		internal Trigger CloneDetached(Game game) => new Trigger(this, game.IdEntityDic[_sourceId])
 		{

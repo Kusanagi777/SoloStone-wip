@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
+  <Profile>
+    <Heroes />
+    <Unlocked />
+    <Archive />
+  </Profile>
+  <Active DataVersion="dungeon-run/1" Seed="6491657387877871343" TypedSeed="false" Hero="ranger" Power="DS1h_292" Floor="3" Phase="PreMatch" Attempt="0" DraftsWithoutDominant="0">
+    <Deck>
+      <string>CATA_558</string>
+      <string>CATA_558</string>
+      <string>CFM_315</string>
+      <string>CS2_084</string>
+      <string>CS2_084</string>
+      <string>GIL_607t</string>
+      <string>OG_325</string>
+      <string>OG_325</string>
+      <string>BOT_039</string>
+      <string>GIL_562</string>
+      <string>AT_105</string>
+      <string>TRL_509</string>
+      <string>UNG_847</string>
+      <string>CORE_UNG_912</string>
+      <string>LOE_020</string>
+      <string>TIME_605</string>
+    </Deck>
+    <Treasures>
+      <string>champions_banner</string>
+    </Treasures>
+    <ActiveTreasures />
+    <Upgrades />
+    <BossSequence>
+      <string>lantern_thief</string>
+      <string>cellar_matron</string>
+      <string>bog_croaker</string>
+      <string>pit_champion</string>
+      <string>tollkeeper</string>
+      <string>golemancer</string>
+      <string>ember_matron</string>
+      <string>sleepless_one</string>
+    </BossSequence>
+    <TakenBundles>
+      <string>bundle_neutral_battlecry</string>
+      <string>bundle_hunter_battlecry</string>
+    </TakenBundles>
+    <BundleCooldowns>
+      <string>bundle_neutral_elemental@3</string>
+      <string>bundle_neutral_taunt@3</string>
+      <string>bundle_hunter_spells@4</string>
+      <string>bundle_neutral_dragon@4</string>
+    </BundleCooldowns>
+    <DraftedThemes>
+      <string>battlecry</string>
+      <string>battlecry</string>
+      <string>battlecry</string>
+      <string>battlecry</string>
+      <string>battlecry</string>
+      <string>battlecry</string>
+    </DraftedThemes>
+    <Drafts>
+      <DungeonRunDraft Floor="1" Kind="treasure" Picked="champions_banner">
+        <Offered>
+          <string>champions_banner</string>
+          <string>healing_spring</string>
+          <string>old_map</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="1" Kind="bundle" Picked="bundle_neutral_battlecry">
+        <Offered>
+          <string>bundle_neutral_battlecry</string>
+          <string>bundle_neutral_elemental</string>
+          <string>bundle_neutral_taunt</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="2" Kind="bundle" Picked="bundle_hunter_battlecry">
+        <Offered>
+          <string>bundle_hunter_battlecry</string>
+          <string>bundle_hunter_spells</string>
+          <string>bundle_neutral_dragon</string>
+        </Offered>
+      </DungeonRunDraft>
+    </Drafts>
+    <Matches>
+      <DungeonRunMatchSummary Floor="1" Boss="lantern_thief" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="2" Boss="cellar_matron" Outcome="Win" Attempt="1" />
+    </Matches>
+  </Active>
+</DungeonRun>

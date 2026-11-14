@@ -114,7 +114,10 @@ namespace SabberStoneCore.Model.Entities
 				SingleTask: SetGameTagTask { Tag: GameTag.EXHAUSTED, Amount: 0, Type: EntityType.HERO }
 			};
 
-		internal int AttackLimit => HasUnlimitedWeaponAttacks ? int.MaxValue : this[GameTag.MEGA_WINDFURY] > 0 ? 4 : HasWindfury ? 2 : 1;
+		/// <summary>The equipped weapon has Mega-Windfury (LOOTA_821 Vorpal Dagger): the hero attacks four times a turn.</summary>
+		internal bool WeaponHasMegaWindfury => Weapon != null && Weapon[GameTag.SILENCED] == 0 && Weapon[GameTag.MEGA_WINDFURY] > 0;
+
+		internal int AttackLimit => HasUnlimitedWeaponAttacks ? int.MaxValue : this[GameTag.MEGA_WINDFURY] > 0 || WeaponHasMegaWindfury ? 4 : HasWindfury ? 2 : 1;
 
 		internal void UpdateAttackReadinessAfterAttackLimitChange(int previousLimit)
 		{

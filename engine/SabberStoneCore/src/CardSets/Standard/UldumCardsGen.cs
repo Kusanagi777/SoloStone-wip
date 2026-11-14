@@ -17,6 +17,23 @@ namespace SabberStoneCore.CardSets.Standard
 {
 	public class UldumCardsGen
 	{
+		/// <summary>
+		/// Phase 6 F10: a random scripted card for the task's controller (RandomCardTask's pool and generation filters, then only
+		/// Implemented cards: the legacy pools still list unscripted ids, and a generated card should do what it says), put on the
+		/// stack; nothing when the pool is empty.
+		/// </summary>
+		private static ISimpleTask RandomScripted(CardType type, CardClass cardClass, Race race = Race.INVALID, GameTag tag = 0) =>
+			new CustomTask((g, c, s, t, stack) =>
+			{
+				var pool = new List<Card>();
+				using (g.GenerateFor(null))
+					foreach (Card p in RandomCardTask.GetCardList(s, type, cardClass, race: race, gameTagFilter: tag == 0 ? null : new[] { tag }))
+						if (p.Implemented) pool.Add(p);
+				if (pool.Count == 0) { stack.Playables = new List<IPlayable>(); return; }
+				stack.Playables = new List<IPlayable> { Entity.FromCard(c, pool[g.Random.Next(pool.Count)]) };
+				g.OnRandomHappened(true);
+			});
+
 		private static void HeroPowers(IDictionary<string, CardDef> cards)
 		{
 			// ------------------------------------- HERO_POWER - DRUID
@@ -29,11 +46,18 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - HIDE_STATS = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: the Reward of Untapped Potential (ULD_131). A passive power; its aura starts when the Quest grants
+			// it (EncounterRules.ActivatePower) and counts as Fandral Staghelm's does. It ends when its owner plays a hero card
+			// (the card replaces the power).
 			cards.Add("ULD_131p", new CardDef(new Power
 			{
-				// TODO [ULD_131p] Ossirian Tear && Test: Ossirian Tear_ULD_131p
-				//PowerTask = null,
-				//Trigger = null,
+				Aura = new Aura(AuraType.CONTROLLER, new Effect(GameTag.CHOOSE_BOTH, EffectOperator.ADD, 1)),
+				Trigger = new Trigger(TriggerType.PLAY_CARD)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					Condition = SelfCondition.IsHero,
+					SingleTask = new CustomTask((g, c, s, t, stack) => EncounterRules.DeactivatePower(s as HeroPower))
+				}
 			}));
 
 			// ----------------------------------- HERO_POWER - WARLOCK
@@ -77,10 +101,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_291p", new CardDef(new Power
 			{
-				// TODO [ULD_291p] Heart of Vir'naal && Test: Heart of Vir'naal_ULD_291p
 				InfoCardId = "ULD_291pe",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new AddEnchantmentTask("ULD_291pe", EntityType.CONTROLLER)
 			}));
 
 			// ------------------------------------- HERO_POWER - ROGUE
@@ -96,9 +118,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_326p", new CardDef(new Power
 			{
-				// TODO [ULD_326p] Ancient Blades && Test: Ancient Blades_ULD_326p
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new WeaponTask("ULD_326t")
 			}));
 
 			// ----------------------------------- HERO_POWER - PALADIN
@@ -117,9 +137,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_431p", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_TO_PLAY,0},{PlayReq.REQ_FRIENDLY_TARGET,0},{PlayReq.REQ_MINION_TARGET,0},{PlayReq.REQ_NUM_MINION_SLOTS,1}}, new Power
 			{
-				// TODO [ULD_431p] Emperor Wraps && Test: Emperor Wraps_ULD_431p
-				//PowerTask = null,
-				//Trigger = null,
+				// A copy of the chosen friendly minion as it is, then set to 2/2.
+				PowerTask = ComplexTask.Create(
+					new SummonCopyTask(EntityType.TARGET, addToStack: true),
+					new AddEnchantmentTask("ULD_431e", EntityType.STACK))
 			}));
 
 			// -------------------------------------- HERO_POWER - MAGE
@@ -136,9 +157,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_433p", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_HAND_NOT_FULL,0}}, new Power
 			{
-				// TODO [ULD_433p] Ascendant Scroll && Test: Ascendant Scroll_ULD_433p
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					RandomScripted(CardType.SPELL, CardClass.MAGE),
+					new AddStackTo(EntityType.HAND),
+					new AddEnchantmentTask("ULD_433e", EntityType.STACK))
 			}));
 
 			// ----------------------------------- HERO_POWER - WARRIOR
@@ -155,9 +177,16 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_711p3", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_NUM_MINION_SLOTS,1}}, new Power
 			{
-				// TODO [ULD_711p3] Anraphet's Core && Test: Anraphet's Core_ULD_711p3
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new SummonTask("ULD_711t"),
+				// "After your hero attacks, refresh this": started with the power (the Quest's reward, UldumRules.Advance).
+				Trigger = new Trigger(TriggerType.AFTER_ATTACK)
+				{
+					TriggerSource = TriggerSource.HERO,
+					SingleTask = new CustomTask((g, c, s, t, stack) =>
+					{
+						if (s is HeroPower power && c.Hero.HeroPower == power) power.IsExhausted = false;
+					})
+				}
 			}));
 
 			// ------------------------------------ HERO_POWER - PRIEST
@@ -173,9 +202,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_724p", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_TO_PLAY,0}}, new Power
 			{
-				// TODO [ULD_724p] Obelisk's Eye && Test: Obelisk's Eye_ULD_724p
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					new HealTask(3, EntityType.TARGET),
+					new ConditionTask(EntityType.TARGET, SelfCondition.IsMinion),
+					new FlagTask(true, new AddEnchantmentTask("ULD_724e", EntityType.TARGET)))
 			}));
 
 		}
@@ -222,12 +252,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - TAUNT = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: the play history's paid cost of the owner's spells this turn (CardSets.DungeonRun.UldumCollectiblesB.CastBigSpellThisTurn).
 			cards.Add("ULD_138", new CardDef(new Power
 			{
-				// TODO [ULD_138] Anubisath Defender && Test: Anubisath Defender_ULD_138
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+				Aura = new AdaptiveCostEffect(p => 0, EffectOperator.SET, new SelfCondition(CardSets.DungeonRun.UldumCollectiblesB.CastBigSpellThisTurn))
+			}) { Configure = card => card.ConsumesHistory = true });
 
 			// ----------------------------------------- MINION - DRUID
 			// [ULD_139] Elise the Enlightened - COST:5 [ATK:5/HP:5]
@@ -259,10 +288,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_292", new CardDef(new Power
 			{
-				// TODO [ULD_292] Oasis Surger && Test: Oasis Surger_ULD_292
 				InfoCardId = "ULD_292ae",
-				//PowerTask = null,
-				//Trigger = null,
+				// Choose Both: +2/+2 first, then the copy (of the buffed minion).
+				PowerTask = ComplexTask.Create(
+					new AddEnchantmentTask("ULD_292ae", EntityType.SOURCE),
+					new SummonCopyTask(EntityType.SOURCE))
 			}));
 
 			// ------------------------------------------ SPELL - DRUID
@@ -281,11 +311,15 @@ namespace SabberStoneCore.CardSets.Standard
 			// - 839 = 1
 			// - QUEST_REWARD_DATABASE_ID = 53499
 			// --------------------------------------------------------
+			// Phase 8 family 03: the owner's turn ends with Mana left (unspent, not locked); the fourth such turn replaces the
+			// owner's hero power with Ossirian Tear (CardSets.DungeonRun.UldumCollectiblesB.QuestStep).
 			cards.Add("ULD_131", new CardDef(new Power
 			{
-				// TODO [ULD_131] Untapped Potential && Test: Untapped Potential_ULD_131
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.TURN_END)
+				{
+					Condition = new SelfCondition(p => p.Controller.RemainingMana > 0),
+					SingleTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumCollectiblesB.QuestStep(g, s, "ULD_131p"))
+				}
 			}));
 
 			// ------------------------------------------ SPELL - DRUID
@@ -303,9 +337,24 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_134", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_TO_PLAY,0},{PlayReq.REQ_MINION_TARGET,0},{PlayReq.REQ_NUM_MINION_SLOTS,1}}, new Power
 			{
-				// TODO [ULD_134] BEEEES!!! && Test: BEEEES!!!_ULD_134
-				//PowerTask = null,
-				//Trigger = null,
+				// Summon four 1/1 Bees (as many as fit), then each Bee still on the board attacks the chosen minion while it lives.
+				PowerTask = new CustomTask((g, c, s, t, stack) =>
+				{
+					if (!(t is Minion victim)) return;
+					var bees = new List<Minion>(4);
+					for (int i = 0; i < 4 && !c.BoardZone.IsFull; i++)
+					{
+						var bee = (Minion)Entity.FromCard(c, Cards.FromId("ULD_134t"));
+						Generic.SummonBlock.Invoke(g, bee, -1, s);
+						bees.Add(bee);
+					}
+					g.DeathProcessingAndAuraUpdate();
+					foreach (Minion bee in bees)
+					{
+						if (g.State == State.COMPLETE || victim.Zone?.Type != Zone.PLAY || victim.ToBeDestroyed) break;
+						if (bee.Zone == c.BoardZone && !bee.ToBeDestroyed) PastColossalCombat.Force(bee, victim);
+					}
+				})
 			}));
 
 			// ------------------------------------------ SPELL - DRUID
@@ -323,12 +372,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// RefTag:
 			// - TAUNT = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_135", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_TO_PLAY,0}}, new Power
-			{
-				// TODO [ULD_135] Hidden Oasis && Test: Hidden Oasis_ULD_135
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			// Phase 8 family 03: a Choose One spell is its two options (ULD_135a, ULD_135b), as Living Roots (AT_037).
+			cards.Add("ULD_135", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_TO_PLAY,0}}));
 
 			// ------------------------------------------ SPELL - DRUID
 			// [ULD_136] Worthy Expedition - COST:1
@@ -342,9 +387,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_136", new CardDef(new Power
 			{
-				// TODO [ULD_136] Worthy Expedition && Test: Worthy Expedition_ULD_136
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new DiscoverTask(DiscoverType.SCRIPTED_CHOOSE_ONE)
 			}));
 
 			// ------------------------------------------ SPELL - DRUID
@@ -375,8 +418,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_288e", new CardDef(new Power
 			{
-				// TODO [ULD_288e] Buried && Test: Buried_ULD_288e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_288e")
+				Enchant = new Enchant(Effects.SetAttack(1), Effects.SetMaxHealth(1), Effects.SetCost(1))
 			}));
 
 			// ------------------------------------ ENCHANTMENT - DRUID
@@ -387,20 +429,15 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_292ae", new CardDef(new Power
 			{
-				// TODO [ULD_292ae] Focused && Test: Focused_ULD_292ae
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_292ae")
+				Enchant = new Enchant(Effects.AttackHealth_N(2))
 			}));
 
 			// ----------------------------------------- MINION - DRUID
 			// [ULD_134t] Bee (*) - COST:1 [ATK:1/HP:1]
 			// - Race: beast, Set: uldum,
 			// --------------------------------------------------------
-			cards.Add("ULD_134t", new CardDef(new Power
-			{
-				// TODO [ULD_134t] Bee && Test: Bee_ULD_134t
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			// Phase 6 F10 (Dungeon Run Tombs/Heist/Rumble starters): a vanilla token (keywords from its tags).
+			cards.Add("ULD_134t", new CardDef());
 
 			// ----------------------------------------- MINION - DRUID
 			// [ULD_135at] Vir'naal Ancient (*) - COST:6 [ATK:6/HP:6]
@@ -411,12 +448,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - TAUNT = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_135at", new CardDef(new Power
-			{
-				// TODO [ULD_135at] Vir'naal Ancient && Test: Vir'naal Ancient_ULD_135at
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			cards.Add("ULD_135at", new CardDef());
 
 			// ----------------------------------------- MINION - DRUID
 			// [ULD_137t] Treant (*) - COST:2 [ATK:2/HP:2]
@@ -443,9 +475,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_135a", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_NUM_MINION_SLOTS,1}}, new Power
 			{
-				// TODO [ULD_135a] Befriend the Ancient && Test: Befriend the Ancient_ULD_135a
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new SummonTask("ULD_135at")
 			}));
 
 			// ------------------------------------------ SPELL - DRUID
@@ -459,9 +489,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_135b", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_TO_PLAY,0}}, new Power
 			{
-				// TODO [ULD_135b] Drink the Water && Test: Drink the Water_ULD_135b
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new HealTask(12, EntityType.TARGET)
 			}));
 
 			// ------------------------------------------ SPELL - DRUID
@@ -472,10 +500,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_292a", new CardDef(new Power
 			{
-				// TODO [ULD_292a] Focused Burst && Test: Focused Burst_ULD_292a
 				InfoCardId = "ULD_292ae",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new AddEnchantmentTask("ULD_292ae", EntityType.SOURCE)
 			}));
 
 			// ------------------------------------------ SPELL - DRUID
@@ -489,9 +515,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_292b", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_NUM_MINION_SLOTS,2}}, new Power
 			{
-				// TODO [ULD_292b] Divide and Conquer && Test: Divide and Conquer_ULD_292b
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new SummonCopyTask(EntityType.SOURCE)
 			}));
 
 		}
@@ -509,9 +533,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_151", new CardDef(new Power
 			{
-				// TODO [ULD_151] Ramkahen Wildtamer && Test: Ramkahen Wildtamer_ULD_151
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					new IncludeTask(EntityType.HAND),
+					new FilterStackTask(SelfCondition.IsRace(Race.BEAST)),
+					new RandomTask(1, EntityType.STACK),
+					new CopyTask(EntityType.STACK, Zone.HAND))
 			}));
 
 			// ---------------------------------------- MINION - HUNTER
@@ -530,9 +556,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_154", new CardDef(new Power
 			{
-				// TODO [ULD_154] Hyena Alpha && Test: Hyena Alpha_ULD_154
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					new ConditionTask(EntityType.SOURCE, SelfCondition.IsControllingSecret),
+					new FlagTask(true, new SummonTask("ULD_154t", 2, SummonSide.RIGHT)))
 			}));
 
 			// ---------------------------------------- MINION - HUNTER
@@ -561,11 +587,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - BATTLECRY = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: CardSets.DungeonRun.UldumCollectiblesB.Bloodstinger (the pull is Dirty Rat's, then a forced attack).
 			cards.Add("ULD_212", new CardDef(new Power
 			{
-				// TODO [ULD_212] Wild Bloodstinger && Test: Wild Bloodstinger_ULD_212
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumCollectiblesB.Bloodstinger(g, c, s))
 			}));
 
 			// ---------------------------------------- MINION - HUNTER
@@ -579,10 +604,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_410", new CardDef(new Power
 			{
-				// TODO [ULD_410] Scarlet Webweaver && Test: Scarlet Webweaver_ULD_410
 				InfoCardId = "ULD_410e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.BuffRandomMinion(EntityType.HAND, "ULD_410e", SelfCondition.IsRace(Race.BEAST))
 			}));
 
 			// ----------------------------------------- SPELL - HUNTER
@@ -594,11 +617,20 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - SECRET = 1
 			// --------------------------------------------------------
+			// Phase 8 family 01 (Trap Room's deck): after the opponent's spell has resolved and its deaths are processed, a random
+			// enemy minion still on the board is destroyed (dormant minions are no target). With none left the Secret stays face
+			// down, as Cat Trick's AFTER_CAST phase does (the rule of the scripted reprint CORE_ULD_152).
 			cards.Add("ULD_152", new CardDef(new Power
 			{
-				// TODO [ULD_152] Pressure Plate && Test: Pressure Plate_ULD_152
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.AFTER_CAST)
+				{
+					TriggerSource = TriggerSource.ENEMY,
+					SingleTask = new CustomTask((g, c, s, t, stack) =>
+					{
+						if (c.Opponent.BoardZone.GetAll(m => !m.ToBeDestroyed).Length == 0) return;
+						ComplexTask.Secret(ComplexTask.DestroyRandomTargets(1, EntityType.OP_MINIONS)).Process(g, c, s, t, stack);
+					})
+				}
 			}));
 
 			// ----------------------------------------- SPELL - HUNTER
@@ -635,9 +667,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_429", new CardDef(new Power
 			{
-				// TODO [ULD_429] Hunter's Pack && Test: Hunter's Pack_ULD_429
-				//PowerTask = null,
-				//Trigger = null,
+				// Three independent draws: a blocked Secret (a run side that excludes generated Secrets) leaves the other two.
+				PowerTask = ComplexTask.Create(
+					ComplexTask.Create(RandomScripted(CardType.MINION, CardClass.HUNTER, Race.BEAST), new AddStackTo(EntityType.HAND)),
+					ComplexTask.Create(RandomScripted(CardType.SPELL, CardClass.HUNTER, tag: GameTag.SECRET), new AddStackTo(EntityType.HAND)),
+					ComplexTask.Create(RandomScripted(CardType.WEAPON, CardClass.HUNTER), new AddStackTo(EntityType.HAND)))
 			}));
 
 			// ----------------------------------------- SPELL - HUNTER
@@ -654,9 +688,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_713", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_NUM_MINION_SLOTS,1}}, new Power
 			{
-				// TODO [ULD_713] Swarm of Locusts && Test: Swarm of Locusts_ULD_713
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new SummonTask("ULD_430t", 7)
 			}));
 
 			// ---------------------------------------- WEAPON - HUNTER
@@ -673,9 +705,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_430", new CardDef(new Power
 			{
-				// TODO [ULD_430] Desert Spear && Test: Desert Spear_ULD_430
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.AFTER_ATTACK)
+				{
+					TriggerSource = TriggerSource.HERO,
+					SingleTask = new SummonTask("ULD_430t")
+				}
 			}));
 
 		}
@@ -702,20 +736,14 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_410e", new CardDef(new Power
 			{
-				// TODO [ULD_410e] Weaved && Test: Weaved_ULD_410e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_410e")
+				Enchant = new Enchant(Effects.ReduceCost(5))
 			}));
 
 			// ---------------------------------------- MINION - HUNTER
 			// [ULD_154t] Hyena (*) - COST:2 [ATK:2/HP:2]
 			// - Race: beast, Set: uldum,
 			// --------------------------------------------------------
-			cards.Add("ULD_154t", new CardDef(new Power
-			{
-				// TODO [ULD_154t] Hyena && Test: Hyena_ULD_154t
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			cards.Add("ULD_154t", new CardDef());
 
 			// ---------------------------------------- MINION - HUNTER
 			// [ULD_156t] Duke (*) - COST:5 [ATK:5/HP:5]
@@ -783,11 +811,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// - DISCOVER = 1
 			// - USE_DISCOVER_VISUALS = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: CardSets.DungeonRun.UldumCollectiblesB.Pilgrim (a Discover among the owner's deck spells; the pick is cast as a copy).
 			cards.Add("ULD_236", new CardDef(new Power
 			{
-				// TODO [ULD_236] Tortollan Pilgrim && Test: Tortollan Pilgrim_ULD_236
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumCollectiblesB.Pilgrim(g, c, s, stack))
 			}));
 
 			// ------------------------------------------ MINION - MAGE
@@ -818,9 +845,12 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_240", new CardDef(new Power
 			{
-				// TODO [ULD_240] Arcane Flakmage && Test: Arcane Flakmage_ULD_240
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.AFTER_PLAY_CARD)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					Condition = SelfCondition.IsSecret,
+					SingleTask = new DamageTask(2, EntityType.OP_MINIONS)
+				}
 			}));
 
 			// ------------------------------------------ MINION - MAGE
@@ -840,9 +870,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_293", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_IF_AVAILABLE_AND_MINIMUM_FRIENDLY_SECRETS,1}}, new Power
 			{
-				// TODO [ULD_293] Cloud Prince && Test: Cloud Prince_ULD_293
-				//PowerTask = null,
-				//Trigger = null,
+				// The target is offered only with a friendly Secret in play (the play requirement), as Medivh's Valet (KAR_092).
+				PowerTask = new DamageTask(6, EntityType.TARGET)
 			}));
 
 			// ------------------------------------------ MINION - MAGE
@@ -855,9 +884,13 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_329", new CardDef(new Power
 			{
-				// TODO [ULD_329] Dune Sculptor && Test: Dune Sculptor_ULD_329
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.AFTER_CAST)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					SingleTask = ComplexTask.Create(
+						RandomScripted(CardType.MINION, CardClass.MAGE),
+						new AddStackTo(EntityType.HAND))
+				}
 			}));
 
 			// ------------------------------------------ MINION - MAGE
@@ -872,10 +905,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_435", new CardDef(new Power
 			{
-				// TODO [ULD_435] Naga Sand Witch && Test: Naga Sand Witch_ULD_435
 				InfoCardId = "ULD_435e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					new IncludeTask(EntityType.HAND),
+					new FilterStackTask(SelfCondition.IsSpell),
+					new AddEnchantmentTask("ULD_435e", EntityType.STACK))
 			}));
 
 			// ------------------------------------------- SPELL - MAGE
@@ -884,11 +918,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			// Text: Cast 10 random spells <i>(targets chosen randomly).</i>
 			// --------------------------------------------------------
+			// Phase 8 family 03: CardSets.DungeonRun.UldumCollectiblesB.CastPuzzleBox (ten random scripted spells of the generation pool, random targets).
 			cards.Add("ULD_216", new CardDef(new Power
 			{
-				// TODO [ULD_216] Puzzle Box of Yogg-Saron && Test: Puzzle Box of Yogg-Saron_ULD_216
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumCollectiblesB.CastPuzzleBox(g, c, s))
 			}));
 
 			// ------------------------------------------- SPELL - MAGE
@@ -900,11 +933,16 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - SECRET = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: after an enemy minion's attack on the owner's hero has resolved (the actual defender; the
+			// attacker may be dead by then), $3 damage to all enemy minions.
 			cards.Add("ULD_239", new CardDef(new Power
 			{
-				// TODO [ULD_239] Flame Ward && Test: Flame Ward_ULD_239
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.AFTER_ATTACK)
+				{
+					TriggerSource = TriggerSource.OP_MINIONS,
+					Condition = new SelfCondition(p => p.Game.CurrentEventData?.EventTarget is Hero hero && hero.Controller != p.Controller),
+					SingleTask = ComplexTask.Secret(new DamageTask(3, EntityType.OP_MINIONS, true))
+				}
 			}));
 
 			// ------------------------------------------- SPELL - MAGE
@@ -924,10 +962,12 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_433", new CardDef(new Power
 			{
-				// TODO [ULD_433] Raid the Sky Temple && Test: Raid the Sky Temple_ULD_433
 				InfoCardId = "ULD_433e",
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.AFTER_CAST)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					SingleTask = CardSets.DungeonRun.UldumRules.QuestProgress("ULD_433p")
+				}
 			}));
 
 			// ------------------------------------------- SPELL - MAGE
@@ -941,10 +981,13 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_726", new CardDef(new Power
 			{
-				// TODO [ULD_726] Ancient Mysteries && Test: Ancient Mysteries_ULD_726
 				InfoCardId = "ULD_726e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					new IncludeTask(EntityType.DECK),
+					new FilterStackTask(SelfCondition.IsSecret),
+					new RandomTask(1, EntityType.STACK),
+					new DrawStackTask(),
+					new AddEnchantmentTask("ULD_726e", EntityType.STACK))
 			}));
 
 		}
@@ -959,8 +1002,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_435e", new CardDef(new Power
 			{
-				// TODO [ULD_435e] Sandwitched && Test: Sandwitched_ULD_435e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_435e")
+				Enchant = new Enchant(Effects.SetCost(5))
 			}));
 
 			// ------------------------------------- ENCHANTMENT - MAGE
@@ -971,8 +1013,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_726e", new CardDef(new Power
 			{
-				// TODO [ULD_726e] Translated && Test: Translated_ULD_726e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_726e")
+				Enchant = new Enchant(Effects.SetCost(0))
 			}));
 
 		}
@@ -987,10 +1028,12 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_145", new CardDef(new Power
 			{
-				// TODO [ULD_145] Brazen Zealot && Test: Brazen Zealot_ULD_145
 				InfoCardId = "ULD_145e",
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.SUMMON)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					SingleTask = new AddEnchantmentTask("ULD_145e", EntityType.SOURCE)
+				}
 			}));
 
 			// --------------------------------------- MINION - PALADIN
@@ -1004,12 +1047,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// - LIFESTEAL = 1
 			// - REBORN = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_207", new CardDef(new Power
-			{
-				// TODO [ULD_207] Ancestral Guardian && Test: Ancestral Guardian_ULD_207
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			cards.Add("ULD_207", new CardDef());
 
 			// --------------------------------------- MINION - PALADIN
 			// [ULD_217] Micro Mummy - COST:2 [ATK:1/HP:2]
@@ -1045,9 +1083,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_438", new CardDef(new Power
 			{
-				// TODO [ULD_438] Salhet's Pride && Test: Salhet's Pride_ULD_438
-				//PowerTask = null,
-				//Trigger = null,
+				DeathrattleTask = ComplexTask.DrawFromDeck(2, SelfCondition.IsMinion, SelfCondition.IsHealth(1, RelaSign.EQ))
 			}));
 
 			// --------------------------------------- MINION - PALADIN
@@ -1061,9 +1097,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_439", new CardDef(new Power
 			{
-				// TODO [ULD_439] Sandwasp Queen && Test: Sandwasp Queen_ULD_439
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new AddCardTo("ULD_439t", EntityType.HAND, 2)
 			}));
 
 			// --------------------------------------- MINION - PALADIN
@@ -1105,10 +1139,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_143", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_TO_PLAY,0},{PlayReq.REQ_MINION_TARGET,0}}, new Power
 			{
-				// TODO [ULD_143] Pharaoh's Blessing && Test: Pharaoh's Blessing_ULD_143
 				InfoCardId = "ULD_143e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new AddEnchantmentTask("ULD_143e", EntityType.TARGET)
 			}));
 
 			// ---------------------------------------- SPELL - PALADIN
@@ -1132,10 +1164,13 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_431", new CardDef(new Power
 			{
-				// TODO [ULD_431] Making Mummies && Test: Making Mummies_ULD_431
 				InfoCardId = "ULD_431e",
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.AFTER_PLAY_MINION)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					Condition = new SelfCondition(p => p.Card[GameTag.REBORN] != 0 || p[GameTag.REBORN] != 0),
+					SingleTask = CardSets.DungeonRun.UldumRules.QuestProgress("ULD_431p")
+				}
 			}));
 
 			// ---------------------------------------- SPELL - PALADIN
@@ -1147,12 +1182,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// PlayReq:
 			// - REQ_MINION_TARGET = 0
 			// --------------------------------------------------------
-			cards.Add("ULD_716", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_MINION_TARGET,0}}, new Power
+			cards.Add("ULD_716", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_NUM_MINION_SLOTS,1}}, new Power
 			{
-				// TODO [ULD_716] Tip the Scales && Test: Tip the Scales_ULD_716
-				InfoCardId = "ULD_716e2",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new RecruitTask(7, SelfCondition.IsRace(Race.MURLOC))
 			}));
 
 			// ---------------------------------------- SPELL - PALADIN
@@ -1167,10 +1199,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_728", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_TO_PLAY,0},{PlayReq.REQ_MINION_TARGET,0}}, new Power
 			{
-				// TODO [ULD_728] Subdue && Test: Subdue_ULD_728
 				InfoCardId = "ULD_728e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new AddEnchantmentTask("ULD_728e", EntityType.TARGET)
 			}));
 
 		}
@@ -1185,8 +1215,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_143e", new CardDef(new Power
 			{
-				// TODO [ULD_143e] Pharaoh's Blessing && Test: Pharaoh's Blessing_ULD_143e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_143e")
+				Enchant = new Enchant(Effects.Attack_N(4), Effects.Health_N(4), new Effect(GameTag.DIVINE_SHIELD, EffectOperator.SET, 1), Effects.TauntEff)
 			}));
 
 			// ---------------------------------- ENCHANTMENT - PALADIN
@@ -1197,8 +1226,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_145e", new CardDef(new Power
 			{
-				// TODO [ULD_145e] Zeal && Test: Zeal_ULD_145e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_145e")
+				Enchant = new OngoingEnchant(Effects.Attack_N(1))
 			}));
 
 			// ---------------------------------- ENCHANTMENT - PALADIN
@@ -1209,8 +1237,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_431e", new CardDef(new Power
 			{
-				// TODO [ULD_431e] Emperor Wrapped && Test: Emperor Wrapped_ULD_431e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_431e")
+				Enchant = new Enchant(Effects.SetAttackHealth(2))
 			}));
 
 			// ---------------------------------- ENCHANTMENT - PALADIN
@@ -1229,12 +1256,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// [ULD_439t] Sandwasp (*) - COST:1 [ATK:2/HP:1]
 			// - Race: beast, Set: uldum,
 			// --------------------------------------------------------
-			cards.Add("ULD_439t", new CardDef(new Power
-			{
-				// TODO [ULD_439t] Sandwasp && Test: Sandwasp_ULD_439t
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			// Phase 6 F10 (Dungeon Run Tombs/Heist/Rumble starters): a vanilla token (keywords from its tags).
+			cards.Add("ULD_439t", new CardDef());
 
 		}
 
@@ -1251,12 +1274,15 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - ELITE = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: CardSets.DungeonRun.UldumCollectiblesB.Amet (ULD_262e carries the Health value).
 			cards.Add("ULD_262", new CardDef(new Power
 			{
-				// TODO [ULD_262] High Priest Amet && Test: High Priest Amet_ULD_262
 				InfoCardId = "ULD_262e",
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.SUMMON)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					SingleTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumCollectiblesB.Amet(g, s, t))
+				}
 			}));
 
 			// ---------------------------------------- MINION - PRIEST
@@ -1273,10 +1299,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_266", new CardDef(new Power
 			{
-				// TODO [ULD_266] Grandmummy && Test: Grandmummy_ULD_266
 				InfoCardId = "ULD_266e",
-				//PowerTask = null,
-				//Trigger = null,
+				DeathrattleTask = ComplexTask.BuffRandomMinion(EntityType.MINIONS, "ULD_266e")
 			}));
 
 			// ---------------------------------------- MINION - PRIEST
@@ -1294,11 +1318,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// RefTag:
 			// - REBORN = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: CardSets.DungeonRun.UldumCollectiblesB.Psychopomp.
 			cards.Add("ULD_268", new CardDef(new Power
 			{
-				// TODO [ULD_268] Psychopomp && Test: Psychopomp_ULD_268
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumCollectiblesB.Psychopomp(g, c, s))
 			}));
 
 			// ---------------------------------------- MINION - PRIEST
@@ -1319,9 +1342,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_269", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_MINION_TARGET,0},{PlayReq.REQ_FRIENDLY_TARGET,0},{PlayReq.REQ_TARGET_IF_AVAILABLE,0}}, new Power
 			{
-				// TODO [ULD_269] Wretched Reclaimer && Test: Wretched Reclaimer_ULD_269
-				//PowerTask = null,
-				//Trigger = null,
+				// As Reincarnate (FP1_025): destroy it, then a fresh copy returns with full Health.
+				PowerTask = ComplexTask.Create(
+					new DestroyTask(EntityType.TARGET, true),
+					new CopyTask(EntityType.TARGET, Zone.PLAY))
 			}));
 
 			// ---------------------------------------- MINION - PRIEST
@@ -1332,9 +1356,14 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_270", new CardDef(new Power
 			{
-				// TODO [ULD_270] Sandhoof Waterbearer && Test: Sandhoof Waterbearer_ULD_270
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.TURN_END)
+				{
+					SingleTask = ComplexTask.Create(
+						new IncludeTask(EntityType.FRIENDS),
+						new FilterStackTask(SelfCondition.IsDamaged),
+						new RandomTask(1, EntityType.STACK),
+						new HealTask(5, EntityType.STACK))
+				}
 			}));
 
 			// ----------------------------------------- SPELL - PRIEST
@@ -1352,9 +1381,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_265", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_TO_PLAY,0},{PlayReq.REQ_MINION_TARGET,0}}, new Power
 			{
-				// TODO [ULD_265] Embalming Ritual && Test: Embalming Ritual_ULD_265
-				//PowerTask = null,
-				//Trigger = null,
+				// A minion that was already reborn gets Reborn again (HAS_BEEN_REBORN cleared), as in the client.
+				PowerTask = ComplexTask.Create(
+					new SetGameTagTask(GameTag.REBORN, 1, EntityType.TARGET),
+					new SetGameTagTask(GameTag.HAS_BEEN_REBORN, 0, EntityType.TARGET))
 			}));
 
 			// ----------------------------------------- SPELL - PRIEST
@@ -1386,9 +1416,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_714", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_TO_PLAY,0},{PlayReq.REQ_MINION_TARGET,0}}, new Power
 			{
-				// TODO [ULD_714] Penance && Test: Penance_ULD_714
-				//PowerTask = null,
-				//Trigger = null,
+				// Lifesteal is the card's own tag: the engine heals its caster for the damage dealt.
+				PowerTask = new DamageTask(3, EntityType.TARGET, true)
 			}));
 
 			// ----------------------------------------- SPELL - PRIEST
@@ -1402,9 +1431,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_718", new CardDef(new Power
 			{
-				// TODO [ULD_718] Plague of Death && Test: Plague of Death_ULD_718
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					new SilenceTask(EntityType.ALLMINIONS),
+					new DestroyTask(EntityType.ALLMINIONS))
 			}));
 
 			// ----------------------------------------- SPELL - PRIEST
@@ -1424,10 +1453,13 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_724", new CardDef(new Power
 			{
-				// TODO [ULD_724] Activate the Obelisk && Test: Activate the Obelisk_ULD_724
 				InfoCardId = "ULD_724e",
-				//PowerTask = null,
-				//Trigger = null,
+				// The Health its owner's cards and powers actually restore (to any character); overhealing does not count.
+				Trigger = new Trigger(TriggerType.HEAL)
+				{
+					SingleTask = CardSets.DungeonRun.UldumRules.QuestProgress("ULD_724p",
+						(g, c, s, t) => g.CurrentEventData?.EventSource?.Controller == c ? g.CurrentEventData.EventNumber : 0)
+				}
 			}));
 
 		}
@@ -1442,8 +1474,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_262e", new CardDef(new Power
 			{
-				// TODO [ULD_262e] Amet's Blessing && Test: Amet's Blessing_ULD_262e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_262e")
+				Enchant = Enchants.Enchants.SetHealthScriptTag
 			}));
 
 			// ----------------------------------- ENCHANTMENT - PRIEST
@@ -1457,8 +1488,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_266e", new CardDef(new Power
 			{
-				// TODO [ULD_266e] Grandmummy's Blessing && Test: Grandmummy's Blessing_ULD_266e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_266e")
+				Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_266e")
 			}));
 
 			// ----------------------------------- ENCHANTMENT - PRIEST
@@ -1469,8 +1499,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_724e", new CardDef(new Power
 			{
-				// TODO [ULD_724e] Obelisk's Gaze && Test: Obelisk's Gaze_ULD_724e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_724e")
+				Enchant = new Enchant(Effects.AttackHealth_N(3))
 			}));
 
 		}
@@ -1491,9 +1520,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_186", new CardDef(new Power
 			{
-				// TODO [ULD_186] Pharaoh Cat && Test: Pharaoh Cat_ULD_186
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					RandomScripted(CardType.MINION, CardClass.INVALID, tag: GameTag.REBORN),
+					new AddStackTo(EntityType.HAND))
 			}));
 
 			// ----------------------------------------- MINION - ROGUE
@@ -1507,9 +1536,14 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_231", new CardDef(new Power
 			{
-				// TODO [ULD_231] Whirlkick Master && Test: Whirlkick Master_ULD_231
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.PLAY_CARD)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					Condition = SelfCondition.IsComboCard,
+					SingleTask = ComplexTask.Create(
+						RandomScripted(CardType.INVALID, CardClass.INVALID, tag: GameTag.COMBO),
+						new AddStackTo(EntityType.HAND))
+				}
 			}));
 
 			// ----------------------------------------- MINION - ROGUE
@@ -1543,10 +1577,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_288", new CardDef(new Power
 			{
-				// TODO [ULD_288] Anka, the Buried && Test: Anka, the Buried_ULD_288
 				InfoCardId = "ULD_288e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					new IncludeTask(EntityType.HAND),
+					new FilterStackTask(SelfCondition.IsDeathrattleMinion),
+					new AddEnchantmentTask("ULD_288e", EntityType.STACK))
 			}));
 
 			// ----------------------------------------- MINION - ROGUE
@@ -1562,9 +1597,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_327", new CardDef(new Power
 			{
-				// TODO [ULD_327] Bazaar Mugger && Test: Bazaar Mugger_ULD_327
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					CardSets.DungeonRun.UldumRules.RandomScripted(CardType.MINION, (c, p) => CardSets.DungeonRun.UldumRules.IsOtherClass(c, p)),
+					new AddStackTo(EntityType.HAND))
 			}));
 
 			// ------------------------------------------ SPELL - ROGUE
@@ -1579,9 +1614,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_286", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_TO_PLAY,0},{PlayReq.REQ_MINION_TARGET,0}}, new Power
 			{
-				// TODO [ULD_286] Shadow of Death && Test: Shadow of Death_ULD_286
-				//PowerTask = null,
-				//Trigger = null,
+				// Three Shadows of the chosen minion's card: each summons a plain copy (no enchantments, no damage) when drawn.
+				PowerTask = new CustomTask((g, c, s, t, stack) =>
+				{
+					if (t is Minion chosen) CardSets.DungeonRun.UldumRules.ShuffleSummonWhenDrawn(c, s, "ULD_286t", chosen.Card, 3);
+				})
 			}));
 
 			// ------------------------------------------ SPELL - ROGUE
@@ -1602,9 +1639,13 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_326", new CardDef(new Power
 			{
-				// TODO [ULD_326] Bazaar Burglary && Test: Bazaar Burglary_ULD_326
-				//PowerTask = null,
-				//Trigger = null,
+				// A card of another class entering the hand, however it got there (drawn, generated, returned).
+				Trigger = new Trigger(TriggerType.ZONE)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					Condition = new SelfCondition(p => p.Zone == p.Controller.HandZone && CardSets.DungeonRun.UldumRules.IsOtherClass(p.Controller, p.Card)),
+					SingleTask = CardSets.DungeonRun.UldumRules.QuestProgress("ULD_326p")
+				}
 			}));
 
 			// ------------------------------------------ SPELL - ROGUE
@@ -1615,9 +1656,22 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_328", new CardDef(new Power
 			{
-				// TODO [ULD_328] Clever Disguise && Test: Clever Disguise_ULD_328
-				//PowerTask = null,
-				//Trigger = null,
+				// Two random spells, each from the classes other than its owner's (no neutral spells), from the format's generation pool.
+				PowerTask = ComplexTask.Create(
+					new CustomTask((g, c, s, t, stack) =>
+					{
+						CardClass own = c.HeroClass;
+						CardClass[] classes = Cards.HeroClasses;
+						var pool = new List<Card>();
+						using (g.GenerateFor(null))
+							foreach (Card p in RandomCardTask.GetCardList(s, CardType.SPELL))
+								if (p.Implemented && p.Class != own && System.Array.IndexOf(classes, p.Class) >= 0) pool.Add(p);
+						var picks = new List<IPlayable>(2);
+						for (int i = 0; i < 2 && pool.Count > 0; i++) picks.Add(Entity.FromCard(c, pool[g.Random.Next(pool.Count)]));
+						if (picks.Count > 0) g.OnRandomHappened(true);
+						stack.Playables = picks;
+					}),
+					new AddStackTo(EntityType.HAND))
 			}));
 
 			// ------------------------------------------ SPELL - ROGUE
@@ -1652,10 +1706,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_285", new CardDef(new Power
 			{
-				// TODO [ULD_285] Hooked Scimitar && Test: Hooked Scimitar_ULD_285
 				InfoCardId = "ULD_285e",
-				//PowerTask = null,
-				//Trigger = null,
+				// Weapons have no Combo dispatch (Playable.ActivateTask runs only minion Combo branches): the play power checks it.
+				PowerTask = ComplexTask.Create(
+					new ConditionTask(EntityType.SOURCE, SelfCondition.IsComboActive),
+					new FlagTask(true, new AddEnchantmentTask("ULD_285e", EntityType.SOURCE)))
 			}));
 
 		}
@@ -1670,8 +1725,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_285e", new CardDef(new Power
 			{
-				// TODO [ULD_285e] Polished && Test: Polished_ULD_285e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_285e")
+				Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_285e")
 			}));
 
 			// ------------------------------------------ SPELL - ROGUE
@@ -1689,9 +1743,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_286t", new CardDef(new Power
 			{
-				// TODO [ULD_286t] Shadow && Test: Shadow_ULD_286t
-				//PowerTask = null,
-				//Trigger = null,
+				// Casts When Drawn: summon the minion it names, then draw; cast from hand it only summons.
+				TopdeckTask = CardSets.DungeonRun.UldumRules.SummonWhenDrawn,
+				PowerTask = CardSets.DungeonRun.UldumRules.SummonNamed
 			}));
 
 			// ----------------------------------------- WEAPON - ROGUE
@@ -1708,9 +1762,12 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_326t", new CardDef(new Power
 			{
-				// TODO [ULD_326t] Mirage Blade && Test: Mirage Blade_ULD_326t
-				//PowerTask = null,
-				//Trigger = null,
+				// Gladiator's Longbow's rule and enchantment (DS1_188): the hero is Immune while attacking.
+				Trigger = new Trigger(TriggerType.TARGET)
+				{
+					TriggerSource = TriggerSource.HERO,
+					SingleTask = new AddEnchantmentTask("DS1_188e", EntityType.HERO)
+				}
 			}));
 
 			// ----------------------------------------- WEAPON - ROGUE
@@ -1746,9 +1803,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_158", new CardDef(new Power
 			{
-				// TODO [ULD_158] Sandstorm Elemental && Test: Sandstorm Elemental_ULD_158
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new DamageTask(1, EntityType.OP_MINIONS)
 			}));
 
 			// ---------------------------------------- MINION - SHAMAN
@@ -1763,9 +1818,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_169", new CardDef(new Power
 			{
-				// TODO [ULD_169] Mogu Fleshshaper && Test: Mogu Fleshshaper_ULD_169
-				//PowerTask = null,
-				//Trigger = null,
+				Aura = new AdaptiveCostEffect(p => p.Controller.BoardZone.Count + p.Controller.Opponent.BoardZone.Count)
 			}));
 
 			// ---------------------------------------- MINION - SHAMAN
@@ -1804,12 +1857,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// RefTag:
 			// - OVERLOAD = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: an aura on her owner's other minions, re-checked on every aura update (CardSets.DungeonRun.UldumCollectiblesB.Overloaded).
 			cards.Add("ULD_173", new CardDef(new Power
 			{
-				// TODO [ULD_173] Vessina && Test: Vessina_ULD_173
 				InfoCardId = "ULD_173e",
-				//PowerTask = null,
-				//Trigger = null,
+				Aura = new CardSets.DungeonRun.RestlessOthersAura("ULD_173e", new SelfCondition(CardSets.DungeonRun.UldumCollectiblesB.Overloaded))
 			}));
 
 			// ---------------------------------------- MINION - SHAMAN
@@ -1852,11 +1904,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			// Text: Transform all minions into random Murlocs.
 			// --------------------------------------------------------
+			// Phase 8 family 03: CardSets.DungeonRun.UldumCollectiblesB.PlagueOfMurlocs.
 			cards.Add("ULD_172", new CardDef(new Power
 			{
-				// TODO [ULD_172] Plague of Murlocs && Test: Plague of Murlocs_ULD_172
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumCollectiblesB.PlagueOfMurlocs(g, c, s))
 			}));
 
 			// ----------------------------------------- SPELL - SHAMAN
@@ -1897,10 +1948,13 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_291", new CardDef(new Power
 			{
-				// TODO [ULD_291] Corrupt the Waters && Test: Corrupt the Waters_ULD_291
 				InfoCardId = "ULD_291pe",
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.AFTER_PLAY_CARD)
+				{
+					TriggerSource = TriggerSource.FRIENDLY,
+					Condition = SelfCondition.IsBattleCryCard,
+					SingleTask = CardSets.DungeonRun.UldumRules.QuestProgress("ULD_291p")
+				}
 			}));
 
 			// ---------------------------------------- WEAPON - SHAMAN
@@ -1947,8 +2001,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_173e", new CardDef(new Power
 			{
-				// TODO [ULD_173e] Vessina's Devotion && Test: Vessina's Devotion_ULD_173e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_173e")
+				Enchant = new Enchant(Effects.Attack_N(2))
 			}));
 
 			// ----------------------------------- ENCHANTMENT - SHAMAN
@@ -1959,8 +2012,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_433e", new CardDef(new Power
 			{
-				// TODO [ULD_433e] Cheat Sheet && Test: Cheat Sheet_ULD_433e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_433e")
+				Enchant = new Enchant(Effects.ReduceCost(2))
 			}));
 
 		}
@@ -2265,11 +2317,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// - DISCOVER = 1
 			// - USE_DISCOVER_VISUALS = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: CardSets.DungeonRun.UldumCollectiblesB.DiscoverTaunt (scripted Taunt minions of the owner's Discover pool).
 			cards.Add("ULD_195", new CardDef(new Power
 			{
-				// TODO [ULD_195] Frightened Flunky && Test: Frightened Flunky_ULD_195
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumCollectiblesB.DiscoverTaunt(g, c, s, stack))
 			}));
 
 			// --------------------------------------- MINION - WARRIOR
@@ -2283,12 +2334,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// - RUSH = 1
 			// - REBORN = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_206", new CardDef(new Power
-			{
-				// TODO [ULD_206] Restless Mummy && Test: Restless Mummy_ULD_206
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			cards.Add("ULD_206", new CardDef());
 
 			// --------------------------------------- MINION - WARRIOR
 			// [ULD_253] Tomb Warden - COST:8 [ATK:3/HP:6]
@@ -2303,9 +2349,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_253", new CardDef(new Power
 			{
-				// TODO [ULD_253] Tomb Warden && Test: Tomb Warden_ULD_253
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new SummonCopyTask(EntityType.SOURCE, side: SummonSide.RIGHT)
 			}));
 
 			// --------------------------------------- MINION - WARRIOR
@@ -2323,10 +2367,14 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_258", new CardDef(new Power
 			{
-				// TODO [ULD_258] Armagedillo && Test: Armagedillo_ULD_258
 				InfoCardId = "ULD_258e",
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.TURN_END)
+				{
+					SingleTask = ComplexTask.Create(
+						new IncludeTask(EntityType.HAND),
+						new FilterStackTask(SelfCondition.HasTaunt),
+						new AddEnchantmentTask("ULD_258e", EntityType.STACK))
+				}
 			}));
 
 			// --------------------------------------- MINION - WARRIOR
@@ -2337,9 +2385,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_709", new CardDef(new Power
 			{
-				// TODO [ULD_709] Armored Goon && Test: Armored Goon_ULD_709
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.ATTACK)
+				{
+					TriggerSource = TriggerSource.HERO,
+					SingleTask = new ArmorTask(5)
+				}
 			}));
 
 			// --------------------------------------- MINION - WARRIOR
@@ -2361,9 +2411,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_720", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_IF_AVAILABLE,0},{PlayReq.REQ_FRIENDLY_TARGET,0},{PlayReq.REQ_MINION_TARGET,0},{PlayReq.REQ_DAMAGED_TARGET,0}}, new Power
 			{
-				// TODO [ULD_720] Bloodsworn Mercenary && Test: Bloodsworn Mercenary_ULD_720
-				//PowerTask = null,
-				//Trigger = null,
+				// A copy of the chosen damaged friendly minion as it is (damage and enchantments included).
+				PowerTask = new SummonCopyTask(EntityType.TARGET)
 			}));
 
 			// ---------------------------------------- SPELL - WARRIOR
@@ -2377,10 +2426,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_256", new CardDef(new Power
 			{
-				// TODO [ULD_256] Into the Fray && Test: Into the Fray_ULD_256
 				InfoCardId = "ULD_256e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					new IncludeTask(EntityType.HAND),
+					new FilterStackTask(SelfCondition.HasTaunt),
+					new AddEnchantmentTask("ULD_256e", EntityType.STACK))
 			}));
 
 			// ---------------------------------------- SPELL - WARRIOR
@@ -2394,9 +2444,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_707", new CardDef(new Power
 			{
-				// TODO [ULD_707] Plague of Wrath && Test: Plague of Wrath_ULD_707
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = ComplexTask.Create(
+					new IncludeTask(EntityType.ALLMINIONS),
+					new FilterStackTask(SelfCondition.IsDamaged),
+					new DestroyTask(EntityType.STACK))
 			}));
 
 			// ---------------------------------------- SPELL - WARRIOR
@@ -2417,9 +2468,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_711", new CardDef(new Power
 			{
-				// TODO [ULD_711] Hack the System && Test: Hack the System_ULD_711
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.AFTER_ATTACK)
+				{
+					TriggerSource = TriggerSource.HERO,
+					SingleTask = CardSets.DungeonRun.UldumRules.QuestProgress("ULD_711p3")
+				}
 			}));
 
 			// --------------------------------------- WEAPON - WARRIOR
@@ -2450,12 +2503,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// [ULD_711t] Stone Golem (*) - COST:3 [ATK:4/HP:3]
 			// - Set: uldum,
 			// --------------------------------------------------------
-			cards.Add("ULD_711t", new CardDef(new Power
-			{
-				// TODO [ULD_711t] Stone Golem && Test: Stone Golem_ULD_711t
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			cards.Add("ULD_711t", new CardDef());
 
 		}
 
@@ -2473,9 +2521,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_003", new CardDef(new Power
 			{
-				// TODO [ULD_003] Zephrys the Great && Test: Zephrys the Great_ULD_003
-				//PowerTask = null,
-				//Trigger = null,
+				// The wish (Dungeon Run phase 6 F15, shared with ULDA_013 Zephrys's Lamp): three Discover options from a curated
+				// list of scripted cards, chosen from public information and the owner's own cards only (DungeonRunContent.WishOffer).
+				PowerTask = CardSets.DungeonRun.DungeonRunContent.ZephrysBattlecry(),
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -2508,9 +2556,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_174", new CardDef(new Power
 			{
-				// TODO [ULD_174] Serpent Egg && Test: Serpent Egg_ULD_174
-				//PowerTask = null,
-				//Trigger = null,
+				DeathrattleTask = new SummonTask("ULD_174t")
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -2525,9 +2571,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_177", new CardDef(new Power
 			{
-				// TODO [ULD_177] Octosari && Test: Octosari_ULD_177
-				//PowerTask = null,
-				//Trigger = null,
+				DeathrattleTask = new DrawTask(8)
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -2573,12 +2617,15 @@ namespace SabberStoneCore.CardSets.Standard
 			// RefTag:
 			// - TAUNT = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: a board aura re-checked on every aura update (a minion that gains or loses Taunt).
 			cards.Add("ULD_179", new CardDef(new Power
 			{
-				// TODO [ULD_179] Phalanx Commander && Test: Phalanx Commander_ULD_179
 				InfoCardId = "ULD_179e",
-				//PowerTask = null,
-				//Trigger = null,
+				Aura = new Aura(AuraType.BOARD, "ULD_179e")
+				{
+					Condition = SelfCondition.HasTaunt,
+					Restless = true
+				}
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -2655,10 +2702,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_185", new CardDef(new Power
 			{
-				// TODO [ULD_185] Temple Berserker && Test: Temple Berserker_ULD_185
 				InfoCardId = "ULD_185e",
-				//PowerTask = null,
-				//Trigger = null,
+				Aura = new EnrageEffect(AuraType.SELF, "ULD_185e")
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -2675,9 +2720,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_188", new CardDef(new Power
 			{
-				// TODO [ULD_188] Golden Scarab && Test: Golden Scarab_ULD_188
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new DiscoverTask(DiscoverType.SCRIPTED_FOUR_COST)
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -2765,12 +2808,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - POISONOUS = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_194", new CardDef(new Power
-			{
-				// TODO [ULD_194] Wasteland Scorpid && Test: Wasteland Scorpid_ULD_194
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			cards.Add("ULD_194", new CardDef());
 
 			// --------------------------------------- MINION - NEUTRAL
 			// [ULD_196] Neferset Ritualist - COST:2 [ATK:2/HP:3]
@@ -2783,9 +2821,12 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_196", new CardDef(new Power
 			{
-				// TODO [ULD_196] Neferset Ritualist && Test: Neferset Ritualist_ULD_196
-				//PowerTask = null,
-				//Trigger = null,
+				// Restore the minions next to it (at play time) to full Health.
+				PowerTask = new CustomTask((g, c, s, t, stack) =>
+				{
+					if (s is Minion self && self.Zone == c.BoardZone)
+						HealingRules.Heal(self, self.GetAdjacentMinions(), 0, full: true);
+				})
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -2831,12 +2872,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - REBORN = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_205", new CardDef(new Power
-			{
-				// TODO [ULD_205] Candletaker && Test: Candletaker_ULD_205
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			cards.Add("ULD_205", new CardDef());
 
 			// --------------------------------------- MINION - NEUTRAL
 			// [ULD_208] Khartut Defender - COST:6 [ATK:3/HP:4]
@@ -2853,9 +2889,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_208", new CardDef(new Power
 			{
-				// TODO [ULD_208] Khartut Defender && Test: Khartut Defender_ULD_208
-				//PowerTask = null,
-				//Trigger = null,
+				DeathrattleTask = new HealTask(3, EntityType.HERO)
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -2869,11 +2903,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// - DISCOVER = 1
 			// - USE_DISCOVER_VISUALS = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: CardSets.DungeonRun.UldumCollectiblesB.Scoundrel (three spells and the mystery choice ULD_209t).
 			cards.Add("ULD_209", new CardDef(new Power
 			{
-				// TODO [ULD_209] Vulpera Scoundrel && Test: Vulpera Scoundrel_ULD_209
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumCollectiblesB.Scoundrel(g, c, s, stack))
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -2912,9 +2945,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_215", new CardDef(new Power
 			{
-				// TODO [ULD_215] Wrapped Golem && Test: Wrapped Golem_ULD_215
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.TURN_END)
+				{
+					SingleTask = new SummonTask("ULD_215t", SummonSide.RIGHT)
+				}
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -2946,9 +2980,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_250", new CardDef(new Power
 			{
-				// TODO [ULD_250] Infested Goblin && Test: Infested Goblin_ULD_250
-				//PowerTask = null,
-				//Trigger = null,
+				DeathrattleTask = new AddCardTo("ULD_215t", EntityType.HAND, 2)
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -2980,12 +3012,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// - STEALTH = 1
 			// - REBORN = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_274", new CardDef(new Power
-			{
-				// TODO [ULD_274] Wasteland Assassin && Test: Wasteland Assassin_ULD_274
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			cards.Add("ULD_274", new CardDef());
 
 			// --------------------------------------- MINION - NEUTRAL
 			// [ULD_275] Bone Wraith - COST:4 [ATK:2/HP:5]
@@ -2998,12 +3025,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// - TAUNT = 1
 			// - REBORN = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_275", new CardDef(new Power
-			{
-				// TODO [ULD_275] Bone Wraith && Test: Bone Wraith_ULD_275
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			cards.Add("ULD_275", new CardDef());
 
 			// --------------------------------------- MINION - NEUTRAL
 			// [ULD_282] Jar Dealer - COST:1 [ATK:1/HP:1]
@@ -3017,9 +3039,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_282", new CardDef(new Power
 			{
-				// TODO [ULD_282] Jar Dealer && Test: Jar Dealer_ULD_282
-				//PowerTask = null,
-				//Trigger = null,
+				DeathrattleTask = ComplexTask.Create(
+					CardSets.DungeonRun.UldumRules.RandomScripted(CardType.MINION, (c, p) => p.Cost == 1),
+					new AddStackTo(EntityType.HAND))
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -3047,10 +3069,13 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_290", new CardDef(new Power
 			{
-				// TODO [ULD_290] History Buff && Test: History Buff_ULD_290
 				InfoCardId = "ULD_290e",
-				//PowerTask = null,
-				//Trigger = null,
+				Trigger = new Trigger(TriggerType.PLAY_MINION)
+				{
+					// The played minion has left the hand and is not on the board yet; History Buff's own play comes before its trigger starts.
+					TriggerSource = TriggerSource.FRIENDLY,
+					SingleTask = ComplexTask.BuffRandomMinion(EntityType.HAND, "ULD_290e")
+				}
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -3068,9 +3093,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_304", new CardDef(new Power
 			{
-				// TODO [ULD_304] King Phaoris && Test: King Phaoris_ULD_304
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumRules.SummonForSpellsInHand(g, c, s))
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -3082,13 +3105,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// RefTag:
 			// - DISCOVER = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_309", new CardDef(new Power
-			{
-				// TODO [ULD_309] Dwarven Archaeologist && Test: Dwarven Archaeologist_ULD_309
-				InfoCardId = "ULD_309e",
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			cards.Add("ULD_309", new CardDef());
 
 			// --------------------------------------- MINION - NEUTRAL
 			// [ULD_450] Vilefiend - COST:2 [ATK:2/HP:2]
@@ -3219,12 +3236,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// - DIVINE_SHIELD = 1
 			// - REBORN = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_721", new CardDef(new Power
-			{
-				// TODO [ULD_721] Colossus of the Moon && Test: Colossus of the Moon_ULD_721
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			cards.Add("ULD_721", new CardDef());
 
 			// --------------------------------------- MINION - NEUTRAL
 			// [ULD_723] Murmy - COST:1 [ATK:1/HP:1]
@@ -3255,9 +3267,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_727", new CardDef(new Power
 			{
-				// TODO [ULD_727] Body Wrapper && Test: Body Wrapper_ULD_727
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumRules.DiscoverDeadToDeck(g, c, s, stack))
 			}));
 
 		}
@@ -3272,8 +3282,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_179e", new CardDef(new Power
 			{
-				// TODO [ULD_179e] Commanded && Test: Commanded_ULD_179e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_179e")
+				Enchant = new Enchant(Effects.Attack_N(2))
 			}));
 
 			// ---------------------------------- ENCHANTMENT - NEUTRAL
@@ -3299,8 +3308,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_185e", new CardDef(new Power
 			{
-				// TODO [ULD_185e] Enraged && Test: Enraged_ULD_185e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_185e")
+				Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_185e")
 			}));
 
 			// ---------------------------------- ENCHANTMENT - NEUTRAL
@@ -3373,8 +3381,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_256e", new CardDef(new Power
 			{
-				// TODO [ULD_256e] Frayed && Test: Frayed_ULD_256e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_256e")
+				Enchant = new Enchant(Effects.AttackHealth_N(2))
 			}));
 
 			// ---------------------------------- ENCHANTMENT - NEUTRAL
@@ -3385,8 +3392,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_258e", new CardDef(new Power
 			{
-				// TODO [ULD_258e] Tough && Test: Tough_ULD_258e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_258e")
+				Enchant = new Enchant(Effects.AttackHealth_N(2))
 			}));
 
 			// ---------------------------------- ENCHANTMENT - NEUTRAL
@@ -3397,8 +3403,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_290e", new CardDef(new Power
 			{
-				// TODO [ULD_290e] Erudite && Test: Erudite_ULD_290e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_290e")
+				Enchant = new Enchant(Effects.AttackHealth_N(1))
 			}));
 
 			// ---------------------------------- ENCHANTMENT - NEUTRAL
@@ -3412,8 +3417,11 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_291pe", new CardDef(new Power
 			{
-				// TODO [ULD_291pe] Heart of Vir'naal && Test: Heart of Vir'naal_ULD_291pe
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_291pe")
+				// Brann's doubling for the rest of this turn.
+				Aura = new Aura(AuraType.CONTROLLER, new Effect(GameTag.EXTRA_BATTLECRIES_BASE, EffectOperator.ADD, 1))
+				{
+					RemoveTrigger = (TriggerType.TURN_END, null)
+				}
 			}));
 
 			// ---------------------------------- ENCHANTMENT - NEUTRAL
@@ -3448,20 +3456,15 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_728e", new CardDef(new Power
 			{
-				// TODO [ULD_728e] Subdued && Test: Subdued_ULD_728e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_728e")
+				Enchant = new Enchant(Effects.SetAttackHealth(1))
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
 			// [ULD_174t] Sea Serpent (*) - COST:3 [ATK:3/HP:4]
 			// - Race: beast, Set: uldum,
 			// --------------------------------------------------------
-			cards.Add("ULD_174t", new CardDef(new Power
-			{
-				// TODO [ULD_174t] Sea Serpent && Test: Sea Serpent_ULD_174t
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			// Phase 6 F10 (Dungeon Run Tombs/Heist/Rumble starters): a vanilla token (keywords from its tags).
+			cards.Add("ULD_174t", new CardDef());
 
 			// --------------------------------------- MINION - NEUTRAL
 			// [ULD_215t] Scarab (*) - COST:1 [ATK:1/HP:1]
@@ -3472,12 +3475,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - TAUNT = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_215t", new CardDef(new Power
-			{
-				// TODO [ULD_215t] Scarab && Test: Scarab_ULD_215t
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			// Phase 6 F10 (Dungeon Run Tombs/Heist/Rumble starters): a vanilla token (keywords from its tags).
+			cards.Add("ULD_215t", new CardDef());
 
 			// --------------------------------------- MINION - NEUTRAL
 			// [ULD_430t] Locust (*) - COST:1 [ATK:1/HP:1]
@@ -3488,12 +3487,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - RUSH = 1
 			// --------------------------------------------------------
-			cards.Add("ULD_430t", new CardDef(new Power
-			{
-				// TODO [ULD_430t] Locust && Test: Locust_ULD_430t
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			// Phase 6 F10 (Dungeon Run Tombs/Heist/Rumble starters): a vanilla token (keywords from its tags).
+			cards.Add("ULD_430t", new CardDef());
 
 			// --------------------------------------- MINION - NEUTRAL
 			// [ULD_616] Titanic Lackey (*) - COST:1 [ATK:1/HP:1]
@@ -3640,11 +3635,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - HIDE_STATS = 1
 			// --------------------------------------------------------
+			// Phase 8 family 03: the fourth option of Vulpera Scoundrel's Discover (CardSets.DungeonRun.UldumCollectiblesB.MysterySpell).
 			cards.Add("ULD_209t", new CardDef(new Power
 			{
-				// TODO [ULD_209t] Mystery Choice! && Test: Mystery Choice!_ULD_209t
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new CustomTask((g, c, s, t, stack) => CardSets.DungeonRun.UldumCollectiblesB.MysterySpell(g, c, s))
 			}));
 
 		}

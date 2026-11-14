@@ -11,6 +11,8 @@ namespace SabberStoneCore.Model
         private bool _playerAttack,_fatigue;
         private AttackScope _attack;
         private IEntity _executingSource;
+        /// <summary>The source of the task being processed now (TaskQueue.Process), or null between tasks.</summary>
+        internal IEntity ExecutingSource => _executingSource;
         internal IDisposable Executing(IEntity source)
         { var previous=_executingSource;_executingSource=source;return new Cleanup(()=>_executingSource=previous); }
         internal IDisposable SuppressHealth()

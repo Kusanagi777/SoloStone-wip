@@ -38,6 +38,9 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			{
 				if (p is BoardObject || p.Zone.Type != Zone.PLAY)
 					continue; //return;
+				// A control change aimed at a run shrine does nothing (phase 7, ShrineRules).
+				if (SabberStoneCore.Actions.ShrineRules.BlocksControl(p))
+					continue;
 
 				if (!Opposite && controller.BoardZone.IsFull || Opposite && controller.Opponent.BoardZone.IsFull)
 				{

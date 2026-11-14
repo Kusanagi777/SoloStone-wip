@@ -1,0 +1,3 @@
+DEATHKNIGHT: 280 draft floors over 20 seeds, 243 offered 3 bundles, 37 offered fewer under a draftOptionsDelta modifier, 0 skipped for a full deck
+DEMONHUNTER: 280 draft floors over 20 seeds, 243 offered 3 bundles, 37 offered fewer under a draftOptionsDelta modifier, 0 skipped for a full deck
+c-dkdh-supply: 13 passed, 0 failed

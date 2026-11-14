@@ -57,7 +57,6 @@ namespace SabberStoneCore.CardSets.Client.Sets
                     if(empowered) RepeatRules.Mark(spell,(IPlayable)s,"TIME_211t1te");
                     Generic.AddHandPhase(c,spell);
                 }
-                s[GameTag.LOCATION_ACTION_COOLDOWN]=1;
             }) } };
         }
         [StandardCard("TIME_211t2",119930)]
@@ -73,7 +72,6 @@ namespace SabberStoneCore.CardSets.Client.Sets
                     new SummonCopyTask(EntityType.TARGET,addToStack:true).Process(g,c,s,t,copyStack);
                     if(empowered && copyStack.Playables.LastOrDefault() is Minion copy)
                         Generic.AddEnchantmentBlock(g,Cards.FromId("TIME_211t2te"),(IPlayable)s,copy,copy.AttackDamage,copy.Health);
-                    s[GameTag.LOCATION_ACTION_COOLDOWN]=1;
                 }) } };
         }
         [StandardCard("TIME_211t1te",120201)]

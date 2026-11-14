@@ -468,9 +468,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("DAL_377", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_FRIENDLY_DEATHRATTLE_MINION_DIED_THIS_GAME,0}}, new Power
 			{
-				// TODO [DAL_377] Nine Lives && Test: Nine Lives_DAL_377
-				//PowerTask = null,
-				//Trigger = null,
+				// The chosen copy goes to the hand; its Deathrattle then runs from there (ActivateDeathrattleTask on the choice).
+				PowerTask = new DiscoverTask(DiscoverType.FRIENDLY_DEATHRATTLE_DIED, new ActivateDeathrattleTask(EntityType.TARGET))
 			}));
 
 			// ----------------------------------------- SPELL - HUNTER
@@ -906,12 +905,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// RefTag:
 			// - SECRET = 1
 			// --------------------------------------------------------
-			cards.Add("DAL_573", new CardDef(new Power
-			{
-				// TODO [DAL_573] Commander Rhyssa && Test: Commander Rhyssa_DAL_573
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			// Its rule is the engine's: Actions.EncounterRules.SecretRepeats reads an active Commander Rhyssa on the owner's board
+			// (ComplexTask.Secret resolves a triggered Secret's effect twice).
+			cards.Add("DAL_573", new CardDef());
 
 			// --------------------------------------- MINION - PALADIN
 			// [DAL_581] Nozari - COST:10 [ATK:4/HP:12]
@@ -1014,10 +1010,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("DAL_731", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_BOARD_NOT_COMPLETELY_FULL,0}}, new Power
 			{
-				// TODO [DAL_731] Duel! && Test: Duel!_DAL_731
-				//PowerTask = null,
-				//Trigger = null,
-
+				PowerTask = DungeonRun.DungeonRunEncounters.Duel
 			}));
 
 			// --------------------------------------- WEAPON - PALADIN
@@ -1220,9 +1213,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("DAL_729", new CardDef(new Power
 			{
-				// TODO [DAL_729] Madame Lazul && Test: Madame Lazul_DAL_729
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = DungeonRun.DungeonRunEncounters.MadameLazul
 			}));
 
 			// ----------------------------------------- SPELL - PRIEST
@@ -1651,9 +1642,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("DAL_431", new CardDef(new[] {"DAL_431t"}, new Power
 			{
-				// TODO [DAL_431] Swampqueen Hagatha && Test: Swampqueen Hagatha_DAL_431
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = DungeonRun.DungeonRunEncounters.SwampqueenHagatha
 			}));
 
 			// ---------------------------------------- MINION - SHAMAN
@@ -1792,12 +1781,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// GameTag:
 			// - BATTLECRY = 1
 			// --------------------------------------------------------
-			cards.Add("DAL_431t", new CardDef(new Power
-			{
-				// TODO [DAL_431t] Drustvar Horror && Test: Drustvar Horror_DAL_431t
-				//PowerTask = null,
-				//Trigger = null,
-			}));
+			// The printed token knows no spell (a vanilla 5/5); Swampqueen Hagatha gives a generated definition
+			// (DungeonRunEncounters.Horror) whose Battlecry casts the two spells it was taught.
+			cards.Add("DAL_431t", new CardDef());
 
 		}
 
@@ -2108,10 +2094,12 @@ namespace SabberStoneCore.CardSets.Standard
 			// - REQ_MINION_TARGET = 0
 			// - REQ_MANA_CRYSTAL = 10
 			// --------------------------------------------------------
-			cards.Add("DAL_770", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_MINION_TARGET,0},{PlayReq.REQ_MANA_CRYSTAL,10}}, new Power
+			// REQ_MANA_CRYSTAL has no engine handler, so the target is made conditional
+			// explicitly: a minion target is offered only at 10 Mana Crystals.
+			cards.Add("DAL_770", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_TARGET_IF_AVAILABLE,0},{PlayReq.REQ_MINION_TARGET,0},{PlayReq.REQ_MANA_CRYSTAL,10}}, new Power
 			{
 				PowerTask = ComplexTask.Conditional(SelfCondition.IsManaCrystalFull, new DamageTask(10, EntityType.TARGET))
-			}));
+			}) { Configure = card => card.TargetingAvailabilityPredicate = (c, _) => c.BaseMana == 10 });
 
 			// ---------------------------------------- SPELL - WARRIOR
 			// [DAL_008] Dr. Boom's Scheme - COST:4

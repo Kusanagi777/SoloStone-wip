@@ -1,0 +1,208 @@
+PASS A1 25 T2 teammates
+PASS A2 TRLA_149 Ghastcoiler: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (PRIEST)
+PASS A3 TRLA_149: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_150 Bloodwash Medic: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (PRIEST)
+PASS A3 TRLA_150: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_151 Bwonsamdi's Keeper: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (PRIEST)
+PASS A3 TRLA_151: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_152 Soulsapper: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (PRIEST)
+PASS A3 TRLA_152: admitted for the run player only (hidden-steal row), never generated, no pending requirement  (hidden-steal True )
+PASS A2 TRLA_153 Conjuring Attendant: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (PRIEST)
+PASS A3 TRLA_153: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_189 Parrot Mascot: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (ROGUE)
+PASS A3 TRLA_189: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_190 Salty Looter: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (ROGUE)
+PASS A3 TRLA_190: admitted for the run player only (hidden-steal row), never generated, no pending requirement  (hidden-steal True )
+PASS A2 TRLA_191 Sharktoothed Harpooner: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (ROGUE)
+PASS A3 TRLA_191: admitted for the run player only (not-started-in-deck row), never generated, no pending requirement  (not-started-in-deck True )
+PASS A2 TRLA_192 Lobstrok Tastetester: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (ROGUE)
+PASS A3 TRLA_192: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_193 Raging Contender: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (ROGUE)
+PASS A3 TRLA_193: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_157 Leap Frog: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (SHAMAN)
+PASS A3 TRLA_157: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_158 Overcharged Totem: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (SHAMAN)
+PASS A3 TRLA_158: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_159 Croak Jouster: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (SHAMAN)
+PASS A3 TRLA_159: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_160 Naga Tonguelasher: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (SHAMAN)
+PASS A3 TRLA_160: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_161 War Heralder: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (SHAMAN)
+PASS A3 TRLA_161: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_181 Ravenous Familiar: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (WARLOCK)
+PASS A3 TRLA_181: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_182 Vile Necrodoctor: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (WARLOCK)
+PASS A3 TRLA_182: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_183 Warp Stalker: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (WARLOCK)
+PASS A3 TRLA_183: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_184 Dark Diviner: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (WARLOCK)
+PASS A3 TRLA_184: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_185 Blood Portal: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (WARLOCK)
+PASS A3 TRLA_185: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_173 Redcrest Rocker: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (WARRIOR)
+PASS A3 TRLA_173: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_174 Ironhorn Drummer: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (WARRIOR)
+PASS A3 TRLA_174: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_175 Seasoned Pitbrawler: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (WARRIOR)
+PASS A3 TRLA_175: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_176 Herald of Flame: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (WARRIOR)
+PASS A3 TRLA_176: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A2 TRLA_177 Unbound Punisher: scripted, a ScriptedTeammate, uncollectible, in its class's teammate row  (WARRIOR)
+PASS A3 TRLA_177: admitted for the run player only (teammate row), never generated, no pending requirement  (teammate True )
+PASS A4 the teammates' hidden-steal row holds TRLA_152 and TRLA_190 (TRLA_186, the shrine, keeps its own) and states the hidden zones (the boss's deck and hand, its own-deck ledger, the masked hand, the hand-transfer facts)
+PASS A5 TRLA_191's row names SelfCondition.IsNotStartInDeck and no pending requirement
+PASS A6 no teammate row is pending any more (the companions' start-of-game-draw row is phase 7 D's)
+PASS A7 enchantment TRLA_153e is scripted  (Costs (2) less.)
+PASS A7 enchantment TRLA_174e is scripted  (Can't be reduced below 1 Health.)
+PASS A7 enchantment TRLA_176e is scripted  (Has <b>Rush</b>.)
+PASS A7 enchantment GBL_008e is scripted  (Costs (4) less.)
+PASS A8 a new PRIEST Rikkar run's teammate pool is its five scripted teammates and its companion TRLA_148 (phase 7 D: start-of-game-draw, admitted)  (TRLA_148,TRLA_149,TRLA_150,TRLA_151,TRLA_152,TRLA_153)
+PASS A8 a new ROGUE Rikkar run's teammate pool is its five scripted teammates and its companion TRLA_188 (phase 7 D: start-of-game-draw, admitted)  (TRLA_188,TRLA_189,TRLA_190,TRLA_191,TRLA_192,TRLA_193)
+PASS A8 a new SHAMAN Rikkar run's teammate pool is its five scripted teammates and its companion TRLA_156 (phase 7 D: start-of-game-draw, admitted)  (TRLA_156,TRLA_157,TRLA_158,TRLA_159,TRLA_160,TRLA_161)
+PASS A8 a new WARLOCK Rikkar run's teammate pool is its five scripted teammates and its companion TRLA_180 (phase 7 D: start-of-game-draw, admitted)  (TRLA_180,TRLA_181,TRLA_182,TRLA_183,TRLA_184,TRLA_185)
+PASS A8 a new WARRIOR Rikkar run's teammate pool is its five scripted teammates and its companion TRLA_172 (phase 7 D: start-of-game-draw, admitted)  (TRLA_172,TRLA_173,TRLA_174,TRLA_175,TRLA_176,TRLA_177)
+PASS A9 no teammate is still unscripted (phase 7 D scripted the nine companions); every one is admitted for the run player
+PASS A10 the validator passes the shipped data (teammate table, registry)
+PASS E1 TRLA_149 Ghastcoiler: its Deathrattle summons 2 random Deathrattle minions (scripted, through the run's generation filter)  (CFM_120,ICC_025)
+PASS E2 deterministic: the same run seed summons the same two
+PASS E3 with TRLA_114 (Deathrattles two extra times) three Deathrattles summon 6: the board (shrine + 6) is full  (7)
+PASS E4 a full board at its death: its own slot is the only one free, one minion is summoned
+PASS E5 TRLA_150 Bloodwash Medic: Rush; its Overkill adds 3 healing spells (spells that restore Health, through the run's generation filter)  (AT_048,ULD_272,DAL_350)
+PASS E6 no kill, no Overkill: nothing is added
+PASS E7 TRLA_151 Bwonsamdi's Keeper: every minion (both sides, the run shrine included) is restored to full Health; heroes are not  (0 0 0)
+PASS E8 with TRLA_147 the friendly Yeti is healed, the damaged enemy Yeti takes its missing 2 instead (1 left), the undamaged Ogre takes nothing  (0 1 0)
+PASS E9 the dormant shrine form takes no heal (untouchable) and stays dormant
+PASS E10 TRLA_152 Soulsapper: its Deathrattle steals both spells of the boss's deck (Fireball, Frostbolt) into the run player's hand, no minion  (CS2_024,CS2_029)
+PASS E11 the stolen spells keep their Cost (no discount)
+PASS E12a on the boss's own run deck the Deathrattle steals min(2, its spells) spells  (0 of 0 spells)
+PASS E12 the boss's fair view masks the stolen spells like the rest of the run player's hand; its own deck count is the engine's
+PASS E13 the boss's own-deck ledger stays consistent after the steal: every sample has the deck's count, from its own list; the stolen cards are not observed  (25/25 25/25 25/25 25/25 25/25 25/25)
+PASS E14 one spell in the boss's deck: one is stolen, the minion stays
+PASS E15 no spell left: nothing is stolen
+PASS E16 with TRLA_114 the Deathrattle runs three times: 6 spells stolen  (6/2)
+PASS E17 TRLA_153 Conjuring Attendant: the run player's spells cost (2) less (TRLA_153e), floor (0); minions do not  (2 0 4)
+PASS E18 the boss's spells are not cheaper
+PASS E19 Silenced, its aura ends
+PASS E20 with shrine upgrade TRLA_801 (one shrine) the cuts stack: Fireball (1)  (1)
+PASS O0 TRLA_189 Parrot Mascot: Combo adds a copy of each card played this turn, in order, itself included (Wisp, Coin, Parrot)  (CS2_231,GAME_005,TRLA_189)
+PASS O1 played first (no Combo): nothing is added
+PASS O2 a full hand takes no more copies (10)  (8)
+PASS O3 TRLA_190 Salty Looter: its Battlecry moves a random card of the boss's hand to the run player's (their card now, cost kept)
+PASS O4 its Deathrattle steals another
+PASS O5 the boss's fair view after the thefts: its own hand and the run player's hand counts are the engine's  (2/2 2/2)
+PASS O6 with Battle Totem (LOOTA_846) the Battlecry steals twice
+PASS O7 with Totem of the Dead (LOOTA_845) the Deathrattle steals twice (one Battlecry + two Deathrattles: 3)
+PASS O8 an empty boss hand: nothing is stolen, nothing breaks
+PASS O9 TRLA_191 Sharktoothed Harpooner: a card that did not start in the deck costs (4) less (Ogre 6 -> 2, GBL_008e)  (2)
+PASS O10 the cards dealt from the run deck (they started in it) keep their Cost (SelfCondition.IsNotStartInDeck, the history's starting deck)  (TRL_507,CS2_188,EX1_131,GVG_075)
+PASS O11 a card drawn later from the run deck still started in it: no discount
+PASS O12 with TRLA_186 the card stolen from the boss's deck (it started in the boss's deck) gets the (4) cut too, floor (0)  (CS2_118 1->0)
+PASS O13 a Parrot Mascot copy (Yeti 4) gets the cut: (0)
+PASS O14 TRLA_192 Lobstrok Tastetester: after a spell, the deck's spell (Fireball) is drawn and costs (2) less (LOOT_204e)
+PASS O15 no spell left in the deck: nothing is drawn
+PASS O16 the boss's spell draws nothing for the owner
+PASS O17 with TRLA_187 a Frostbolt is cast twice (6 to the boss's hero) and one spell is drawn  (30->24 deck 2)
+PASS O18 TRLA_193 Raging Contender: Rush (it attacks the Ogre the turn it is played; 8 kills it, the Ogre's 6 kills it)
+PASS O19 its Deathrattle fills the board with random Pirates (scripted, the run's generation filter): shrine + 6  (GVG_025,CORE_NEW1_022,GIL_681,TRL_126,NEW1_024,GVG_025)
+PASS O20 with TRLA_106 Bottled Terror the Pirates have Stealth (the shrine's aura), the shrine does not
+PASS O21 with Totem of the Dead the second Deathrattle meets a full board: still shrine + 6
+PASS S1 TRLA_157 Leap Frog: 3 to a random enemy minion, repeated on each kill: three 1-Health minions all die
+PASS S2 no kill, no repeat: a lone Yeti takes 3 (2 left)
+PASS S3 the boss's 1-Health TRLA_107 fixture shrine counts as a kill (it goes dormant): the Wisp dies too; the dormant form is untouchable  (TRLA_107t)
+PASS S4 only the dormant form left: nothing to hit
+PASS S5 with TRLA_154 (Battlecries two extra times) a lone Yeti is hit and then killed
+PASS S6 TRLA_158 Overcharged Totem: after the owner Overloads, 2 to every enemy minion (not the friendly Yeti, not the boss's hero)  (3 5)
+PASS S7 with Krag'wa's Lure (TRLA_109) the same Overload gives the owner's minions +1 Attack (the Totem 0 -> 1)
+PASS S8 the boss's Overload does nothing for the Totem
+PASS S9 TRLA_160's Overload on the boss does not set off the owner's Totem
+PASS S10 TRLA_159 Croak Jouster: not Overloaded, a Discover of 3 spells  (UNG_817,FP1_025,LOOT_344)
+PASS S11 one is kept
+PASS S12 Overloaded (Overload owed this turn): all 3 spells are kept, no choice  (3)
+PASS S13 with TRLA_154 three Discovers, each picked  (3 3)
+PASS S14 with TRLA_154 and locked Overloaded crystals, 3 Battlecries keep 9 spells  (9)
+PASS S15 TRLA_160 Naga Tonguelasher: the boss owes 3 Overload
+PASS S16 on the boss's next turn 3 of its Mana Crystals are locked  (locked 3 remaining 7/10)
+PASS S17 with Battle Totem two Battlecries: the boss owes 6
+PASS S18 TRLA_161 War Heralder: Rush; Overkill adds 3 random Shaman spells (scripted, the run's generation filter)  (CFM_313,ULD_181,GVG_029)
+PASS S19 with Krag'wa's Grace (TRLA_155) they cost (2) less, floor (0)
+PASS W1 TRLA_181 Ravenous Familiar: Rush; Overkill discards the lowest-Cost card (Frostbolt 2) and draws a card (the Wisp)  (GRAVEYARD)
+PASS W2 with TRLA_178 the Overkill's discard summons a random Demon  (AT_021)
+PASS W3 an empty hand: nothing is discarded (no Demon), a card is still drawn
+PASS W4 TRLA_182 Vile Necrodoctor: Lifesteal; the Battlecry deals 3 to every enemy minion (Yetis 2 left, the Wisp dies, the friendly Yeti untouched)
+PASS W5 the Lifesteal heals the run player's hero by the damage dealt (9)  (6)
+PASS W6 the boss's 1-Health fixture shrine dies and goes dormant
+PASS W7 TRLA_183 Warp Stalker: Stealth; played after the Hero Power (Life Tap) was spent, it is ready again
+PASS W8 the Hero Power is used four more times this turn (4 Life Taps: 8 damage, 4 draws)  (4 28->20)
+PASS W9 Silenced, the next use spends it
+PASS W10 with TRLA_179 three Life Taps on the owner's turn hit the boss's hero (6), not the owner's: no Blood Portal spell  (30->30 boss 30->24)
+PASS W11 TRLA_184 Dark Diviner: the hand is filled with random spells (8 beside the two Wisps; scripted, the run's generation filter)  (DRG_219,LOE_115,CORE_CS1_130,GVG_047,AT_061,LOOT_204,EX1_345,DRG_311)
+PASS W12 spells of more than one class (the text names none)
+PASS W13 deterministic: the same run seed fills the same spells
+PASS W14 TRLA_185 Blood Portal: the owner's hero takes damage (Life Tap) -> a random Warlock spell (scripted, the run's generation filter)  (OG_114)
+PASS W15 Hellfire hits both heroes: one spell (the owner's hero), none for the boss's  (CS2_063)
+PASS W16 on the boss's turn its Fireball on the owner's hero adds one
+PASS W17 with TRLA_113 a Frostbolt paid with 2 Health adds nothing (paying Health is not damage)  (15->13 hand 0)
+PASS W18 with TRLA_179 dormant the Life Tap hits the owner's hero: a spell
+PASS W19 revived, Hir'eek's Hunger sends the Life Tap to the boss: no spell  (28->28 CS2_231)
+PASS X1 TRLA_173 Redcrest Rocker: Rush; Overkill Discovers a Dragon (3 Dragons offered)  (TIME_045,BRM_024,EX1_561)
+PASS X2 one is kept
+PASS X3 with TRLA_171 the Rocker can attack again after its Overkill; now beside a Dragon, all 3 Dragons are kept  (True 3)
+PASS X4 TRLA_174 Ironhorn Drummer: on the owner's turn the owner's minions stop at 1 Health (Wisp 1, Yeti 2, the 2-Health shrine 1, awake); the boss's Wisp dies  (1 2 1)
+PASS X5 on the boss's turn it does not: a Fireball kills the Yeti
+PASS X6 Silenced, the aura ends: the owner's own Hellfire kills the Wisp and sends the shrine dormant
+PASS X7 TRLA_175 Seasoned Pitbrawler: Armor Up gives twice as much (4)  (4)
+PASS X8 with TRLA_104 (Attack equal to the Armor) the shrine has 4 Attack
+PASS X9 two Pitbrawlers: four times as much (Shield Block 5 -> 20)  (20)
+PASS X10 one doubled gain is one Armor event: TRLA_123 draws once (Armor Up 2 -> 8 with two Pitbrawlers)  (8 hand 1)
+PASS X11 Silenced Pitbrawlers double nothing; the boss's Armor is never doubled  (2)
+PASS X12 the Herald (itself a Dragon) does not answer its own play: nothing drawn
+PASS X13 TRLA_176 Herald of Flame: a played Dragon gets Rush (TRLA_176e) and the deck's Dragon (Twilight Drake) is drawn
+PASS X14 the Rush Dragon attacks a minion the turn it is played
+PASS X15 with Akali's War Drum (TRLA_170) the drawn Dragon then costs (1) less (after the summon)  (3)
+PASS X16 the boss's Dragon draws nothing for the owner
+PASS X17 TRLA_177 Unbound Punisher: every enemy minion is destroyed (the TRLA_107 fixture goes dormant), 2 Armor each (6); the friendly Yeti stays  (6)
+PASS X18 with TRLA_104 the shrine's Attack is the Armor (6)
+PASS X19 only the untouchable dormant form left: nothing destroyed, no Armor
+PASS X20 with a Pitbrawler the gain (2 x 2) is doubled in one: 8  (8)
+PASS X21 with TRLA_805 the shrine revives on the owner's second turn after its death; the Punisher's 2 Armor is its Attack  (turn 1->5 atk 2)
+PASS Q1 PRIEST: four teammate drafts (I.2, I.4, II.3, III.3) offer 3 each of its six teammates (the companion included), never one already taken  (f2:teammate[TRLA_148,TRLA_149,TRLA_151] f4:teammate[TRLA_149,TRLA_151,TRLA_153] f8:teammate[TRLA_150,TRLA_151,TRLA_152] f13:teammate[TRLA_151,TRLA_152,TRLA_153])
+PASS Q2 PRIEST: the four picks are distinct deck records with origin "teammate"  (TRLA_148,TRLA_149,TRLA_150,TRLA_151)
+PASS Q3 PRIEST: the next fight's plan deck holds the four teammates
+PASS Q4 PRIEST: the match deals them to the run player (deck or hand), with the board shrine on the board
+PASS Q5 PRIEST: the drafted TRLA_148 plays from the run deck onto the board  (PLAY)
+PASS Q5 PRIEST: the drafted TRLA_149 plays from the run deck onto the board  (PLAY)
+PASS Q5 PRIEST: the drafted TRLA_150 plays from the run deck onto the board  (PLAY)
+PASS Q5 PRIEST: the drafted TRLA_151 plays from the run deck onto the board  (PLAY)
+PASS Q1 ROGUE: four teammate drafts (I.2, I.4, II.3, III.3) offer 3 each of its six teammates (the companion included), never one already taken  (f2:teammate[TRLA_188,TRLA_189,TRLA_192] f4:teammate[TRLA_189,TRLA_191,TRLA_192] f8:teammate[TRLA_190,TRLA_192,TRLA_193] f13:teammate[TRLA_191,TRLA_192,TRLA_193])
+PASS Q2 ROGUE: the four picks are distinct deck records with origin "teammate"  (TRLA_188,TRLA_189,TRLA_190,TRLA_191)
+PASS Q3 ROGUE: the next fight's plan deck holds the four teammates
+PASS Q4 ROGUE: the match deals them to the run player (deck or hand), with the board shrine on the board
+PASS Q5 ROGUE: the drafted TRLA_188 plays from the run deck onto the board  (PLAY)
+PASS Q5 ROGUE: the drafted TRLA_189 plays from the run deck onto the board  (PLAY)
+PASS Q5 ROGUE: the drafted TRLA_190 plays from the run deck onto the board  (PLAY)
+PASS Q5 ROGUE: the drafted TRLA_191 plays from the run deck onto the board  (PLAY)
+PASS Q1 SHAMAN: four teammate drafts (I.2, I.4, II.3, III.3) offer 3 each of its six teammates (the companion included), never one already taken  (f2:teammate[TRLA_156,TRLA_157,TRLA_160] f4:teammate[TRLA_157,TRLA_159,TRLA_161] f8:teammate[TRLA_158,TRLA_159,TRLA_161] f13:teammate[TRLA_159,TRLA_160,TRLA_161])
+PASS Q2 SHAMAN: the four picks are distinct deck records with origin "teammate"  (TRLA_156,TRLA_157,TRLA_158,TRLA_159)
+PASS Q3 SHAMAN: the next fight's plan deck holds the four teammates
+PASS Q4 SHAMAN: the match deals them to the run player (deck or hand), with the board shrine on the board
+PASS Q5 SHAMAN: the drafted TRLA_156 plays from the run deck onto the board  (PLAY)
+PASS Q5 SHAMAN: the drafted TRLA_157 plays from the run deck onto the board  (PLAY)
+PASS Q5 SHAMAN: the drafted TRLA_158 plays from the run deck onto the board  (PLAY)
+PASS Q5 SHAMAN: the drafted TRLA_159 plays from the run deck onto the board  (PLAY)
+PASS Q1 WARLOCK: four teammate drafts (I.2, I.4, II.3, III.3) offer 3 each of its six teammates (the companion included), never one already taken  (f2:teammate[TRLA_180,TRLA_182,TRLA_185] f4:teammate[TRLA_182,TRLA_184,TRLA_185] f8:teammate[TRLA_181,TRLA_183,TRLA_185] f13:teammate[TRLA_183,TRLA_184,TRLA_185])
+PASS Q2 WARLOCK: the four picks are distinct deck records with origin "teammate"  (TRLA_180,TRLA_182,TRLA_181,TRLA_183)
+PASS Q3 WARLOCK: the next fight's plan deck holds the four teammates
+PASS Q4 WARLOCK: the match deals them to the run player (deck or hand), with the board shrine on the board
+PASS Q5 WARLOCK: the drafted TRLA_180 plays from the run deck onto the board  (PLAY)
+PASS Q5 WARLOCK: the drafted TRLA_182 plays from the run deck onto the board  (PLAY)
+PASS Q5 WARLOCK: the drafted TRLA_181 plays from the run deck onto the board  (PLAY)
+PASS Q5 WARLOCK: the drafted TRLA_183 plays from the run deck onto the board  (PLAY)
+PASS Q1 WARRIOR: four teammate drafts (I.2, I.4, II.3, III.3) offer 3 each of its six teammates (the companion included), never one already taken  (f2:teammate[TRLA_172,TRLA_173,TRLA_177] f4:teammate[TRLA_173,TRLA_175,TRLA_177] f8:teammate[TRLA_174,TRLA_176,TRLA_177] f13:teammate[TRLA_175,TRLA_176,TRLA_177])
+PASS Q2 WARRIOR: the four picks are distinct deck records with origin "teammate"  (TRLA_172,TRLA_173,TRLA_174,TRLA_175)
+PASS Q3 WARRIOR: the next fight's plan deck holds the four teammates
+PASS Q4 WARRIOR: the match deals them to the run player (deck or hand), with the board shrine on the board
+PASS Q5 WARRIOR: the drafted TRLA_172 plays from the run deck onto the board  (PLAY)
+PASS Q5 WARRIOR: the drafted TRLA_173 plays from the run deck onto the board  (PLAY)
+PASS Q5 WARRIOR: the drafted TRLA_174 plays from the run deck onto the board  (PLAY)
+PASS Q5 WARRIOR: the drafted TRLA_175 plays from the run deck onto the board  (PLAY)
+SUMMARY checks passed 207 failed 0

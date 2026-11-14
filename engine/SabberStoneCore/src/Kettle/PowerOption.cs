@@ -157,7 +157,7 @@ namespace SabberStoneCore.Kettle
 			var heroPowers = list.Where(p => p.PlayerTaskType == PlayerTaskType.HERO_POWER).ToList();
 			foreach (var group in heroPowers.GroupBy(p => p.Source?.Id ?? p.Controller.Hero.HeroPower.Id))
 			{
-				IEnumerable<PlayerTask> targets = group.Where(p => p.ActionTarget != null);
+				IEnumerable<PlayerTask> targets = group.Where(p => p.ActionTarget != null && p.ChooseOne <= 0);
 				var mainOption = new PowerOption
 				{
 					OptionType = OptionType.POWER,
@@ -168,6 +168,21 @@ namespace SabberStoneCore.Kettle
 					}
 				};
 				result.PowerOptionList.Add(mainOption);
+
+				// A Choose One hero power (the Tombs of Terror's ULDA_Elise_HP1): one sub-option per choice, on the choice's
+				// entity, as a Choose One card's play option has.
+				SabberStoneCore.Model.Entities.IPlayable[] choices = game.IdEntityDic.TryGetValue(group.Key, out SabberStoneCore.Model.Entities.IPlayable power) ? power.ChooseOnePlayables : null;
+				for (int i = 1; i < 3 && choices != null; i++)
+				{
+					var subOptions = group.Where(p => p.ChooseOne == i).ToList();
+					if (!subOptions.Any() || choices.Length < i || choices[i - 1] == null) continue;
+					var subTargets = subOptions.Where(p => p.ActionTarget != null).Select(p => p.ActionTarget.Id).Distinct().ToList();
+					mainOption.SubOptions.Add(new PowerSubOption
+					{
+						EntityId = choices[i - 1].Id,
+						Targets = subTargets.Any() ? subTargets : null
+					});
+				}
 			}
 
             foreach (var group in list.OfType<ActivateLocationTask>().GroupBy(task => task.Source.Id))

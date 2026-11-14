@@ -1,0 +1,5 @@
+PASS X1 the run player's Glinda gives the minions in its hand Echo  (1 1)
+PASS X2 in the boss's fair view the run player's hand is masked and Glinda's death resolves (no exception)  (masked 2 of 2 error '' zone GRAVEYARD)
+PASS X3 the boss's fair state applies its end of turn with Glinda in play
+PASS X4 in the real game Glinda's death removes Echo from the minions in hand  (0 0)
+RESULT 4 passed, 0 failed

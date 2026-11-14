@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Shared draft catalog generator: reads the original bucket memberships, the SoloStone bundles and the engine, writes
+       data/dungeon-run/catalog-v1.json and docs/design/dungeon-run-catalog.md. See README.md. Nothing it compiles is shipped. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <NuGetAudit>false</NuGetAudit>
+    <AssemblyName>DungeonRunCatalogTool</AssemblyName>
+    <RootNamespace>DungeonRunCatalogTool</RootNamespace>
+    <NoWarn>CS0618;CS8632;CS0162;CS0649</NoWarn>
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..'))</RepoRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- The run layer's own parser, validator predicate and admission rules, compiled in unchanged, so the tool admits a card
+         exactly when the runtime would. -->
+    <Compile Include="$(RepoRoot)\plugin\DungeonRun\DungeonRunData.cs" Link="RunLayer\DungeonRunData.cs" />
+    <Compile Include="$(RepoRoot)\plugin\DungeonRun\DungeonRunValidator.cs" Link="RunLayer\DungeonRunValidator.cs" />
+    <Compile Include="$(RepoRoot)\plugin\DungeonRun\DungeonRunAdmission*.cs" LinkBase="RunLayer" />
+    <Compile Include="$(RepoRoot)\plugin\Npc\World\NpcWorldJson.cs" Link="RunLayer\NpcWorldJson.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(EngineDll)' == ''">
+    <ProjectReference Include="$(RepoRoot)\engine\SabberStoneCore\SabberStoneCore.csproj" SetTargetFramework="TargetFramework=net10.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(EngineDll)' != ''">
+    <!-- -p:EngineDll=C:\path\SabberStoneCore.dll uses an existing net10.0 engine build instead of building the engine. -->
+    <Reference Include="SabberStoneCore">
+      <HintPath>$(EngineDll)</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="3">
+  <Profile>
+    <Heroes>
+      <DungeonRunHeroStats Class="MAGE" Runs="1" Wins="1" BestFloor="8" />
+    </Heroes>
+    <Unlocked>
+      <string>challenge</string>
+      <string>druid_floor3</string>
+      <string>hunter_floor3</string>
+      <string>mage_floor3</string>
+      <string>paladin_floor3</string>
+      <string>priest_floor3</string>
+      <string>rogue_floor3</string>
+      <string>shaman_floor3</string>
+      <string>warlock_floor3</string>
+      <string>warrior_floor3</string>
+      <string>deathknight_floor3</string>
+      <string>demonhunter_floor3</string>
+      <string>druid_floor4</string>
+      <string>hunter_floor4</string>
+      <string>mage_floor4</string>
+      <string>paladin_floor4</string>
+      <string>priest_floor4</string>
+      <string>rogue_floor4</string>
+      <string>shaman_floor4</string>
+      <string>warlock_floor4</string>
+      <string>warrior_floor4</string>
+      <string>deathknight_floor4</string>
+      <string>demonhunter_floor4</string>
+      <string>druid_floor5</string>
+      <string>hunter_floor5</string>
+      <string>mage_floor5</string>
+      <string>paladin_floor5</string>
+      <string>priest_floor5</string>
+      <string>rogue_floor5</string>
+      <string>shaman_floor5</string>
+      <string>warlock_floor5</string>
+      <string>warrior_floor5</string>
+      <string>deathknight_floor5</string>
+      <string>demonhunter_floor5</string>
+      <string>druid_win</string>
+      <string>hunter_win</string>
+      <string>mage_win</string>
+      <string>paladin_win</string>
+      <string>priest_win</string>
+      <string>rogue_win</string>
+      <string>shaman_win</string>
+      <string>warlock_win</string>
+      <string>warrior_win</string>
+      <string>deathknight_win</string>
+      <string>demonhunter_win</string>
+    </Unlocked>
+    <Archive>
+      <DungeonRunArchiveEntry Class="MAGE" StarterDeck="mage_rimeward" Power="CS2_034" Seed="0000000000012DCE" TypedSeed="false" FloorReached="8" Won="true" LastBoss="hollow_sovereign">
+        <Treasures>
+          <string>deep_satchel</string>
+          <string>charm_blooming</string>
+          <string>frost_lantern</string>
+        </Treasures>
+      </DungeonRunArchiveEntry>
+    </Archive>
+  </Profile>
+  <Active DataVersion="dungeon-run/2" Seed="77262" TypedSeed="false" Class="MAGE" StarterDeck="mage_rimeward" Power="CS2_034" Floor="8" Phase="Victory" Attempt="1" DraftsWithoutDominant="6">
+    <Deck>
+      <string>DAL_577</string>
+      <string>DAL_577</string>
+      <string>ICC_836</string>
+      <string>CS2_024</string>
+      <string>ICC_068</string>
+      <string>GVG_002</string>
+      <string>ICC_252</string>
+      <string>CS2_026</string>
+      <string>CS2_033</string>
+      <string>CFM_671</string>
+      <string>DAL_182</string>
+      <string>MEND_506</string>
+      <string>GIL_664</string>
+      <string>CORE_UNG_205</string>
+      <string>UNG_845</string>
+      <string>UNG_813</string>
+      <string>TB_CoOpv3_010</string>
+      <string>AT_105</string>
+      <string>TRL_509</string>
+      <string>UNG_847</string>
+      <string>CORE_DRG_107</string>
+      <string>TLC_226</string>
+      <string>TRL_311</string>
+      <string>TB_CoOpv3_005</string>
+      <string>AT_097</string>
+      <string>EX1_396</string>
+      <string>TRL_550</string>
+      <string>CATA_484</string>
+      <string>CATA_483</string>
+      <string>TIME_858</string>
+      <string>BOT_020</string>
+      <string>BOT_312</string>
+      <string>TIME_035</string>
+    </Deck>
+    <Treasures>
+      <string>deep_satchel</string>
+    </Treasures>
+    <ActiveTreasures>
+      <string>charm_blooming</string>
+      <string>frost_lantern</string>
+    </ActiveTreasures>
+    <Upgrades />
+    <BossSequence>
+      <string>bog_croaker</string>
+      <string>hedge_witch</string>
+      <string>lantern_thief</string>
+      <string>ashen_abbess</string>
+      <string>pit_champion</string>
+      <string>golemancer</string>
+      <string>ember_matron</string>
+      <string>hollow_sovereign</string>
+    </BossSequence>
+    <TakenBundles>
+      <string>bundle_mage_beast</string>
+      <string>bundle_neutral_elemental</string>
+      <string>bundle_neutral_battlecry</string>
+      <string>bundle_mage_elemental</string>
+      <string>bundle_neutral_taunt</string>
+      <string>bundle_mage_battlecry</string>
+      <string>bundle_neutral_mechanical</string>
+    </TakenBundles>
+    <BundleCooldowns>
+      <string>bundle_mage_battlecry@3</string>
+      <string>bundle_neutral_mechanical@3</string>
+      <string>bundle_mage_elemental@4</string>
+      <string>bundle_mage_spells@4</string>
+      <string>bundle_neutral_beast@5</string>
+      <string>bundle_neutral_taunt@5</string>
+      <string>bundle_mage_battlecry@6</string>
+      <string>bundle_neutral_murloc@6</string>
+      <string>bundle_mage_spells@7</string>
+      <string>bundle_neutral_mechanical@7</string>
+      <string>bundle_neutral_beast@8</string>
+      <string>bundle_neutral_deathrattle@8</string>
+      <string>bundle_mage_spells@9</string>
+      <string>bundle_neutral_murloc@9</string>
+    </BundleCooldowns>
+    <DraftedThemes>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>battlecry</string>
+      <string>battlecry</string>
+      <string>battlecry</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>taunt</string>
+      <string>taunt</string>
+      <string>taunt</string>
+      <string>battlecry</string>
+      <string>battlecry</string>
+      <string>battlecry</string>
+      <string>mechanical</string>
+      <string>mechanical</string>
+      <string>mechanical</string>
+    </DraftedThemes>
+    <Drafts>
+      <DungeonRunDraft Floor="1" Kind="treasure" Picked="deep_satchel">
+        <Offered>
+          <string>deep_satchel</string>
+          <string>gilded_idol</string>
+          <string>mending_charm</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="1" Kind="bundle" Picked="bundle_mage_beast">
+        <Offered>
+          <string>bundle_mage_battlecry</string>
+          <string>bundle_mage_beast</string>
+          <string>bundle_neutral_mechanical</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="2" Kind="bundle" Picked="bundle_neutral_elemental">
+        <Offered>
+          <string>bundle_mage_elemental</string>
+          <string>bundle_mage_spells</string>
+          <string>bundle_neutral_elemental</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="treasure" Picked="charm_seedling">
+        <Offered>
+          <string>charm_seedling</string>
+          <string>ember_brand</string>
+          <string>iron_skin</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="bundle" Picked="bundle_neutral_battlecry">
+        <Offered>
+          <string>bundle_neutral_battlecry</string>
+          <string>bundle_neutral_beast</string>
+          <string>bundle_neutral_taunt</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="4" Kind="bundle" Picked="bundle_mage_elemental">
+        <Offered>
+          <string>bundle_mage_battlecry</string>
+          <string>bundle_mage_elemental</string>
+          <string>bundle_neutral_murloc</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="5" Kind="treasure" Picked="frost_lantern">
+        <Offered>
+          <string>frost_lantern</string>
+          <string>iron_ward</string>
+          <string>stoneskin_idol</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="5" Kind="bundle" Picked="bundle_neutral_taunt">
+        <Offered>
+          <string>bundle_mage_spells</string>
+          <string>bundle_neutral_mechanical</string>
+          <string>bundle_neutral_taunt</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="6" Kind="bundle" Picked="bundle_mage_battlecry">
+        <Offered>
+          <string>bundle_mage_battlecry</string>
+          <string>bundle_neutral_beast</string>
+          <string>bundle_neutral_deathrattle</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="7" Kind="bundle" Picked="bundle_neutral_mechanical">
+        <Offered>
+          <string>bundle_mage_spells</string>
+          <string>bundle_neutral_mechanical</string>
+          <string>bundle_neutral_murloc</string>
+        </Offered>
+      </DungeonRunDraft>
+    </Drafts>
+    <Matches>
+      <DungeonRunMatchSummary Floor="1" Boss="bog_croaker" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="2" Boss="hedge_witch" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="3" Boss="lantern_thief" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="4" Boss="ashen_abbess" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="5" Boss="pit_champion" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="6" Boss="golemancer" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="7" Boss="ember_matron" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="8" Boss="hollow_sovereign" Outcome="Win" Attempt="1" />
+    </Matches>
+    <UnlockedThisRun />
+  </Active>
+</DungeonRun>

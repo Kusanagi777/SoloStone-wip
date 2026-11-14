@@ -1,0 +1,1213 @@
+{
+  "schemaVersion": 1,
+  "family": "09",
+  "description": "Dungeon Run bosses C (phase 8 family 09): the five final bosses of the Kobolds and Catacombs Dungeon Run (Vustrasz the Ancient, Xol the Unscathed, Azari the Devourer, The Darkness, King Togwaggle), its special rooms (Treasure Vault, Tad, Brimstone Warden, A. F. Kay, Chronomancer Inara) and Mushhuckster Max. Boss deck lists are transcribed from the hearthstone.wiki.gg boss pages (read 2026-11-13), by card name; the rounds each boss appears in and the notes the boss pages lack (Rakanishu, the Sunken Chest's turn, the Mushroom Potion's table, the Coffers' stats) are the Bosses table of https://hearthstone.wiki.gg/wiki/Dungeon_Run (same date). tools/dungeon-run-catalog (step 'encounters') resolves the names against facts/violet-hold-2026-09.json and writes data/dungeon-run/encounters-v1.json.",
+  "method": "Each boss page was read twice, as wikitext (MediaWiki API, action=parse, prop=wikitext) and as the rendered page, and its Decks table transcribed in table order with the table's own counts; the two readings agree for every boss, and every table totals 30 except Tad's (10) and the Treasure Vault's (\"This boss has no deck\"). Level: the first round of the Dungeon Run page's Bosses table (rounds 4-5 = tier 2, 6-7 = tier 3, as family 08); the five round-8 final bosses are the act I majors (tier major1). Health is the act curve (plus 10 for a final boss) except where the wiki states a Health of the boss's own that is not its round's (Tad: 20; Treasure Vault: 60). Boss-only cards and adventure cards carry their id (Looming Presence: LOEA_01 where the page's special cards show the normal card, LOEA_01H where they show the Heroic one). The Mushroom Potion's option table is not in the client data (its text is the template \"{0} {1}\"): the Dungeon Run page states that the potions are 1-Mana Kazakus Potions, so the table is the nine 1-Cost Kazakus effects of the client data (CFM_621t2 to CFM_621t10 and CFM_621t37).",
+  "bosses": [
+    {
+      "id": "loot_20_brimstone",
+      "name": "Brimstone Warden",
+      "provenance": "LOOT",
+      "family": "09",
+      "hero": "LOOTA_BOSS_20h",
+      "power": "LOOTA_BOSS_20p",
+      "tier": "2",
+      "archetype": "control",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "start": {
+        "bossBoard": [
+          "LOOTA_BOSS_20t",
+          "LOOTA_BOSS_20t",
+          "LOOTA_BOSS_20t",
+          "LOOTA_BOSS_20t"
+        ],
+        "bossMana": 0
+      },
+      "incompatibleModifiers": [
+        "mod_hot_start"
+      ],
+      "flags": [
+        "start",
+        "boardStart",
+        "passive"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Brimstone_Warden",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Looming Presence",
+              "count": 4,
+              "id": "LOEA_01"
+            },
+            {
+              "name": "Stone Golem",
+              "count": 11,
+              "id": "LOOTA_BOSS_20t"
+            },
+            {
+              "name": "Shieldbearer",
+              "count": 2
+            },
+            {
+              "name": "Emperor Cobra",
+              "count": 2
+            },
+            {
+              "name": "Giant Wasp",
+              "count": 2
+            },
+            {
+              "name": "Emperor Thaurissan",
+              "count": 1
+            },
+            {
+              "name": "Bear Trap",
+              "count": 2
+            },
+            {
+              "name": "Snake Trap",
+              "count": 2
+            },
+            {
+              "name": "Venomstrike Trap",
+              "count": 2
+            },
+            {
+              "name": "Pit Snake",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "start",
+          "note": "He begins with 4 Stone Golems in play (the wiki), placed after both mulligans. His Mana Crystals are the mechanic (each Stone Golem that dies costs him one, Dispel Ward costs 5), so he starts with none of the act curve's bonus crystals (start bossMana 0)."
+        },
+        {
+          "kind": "power",
+          "note": "The wiki marks Dispel Ward (5; \"he uses his hero power to silence the Stone Golems once he reaches 5 mana crystals\") as auto-cast, and the boss's AI cannot see its worth (a Silence of its own minions), so it is cast by rule, not by a choice of the AI: at the start of the boss's turn, when it can pay the Cost and a minion of his is not silenced yet, the Cost is paid and the power resolves. The engine never offers it as an option (it is registered with the passive powers)."
+        }
+      ]
+    },
+    {
+      "id": "loot_22_tad",
+      "name": "Tad",
+      "provenance": "LOOT",
+      "family": "09",
+      "hero": "LOOTA_BOSS_22h",
+      "power": "LOOTA_BOSS_22p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 6
+      },
+      "health": 20,
+      "fixedHealth": true,
+      "start": {
+        "bossMana": 0
+      },
+      "incompatibleModifiers": [
+        "mod_iron_bosses",
+        "mod_open_road",
+        "mod_hot_start"
+      ],
+      "flags": [
+        "listedDeck"
+      ],
+      "cards": [
+        "LOOTA_103",
+        "LOOTA_BOSS_22t"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Tad",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Starving Crab",
+              "count": 1,
+              "id": "LOOTA_102"
+            },
+            {
+              "name": "Tyrantus",
+              "count": 1
+            },
+            {
+              "name": "Flamewreathed Faceless",
+              "count": 1
+            },
+            {
+              "name": "Earth Elemental",
+              "count": 1
+            },
+            {
+              "name": "Swamp King Dred",
+              "count": 1
+            },
+            {
+              "name": "King Krush",
+              "count": 1
+            },
+            {
+              "name": "Emerald Hive Queen",
+              "count": 1
+            },
+            {
+              "name": "Millhouse Manastorm",
+              "count": 1
+            },
+            {
+              "name": "Cairne Bloodhoof",
+              "count": 1
+            },
+            {
+              "name": "Ragnaros the Firelord",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "deck",
+          "note": "His deck is the wiki's ten minions, kept at ten cards on a combat tier (flag listedDeck): the deck is the mechanic. \"Tad has no hand, plays no cards, and will not draw anything, so he will not be subject to any fatigue damage\": the opening hand the engine deals goes back into his deck at the first turn start, and from then on he never draws, never fatigues and plays no card (EncounterRules.RoomRules)."
+        },
+        {
+          "kind": "power",
+          "note": "Catch and Release, \"Summon a random minion from your deck\": as the wiki states it, \"despite the wording\" it \"pulls out a minion matching his current mana crystal count\" (Emerald Hive Queen at 1, Millhouse Manastorm at 2, Starving Crab at 3, Flamewreathed Faceless at 4, Earth Elemental at 5, Cairne Bloodhoof at 6, Swamp King Dred at 7, Ragnaros the Firelord at 8, King Krush at 9, Tyrantus at 10). Scripted so: the deck minion whose Cost equals his Mana Crystals, and with none of that Cost left a random minion of the deck (the card's text). He starts with none of the act curve's bonus crystals (start bossMana 0), so the order begins at 1. Auto-cast on the wiki; here the boss's AI chooses when to use it, and it is not offered with a full board."
+        },
+        {
+          "kind": "power",
+          "note": "The Sunken Chest: \"if the player goes ten turns without damaging the boss, Tad summons one last minion, a 0/1 Sunken Chest\" (the Dungeon Run page: \"on turn 11\"). Scripted as: at the start of his eleventh turn, if his hero carries no damage, once. Destroying it adds Tad's Pole to the run deck (a run deck edit, applied after the won fight) and Tad loses the game."
+        },
+        {
+          "kind": "health",
+          "note": "Identity Health: 20 at every floor (the wiki: 20, where most round 6 bosses have 50), so fixedHealth; the act curve and the modifiers' bossHealthDelta do not apply."
+        }
+      ]
+    },
+    {
+      "id": "loot_50_max",
+      "name": "Mushhuckster Max",
+      "provenance": "LOOT",
+      "family": "09",
+      "hero": "LOOTA_BOSS_50h",
+      "power": "LOOTA_BOSS_50p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "cards": [
+        "LOOTA_BOSS_50t",
+        "CFM_621t2",
+        "CFM_621t3",
+        "CFM_621t4",
+        "CFM_621t5",
+        "CFM_621t6",
+        "CFM_621t8",
+        "CFM_621t9",
+        "CFM_621t10",
+        "CFM_621t37",
+        "CFM_621e",
+        "CFM_621_m4"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Mushhuckster_Max",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Shroomsayer",
+              "count": 2,
+              "id": "LOOTA_107"
+            },
+            {
+              "name": "Potion of Madness",
+              "count": 2
+            },
+            {
+              "name": "Shadow Word: Death",
+              "count": 2
+            },
+            {
+              "name": "Darkshire Alchemist",
+              "count": 2
+            },
+            {
+              "name": "Mistress of Mixtures",
+              "count": 2
+            },
+            {
+              "name": "Crazed Alchemist",
+              "count": 2
+            },
+            {
+              "name": "Shrieking Shroom",
+              "count": 2
+            },
+            {
+              "name": "Eater of Secrets",
+              "count": 1
+            },
+            {
+              "name": "Kabal Chemist",
+              "count": 2
+            },
+            {
+              "name": "Kooky Chemist",
+              "count": 2
+            },
+            {
+              "name": "Shroom Brewer",
+              "count": 2
+            },
+            {
+              "name": "Violet Teacher",
+              "count": 2
+            },
+            {
+              "name": "Fungalmancer",
+              "count": 4
+            },
+            {
+              "name": "Ancient of Blossoms",
+              "count": 2
+            },
+            {
+              "name": "The Boogeymonster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "power",
+          "note": "Mushroom, Mushroom, \"Craft a custom Mushroom Potion\": the client's Mushroom Potion text is the template \"{0} {1}\" and the option table is not in the client data. Source of the table: the Dungeon Run page's Bosses table (\"These potions are 1-Mana Kazakus Potions\") and Max's page, whose special cards name the Kazakus Potion. So the craft is Kazakus's with the nine 1-Cost effects (Heart of Fire, Stonescale Oil, Felbloom, Icecap, Goldthorn, Kingsblood, Shadow Oil, Netherbloom, Ichor of Undeath): a Discover among three random ones, then among three of the others, and the potion of the two joins his hand. The potion is the client card LOOTA_BOSS_50t with its two ingredients as the entity's modular parts; it takes a target when one of them is Heart of Fire. Auto-cast on the wiki; here the boss's AI chooses when to pay for it, and it is not offered with a full hand."
+        }
+      ]
+    },
+    {
+      "id": "loot_52_vault",
+      "name": "Treasure Vault",
+      "provenance": "LOOT",
+      "family": "09",
+      "hero": "LOOTA_BOSS_52h",
+      "power": "LOOTA_BOSS_52p",
+      "tier": "3",
+      "archetype": "control",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 6
+      },
+      "health": 60,
+      "fixedHealth": true,
+      "start": {
+        "bossBoard": [
+          "LOOTA_BOSS_52t",
+          "LOOTA_BOSS_52t",
+          "LOOTA_BOSS_52t",
+          "LOOTA_BOSS_52t",
+          "LOOTA_BOSS_52t",
+          "LOOTA_BOSS_52t",
+          "LOOTA_BOSS_52t"
+        ],
+        "bossMana": 0
+      },
+      "incompatibleModifiers": [
+        "mod_iron_bosses",
+        "mod_open_road",
+        "mod_hot_start"
+      ],
+      "flags": [
+        "start",
+        "boardStart",
+        "listedDeck",
+        "noLoss",
+        "passive"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Treasure_Vault",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Curated",
+          "cards": [
+            {
+              "name": "Treasure Coffer",
+              "count": 10,
+              "id": "LOOTA_BOSS_52t"
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Curated",
+        "kind": "curated"
+      },
+      "adaptations": [
+        {
+          "kind": "deck",
+          "note": "The wiki: \"This boss has no deck\" (and it \"plays no cards\"). The engine needs a deck of at least ten cards, so the row carries ten Treasure Coffers that are never drawn or played: the Vault holds no cards (the opening hand goes back into the deck at the first turn start), never draws, never fatigues and plays no card (EncounterRules.RoomRules)."
+        },
+        {
+          "kind": "start",
+          "note": "It starts with seven Treasure Coffers on its board (the wiki; the Dungeon Run page: 0/10 each), placed after both mulligans, and with none of the act curve's bonus crystals (start bossMana 0): the fight lasts until the Vault has 5 Mana Crystals."
+        },
+        {
+          "kind": "power",
+          "note": "Doors Are Closing (5), \"End the game\", auto-cast: \"when the boss reaches 5 mana, it activates its Hero Power, and the level ends in the player's victory\". Scripted as a rule, not a choice of the boss's AI: at the start of the Vault's turn, once it has 5 Mana Crystals, the fight ends with no loss for the run player (EncounterRules.EndWithNoLoss): the run records it as won with no boss kill credit, and the treasures the destroyed Coffers added join the run deck. The power is therefore one the engine never offers (it is registered with the passive powers)."
+        },
+        {
+          "kind": "power",
+          "note": "Treasure Coffer, \"Add a random Treasure to the Player's Dungeon Deck\": \"a random playable treasure\" (the wiki) of the run's own treasure pool (the active treasures the run could be offered), added by a run deck edit after the fight. The run layer applies a fight's deck edits all or none within the schedule's deck size."
+        },
+        {
+          "kind": "health",
+          "note": "Identity Health: the printed 60 at every floor (the Dungeon Run page: \"has no health, deck, or hand\"), so fixedHealth. The run player can also win by destroying it; that is an ordinary win."
+        }
+      ]
+    },
+    {
+      "id": "loot_53_inara",
+      "name": "Chronomancer Inara",
+      "provenance": "LOOT",
+      "family": "09",
+      "hero": "LOOTA_BOSS_53h",
+      "power": "LOOTA_BOSS_53p",
+      "tier": "3",
+      "archetype": "control",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 7
+      },
+      "flags": [
+        "passive"
+      ],
+      "cards": [
+        "KARA_00_05e"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Chronomancer_Inara",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Astral Portal",
+              "count": 2,
+              "id": "KARA_00_07"
+            },
+            {
+              "name": "Archmage's Apprentice",
+              "count": 2,
+              "id": "KARA_00_08"
+            },
+            {
+              "name": "Archmage's Insight",
+              "count": 2,
+              "id": "KARA_00_05"
+            },
+            {
+              "name": "Looming Presence",
+              "count": 4,
+              "id": "LOEA_01H"
+            },
+            {
+              "name": "Sorcerer's Apprentice",
+              "count": 2
+            },
+            {
+              "name": "Frozen Clone",
+              "count": 2
+            },
+            {
+              "name": "Animated Armor",
+              "count": 2
+            },
+            {
+              "name": "Aluneth",
+              "count": 1
+            },
+            {
+              "name": "Blizzard",
+              "count": 2
+            },
+            {
+              "name": "Archmage Antonidas",
+              "count": 1
+            },
+            {
+              "name": "Flamestrike",
+              "count": 2
+            },
+            {
+              "name": "Emperor Thaurissan",
+              "count": 1
+            },
+            {
+              "name": "Grand Archivist",
+              "count": 1
+            },
+            {
+              "name": "Gruul",
+              "count": 1
+            },
+            {
+              "name": "Ragnaros the Firelord",
+              "count": 1
+            },
+            {
+              "name": "The Lich King",
+              "count": 1
+            },
+            {
+              "name": "Malygos",
+              "count": 1
+            },
+            {
+              "name": "Ysera",
+              "count": 1
+            },
+            {
+              "name": "Y'Shaarj, Rage Unbound",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "power",
+          "note": "The wiki marks Stolen Time (10; \"next turn Inara will automatically use her Hero Power\" at 10 Mana, it \"spends all her Mana\" and she \"drops back to 8 Mana\" for the extra turn) as auto-cast, and the boss's AI cannot see its worth (an extra turn bought with all her Mana and three Mana Crystals), so it is cast by rule, not by a choice of the AI: at the start of the boss's turn, when it can pay the Cost, the Cost is paid and the power resolves. The engine never offers it as an option (it is registered with the passive powers)."
+        },
+        {
+          "kind": "power",
+          "note": "The wiki: \"After using Stolen Time, Chronomancer Inara turns into Inara the Mage until she ends her extra turn\". The portrait change (LOOTA_BOSS_53h2, a hero card with the same Health and power) is cosmetic and not modelled: she keeps her portrait through the extra turn."
+        }
+      ]
+    },
+    {
+      "id": "loot_54_kay",
+      "name": "A. F. Kay",
+      "provenance": "LOOT",
+      "family": "09",
+      "hero": "LOOTA_BOSS_54h",
+      "power": "LOOTA_BOSS_54p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 4
+      },
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/A._F._Kay_(boss)",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Bag of Stuffing",
+              "count": 2,
+              "id": "LOOTA_823"
+            },
+            {
+              "name": "Boots of Haste",
+              "count": 2,
+              "id": "LOOTA_812"
+            },
+            {
+              "name": "Giant Sand Worm",
+              "count": 4
+            },
+            {
+              "name": "Ragnaros, Lightlord",
+              "count": 1
+            },
+            {
+              "name": "Snowfury Giant",
+              "count": 2
+            },
+            {
+              "name": "Bittertide Hydra",
+              "count": 2
+            },
+            {
+              "name": "Fel Reaver",
+              "count": 2
+            },
+            {
+              "name": "Frozen Crusher",
+              "count": 2
+            },
+            {
+              "name": "Ragnaros the Firelord",
+              "count": 1
+            },
+            {
+              "name": "Frost Giant",
+              "count": 2
+            },
+            {
+              "name": "Sea Giant",
+              "count": 2
+            },
+            {
+              "name": "Arcane Giant",
+              "count": 2
+            },
+            {
+              "name": "Clockwork Giant",
+              "count": 2
+            },
+            {
+              "name": "Mountain Giant",
+              "count": 2
+            },
+            {
+              "name": "Molten Giant",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "replacements": {
+        "Fel Reaver": "Bittertide Hydra"
+      },
+      "adaptations": [
+        {
+          "kind": "power",
+          "note": "Idle (2), \"Do nothing\": the power does nothing. Her idle turns are the wiki's rule, \"A. F. Kay plays no cards from turns one to five\" (\"her AI prevents her from playing any of her cards until turn 6\", but \"it won't stop her from attacking with minions or weapons given to her by the player earlier\"): she plays no card from her hand before her sixth turn (EncounterRules.RoomRules), whatever her AI would choose; her hero power and her attacks stay. From her sixth turn the boss's AI plays her hand (the wiki: Boots of Haste and a board of 8/8s)."
+        }
+      ]
+    },
+    {
+      "id": "loot_25_vustrasz",
+      "name": "Vustrasz the Ancient",
+      "provenance": "LOOT",
+      "family": "09",
+      "hero": "LOOTA_BOSS_25h",
+      "power": "LOOTA_BOSS_25p",
+      "tier": "major1",
+      "archetype": "control",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 8
+      },
+      "healthOffset": 10,
+      "start": {
+        "bossBoard": [
+          "LOOT_357l",
+          "LOOT_357l",
+          "LOOT_357l",
+          "LOOT_357l",
+          "LOOT_357l"
+        ]
+      },
+      "flags": [
+        "start",
+        "boardStart"
+      ],
+      "cards": [
+        "BRMA12_8te",
+        "LOOT_998h",
+        "LOOT_998j",
+        "LOOT_998k",
+        "LOOT_998l"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Vustrasz_the_Ancient",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Chromatic Dragonkin",
+              "count": 2,
+              "id": "BRMA12_8t"
+            },
+            {
+              "name": "Looming Presence",
+              "count": 2,
+              "id": "LOEA_01H"
+            },
+            {
+              "name": "Twilight Whelp",
+              "count": 2
+            },
+            {
+              "name": "Spirit Lash",
+              "count": 2
+            },
+            {
+              "name": "Holy Nova",
+              "count": 2
+            },
+            {
+              "name": "Unidentified Elixir",
+              "count": 2
+            },
+            {
+              "name": "Velen's Chosen",
+              "count": 2
+            },
+            {
+              "name": "Drakonid Operative",
+              "count": 2
+            },
+            {
+              "name": "Power Word: Tentacles",
+              "count": 2
+            },
+            {
+              "name": "Lightbomb",
+              "count": 2
+            },
+            {
+              "name": "Hoarding Dragon",
+              "count": 2
+            },
+            {
+              "name": "Azure Drake",
+              "count": 2
+            },
+            {
+              "name": "Blackwing Corruptor",
+              "count": 2
+            },
+            {
+              "name": "Cobalt Scalebane",
+              "count": 2
+            },
+            {
+              "name": "Wrathion",
+              "count": 1
+            },
+            {
+              "name": "Ysera",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "health",
+          "note": "A final boss of the Dungeon Run (round 8, 70 Health). In the one mode it is a major of act I: Health is the act curve at the major's floor plus 10 (rule adaptation health-policy), not the printed 70."
+        },
+        {
+          "kind": "start",
+          "note": "He starts the match with five Master Chests (the wiki), the collectible set's LOOT_357l (0/8, \"Deathrattle: Give your opponent a fantastic treasure!\": one of Marin's four treasures to the run player's hand), placed on his board after both mulligans."
+        },
+        {
+          "kind": "power",
+          "note": "The wiki marks Vindictive Breath (0) as auto-cast. Here the boss's AI chooses when to use it like any hero power, and it is not offered when it would do nothing (no Master Chest is missing: he controls five)."
+        }
+      ]
+    },
+    {
+      "id": "loot_26_xol",
+      "name": "Xol the Unscathed",
+      "provenance": "LOOT",
+      "family": "09",
+      "hero": "LOOTA_BOSS_26h",
+      "power": "LOOTA_BOSS_26p8",
+      "tier": "major1",
+      "archetype": "aggro",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 8
+      },
+      "healthOffset": 10,
+      "flags": [
+        "passive"
+      ],
+      "cards": [
+        "LOOTA_BOSS_26p2",
+        "LOOTA_BOSS_26p3",
+        "LOOTA_BOSS_26p4",
+        "LOOTA_BOSS_26p5",
+        "LOOTA_BOSS_26p6",
+        "LOOTA_BOSS_26p7"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Xol_the_Unscathed",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Flame Imp",
+              "count": 2
+            },
+            {
+              "name": "Lakkari Sacrifice",
+              "count": 1
+            },
+            {
+              "name": "Malchezaar's Imp",
+              "count": 2
+            },
+            {
+              "name": "Power Overwhelming",
+              "count": 2
+            },
+            {
+              "name": "Soulfire",
+              "count": 2
+            },
+            {
+              "name": "Clutchmother Zavas",
+              "count": 1
+            },
+            {
+              "name": "Corrupting Mist",
+              "count": 2
+            },
+            {
+              "name": "Darkshire Librarian",
+              "count": 2
+            },
+            {
+              "name": "Howlfiend",
+              "count": 4
+            },
+            {
+              "name": "Silverware Golem",
+              "count": 2
+            },
+            {
+              "name": "Dark Bargain",
+              "count": 2
+            },
+            {
+              "name": "Lakkari Felhound",
+              "count": 2
+            },
+            {
+              "name": "Blood-Queen Lana'thel",
+              "count": 1
+            },
+            {
+              "name": "Cataclysm",
+              "count": 1
+            },
+            {
+              "name": "Despicable Dreadlord",
+              "count": 1
+            },
+            {
+              "name": "Doomguard",
+              "count": 2
+            },
+            {
+              "name": "Deathwing",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "health",
+          "note": "A final boss of the Dungeon Run (round 8, 70 Health). In the one mode it is a major of act I: Health is the act curve at the major's floor plus 10 (rule adaptation health-policy), not the printed 70."
+        },
+        {
+          "kind": "power",
+          "note": "Beam Me Up!, \"At the end of your turn, add a Beam to your hand\": one of the six Beam cards (Frost, Death, Confusion, Fear, Fire, Decay; 3 Mana each) at random; the wiki does not say how the Beam is chosen. A full hand gets none."
+        }
+      ]
+    },
+    {
+      "id": "loot_34_azari",
+      "name": "Azari, the Devourer",
+      "provenance": "LOOT",
+      "family": "09",
+      "hero": "LOOTA_BOSS_34h",
+      "power": "LOOTA_BOSS_34p",
+      "tier": "major1",
+      "archetype": "midrange",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 8
+      },
+      "healthOffset": 10,
+      "flags": [
+        "hiddenZone",
+        "passive"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/Azari,_the_Devourer_(boss)",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Flame Imp",
+              "count": 2
+            },
+            {
+              "name": "Wrathguard",
+              "count": 2
+            },
+            {
+              "name": "Demonwrath",
+              "count": 2
+            },
+            {
+              "name": "Dreadsteed",
+              "count": 2
+            },
+            {
+              "name": "Pit Lord",
+              "count": 2
+            },
+            {
+              "name": "Voidcaller",
+              "count": 2
+            },
+            {
+              "name": "Bane of Doom",
+              "count": 2
+            },
+            {
+              "name": "Despicable Dreadlord",
+              "count": 2
+            },
+            {
+              "name": "Doomguard",
+              "count": 2
+            },
+            {
+              "name": "Dread Infernal",
+              "count": 2
+            },
+            {
+              "name": "Kabal Trafficker",
+              "count": 2
+            },
+            {
+              "name": "Abyssal Enforcer",
+              "count": 2
+            },
+            {
+              "name": "Fearsome Doomguard",
+              "count": 1
+            },
+            {
+              "name": "Mal'Ganis",
+              "count": 1
+            },
+            {
+              "name": "Voidlord",
+              "count": 2
+            },
+            {
+              "name": "DOOM!",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "health",
+          "note": "A final boss of the Dungeon Run (round 8, 70 Health). In the one mode it is a major of act I: Health is the act curve at the major's floor plus 10 (rule adaptation health-policy), not the printed 70."
+        },
+        {
+          "kind": "power",
+          "note": "The wiki marks Devour (0), \"Remove the top 2 cards of your opponent's deck\" as auto-cast, and the boss's AI cannot see its worth (burning cards it does not know), so it is cast by rule, not by a choice of the AI: at the start of the boss's turn, when it can pay the Cost and the run player's deck holds a card, the Cost is paid and the power resolves. The engine never offers it as an option (it is registered with the passive powers). The two cards go from the top of the deck to the run player's graveyard, face up (Gnomeferatu's rule): both players see what was burned, and the rest of the deck stays hidden."
+        }
+      ]
+    },
+    {
+      "id": "loot_49_darkness",
+      "name": "The Darkness",
+      "provenance": "LOOT",
+      "family": "09",
+      "hero": "LOOTA_BOSS_49h",
+      "power": "LOOTA_BOSS_49p",
+      "tier": "major1",
+      "archetype": "control",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 8
+      },
+      "healthOffset": 10,
+      "start": {
+        "playerHandAdd": [
+          "LOOTA_BOSS_49t2",
+          "LOOTA_BOSS_49t2",
+          "LOOTA_BOSS_49t2"
+        ]
+      },
+      "flags": [
+        "start"
+      ],
+      "cards": [
+        "LOOTA_BOSS_49t"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/The_Darkness_(boss)",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Looming Presence",
+              "count": 4,
+              "id": "LOEA_01H"
+            },
+            {
+              "name": "Forbidden Shaping",
+              "count": 2
+            },
+            {
+              "name": "Potion of Madness",
+              "count": 2
+            },
+            {
+              "name": "Shadow Word: Death",
+              "count": 2
+            },
+            {
+              "name": "Shadow Word: Pain",
+              "count": 2
+            },
+            {
+              "name": "Shadowfiend",
+              "count": 2
+            },
+            {
+              "name": "Cabal Shadow Priest",
+              "count": 2
+            },
+            {
+              "name": "Entomb",
+              "count": 2
+            },
+            {
+              "name": "Psychic Scream",
+              "count": 2
+            },
+            {
+              "name": "Mind Control",
+              "count": 2
+            },
+            {
+              "name": "Evasion",
+              "count": 2
+            },
+            {
+              "name": "Sudden Betrayal",
+              "count": 2
+            },
+            {
+              "name": "Shadow Bolt",
+              "count": 2
+            },
+            {
+              "name": "Twisting Nether",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "health",
+          "note": "A final boss of the Dungeon Run (round 8, 70 Health). In the one mode it is a major of act I: Health is the act curve at the major's floor plus 10 (rule adaptation health-policy), not the printed 70."
+        },
+        {
+          "kind": "start",
+          "note": "\"The player starts with three Luminous Candles in hand\" (the wiki; Luminous Candle, 0 Mana: \"Destroy all Darkspawns\"): given to the run player after both mulligans, for this fight only (a full hand shuffles the rest into the deck). They never touch the run deck."
+        },
+        {
+          "kind": "power",
+          "note": "The wiki marks Encroaching Darkness (0) as auto-cast. Here the boss's AI chooses when to use it like any hero power, and it is not offered when it would do nothing (his board is full)."
+        }
+      ]
+    },
+    {
+      "id": "loot_99_togwaggle",
+      "name": "King Togwaggle",
+      "provenance": "LOOT",
+      "family": "09",
+      "hero": "LOOTA_BOSS_99h",
+      "power": "LOOTA_BOSS_99p",
+      "tier": "major1",
+      "archetype": "tempo",
+      "level": {
+        "source": "wiki-level-table",
+        "original": 8
+      },
+      "healthOffset": 10,
+      "cards": [
+        "LOOTA_BOSS_99t",
+        "LOOTA_806",
+        "LOOTA_812",
+        "LOOTA_816",
+        "LOOTA_819",
+        "LOOTA_821",
+        "LOOTA_823",
+        "LOOTA_826",
+        "LOOTA_827",
+        "LOOTA_835",
+        "LOOTA_836",
+        "LOOTA_838",
+        "LOOTA_839",
+        "LOOTA_842b",
+        "LOOTA_843",
+        "LOOTA_847",
+        "LOOT_998k"
+      ],
+      "source": {
+        "url": "https://hearthstone.wiki.gg/wiki/King_Togwaggle_(boss)",
+        "read": "2026-11-13"
+      },
+      "lists": [
+        {
+          "label": "Deck",
+          "cards": [
+            {
+              "name": "Backstab",
+              "count": 2
+            },
+            {
+              "name": "Betrayal",
+              "count": 2
+            },
+            {
+              "name": "Evasion",
+              "count": 2
+            },
+            {
+              "name": "Eviscerate",
+              "count": 2
+            },
+            {
+              "name": "Sudden Betrayal",
+              "count": 2
+            },
+            {
+              "name": "Beneath the Grounds",
+              "count": 2
+            },
+            {
+              "name": "Kobold Illusionist",
+              "count": 2
+            },
+            {
+              "name": "Tomb Pillager",
+              "count": 2
+            },
+            {
+              "name": "Vanish",
+              "count": 2
+            },
+            {
+              "name": "Kobold Hermit",
+              "count": 2
+            },
+            {
+              "name": "Kobold Barbarian",
+              "count": 2
+            },
+            {
+              "name": "Kobold Geomancer",
+              "count": 2
+            },
+            {
+              "name": "Kobold Apprentice",
+              "count": 2
+            },
+            {
+              "name": "Evolved Kobold",
+              "count": 2
+            },
+            {
+              "name": "Kobold Monk",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "deck": {
+        "list": "Deck"
+      },
+      "adaptations": [
+        {
+          "kind": "health",
+          "note": "A final boss of the Dungeon Run (round 8, 70 Health). In the one mode it is a major of act I: Health is the act curve at the major's floor plus 10 (rule adaptation health-policy), not the printed 70."
+        },
+        {
+          "kind": "power",
+          "note": "Magic Candle (3), \"Find a Treasure!\": one of the sixteen Treasures the wiki lists for it (Archmage Staff, Bag of Coins, Scroll of Confusion, Bag of Stuffing, Boots of Haste, Hilt of Quel'Delar, Mask of Mimicry, Party Portal, Portable Ice Wall, THE CANDLE, Greedy Pickaxe, Vorpal Dagger, Embers of Ragnaros, Golden Kobold, Wand of Disintegration, Dr. Boom's Boombox; \"not every Treasure card can be generated\") joins his hand, at random; the wiki does not say how it is chosen. Not offered with a full hand."
+        },
+        {
+          "kind": "power",
+          "note": "Rakanishu (0 Mana, \"Deal 4 damage to a random enemy\"): the Dungeon Run page says \"he occasionally deals 4 damage to a random enemy at the start of his turn\", with no frequency. Scripted as: at the start of each of his turns, with a chance of 1 in 4 (the game RNG), the hero power casts Rakanishu."
+        }
+      ]
+    }
+  ],
+  "rejected": []
+}

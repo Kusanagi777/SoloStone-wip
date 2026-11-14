@@ -1,0 +1,262 @@
+PASS A1 the nine companions, one per Rumble Run class (DungeonRunShrines.CompanionIds)  (TRLA_121,TRLA_135,TRLA_139,TRLA_148,TRLA_156,TRLA_164,TRLA_172,TRLA_180,TRLA_188)
+PASS A2 TRLA_121 Water Spirit: scripted, a ScriptedTeammate, uncollectible, a DRUID minion in its class's teammate row, the client's name and text  (DRUID)
+PASS A3 TRLA_121: a Start of Game source (StartOfGameRules), START_OF_GAME on the card
+PASS A4 TRLA_121: admitted for the run player only (start-of-game-draw row, revealed to both players), never generated, no pending requirement  (start-of-game-draw True  gen True/True boss False)
+PASS A2 TRLA_164 Shadowmaw Panther: scripted, a ScriptedTeammate, uncollectible, a HUNTER minion in its class's teammate row, the client's name and text  (HUNTER)
+PASS A3 TRLA_164: a Start of Game source (StartOfGameRules), START_OF_GAME on the card
+PASS A4 TRLA_164: admitted for the run player only (start-of-game-draw row, revealed to both players), never generated, no pending requirement  (start-of-game-draw True  gen True/True boss False)
+PASS A2 TRLA_135 Fan of Flames: scripted, a ScriptedTeammate, uncollectible, a MAGE minion in its class's teammate row, the client's name and text  (MAGE)
+PASS A3 TRLA_135: a Start of Game source (StartOfGameRules), START_OF_GAME on the card
+PASS A4 TRLA_135: admitted for the run player only (start-of-game-draw row, revealed to both players), never generated, no pending requirement  (start-of-game-draw True  gen True/True boss False)
+PASS A2 TRLA_139 Parading Marshal: scripted, a ScriptedTeammate, uncollectible, a PALADIN minion in its class's teammate row, the client's name and text  (PALADIN)
+PASS A3 TRLA_139: a Start of Game source (StartOfGameRules), START_OF_GAME on the card
+PASS A4 TRLA_139: admitted for the run player only (start-of-game-draw row, revealed to both players), never generated, no pending requirement  (start-of-game-draw True  gen True/True boss False)
+PASS A2 TRLA_148 Weaponized Zombie: scripted, a ScriptedTeammate, uncollectible, a PRIEST minion in its class's teammate row, the client's name and text  (PRIEST)
+PASS A3 TRLA_148: a Start of Game source (StartOfGameRules), START_OF_GAME on the card
+PASS A4 TRLA_148: admitted for the run player only (start-of-game-draw row, revealed to both players), never generated, no pending requirement  (start-of-game-draw True  gen True/True boss False)
+PASS A2 TRLA_188 Pesky Rascal: scripted, a ScriptedTeammate, uncollectible, a ROGUE minion in its class's teammate row, the client's name and text  (ROGUE)
+PASS A3 TRLA_188: a Start of Game source (StartOfGameRules), START_OF_GAME on the card
+PASS A4 TRLA_188: admitted for the run player only (start-of-game-draw row, revealed to both players), never generated, no pending requirement  (start-of-game-draw True  gen True/True boss False)
+PASS A2 TRLA_156 Deepsea Diver: scripted, a ScriptedTeammate, uncollectible, a SHAMAN minion in its class's teammate row, the client's name and text  (SHAMAN)
+PASS A3 TRLA_156: a Start of Game source (StartOfGameRules), START_OF_GAME on the card
+PASS A4 TRLA_156: admitted for the run player only (start-of-game-draw row, revealed to both players), never generated, no pending requirement  (start-of-game-draw True  gen True/True boss False)
+PASS A2 TRLA_180 Leering Bat: scripted, a ScriptedTeammate, uncollectible, a WARLOCK minion in its class's teammate row, the client's name and text  (WARLOCK)
+PASS A3 TRLA_180: a Start of Game source (StartOfGameRules), START_OF_GAME on the card
+PASS A4 TRLA_180: admitted for the run player only (start-of-game-draw row, revealed to both players), never generated, no pending requirement  (start-of-game-draw True  gen True/True boss False)
+PASS A2 TRLA_172 Rallying Quilboar: scripted, a ScriptedTeammate, uncollectible, a WARRIOR minion in its class's teammate row, the client's name and text  (WARRIOR)
+PASS A3 TRLA_172: a Start of Game source (StartOfGameRules), START_OF_GAME on the card
+PASS A4 TRLA_172: admitted for the run player only (start-of-game-draw row, revealed to both players), never generated, no pending requirement  (start-of-game-draw True  gen True/True boss False)
+PASS A5 the companions' row holds exactly the nine (the treasures' start-of-game-draw row and ULDA_111's keep theirs)
+PASS A6 TRLA_809 Windfall Blessing: scripted, a ScriptedUpgrade with its player enchantment TRLA_809e, whose grant is TRLA_809e2
+PASS A7 TRLA_809: admitted for the run player (deck-wide-change, never generated), the boss side lifted by BossDeckLedgerLift (OwnDeckLedger)  (deck-wide-change phase 8 (encounters/anomalies): the first boss decks that use deck-wide rewrites (encounter families) bring the boss's own-deck ledger for deck-wide rewrites and removals)
+PASS A8 enchantment TRLA_148e is scripted, the client's own record
+PASS A8 enchantment TRLA_164e is scripted, the client's own record
+PASS A8 enchantment TRLA_172e is scripted, the client's own record
+PASS A8 enchantment TRLA_180e is scripted, the client's own record
+PASS A8 enchantment TRLA_809e is scripted, the client's own record
+PASS A8 enchantment TRLA_809e2 is scripted, the client's own record
+PASS A8 enchantment TRLA_809e3 is scripted, the client's own record
+PASS A9 a new DRUID Rikkar run's teammate pool is its class's six teammates, the companion TRLA_121 included  (TRLA_121,TRLA_122,TRLA_123,TRLA_124,TRLA_125,TRLA_127)
+PASS A10 a new Rikkar run's shrine-upgrade pool is all nine upgrades, TRLA_809 included  (TRLA_801,TRLA_802,TRLA_803,TRLA_804,TRLA_805,TRLA_806,TRLA_807,TRLA_808,TRLA_809)
+PASS A9 a new HUNTER Rikkar run's teammate pool is its class's six teammates, the companion TRLA_164 included  (TRLA_164,TRLA_165,TRLA_166,TRLA_167,TRLA_168,TRLA_169)
+PASS A9 a new MAGE Rikkar run's teammate pool is its class's six teammates, the companion TRLA_135 included  (TRLA_130,TRLA_131,TRLA_132,TRLA_133,TRLA_134,TRLA_135)
+PASS A9 a new PALADIN Rikkar run's teammate pool is its class's six teammates, the companion TRLA_139 included  (TRLA_139,TRLA_140,TRLA_141,TRLA_142,TRLA_143,TRLA_144)
+PASS A9 a new PRIEST Rikkar run's teammate pool is its class's six teammates, the companion TRLA_148 included  (TRLA_148,TRLA_149,TRLA_150,TRLA_151,TRLA_152,TRLA_153)
+PASS A9 a new ROGUE Rikkar run's teammate pool is its class's six teammates, the companion TRLA_188 included  (TRLA_188,TRLA_189,TRLA_190,TRLA_191,TRLA_192,TRLA_193)
+PASS A9 a new SHAMAN Rikkar run's teammate pool is its class's six teammates, the companion TRLA_156 included  (TRLA_156,TRLA_157,TRLA_158,TRLA_159,TRLA_160,TRLA_161)
+PASS A9 a new WARLOCK Rikkar run's teammate pool is its class's six teammates, the companion TRLA_180 included  (TRLA_180,TRLA_181,TRLA_182,TRLA_183,TRLA_184,TRLA_185)
+PASS A9 a new WARRIOR Rikkar run's teammate pool is its class's six teammates, the companion TRLA_172 included  (TRLA_172,TRLA_173,TRLA_174,TRLA_175,TRLA_176,TRLA_177)
+PASS A11 no teammate of the 54 is unscripted any more, and every one is admitted for the run player
+PASS A12 no shrine upgrade is unscripted any more
+PASS A13 the validator passes the shipped data (teammate table, registry, upgrades)
+PASS A14 a companion and TRLA_809 are in the run's generation filter (never a random card for either side)  (True True)
+PASS G1 DRUID: the plan deck holds the companion TRLA_121 once (a teammate record) and DALA_743 as a passive
+PASS G2 DRUID: before the mulligan TRLA_121 waits in the deck, not in the opening hand  (CS2_012,LOE_050,LOOT_117)
+PASS G3 DRUID: a full mulligan never deals it as a replacement
+PASS G4 DRUID: after MainBegin it is in hand (drawn by its Start of Game), no longer in the deck
+PASS G5 DRUID: the board shrine stands left of the three Boom Bots  (TRLA_115,GVG_110t,GVG_110t,GVG_110t)
+PASS G6 DRUID: Start of Game order: the shrine lands, then the Boom Bots, then the companion is drawn (StartOfGameRules priorities -100, 0, 10)  (shrine 0 remote 1 draw 5)
+PASS G7 DRUID: on turn 1 the run player holds the opening hand, the companion and the turn's draw  (5 vs 3+2)
+PASS G1 HUNTER: the plan deck holds the companion TRLA_164 once (a teammate record) and DALA_743 as a passive
+PASS G2 HUNTER: before the mulligan TRLA_164 waits in the deck, not in the opening hand  (LOOT_222,NEW1_031,CFM_669)
+PASS G3 HUNTER: a full mulligan never deals it as a replacement
+PASS G4 HUNTER: after MainBegin it is in hand (drawn by its Start of Game), no longer in the deck
+PASS G5 HUNTER: the board shrine stands left of the three Boom Bots  (TRLA_110,GVG_110t,GVG_110t,GVG_110t)
+PASS G6 HUNTER: Start of Game order: the shrine lands, then the Boom Bots, then the companion is drawn (StartOfGameRules priorities -100, 0, 10)  (shrine 0 remote 1 draw 2)
+PASS G7 HUNTER: on turn 1 the run player holds the opening hand, the companion and the turn's draw  (5 vs 3+2)
+PASS G1 MAGE: the plan deck holds the companion TRLA_135 once (a teammate record) and DALA_743 as a passive
+PASS G2 MAGE: before the mulligan TRLA_135 waits in the deck, not in the opening hand  (AT_003,ICC_092,AT_006)
+PASS G3 MAGE: a full mulligan never deals it as a replacement
+PASS G4 MAGE: after MainBegin it is in hand (drawn by its Start of Game), no longer in the deck
+PASS G5 MAGE: the board shrine stands left of the three Boom Bots  (TRLA_128,GVG_110t,GVG_110t,GVG_110t)
+PASS G6 MAGE: Start of Game order: the shrine lands, then the Boom Bots, then the companion is drawn (StartOfGameRules priorities -100, 0, 10)  (shrine 0 remote 1 draw 2)
+PASS G7 MAGE: on turn 1 the run player holds the opening hand, the companion and the turn's draw  (5 vs 3+2)
+PASS G1 PALADIN: the plan deck holds the companion TRLA_139 once (a teammate record) and DALA_743 as a passive
+PASS G2 PALADIN: before the mulligan TRLA_139 waits in the deck, not in the opening hand  (AT_105,CS2_189,GIL_685)
+PASS G3 PALADIN: a full mulligan never deals it as a replacement
+PASS G4 PALADIN: after MainBegin it is in hand (drawn by its Start of Game), no longer in the deck
+PASS G5 PALADIN: the board shrine stands left of the three Boom Bots  (TRLA_105,GVG_110t,GVG_110t,GVG_110t)
+PASS G6 PALADIN: Start of Game order: the shrine lands, then the Boom Bots, then the companion is drawn (StartOfGameRules priorities -100, 0, 10)  (shrine 0 remote 1 draw 2)
+PASS G7 PALADIN: on turn 1 the run player holds the opening hand, the companion and the turn's draw  (5 vs 3+2)
+PASS G1 PRIEST: the plan deck holds the companion TRLA_148 once (a teammate record) and DALA_743 as a passive
+PASS G2 PRIEST: before the mulligan TRLA_148 waits in the deck, not in the opening hand  (KAR_036,TRL_131,TRL_509)
+PASS G3 PRIEST: a full mulligan never deals it as a replacement
+PASS G4 PRIEST: after MainBegin it is in hand (drawn by its Start of Game), no longer in the deck
+PASS G5 PRIEST: the board shrine stands left of the three Boom Bots  (TRLA_146,GVG_110t,GVG_110t,GVG_110t)
+PASS G6 PRIEST: Start of Game order: the shrine lands, then the Boom Bots, then the companion is drawn (StartOfGameRules priorities -100, 0, 10)  (shrine 0 remote 1 draw 2)
+PASS G7 PRIEST: on turn 1 the run player holds the opening hand, the companion and the turn's draw  (5 vs 3+2)
+PASS G1 ROGUE: the plan deck holds the companion TRLA_188 once (a teammate record) and DALA_743 as a passive
+PASS G2 ROGUE: before the mulligan TRLA_188 waits in the deck, not in the opening hand  (CFM_630,CS2_075,CS2_142)
+PASS G3 ROGUE: a full mulligan never deals it as a replacement
+PASS G4 ROGUE: after MainBegin it is in hand (drawn by its Start of Game), no longer in the deck
+PASS G5 ROGUE: the board shrine stands left of the three Boom Bots  (TRLA_187,GVG_110t,GVG_110t,GVG_110t)
+PASS G6 ROGUE: Start of Game order: the shrine lands, then the Boom Bots, then the companion is drawn (StartOfGameRules priorities -100, 0, 10)  (shrine 0 remote 1 draw 2)
+PASS G7 ROGUE: on turn 1 the run player holds the opening hand, the companion and the turn's draw  (5 vs 3+2)
+PASS G1 SHAMAN: the plan deck holds the companion TRLA_156 once (a teammate record) and DALA_743 as a passive
+PASS G2 SHAMAN: before the mulligan TRLA_156 waits in the deck, not in the opening hand  (EX1_247,UNG_928,LOE_046)
+PASS G3 SHAMAN: a full mulligan never deals it as a replacement
+PASS G4 SHAMAN: after MainBegin it is in hand (drawn by its Start of Game), no longer in the deck
+PASS G5 SHAMAN: the board shrine stands left of the three Boom Bots  (TRLA_109,GVG_110t,GVG_110t,GVG_110t)
+PASS G6 SHAMAN: Start of Game order: the shrine lands, then the Boom Bots, then the companion is drawn (StartOfGameRules priorities -100, 0, 10)  (shrine 0 remote 1 draw 2)
+PASS G7 SHAMAN: on turn 1 the run player holds the opening hand, the companion and the turn's draw  (5 vs 3+2)
+PASS G1 WARLOCK: the plan deck holds the companion TRLA_180 once (a teammate record) and DALA_743 as a passive
+PASS G2 WARLOCK: before the mulligan TRLA_180 waits in the deck, not in the opening hand  (EX1_308,TRL_247,OG_109)
+PASS G3 WARLOCK: a full mulligan never deals it as a replacement
+PASS G4 WARLOCK: after MainBegin it is in hand (drawn by its Start of Game), no longer in the deck
+PASS G5 WARLOCK: the board shrine stands left of the three Boom Bots  (TRLA_178,GVG_110t,GVG_110t,GVG_110t)
+PASS G6 WARLOCK: Start of Game order: the shrine lands, then the Boom Bots, then the companion is drawn (StartOfGameRules priorities -100, 0, 10)  (shrine 0 remote 1 draw 2)
+PASS G7 WARLOCK: on turn 1 the run player holds the opening hand, the companion and the turn's draw  (5 vs 3+2)
+PASS G1 WARRIOR: the plan deck holds the companion TRLA_172 once (a teammate record) and DALA_743 as a passive
+PASS G2 WARRIOR: before the mulligan TRLA_172 waits in the deck, not in the opening hand  (GIL_681,TRL_323,NEW1_023)
+PASS G3 WARRIOR: a full mulligan never deals it as a replacement
+PASS G4 WARRIOR: after MainBegin it is in hand (drawn by its Start of Game), no longer in the deck
+PASS G5 WARRIOR: the board shrine stands left of the three Boom Bots  (TRLA_170,GVG_110t,GVG_110t,GVG_110t)
+PASS G6 WARRIOR: Start of Game order: the shrine lands, then the Boom Bots, then the companion is drawn (StartOfGameRules priorities -100, 0, 10)  (shrine 0 remote 1 draw 2)
+PASS G7 WARRIOR: on turn 1 the run player holds the opening hand, the companion and the turn's draw  (5 vs 3+2)
+PASS G8 an opening-flagged companion is still not in the opening hand
+PASS G9 it is drawn at the start of the game
+PASS G10 with a Start of Game treasure draw (DALA_707): shrine, then the treasure's draw, then the companion's
+PASS G11 deterministic: the same run seed gives the same hand after the Start of Game draw
+PASS E1 TRLA_121 Water Spirit (0 Cost, 2/1) lands with Wardruid Loa's +1/+1 (TRLA_115, after you summon a minion): 3/2  (3/2)
+PASS E2 its Deathrattle gains 2 full Mana Crystals: 3 -> 5, all usable  (5 5)
+PASS E3 at 9 Mana Crystals stop at 10  (10)
+PASS E4 killed by the boss's Flamestrike on the boss's turn: the run player has 2 more Mana Crystals (4 -> 6)  (6)
+PASS E5 with Totem of the Dead (LOOTA_845, Deathrattles twice): 4 Mana Crystals (3 -> 7)  (7)
+PASS E6 Ancestral Fury (TRLA_112: refresh Mana on Armor gain) is untouched by the gain (no Armor)
+PASS E7 TRLA_164 Shadowmaw Panther is a Beast and has Rush itself (TRLA_164e): it may attack the boss's Yeti on the turn it lands, not the boss's hero  (CS2_182)
+PASS E8 a Beast played after it (Bloodfen Raptor) has Rush
+PASS E9 a non-Beast (Chillwind Yeti) has none
+PASS E10 the Raptor attacks the boss's Yeti at once
+PASS E11 the shrine (not a Beast) has no Rush
+PASS E12 the Panther silenced: its Beasts lose the Rush
+PASS E13 with Halazzi's Guise (TRLA_163) the Panther also gains one of Rush, Taunt or Poisonous, beside its own Rush  (TRLA_164e,TRLA_163e rush 2)
+PASS E14 the dormant shrine form gets no Rush from the Panther
+PASS E15 the Mage Rikkar run's power is Fireblast (CS2_034), (0) with Jan'alai's Flame (TRLA_128)  (CS2_034 0)
+PASS E16 TRLA_135 Fan of Flames upgrades it: Fireblast Rank 2 (AT_132_MAGE), a fresh ready power, still (0) with the shrine  (AT_132_MAGE exhausted False cost 0)
+PASS E17 the upgraded power deals 2  (29 -> 27)
+PASS E18 a second Fan keeps the upgraded power (no further form)
+PASS E19 the shrine dormant: the upgraded power costs its own (2)  (2)
+PASS E20 with Justicar's Ring the power is AT_132_MAGE from the start and the Fan keeps it (same entity, the Ring's (1))  (AT_132_MAGE 1)
+PASS E21 with Battle Totem two Battlecries: the power is AT_132_MAGE
+PASS E22 with Frostweaver (TRLA_132) the upgraded power hits for 2 and Freezes
+PASS E23 TRLA_139 Parading Marshal (3/3) equips a Truesilver Champion (CS2_097, 4/2), replacing the Fiery War Axe  (CS2_097)
+PASS E24 the hero attacks: Truesilver restores 2 (25 -> 27) and deals 4  (27 26)
+PASS E25 with Battle Totem two Battlecries: one Truesilver equipped (the second replaced the first, 4/2), one in the graveyard
+PASS E26 with TRLA_137 the hero attacks a Yeti: healed 2 then hit for 4 (25 -> 23), the shrine answers the hit with 5 to the boss's hero, the Yeti takes 4  (me 23 boss 30->25 yeti 1)
+PASS E27 TRLA_148 Weaponized Zombie is a 2/3
+PASS E28 its Deathrattle: the only friendly minion, the run shrine, gets +1/+1 (TRLA_148e)  (1/6)
+PASS E29 with a Yeti beside the shrine exactly one of them gets +1/+1
+PASS E30 only the dormant shrine form left: no target (it is untouchable), the boss's Yeti gets nothing
+PASS E31 with Bwonsamdi's Sanctum (TRLA_114: Deathrattles two extra times) the shrine gets +1/+1 three times  (3)
+PASS E32 with the Sanctum and Totem of the Dead: four times  (4)
+PASS E33 deterministic: the same run seed buffs the same minion
+PASS E34 TRLA_188 Pesky Rascal: a 1/1 with Immune  (1/1 immune True tag 1)
+PASS E35 the boss can neither attack it nor aim Fireball or Hex at it
+PASS E36 the boss's Hellfire does not hurt it
+PASS E37 it attacks the boss's Yeti and takes nothing back  (yeti 1)
+PASS E38 a destroy effect (Twisting Nether) still kills it; the run shrine goes dormant
+PASS E39 with Bottled Terror (TRLA_106) the Rascal is also Stealthed (one of the shrine's other minions)
+PASS E40s silenced, the Rascal loses Immune
+PASS E40 Lightning Bolt: 1 Overload owed; Krag'wa's Lure (TRLA_109) gives the shrine +1 Attack  (1 1)
+PASS E41 TRLA_156 Deepsea Diver (2/2): the owed Overload is cleared (nothing locked), the Lure's Attack stays
+PASS E42 the next turn no Mana Crystal is locked
+PASS E43 two Mana Crystals locked: 3 of 5 usable
+PASS E44 a Diver (1) unlocks them: 4 of 5 usable  (4)
+PASS E45 with Tribute from the Tides (TRLA_154, three Battlecries) the same unlock
+PASS E46 before the Bat the hero is not Immune
+PASS E47 TRLA_180 Leering Bat (3/3 Beast): the run player's hero is Immune on their turn (TRLA_180e)
+PASS E48 Life Tap: a card drawn, no Health lost  (30 -> 30)
+PASS E49 on the boss's turn the hero is not Immune
+PASS E50 the boss's Fireball hits it for 6
+PASS E51 the run player's next turn: Immune again
+PASS E52 the Bat dead: no Immunity
+PASS E53 with Hir'eek's Hunger and the Bat, Life Tap hurts nobody (no damage to redirect)
+PASS E54 with Blood Pact and the Bat, Fireball still costs 4 Health (a payment, not damage) and deals 6  (me 30->26 boss 30->24)
+PASS E55 TRLA_172 Rallying Quilboar (2/4) beside the shrine: the shrine has Taunt (TRLA_172e), the Quilboar none
+PASS E56 a Yeti on its other side has Taunt
+PASS E57 the boss's Yeti may attack only the two Taunts  (TRLA_170,CS2_182)
+PASS E58 the shrine dormant: its form gets no Taunt, the Yeti keeps its own
+PASS E59 with Favor of the Gods (TRLA_802) the Quilboar beside the shrine has Taunt too (TRLA_802e), the shrine has the Quilboar's
+PASS U1 the plan carries TRLA_809; the run player holds TRLA_809e and the shrine its grant TRLA_809e2
+PASS U2 the shrine goes dormant: every minion in the run player's deck has +1/+1 (TRLA_809e3)  ((5, 6) (3, 4) (4, 3))
+PASS U3 the spell and the weapon in the deck, the minion in hand and the one in play are unchanged; the boss's deck too
+PASS U4 a buffed Yeti drawn and played keeps +1/+1 (5/6)
+PASS U5 the revived shrine (three owner's turns later) has the grant back  (7)
+PASS U6 its second death: every minion still in the deck has +2/+2 in all  (11)
+PASS U7 the run deck records are unchanged (no mods written)
+PASS U8 TRLA_804: two shrines, each with TRLA_809e2
+PASS U9 both dormant: the deck's Yeti is 6/7
+PASS U10 with Totem of the Dead: +2/+2 (6/7)  (6/7)
+INFO U11 a lone Sanctum's own death: the deck's Yeti 5/6
+PASS U11 a lone Bwonsamdi's Sanctum dying: its aura leaves with it (the Sanctum dormant: Deathrattles trigger once), so +1/+1 (5/6)  (5/6)
+PASS U11b two Sanctums (TRLA_804): one dies while the other stands: three times (+3/+3, 7/8)  (7/8)
+PASS U12 Sow the Seeds, Blade of the Burning Sun, Pack Mule, then the shrine's death: the Yeti is 10/9 at (3)  (10/9 (3))
+PASS U13 a silenced shrine dies: no grant, no buff
+PASS U14 the boss's copy of the shrine dies for good: neither deck changes
+PASS U15 the boss's fixture shrine dies: the boss's deck gets nothing (the boss holds no upgrade)
+PASS Q1 DRUID: a teammate draft offers the companion TRLA_121 (a seed of 650-699) and the pick joins the deck as a teammate record  (650)
+PASS Q2 DRUID: four teammate drafts (I.2, I.4, II.3, III.3) of 3 from its six, never one already taken  (f2:teammate[TRLA_121,TRLA_122,TRLA_124] f4:teammate[TRLA_122,TRLA_124,TRLA_127] f8:teammate[TRLA_123,TRLA_124,TRLA_125] f13:teammate[TRLA_124,TRLA_125,TRLA_127])
+PASS Q3 DRUID: the next match does not deal TRLA_121 in the opening hand
+PASS Q4 DRUID: TRLA_121 is drawn at the start of the match
+PASS Q5 DRUID: it plays from the hand onto the board  (PLAY)
+PASS Q1 HUNTER: a teammate draft offers the companion TRLA_164 (a seed of 650-699) and the pick joins the deck as a teammate record  (650)
+PASS Q2 HUNTER: four teammate drafts (I.2, I.4, II.3, III.3) of 3 from its six, never one already taken  (f2:teammate[TRLA_164,TRLA_165,TRLA_167] f4:teammate[TRLA_165,TRLA_167,TRLA_169] f8:teammate[TRLA_166,TRLA_167,TRLA_168] f13:teammate[TRLA_167,TRLA_168,TRLA_169])
+PASS Q3 HUNTER: the next match does not deal TRLA_164 in the opening hand
+PASS Q4 HUNTER: TRLA_164 is drawn at the start of the match
+PASS Q5 HUNTER: it plays from the hand onto the board  (PLAY)
+PASS Q1 MAGE: a teammate draft offers the companion TRLA_135 (a seed of 650-699) and the pick joins the deck as a teammate record  (650)
+PASS Q2 MAGE: four teammate drafts (I.2, I.4, II.3, III.3) of 3 from its six, never one already taken  (f2:teammate[TRLA_130,TRLA_131,TRLA_133] f4:teammate[TRLA_131,TRLA_133,TRLA_135] f8:teammate[TRLA_131,TRLA_132,TRLA_133] f13:teammate[TRLA_132,TRLA_133,TRLA_134])
+PASS Q3 MAGE: the next match does not deal TRLA_135 in the opening hand
+PASS Q4 MAGE: TRLA_135 is drawn at the start of the match
+PASS Q5 MAGE: it plays from the hand onto the board  (PLAY)
+PASS Q1 PALADIN: a teammate draft offers the companion TRLA_139 (a seed of 650-699) and the pick joins the deck as a teammate record  (650)
+PASS Q2 PALADIN: four teammate drafts (I.2, I.4, II.3, III.3) of 3 from its six, never one already taken  (f2:teammate[TRLA_139,TRLA_140,TRLA_142] f4:teammate[TRLA_140,TRLA_142,TRLA_144] f8:teammate[TRLA_141,TRLA_142,TRLA_143] f13:teammate[TRLA_142,TRLA_143,TRLA_144])
+PASS Q3 PALADIN: the next match does not deal TRLA_139 in the opening hand
+PASS Q4 PALADIN: TRLA_139 is drawn at the start of the match
+PASS Q5 PALADIN: it plays from the hand onto the board  (PLAY)
+PASS Q1 PRIEST: a teammate draft offers the companion TRLA_148 (a seed of 650-699) and the pick joins the deck as a teammate record  (650)
+PASS Q2 PRIEST: four teammate drafts (I.2, I.4, II.3, III.3) of 3 from its six, never one already taken  (f2:teammate[TRLA_148,TRLA_149,TRLA_151] f4:teammate[TRLA_149,TRLA_151,TRLA_153] f8:teammate[TRLA_150,TRLA_151,TRLA_152] f13:teammate[TRLA_151,TRLA_152,TRLA_153])
+PASS Q3 PRIEST: the next match does not deal TRLA_148 in the opening hand
+PASS Q4 PRIEST: TRLA_148 is drawn at the start of the match
+PASS Q5 PRIEST: it plays from the hand onto the board  (PLAY)
+PASS Q1 ROGUE: a teammate draft offers the companion TRLA_188 (a seed of 650-699) and the pick joins the deck as a teammate record  (650)
+PASS Q2 ROGUE: four teammate drafts (I.2, I.4, II.3, III.3) of 3 from its six, never one already taken  (f2:teammate[TRLA_188,TRLA_189,TRLA_191] f4:teammate[TRLA_189,TRLA_191,TRLA_193] f8:teammate[TRLA_190,TRLA_191,TRLA_192] f13:teammate[TRLA_191,TRLA_192,TRLA_193])
+PASS Q3 ROGUE: the next match does not deal TRLA_188 in the opening hand
+PASS Q4 ROGUE: TRLA_188 is drawn at the start of the match
+PASS Q5 ROGUE: it plays from the hand onto the board  (PLAY)
+PASS Q1 SHAMAN: a teammate draft offers the companion TRLA_156 (a seed of 650-699) and the pick joins the deck as a teammate record  (650)
+PASS Q2 SHAMAN: four teammate drafts (I.2, I.4, II.3, III.3) of 3 from its six, never one already taken  (f2:teammate[TRLA_156,TRLA_157,TRLA_159] f4:teammate[TRLA_157,TRLA_159,TRLA_161] f8:teammate[TRLA_158,TRLA_159,TRLA_160] f13:teammate[TRLA_159,TRLA_160,TRLA_161])
+PASS Q3 SHAMAN: the next match does not deal TRLA_156 in the opening hand
+PASS Q4 SHAMAN: TRLA_156 is drawn at the start of the match
+PASS Q5 SHAMAN: it plays from the hand onto the board  (PLAY)
+PASS Q1 WARLOCK: a teammate draft offers the companion TRLA_180 (a seed of 650-699) and the pick joins the deck as a teammate record  (650)
+PASS Q2 WARLOCK: four teammate drafts (I.2, I.4, II.3, III.3) of 3 from its six, never one already taken  (f2:teammate[TRLA_180,TRLA_181,TRLA_183] f4:teammate[TRLA_181,TRLA_183,TRLA_185] f8:teammate[TRLA_182,TRLA_183,TRLA_184] f13:teammate[TRLA_183,TRLA_184,TRLA_185])
+PASS Q3 WARLOCK: the next match does not deal TRLA_180 in the opening hand
+PASS Q4 WARLOCK: TRLA_180 is drawn at the start of the match
+PASS Q5 WARLOCK: it plays from the hand onto the board  (PLAY)
+PASS Q1 WARRIOR: a teammate draft offers the companion TRLA_172 (a seed of 650-699) and the pick joins the deck as a teammate record  (650)
+PASS Q2 WARRIOR: four teammate drafts (I.2, I.4, II.3, III.3) of 3 from its six, never one already taken  (f2:teammate[TRLA_172,TRLA_173,TRLA_175] f4:teammate[TRLA_173,TRLA_175,TRLA_177] f8:teammate[TRLA_174,TRLA_175,TRLA_176] f13:teammate[TRLA_175,TRLA_176,TRLA_177])
+PASS Q3 WARRIOR: the next match does not deal TRLA_172 in the opening hand
+PASS Q4 WARRIOR: TRLA_172 is drawn at the start of the match
+PASS Q5 WARRIOR: it plays from the hand onto the board  (PLAY)
+PASS Q6 a shrine-upgrade draft offers TRLA_809 (a seed of 700-759) and the pick joins the run's shrine upgrades (not its treasures)  (700)
+PASS Q7 the next match: the run shrine carries Windfall Glyph
+X1 TRLA_121 rumble_druid_115     player turns 9 played 1 decisions 12 fallbacks 0 shrine-deaths 1 boss lantern_thief
+PASS X1 TRLA_121 (DRUID, with TRLA_809): a full game against the boss AI with the companion played, no fault, no AI fallback  (player turns 9 played 1 decisions 12 fallbacks 0 shrine-deaths 1 boss lantern_thief)
+X1 TRLA_164 rumble_hunter_110    boss turns 25 played 1 decisions 37 fallbacks 0 shrine-deaths 0 boss hedge_witch
+PASS X1 TRLA_164 (HUNTER, with TRLA_809): a full game against the boss AI with the companion played, no fault, no AI fallback  (boss turns 25 played 1 decisions 37 fallbacks 0 shrine-deaths 0 boss hedge_witch)
+X1 TRLA_135 rumble_mage_128      player turns 11 played 1 decisions 15 fallbacks 0 shrine-deaths 0 boss tunnel_rat
+PASS X1 TRLA_135 (MAGE, with TRLA_809): a full game against the boss AI with the companion played, no fault, no AI fallback  (player turns 11 played 1 decisions 15 fallbacks 0 shrine-deaths 0 boss tunnel_rat)
+X1 TRLA_139 rumble_paladin_105   player turns 13 played 1 decisions 18 fallbacks 0 shrine-deaths 0 boss tunnel_rat
+PASS X1 TRLA_139 (PALADIN, with TRLA_809): a full game against the boss AI with the companion played, no fault, no AI fallback  (player turns 13 played 1 decisions 18 fallbacks 0 shrine-deaths 0 boss tunnel_rat)
+X1 TRLA_148 rumble_priest_146    boss turns 21 played 1 decisions 36 fallbacks 0 shrine-deaths 1 boss cellar_matron
+PASS X1 TRLA_148 (PRIEST, with TRLA_809): a full game against the boss AI with the companion played, no fault, no AI fallback  (boss turns 21 played 1 decisions 36 fallbacks 0 shrine-deaths 1 boss cellar_matron)
+X1 TRLA_188 rumble_rogue_187     boss turns 20 played 1 decisions 37 fallbacks 0 shrine-deaths 2 boss mire_brute
+PASS X1 TRLA_188 (ROGUE, with TRLA_809): a full game against the boss AI with the companion played, no fault, no AI fallback  (boss turns 20 played 1 decisions 37 fallbacks 0 shrine-deaths 2 boss mire_brute)
+X1 TRLA_156 rumble_shaman_109    player turns 17 played 1 decisions 31 fallbacks 0 shrine-deaths 1 boss lantern_thief
+PASS X1 TRLA_156 (SHAMAN, with TRLA_809): a full game against the boss AI with the companion played, no fault, no AI fallback  (player turns 17 played 1 decisions 31 fallbacks 0 shrine-deaths 1 boss lantern_thief)
+X1 TRLA_180 rumble_warlock_178   player turns 11 played 1 decisions 15 fallbacks 0 shrine-deaths 0 boss tunnel_rat
+PASS X1 TRLA_180 (WARLOCK, with TRLA_809): a full game against the boss AI with the companion played, no fault, no AI fallback  (player turns 11 played 1 decisions 15 fallbacks 0 shrine-deaths 0 boss tunnel_rat)
+X1 TRLA_172 rumble_warrior_170   player turns 17 played 1 decisions 33 fallbacks 0 shrine-deaths 0 boss lantern_thief
+PASS X1 TRLA_172 (WARRIOR, with TRLA_809): a full game against the boss AI with the companion played, no fault, no AI fallback  (player turns 17 played 1 decisions 33 fallbacks 0 shrine-deaths 0 boss lantern_thief)
+SUMMARY checks passed 251 failed 0

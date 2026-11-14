@@ -1,0 +1,8 @@
+loot_48_trapped_room LOOT t2      floor  3 DRUID/druid_thicket/CS2_017                    deck 17 -> boss     turns  24 decisions  45 fallbacks  0 health  34 mana+0 power  0 checks ok
+loot_48_trapped_room LOOT t2      floor  3 HUNTER/hunter_kennel/DS1h_292                  deck 16 -> player   turns  21 decisions  27 fallbacks  0 health  34 mana+0 power  0 checks ok
+loot_48_trapped_room LOOT t2      floor  3 MAGE/mage_rimeward/CS2_034                     deck 16 -> boss     turns  28 decisions  45 fallbacks  0 health  34 mana+0 power  0 checks ok
+loot_48_trapped_room LOOT t2      floor  3 PALADIN/paladin_gleaming/CS2_101               deck 16 -> boss     turns  21 decisions  37 fallbacks  0 health  34 mana+0 power  0 checks ok
+loot_48_trapped_room LOOT t2      floor  3 PRIEST/priest_mending/CS1h_001                 deck 16 -> boss     turns  24 decisions  47 fallbacks  0 health  34 mana+0 power  0 checks ok
+loot_48_trapped_room LOOT t2      floor  3 ROGUE/rogue_backalley/CS2_083b                 deck 16 -> boss     turns  14 decisions  23 fallbacks  0 health  34 mana+0 power  0 checks ok
+encounter run: schedule acts-v3h; power unused: -; form unreached: -
+games 6, boss wins 5, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched LOOTA_107 x9, most boss Secrets 5

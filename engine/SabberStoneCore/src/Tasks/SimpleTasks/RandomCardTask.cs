@@ -106,10 +106,12 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			}
 
 
-			IReadOnlyList<Card> cardsList =
-				GetCardList(source, _cardType, cardClass, _cardSet, _race, _rarity, _gameTagFilter);
+			// A card for the opponent passes both sides' run generation filters (Game.GenerateFor).
+			IReadOnlyList<Card> cardsList;
+			using (game.GenerateFor(_opposite ? controller.Opponent : null))
+				cardsList = GetCardList(source, _cardType, cardClass, _cardSet, _race, _rarity, _gameTagFilter);
 
-			if ((cardClass == CardClass.DEMONHUNTER || cardClass == CardClass.DEATHKNIGHT) && cardsList.Count == 0)
+			if ((cardClass == CardClass.DEMONHUNTER || cardClass == CardClass.DEATHKNIGHT || game.FiltersGenerated) && cardsList.Count == 0)
 			{
 				stack.Playables = Array.Empty<IPlayable>();
 				return TaskState.STOP;
@@ -131,6 +133,9 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			IEnumerable<Card> cards = source.Game.FormatType == FormatType.FT_STANDARD
 				? Cards.AllStandard
 				: Cards.AllWild;
+			// Run games never generate a Secret for a side that excludes them (Game.BlocksGenerated) or a listed id (ExcludedGeneratedIds).
+			Game game = source.Game;
+			bool filtered = game.FiltersGenerated;
 
 			// DH/DK format pools is independent of the legacy global random pools and cache.
 			if (cardClass == CardClass.DEMONHUNTER || cardClass == CardClass.DEATHKNIGHT)
@@ -138,7 +143,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 					(p.Class == cardClass || cardClass == CardClass.DEATHKNIGHT && p[GameTag.MULTIPLE_CLASSES] != 0) && (cardType == CardType.INVALID || p.Type == cardType) &&
 					(cardSet == CardSet.INVALID || p.Set == cardSet) &&
 					(race == Race.INVALID || p.IsRace(race)) && (rarity == Rarity.INVALID || p.Rarity == rarity) &&
-					(gameTagFilter == null || Array.TrueForAll(gameTagFilter, tag => p.Tags.ContainsKey(tag))) && !p.IsQuest).ToArray();
+					(gameTagFilter == null || Array.TrueForAll(gameTagFilter, tag => p.Tags.ContainsKey(tag))) && !p.IsQuest && !(filtered && game.BlocksGenerated(p))).ToArray();
 
 			// Uncached: a source-keyed process cache leaked the first game's format and filters.
 			return cards.Where(p =>
@@ -149,7 +154,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 				(rarity == Rarity.INVALID || p.Rarity == rarity) &&
 				(gameTagFilter == null ||
 				 Array.TrueForAll(gameTagFilter, gameTag => p.Tags.ContainsKey(gameTag))) &&
-				p[GameTag.QUEST] == 0).ToArray();
+				p[GameTag.QUEST] == 0 && !(filtered && game.BlocksGenerated(p))).ToArray();
 		}
 	}
 }

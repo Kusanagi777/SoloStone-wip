@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
+  <Profile>
+    <Heroes>
+      <DungeonRunHeroStats Hero="bogus" Archetype="class" Runs="2" Wins="0" BestFloor="4" />
+    </Heroes>
+    <Unlocked />
+    <Archive />
+  </Profile>
+  <Active DataVersion="dungeon-run/1" Seed="6491657387877871622" TypedSeed="false" Hero="bogus" Power="CS2_034" Floor="2" Phase="PreMatch" Attempt="0" DraftsWithoutDominant="0">
+    <Deck>
+      <string>KAR_009</string>
+      <string>KAR_009</string>
+      <string>CATA_484</string>
+      <string>JAIL_312</string>
+      <string>JAIL_312</string>
+      <string>EX1_608</string>
+      <string>GVG_123</string>
+      <string>GVG_123</string>
+      <string>BOT_604</string>
+      <string>TIME_856</string>
+      <string>AT_105</string>
+      <string>TRL_509</string>
+      <string>UNG_847</string>
+    </Deck>
+    <Treasures>
+      <string>deep_satchel</string>
+    </Treasures>
+    <ActiveTreasures />
+    <Upgrades />
+    <BossSequence>
+      <string>mire_brute</string>
+      <string>lantern_thief</string>
+      <string>hedge_witch</string>
+      <string>pit_champion</string>
+      <string>frostwarden</string>
+      <string>ashen_abbess</string>
+      <string>ember_matron</string>
+      <string>hollow_sovereign</string>
+    </BossSequence>
+    <TakenBundles>
+      <string>bundle_neutral_battlecry</string>
+    </TakenBundles>
+    <BundleCooldowns>
+      <string>bundle_neutral_deathrattle@3</string>
+      <string>bundle_neutral_taunt@3</string>
+    </BundleCooldowns>
+    <DraftedThemes>
+      <string>battlecry</string>
+      <string>battlecry</string>
+      <string>battlecry</string>
+    </DraftedThemes>
+    <Drafts>
+      <DungeonRunDraft Floor="1" Kind="treasure" Picked="deep_satchel">
+        <Offered>
+          <string>deep_satchel</string>
+          <string>frost_lantern</string>
+          <string>quake_stone</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="1" Kind="bundle" Picked="bundle_neutral_battlecry">
+        <Offered>
+          <string>bundle_neutral_battlecry</string>
+          <string>bundle_neutral_deathrattle</string>
+          <string>bundle_neutral_taunt</string>
+        </Offered>
+      </DungeonRunDraft>
+    </Drafts>
+    <Matches>
+      <DungeonRunMatchSummary Floor="1" Boss="mire_brute" Outcome="Win" Attempt="1" />
+    </Matches>
+  </Active>
+</DungeonRun>

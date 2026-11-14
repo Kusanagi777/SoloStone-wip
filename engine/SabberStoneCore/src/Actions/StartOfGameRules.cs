@@ -50,6 +50,9 @@ namespace SabberStoneCore.Actions
 
         private static bool Excluded(IPlayable e) => e[Pending] == 1 && NeverOpening.Contains(e.Card.AssetId);
 
+        /// <summary>A pending self-removing source: never dealt in an opening hand, a run opening flag included.</summary>
+        internal static bool NeverDealt(IPlayable e) => Excluded(e);
+
         /// <summary>Runs in MainBegin: retail lands Start of Game effects after both mulligans, before MAIN_READY
         /// (data/rules-evidence/start-of-game/sog-timing-generic.yaml). Eligibility stays captured before the deal.</summary>
         internal static void Resolve(Game game)

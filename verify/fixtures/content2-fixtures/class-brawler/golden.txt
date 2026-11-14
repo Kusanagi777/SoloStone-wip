@@ -1,0 +1,15 @@
+plan hero=HERO_01 power=CS2_102 deck=GVG_051,GVG_051,OG_312,CORE_EX1_606,CORE_EX1_606,CFM_300,GIL_113,GIL_113,NEW1_011,ICC_450,TB_CoOpv3_003,BOT_020,BOT_312,TIME_035,CFM_095,TLC_242,UNG_002 boss=cellar_matron matchSeed=470241654
+floor 3 boss=cellar_matron power=CS2_102 matchSeed=470241654
+floor 3 treasure offered=champions_banner,hearty_tonic,thrifty_gloves
+floor 3 bundle offered=bundle_neutral_murloc,bundle_neutral_taunt,bundle_warrior_weapons
+floor 4 boss=golemancer power=CS2_102 matchSeed=1939650640
+floor 4 bundle offered=bundle_neutral_dragon,bundle_neutral_elemental,bundle_warrior_battlecry
+floor 5 boss=storm_herald power=CS2_102 matchSeed=1262763695
+floor 5 treasure offered=gilded_idol,mending_charm,old_map
+floor 5 bundle offered=bundle_neutral_battlecry,bundle_neutral_deathrattle,bundle_neutral_taunt
+floor 6 boss=pit_champion power=CS2_102 matchSeed=1767145807
+floor 6 bundle offered=bundle_warrior_battlecry,bundle_warrior_mechanical,bundle_warrior_spells
+floor 7 boss=lady_of_thorns power=CS2_102 matchSeed=1613035091
+floor 7 bundle offered=bundle_neutral_deathrattle,bundle_neutral_elemental,bundle_warrior_weapons
+floor 8 boss=sleepless_one power=CS2_102 matchSeed=1444497813
+end phase=Victory deck=33 treasures=champions_banner,bottomless_tome,gilded_idol

@@ -80,6 +80,10 @@ internal static class NativeFormatLock
     private static void StandardMode(ref VisualsFormatType __0)
     {
         if (!NativeUIProbe.IsolatedLaunch) return;
+        // The Dungeon Run picker's borrowed adventure tray (ADVENTURE) keeps the visual format its own InitMode asks for. Only
+        // the visual switch is left alone: SwitchFormatTypeAndRankedPlayMode still calls Options.SetFormatType (IL 0047), which
+        // the StandardFormat prefix above still coerces to LocalDeckFormat, so the player's format setting is protected.
+        if (NativeDungeonRunPicker.Active && !PlayScreen) { NativeUIProjection.PickerSwitchActive = false; return; }
         if (__0 != VisualsFormatType.VFT_STANDARD && __0 != VisualsFormatType.VFT_CASUAL)
         {
             log?.LogInfo("NATIVE_FORMAT mode " + __0 + " kept VFT_STANDARD");
@@ -127,7 +131,7 @@ internal static class NativeFormatLock
 
     private static void PickerShown(DeckPickerTrayDisplay __instance)
     {
-        if (!NativeUIProbe.IsolatedLaunch || disabled) return;
+        if (!NativeUIProbe.IsolatedLaunch || disabled || NativeDungeonRunPicker.Active && !PlayScreen) return;
         try
         {
             var widget = pickerField.GetValue(__instance) as Widget;

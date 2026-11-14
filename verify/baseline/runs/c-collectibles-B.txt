@@ -1,0 +1,110 @@
+PASS B1 the thirty family cards are scripted (Card.Implemented)
+PASS B1 their options, tokens, enchantments and the reward power are scripted
+PASS B2 ULD_194 Wasteland Scorpid costs (7) and is a 3/9 Beast with Poisonous
+PASS B3 its Poisonous destroys a minion it damages
+PASS B4 ULD_205 Candletaker (3 mana 3/2) has Reborn: it returns once with 1 Health
+PASS B4 the reborn Candletaker does not return again
+PASS B5 ULD_206 Restless Mummy (4 mana 3/2) has Rush (it can attack a minion, not the hero, the turn it is played) and Reborn
+PASS B5 killed in its attack it is reborn with 1 Health
+PASS B6 ULD_274 Wasteland Assassin (5 mana 4/2) has Stealth and Reborn
+PASS B6 it returns with 1 Health
+PASS B7 ULD_131 Untapped Potential costs (1) and enters play as the owner's Quest at 0 of 4
+PASS B8 a turn ended with unspent Mana counts one
+PASS B8 the opponent's turn end counts nothing
+PASS B9 a turn ended with all Mana spent counts nothing
+PASS B9 Mana that is only locked by Overload is not unspent
+PASS B10 three turns counted: the Quest is still in play and the power is still the Druid's
+PASS B11 the fourth turn completes it: the Quest leaves play revealed and the hero power becomes Ossirian Tear  (ULD_131p)
+PASS B12 Ossirian Tear is a passive power (never an option) and makes its owner's Choose One cards have both effects; the opponent is unaffected
+PASS B12 it is not offered on its owner's turn
+PASS B13 with it Hidden Oasis does both: a 6/6 Taunt Ancient and 12 Health restored to the target
+PASS B13 a clone of the game keeps the aura
+PASS B14 a hero card replaces the power and ends the aura (ICC_832)  (ICC_832p False)
+PASS B14 the boss completes it too (four of its own turn ends with Mana left): its hero power becomes the passive Ossirian Tear  (ULD_131p 4)
+PASS B15 ULD_135 Hidden Oasis costs (6); its first option summons a 6/6 Vir'naal Ancient with Taunt and heals nothing
+PASS B16 its second option restores 12 Health to the target and summons nothing
+PASS B17 the heal can target a minion
+PASS B18 ULD_138 Anubisath Defender is a 5-Cost 3/5 with Taunt
+PASS B19 a (4)-Cost spell does not change its Cost
+PASS B19 after a spell that cost (5) or more this turn it costs (0)
+PASS B20 the next turn it costs (5) again
+PASS B20 the opponent's spell does not count
+PASS B20 played for (0) it lands as a 3/5 Taunt
+PASS B21 ULD_143 Pharaoh's Blessing (6): +4/+4, Divine Shield and Taunt
+PASS B22 ULD_151 Ramkahen Wildtamer (3 mana 4/3) copies a random Beast of its owner's hand  (CS2_120,CS2_182,CS2_120)
+PASS B23 with no Beast in hand it copies nothing
+PASS B24 ULD_154 Hyena Alpha (4 mana 3/3) summons nothing without a Secret
+PASS B25 with a Secret in play it summons two 2/2 Hyenas (Beasts) to its right
+PASS B26 ULD_158 Sandstorm Elemental (2 mana 2/2): 1 damage to all enemy minions, Overload (1)
+PASS B27 ULD_169 Mogu Fleshshaper (9 mana 3/4 Rush) costs (1) less for each minion on the battlefield, both sides, never below (0)  (0)
+PASS B28 ULD_172 Plague of Murlocs (3) transforms every minion of both boards into a scripted Murloc; each side keeps its count  (CFM_699,CORE_EX1_509,LOE_076,CFM_650)
+PASS B29 the Murlocs are random (several different ones over 12 seeds), none unscripted, none a run exclusion  (CFM_647,CFM_699,CORE_CFM_344,CORE_EX1_103,CORE_EX1_507,CORE_ULD_723,DAL_049,DAL_726,DINO_435,EX1_103,EX1_507,EX1_508,EX1_509,GVG_040,ICC_220,LOEA10_3,OG_156,UNG_011,UNG_073,UNG_937)
+PASS B30 a run board shrine goes dormant instead of becoming a Murloc; the minion next to it is transformed  (TRLA_104t,CORE_EX1_509)
+PASS B31 ULD_173 Vessina (4 mana 2/6): no bonus while her owner is not Overloaded
+PASS B31 once her owner is Overloaded (Mana owed) her other minions have +2 Attack; she and enemy minions do not
+PASS B31 a clone of the game keeps the aura and re-checks it; the original is untouched
+PASS B31 a second Vessina: each has +2 from the other, the other minions +4
+PASS B32 locked Mana Crystals count as Overloaded too; with none locked or owed the bonus is gone
+PASS B32 the bonus ends when she leaves play
+PASS B33 ULD_177 Octosari (8 mana 8/8 Beast): Deathrattle draws 8 cards
+PASS B34 ULD_179 Phalanx Commander (5 mana 4/5): its owner's Taunt minions have +2 Attack; others and enemy Taunt minions do not
+PASS B35 a minion that gains Taunt gains the bonus
+PASS B35 the bonus ends when the Commander leaves play
+PASS B36 ULD_195 Frightened Flunky (2 mana 2/2 Taunt) opens a Discover of three different scripted Taunt minions, never itself  (CFM_653,CORE_LOOT_137,TLC_101)
+PASS B37 the pick goes to the hand  (CORE_LOOT_137)
+PASS B37 a boss's Flunky offers three scripted Taunt minions outside the boss's generation rejections  (CFM_653,CORE_LOOT_137,TLC_101)
+PASS B38 ULD_208 Khartut Defender (6 mana 3/4 Taunt, Reborn): each death restores 3 Health to its owner's hero, the reborn one's too  (True True 4)
+PASS B39 ULD_209 Vulpera Scoundrel (3 mana 2/3) opens a Discover of three different scripted Mage spells and, last, Mystery Choice!  (BOT_453,CORE_CS2_028,OG_086,ULD_209t)
+PASS B40 a picked spell goes to the hand  (BOT_453)
+PASS B41 the mystery choice adds one random scripted Mage spell instead (never itself; different spells over 10 seeds)  (AT_002,BOT_453,BRM_003,DAL_577,DAL_608,EX1_275,GVG_005,LOOT_101,LOOT_106,ULD_726)
+PASS B42 a boss's Scoundrel offers Warrior spells that are no Secret and outside the boss's generation rejections, and the mystery choice  (CFM_752,ICC_837,GVG_052,ULD_209t)
+PASS B42 a Mage boss's Scoundrel never offers or rolls a Secret over 25 seeds
+PASS B43 ULD_212 Wild Bloodstinger (6 mana 6/9 Beast) summons the minion of the opponent's hand for the opponent and attacks it at once  (PLAY 6 7)
+PASS B43 the forced attack spends no attack and the summoned minion is the hand's own entity
+PASS B44 with no minion in the opponent's hand nothing is summoned or attacked
+PASS B45 with a full opposing board nothing is pulled
+PASS B46 one random minion of the hand is pulled each time (all three occur over 12 seeds); a small one dies to the attack  (CS2_186,CS2_182,CS2_125)
+PASS B46 a boss's Bloodstinger pulls the run player's minion the same way
+PASS B47 ULD_215 Wrapped Golem (7 mana 7/5 Reborn): at the end of its owner's turn (not the opponent's) a 1/1 Scarab with Taunt is summoned to its right  (True True 2)
+PASS B48 ULD_216 Puzzle Box of Yogg-Saron (10) casts ten spells for its owner (fewer only when a hero is down), leaving no open choice  (120 casts)
+PASS B49 the spells are random scripted spells: never the Box, a Quest or a hidden-stat card, and no run exclusion  (113 different)
+PASS B50 a catalog run's player may cast Secrets with it (their classes are any)  (9 Secret casts, 9 left in play)
+PASS B51 a boss's Box casts no Secret and nothing its generation rejects  (120 casts, 0 Secrets)
+PASS B52 on a legacy run the player's Box casts no Secret  (80 casts)
+PASS B53 ULD_236 Tortollan Pilgrim (8 mana 5/5) opens a Discover of three different spells of its owner's deck  (CS2_023,CS2_027,CS2_025)
+PASS B54 the pick is cast at once as a copy (CS2_027): the deck keeps its own cards, and the copy does not go to the hand  (3 on board, deck 26 of 26)
+PASS B55 a deck with one kind of spell offers that one card once
+PASS B55 a deck with no spell opens no Discover
+PASS B56 a boss's Pilgrim offers its own deck's spell and casts the copy at a random target (Fireball: 6 damage somewhere)
+PASS B57 ULD_239 Flame Ward (3) is a Secret; an enemy minion attacking a minion does not trigger it
+PASS B58 after an enemy minion attacks its owner's hero (the attack's damage is dealt first) all enemy minions take 3 damage and the Secret is revealed  (a2 3 a3 3 mine 4 secrets 0)
+PASS B59 an enemy hero's attack does not trigger it
+PASS B60 a boss's Flame Ward answers the run player's minion attacking the boss's hero
+PASS B61 ULD_253 Tomb Warden (8 mana 3/6 Taunt Mech): Battlecry summons a copy of itself to its right
+PASS B61 with one free slot the Warden lands and no copy fits
+PASS B62 ULD_256 Into the Fray (1): the Taunt minions in its owner's hand get +2/+2; other cards and the board do not
+PASS B63 ULD_258 Armagedillo (6 mana 4/7 Taunt Beast): at the end of its owner's turn (only) the Taunt minions in its owner's hand get +2/+2  (True True True 7)
+PASS B63 the buffed minion is played with its stats
+PASS B64 ULD_262 High Priest Amet (4 mana 2/7): a minion its owner summons has its Health set to Amet's; enemy minions and Amet do not
+PASS B65 it is Amet's current Health (3 after damage), for a minion played from hand too; earlier minions keep theirs
+PASS B65 a minion that returns by Reborn is summoned again, so its Health is set as well (3, not 1)  (3)
+PASS B66 after Amet dies new minions keep their own Health and the set Health stays
+PASS B67 ULD_268 Psychopomp (4 mana 3/1) summons nothing when no friendly minion has died (an enemy death does not count)
+PASS B68 it summons a friendly minion that died this game anew (full Health), to its right, and gives it Reborn  (ULD_268,ULD_268,CS2_182)
+PASS B68 the Reborn it gave works: the minion returns with 1 Health
+PASS B69 the minion is random among the dead (all three occur over 12 seeds)  (CS2_186,CS2_182,CS2_125)
+PASS B69 a dead run board shrine is never resurrected  (TRLA_104t,ULD_268)
+PASS B70 ULD_270 Sandhoof Waterbearer (5 mana 5/5): at the end of its owner's turn 5 Health is restored to a damaged friendly character; never an enemy  (True True 4)
+PASS B71 one random damaged friendly character each time (hero or minion over 12 seeds, never both, never an undamaged one)  (minion,hero)
+PASS B72 every family card is admitted for the run player and for a boss, on legacy and catalog runs
+PASS B73 every family card has an admission row (ULD_154, ULD_236 and ULD_239 keep their phase 2 rows)
+PASS B73 the rows name their family: the pull from a hidden hand, the random casts, the Quest and its reward power
+PASS B74 generation: no family card is rejected for both sides; only the Secret (Flame Ward) is kept from the boss's own generation  (ULD_239)
+PASS B75 Flame Ward is in the Mage Secret pool a boss with generated Secrets draws from (Whirt's Prediction), and is admitted for a boss
+PASS B76 the shipped data validates with the family scripted
+PASS B76 Icarax's wiki decks now hold the family's cards the list names (Restless Mummy, Into the Fray, Armagedillo, Tomb Warden, Phalanx Commander, Khartut Defender)
+PASS B77 the fixture rows (curated boss decks, tiers 1 to 4) hold every family card
+PASS B78 the fixture data validates: every card is scripted, client-known and admitted for a boss
+PASS B79 three games piloted by the fair AI with Ossirian Tear from the boss's first turn end: no fault, no fallback, the power is never offered, the aura holds to the end  (boss,boss,boss; Hidden Oasis played with both effects 2 times)
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 108 passed, 0 failed

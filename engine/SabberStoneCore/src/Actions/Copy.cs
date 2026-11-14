@@ -105,7 +105,7 @@ namespace SabberStoneCore.Actions
 					{
                         // External aura actors belong to their destination, not to copied state.
                         if (preserveBoardMinionState && AuraAttachment(e.Creator?.OngoingEffect, e.Card)) continue;
-                        if (e.Card.Id == "EDR_469e" || DormantRules.IsHelper(e) || e.Card.Id == "GBL_999e") continue;
+                        if (e.Card.Id == "EDR_469e" || DormantRules.IsHelper(e) || e.Card.Id == "GBL_999e" || ShrineRules.IsUpgradeGrant(e)) continue;
                         // Destination adjacency owns presentation; never inherit another slot's actor.
                         if (e.Creator?.OngoingEffect is HandAdjacencyCostAura adjacency && adjacency.OwnsPresentation(e)) continue;
 						Enchantment instance = Enchantment.CopyAttachment(in controller, e.Creator, copiedEntity, e);
@@ -180,6 +180,8 @@ namespace SabberStoneCore.Actions
                     copiedEntity[HandProgressRules.PrivateAttachmentTarget] = copiedEntity.Id;
 				copiedEntity.NativeTags.Add(GameTag.DISPLAYED_CREATOR, creator.Id);
 			}
+            // A copy of a run shrine is a plain minion (phase 7).
+            ShrineRules.ClearMark(copiedEntity);
 
             if (sourceZone == Zone.PLAY && targetZone == Zone.PLAY) OldGodRules.CopyState(source,copiedEntity);
             ObjectiveRules.CopyComposition(source, copiedEntity);

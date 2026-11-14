@@ -74,8 +74,14 @@ namespace SabberStoneCore.Actions
         {
             AutoPlayRules.AdvanceDiscoverQuest(c);
             if (chosen[BoundEntity] != 0) chosen = c.Game.IdEntityDic[chosen[BoundEntity]];
+            // ULDA_205 Lucky Spade (phase 6 F13): the chosen card costs (2) less; its two copies follow once it has landed.
+            CardSets.DungeonRun.RunPlayerRules.Discovered(c, chosen);
             foreach (var vault in c.BoardZone.Where(m => m.Card.Id == "TLC_483" && !m.IsSilenced && !m.IsDormant).OrderBy(m => m.OrderOfPlay).ToArray())
                 vault.Power.PowerTask.Process(c.Game, c, vault, chosen);
+            // ULD_309 Dwarven Archaeologist (phase 6 F10), the same text: each active one reduces the chosen card's Cost by (1).
+            if (chosen is Playable discovered)
+                foreach (var archaeologist in c.BoardZone.Where(m => m.Card.Id == "ULD_309" && !m.IsSilenced && !m.IsDormant).ToArray())
+                    CostRules.AddModifier(discovered, Enchants.EffectOperator.SUB, 1);
         }
 
         private static bool IsMap(Enchantment e) => e.Card.Id == "TLC_515e" || e.Card.Id == "TLC_464e";
@@ -137,6 +143,7 @@ namespace SabberStoneCore.Actions
 
         internal static void DrainMaps(Controller c)
         {
+            CardSets.DungeonRun.RunPlayerRules.DeliverDiscovered(c);
             if (c.Choice != null || c.Game.Resolution.HasSuspendedEffect || c.Game.State == State.COMPLETE) return;
             var watch = Maps(c).FirstOrDefault(w => w[Pending] == 2);
             if (watch == null) return;
@@ -174,7 +181,10 @@ namespace SabberStoneCore.Actions
         internal static bool TryReplaceNormalDraw(Controller controller)
         {
             if (controller.DeckZone.IsEmpty) return false;
-            var effect = controller.AppliedEnchantments?.FirstOrDefault(e => e.Card.Id == "CATA_591e");
+            // Commander Geddon's CATA_591e, and the Dungeon Run's ULDA_Brann_HP3 Dino Tracking (its player enchantment, the
+            // client's Brann Hero Power Watcher): the turn's draw becomes a Discover of the owner's own deck.
+            var effect = controller.AppliedEnchantments?.FirstOrDefault(e => e.Card.Id == "CATA_591e"
+                || e.Card.Id == CardSets.DungeonRun.DungeonRunContent.DinoTrackingEffect);
             if (effect == null) return false;
             effect.Power.PowerTask.Process(controller.Game, controller, effect, null);
             return true;

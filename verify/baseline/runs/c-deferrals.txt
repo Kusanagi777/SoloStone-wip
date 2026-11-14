@@ -1,0 +1,10 @@
+T30 DALA_707  DALA_Rakanishu  boss turns 22 played 1 player-choices 2 decisions 42 fallbacks 0 boss hedge_witch
+T30 ULDA_407  HUNTER_WARRIOR  boss turns 12 played 1 player-choices 0 decisions 24 fallbacks 0 boss hedge_witch
+T30 ULDA_302  DRUID_PRIEST    boss turns 22 played 1 player-choices 0 decisions 44 fallbacks 0 boss hedge_witch
+T30 ULDA_013  MAGE_ROGUE      player turns 19 played 1 player-choices 2 decisions 28 fallbacks 0 boss hedge_witch
+T30 ULDA_040  MAGE_ROGUE      player turns 19 played 1 player-choices 7 decisions 25 fallbacks 0 boss hedge_witch
+T30 ULD_003   MAGE_ROGUE      player turns 23 played 1 player-choices 2 decisions 33 fallbacks 0 boss hedge_witch
+T30 ULDA_045  DRUID_PRIEST    boss turns 24 played 1 player-choices 0 decisions 46 fallbacks 0 boss hedge_witch
+T30 ULDA_045  HUNTER_WARRIOR  player turns 23 played 1 player-choices 1 decisions 26 fallbacks 0 boss hedge_witch
+T30 GILA_511  GILA_500h3      boss turns 15 played 1 player-choices 3 decisions 26 fallbacks 0 boss hedge_witch
+149 passed, 0 failed

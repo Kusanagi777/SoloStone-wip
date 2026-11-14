@@ -177,6 +177,8 @@ internal sealed class TurnBeam : INodeJob
     internal int Nodes { get; private set; }
     internal int Expansions { get; private set; }
     internal int EndpointScores { get; private set; }
+    // Reply leaves scored as they stand because a pending choice could not be settled (telemetry).
+    internal int PendingChoiceLeaves { get; private set; }
     internal bool Capped { get; private set; }
     // Completed beam depths (frontier replacements); read-only progress telemetry for the hover cache.
     internal int Depth { get; private set; }
@@ -220,6 +222,15 @@ internal sealed class TurnBeam : INodeJob
                     settledChoices++;
                     return;
                 }
+                // A pending choice the beam cannot expand (its options are hidden draws, TIME_770 Fast Forward) or past the
+                // settlement limit: score the leaf as it stands, as ReplyModel finishes such a reply. END_TURN over a pending
+                // choice is refused (FairBotState.ForReplyEndTurn), which used to drop the line at -inf.
+                if (leaf.State.HasPendingChoice) {
+                    PendingChoiceLeaves++; SearchTelemetry.PendingChoiceLeaf();
+                    leaf.Value = evaluate(leaf.State);
+                    horizon++; settledChoices = 0;
+                    return;
+                }
                 if (!leaf.State.IsTerminal && leaf.State.Facts.CurrentPlayerId == rootState.Facts.Own.PlayerId) {
                     var end = leaf.State.ReplyEndTurnAction;
                     leaf.State = leaf.State.ForReplyEndTurn();
@@ -232,7 +243,12 @@ internal sealed class TurnBeam : INodeJob
             // settle-fallback: a settlement the fair view refuses (an end-of-turn effect reading a hidden card) keeps the
             // reply's unsettled value; dropping the leaf left lines whose every reply was refused at their static value.
             catch (Exception error) when (SettleFallback && FairHistory.IsPrivate(error)) { leaf.Value = evaluate(leaf.State); }
-            catch (Exception error) when (!(error is OutOfMemoryException)) { leaf.Value = double.NegativeInfinity; }
+            catch (Exception error) when (!(error is OutOfMemoryException)) {
+                // Never silent: counted (SearchTelemetry, read by the harnesses, required 0) and sent to the fault reporter.
+                SearchTelemetry.SwallowedLeaf(error);
+                leaf.State.FaultReporter?.Invoke("swallowed-leaf " + error.GetType().Name + ": " + error.Message.Split('\n')[0]);
+                leaf.Value = double.NegativeInfinity;
+            }
             horizon++; settledChoices = 0;
             return;
         }
@@ -587,6 +603,36 @@ public sealed class TurnPlannerJob : INodeJob
     private ReplyJob reply;
     private int index, steps, originalFinalistCount;
     private readonly List<TurnLine> scored = new List<TurnLine>();
+    // secret-worlds settlement (closed Secret pool only): before reply scoring, every finalist and the best line of each
+    // action signature the finalists lack (hero power alone, ...) are replayed over the opponent's most likely Secret
+    // worlds (LethalJob.Settle) and keep the expected own-turn change as a delta on their value. A settled alternative
+    // that beats the worst finalist takes its slot, so a Secret-safe play competes with passing. Lines that arrive later
+    // (refills, hold extension, combat slot) are settled from the reserve that is left; a line with actions that could
+    // not be settled gets the worst settled delta, so an unsettled line never wins on its Secret exposure.
+    internal const int SettleAlternatives = 3, SettleWorldLimit = 8;
+    private readonly bool settleSecrets, pricesMistake;
+    private readonly int settleWorldCount, settleReserve;
+    private readonly Func<FairBotState, double> scoreFn;
+    private bool settlePlanned, settleDone;
+    private List<TurnLine> settleQueue, settleSorted;
+    private readonly List<TurnLine> settleAlternatives = new List<TurnLine>();
+    private readonly HashSet<TurnLine> settleTried = new HashSet<TurnLine>();
+    private int settleAt;
+    private LethalJob settleJob;
+    private TurnLine settleCurrent;
+    private readonly Dictionary<TurnLine, double> secretDelta = new Dictionary<TurnLine, double>();
+    internal int DiagnosticSettleReserve => settleReserve;
+    internal int DiagnosticSettleWorlds => settleWorldCount;
+    internal int DiagnosticSettleNodes { get; private set; }
+    internal int DiagnosticSettledLines => secretDelta.Count;
+    internal IReadOnlyDictionary<TurnLine, double> DiagnosticSecretDelta => secretDelta;
+    /// <summary>Scored lines with actions that got the conservative default delta because the reserve could not settle them.</summary>
+    internal int DiagnosticUnsettledDefaults { get; private set; }
+    /// <summary>Settled alternatives that replaced a finalist before reply scoring.</summary>
+    internal IReadOnlyList<TurnLine> DiagnosticSwappedIn => swappedIn;
+    private readonly List<TurnLine> swappedIn = new List<TurnLine>();
+    /// <summary>Every scored line with its reply value and the Secret delta it carried (diagnostics and tests).</summary>
+    internal IReadOnlyList<TurnLine> DiagnosticScored => scored;
     internal static string HandCommitment(IEnumerable<int> hand, IReadOnlyDictionary<int, string> kinds) =>
         string.Join(",", hand.Select(id => kinds.TryGetValue(id, out var kind) ? kind : "<new>"));
     // Masked cards (own draws of hidden cards inside a search) all carry EntityId 0; they map to "<new>".
@@ -609,7 +655,7 @@ public sealed class TurnPlannerJob : INodeJob
     public TurnPlannerJob(FairBotState state, NpcProfile profile, DeckPlan plan, int seed, int cap, IEnumerable<string> publiclyPlayed, GoldenPublicInputs inputs = null,
         BotAction firstAction = null, IEnumerable<int> heldSources = null, bool comparePass = false)
     {
-        this.comparePass = comparePass; root = state; this.profile = profile; evaluator = new DeckPlanEvaluator(plan, profile.Budget.Brain) { RecurringValue = profile.Fixes.On("recurring-value"), ZeroDoomed = profile.Fixes.On("doomed-minions"), DeathFixes = profile.Fixes, TriggerFixes = profile.Fixes, OwnDeckValue = profile.Fixes.On("own-deck-value") }; this.seed = seed;
+        this.comparePass = comparePass; pricesMistake = firstAction != null; root = state; this.profile = profile; evaluator = new DeckPlanEvaluator(plan, profile.Budget.Brain) { RecurringValue = profile.Fixes.On("recurring-value"), ZeroDoomed = profile.Fixes.On("doomed-minions"), DeathFixes = profile.Fixes, TriggerFixes = profile.Fixes, OwnDeckValue = profile.Fixes.On("own-deck-value") }; this.seed = seed;
         this.cap = Math.Max(1, cap); played = (publiclyPlayed ?? Enumerable.Empty<string>()).ToArray();
         evaluator.SetOpponentEvidence(state.ReplyClass, played);
         if (evaluator.TriggerValue) evaluator.SetTriggerEvidence(state.OwnEvidence, state.OpponentEvidence);
@@ -644,11 +690,26 @@ public sealed class TurnPlannerJob : INodeJob
         // Spend spare nodes on one extra combat reply without reducing own coverage or the normal commitment/hold slots.
         if (profile.Fixes.On("attack-allocation") && state.Facts.Opponent.Board.Count > 0 && replyLimit >= 3) replyLimit++;
         int replyReserve = normalReplyLimit * perLeaf + verificationReserve + 2;
+        // Settlement shares the verification pool: (finalists + alternatives) x W worlds x (line length + 1), at most a
+        // quarter of the cap. It needs the run's closed Secret pool (FairOptions.OpponentSecretPrior): the open class pool
+        // of ladder and world NPCs keeps the Secret-blind search unchanged. Off (or no opponent Secret, or no reply phase)
+        // leaves every reservation exactly as before.
+        settleSecrets = replyLimit > 0 && state.Facts.OpponentSecretCount > 0 && state.OpponentSecretPrior != null && profile.Fixes.On("secret-worlds");
+        if (settleSecrets) {
+            settleWorldCount = LethalJob.SettleWorlds(state, SettleWorldLimit).Count;
+            var f = state.Facts;
+            int lineEstimate = Math.Min(TurnBeam.MaxLineActions, f.Own.Hand.Count + f.Own.Board.Count + 2);
+            long want = (long)(replyLimit + SettleAlternatives) * settleWorldCount * (lineEstimate + 1);
+            settleReserve = (int)Math.Min(this.cap / 4, want);
+            if (settleWorldCount == 0 || settleReserve <= 0) { settleSecrets = false; settleReserve = 0; }
+            replyReserve += settleReserve;
+        }
         // Secret settlement's pessimistic allowance can exceed this reserve for two finalists. Keep an own beam;
         // if both full-strength replies cannot finish inside cap, the caller retains its original decision.
         if (comparePass) replyReserve = Math.Min(replyReserve, reserve);
         int own = replyLimit == 0 ? this.cap : Math.Max(1, this.cap - replyReserve);
         Func<FairBotState, double> score = GoldenAblation.LegacyEval ? (Func<FairBotState, double>)(s => s.Evaluate()) : s => s.Evaluate(evaluator);
+        scoreFn = score;
         beam = new TurnBeam(state, score, own, GoldenAblation.OwnBeamWidth > 0 ? GoldenAblation.OwnBeamWidth : profile.Budget.OwnBeamWidth, false, evaluator, inputs, profile.Budget.Dedupe,
             profile.Budget.Brain != null && profile.Budget.Brain.Prune, firstAction, heldSources,
             (normalReplyLimit > 2 || refit && this.cap >= 3 * ReplyModel.SearchAllowance(MinReplySamples, profile.Budget.ReplyR, state.HasOwnSecrets) + verificationReserve + 2) && profile.Fixes.On("survival-scoring"), profile.Fixes.On("attack-allocation"), profile.Fixes.On("face-tiebreak"));
@@ -673,7 +734,7 @@ public sealed class TurnPlannerJob : INodeJob
         bool choice = beam.ScoredLeaves.Skip(1).Any(), acts = beam.ScoredLeaves.Any(n => n.Actions.Any(a => a.Type != PlayerTaskType.END_TURN));
         if (replyK == budget.ReplyK && normalReplyLimit >= Math.Min(ComparisonFinalists, budget.ReplyL) && choice && acts) return;
         // This step counts in steps, so a beam that used exactly its share leaves the planned replies.
-        var fit = choice && acts ? FitReplies(cap - steps - verificationReserve, budget, root.HasOwnSecrets) : (K: budget.ReplyK, Finalists: 0);
+        var fit = choice && acts ? FitReplies(cap - steps - verificationReserve - (settleDone ? 0 : settleReserve), budget, root.HasOwnSecrets) : (K: budget.ReplyK, Finalists: 0);
         replyK = fit.K;
         perReplyAllowance = ReplyModel.SearchAllowance(replyK, budget.ReplyR, root.HasOwnSecrets);
         normalReplyLimit = replyLimit = fit.Finalists;
@@ -779,6 +840,10 @@ public sealed class TurnPlannerJob : INodeJob
             // a node cap inside reply scoring can differ, so only wall-guarded (elite+) profiles reorder.
             int at = hold == null ? -1 : leaves.IndexOf(hold);
             if (!comparePass && at > 1 && profile.Budget.TurnWallSeconds > 0) { leaves.RemoveAt(at); leaves.Insert(1, hold); }
+            if (settleSecrets) settleSorted = sorted;
+        }
+        else if (settleSecrets && !settleDone) {
+            SettleStep();
         }
         else if (index < leaves.Count) {
             if (reply == null) {
@@ -790,6 +855,11 @@ public sealed class TurnPlannerJob : INodeJob
                     // An unadmitted, never-priced line must not stay a finalist.
                     if (index >= normalReplyLimit && cap - steps < finalist.RebuildNodes +
                         ReplyModel.SearchAllowance(replyK, replyNodes, root.HasOwnSecrets)) { leaves.RemoveAt(index); Finish(); return; }
+                }
+                // A line that joined after settlement (refill, hold extension, combat slot) is settled from what is left.
+                if (settleSecrets && AdvanceSettle(leaves[index])) { if (steps >= cap) Finish(); return; }
+                if (profile.Fixes.On("attack-allocation")) {
+                    var finalist = leaves[index];
                     if (!finalist.Holds) {
                         finalist.RebuildStep();
                         if (steps >= cap) Finish();
@@ -801,10 +871,12 @@ public sealed class TurnPlannerJob : INodeJob
             }
             if (!reply.IsDone) reply.StepNode();
             if (reply.IsDone) {
-                var line = leaves[index++]; line.Value = reply.Value; line.Survival = reply.Survival;
+                var line = leaves[index++];
+                double settled = settleSecrets ? SecretDelta(line, count: true) : 0;
+                line.Value = reply.Value + settled; line.Survival = reply.Survival;
                 if (line.Survival.HasValue && GoldenAblation.SoftVeto) {
                     // Probability-weighted loss instead of a lexicographic veto of every risky line.
-                    line.Value = reply.Value - (1 - line.Survival.Value) * 400; line.Survival = null;
+                    line.Value = reply.Value + settled - (1 - line.Survival.Value) * 400; line.Survival = null;
                 }
                 if (line.Survival.HasValue) {
                     line.Resistance = evaluator.Resistance(line.State.Facts);
@@ -824,6 +896,91 @@ public sealed class TurnPlannerJob : INodeJob
             if (!ExtendHoldComparison() && !Refill()) { Finish(); return; }
         }
         if (steps >= cap) Finish();
+    }
+    // One settlement node per call. The first call queues every finalist with actions, then up to SettleAlternatives
+    // alternatives: the best line (static order) of each action signature no finalist has. A line whose replay does not
+    // fit the reserve left is skipped (it keeps the conservative default). A trailing END_TURN sentinel is dropped: the
+    // opponent's Secrets cannot fire on its owner's turn, and the baseline is the line's own-turn state.
+    private void SettleStep()
+    {
+        if (!settlePlanned) {
+            settlePlanned = true;
+            settleQueue = leaves.Where(l => SettleActions(l).Count > 0).ToList();
+            if (!comparePass && !pricesMistake && settleSorted != null) {
+                var signatures = new HashSet<string>(leaves.Select(Signature), StringComparer.Ordinal);
+                foreach (var candidate in settleSorted) {
+                    if (settleAlternatives.Count >= SettleAlternatives) break;
+                    if (leaves.Contains(candidate) || SettleActions(candidate).Count == 0 || !signatures.Add(Signature(candidate))) continue;
+                    settleAlternatives.Add(candidate);
+                }
+                settleQueue.AddRange(settleAlternatives);
+            }
+            settleAt = 0;
+        }
+        while (settleAt < settleQueue.Count) {
+            if (AdvanceSettle(settleQueue[settleAt])) { if (settleCurrent == null) settleAt++; return; }
+            settleAt++;
+        }
+        settleDone = true;
+        SwapAlternatives();
+    }
+    // Settles one line, one node per call: true when this call spent the node on it, false when it needs nothing more
+    // (settled, no actions, or its replay does not fit the settlement reserve left).
+    private bool AdvanceSettle(TurnLine line)
+    {
+        if (settleCurrent != line) {
+            if (secretDelta.ContainsKey(line) || !settleTried.Add(line)) return false;
+            var actions = SettleActions(line);
+            int need = settleWorldCount * (actions.Count + 1);
+            if (actions.Count == 0 || need > Math.Min(settleReserve - DiagnosticSettleNodes, cap - steps)) return false;
+            settleCurrent = line;
+            settleJob = LethalJob.Settle(root, actions, need, scoreFn, settleWorldCount, seed);
+        }
+        if (!settleJob.IsDone) { settleJob.StepNode(); DiagnosticSettleNodes++; }
+        if (!settleJob.IsDone) return true;
+        // A released line rebuilds its clone one Apply per node, as reply scoring does, before its baseline.
+        if (!line.Holds) { line.RebuildStep(); return true; }
+        double? settled = settleJob.SettledValue;
+        if (settled.HasValue) {
+            double baseline = LethalJob.ClampValue(scoreFn(line.State));
+            secretDelta[line] = Math.Max(-LethalJob.SettleClamp, Math.Min(LethalJob.SettleClamp, settled.Value - baseline));
+            TurnSearchTrace.Observe?.Invoke("settled", line.Actions, secretDelta[line]);
+        }
+        settleJob = null; settleCurrent = null;
+        return true;
+    }
+    // The Secret delta a line carries: its settled delta; for a line with actions that was never settled, the worst
+    // settled delta (never above 0); for a pass, 0 (nothing it does can trigger the opponent's Secrets).
+    private double SecretDelta(TurnLine line, bool count = false)
+    {
+        if (secretDelta.TryGetValue(line, out double delta)) return delta;
+        if (SettleActions(line).Count == 0 || secretDelta.Count == 0) return 0;
+        if (count) DiagnosticUnsettledDefaults++;
+        return Math.Min(0, secretDelta.Values.Min());
+    }
+    // A settled alternative whose settled own-turn value beats the worst finalist's takes that finalist's slot, before any
+    // reply is priced. The hold line and the reserved defense keep their slots; two-arm comparisons never swap.
+    private void SwapAlternatives()
+    {
+        double Settled(TurnLine l) => l.Value + SecretDelta(l);
+        foreach (var alternative in settleAlternatives.Where(secretDelta.ContainsKey)
+            .OrderByDescending(Settled).ThenBy(l => l.Key, StringComparer.Ordinal).ToList()) {
+            var worst = leaves.Where(l => l != holdLine && l != DiagnosticDefense && !swappedIn.Contains(l))
+                .OrderBy(Settled).ThenByDescending(l => l.Key, StringComparer.Ordinal).FirstOrDefault();
+            if (worst == null || Settled(alternative) <= Settled(worst)) break;
+            leaves[leaves.IndexOf(worst)] = alternative;
+            swappedIn.Add(alternative);
+            ObserveLeaf?.Invoke(alternative, "shortlisted");
+        }
+    }
+    // The distinct action types of a line, without the END_TURN sentinel: hero power alone, attacks only, plays and attacks.
+    private static string Signature(TurnLine line) =>
+        string.Join(",", SettleActions(line).Select(a => (int)a.Type).Distinct().OrderBy(t => t));
+    private static List<BotAction> SettleActions(TurnLine line)
+    {
+        var actions = new List<BotAction>(line.Actions);
+        if (actions.Count > 0 && actions[actions.Count - 1].Type == PlayerTaskType.END_TURN) actions.RemoveAt(actions.Count - 1);
+        return actions;
     }
     // Pass validation owns pass + static leader (or best continuation if pass leads). Resolve those
     // slots first; at three replies the optional hold must yield to defense, never the reserved defense.

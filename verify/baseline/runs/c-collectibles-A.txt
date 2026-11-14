@@ -1,0 +1,116 @@
+PASS A0 the 33 cards and the 23 tokens and enchantments they use are scripted
+PASS A0b the 33 cards are collectible and every one is a card of the legacy pools already (no pool gained a member)
+PASS AT_027 a card drawn by its owner's Hero Power (Life Tap) costs (0)  (CS2_182 cost 0)
+PASS AT_027 cards drawn by a spell keep their Cost  (4,4)
+PASS AT_027 the turn's draw keeps its Cost
+PASS AT_027 an enemy Wilfred does not discount the draw
+PASS AT_079 (boss) one of each Secret of its deck enters play, live; the second copy stays in the deck  (EX1_611,EX1_554,EX1_610 deck 23/26)
+PASS AT_079 the Secrets it put into play trigger (Explosive Trap answers the attack)  (EX1_554)
+PASS AT_079 (player) more Secrets in the deck than room: five different ones enter play  (EX1_609,EX1_554,EX1_611,EX1_610,EX1_287)
+PASS AT_081 all enemy minions' Attack becomes 1; friendly minions and Health are untouched  (1,1,4)
+PASS AT_115 the next Hero Power costs (2) less  (cost 0)
+PASS AT_115 it waits through the opponent's Hero Power use  (cost 0)
+PASS AT_115 after the owner's use the Hero Power costs (2) again  (cost 2)
+PASS BOT_436 draws a minion and a spell from the deck and swaps their Costs  (CS2_182:7,CS2_032:4)
+PASS BOT_436 with no spell in the deck it draws the minion and swaps nothing
+PASS DAL_573 (boss) its owner's Secret triggers twice: Explosive Trap deals 2 damage twice, then leaves play  (damage 4)
+PASS DAL_573 without it the Secret triggers once
+PASS DAL_573 a silenced Rhyssa doubles nothing
+PASS DAL_573 (player) Noble Sacrifice triggers twice: two Defenders are summoned and the Secret is revealed once  (defenders 2)
+PASS DAL_573 the enemy's Secrets are not doubled (rule read from the Secret's owner)
+PASS DAL_729 a Discover among three different cards of the opponent's hand  (CS2_182,CS2_032,CS2_186)
+PASS DAL_729 the picked copy joins its owner's hand; the opponent's hand is unchanged
+PASS DAL_729 a hand with one card name offers that one card
+PASS DAL_729 an empty opponent hand: no Discover
+PASS DAL_729 (boss) the boss is offered copies of the run player's hand cards  (CS2_182)
+PASS DAL_731 a minion of each player's deck is summoned and they fight (the caster's attacks)  (board 0/1 damage 4)
+PASS DAL_731 a deck with no minion summons none: the other minion arrives and nothing fights
+PASS DAL_731 (boss) the boss's minion attacks the run player's
+PASS EX1_112 summons one AWESOME invention; over 24 seeds all four appear  (Mekka1,Mekka2,Mekka3,Mekka4)
+PASS Mekka1 Homing Chicken: at the start of its owner's turn it is destroyed and 3 cards are drawn  (drawn 4)
+PASS Mekka2 Repair Bot: at the end of its owner's turn it restores 6 Health to the damaged character  (damage 4)
+PASS Mekka3 Emboldener 3000: at the end of its owner's turn a random minion (here itself) gets +1/+1  (1/5)
+PASS Mekka4 Poultryizer: at the start of its owner's turn a random minion (here itself) becomes a 1/1 Chicken  (Mekka4t)
+PASS GIL_655 after another friendly minion attacks it gains +1 Attack  (atk 3)
+PASS GIL_655 its own attack counts too  (atk 4)
+PASS GIL_655 an enemy minion's attack does not count
+PASS GVG_014 swaps Health with the chosen minion (its current Health)  (5 / 2)
+PASS GVG_014 with no other minion it is played without a target
+PASS GVG_017 draws a card; a Beast costs (4) less  (DS1_178 cost 1)
+PASS GVG_017 a card that is no Beast keeps its Cost
+PASS GVG_025 summoning a minion that is no Pirate gives no Stealth
+PASS GVG_025 whenever its owner summons a Pirate it gains Stealth
+PASS GVG_025 an enemy Pirate does not count
+PASS GVG_025 a Pirate played from hand counts
+PASS GVG_049 whenever it takes damage its Attack doubles  (12/8)
+PASS GVG_049 and doubles again  (atk 24)
+PASS GVG_050 hits a random minion for 1 until a minion dies (one 3-Health minion: three hits)
+PASS GVG_050 among several minions exactly one dies and the hits stop there  (dead 1 total 10)
+PASS GVG_050 when no minion can die it stops after 80 hits
+PASS GVG_050 needs a minion in play
+PASS GVG_054 its wielder attacks the wrong enemy about half the time (40 seeds: every attack hits the hero or the other enemy)  (19 hero / 21 minion)
+PASS GVG_054 with no other enemy the attack always hits its target  (40/40)
+PASS GVG_054 is a 4/2 weapon
+PASS GVG_054 only the hero is forgetful, never its minions  (0 wrong)
+PASS GVG_097 Taunt, and +1/+1 for each enemy Deathrattle minion (two)  (4/5)
+PASS GVG_097 with none it stays 2/3
+PASS GVG_107 each other friendly minion gets exactly one of Windfury, Taunt, Divine Shield; itself and enemies none; all three appear  (DTW)
+PASS GVG_108 transforms a friendly minion into a random scripted minion of the same Cost (12 seeds)  (OG_323,AT_122,CFM_063,DAL_576,EX1_396,CFM_061,BOT_532,TRL_545,GVG_107,ULD_727,ICC_021,ICC_204)
+PASS GVG_108 cannot target an enemy minion
+PASS GVG_111 at the start of its owner's turn with 3 Mechs they are destroyed and V-07-TR-0N is formed (4/8, Charge, Mega-Windfury)  (CS2_182,GVG_111t 4/8 charge True limit 4 wf 0 mwf 1)
+PASS GVG_111 with two Mechs nothing happens
+PASS GVG_111 a full board of Mechs still forms V-07-TR-0N (the Mechs die first)
+PASS GVG_113 also damages the minions next to whomever it attacks  (6,6,6,0)
+PASS GVG_113 an attack on the hero damages no minion
+PASS GVG_119 equips a random scripted collectible weapon for each player (8 seeds)  (TRL_074,FP1_021,BOT_406,CS2_112,CORE_LOOT_044,LOOT_286,EX1_133,LOOT_542,TRL_304,LOOT_506,CFM_717,CS2_097,TRL_360,GIL_596)
+PASS LOE_009 at the end of its owner's turn a 1/1 Scarab with Taunt is summoned to its right
+PASS LOE_009 not at the end of the opponent's turn
+PASS LOE_022 Fierce Monkey is a 3/4 Beast with Taunt
+PASS LOE_029 Discover a 3-Cost card: three different scripted cards of the owner's class or neutral; the pick joins the hand  (18 cards seen)
+PASS LOE_047 Discover a Beast: three scripted Beasts
+PASS LOE_029 (boss) the boss's Discover honours the boss's generation list
+PASS LOE_053 after its owner casts a spell on another friendly minion, a copy is cast on it  (7 / 7)
+PASS LOE_053 a spell cast on itself is not copied
+PASS LOE_053 a spell cast on an enemy minion is not copied
+PASS LOE_053 the opponent's spells are not copied
+PASS LOE_061 Deathrattle: a random friendly minion gets +3/+3  (7/8)
+PASS LOE_061 with no friendly minion left nothing happens
+PASS LOE_092 Discover a powerful Artifact: Lantern of Power, Timepiece of Horror, Mirror of Doom  (LOEA16_3,LOEA16_4,LOEA16_5)
+PASS LOE_092 the picked artifact joins the hand (10 mana)
+PASS LOEA16_3 Lantern of Power gives a minion +10/+10
+PASS LOEA16_4 Timepiece of Horror deals 10 damage split among all enemies  (7 + 3)
+PASS LOEA16_5 Mirror of Doom fills the board with 3/3 Mummy Zombies
+PASS LOE_107 alone on the battlefield it can attack
+PASS LOE_107 with another minion in play (an enemy one) it can't attack
+PASS LOE_107 alone again it can attack
+PASS LOE_107 a friendly minion stops it too
+PASS LOE_107 silenced it attacks freely
+PASS LOE_119 its owner's hero takes only 1 damage from a 7-Attack hit  (damage 1)
+PASS LOE_119 and only 1 from a 6-damage spell  (damage 2)
+PASS LOE_119 Armor absorbs the single point  (2 armor 4)
+PASS LOE_119 its own damage is not capped (it dies to Fireball)
+PASS LOE_119 once it is gone the hero takes full damage (4 Armor, then 2 Health)  (4 armor 0)
+PASS LOE_119 silenced it caps nothing
+PASS LOE_119 (boss) the boss's hero is capped by its own Animated Armor; the run player's is not
+PASS TRL_318 the opening hand is recorded after the mulligan (before the first draw)  (CS2_186,TRL_318,CS2_182)
+PASS TRL_318 adds a copy of the opening hand to the hand, except Malacrass himself  (CS2_186,CS2_182 vs CS2_182,CS2_186)
+PASS TRL_318 a run match (DungeonRun.BuildPlan) records both opening hands
+PASS TRL_318 (boss) the boss gets a copy of its own opening hand  (CFM_665,CS2_119,CS2_172,GVG_071)
+PASS DAL_431 the first Discover offers three scripted Shaman spells  (BOT_246,CORE_EX1_238,LOOT_373)
+PASS DAL_431 then a second Discover (only untargeted spells after a targeted one)  (BOT_246,CORE_GIL_836,TRL_058)
+PASS DAL_431 a 5/5 Drustvar Horror that knows both spells joins the hand  (DAL_431t BOT_246+BOT_246)
+PASS DAL_431t its Battlecry casts both spells: Lightning Bolt on the chosen target, then Feral Spirit  (target True damage 3 board DAL_431t,EX1_tk11,EX1_tk11)
+PASS DAL_431t two untargeted spells: no target, both are cast
+PASS DAL_431t the generated definition survives a game clone
+PASS DAL_431t the printed token is a vanilla 5/5
+PASS FV1 the boss's fair view masks the run player's hand and deck  (4 hand, 26 deck)
+PASS FV2 the fair view keeps the boss's own opening hand and holds none of the run player's (TRL_318)
+PASS FV3 in the fair view Madame Lazul's Battlecry offers nothing: the search never reads the hidden hand (DAL_729)  (ok)
+PASS FV4 in the fair view Duel! takes nothing from the run player's deck: it stays hidden (DAL_731)  (ok deck 25->25 player deck 26->26)
+PASS FV5 after the real Duel! the boss's own-deck ledger samples its deck exactly (one minion left it for the board)  (24/24 24/24 24/24 24/24 24/24 24/24)
+PASS FV6 after Mysterious Challenger the boss's own-deck ledger holds exactly the Secrets left in its deck (AT_079)
+PASS Z1 every one of the 33 cards is admitted for the run player and for a boss (catalog runs)
+PASS Z2 every one has an admission row that names its test
+PASS Z3 none of them is on a generation reject list
+PASS Z4 the regenerated catalog offers the bucket members among them  (33 offered: )
+RESULT 115 passed, 0 failed

@@ -1,0 +1,552 @@
+{
+  "schemaVersion": 1,
+  "about": "Hand facts for tools/dungeon-run-catalog that the inputs do not hold. Every exclusion needs a reason; a theme list replaces the keyword tags of its labelKey (first tag primary).",
+  "labelFixes": {
+    "minature army": "miniature army"
+  },
+  "grantHeroes": [
+    "Houndmaster Shaw",
+    "Tess Greymane"
+  ],
+  "distinct": [
+    {
+      "adventure": "Dungeon Run",
+      "labelKey": "unique"
+    }
+  ],
+  "exclusions": [],
+  "weights": {},
+  "themes": {
+    "a dark hand": [
+      "discard"
+    ],
+    "adrenaline rush": [
+      "combo"
+    ],
+    "aggression": [
+      "aggro"
+    ],
+    "aggressive tactics": [
+      "aggro"
+    ],
+    "all might": [
+      "buff"
+    ],
+    "arcane": [
+      "spells"
+    ],
+    "assassin": [
+      "removal"
+    ],
+    "attack": [
+      "aggro"
+    ],
+    "auchenais touch": [
+      "heal",
+      "self-damage"
+    ],
+    "bag of tricks": [
+      "spells"
+    ],
+    "balance": [
+      "control"
+    ],
+    "berserker": [
+      "self-damage",
+      "weapons"
+    ],
+    "blood": [
+      "self-damage"
+    ],
+    "bombs away": [
+      "mechanical"
+    ],
+    "bounce": [
+      "combo"
+    ],
+    "burgle": [
+      "steal"
+    ],
+    "burn": [
+      "spells",
+      "aggro"
+    ],
+    "callin fer help": [
+      "swarm"
+    ],
+    "card draw": [
+      "draw"
+    ],
+    "carvings": [
+      "totem"
+    ],
+    "chaos": [
+      "random"
+    ],
+    "charge": [
+      "charge"
+    ],
+    "choose the outcome": [
+      "choose-one"
+    ],
+    "combat ready": [
+      "rush"
+    ],
+    "commander": [
+      "buff"
+    ],
+    "companions": [
+      "swarm"
+    ],
+    "copy minions": [
+      "copy"
+    ],
+    "copycat": [
+      "copy"
+    ],
+    "cult of cthun": [
+      "old-god"
+    ],
+    "cutthroat": [
+      "combo",
+      "weapons"
+    ],
+    "damaged": [
+      "self-damage"
+    ],
+    "death dealer": [
+      "removal"
+    ],
+    "destruction": [
+      "removal"
+    ],
+    "dire rush": [
+      "rush"
+    ],
+    "direct hit": [
+      "aggro"
+    ],
+    "discipline": [
+      "control"
+    ],
+    "divide and conquer": [
+      "removal"
+    ],
+    "divine shield": [
+      "divine-shield"
+    ],
+    "domination": [
+      "control"
+    ],
+    "double down": [
+      "combo"
+    ],
+    "draw": [
+      "draw"
+    ],
+    "erratic creatures": [
+      "random"
+    ],
+    "everybody hurts": [
+      "self-damage"
+    ],
+    "exhaustion": [
+      "control"
+    ],
+    "family tree": [
+      "choose-one"
+    ],
+    "farseer": [
+      "hero-power"
+    ],
+    "feeble squires": [
+      "swarm"
+    ],
+    "fervent fans": [
+      "swarm"
+    ],
+    "fire": [
+      "spells",
+      "aggro"
+    ],
+    "flood": [
+      "overload"
+    ],
+    "for the money": [
+      "steal"
+    ],
+    "fresh meat": [
+      "aggro"
+    ],
+    "go for the throat": [
+      "aggro"
+    ],
+    "greed": [
+      "draw"
+    ],
+    "hand power": [
+      "buff"
+    ],
+    "helping hand": [
+      "buff"
+    ],
+    "hireeks legion": [
+      "swarm"
+    ],
+    "holy": [
+      "spells"
+    ],
+    "honor among thieves": [
+      "steal"
+    ],
+    "in control": [
+      "control"
+    ],
+    "jinx": [
+      "removal"
+    ],
+    "judgment": [
+      "removal"
+    ],
+    "justice": [
+      "removal"
+    ],
+    "kingslayer": [
+      "removal"
+    ],
+    "knowledge": [
+      "discover"
+    ],
+    "life takers": [
+      "lifesteal"
+    ],
+    "lifesteal": [
+      "lifesteal"
+    ],
+    "magical friends": [
+      "spell-damage"
+    ],
+    "mana": [
+      "ramp"
+    ],
+    "mana growth": [
+      "ramp"
+    ],
+    "mercenaries": [
+      "aggro"
+    ],
+    "miracles": [
+      "spells",
+      "draw"
+    ],
+    "misfits": [
+      "random"
+    ],
+    "multiple enemies": [
+      "removal"
+    ],
+    "mutations": [
+      "transform"
+    ],
+    "mutual destruction": [
+      "removal"
+    ],
+    "natures wrath": [
+      "spells"
+    ],
+    "nurture and grow": [
+      "ramp"
+    ],
+    "old god": [
+      "old-god"
+    ],
+    "overkill": [
+      "overkill"
+    ],
+    "overwhelm": [
+      "swarm"
+    ],
+    "pain": [
+      "self-damage"
+    ],
+    "pain gains": [
+      "self-damage"
+    ],
+    "professional": [
+      "combo"
+    ],
+    "protection": [
+      "divine-shield"
+    ],
+    "rapid fire": [
+      "spells"
+    ],
+    "re enforcer": [
+      "buff"
+    ],
+    "recruiter": [
+      "recruit"
+    ],
+    "recruits": [
+      "recruit"
+    ],
+    "reinforce": [
+      "swarm"
+    ],
+    "removal": [
+      "removal"
+    ],
+    "resilient": [
+      "taunt"
+    ],
+    "resourceful": [
+      "discover"
+    ],
+    "resurrection": [
+      "resurrect"
+    ],
+    "rumble kings": [
+      "legendary"
+    ],
+    "run n gun": [
+      "weapons"
+    ],
+    "rush": [
+      "rush"
+    ],
+    "sacrifice": [
+      "self-damage"
+    ],
+    "safety measures": [
+      "control"
+    ],
+    "saplings": [
+      "swarm"
+    ],
+    "self sacrifice": [
+      "self-damage"
+    ],
+    "shadow": [
+      "spells"
+    ],
+    "shadows": [
+      "spells"
+    ],
+    "shifting scales": [
+      "transform"
+    ],
+    "shots": [
+      "spells"
+    ],
+    "shuffle and draw": [
+      "draw"
+    ],
+    "silence yourself": [
+      "silence"
+    ],
+    "silver hand": [
+      "swarm"
+    ],
+    "smash": [
+      "weapons"
+    ],
+    "specialist": [
+      "combo"
+    ],
+    "spirits": [
+      "deathrattle"
+    ],
+    "stalking": [
+      "stealth"
+    ],
+    "strike": [
+      "aggro"
+    ],
+    "strike at thee": [
+      "aggro"
+    ],
+    "superior subjugation": [
+      "removal"
+    ],
+    "survival tactics": [
+      "control"
+    ],
+    "tactical": [
+      "control"
+    ],
+    "take em down": [
+      "removal"
+    ],
+    "teambuilding": [
+      "buff"
+    ],
+    "the professional": [
+      "combo"
+    ],
+    "the silver hand": [
+      "swarm"
+    ],
+    "thief": [
+      "steal"
+    ],
+    "totems": [
+      "totem"
+    ],
+    "tracker": [
+      "discover"
+    ],
+    "transformations": [
+      "transform"
+    ],
+    "trick shots": [
+      "spells"
+    ],
+    "trickery": [
+      "steal"
+    ],
+    "tricks of the trade": [
+      "steal"
+    ],
+    "twisted": [
+      "old-god"
+    ],
+    "unique": [
+      "highlander",
+      "legendary"
+    ],
+    "unload": [
+      "spells"
+    ],
+    "unwavering": [
+      "taunt"
+    ],
+    "vanguard": [
+      "taunt"
+    ],
+    "whats mind is mine": [
+      "steal"
+    ],
+    "wild magic": [
+      "random"
+    ],
+    "wise decisions": [
+      "choose-one"
+    ],
+    "wrath": [
+      "spells"
+    ]
+  },
+  "adaptations": [
+    {
+      "id": "tombs-secondary-class-generation",
+      "note": "A dual-class (Tombs of Terror) run drafts from both classes, but the engine's Discover and random pools follow the primary class (Classes[0]) only. The exceptions are the explorer treasures' own class Discovers (ULDA_301 Map of Uldum, ULDA_303 Starseeker's Tools), which offer cards of both row classes (RunContext.PlayerClasses). Other Tombs secondary-class generation is not modelled."
+    },
+    {
+      "id": "tombs-vip-membership-tavern",
+      "note": "ULDA_011 VIP Membership ('Taverns you visit are upgraded!', phase 6 F13): the client data does not say what an upgraded tavern is (the original was server-side). In SoloStone an upgraded tavern gives 1 more gold and offers 1 more option (DungeonRun.VipExtraGold, DungeonRun.VipExtraOffers); the treasure has no match effect."
+    }
+  ],
+  "exclusionNotes": {
+  },
+  "customBucketsAbout": "Phase 6 (F16): themed SoloStone-curated pool entries for the classes no original adventure offered (Death Knight, Demon Hunter), so an act run's fourteen drafts never run dry under any pick order (seven entries each; the phase 6 review walked always-pick-last runs that fell to 2 offers on floors 13-14 with four. The Death Knight entries share cards, as the rune-free Death Knight cards admitted are few). Members are admitted, scripted, rune-free collectible cards of the class (the catalog tool fails the build on any other); each entry is taken at most draft.bucketMaxTakes times.",
+  "customBuckets": [
+    {
+      "id": "ss.deathknight.army-of-the-scourge",
+      "class": "DEATHKNIGHT",
+      "label": "Army of the Scourge",
+      "themes": ["undead", "swarm"],
+      "cards": ["CORE_RLK_121", "RLK_503", "RLK_958", "CORE_EDR_002", "TIME_616", "END_003", "TLC_436", "CORE_RLK_745"]
+    },
+    {
+      "id": "ss.deathknight.blood-and-bone",
+      "class": "DEATHKNIGHT",
+      "label": "Blood and Bone",
+      "themes": ["taunt", "heal"],
+      "cards": ["DINO_416", "TLC_443", "RLK_720", "TIME_614", "TIME_618", "CORE_RLK_062", "JAIL_440"]
+    },
+    {
+      "id": "ss.deathknight.frozen-throne",
+      "class": "DEATHKNIGHT",
+      "label": "The Frozen Throne",
+      "themes": ["deathrattle", "big"],
+      "cards": ["CORE_RLK_086", "RLK_708", "TLC_810", "DINO_415", "EDR_819", "JAIL_442"]
+    },
+    {
+      "id": "ss.deathknight.plague-march",
+      "class": "DEATHKNIGHT",
+      "label": "Plague March",
+      "themes": ["buff", "undead"],
+      "cards": ["DINO_417", "EDR_816", "CATA_161", "CORE_RLK_087", "FIR_900", "FIR_901", "JAIL_444"]
+    },
+    {
+      "id": "ss.deathknight.corpse-harvest",
+      "class": "DEATHKNIGHT",
+      "label": "Corpse Harvest",
+      "themes": ["undead", "deathrattle"],
+      "cards": ["RLK_503", "CORE_RLK_745", "DINO_416", "TLC_436", "TIME_618", "CORE_RLK_121", "TLC_443"]
+    },
+    {
+      "id": "ss.deathknight.grave-tidings",
+      "class": "DEATHKNIGHT",
+      "label": "Grave Tidings",
+      "themes": ["removal", "control"],
+      "cards": ["CORE_RLK_087", "TIME_614", "RLK_720", "TLC_EVENT_402", "EDR_819", "RLK_708", "TIME_619"]
+    },
+    {
+      "id": "ss.deathknight.ghoul-tide",
+      "class": "DEATHKNIGHT",
+      "label": "Ghoul Tide",
+      "themes": ["swarm", "buff"],
+      "cards": ["JAIL_440", "CORE_RLK_062", "EDR_816", "DINO_417", "RLK_958", "CATA_161", "CORE_EDR_002"]
+    },
+    {
+      "id": "ss.demonhunter.fel-fury",
+      "class": "DEMONHUNTER",
+      "label": "Fel Fury",
+      "themes": ["weapons", "attack"],
+      "cards": ["CORE_BT_035", "CORE_BT_921", "CORE_BT_187", "CORE_WC_701", "CORE_BT_351", "END_006", "TLC_840", "EDR_842"]
+    },
+    {
+      "id": "ss.demonhunter.void-souls",
+      "class": "DEMONHUNTER",
+      "label": "Void Souls",
+      "themes": ["demon", "spells"],
+      "cards": ["JAIL_732", "JAIL_733", "JAIL_891", "JAIL_730", "JAIL_892", "TIME_021", "JAIL_721"]
+    },
+    {
+      "id": "ss.demonhunter.demonic-studies",
+      "class": "DEMONHUNTER",
+      "label": "Demonic Studies",
+      "themes": ["demon", "discover"],
+      "cards": ["CORE_BT_321", "CORE_YOP_001", "CORE_BT_416", "CORE_TTN_843", "CORE_BT_493", "CORE_CATA_001", "EDR_891", "TIME_444"]
+    },
+    {
+      "id": "ss.demonhunter.outcast-strikes",
+      "class": "DEMONHUNTER",
+      "label": "Outcast Strikes",
+      "themes": ["outcast", "attack"],
+      "cards": ["CORE_BT_480", "CORE_BT_491", "CORE_BT_801", "DINO_136", "CATA_533", "CS3_020", "TLC_833", "FIR_902"]
+    },
+    {
+      "id": "ss.demonhunter.hive-swarm",
+      "class": "DEMONHUNTER",
+      "label": "Hive Swarm",
+      "themes": ["swarm", "spells"],
+      "cards": ["TLC_630", "TLC_631", "TLC_633", "TLC_841", "TLC_900", "TLC_901", "TLC_902", "TLC_903"]
+    },
+    {
+      "id": "ss.demonhunter.tidal-depths",
+      "class": "DEMONHUNTER",
+      "label": "Tidal Depths",
+      "themes": ["big", "attack"],
+      "cards": ["CATA_151", "CATA_525", "CATA_526", "CATA_528", "CATA_529", "CATA_530", "CATA_697", "CATA_699"]
+    },
+    {
+      "id": "ss.demonhunter.emerald-nightmare",
+      "class": "DEMONHUNTER",
+      "label": "Emerald Nightmare",
+      "themes": ["demon", "removal"],
+      "cards": ["EDR_421", "EDR_493", "EDR_820", "EDR_840", "EDR_841", "EDR_882", "EDR_890", "EDR_892"]
+    }
+  ]
+}

@@ -1,0 +1,171 @@
+PASS A1 the rule's player enchantment is on both players
+PASS A2 after the run player plays Fireball (4) a 4-Cost minion is summoned for the run player only  (BOT_532:4)
+PASS A3 the minion is a scripted card the run's generation filter allows
+PASS A4 Arcane Missiles (1): a 1-Cost minion
+PASS A5 the boss plays Arcane Intellect (3): a 3-Cost minion for the boss, none for the run player
+PASS A6 a full board: nothing is summoned and the spell still resolves
+PASS A7 a Fireball that cost (3) in hand summons a 3-Cost minion  (BOT_413:3)
+PASS A8 the minion is random (twelve seeds give several different 4-Cost minions)  (12 distinct)
+PASS B1 both players' Battlecries trigger twice (the controller aura is on each)
+PASS B2 the run player's Elven Archer deals its 1 damage twice
+PASS B3 the boss's Elven Archer deals its 1 damage twice
+PASS B4 without the rule: once
+PASS B5 a clone plays under the same rule
+PASS B6 the shared helper: one aura for both players (a boss power's "All Battlecries trigger twice")
+PASS C1 the rule is on both players
+PASS C2 the run player's Leper Gnome deals its 2 damage to the boss twice
+PASS C3 the boss's Leper Gnome deals its 2 damage to the run player twice
+PASS C4 Loot Hoarder draws two cards
+PASS C5 without the rule: once
+PASS D1 a played minion gains Nested and counts as a Deathrattle minion
+PASS D2 a summoned (not played) minion gains nothing
+PASS D3 when it dies a 1/1 copy of it takes its place  (1/1 at 0)
+PASS D4 the copy was not played: it has no Nested and leaves nothing when it dies
+PASS D4b nothing follows the copy
+PASS D5 the boss's played minion leaves a 1/1 copy on the boss's board
+PASS D6 the dead minion's own slot is free again, so the copy still fits a board that was full
+PASS E1 at the end of the run player's turn the run player draws until 5 cards; the boss does not draw for it  (5 6 (boss drew its turn card))
+PASS E2 at the end of the boss's turn the boss draws until 5 cards
+PASS E3 with 5 or more cards nothing is drawn
+PASS E4 an empty deck: two missing cards are two Fatigue draws (1 + 2 damage)  (damage 3)
+PASS F1 Arcane Intellect is cast an additional time: four cards drawn, and the copy does not cast again  (4 drawn)
+PASS F2 Fireball: the chosen target takes 6 and the copy hits a random character for 6 (ten seeds)  (10 of 10)
+PASS F3 the copy's target is random among all characters, the caster's own included  (boss,boss minion,own hero,own minion)
+PASS F4 a Secret is not cast again (it could not enter play twice)
+PASS F5 the boss's spell: Counterspell counters the played spell, and a countered spell casts no copy  (0 drawn)
+PASS F6 the boss's next Arcane Intellect draws four
+PASS F7 without the rule: two cards
+PASS F8 RecastRandom casts a copy of a spell, never of a recast's copy, a Secret or a Quest
+PASS G1 the rule is on both players
+PASS G2 at the start of a player's turn a Murloc sometimes joins that player's board (1 in 4): 48 in 160 turn starts  (22 for the run player, 26 for the boss)
+PASS G3 every one is a scripted Murloc the generation filter allows, summoned for the player whose turn started  (32 distinct)
+PASS G4 without the rule no minion appears
+PASS H1 both players are dealt two more opening cards, before the mulligan  (5/7 against 3/5)
+PASS H2 both players start with two Mana Crystals; the rule has no player enchantment and is active by its mark
+PASS H3 the run player's first turn has 3 Mana Crystals
+PASS H4 the boss's first turn has 3 Mana Crystals
+PASS H5 applying the rule again gives nothing more (its mark is on the game, in a clone too)
+PASS H6 the engine's opening-hand cap applies to the sum
+PASS H7 a rule without opening cards leaves both bonuses alone
+PASS I1 two spells in a turn: no Dragon yet
+PASS I2 the third spell in a turn summons a 5/5 Dragon Spirit for the run player
+PASS I3 the count starts again after a Dragon
+PASS I4 six spells in a turn: two Dragons
+PASS I5 the count is per player and per turn: the boss's first spell summons nothing
+PASS I6 the boss's third spell in its turn summons the boss's Dragon
+PASS I7 the run player's two spells of last turn do not count this turn
+PASS I8 a clone keeps the count (an entity tag of the player's enchantment)
+PASS J1 the rule is on both players
+PASS J2 a run player's minion attacks the wrong enemy about half the time (40 attacks)  (21 wrong, 19 right)
+PASS J3 so does a boss's minion  (20 wrong, 20 right)
+PASS J4 with no other enemy the attack lands where it was aimed
+PASS J5 without the rule every attack lands where it was aimed
+PASS J6 Splitting Image under the rule: the attacked Yeti is copied; an attack that went to the hero leaves the Secret in play  (11 copied, 13 kept, 0 other)
+PASS J7 Ogre Warmaul (GVG_054, family 02) equipped before Splitting Image: no hero attack faults  (0 of 24 hero attacks fault)
+PASS K1 at the end of the run player's turn its hand costs (1) less; the boss's hand does not  (3 4)
+PASS K2 an Echo or repeatable card is never brought below (1)
+PASS K3 at the end of the boss's turn the boss's hand costs (1) less; the run player's is unchanged
+PASS K4 it adds up turn after turn; Sound the Bells! stays at (1)
+PASS K5 without the rule nothing changes
+PASS L1 nothing before the mulligan: decks and hands hold no Hallucination
+PASS L2 after both mulligans each deck holds ten Hallucinations  (10 10)
+PASS L3 they are shuffled in, not stacked
+PASS L4 each owner's deck is recorded for its own-deck ledger
+PASS L5 the boss's own-deck ledger samples its deck with the ten Hallucinations  (CS2_182x26,UNG_856x10)
+PASS L6 the run player's Hallucination: a Discover among three cards of the boss's class the generation filter allows  (KAR_028,DAL_008,GVG_050)
+PASS L7 the boss's Hallucination: a Discover among three cards of the run player's class that both generation lists allow  (CORE_CS2_024,GIL_645,UNG_948)
+PASS L8 a 50-card run deck holds them too (60 cards with the hand)
+PASS M1 a summoned minion gains Explosive (a Deathrattle), on either side
+PASS M2 when it dies it deals 1 damage to all minions
+PASS M3 a played minion gains it too
+PASS M4 a chain: the 1 damage kills the 1-Health minions, whose own explosions follow  (4 4)
+PASS M5 Eternal Bloodpetal and its Seedling: the death phase ends once 30 minions of that player were marked this turn  (ended, 31 deaths, left TLC_234t)
+PASS M6 past the limit a minion summoned in the same turn gains nothing; the other player's count is its own
+PASS M7 the count starts again at the turn's end
+PASS N1 the rule is on both players
+PASS N2 each summoned minion gains exactly one of Taunt, Divine Shield, Rush and Windfury  (10/10/5/11)
+PASS N3 all four are given over 36 summons  (10/10/5/11)
+PASS N4 a played minion that got Rush can attack a minion at once, not the hero
+PASS O1 nothing on the boards before the mulligan; the rule has no player enchantment
+PASS O2 after both mulligans the boss has a 0/3 Cache of Cash; the run player has none
+PASS O3 it is an ordinary minion: the run player may attack and target it
+PASS O4 its Deathrattle gives each player two Coins
+PASS O5 the start hook runs once (a second resolve does nothing, in a clone too)
+PASS P1 a played 4/5 Yeti is a 5/4 with the Stinky enchantment  (5/4)
+PASS P2 a summoned boss 2/3 Crocolisk is a 3/2
+PASS P3 a 0-Attack minion has 0 Health and dies
+PASS P4 the swap comes as the minion enters play; its Battlecry still resolves
+PASS P5 a later buff applies to the swapped values (5/4 and +1/+2: 6/6)  (6/6)
+PASS P6 damage is dealt to the swapped Health
+PASS P7 Mirror Image's two 0/2 Taunts are 2/0 and die as they arrive
+PASS P8 without the rule: 4/5
+PASS Q1 nothing on the boards before the mulligan
+PASS Q2 after both mulligans each player has a Violet Prison holding a minion  (BOT_507 CORE_EX1_014)
+PASS Q3 the held minion and the turns left are public tags (the turns: the minion's Cost, at least 1); the generation filter chose them  (run player's: 6 left of 7 (its first turn started); boss's: 3 of 3)
+PASS Q4 a prison is a permanent: untouchable, never a target, never attackable, not counted as a minion
+PASS Q5 Imprison: 2 turns for a 2-Cost minion, 1 for a 1-Cost one
+PASS Q6 the run player's Fireball and minions cannot choose the boss's prison
+PASS Q7 Twisting Nether destroys the minions and leaves both prisons
+PASS Q8 at the start of the boss's next turn its 1-Cost prisoner is released in the prison's place
+PASS Q9 a released Charge minion may attack at once
+PASS Q10 the run player's prison counts down at the start of the run player's turn
+PASS Q11 one turn later the Crocolisk is released; it entered play this turn and cannot attack yet
+PASS Q12 next turn it attacks as any minion
+PASS Q13 the shipped prisons release their minions after as many owner turns as they cost (the first turn start counts)  (7/7 3/3)
+PASS Q14 the prisoner is random (ten seeds: several different Costs)  (1,2,3,4,6,7,8)
+PASS R1 nothing on the boards before the mulligan
+PASS R2 after both mulligans each player has three different Carts  (DALA_833t,DALA_833t2,DALA_833t4 | DALA_833t,DALA_833t2,DALA_833t4)
+PASS R3 both players can only have four minions: the board is full with four
+PASS R4 a fifth minion cannot be played
+PASS R5 a Cart is never a target and cannot be attacked
+PASS R6 Flamestrike and Twisting Nether leave all six Carts and clear the minions
+PASS R7 the Carts stay for the whole match
+PASS R8 all four Carts appear over eight seeds
+PASS R9 PlaceBlockers refuses a card that is not a permanent
+PASS S1 the scripted rules: family 01's three and this family's eighteen (DALA_857 is not scripted)  (DALA_829,DALA_831,DALA_832,DALA_833,DALA_850,DALA_851,DALA_852,DALA_853,DALA_854,DALA_855,DALA_856,DALA_858,DALA_859,DALA_860,DALA_861,DALA_862,DALA_863,DALA_864,DALA_865,DALA_866,DALA_867,ULDA_702,ULDA_705,ULDA_706,ULDA_707,ULDA_708,ULDA_709,ULDA_710,ULDA_711,ULDA_712,ULDA_713,ULDA_714,ULDA_715,ULDA_719,ULDA_721,ULDA_724,ULDA_801,ULDA_802,ULDA_803,ULDA_804)
+PASS S2 DALA_851: the rule card carries the client's text and its player enchantment is the client's  (After a spell is played, a minion of the same cost is summoned.)
+PASS S2 DALA_852: the rule card carries the client's text and its player enchantment is the client's  (All <b>Battlecries</b> trigger twice.)
+PASS S2 DALA_853: the rule card carries the client's text and its player enchantment is the client's  (All <b>Deathrattles</b> trigger twice.)
+PASS S2 DALA_854: the rule card carries the client's text and its player enchantment is the client's  (After a minion is played, it gains "<b>Deathrattle:</b> Summon a 1/1 copy of this minion.")
+PASS S2 DALA_855: the rule card carries the client's text and its player enchantment is the client's  (At the end of each player's turn, that player draws until they have 5 cards.)
+PASS S2 DALA_856: the rule card carries the client's text and its player enchantment is the client's  (All spells cast an additional time. <i>(targets chosen randomly)</i>)
+PASS S2 DALA_858: the rule card carries the client's text and its player enchantment is the client's  (Murlocs occasionally join the battle.)
+PASS S2 DALA_859: the rule card carries the client's text and is hooks only (the client has no player enchantment for it)  (Both players start the game with two extra cards and Mana Crystals.)
+PASS S2 DALA_860: the rule card carries the client's text and its player enchantment is the client's  (After a player casts 3 spells in a turn, that player summons a 5/5 Dragon.)
+PASS S2 DALA_861: the rule card carries the client's text and its player enchantment is the client's  (All minions have a 50% chance to attack the wrong enemy.)
+PASS S2 DALA_862: the rule card carries the client's text and its player enchantment is the client's  (At the end of each player's turn, reduce the cost of cards in their hand by (1).)
+PASS S2 DALA_863: the rule card carries the client's text and is hooks only (the client has no player enchantment for it)  (Both players start the game with 10 'Hallucinations' in their deck.)
+PASS S2 DALA_865: the rule card carries the client's text and its player enchantment is the client's  (After a minion is summoned, it gains "<b>Deathrattle</b>: Deal 1 damage to all minions.")
+PASS S2 DALA_867: the rule card carries the client's text and its player enchantment is the client's  (After a minion is summoned, it gains <b>Taunt</b>, <b>Divine Shield</b>, <b>Rush</b>, or <b>Windfury</b> at random.)
+PASS S2 DALA_829: the rule card carries the client's text and is hooks only (the client has no player enchantment for it)  (Your opponent starts the game with a 'Cache of Cash.')
+PASS S2 DALA_831: the rule card carries the client's text and its player enchantment is the client's  (All minions' Attack and Health are swapped.)
+PASS S2 DALA_832: the rule card carries the client's text and is hooks only (the client has no player enchantment for it)  (Both players start the game with a 'Violet Prison.')
+PASS S2 DALA_833: the rule card carries the client's text and is hooks only (the client has no player enchantment for it)  (Both players can only have four minions.)
+PASS S3 the tokens are scripted client cards; the prison and the Carts are permanents
+PASS S4 what each hooked rule creates is listed for the validator
+PASS S5 a twist and an anomaly together: both active on both players, each doing its part (the Carts gain nothing)
+PASS S6 a plan without rules has no encounter rules, no mark and no start block
+PASS S7 Configure refuses the unscripted rule DALA_857
+PASS S8 a clone keeps a hooked rule's mark and start state
+PASS S9 the family's private tags are inside the encounter range (never sent to the client)
+PASS T1 the shipped data validates with the family's rule rows
+PASS T2 schedule-v1.json lists the 18 anomalies and the 4 twists of the Dalaran Heist
+PASS T3 DALA_857 Glittering is rejected with its reason, and the admission table rejects it too
+PASS T4 every scripted rule of the family is admitted as a rule only and never generated
+PASS T5 the tokens are admitted for a rule only and never generated
+PASS T6 over 400 seeds the act I anomaly node offers each of the 17 admitted anomalies, never DALA_857 and never a twist
+PASS T7 an act with a shrine boss (Voone) never gets The Stench or The Carts; The Coffers and The Prisons stay possible  (DALA_829,DALA_832,ULDA_801,ULDA_802,ULDA_803,ULDA_804)
+PASS T8 an act with a deck-replacing boss (Icarax) is never offered Hallucinating; another act is  (Icarax act 3)
+PASS T9 a boss with the same rule as its power excludes the rule: Crying, Rattling, Wild Magic and Ogreish by flag, every board twist by boardStart  (DALA_850,DALA_864,DALA_866,DALA_851,DALA_854,DALA_855,DALA_858,DALA_859,DALA_860,DALA_862,DALA_863,DALA_865,DALA_867,ULDA_702,ULDA_705,ULDA_707,ULDA_708,ULDA_709,ULDA_710,ULDA_711,ULDA_712,ULDA_713,ULDA_714,ULDA_715,ULDA_720,ULDA_721,ULDA_724,ULDA_729 | )
+PASS T10 a run with a board shrine never gets The Stench or The Carts  (DALA_829,DALA_832,ULDA_801,ULDA_802,ULDA_803,ULDA_804)
+PASS T11 Darius Crowley (his Cannons take board slots) never gets The Carts; a Mage run may get all four twists  (DALA_829,DALA_831,DALA_832 | DALA_829,DALA_831,DALA_832,DALA_833)
+PASS T12 the board twists exclude one another, whichever row states it (The Carts active: no Coffers, no Prisons)  (DALA_831,ULDA_801,ULDA_802,ULDA_803)
+PASS T12b an anomaly may share the act with a twist
+PASS T13 the validator refuses an unknown class in incompatibleClasses and an unknown flag
+PASS T14 the validator refuses DALA_857 as an admitted rule (the table rejects it and it has no script)
+PASS T15 the validator checks that the client knows each card a rule creates  (JAIL_202: no client entity definition (deck druid_thicket) | CORE_CS2_009: no client entity definition (deck druid_barkbough) | CORE_EX1_154: no client entity definition (deck druid_forked))
+PASS T16 the fixture schedule (twist pools filled, chance 100) validates and rolls each of the four twists  (DALA_829x289,DALA_832x272,DALA_833x142,DALA_831x148)
+PASS T17 a rolled twist is never one a boss of its act excludes (276 acts with a shrine boss)
+PASS T18 the rolled twist is on the fight's plan and plays (DALA_829)
+PASS T19 the rule page shows each rule card's own name and text
+RESULT 170 passed, 0 failed

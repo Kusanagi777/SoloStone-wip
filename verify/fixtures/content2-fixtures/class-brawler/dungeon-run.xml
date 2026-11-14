@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
+  <Profile>
+    <Heroes />
+    <Unlocked />
+    <Archive />
+  </Profile>
+  <Active DataVersion="dungeon-run/1" Seed="6491657387877926776" TypedSeed="false" Hero="brawler" Power="CS2_102" Floor="3" Phase="PreMatch" Attempt="0" DraftsWithoutDominant="1">
+    <Deck>
+      <string>GVG_051</string>
+      <string>GVG_051</string>
+      <string>OG_312</string>
+      <string>CORE_EX1_606</string>
+      <string>CORE_EX1_606</string>
+      <string>CFM_300</string>
+      <string>GIL_113</string>
+      <string>GIL_113</string>
+      <string>NEW1_011</string>
+      <string>ICC_450</string>
+      <string>TB_CoOpv3_003</string>
+      <string>BOT_020</string>
+      <string>BOT_312</string>
+      <string>TIME_035</string>
+      <string>CFM_095</string>
+      <string>TLC_242</string>
+      <string>UNG_002</string>
+    </Deck>
+    <Treasures />
+    <ActiveTreasures>
+      <string>bottomless_tome</string>
+    </ActiveTreasures>
+    <Upgrades />
+    <BossSequence>
+      <string>mire_brute</string>
+      <string>hedge_witch</string>
+      <string>cellar_matron</string>
+      <string>golemancer</string>
+      <string>storm_herald</string>
+      <string>pit_champion</string>
+      <string>lady_of_thorns</string>
+      <string>sleepless_one</string>
+    </BossSequence>
+    <TakenBundles>
+      <string>bundle_neutral_mechanical</string>
+      <string>bundle_neutral_beast</string>
+    </TakenBundles>
+    <BundleCooldowns>
+      <string>bundle_warrior_battlecry@3</string>
+      <string>bundle_warrior_weapons@3</string>
+      <string>bundle_neutral_elemental@4</string>
+      <string>bundle_warrior_mechanical@4</string>
+    </BundleCooldowns>
+    <DraftedThemes>
+      <string>mechanical</string>
+      <string>mechanical</string>
+      <string>mechanical</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+    </DraftedThemes>
+    <Drafts>
+      <DungeonRunDraft Floor="1" Kind="treasure" Picked="bottomless_tome">
+        <Offered>
+          <string>bottomless_tome</string>
+          <string>ember_brand</string>
+          <string>mirror_shard</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="1" Kind="bundle" Picked="bundle_neutral_mechanical">
+        <Offered>
+          <string>bundle_neutral_mechanical</string>
+          <string>bundle_warrior_battlecry</string>
+          <string>bundle_warrior_weapons</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="2" Kind="bundle" Picked="bundle_neutral_beast">
+        <Offered>
+          <string>bundle_neutral_beast</string>
+          <string>bundle_neutral_elemental</string>
+          <string>bundle_warrior_mechanical</string>
+        </Offered>
+      </DungeonRunDraft>
+    </Drafts>
+    <Matches>
+      <DungeonRunMatchSummary Floor="1" Boss="mire_brute" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="2" Boss="hedge_witch" Outcome="Win" Attempt="1" />
+    </Matches>
+  </Active>
+</DungeonRun>

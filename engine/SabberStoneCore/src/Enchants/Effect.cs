@@ -321,6 +321,11 @@ namespace SabberStoneCore.Enchants
             if (Tag == GameTag.COST && playable is Playable costTarget)
             { costTarget._costManager?.RemoveCostAura(Operator, Value, sourceId); return; }
 
+            // An entity that holds no aura effects has none of this aura to give back: a fair-view stand-in (Unknown) for a
+            // hidden hand card the aura reached in the real game (GIL_618 Glinda Crowskin's Echo on the opponent's masked hand:
+            // her death in the boss's search threw here; phase 8 wave 3 integration, c-w3fix X2).
+            if (playable.AuraEffects == null) return;
+
             bool hadAttackKeyword = (Tag == GameTag.CHARGE || Tag == GameTag.RUSH || Tag == GameTag.WINDFURY)
                 && playable[Tag] > 0;
 			switch (Operator)

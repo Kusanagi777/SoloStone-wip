@@ -2541,7 +2541,7 @@ namespace SabberStoneCore.CardSets
 			cards.Add("ICC_450", new CardDef(new Power
 			{
 				PowerTask = ComplexTask.Create(
-					new IncludeTask(EntityType.FRIENDS),
+					new IncludeTask(EntityType.ALLMINIONS),
 					new FilterStackTask(SelfCondition.IsDamaged),
 					new CountTask(EntityType.STACK),
 					new AddEnchantmentTask("ICC_450e", EntityType.SOURCE, true))

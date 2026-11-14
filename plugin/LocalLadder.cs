@@ -99,6 +99,11 @@ internal static class LocalLadder
             FinishDebugScenario();
             return;
         }
+        if (active.DungeonRun)
+        {
+            FinishDungeonRun(match, diagnostic);
+            return;
+        }
         if (result == null && error == null)
         {
             try
@@ -151,6 +156,133 @@ internal static class LocalLadder
             catch (Exception second) { error = "Debug scenario could not be closed: " + second.Message; Debug.LogError(error); }
         }
         scenarioDoneAt = -1;
+    }
+
+    // ---------------------------------------------------------------- Dungeon Run (docs/design/dungeon-run.md R10-R12)
+
+    // A run fight reuses the ladder's staging (BeginLaunch, StartLocalMatch, the Starting/Playing screen and its guards) on
+    // a Pending flagged DungeonRun, which Settle and RecoverInterrupted drop without a trace. No world encounter, NPC memory,
+    // achievement context, pet, playtest knob or debug scenario is ever attached. Returns null, or why it could not start.
+    internal static string StartRun()
+    {
+        if (screen == "Starting" || screen == "Playing") return "A match is already starting.";
+        if (profile?.Pending != null) return "A match is still pending.";
+        try
+        {
+            var run = DungeonRunRuntime.Rules ?? throw new InvalidOperationException(
+                "Dungeon Run is unavailable: " + string.Join("; ", DungeonRunRuntime.DisabledReasons.Take(3)));
+            var state = DungeonRunRuntime.Save?.Active ?? throw new InvalidOperationException("No run in progress.");
+            if (state.Phase != DungeonRunPhase.PreMatch) throw new InvalidOperationException("The run is not ready for a fight.");
+            NpcWorldRuntime.End();
+            opponentLabel = null;
+            playtest = null;
+            // Phase 8: the profile carries persistent boss damage; the boss's Secret prior covers every class the run player's
+            // hero can be in this fight (a fight-only hero card or a relay hero; the run's own classes on every other fight).
+            var plan = run.BuildPlan(state, DungeonRunRuntime.Save?.Profile);
+            var boss = DungeonRunBossPilot.Build(run.CurrentBoss(state), plan, run.Data, legacyDeck: state.StarterDeck == null, runClasses: run.MatchClasses(state));
+            int seed = run.MatchSeed(state);
+            const string deckKey = "dungeon-run";
+            var prepared = ClientBridge.PrepareRunMatch(plan, boss, seed, deckKey, boss.Deck.Id, run.DeckMax(state));
+            profile.ArmDungeonRun();
+            profile.ArmFirstPlayer(1);
+            try
+            {
+                profile.BeginLaunch(deckKey, boss.Deck.Id, seed, record => {
+                    ClientBridge.StartLocalMatch(record, prepared);
+                    active = record;
+                    result = null;
+                    terminalFacts = null;
+                    terminalPetXp = null;
+                    terminalAchievementEvidence = null;
+                    terminalOutcome = null;
+                    conceded = false;
+                    nativeFinished = false;
+                    error = null;
+                    runRecorded = false;
+                    runRecordAttempts = 0;
+                    runNextAttemptAt = 0;
+                    runDoneAt = -1;
+                    // The debug overlay labels the opponent from this (the boss deck id is no LocalDecks entry).
+                    opponentLabel = boss.Profile.DisplayName;
+                    screen = "Starting";
+                });
+            }
+            finally { profile.DisarmDebugScenario(); }
+            // Only once the fight is staged: a refusal above leaves the run at pre-match with nothing to undo.
+            run.BeginMatch(state);
+            DungeonRunRuntime.BeginMatch(state);
+            try { DungeonRunRuntime.Commit(); }
+            catch (Exception failure) { Debug.LogWarning("DUNGEON_RUN_COMMIT_FAILED at fight start: " + failure.Message); }
+            var node = run.CurrentNode(state);
+            Debug.Log("DUNGEON_RUN_FIGHT floor=" + state.Floor + " boss=" + state.BossSequence[state.Floor - 1] + " seed=" + seed
+                + " attempt=" + state.Attempt + (node != null ? " schedule=" + state.Schedule + " act=" + node.Act + " floorInAct=" + node.FloorInAct
+                + " node=" + node.Index + " " + node.Kind + " health=" + plan.BossHealth + " manaBonus=" + run.BossStartManaBonus(state)
+                + " deck=" + state.Deck.Count + "/" + run.DeckMax(state) : ""));
+            return null;
+        }
+        catch (Exception failure)
+        {
+            NpcWorldRuntime.End();
+            DungeonRunRuntime.EndMatch();
+            error = null;
+            screen = "Menu";
+            Debug.LogWarning("DUNGEON_RUN_START_REFUSED " + failure.Message);
+            return "The fight could not start: " + failure.Message;
+        }
+    }
+
+    private static bool runRecorded;
+    private static int runRecordAttempts;
+    private static float runDoneAt = -1, runNextAttemptAt;
+    private const int RunRecordAttempts = 10;
+
+    // The run's outcome is recorded (and its sidecar committed) as soon as the engine game is over, BEFORE the flagged
+    // Pending is dropped (design R10). A failed record is retried (about once a second, up to RunRecordAttempts); the
+    // Pending stays until then. Only if every attempt fails is it dropped anyway: memory and file both still say InMatch,
+    // so the run screen restages the floor (the Fault rule) and no recorded outcome can disappear.
+    private static void FinishDungeonRun(NativeMatch match, Action<string> diagnostic)
+    {
+        if (!runRecorded)
+        {
+            if (Time.realtimeSinceStartup < runNextAttemptAt) return;
+            DungeonRunOutcome outcome = match.DungeonRunEnding == "fault" ? DungeonRunOutcome.Fault
+                : match.DungeonRunEnding == "turn-limit" ? DungeonRunOutcome.TurnLimit
+                : terminalOutcome == "Won" ? DungeonRunOutcome.Win
+                : terminalOutcome == "Tied" ? DungeonRunOutcome.Tie
+                : terminalOutcome == "Lost" ? (conceded ? DungeonRunOutcome.Concede : DungeonRunOutcome.Loss)
+                : DungeonRunOutcome.Fault;
+            try
+            {
+                DungeonRunRuntime.RecordFightOutcome(outcome, match.DungeonRunResult, match.DungeonRunEnd);
+                runRecorded = true;
+            }
+            catch (Exception failure)
+            {
+                runRecordAttempts++;
+                try { diagnostic?.Invoke("DUNGEON_RUN_RECORD_FAILED attempt " + runRecordAttempts + "/" + RunRecordAttempts + " "
+                    + failure.GetType().Name + ": " + failure.Message); } catch { }
+                if (runRecordAttempts < RunRecordAttempts) { runNextAttemptAt = Time.realtimeSinceStartup + 1; return; }
+                runRecorded = true;
+                DungeonRunRuntime.EndMatch();
+            }
+        }
+        if (runDoneAt < 0) runDoneAt = Time.realtimeSinceStartup;
+        if (!nativeFinished && Time.realtimeSinceStartup - runDoneAt < 20) return;
+        try
+        {
+            string legal = terminalOutcome ?? "Lost";
+            profile.Settle(active.Id, legal, terminalTurns, conceded && legal == "Lost", terminalFacts);
+        }
+        catch (Exception failure)
+        {
+            Debug.LogWarning("DUNGEON_RUN settle gate failed (" + failure.Message + "); dropping the run pending record");
+            try { if (profile.Pending?.DungeonRun == true) profile.RecoverInterrupted(); }
+            catch (Exception second) { error = "Dungeon Run fight could not be closed: " + second.Message; Debug.LogError(error); return; }
+        }
+        runDoneAt = -1;
+        RewardPresentationComplete();
+        DungeonRunRuntime.RequestReturnToRunHub();
+        DungeonRunRuntime.RaiseFightClosed();
     }
 
     private static void Start()

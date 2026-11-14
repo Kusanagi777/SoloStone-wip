@@ -45,6 +45,11 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			if (weapon == null)
 				return TaskState.STOP;
 
+			// A weapon picked from a Discover (LOOTA_841 Portable Forge, GILA_510) sits in the set-aside zone: it leaves it as it
+			// is equipped, so no hidden zone keeps holding the equipped weapon (a fair view masks the set-aside zone).
+			if (weapon.Zone != null && weapon.Zone.Type == SabberStoneCore.Enums.Zone.SETASIDE)
+				weapon.Zone.Remove(weapon);
+
 			weapon.Card.Power?.Aura?.Activate(weapon);
 			weapon.Card.Power?.Trigger?.Activate(weapon);
 			c.Hero.AddWeapon(weapon);

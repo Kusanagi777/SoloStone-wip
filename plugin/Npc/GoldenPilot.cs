@@ -52,15 +52,22 @@ public sealed class GoldenPilot : IFrameSlicedGoldenPilot, IGoldenPilotHost
 #endif
     public GoldenPublicInputs PublicInputs => factoryInputs;
     private readonly Func<MulliganView, IReadOnlyList<int>> mulligan;
-    public GoldenPilot(NpcProfile profile, DeckPlan plan = null, Func<MulliganView, IReadOnlyList<int>> mulligan = null)
+    // The opponent's closed, public Secret pool (DungeonRunAdmission.SecretPrior); null keeps the open class pool.
+    internal IReadOnlyDictionary<string, double> OpponentSecretPrior { get; }
+    private readonly string secretPriorHash;
+    public GoldenPilot(NpcProfile profile, DeckPlan plan = null, Func<MulliganView, IReadOnlyList<int>> mulligan = null,
+        IReadOnlyDictionary<string, double> opponentSecretPrior = null)
     {
         Profile = profile ?? throw new ArgumentNullException(nameof(profile));
         Plan = plan ?? DeckPlans.ForId(profile.PlanId) ?? throw new ArgumentException("Unknown deck plan.");
         this.mulligan = mulligan;
+        OpponentSecretPrior = opponentSecretPrior;
+        secretPriorHash = SecretPriorHash(opponentSecretPrior);
         Options = new DriverOptions { Rewind = KeepRewind, FairViewFactory = (game, owner, seed, style) => {
             var fairOptions = new FairOptions {
                 RemoveOpponentSecrets = true, ShowOwnCarriedCards = Profile.Fixes.On("carried-cards"), ShowPublicCaptures = Profile.Fixes.On("death-value") && Profile.Fixes.On("death-held"),
                 FallbackEvaluator = DeckPlanEvaluator.ForFallback(Plan, Profile),
+                OpponentSecretPrior = OpponentSecretPrior,
 #if ENGINE_SOURCE
                 TrackOwnDeck = true, MaterializeOwnDeckTriggers = true, Observations = deckObservations
 #endif
@@ -94,7 +101,7 @@ public sealed class GoldenPilot : IFrameSlicedGoldenPilot, IGoldenPilotHost
     // Preserve cached continuations and remaining turn budgets in both recheck arms.
     internal GoldenPilot ForkForRecheck(AiFixes fixes)
     {
-        var copy = new GoldenPilot(Profile.WithFixes(fixes), Plan, mulligan);
+        var copy = new GoldenPilot(Profile.WithFixes(fixes), Plan, mulligan, OpponentSecretPrior);
         copy.turn = turn; copy.turnSeed = turnSeed; copy.expected = expected; copy.cached = new List<BotAction>(cached);
         copy.factoryInputs = factoryInputs; copy.RemainingNodes = RemainingNodes; copy.RemainingLethalNodes = RemainingLethalNodes;
         copy.LastLine = LastLine.ToArray(); copy.LastLineStamp = LastLineStamp; copy.CachedInterrupted = CachedInterrupted;
@@ -203,7 +210,17 @@ public sealed class GoldenPilot : IFrameSlicedGoldenPilot, IGoldenPilotHost
     // carried-reuse: an entity-reference host (carved Treant, ...) shows only its payload's entity id, equal in every simulated world, so
     // a plan built on rolled spells also matched the real, different ones. The owner sees the payload, so its identity joins the key.
     internal string PlanKey(FairBotState view) => (PlanReuseFix ? WithoutDeckPrior(ReuseKey(view), view.Facts) : ReuseKey(view))
-        + (Profile.Fixes.On("carried-reuse") ? "|carried:" + view.OwnCarriedKey() : "");
+        + (Profile.Fixes.On("carried-reuse") ? "|carried:" + view.OwnCarriedKey() : "")
+        // A closed Secret pool joins the key next to the Secret count, so a plan is never reused across pools.
+        + (secretPriorHash == null ? "" : "|secret-prior:" + secretPriorHash);
+    // Stable text hash of a Secret prior (ordinal id order, invariant weights); null for no prior.
+    internal static string SecretPriorHash(IReadOnlyDictionary<string, double> prior)
+    {
+        if (prior == null) return null;
+        string text = string.Join(",", prior.OrderBy(p => p.Key, StringComparer.Ordinal)
+            .Select(p => p.Key + "=" + p.Value.ToString("R", System.Globalization.CultureInfo.InvariantCulture)));
+        return FairBotState.StableHash(new[] { text }, 0).ToString("x8", System.Globalization.CultureInfo.InvariantCulture);
+    }
     // Every exposed value and tag on both sides plus the legal options; a mismatch forces a replan.
     private static string ReuseKey(FairBotState view)
     {

@@ -125,6 +125,7 @@ namespace SabberStoneCore.Model.Zones
 
         public void Add(BoardObject entity, int zonePosition = -1)
         {
+            if (_hasUntouchables) zonePosition = CardSets.DungeonRun.Cannons.Clamp(this, entity, zonePosition);
             InsertPhysical(entity, zonePosition);
             entity.OrderOfPlay = Game.NextOop;
             if (Controller.SecretZone.ModernQuests.Count != 0)
@@ -201,6 +202,8 @@ namespace SabberStoneCore.Model.Zones
 
 		internal void Add(Minion entity, int zonePosition, bool applyEntrySetters, bool preserveAge = false)
 		{
+            // Darius's edge Cannons keep their edges (phase 6 F3); a board with no untouchable entity skips the check.
+            if (_hasUntouchables || entity.Card.Untouchable) zonePosition = CardSets.DungeonRun.Cannons.Clamp(this, entity, zonePosition);
             if (!preserveAge) entity[GameTag.NUM_TURNS_IN_PLAY] = 0;
             Actions.EitherSideRules.SyncController(entity);
 			Actions.HeraldRules.ConfigureSummon(entity, Actions.HeraldRules.Tier(entity.Controller));

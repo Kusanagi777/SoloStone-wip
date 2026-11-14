@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
+  <Profile>
+    <Heroes />
+    <Unlocked />
+    <Archive />
+  </Profile>
+  <Active DataVersion="dungeon-run/1" Seed="6491657387877867524" TypedSeed="false" Hero="sellsword" Power="sellsword_war_cry" Floor="1" Phase="PreMatch" Attempt="0" DraftsWithoutDominant="0">
+    <Deck>
+      <string>GVG_051</string>
+      <string>GVG_051</string>
+      <string>OG_312</string>
+      <string>CORE_EX1_606</string>
+      <string>CORE_EX1_606</string>
+      <string>CFM_300</string>
+      <string>GIL_113</string>
+      <string>GIL_113</string>
+      <string>NEW1_011</string>
+      <string>ICC_450</string>
+    </Deck>
+    <Treasures />
+    <ActiveTreasures />
+    <Upgrades />
+    <BossSequence>
+      <string>lantern_thief</string>
+      <string>cellar_matron</string>
+      <string>bog_croaker</string>
+      <string>pit_champion</string>
+      <string>ashen_abbess</string>
+      <string>golemancer</string>
+      <string>clockwork_tyrant</string>
+      <string>gilded_king</string>
+    </BossSequence>
+    <TakenBundles />
+    <BundleCooldowns />
+    <DraftedThemes />
+    <Drafts />
+    <Matches />
+  </Active>
+</DungeonRun>

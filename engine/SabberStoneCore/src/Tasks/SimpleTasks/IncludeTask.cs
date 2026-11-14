@@ -264,7 +264,8 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 				case EntityType.MINIONS:
 					return c.BoardZone.GetAll();
 				case EntityType.GRAVEYARD:
-					return c.GraveyardZone.GetSpan().ToArray();
+					// A dead run shrine (phase 7) is never in a resurrect pool.
+					return c.GraveyardZone.Where(p => !SabberStoneCore.Actions.ShrineRules.IsCorpse(p)).ToArray();
 				case EntityType.OP_HAND:
 					return c.Opponent.HandZone.GetAll();
 				case EntityType.OP_DECK:

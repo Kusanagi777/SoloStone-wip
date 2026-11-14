@@ -1049,12 +1049,10 @@ namespace SabberStoneCore.CardSets.Standard
 			// - REQ_MINION_TARGET = 0
 			// - REQ_FRIENDLY_TARGET = 0
 			// --------------------------------------------------------
-			cards.Add("BOT_436", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_MINION_TARGET,0},{PlayReq.REQ_FRIENDLY_TARGET,0}}, new Power
+			cards.Add("BOT_436", new CardDef(new Power
 			{
-				// TODO [BOT_436] Prismatic Lens && Test: Prismatic Lens_BOT_436
 				InfoCardId = "BOT_436e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = DungeonRun.DungeonRunEncounters.PrismaticLens
 			}));
 
 			// ---------------------------------------- SPELL - PALADIN
@@ -1144,9 +1142,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("BOT_436e", new CardDef(new Power
 			{
-				// TODO [BOT_436e] Swapped Cost && Test: Swapped Cost_BOT_436e
-				//PowerTask = null,
-				//Trigger = null,
+				// The Cost the other drawn card had (the script value).
+				Enchant = new Enchant(Effects.SetCost(0)) { UseScriptTag = true }
 			}));
 
 			// ---------------------------------- ENCHANTMENT - PALADIN
@@ -1795,7 +1792,7 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("BOT_291", new CardDef(new Power
 			{
-				PowerTask = ComplexTask.DrawFromDeck(1, SelfCondition.IsTagValue(GameTag.COST, 5, RelaSign.GEQ))
+				PowerTask = ComplexTask.DrawFromDeck(1, SelfCondition.IsSpell, SelfCondition.IsTagValue(GameTag.COST, 5, RelaSign.GEQ))
 			}));
 
 			// ---------------------------------------- MINION - SHAMAN

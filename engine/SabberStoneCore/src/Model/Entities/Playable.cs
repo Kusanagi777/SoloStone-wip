@@ -574,6 +574,8 @@ namespace SabberStoneCore.Model.Entities
 								case PlayReq.REQ_TARGET_IF_AVAILABE_AND_ELEMENTAL_PLAYED_LAST_TURN:
 								case PlayReq.REQ_TARGET_IF_AVAILABLE_AND_MINIMUM_FRIENDLY_MINIONS:
 								case PlayReq.REQ_TARGET_IF_AVAILABLE_AND_MINIMUM_FRIENDLY_SECRETS:
+								case PlayReq.REQ_TARGET_IF_AVAILABLE_AND_MINIMUM_SPELLS_PLAYED_THIS_TURN:
+								case PlayReq.REQ_FRIENDLY_DEATHRATTLE_MINION_DIED_THIS_GAME:
 								case PlayReq.REQ_NONSELF_TARGET:
 									break;
 
@@ -700,7 +702,7 @@ namespace SabberStoneCore.Model.Entities
 			}
 		}
 
-		public virtual bool HasOverkill => Card.Overkill;
+		public virtual bool HasOverkill => Card.Overkill || Actions.OverkillRules.HasGranted(this);
 	}
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

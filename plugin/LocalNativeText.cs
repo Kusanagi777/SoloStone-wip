@@ -24,6 +24,12 @@ internal static class LocalNativeText
         out string name)
     {
         name = null;
+        // A Dungeon Run match shows its own names over borrowed client entities.
+        if (transform != null && DungeonRunRuntime.TryName(cardId, out string runName))
+        {
+            name = transform(runName);
+            return true;
+        }
         if (!localContext || cardId != "EX1_084e" || transform == null) return false;
         name = transform(Cards.FromId(cardId).Name);
         return true;
@@ -36,6 +42,11 @@ internal static class LocalNativeText
         if (!staged || string.IsNullOrEmpty(cardId) || defaultVariant == null) return false;
         try
         {
+            if (DungeonRunRuntime.TryText(cardId, out string runText))
+            {
+                text = NormalizeRawText(defaultVariant(runText));
+                return !string.IsNullOrEmpty(text);
+            }
             if (!TextByNativeId.TryGetValue(cardId, out string rawText) || string.IsNullOrEmpty(rawText))
                 return false;
             text = NormalizeRawText(defaultVariant(rawText));

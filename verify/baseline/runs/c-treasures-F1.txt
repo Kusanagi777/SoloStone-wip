@@ -1,0 +1,15 @@
+T18 LOOTA_800 WARRIOR      player turns 11 decisions 13 fallbacks 0 boss cellar_matron power CS2_102
+T18 LOOTA_801 DRUID        player turns 9 decisions 10 fallbacks 0 boss cellar_matron power CS2_017
+T18 LOOTA_802 MAGE         boss turns 18 decisions 27 fallbacks 0 boss cellar_matron power AT_132_MAGE
+T18 LOOTA_803 WARLOCK      player turns 13 decisions 20 fallbacks 0 boss cellar_matron power CS2_056
+T18 LOOTA_804 PRIEST       boss turns 19 decisions 38 fallbacks 0 boss cellar_matron power CS1h_001
+T18 LOOTA_818 WARRIOR      player turns 11 decisions 13 fallbacks 0 boss cellar_matron power CS2_102
+T18 LOOTA_824 MAGE         boss turns 14 decisions 19 fallbacks 0 boss cellar_matron power CS2_034
+T18 LOOTA_825 SHAMAN       boss turns 10 decisions 17 fallbacks 0 boss cellar_matron power CS2_049
+T18 LOOTA_828 PALADIN      player turns 11 decisions 12 fallbacks 0 boss cellar_matron power CS2_101
+T18 LOOTA_831 DEMONHUNTER  player turns 11 decisions 11 fallbacks 0 boss cellar_matron power HERO_10bp
+T18 LOOTA_832 ROGUE        player turns 13 decisions 17 fallbacks 0 boss cellar_matron power CS2_083b
+T18 LOOTA_833 HUNTER       player turns 11 decisions 13 fallbacks 0 boss cellar_matron power DS1h_292
+T18 LOOTA_845 DEATHKNIGHT  boss turns 13 decisions 18 fallbacks 0 boss cellar_matron power HERO_11bp
+T18 LOOTA_846 MAGE_ROGUE   player turns 13 decisions 21 fallbacks 0 boss cellar_matron power ULDA_Reno_HP1
+229 passed, 0 failed

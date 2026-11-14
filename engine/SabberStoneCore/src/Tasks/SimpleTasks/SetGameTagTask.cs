@@ -86,7 +86,9 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 				{
 					// The indexer write raises no event; this is the freeze's single event (main order: tag, then trigger).
 					if (oldValue == 0 && p[GameTag.FROZEN] != 0 && p is Character frozen) game.Facts.Frozen(frozen, source);
-					game.TriggerManager.OnFreezeTrigger(p);
+					// The freezer rides on the character for the event (TRLA_129 "whenever you Freeze": ShrineRules.Freezer).
+					var freezeEvent = game.TriggerManager; var frozenTarget = p;
+					Actions.ShrineRules.Freezing(p, controller, () => freezeEvent.OnFreezeTrigger(frozenTarget));
                 }
                 if(Tag==GameTag.CANT_PLAY && oldValue==0 && p[Tag]!=0 && p is Spell spell)
                     game.Facts.SpellCountered(spell,source);

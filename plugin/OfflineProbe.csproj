@@ -107,6 +107,12 @@
     <EmbeddedResource Include="../data/npc/notables-v1.json" LogicalName="SoloStone.Npc.notables-v1.json" />
     <EmbeddedResource Include="../data/npc/names-v1.json" LogicalName="SoloStone.Npc.names-v1.json" />
     <EmbeddedResource Include="../data/npc/cosmetics-v1.json" LogicalName="SoloStone.Npc.cosmetics-v1.json" />
+    <EmbeddedResource Include="../data/dungeon-run/run-v1.json" LogicalName="SoloStone.DungeonRun.run-v1.json" />
+    <EmbeddedResource Include="../data/dungeon-run/pool-v1.json" LogicalName="SoloStone.DungeonRun.pool-v1.json" />
+    <EmbeddedResource Include="../data/dungeon-run/catalog-v1.json" LogicalName="SoloStone.DungeonRun.catalog-v1.json" />
+    <EmbeddedResource Include="../data/dungeon-run/schedule-v1.json" LogicalName="SoloStone.DungeonRun.schedule-v1.json" />
+    <EmbeddedResource Include="../data/dungeon-run/tavern-v1.json" LogicalName="SoloStone.DungeonRun.tavern-v1.json" />
+    <EmbeddedResource Include="../data/dungeon-run/encounters-v1.json" LogicalName="SoloStone.DungeonRun.encounters-v1.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="../data/progression/card-mastery.json" LogicalName="SoloStone.Progression.card-mastery.json" />

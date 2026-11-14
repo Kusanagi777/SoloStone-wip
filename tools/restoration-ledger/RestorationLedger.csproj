@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Restoration ledger generator: reads the engine, the run data and the reference files, writes
+       docs/design/restoration-ledger.csv and .md. See README.md. Nothing it compiles is shipped. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <NuGetAudit>false</NuGetAudit>
+    <AssemblyName>RestorationLedger</AssemblyName>
+    <RootNamespace>RestorationLedger</RootNamespace>
+    <NoWarn>CS0618;CS8632;CS0162;CS0649</NoWarn>
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..'))</RepoRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- The run layer's own data parser and admission rules, compiled in unchanged so the ledger applies the same rules. -->
+    <Compile Include="$(RepoRoot)\plugin\DungeonRun\DungeonRunData.cs" Link="RunLayer\DungeonRunData.cs" />
+    <Compile Include="$(RepoRoot)\plugin\DungeonRun\DungeonRunValidator.cs" Link="RunLayer\DungeonRunValidator.cs" />
+    <Compile Include="$(RepoRoot)\plugin\DungeonRun\DungeonRunAdmission*.cs" LinkBase="RunLayer" />
+    <Compile Include="$(RepoRoot)\plugin\Npc\World\NpcWorldJson.cs" Link="RunLayer\NpcWorldJson.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(EngineDll)' == ''">
+    <ProjectReference Include="$(RepoRoot)\engine\SabberStoneCore\SabberStoneCore.csproj" SetTargetFramework="TargetFramework=net10.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(EngineDll)' != ''">
+    <!-- -p:EngineDll=C:\path\SabberStoneCore.dll uses an existing net10.0 engine build instead of building the engine. -->
+    <Reference Include="SabberStoneCore">
+      <HintPath>$(EngineDll)</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

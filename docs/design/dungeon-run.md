@@ -1,0 +1,864 @@
+# Dungeon Run (SoloStone mode)
+
+> **Status**: In Design — initial specification, framework scope
+> **Author**: Kusanagi777 + Claude (game-designer / systems-designer roles)
+> **Last Updated**: 2026-11-10 (phase 3: shared draft catalog runs, dual-class rows, generated Secrets; save version 3)
+> **Last Verified**: 2026-11-09, against SoloStone `main` @ `0f6a476`
+> **Implements Pillar**: Deckdelve P1 "every run builds a deck you couldn't have planned", P3 "lose fast, learn fast", P4 "readable, deterministic rules"
+> **Ported from**: `dungeon-run-ccg/design/gdd/` (Deckdelve) — `run-structure.md`, `reward-draft.md`, `treasures.md`, `content.md`, `rng-event-log.md`, `meta-progression.md`
+
+## Summary
+
+Dungeon Run is a single-player roguelike mode inside SoloStone. Each run is up to 8 fights against escalating bosses. The player starts with a thin 10-card class deck and grows it after each win by picking one of three curated 3-card bundles. Run-long passive treasures arrive after floors 1, 3 and 5. One loss ends the run. Every fight is an ordinary SabberStone match, started through SoloStone's existing local-match path, with the run layer adding:
+
+- the run deck
+- boss health and hero power
+- start-of-match treasure effects
+
+The mode is isolated. It never reads or writes the collection, ladder, gold, packs, dust or quests.
+
+> **Quick reference** — Layer: `Feature` · Priority: `MVP` (framework), content `Post-MVP` · Key deps: SabberStoneCore `Game`/`Cards`, `ClientBridge` match staging, `NativeMatch.Start`, NPC pilots, `StableSeed`, profile directory
+> Category: Gameplay (inferred; SoloStone has no systems index). Workflow tier: standard.
+> **Scope of this document:** the run engine, draft, save, match integration and UI flow. Boss and treasure *content* (Deckdelve's 16 bosses and 20 treasures) is a later data pass. This spec defines the data schemas and engine hooks that content must fit (§ Core Rules R7, R8).
+
+## Overview
+
+SoloStone today has one way to play: a 30-card constructed deck against an NPC, on the ladder or in Casual. Dungeon Run adds a second loop built from the same parts. The deck is drafted, not built. The opponent is a boss with a rule twist, not a mirror of a ladder deck. A run is a 20–45 minute arc that ends in victory or in a loss you learn from.
+
+Technically, the mode is a pure-C# **run layer** (state, draft, seeds, save) sitting above the existing match pipeline. It hands `NativeMatch` a prepared player deck, boss deck, boss hero and a list of *match modifiers*. It then reads back only the match outcome. The run layer must not depend on Unity or client types, so it can be tested headlessly against `SabberStoneCore`.
+
+Without the mode, SoloStone has no non-ladder progression and no reason to play the card pool outside constructed. The hidden home **Modes** button already records this as backlog *"#8 separate roguelike"* (`plugin/NativeHiddenEntries.cs:24`).
+
+## Detailed Design
+
+### Core Rules
+
+**R1 — Run state.** A run is a `RunState` value with these fields:
+
+- `runSeed` (ulong)
+- `class`, `starterDeck` and `power` (the run setup, R4)
+- `floor` (1–8)
+- `deck` (ordered card-id list)
+- `treasures` (ordered id list, in pick order)
+- `takenBundles`
+- `bundleCooldowns`
+- `bossSequence` (8 boss ids, fixed at run start)
+- `drafts` (an offer/pick record per draft)
+- `matchSummaries`
+- `phase`
+- `dataVersion`
+
+Nothing else persists between fights. Specifically, hero health, armor, board, hand and mana do not persist; each match starts fresh (Deckdelve RS R1).
+
+**R2 — Phases.** `run_setup → pre_match → in_match → post_match → (treasure_draft) → bundle_draft → pre_match … → victory | defeat`. These are spelled out in § States and Transitions. `run_setup` is three choices in order: **class**, then one of the class's **starter decks**, then one of its **hero powers**, then a confirm page (R4).
+
+**R3 — Structure.**
+
+- 8 floors, one boss each.
+- Bosses come in 3 bands: floors 1–3 are band 1, floors 4–6 band 2 and floor 7 band 3 (`band_split [3,3,1]`). Floor 8 is drawn from a separate finals pool. *(Changed 2026-11-09 from `[3,3,2]` to add the finals pool; see § Content.)*
+- Each band draws its bosses without replacement from that band's pool. The draw is a seeded shuffle (Formula F2).
+- **MVP cut:** 4 floors, `band_split [2,1,1]`.
+
+**R4 — Class, starter deck and hero power.** *(Rewritten 2026-11-09: the 13 named heroes became 9 classes; Death Knight and Demon Hunter were added the same day, because the client's class tray offers them.)*
+
+- The player picks one of the **11 classes**. Every class is always selectable. Its hero is the class's standard client hero, shown under the class's run title (The Wilder, The Ranger, ...).
+- Each class has **3 themed 10-card starter decks** (`deckOptions`). Their cards pass the pool rules (R6) and the class rule `CardClassRules.IsAllowedInDeck` (so a multi-class card is allowed in any of its classes), and duplicates are allowed. Every deck has the target curve of three 1-drops, three 2s, two 3s, one 4 and one 5, except Lantern Road (two 1s, four 2s). The first deck is the default.
+- Each class has **3 hero powers** (`powerOptions`): its standard class power first (`<hero>bp`, which always has a client definition), then two run powers. Run powers are scripts on unscripted client shells (§ Content); none is choose-one or a Secret, and none uses a scripted lambda, so they clone and replay deterministically.
+- The starter is copied into the run deck at run start; the run never changes the data deck.
+- Decks 2 and 3 and powers 2 and 3 unlock per class (R13). A locked deck or power shows greyed, with its unlock hint.
+- The four version-1 special heroes are folded into their classes: their decks became deck 3 of Hunter (Snareline), Paladin (Lantern Road), Mage (Survey Party), Rogue (Wayfinder) and Warrior (Shieldhire Company), and their powers became class powers (Set Snare for Hunter, Survey for Mage, Shortcut and Ambush Point for Rogue, Shield Wall and War Cry for Warrior). Shrines and signature cards are no longer chosen; they stay registered for version-1 runs (§ Save versions).
+
+**R5 — Rewards per floor.**
+
+- After a win on floors 1–7: a **bundle draft**. The player sees 3 bundles and picks 1. All 3 cards in the bundle join the deck. There is no skip.
+- After a win on floors 1, 3 and 5, a **treasure draft** comes first: 3 offered, pick 1.
+- There is no reward after floor 8; the run is won.
+- Deck size at the start of floor f is `10 + 3(f−1)`, rising to 31 by floor 8. There is no cap and no card removal (F4).
+
+**R6 — Card pool and bundle data.**
+
+- Bundles are hand-curated data in `data/dungeon-run/pool-v1.json` (`bundles`). Each bundle has an id, a `class` (or `NEUTRAL`), one `theme` tag and exactly 3 card ids.
+- The shared draft catalog `data/dungeon-run/catalog-v1.json` is generated from those bundles and the original adventure buckets by `tools/dungeon-run-catalog` (report: `docs/design/dungeon-run-catalog.md`). The plugin loads the catalog; a catalog whose `poolBundlesHash` no longer matches `pool-v1.json` disables the mode as stale. Pool entries are checked with the same rules below (class set, grants, no rune cost), and a candidate the client lacks is dropped at load and logged.
+- Each enabled class's pool is its own class bundles plus the shared neutral bundles. The Deckdelve shape is 8 class and 12 neutral bundles.
+- Validation runs when the mode loads. Any failure disables the mode with a named reason; it never fails silently. Every card id in starters and bundles must pass all of these:
+  1. It exists in `Cards` (`Cards.FromId` does not throw).
+  2. The client has an entity definition for it (`ClientBridge.ClientKnowsCard`).
+  3. It is in the active meta (`OfflinePoolPolicy.AllowsCard`).
+  4. `Card.Implemented == true`. An unscripted card would play as a vanilla body.
+  5. Its class is allowed in the bundle's or starter deck's class (`CardClassRules.IsAllowedInDeck`); a neutral bundle takes neutral cards only.
+  6. The **admission table** admits it for the run player (Edge Cases E5).
+- Run cards are not owned cards. Drafting never checks or changes the collection.
+
+**R7 — Bosses (framework).** A boss is a `BossDef` in `data/dungeon-run/bosses-v1.json`. Its fields are:
+
+| Field | Meaning | Client-def requirement |
+|---|---|---|
+| `id`, `band`, `theme` | Identity and pool placement | — |
+| `name` | Display name, shown on SoloStone's own run screens and on the opponent nameplate | — |
+| `heroCard` | Engine hero card for the boss's portrait | Must be a client-known hero entity |
+| `health` | Starting health. Default by band is 30 / 40 / 50 (F3) | — |
+| `heroPower` | Optional hero-power card id, which replaces the default | Must be client-known |
+| `deck` | 30 card ids, piloted through the existing NPC `auto:` plan | Every card client-known, `Implemented` |
+| `aiProfile` | NPC personality and skill ids from `data/npc/` | — |
+| `modifiers[]` | Boss passives as match modifiers (R8), owned by the boss side | Display shell must be client-known |
+
+**MVP content stand-in:** until the content pass, bosses are existing `data/npc/decks-v1.json` decks with band health and no modifiers. That is enough to exercise the whole framework. Deckdelve's boss-only cards have no client definitions. They must be re-expressed with existing client cards or as modifiers (Open Question Q1).
+
+**R8 — Match modifiers (the treasure/passive framework).**
+
+- A treasure, or a boss passive, is a list of **match modifiers**. The run layer applies them to the engine `Game` after `new EngineGame(config)`, in pick order, at a fixed point in `NativeMatch.Start`.
+- They run in two phases around `StartGame()`. The pre-start phase holds stat and setup overrides. The post-start phase holds enchantments and summons. This mirrors the existing `DebugScenario.ApplyOpening` seam (`NativeMatch.cs:784-787`).
+- The supported modifier kinds and the SabberStone primitive behind each are:
+
+| Kind | Example (Deckdelve treasure) | Engine primitive |
+|---|---|---|
+| `hero_health_delta` | Iron Constitution, +10 health | `Hero.BaseHealth` (`Character.cs:778`) |
+| `start_mana_crystals` | Hollow Crown, +1 crystal | Controller base mana before the first turn |
+| `opening_hand_delta` | Bottomless Satchel, +2 cards | Extra draws after the mulligan, with no draw triggers |
+| `hero_power_replace` | Worn Signet (cost change), boss powers | `Controller.ReplaceHeroPower` (already used by `DebugScenario.cs:390`) |
+| `player_enchant` | Vanguard's Banner, Stampede Horn, Grave Tithe | `QuestRules.AddPlayerEffect(controller, source, enchantId)` (`QuestRules.cs:47`) |
+| `start_in_hand` | Living Armory (random Legendary) | Generate the card into the hand from a seeded pool (F5 stream) |
+| `start_on_board` | Boss setups | `EngineEntity.FromCard` + `SummonBlock`, the same as `DebugScenario` `Board()` |
+
+- `player_enchant` and `hero_power_replace` need an engine card script and a client-known entity id to show. Content work picks a "display shell" entity per modifier (Q1).
+- Modifiers are recorded in the match's playtest record with the run seed, so replay stays exact. This is the same rule `DebugScenario.Canonical()` follows today.
+
+**R9 — Match rules.** These are standard SoloStone and SabberStone rules: 30 health, 10 mana, hand 10, board 7, standard fatigue, mulligan on. They have two run-specific differences:
+
+1. **The player always goes first.** The `StartPlayer` override replaces `StableSeed.MatchFirstPlayer`. The boss therefore gets the standard second-player hand and The Coin.
+2. **A tie (both heroes dead) or the engine's turn limit counts as a loss for the player.** This is Deckdelve DD-M12, enforced in the run layer and not in the engine.
+
+The format stays `FT_WILD`, as for every SoloStone match.
+
+**R10 — Outcome handling.**
+
+- **Win:** advance to rewards.
+- **Loss, concede or tie:** `defeat`. The run is archived and cannot be resumed.
+- **Fault:** an engine exception or a refused staging. The floor is not lost; return to `pre_match` with the same match seed.
+- **Abandon:** legal only outside `in_match`. It counts as a defeat.
+
+**R11 — Save and resume.**
+
+- Run state lives in a sidecar file in the active profile's directory: `<profileDir>/dungeon-run.xml`. It is not part of `LocalProfileData`, so the strict V15 profile schema and its `Commit` validation are untouched.
+- Writes use the same pattern as `LocalProfile.Commit` (`LocalProfile.cs:1863`): a temp file, flushed, then `File.Replace`.
+- The file is saved after run setup, after every match outcome, and after every draft pick.
+- The file is versioned; § Save versions describes the upgrade from version 1.
+- `in_match` is never saved as a resumable state. On load, a run whose phase is `in_match` resumes at that floor's `pre_match` with the same match seed. The player replays the same shuffle against the same boss (F1 makes this deterministic).
+- Unlock state and the run archive (cap 200, as in Deckdelve) live in the same sidecar.
+
+**R12 — Isolation from SoloStone systems.** A run match:
+
+- never creates a `LocalMatchRecord` on the ladder
+- never calls `Settle` reward rolls
+- never feeds achievements, card mastery, ladder milestones or NPC memory
+
+`LocalProfile.RecoverInterrupted` (`LocalProfile.cs:879`) must recognise run matches and leave them alone, the same way it already carves out `DebugScenario` matches. Otherwise a crash would book an `Abandoned` ladder loss.
+
+**R13 — Meta-progression.** There are no currency and no cards. Persistent effects are:
+
+- run archive (class, starter deck, power, seed, floor, last boss, treasures; since phase 7 the board shrine and its upgrades in pick order, kept apart from the treasures)
+- lifetime stats by class (runs, wins, best floor)
+- unlocks expressed as `{key, condition}`, using Deckdelve's grammar (`runsWon`, `floorReached`, `classesWon`, `anyOf`, `allOf`), optionally scoped to one `class`
+
+**The class ladder** (`classUnlocks` in `run-v1.json`, expanded at load to `<class>_floor3`, `_floor4`, `_floor5`, `_win` for each class, 44 keys):
+
+| Milestone with the class | Unlocks |
+|---|---|
+| default | deck 1 and the basic power |
+| reach floor 3 | deck 2 |
+| reach floor 4 | power 2 |
+| reach floor 5 | deck 3 |
+| win a run | power 3 |
+
+"Reach floor N" is the floor a run ended on (`BestFloor`). The challenge boss unlocks after winning runs with **4 different classes** (`classesWon: 4`). Unlocks are re-evaluated when a run ends, when a save is loaded and when the run screen opens, so progress already in the stats (or carried over from version 1) shows at once. The run summary names what the run unlocked.
+
+The unlocked pool is snapshotted at run start. Personal bests and unlocks count only for random seeds, not typed ones.
+
+### States and Transitions
+
+| From | Event | To | Save? |
+|---|---|---|---|
+| (none) | Player opens Dungeon Run with no active run | `run_setup` (class page) | — |
+| `run_setup` | Class, deck, power chosen and confirmed (Back walks one step back) | `pre_match` (floor 1) | yes |
+| `pre_match` | "Fight" pressed → staging succeeds | `in_match` | no |
+| `pre_match` | Staging refused (missing def, invalid deck) | `pre_match` + error | — |
+| `in_match` | Player win | `post_match` → `treasure_draft` (floors 1, 3, 5) or `bundle_draft` (other floors 1–7) or `victory` (floor 8) | yes |
+| `in_match` | Loss / concede / tie / turn cap | `defeat` | yes |
+| `in_match` | Fault or crash | `pre_match` (same floor, same seed) | — |
+| `treasure_draft` | Treasure picked | `bundle_draft` | yes |
+| `bundle_draft` | Bundle picked | `pre_match` (floor+1) | yes |
+| `pre_match` / drafts | Abandon confirmed | `defeat` | yes |
+| `victory` / `defeat` | Summary dismissed | (none); run archived | yes |
+
+### Interactions with Other Systems
+
+- **ClientBridge match staging.** `PrepareLocalMatch` builds `NativeMatch` from `LocalDeck`s, and `LocalDeck.Build` requires exactly 30 cards (`LocalDecks.cs:46-49`). A run deck is 10–31 cards, so the mode needs a parallel `PrepareRunMatch`. It applies the same client-def checks (`ClientBridge.cs:432-433`) to the run deck, boss deck, boss hero and every modifier display entity. It then calls `StartLocalMatch` with `GT_VS_AI`, as today.
+- **NativeMatch.Start.** It gains an optional `RunMatchSetup` (player deck list, boss def, modifiers, `StartPlayer` override). It builds `GameConfig` exactly as now (`NativeMatch.cs:735-756`) and applies modifiers around `StartGame()`.
+- **NPC pilot.** The boss deck is exposed through `LocalDecks.ExternalDecks`, its profile through `ProfileForDeck`, and it is piloted by the `auto:<deckId>` plan. A custom boss hero power is worth 0 to the evaluator, because `CardFrequencies.FaceDamage` is hard-coded (`DeckPlanEvaluator.cs:363`). The content pass must add values for each boss power.
+- **Home UI.** The hidden `home.modes` entry is re-enabled and relabelled **Dungeon Run**, opening the run hub. Nothing else on Modes is exposed.
+- **Results flow.** The client's own end-of-game screen plays as usual. The SoloStone reward presentation is skipped: there is no `PendingRewardPresentationId`. Control returns to the run hub, not the deck picker.
+- **Format lock and collection.** These are untouched. The run never opens the deck editor or the collection.
+
+## Formulas
+
+**F1 — Seed derivation.** Every random choice in the run layer comes from `runSeed` through `StableSeed.Derive`. No `System.Random`, `Guid` or clock is used.
+
+```
+matchSeed(f)        = StableSeed.Derive(runSeed, "match", f)        → GameConfig.RandomSeed
+bossShuffle(b)      = StableSeed.Derive(runSeed, "bosses", b)
+draftSeed(f, step)  = StableSeed.Derive(runSeed, "draft", f, step)  step ∈ {treasure, bundle}
+modifierSeed(f, i)  = StableSeed.Derive(runSeed, "mod", f, i)
+```
+
+| Variable | Type | Range | Meaning |
+|---|---|---|---|
+| `runSeed` | ulong | any; random at `run_setup` unless typed | One seed per run, shown as 16 hex digits |
+| `f` | int | 1–8 | Floor |
+| `b` | int | 1–3 | Band |
+| `i` | int | 0–n | Modifier index in pick order |
+
+Replay guarantee: the same seed, class, `dataVersion` and picks give the same bosses, offers and match shuffles. The NPC's wall-clock guards (`NpcCatalog.cs:14`) can make AI turns differ. That is accepted, and the run guarantee covers run-layer outputs only.
+
+**F2 — Boss sequence.** For each band b, sort that band's boss pool by id and shuffle it with `bossShuffle(b)`. Take the first `s_b` bosses, where `s = band_split`. Pools must be at least as large as `s_b` (Deckdelve 6/6/4 for `[3,3,2]`).
+
+**F3 — Boss health.** `health = bandHealth[band] + floorHealthBonus × (f − firstFloorOfBand)`. Defaults: `bandHealth = [30, 40, 50]`, `floorHealthBonus = 0`. A boss's own `health` field overrides both.
+
+**F4 — Deck size.** `deckSize(f) = 10 + 3(f − 1)`. It is 10 at floor 1, 13 at floor 2 and 31 at floor 8. 21 cards and 3 treasures are drafted in a full run.
+
+Cut from Deckdelve's 15-card start (2026-11-09). Drafted cards are then 23% of the floor-2 deck instead of 17%, and 68% of the final deck instead of 58%. So the draft shapes the deck sooner, which serves pillar P1. The cost is earlier fatigue on the first floors (E2).
+
+**F5 — Bundle weight.** Ported from Deckdelve RD F1:
+
+```
+weight     = max(1, round(100 × affinity × bandMult / 100))
+affinity   = 1 + 0.25 × min(nTag, 6)                 (1.0 – 2.5)
+bandMult   = table[band][costBand(avgCost)]
+```
+
+| band | low (avg < 2.5) | mid (2.5–4.0) | high (> 4.0) |
+|---|---|---|---|
+| 1 | 120 | 100 | 70 |
+| 2 | 100 | 110 | 100 |
+| 3 | 80 | 100 | 130 |
+
+`nTag` is the number of deck cards drawn from bundles sharing this bundle's theme. Starter cards carry no theme unless the starter data tags them.
+
+The offer is filled slot by slot:
+
+1. **Slot 1:** a weighted pick. It is forced to a dominant-theme bundle after `PITY_WINDOW = 2` drafts without one.
+2. **Slot 2:** a weighted pick.
+3. **Slot 3:** forced to a theme different from slot 1 if slots 1 and 2 share a theme.
+
+Candidate rules:
+
+- A taken bundle is never offered again.
+- An offered but untaken bundle is on cooldown for `reofferAfterFloors = 2`.
+- The displayed order is sorted by id.
+
+**F6 — Treasure weight.** Ported from Deckdelve RD F2:
+
+```
+weight = round(rarityWeight × (100 + 50 × affine) / 100)
+```
+
+- `rarityWeight` is common 70 or rare 30.
+- `affine` is 1 if the treasure shares a plan tag with the class's `classTags` plus the starter deck's `treasureTags`, or if it is a scoped treasure, else 0.
+- A treasure with a `scope` (`classes`, `decks`, `powers`) is a candidate only when the run matches any listed class, starter deck or power: Keen Eye with Set Snare, Rimebite or the Rimeward deck; Hunting Net with Set Snare. A `legacy` treasure is never offered.
+- Slot 1 is forced to a universal treasure when one exists.
+- A held or already-offered treasure is never offered again in that run.
+
+**F7 — Difficulty targets** (tuning goal, not a rule). Floor win-rate targets are `[0.90, 0.85, 0.80, 0.70, 0.65, 0.60, 0.50, 0.40]`. That gives about 3% full-clear and a median death on floors 4–5. The MVP has 4 floors, and its targets are the first four values.
+
+## Edge Cases
+
+- **E1 — Client definition missing** after a client patch removes or renames an entity. Load-time validation (R6) disables the mode with the failing ids. `PrepareRunMatch` re-checks before every fight. A run in progress whose deck now fails stays saved and is marked *blocked*, never deleted.
+- **E2 — Thin deck and fatigue.** The player goes first and draws 3 cards plus 1 each turn. A 10-card deck therefore runs out on turn 7 and takes fatigue from turn 8; the 13-card floor-2 deck takes fatigue from turn 11. Each card of opening-hand bonus brings fatigue a turn earlier. This is intended pressure on floors 1–2 and is not padded. If floor-1 losses come mostly from fatigue, raise the starter size; do not add padding. A boss's 30-card deck never fatigues first, so long control bosses are a band-1 risk: check them in the F7 tuning pass.
+- **E2a — Small deck and the opening bonus.** With a 10-card deck, a second-player opening of 4 cards plus the 5-card maximum bonus deals 9 of the 10 cards. The engine allows this. The treasure content pass should keep any opening-hand treasure at +2 or less.
+- **E3 — Duplicate legendaries.** Allowed in run decks, as in Deckdelve. The run deck bypasses `LocalDecks.CreateCustom` copy limits. Cards whose own text checks for duplicates (highlander checks) are decided by the admission table (E5).
+- **E4 — Tie, or both heroes dead.** The client may show "Tie". The run layer records a defeat (R9).
+- **E5 — Admission table.** Secrets and cards that depend on the deck are decided by one table, `plugin/DungeonRun/DungeonRunAdmission.cs` (phase 2):
+  - A card is a *subject* when it is a Secret, has tag 997 or a sideboard, has a Secret or deck phrase in its text ("secret", "no duplicates", "start of game", "if your deck", "in your deck", "questline", "deckbuilding", "sideboard", the rewind phrases), or is listed. The phrases only detect; the verdict is the table's.
+  - Each rule names a family (`secret-card`, `secret-from-deck`, `secret-generated`, `highlander`, `not-started-in-deck`, `from-own-deck`, `deck-wide-change`, `start-of-game-draw`, `empty-deck`, `turn-rewind`, ...), the scopes it is admitted in (player cards, boss decks and powers, generated cards), the reason, and the numbered goal phase that lifts a rejection (3 shared draft catalog, 5 deck mutation, 6 heroes/powers/treasures, 7 shrines/teammates). A subject with no rule is rejected as `unclassified`. A rule with a pending requirement (`Requires`: an AI or script step not done yet) admits no scope until its lift; the table refuses to load otherwise.
+  - `DungeonRunValidator` applies it to starter and bundle cards, player powers and their tokens, legacy (version-1) powers, active treasures and their tokens, passive treasure ids and their effect shells, and every run content shell that no boss names (shrines included) in the player scope, and to boss decks, boss powers and the content they name in the boss scope. The message is `admission <family>: <reason>; lifted by <phase>`.
+  - Generated cards: the Generated scope is classified over the engine's whole card pool, not only the table's ids, so a detected card with no rule is blocked too. `RunMatchPlan.ExcludedGenerated` (`DungeonRunAdmission.GeneratedRejects`: rejected and not admitted for the run player) becomes `GameConfig.ExcludedGeneratedIds` and applies to both sides; `RunMatchPlan.ExcludedGeneratedBoss` (`GeneratedRejectsBoss`: rejected for generation but admitted for the player, a boss AI limit such as the deck-wide changes) becomes `GameConfig.Player2ExcludedGeneratedIds` and applies only when the boss generates. The engine reads the generating controller from the task being processed (`TaskQueue.CurrentController`, else the current player).
+  - The restoration ledger's `ai_support` column is derived from the same table.
+  - Still rejected outright: deck-size changers (tag 997 Fabled and Renathal-style 40-card cards) and sideboard cards (they need `Player1Sideboards`), both by their own checks as well.
+  - Death Knight runes: a Death Knight starter deck may need at most 3 runes in all (`RuneRules.IsLegalForClass`, checked at load), and no bundle card has a rune cost, so no draft can push a run deck past 3 runes. The engine has no in-match rune rule; runes are deckbuilding only.
+- **E6 — Crash or quit during a fight.** On resume the player is at `pre_match` with the same seed, so the match is replayable but not a fresh roll. A concede is a loss and never a reset.
+- **E7 — Profile switch or delete mid-run.** The run belongs to the profile directory. Switching profiles shows that profile's run. Deleting a profile deletes its sidecar along with the directory.
+- **E8 — Empty or short pool.** Fewer than 3 eligible bundles: offer what remains. Zero: skip the bundle step and log it. A boss band pool smaller than `s_b`: validation failure (E1 path).
+- **E9 — Modifier fails to apply** (script missing, entity refused). This is a fault (R10), not a loss. The floor is restaged, and the modifier id is logged.
+- **E10 — Generated cards outside the pool.** Discover and random-generation cards can create cards outside the active meta. That is allowed in-match, as on the ladder. It never adds to the run deck.
+- **E11 — `dataVersion` mismatch.** A saved run whose bundle or boss data version is older than the shipped data continues on its snapshotted ids if they still validate. Otherwise it is blocked (E1).
+
+## Dependencies
+
+**Upstream (this mode needs):**
+
+- **SabberStoneCore:**
+  - `GameConfig`, `Game.StartGame`, `Cards.FromId` and `Cards.All`, `Card.Implemented`
+  - `Hero.BaseHealth`, `Controller.ReplaceHeroPower`, `QuestRules.AddPlayerEffect`
+  - `OfflinePoolPolicy.AllowsCard`
+- **facts/violet-hold-2026-09.json:** the only card source. No new cards are added, because the facts file is frozen per meta. Every run card, boss hero, hero power and modifier entity must already exist there and in the client.
+- **Plugin:**
+  - `ClientBridge.PrepareLocalMatch` and `StartLocalMatch` (a new run-aware sibling)
+  - `NativeMatch.Start` (a new setup parameter)
+  - `LocalDecks.ExternalDecks`, `NpcCatalog`, `NpcPilots`, `DeckPlans` `auto:`
+  - `StableSeed`, `LocalProfile.RecoverInterrupted` (a carve-out)
+  - `NativeHiddenEntries` (`home.modes`), the profile directory from `ProfileCatalog`
+- **Data (new):** `data/dungeon-run/run-v1.json` (rules, classes, treasures, bosses, unlocks, version-1 save map; schema 2) and `pool-v1.json` (starter decks, bundles, band-1/2 boss decks; schema 2). The file names are fixed by the plugin's embedded resources.
+
+**Downstream (depends on this mode):** Boss and treasure content pass (Q1). Future run-specific achievements (`LocalAchievementCatalog` would need new definitions; out of scope for v1).
+
+**Not dependencies:** LocalEconomy, LocalShop, packs, crafting, ladder, card mastery and the deck editor. Isolation is a requirement (R12).
+
+## Engine Changes (SabberStoneCore)
+
+These were made on branch `feat/dungeon-run-engine` and are uncommitted. All of them are opt-in: a `GameConfig` that sets none of the new fields builds the same game as before.
+
+| Change | Where | Serves |
+|---|---|---|
+| `Player1HeroPower` / `Player2HeroPower` (Card) | `Config/GameConfig.cs`; applied through `AddHeroAndPower(hero, power)` in the `Game` constructor | R7 boss hero power, `hero_power_replace` |
+| `Player1HeroHealth` / `Player2HeroHealth` (int?) | Same; sets `Hero.BaseHealth`, which emits a HEALTH tag change to the client history | R7 boss health, F3, `hero_health_delta` |
+| `Player1OpeningHandBonus` / `Player2OpeningHandBonus` (0–5) | `Game.BeginDraw`; dealt like ordinary opening cards, so they can be mulliganed | `opening_hand_delta` |
+| Construction-time validation | `Game.ValidateRunSetup`: the power must be a HERO_POWER card, health at least 1, bonus between 0 and 5 | E9: a bad setup fails before any entity exists |
+| Start-of-game passive hero powers | `Game.ActivateStartingPassiveHeroPowers` runs in `MainBegin` after Start of Game effects, first player first, in its own TRIGGER block. `HeroPower.IsPassiveHeroPower` also reads the registry | Boss passives shown as passive hero powers |
+| `CardSets/DungeonRun/DungeonRunCardsGen` | Registered last in `CardDefs`. Holds `PassiveHeroPowers` (empty) and an empty `AddAll` | Home for boss and treasure scripts (Q1 content pass) |
+| `Player1ExcludeGeneratedSecrets` / `Player2ExcludeGeneratedSecrets` (bool), with `ExcludeGeneratedSecrets` as an alias that sets both (and reads true only while both are set); read per generating controller (`Game.BlocksGenerated`, `Game.ExcludesGeneratedSecretsFor`) | `Config/GameConfig.cs`; filters `DiscoverTask`, `RandomCardTask.GetCardList` (so `RandomCardTask` and `ChangeEntityTask`, e.g. Shifting Scroll), `CastRandomSpellTask`, the class-pool and random-Secret helpers in `SpecificTask` (which now also honour `ExcludedGeneratedIds`), and the game-level `OfflineCardPools.Candidates` / `SampleDistinct` / `Pick`. `DungeonRunSetup.Configure` sets player 1 from `RunMatchPlan.PlayerGeneratedSecrets` and player 2 always | A legacy run blocks both sides (its boss's Secret worlds are complete only while the player's Secrets come from the run pool). A catalog run (phase 3) lets the player generate Secrets: the boss's prior adds every Secret that generation can yield (`DungeonRunAdmission.CatalogSecretPrior`). The boss side stays blocked (phase 8) |
+| `ExcludedGeneratedIds` (sorted id set), read as `Game.ExcludedGeneratedIds` | `Config/GameConfig.cs`; `Game.BlocksGenerated` and `Game.FiltersGenerated` cover the same paths as `ExcludeGeneratedSecrets`. `DungeonRunSetup.Configure` copies `RunMatchPlan.ExcludedGenerated` | Admission table, generated scope: cards that would do nothing (Secret generators) or that the boss's own-deck ledger cannot follow are never generated in a run match. Empty outside run matches |
+| Diamond Spellstone (`LOOT_507`, in a Priest bundle) cast with an empty graveyard | `SpecificTask.DiamondSpellstone` returned `list[0]` of an empty list | Was a match fault; now it resurrects nothing |
+
+The construction fields are `[field: NonSerialized]` construction inputs: clones and snapshots carry the resulting entity state. `ExcludeGeneratedSecrets` and `ExcludedGeneratedIds` are the exception: they are rules for the whole game, so they are serialized, and clones and snapshots keep them. The engine source stamp changes with these files, as it does with any engine edit.
+
+**Verified** with a scratch console harness against the built engine, using the real card data:
+
+- The default game is unchanged: 30 health and the standard hands.
+- 10-card and 15-card decks are accepted. A 10-card deck with the maximum +5 bonus, going second, deals 9 cards plus The Coin and leaves 1 card in the deck.
+- Boss health 40 shows in the hero entity and in the power history, and survives `Clone`.
+- The replaced power is owned by the boss and usable on the boss turn.
+- The +2 opening bonus works.
+- The same seed gives the same hands.
+- All four kinds of invalid setup throw.
+- None of the 11 class powers counts as a start-of-game passive.
+- Life Tap registered as a passive fires once at game start (40 → 38, plus a card) and is not clickable. This holds with and without a mulligan and with either side going first.
+
+**Not verified:** the in-client display of these changes, which is AC8 and needs a running client. The harness is throwaway; it is not checked in, since SoloStone's test suites are not public.
+
+**Still needed outside the engine:** `RunMatchSetup` in `NativeMatch.Start` to fill these fields, and `PrepareRunMatch` in `ClientBridge` (§ Interactions). Treasure enchantments use the existing `QuestRules.AddPlayerEffect` and need no engine change beyond their scripts.
+
+## UI Requirements
+
+The client has no adventure scenes the plugin can drive (the plugin touches only HUB, TOURNAMENT, GAMEPLAY, COLLECTIONMANAGER, PACKOPENING and LOGIN). All run screens are plugin-built, using the existing UI kits (`ProfileFormKit`, `NativeButtonKit`, the patterns in `LocalCollectionUI`).
+
+1. **Run setup:** class (6 per page), then deck, then hero power, then confirm. Locked decks and powers are greyed planks; their unlock hints are in the caption. A native Adventure picker can replace these planks through the same API (`DungeonRunRuntime.Classes`, `DecksFor`, `PowersFor`, `NewRun`; § Implementation Status).
+2. **Run hub:**
+   - the run line: class title, starter deck and power
+   - floor track showing 8 floors in their bands and the next boss's name, health and passive text
+   - deck list and treasure list
+   - Fight and Abandon buttons
+3. **Treasure picker:** 3 cards, pick 1. Text comes from treasure data.
+4. **Bundle picker:** 3 bundles of 3 card faces each, with the theme label. It reuses client card visuals where the kit allows.
+5. **Run summary:** victory or defeat, floor reached, bosses beaten, final deck, treasures, a copyable seed, and what the run unlocked.
+
+The plank menu's caption is laid out by hand above the planks, not as a slice of the native slice stack (which dropped it to the first plank's position, behind the top planks); the board grows both ways to cover it, and the header plate is lifted by the board top's change so it stays on the top edge. Native layout never moves the board, border or header back, so every layout first restores their prefab positions: a rebuild (each click) starts from the same frame. Each build logs `DUNGEON_RUN_UI layout caption=... planks=... frame=... board=... header=... lift=... lines=...`; `frame`, `board` and `header` should be the same between two rebuilds of the same page.
+
+In-match, the boss name appears on the opponent nameplate (`OpponentName`). Boss and treasure passives appear only through their display-shell entities; the run hub shows their full text before the fight.
+
+## Acceptance Criteria
+
+- **AC1** — *Given* a new run with seed S, class C, starter deck D and power P, *when* the run is started twice from scratch with the same picks, *then* the boss sequence, every draft offer and every `matchSeed(f)` are identical.
+- **AC2** — *Given* floor f starts, *then* the player's engine deck has exactly `10 + 3(f−1)` cards plus one per active treasure or signature held, matching `RunState.deck`.
+- **AC3** — *Given* a win on floor 1, 3 or 5, *then* a treasure draft of 3 distinct unheld treasures appears before the bundle draft. *Given* a win on floor 2, 4, 6 or 7, *then* only a bundle draft appears. *Given* a win on floor 8, *then* `victory`.
+- **AC4** — *Given* any player loss, concede, tie or turn-limit end, *then* the run moves to `defeat`, is archived, and cannot be resumed.
+- **AC5** — *Given* the game is killed during a fight, *when* SoloStone restarts and the run hub opens, *then* the run is at that floor's `pre_match` with the same match seed. *And* no ladder or Casual match record, abandon or loss was written.
+- **AC6** — *Given* a run match completes, *then* gold, packs, dust, ladder rank, card mastery, achievements and NPC memory are byte-for-byte unchanged in `LocalProfileData`.
+- **AC7** — *Given* bundle data containing a card that fails any R6 check, *when* the mode loads, *then* Dungeon Run is disabled and the reason names the card id and the failed check.
+- **AC8** — *Given* a boss with `health: 40` and a `hero_power_replace` modifier, *when* the match starts, *then* the client shows the boss at 40 health with that hero power. A screenshot of this is retained as evidence.
+- **AC9** — *Given* a treasure modifier is applied, *then* the playtest record holds the run seed and modifier list, and a replay from the record reproduces the opening state.
+- **AC11** — *Given* a version-1 save with a run in progress, *when* it loads, *then* the run keeps its deck, power (or shrine), treasures, bosses and floor, and every later offer equals what version 1 would have offered (for runs of the 9 class heroes, the Trapper, the Pilgrim and the Sellsword). *Given* a file of a newer version, *then* it is refused and never overwritten.
+- **AC12** — *Given* a fresh profile, *then* every class offers exactly its default deck and basic power; *given* a Mage run that ends on floor 3, *then* the second Mage deck unlocks and nothing else.
+- **AC10** — *Given* the bundle offer algorithm, *when* run over 10,000 seeded drafts in a headless harness, *then* no taken bundle reappears, the pity rule fires within 3 drafts, and slot 3 coverage holds.
+
+## Content (vertical slice, 2026-11-09)
+
+All content is original and uses generic names. The client supplies only the art of each borrowed "shell" entity. Shells are unscripted Tavern Brawl entities that no other code references, so scripting them changes no other card. Names and text are overridden only during a run match (`DungeonRunRuntime.TryName` / `TryText`, hooked through `LocalNativeText`). The source of truth is `engine/.../CardSets/DungeonRun/DungeonRunContent.cs` for scripts, names and shells, plus `data/dungeon-run/run-v1.json` and `pool-v1.json` for rules, heroes, bosses and the card pool.
+
+**Classes, decks and powers (11 classes, 33 decks, 33 powers).** The deck names and descriptions are in `pool-v1.json` (`starterDecks`); the power scripts in `DungeonRunContent.cs`. Deck 1 and power 1 are the defaults; the others unlock by the class ladder (R13).
+
+| Class (title) | Decks (default, floor 3, floor 5) | Powers (basic, floor 4, win) |
+|---|---|---|
+| Druid (The Wilder) | Thicket Pack, Bark and Bough, Forked Path | Shapeshift, Rootcall (summon a 1/1 Sapling), Thornhide (1 Armor, 1 damage to a random enemy) |
+| Hunter (The Ranger) | Kennel Run, Scrapyard Hounds, Snareline | Steady Shot, Set Snare, Pack Whistle (summon a 1/1 Hound with Charge) |
+| Mage (The Spellwright) | Rimeward, Kindled Sparks, Survey Party | Fireblast, Survey, Rimebite (1 damage to a minion and Freeze it) |
+| Paladin (The Vowkeeper) | Gleaming Wall, Supply Wagon, Lantern Road | Reinforce, Vow of Light (Divine Shield), Lantern March (restore 2 to all friendly characters) |
+| Priest (The Mender) | Mending Circle, Grave Choir, Wyrmwatch | Lesser Heal, Ward of Faith (+2 Health), Penitent Lash (1 damage to an enemy minion, restore 2 to your hero) |
+| Rogue (The Cutpurse) | Back-Alley Combo, Corsair Steel, Wayfinder | Dagger Mastery, Shortcut (draw, costs 3), Ambush Point |
+| Shaman (The Stormcaller) | Storm Debt, Kindred Elements, Gale Riders | Totemic Call, Spirit Kindling (+1/+1 to a random friendly minion), Spark Lash (2 damage to a random enemy minion) |
+| Warlock (The Hexer) | Fiend Pact, Ashen Offering, Leechwall | Life Tap, Fiend Gate (summon a 1/1 Imp), Sanguine Pact (2 damage to your hero, +2/+2 to a friendly minion) |
+| Warrior (The Brawler) | Plated Ranks, Wounded Fury, Shieldhire Company | Armor Up!, Shield Wall, War Cry |
+| Death Knight (The Wight) | Bone Legion, Rimeguard, Crimson Oath | Ghoul Charge, Grave Call (summon a 1/1 Ant Husk), Rime Wind (1 damage to all enemy minions, costs 3) |
+| Demon Hunter (The Exile) | Glaive Rush, Edge of the Hand, Fel Hunger | Demon Claws, Glaivewhirl (+1 Attack this turn, draw a card), Felbat Call (summon a 1/1 Felbat with Rush) |
+
+**Death Knight and Demon Hunter (added 2026-11-09).** Neither class was in any retail Dungeon Run adventure, so both have only original decks, powers and titles.
+
+- Heroes and basic powers: the vanilla heroes `HERO_11` (Death Knight) and `HERO_10` (Demon Hunter) with their own powers `HERO_11bp` (Ghoul Charge) and `HERO_10bp` (Demon Claws). The engine and the client use the same ids, so `NativeMatch.TransportCardId` passes them through unchanged.
+- Decks (each 10 cards, curve 3/3/2/1/1, at least 5 minions):
+  - Bone Legion (default, Unholy, 2 runes): Body Bagger x2, Skeletal Sidekick, Battlefield Necromancer x2, Corpse Cannon, Acolyte of Death, Chillfallen Baron, Tomb Guardians, Army of the Dead.
+  - Rimeguard (floor 3, Frost, 2 runes): Crypt Map, Cryofrozen Champion x2, Deathchiller, Harbinger of Winter, Timestop, Chillfallen Baron, Asphyxiate, Remorseless Winter, Hollow Direhorn.
+  - Crimson Oath (floor 5, Blood with one Unholy card, 3 runes): Monstrous Mosquito x2, Body Bagger, Hematurge x2, Drink Blood, Death Metal Knight, Liferender, Death Strike, Emergency Surgery.
+  - Glaive Rush (default): Battlefiend x2, Crimson Sigil Runner, Chaos Strike x2, Netherwalker, Aldrachi Warblades, Felrattler, Kayn Sunfury, Wrathspike Brute.
+  - Edge of the Hand (floor 3, Outcast): Crimson Sigil Runner x2, Illidari Studies, Spectral Sight, Netherwalker, Cosmic Manifestations, Eye Beam, Felrattler, Horn of Feasting, Doomsday Prepper.
+  - Fel Hunger (floor 5, Demons): Battlefiend, Void Soul x2, Netherwalker x2, Void Blast, Vicious Voidscale, Gorishi Tunneler, Eredar Deceptor, Ravenous Felhunter.
+- Bundles, 4 per class like the others: Death Knight spells, undead, deathrattle and beast; Demon Hunter spells, demon, weapons and outcast. Every Death Knight bundle card is rune-free.
+- `classTags`: Death Knight `minions`, `deathrattle`; Demon Hunter `minions`, `heropower`.
+- Corpses: `DungeonRunSetup.Configure` sets `GameConfig.EnableCorpses`, so every run match counts Corpses. The live match already did (`NativeMatch`); headless checks now do too.
+- Leech cards (Infested Breath, Sanguine Infestation, Hideous Husk) are left out until the Bloated Leech fix lands.
+
+**Class tray.** The native picker borrows Dalaran Heist's class tray. `AbsDeckPickerTrayDisplay.UpdateValidHeroClasses` fills it from `GameUtils.ORDERED_HERO_CLASSES` (in ADVENTURE mode never the Classic list), which holds 11 classes: Death Knight, Demon Hunter, then the nine classic classes. It then removes the mission's `ClassExclusions`, and Dalaran's are empty. `DeckPickerTrayDisplay.InitHeroPickerButtons` adds no other filter. It locks a button only when `GameUtils.HasUnlockedClass` (a hero level exists) is false. `CollectionManager.GetVanillaHero(class)` is a local read of the first `CardHero` row with hero type VANILLA for the class, so it works offline for every class that has such a row. The playmat does not need DALARAN rows for a class: the picker hooks feed the deck and power rows. A class with no DALARAN `AdventureDeck` rows (Death Knight, Demon Hunter) just gets the default pouch texture.
+
+The picker's guard (`NativeDungeonRunPicker.PickerClasses`) reads DALARAN's `AdventureDeck` rows, which list only the nine classic classes. It therefore missed the two classes the tray really shows, and picking one of them failed on the playmat ("no decks/powers"). With data for all 11 classes the guard can no longer refuse. It should still be changed to read the tray's own list.
+
+The first 12 class powers use 12 of the 15 clickable free Tavern Brawl hero-power shells. Rime Wind, Glaivewhirl and Felbat Call use the last three (`TB_EVILBRM_OnyxiaHeroPower`, `TB_EVILBRM_RafaamHeroPower2` and `TB_TempleOutrun_Lazul_HP`). Their leftover `AI_MUST_PLAY`, `DISCOVER` and `DEATHRATTLE` tags are removed by the power's shape (`DungeonRunContent.Without`). Grave Call uses an unscripted adventure power, Bone Minions (`BRMA17_5`, Blackrock Mountain), so no free Tavern Brawl hero-power shell is left. Summoning powers list their minion (`RunContent.Tokens`) so the load check covers it (Sapling `AT_037t`, Hound `EX1_538t`, Imp `EX1_598`, Ant Husk `EDR_813at`, Invading Felbat `TTN_843t1`). All run powers cost 2 except Shortcut and Rime Wind (3). Outside a run match the shells keep their own client name, art and cost.
+
+**Treasures (33):**
+
+- 16 passive. 4 change the starting state: +10 Health, +1 opening card, +1 Mana Crystal, a Coin. 12 are triggers or auras on the player.
+- 14 active cards: 10 spells and 3 minions, including one that grows over the run (Seedling → Sprouting → Blooming Charm every 2 floors), plus Hunting Net (Set Snare runs only).
+- 3 version-1 signature cards (Cartographer), kept as `legacy` and never offered.
+- Keen Eye is offered only with a Freeze source (Set Snare, Rimebite or Rimeward); Hunting Net only with Set Snare.
+
+**Deck fixes after review (2026-11-09):** Kindled Sparks had no spells; it now has First Flame, Flame Geyser and Forgotten Torch (in place of Arcane Artificer, one Shimmering Tempest and Spire Security). Kindred Elements has Igneous Elemental in place of Volcanic Thrasher, whose Fire-spell draw had no target in an all-minion deck. Survey Party keeps its Discover cards: the engine rule above keeps Secrets out of what they offer.
+
+**Bosses (20):** 6 in band 1, 6 in band 2, 4 in band 3, 3 finals, and a challenge boss (*The Hollow Sovereign*). The challenge boss joins the finals pool once runs have been won with 4 different classes.
+
+- Band 1–2 bosses pilot generated 30-card decks.
+- Band 3 bosses and finals pilot NPC library decks, including their sideboards.
+- Boss twists are custom powers (5) or passive powers (11).
+
+**Unlocks:** the per-class ladder (R13) and the challenge boss. The version-1 chapters are gone; § Save versions maps what they gave.
+
+## Save versions
+
+The sidecar is versioned (`DungeonRunSave.Version`).
+
+- **Version 1** (hero select) held a hero id per run, stats per hero and the chapter unlocks.
+- **Version 2** (class, deck, power) adds `Class` and `StarterDeck` to the run, `Class` to stats rows and archive entries, `StarterDeck` and `Power` to archive entries, and `UnlockedThisRun` to the run.
+- **Version 3** (the shared draft catalog, phase 3) adds `CatalogVersion` to the run (absent = 0: a legacy run, drafting the 52 fixed bundles exactly as before), its `BucketTakes`, and each catalog bundle draft's stored `Offers` (entry, label, theme, kind, adventure tag and the three drawn cards). The upgrade from 2 changes no value: every run of an older save is a legacy run; it stamps `CatalogVersion` 0 and leaves the legacy drafts without stored offers. The first commit copies the version-2 file once to `dungeon-run.v2.xml`. A version-2 plugin refuses a version-3 file, so it can never drop the stored offers.
+
+Loading accepts versions 1 to 3. A newer version is refused (`InvalidDataException`), so a downgraded plugin never overwrites data it cannot read. The upgrade (`plugin/DungeonRun/DungeonRunMigration.cs`) needs the loaded data, so the runtime runs it when it first hands out the save with the rules loaded, never inside the store. Each step is caught and logged, so loading never throws on old content. Before the first commit of an upgraded file, the old file is copied once to `dungeon-run.v1.xml`.
+
+1. **Run in progress:** the hero id maps to a class (`legacy.heroes` in `run-v1.json`; an unknown id falls back to a class id, then to the class of the run deck's first class card, then to the first class, and is logged). If this step fails, the save stays at version 1 and the upgrade runs again on the next load; a run whose class the data does not know can still be abandoned (it is archived and adds no stats row). The deck, treasures, power or shrine, signature, bosses, drafts, cooldowns, seed, floor and phase are kept exactly; a version-1 run records no starter deck id, because none of the version-1 starters is a version-2 deck. Its offers therefore match version 1 (verified for every class hero, the Trapper, the Pilgrim and the Sellsword); a Cartographer run is now single-class (Mage) and no longer gets Rogue bundles. A power the class no longer lists is kept (an old Cartographer run on Ambush Point keeps it under Mage).
+2. **Stats:** rows merge by class (Trapper and Ranger become one Hunter row: runs and wins add, best floor is the maximum). A row of an unknown hero keeps its hero id and gets no class: it counts for class-free conditions, never for a class ladder.
+3. **Archive:** entries learn their class (none for an unknown hero); the hero id stays.
+4. **Unlocks:** each version-1 key adds the class keys that keep what it gave (`legacy.unlocks`: chapter 2 → Hunter floor 4 and 5, Paladin floor 5; chapter 3 → Warrior floor 5, Mage floor 4 and 5, Rogue floor 5; the Sellsword and Cartographer power keys → Warrior and Rogue power keys). Old keys stay; then the ladder is re-evaluated from the merged stats.
+
+The upgrade is idempotent: every step only touches rows without a class.
+
+## Phase 3: catalog runs (2026-11-10)
+
+- **Which runs.** A new run is stamped with the loaded catalog's `catalogVersion` (1). A run of an older save stays a legacy run (0): the pre-catalog draft over the 52 fixed bundles, the closed Secret prior and both sides' generated Secrets off, byte for byte.
+- **Offers** (`DungeonRun.OpenCatalogDraft`). Candidates: the catalog entries eligible for the run's classes (`DungeonRunBundle.EligibleFor`; a Secret entry once `DungeonRunAdmission.MechanicHolds`), a fixed entry while not taken, a pool entry while taken fewer than `draft.bucketMaxTakes` (3) times (a distinct "Unique" entry once: a second take would repeat its no-duplicates cards and switch their condition off), none cooling down. Weight = entry weight × theme affinity (1 + 0.25 n over the entry's themes, capped at 6) × the F5 band multiplier of its average cost × `draft.dualMatchWeight` (2) for a Tombs entry of the run's own pair. Slots: pity, weighted, a different primary theme; within one draft no entry repeats, no label repeats within a shared class, and no two pool entries draw from the same class set and candidates (`DungeonRun.SameDraw`; 1 or 2 offers when fewer candidates remain; none opens no draft). A pool entry's three cards are three different candidates, each drawn by candidate weight from those not drawn yet, on their own stream (`BucketStep`, component slot × 16 + card): a bucket repeats across steps (a later take draws again), never inside one offer. A fixed entry offers its cards. The offers, their cards and their grant cards are stored on the draft (`DungeonRunDraft.Offers`, `DungeonRunOffer.Grants`), and a pick takes the stored cards, re-checking each against the current data with the grant flag as offered and the client check the catalog was loaded with (`DungeonRunData.ClientKnows`; a card that no longer passes is a validation error and the run rolls back). A pool pick adds a take; a fixed pick is taken once. Cooldown entries are `id@floor` parsed at the last `@`; a malformed one is an `InvalidDataException`.
+- **Dual-class rows** (`run-v1.json` `catalogClasses`, loaded with the catalog only: legacy runs are single-class). `MAGE_ROGUE` (Reno) ships enabled with the one Tombs starter deck whose every card passes the pool checks (`tombs_reno_spellslinger`, ULDA_Reno_Deck1), the Mage portrait (the validator requires a scripted class portrait: ULDA_Reno is not scripted and has its adventure 15 Health) and the Mage powers on its own unlock ladder; `PALADIN_SHAMAN`, `DRUID_PRIEST` and `HUNTER_WARRIOR` ship disabled (`run:adventure-loadouts`: no Tombs starter passes after reprint resolution; the reasons name the cards still blocking). Their Tombs entries stay in the catalog marked `unreachable` and are counted apart. A dual row's class set is its two classes (treasure scopes, catalog eligibility, the Secret prior); engine generation follows the primary class only. The native Adventure tray never shows a dual row (its classes are `TAG_CLASS` values); the plank flow does ("Mage / Rogue").
+- **Generated Secrets.** A catalog run's player may generate Secrets (`RunMatchPlan.PlayerGeneratedSecrets`); the five Secret-generating draft cards are admitted (`secret-generated` `CatalogAdmit`); unscripted Secrets are never generated (they join `GeneratedRejects` for catalog runs, since the engine's Secret helpers do not check `Implemented`). The boss's prior is `DungeonRunAdmission.CatalogSecretPrior`: the run's deck-source Secrets at 4 × (1 + count) plus, at 1, every Secret the player's generation can yield in its classes and in the class of each Secret generator its deck sources hold (`SecretGeneratorClasses`: Professor Putricide, granted to Rogue by Tess Greymane, casts Hunter Secrets). It orders the fair search and never certifies (`FairBotState` certifies only while the opponent's generation is Secret-free). The boss side keeps generated Secrets off (DALA_BOSS_21p waits on phase 8), also when the player's own effects generate for the boss: a task that generates for the other side (Spellslinger AT_007, Mulch AT_044, Merch Seller, Faceless Enigma, Encircle, Undefeated Champion) reads the pool inside `Game.GenerateFor(receiver)`, so a card passes only when both sides' filters allow it. The catalog lifts admit scripted cards only: an unscripted card (Hunter's Pack ULD_429) keeps its legacy Generated verdict.
+- **Not lifted:** Zephrys (ULD_003) is unscripted in the engine and needs a wish script; its lift is phase 6 with ULDA_013.
+
+## Phase 8: the encounter model (2026-11-12)
+
+Imported adventure encounters are boss rows with a provenance (LOOT, GIL, TRL, DALA, ULDA) in
+`data/dungeon-run/encounters-v1.json`, generated by `tools/dungeon-run-catalog -- encounters` from
+`data/dungeon-run/reference/encounters/F<NN>.json`. They are appended after the twenty custom bosses; `run-v1.json` and
+`pool-v1.json` are not edited.
+
+- **Row**: tier (`1`-`4`, `major1`-`major3`, `finale`; its pool is `enc-t<n>`, `enc-major<n>` or `finale`), hero, power,
+  deck (kind `authentic`, `substituted`, `extended` or `curated`, with its source page), flags from a closed vocabulary,
+  and what makes the boss distinctive: `forms`, `start`, `variants` (shrine + deck), `heroCards`, `relay`,
+  `bossGeneratedSecrets`, `incompatibleRules`.
+- **Schedules**: `schedule-v1.json` is scheduleVersion 3. `acts-v1`, `acts-v2` and `act1` ship unchanged and stamp new runs
+  2. `acts-v3h` and `acts-v3t` (stamp 3) draw from pool sets that mix the custom bands with the encounter tiers
+  (`"draw": "provenance-mix"`: each pick takes the provenance the run has used least), open each act with an anomaly node,
+  and end with a finale act once their `finale` is enabled. `default` stays `acts-v2` until the encounter families have
+  landed; the close-out sets `defaults` and a new run then rolls one of them from its seed.
+- **Global rules**: anomalies (offered at the anomaly node: two rolled rules or none) and twists (rolled per act at
+  NewRun) are `schedule-v1.json` `rules`; an active rule is a `DungeonRunRule` with a `Kind`, and lands on both players as
+  its player enchantment (`DungeonRunGlobalRules.Apply`).
+- **Run-owned fight state** (save version 6): `DungeonRunState.HeroSwitch` (the fight-only heroes of the floor being fought;
+  the run's class, power, deck and cards are never written by a switch), `DungeonRunState.HeroDamage` (ULDA_720), and
+  `DungeonRunProfile.BossDamage` (persistent boss damage per encounter, at profile scope because a lost fight ends the run).
+  `DungeonRunSetup.Harvest` reads what a fight left; `DungeonRun.RecordOutcome` keeps it.
+- **Engine**: `Actions.EncounterRules` (forms, start block, relay, carried damage, own-deck facts, harvest; one tag table,
+  32630-32699) and `CardSets.DungeonRun.DungeonRunEncounters` (the encounter cards on their own client ids, one file per
+  family).
+- **Boss Secrets** (family 01): four Secret bosses ship with their wiki decks. Elder Brandlemar (`LOOTA_BOSS_35p` puts a
+  Counterspell into play), Trapped Room (the passive `LOOTA_BOSS_48p` summons a 3/3 Sawblade when a boss Secret is
+  revealed), Manhunter Ivan (`GILA_BOSS_25p` puts a random Secret of the boss's deck into play) and Trap Room
+  (`ULDA_BOSS_44p` plays one from the boss's hand or deck, as an effect cast). Pressure Plate (`ULD_152`) is scripted.
+  - *The boss side's generated Secrets* stay off unless the row says `bossGeneratedSecrets`. A card with
+    `AdmissionRule.BossNeeds` (Whirt's Prediction; Professor Putricide and Streetsmuggler, which name "a random Hunter
+    Secret": `BossSecretClass`) is refused on a row without it, and the validator closes each yield pool
+    (`DungeonRunValidator.BossSecretPool`: every scripted Secret of that class a catalog run's lists leave is admitted for
+    a boss). The boss's Discovers and random cards still never yield a Secret (its own generation list holds them all);
+    a card that names the Secret reads the closed pool instead (`Game.BossNamesSecrets`).
+  - *A clickable boss power is offered by what is exact in the boss's fair view only* (boards, its own hand and Secrets,
+    zone counts), never by its deck: the boss's search samples its deck, and an option that is legal in a sample but not
+    in the real game cannot be taken. Trap Preparation and Tricks and Traps are therefore offered whenever the Secret
+    zone has room and do nothing when no Secret is left.
+  - *Own-deck ledger*: a Secret that goes from its owner's deck into its owner's Secret zone (those two powers, Mad
+    Scientist) leaves the owner's sampled deck as that card, not as an unknown one (`OwnDeckLedger`).
+
+### Wave 1: unscripted collectibles (families 02, 03, 04; 2026-11-13)
+
+The 92 collectible cards the buckets and the imported boss decks listed without a script are scripted in their card-set
+files, each with an admission row (`DungeonRunAdmission.F02.cs`, `.F03.cs`, `.F04.cs`): 33 outside Uldum (family 02), ULD_131
+to ULD_274 (family 03) and ULD_282 to ULD_728 (family 04). No bucket member is left unscripted (catalog: 6508 admitted
+references, 1 excluded for its class). They add no boss row; six of the twelve shipped encounter decks are now the wiki's
+lists unchanged.
+
+- **Engine rules for later families** (`Actions/EncounterRules.F02.cs`): `WrongTarget50` / `WrongTargetTask` (GVG_054; an
+  ATTACK trigger whose event source is the attacker), `HeroDamageCap` (tag 32637 in the table of `EncounterRules.cs`, read
+  on a minion, a hero power or the hero; applied in `Character.TakeDamage` before Armor), `SecretRepeats` (DAL_573: every
+  Secret built by `ComplexTask.Secret` is a `SecretTriggerTask`), `CapturesOpening` (opening hands are recorded in every run
+  match; `TurnQueueRules.RedactOpening` keeps the run player's out of the boss's view).
+- **Helpers**: `DungeonRunEncounters.ScriptedPool` / `DiscoverScripted` (family 02), `UldumCollectiblesB.QuestStep` and
+  `RestlessOthersAura` (family 03), `UldumRules` (family 04: `ShuffleSummonWhenDrawn`, `SummonDrawn`, `QuestProgress` /
+  `Advance`, `ScriptedPool` / `RandomScripted`, `IsOtherClass`, `DiscoverDeadToDeck`).
+- **Quests whose reward is a hero power** (admission family `quest-hero-power`, two rows): the six of family 04 are the
+  run player's only (a boss's hero power is its encounter's identity); ULD_131 Untapped Potential of family 03 is admitted
+  in every scope. No shipped boss deck lists a Quest. The two rows state different boss policies; the close-out decides
+  whether ULD_131 joins the player-only row.
+- **Fixes the regenerated catalog exposed** (released bosspilot modes; regression suite c-w1fix): FP1_009 Deathlord left
+  the minion it summons listed in the opponent's deck; CFM_668 Doppelgangster's Battlecry threw when GIL_820 Shudderwock
+  repeated it (now 2 copies of the repeater); LOOT_210 Sudden Betrayal answered a hero's attack and threw (now enemy
+  minions only).
+
+### Wave 2: global rules and the Dungeon Run bosses (families 05, 07, 08; 2026-11-13)
+
+Three families landed together: the global-rule framework with the Dalaran Heist anomalies and twists (05), eighteen Dungeon
+Run encounters with a clickable hero power (07) and seventeen with a passive, trigger or both-player power (08). The shipped
+encounter list holds 43 rows (the foundation's 8, 18 of family 07, 17 of family 08) and 47 decks, 32 of them the wiki's list
+unchanged; the schedule lists 22 rule rows (17 scripted anomalies, 4 scripted twists, DALA_857 rejected). All of it stays
+behind acts-v3h and acts-v3t; no default changed.
+
+#### Family 05: the global-rule framework and the Dalaran Heist rules
+
+**Framework.** A global rule (an anomaly or a twist) is a row of `schedule-v1.json` "rules" whose id is the rule's client
+card. Family 01 built its life cycle: offered at an act's anomaly node or rolled from an act's twist pool, stored in
+`DungeonRunState.ActiveRules`, checked against the act's bosses and the other active rules, carried on
+`RunMatchPlan.GlobalRules` and applied by `DungeonRunGlobalRules.Apply` as a player enchantment on both controllers.
+Family 05 adds what an enchantment cannot carry:
+
+- `RuleHooks` (engine, `DungeonRunEncounters.Rule(id, effectId, effect, hooks)`): `OpeningCards` (extra opening-hand cards
+  for both players, added in `DungeonRunSetup.Configure` within the engine's cap), `OnApply` (once, at
+  `ApplyAfterStart`), `OnStart` (once, after both mulligans and the encounter's own start block, from
+  `EncounterRules.ResolveStart`) and `Cards` (the tokens and enchantments the rule creates; the validator checks the client
+  knows each and that each is scripted). A rule whose text is a start condition has no "Player Enchantment" card in the
+  client data and is hooks only: `effectId` null. Such a rule is active by its bit in the game tag
+  `EncounterRules.RuleApplied` (32660), which also makes an apply hook run once in the game and in every clone.
+- Private tags: `RuleApplied` 32660 (game), `RuleSpells` 32661 (a rule's player enchantment: spells cast this turn),
+  `RuleSummons` 32662 (a rule's player enchantment: minions marked this turn; added by the integration for Explosive).
+  Next free rule tag: 32663.
+- Run side: a rule row may list `incompatibleClasses` (run class ids the rule is never active for), beside `noBoardShrine`,
+  `incompatibleRules`, `incompatibleFlags` and `incompatibleModifiers`.
+- Shared engine rules for later families (`Actions/EncounterRules.F05.cs`): `BattlecriesTwice(bothPlayers)` and
+  `DeathrattlesTwice(bothPlayers)` (the controller auras of Battle Totem and Totem of the Dead; one aura of type CONTROLLERS
+  on a boss power covers "All ... trigger twice"), `RecastRandom(spell, source)` (a copy cast with random targets, never of a
+  copy, a Secret or a Quest), `PlaceBlockers` / `Blockers` (a board limit made of untouchable permanents), `Imprison` /
+  `Imprisoned` / `PrisonTurns` / `TickPrison` (a permanent that holds a minion and releases it), `SwapStatsOnSummon`.
+
+**Rules.** Texts are the client's; readings the text leaves open are recorded in `curation.json` "ruleAdaptations" and in
+`data/dungeon-run/reference/encounters/F05.json` "rules".
+
+| Rule | Kind | How it is scripted |
+|---|---|---|
+| DALA_851 Summons | anomaly | after a player plays a spell: a random scripted minion of the Cost the spell had in hand, through the generation filter |
+| DALA_852 Crying / DALA_853 Rattling | anomaly | the Battlecry / Deathrattle doubling aura on each player |
+| DALA_854 Nesting | anomaly | a played minion gains Nested: when it dies a fresh 1/1 of the same card takes its place |
+| DALA_855 Refreshing | anomaly | at the end of a player's turn that player draws up to 5 cards (Jeeves's count; Fatigue from an empty deck) |
+| DALA_856 Wild Magic | anomaly | after a player plays a spell a copy is cast with random targets (no copy of a Secret, a Quest or a countered spell) |
+| DALA_858 Fishy | anomaly | 1 chance in 4 at the start of a player's turn: a random scripted Murloc for that player |
+| DALA_859 Gorged | anomaly | hooks only: two more opening cards before the mulligan and two Mana Crystals, both players |
+| DALA_860 Dragon Soul | anomaly | the third spell a player casts in a turn summons a 5/5 Dragon Spirit (LOOT_209t); the count starts again |
+| DALA_861 Ogreish | anomaly | Ogre Warmaul's 50% wrong-enemy rule for every attacking minion |
+| DALA_862 Reductive | anomaly | at the end of a player's turn its hand costs (1) less (Thaurissan's enchantment; Echo cards stay at (1)) |
+| DALA_863 Hallucinating | anomaly | hooks only: ten Hallucinations (UNG_856) shuffled into each deck after both mulligans, recorded for the own-deck ledger |
+| DALA_865 Explosive | anomaly | a summoned minion gains "Deathrattle: Deal 1 damage to all minions"; at most 30 minions of one player a turn (see the integration changes) |
+| DALA_867 Infused | anomaly | a summoned minion gains one of Taunt, Divine Shield, Rush, Windfury at random |
+| DALA_829 The Coffers | twist | hooks only: the boss starts with a 0/3 Cache of Cash (Deathrattle: two Coins for each player) |
+| DALA_831 The Stench | twist | a minion's Attack and Health are swapped once as it enters play (a 0-Attack minion dies) |
+| DALA_832 The Prisons | twist | hooks only: each player starts with a Violet Prison holding a random minion, released at the start of its owner's turn number Cost |
+| DALA_833 The Carts | twist | hooks only: each player starts with three different Carts, permanents that take board slots (four minions each) |
+| DALA_857 Glittering | anomaly | **rejected**: its Treasures are the Dalaran Heist active treasures, run rewards no boss and no generation pool may hold yet |
+
+**Incompatibility (schedule-v1.json).** Crying excludes bosses flagged `doubleBattlecry`, Rattling `doubleDeathrattle`, Wild
+Magic `recast`, Ogreish `forcedAttack`, Hallucinating `deckReplace` and `relay`. The board twists (Coffers, Prisons, Carts)
+exclude one another and bosses flagged `boardStart`; The Stench excludes Coffers and Prisons (a 0/3 Cache would die on
+arrival; a released prisoner is a transform, not a summon). The Stench and The Carts are never active on a run with a
+board shrine or against a boss flagged `shrine` or `boardStart`; The Carts never for Darius Crowley (his Cannons).
+A later family whose boss conflicts with a rule lists the rule in its row's `incompatibleRules` (Tierra Blythe's waitress
+and DALA_861) or sets the matching flag.
+
+**Not in a shipped twist pool yet.** The four twists are scripted, admitted and listed as twist rules, but the acts of
+acts-v3h and acts-v3t ship with empty twist pools (changing an act is the close-out's): they are rolled only on the
+fixture schedule of the tests. The ledger shows them `partial`, blocked by `run:global-rules`.
+
+**Tests.** `p8f05/suites/c-rules-05` (each rule's text on both sides in real engine games through DungeonRunSetup, the
+framework and the run layer) and the rules05 bosspilot mode (`p8f05/run.sh bp <n> <rule>`: the rule active against one
+custom boss and one boss per adventure with the fair AI as the boss; a probe counts the rule's own effect in each game).
+
+#### Family 07: Dungeon Run bosses A (clickable powers)
+
+Rows of `reference/encounters/F07.json`, each with its wiki page: Waxmancer Sturmi (Sculpt Wax; Rank 2 Harden Sculpture),
+Pathmaker Hamm (Unstable Explosion; Unstable Demolition), Blackseed (Evolvomancy; Greater Evolution), Frostfur, Graves the
+Cleric, Overseer Mogark (Cruel Words; Searing Lash), Candlebeard (Charge!), Thaddock the Thief, Giant Rat, Gnosh the
+Greatworm, Bristlesnarl, The Mothergloop, Wee Whelp and Bink the Burglar. The tier is the printed hero Health (10 and 20:
+tier 1; 30 and 40: tier 2; 50 and 60: tier 3); the two ranks of a boss are two rows of different tiers and one run can
+meet both. The powers the wiki marks as auto-cast are the AI's choice here. Scripts: `DungeonRunEncounters.F07.cs` (public
+helpers `EvolvePool`, `HighestAttack`); admission rows `boss-power-public`, `boss-power-own-hand`, `boss-token`, all for
+a boss only. Growing Ooze (ICCA07_004, The Mothergloop's deck) is scripted there too.
+
+- A run player's board shrine is destroyed instead of transformed by Evolvomancy / Greater Evolution (it goes dormant), a
+  copy of a shrine is a plain minion, and Swallow Whole and the random-damage powers never pick an untouchable card (a
+  dormant shrine form, a Cart, a Violet Prison).
+- Decks: twelve are the wiki's lists unchanged. Blackseed's two replace Wrath (EX1_154 has no script of its own; the
+  encounters step does not take the Core reprint as a client card) with Swipe; Graves the Cleric's replaces ten later
+  Core-set cards this client does not have; the three level-1 lists (Giant Rat, Wee Whelp, Bink) are the wiki's ten cards
+  twice plus ten curated fillers.
+- FIR_955 Emberroot Destroyer never picks a mortally wounded minion: with Axe Flinger (Hamm's deck) the two answered each
+  other without end and the boss's search overflowed the stack.
+
+#### Family 08: Dungeon Run bosses B (passive, trigger and both-player powers)
+
+Rows of `reference/encounters/F08.json`: George and Karl (one tag-team encounter), Azun (all Deathrattles twice), Jinzo (all
+Battlecries twice), Vex (both), the two Gutmooks, Candlebeard's passive rank, Ixlid, Lyris, Kraxx, Seriona, Whompwhisker,
+Elder Jari, Jeeru, Fungalmancer Flurgl, the Lava-Filled Chamber and Russell the Bard; and the boss deck minions LOOTA_102
+Starving Crab, LOOTA_104 Reverberating Ooze, LOOTA_105 Deadly Spore, LOOTA_107 Shroomsayer and LOOTA_109 Gluttonous Trogg
+(admitted for both sides, never generated). Scripts: `DungeonRunEncounters.F08.cs` (`PoisonousToHeroes`, `RecruitOne`),
+`Actions/EncounterRules.F08.cs`; eight admission rows.
+
+- **The tag team.** George and Karl are one row with a script form (form 0 George and Karl with Divinity, form 1 Karl and
+  George with The Silver Hand), each hero with his own 30 Health. LOOTA_BOSS_110 Tag Team swaps the active and the benched
+  hero with their own damage (`EncounterRules.TagTeam`; the swap itself is `SwapForm`); a defeated active hero is replaced
+  by the other inside the death check (`TagTeamDeath`, called first in `ResolveBoss`), and the boss loses when both are
+  defeated. The bench is the private controller tag `TagTeamBench` (32643, in the tag table).
+- A take-control hero power is never offered on a run shrine (`Controller` hero power options; LOOTA_BOSS_51p Alluring
+  Tune). A clickable power that would do nothing is not offered; each such condition reads only public boards or the
+  boss's own hand count.
+- Rows that double Battlecries or Deathrattles carry the flags `doubleBattlecry` / `doubleDeathrattle`, so DALA_852 Crying
+  and DALA_853 Rattling are never active against them. George and Karl and Ixlid keep their identity Health
+  (`fixedHealth`; incompatible with mod_iron_bosses and mod_open_road).
+- LOEA10_3 Murloc Tinyfin (Flurgl's deck), a collectible vanilla minion that had no card-database entry, is registered as
+  scripted: it is now in every generation pool it qualifies for (0-Cost minions, Murlocs).
+- Decks: thirteen are the wiki's lists unchanged; four replace Wrath, Power of the Wild, Mogor's Champion or Fel Reaver.
+
+#### What the integration changed
+
+- **Decks that became the wiki's lists.** With family 08's cards scripted, Trapped Room (two Shroomsayers), Gnosh the
+  Greatworm (two Gluttonous Troggs) and The Mothergloop (five Reverberating Oozes, two Shroomsayers) play their lists
+  unchanged; the replacements named in F01.json and F07.json are no longer used.
+- **Explosive is bounded.** Two minions that summon each other when they die (Eternal Bloodpetal, 5/1, and its 0/1 Eternal
+  Seedling) exploded on each other without end under DALA_865: the death phase never returned (the boss's search hung on
+  that line against Blackseed). The rule now marks at most 30 minions of one player in one turn
+  (`DungeonRunEncounters.ExplosiveMarksPerTurn`; the count is the tag `RuleSummons` on that player's copy of the rule and
+  starts again at each turn end); recorded as rule adaptation `explosive-limit`.
+- **GVG_054 Ogre Warmaul** redirects as the attack event reaches it (FastExecution), as DALA_861 Ogreish does: queued, a
+  Secret that answers the attack (Splitting Image) was validated on the aimed minion and resolved on the hero
+  (InvalidCastException). A later card with the 50% rule on an ATTACK trigger must do the same.
+- **Tag table.** `TagTeamBench` 32643 moved from the family's file into the table of `EncounterRules.cs`; a family's
+  reserved number is 32635 + NN (taken: 32637 by family 02, 32643 by family 08).
+
+**Open for the close-out.** The twist pools of acts-v3h and acts-v3t are empty, so the four twists are rolled only on the
+fixture schedule (`p8f05/fixtures/schedule-twists.json`); DALA_857 Glittering waits for treasures a boss may hold; the
+flags `recast`, `forcedAttack` and `boardStart` are set on no shipped row yet (the families that own such bosses set them).
+
+**Tests of the wave.** c-rules-05 (170 checks), c-enc-07 (161), c-enc-08 (113), and the bosspilot modes rules05 (each of
+the 18 rules against six bosses), enc07a / enc07b / shrine07 and enc08 / enc08-tag / enc08-cards / enc08-trapped, each
+twice identical with 0 faults, fallbacks, failed checks and swallowed leaf exceptions; every family 05 rule was also
+played against fourteen bosses of families 07 and 08 (Crying and Rattling against the thirteen they may meet).
+
+### Wave 3: Tombs anomalies, Dungeon Run finals and rooms, Monster Hunt bosses (families 06, 09, 10; 2026-11-13)
+
+Three families landed together: the Tombs of Terror anomalies and plague twists on family 05's framework (06), the five final
+bosses, special rooms and special starts of the Kobolds and Catacombs Dungeon Run (09), and fifteen Monster Hunt encounters
+with a clickable hero power (10). The shipped encounter list holds 69 rows (the foundation's 8, 18 of family 07, 17 of
+family 08, 11 of family 09, 15 of family 10) and 73 decks, 43 of them the wiki's list unchanged; the schedule lists 43 rule
+rows (the 22 of wave 2 and 21 of family 06). All of it stays behind acts-v3h and acts-v3t; no default changed.
+
+#### Family 06: the Tombs of Terror anomalies and plague twists
+
+Rules of `reference/encounters/F06.json` (no boss rows), scripts in `DungeonRunEncounters.F06.cs`, engine rules in
+`Actions/EncounterRules.F06.cs`, admission rows in `DungeonRunAdmission.F06.cs`; twenty-one rule rows of `schedule-v1.json`.
+
+| Rule | Kind | What it does here |
+|---|---|---|
+| ULDA_702 Loot-Filled | anomaly | a played minion gives the other player a Coin (none into a full hand) |
+| ULDA_705 Booms Away | anomaly | a dead minion shuffles a Bomb (BOT_511t) into its controller's deck |
+| ULDA_706 No-Face | anomaly | a hero is Immune while its side controls a minion (permanents and dormant minions do not count); never on a shrine run or against the flags `shrine`, `heroImmune` |
+| ULDA_707 Eternal Army | anomaly | a dead minion shuffles a new copy of its card into its controller's deck |
+| ULDA_708 Dizzying Blows | anomaly | after a hero is damaged, each card in that player's hand costs a random 0 to 10 (Echo and repeatable cards never below 1) |
+| ULDA_709 Angelic Presence | anomaly | a minion's Attack equals its Health (`AttackEqualsHealth`); not with DALA_831 |
+| ULDA_710 CHARGE! / ULDA_711 Relentless | anomaly | board auras: all minions have Charge / Windfury |
+| ULDA_712 Holograms | anomaly | a played minion gives the other side a 1/1 copy |
+| ULDA_713 Whirling Winds | anomaly | 1 damage to all minions at each turn start |
+| ULDA_714 In the Face | anomaly | hero damage is doubled before Armor (`HeroDamageDouble`, tag 32641; Animated Armor's cap applies after); not against the flag `damageCap` |
+| ULDA_715 Bountiful | anomaly | both players start with nine cards (the boss's Coin is one of its nine); hooks only (`RuleHooks.OpeningHand`); not with mod_open_road |
+| ULDA_719 Marin's Return | anomaly | each player starts with a Master Chest (LOOT_357l) on its own side; the breaker gets one of the four treasures; not with the other board-start rules or against the flag `boardStart` |
+| ULDA_720 Battle Scars | anomaly, run scope | the run hero starts at 100 Health and keeps its damage between fights (family 01's run state) |
+| ULDA_721 Aleatory | anomaly | both decks are mixed after the mulligans and each player gets half (`MixDecks`); a card the receiving side may not be given stays; not with ULDA_801 or against the flags `deckReplace`, `relay`, `heroSwitch`, `secrets` |
+| ULDA_724 Spellshields | anomaly | 2 Armor after each spell that was not countered |
+| ULDA_729 Multiclassing | anomaly, run scope | the card drafts offer every class and a deck copy accepts such a card (`DungeonRun.LootClasses`); class Discovers, tavern pools and the treasure pool keep the run's classes |
+| ULDA_801 Plague of Murlocs | twist | Surprise! Murlocs! (ULDA_801t) shuffled into both decks after the mulligans: the run's fight number, at most 8, per deck |
+| ULDA_802 Plague of Madness | twist | at each turn end the rightmost minion of the turn's player attacks a random enemy (`ForcedAttackRandomEnemy`) |
+| ULDA_803 Plague of Wrath | twist | a minion that takes damage gains +1 Attack |
+| ULDA_804 Plague of Death | twist | each player starts with an Eternal Tomb (ULDA_804t); it summons the minion it holds after as many friendly deaths as that minion costs, at most 7 summons a Tomb a turn (`RuleTombSummons`, tag 32680) |
+
+- The two run-scope rules have no match script and never reach a plan's rule list; the ledger tool reads an admitted rule
+  with effect `run` as carried by the run layer.
+- Opening hands: `GameConfig.MaxFirstOpeningHandBonus` (6) holds for the player the config names as first;
+  `MaxOpeningHandBonus` stays 5.
+- The ten client "Dummy Hook Up" cards (ULDA_702d ... ULDA_803d) are the client's script holders and are never created;
+  with the two tokens they are support records of E06.
+- The four twists are listed, scripted and admitted, but no shipped act names them in its twist pool: they are rolled only
+  on the fixture schedule `p8f06/fixtures/schedule-plagues.json`.
+- Twelve rule adaptations are recorded in `curation.json` (`plague-twists-per-act` ... `eternal-tomb-rule`): the wiki states
+  no number for the Murlocs of a Surprise or the Cost range of Dizzying Blows (1 to 3 and 0 to 10 here), and names no chest
+  card for Marin's Return (the Master Chest).
+
+#### Family 09: Dungeon Run bosses C (final bosses, special rooms, special starts)
+
+Eleven encounters (data/dungeon-run/reference/encounters/F09.json; scripts DungeonRunEncounters.F09.cs; engine rules
+Actions/EncounterRules.F09.cs; admission rows DungeonRunAdmission.F09.cs).
+
+- **Final bosses** (tier `major1`: act I majors, the act curve's Health plus 10): Vustrasz the Ancient (five Master Chests to
+  start; Vindictive Breath counts the missing ones), Xol the Unscathed (passive Beam Me Up!: a random Beam at the end of her
+  turn; six Beam spells), Azari the Devourer (Devour burns the top two cards of the run player's deck into the public
+  graveyard), The Darkness (Encroaching Darkness summons 5/5 Darkspawns; the run player starts with three Luminous Candles
+  in hand, for that fight only), King Togwaggle (Magic Candle finds one of sixteen Treasures; Rakanishu at the start of his
+  turn with a chance of 1 in 4).
+- **Special rooms**: Treasure Vault (seven Treasure Coffers; a Coffer's death adds a random treasure of the run's own pool to
+  the run deck; at 5 Mana Crystals the doors close and the fight ends with no loss), Tad (a ten-minion deck, no hand, no
+  draw; Catch and Release pulls the minion whose Cost equals his Mana Crystals; an undamaged Tad summons the Sunken Chest
+  on turn 11, whose death adds Tad's Pole to the run deck), Brimstone Warden (four Stone Golems; Dispel Ward at 5 Mana),
+  A. F. Kay (plays no card before her sixth turn), Chronomancer Inara (Stolen Time at 10 Mana: an extra turn), and
+  Mushhuckster Max (Mushroom Potions crafted from the nine 1-Cost Kazakus effects).
+
+Rules the family adds to the model:
+
+- **Room rules** (`EncounterRules.RoomRules`, private controller tag 32644, bits `RoomNoDraw`, `RoomNoPlay`): a boss that holds
+  no cards never draws or fatigues (`Generic.Draw` returns at once) and a boss that is idle plays no card from its hand
+  (`PlayLockRules.BlocksPlay`). The room's hero power puts them on at the first turn start; with `RoomNoDraw` the dealt hand
+  returns to the deck and a deck fact (`DeckRewritten`) gives the boss's own-deck ledger the exact list.
+- **Rule-cast powers** (`DungeonRunEncounters.AutoCast`): a power the wiki marks auto-cast whose worth the boss's AI cannot
+  evaluate (Devour, Stolen Time, Dispel Ward, Doors Are Closing) is registered with the passive powers (never an option) and
+  cast by a turn-start trigger that pays its Cost. Other auto-cast powers remain an AI choice.
+- **No-loss ending** (`EncounterRules.EndWithNoLoss`): the script marks the game (`NoLoss`) and the closing side's hero is
+  destroyed, so the table shows the run player's win; `DungeonRun.RecordOutcome` records a harvest with the mark as a win
+  with no boss kill credit whatever outcome is reported.
+- **Flag `listedDeck`**: a combat-tier row keeps its listed deck count (10 to 60) instead of 30 (Tad, the Treasure Vault). A
+  deck spec may state `"kind": "curated"` (the Vault has no deck on the wiki).
+- **Boss-held treasures**: the fifteen Kobolds and Catacombs treasures Magic Candle finds are admitted for a boss on catalog
+  runs only (`CatalogAdmit`; the legacy verdict stays the run player's).
+- A static field initializer in a `DungeonRunEncounters` partial file must not construct a task that reads the card database
+  (an `AddEnchantmentTask`, a `SummonTask` by id): the card database registers the class's entries while it loads, and a
+  re-entrant load leaves every encounter card unscripted. Build such tables on first use.
+
+Decks: nine are the wiki's lists unchanged; A. F. Kay's replaces two Fel Reavers with Bittertide Hydras; the Treasure
+Vault's (ten Coffers, never drawn) is curated. LOOTA_BOSS_53h2 (Inara's second portrait) is a support record.
+
+#### Family 10: Monster Hunt bosses A (clickable powers)
+
+Rows of `reference/encounters/F10.json`: A Mangy Wolf, Rottooth, Cutthroat Willie, Grubb the Swampdrinker, Gnomenapper,
+Experiment 3C, Sazzmi Gentlehorn, Gnarlroot, Niira the Trickster, The Scarecrow, Inquisitor Hav'nixx, Chupacabran, Griselda,
+Wharrgarbl and Cozzlewurt, with their nine boss-only cards. The tier is the printed Health of the hero card (15: tier 1;
+25 and 30: tier 2; 35 and 40: tier 3; 50 and 60: tier 4); the wiki's round of each boss is recorded in its row. Scripts:
+`DungeonRunEncounters.F10.cs`; five admission rows (`boss-board-power`, `boss-own-hand-power`, `boss-control-all`,
+`boss-setaside-store`, `boss-hunt-card`).
+
+- **The set-aside store** (`Actions/EncounterRules.F10.cs`: `CanStore`, `Store`, `StoredBy`, `Release`; private tag
+  `SetAsideStore` 32645 on the holder). Gnomenapper's Nab stores an enemy minion in a Stuffed Sack summoned for the boss;
+  the sack's Deathrattle returns the minion itself (damage and enchantments kept) to its own controller; it is lost when
+  that board is full or the sack is silenced, transformed or bounced. A run shrine is never a legal target and never enters
+  a store.
+- A start-block weapon now starts its aura and trigger (`EncounterRules.ResolveStart`; the Scarecrow's Scythe: Immune to
+  Durability loss, +1 Attack per kill; start-equipped here, the wiki lists it in no deck row).
+- Hero-power options apply a card's `SourceTargetingPredicate` (`Controller`), as hand cards do: Nab is never offered on a
+  shrine and Bloodthirst never on a Lifesteal minion.
+- Amalgamate resolves the deaths before it summons the Amalgamation; Infatuation and Enchanting Tune never take a shrine;
+  Witch's Kiss makes a picked shrine dormant; Devour Soul halves Health without damage and never below 1.
+- Decks are the wiki's lists brought to 30 cards (second copies, curated fillers, or the first 30 of a longer list), each
+  change recorded: one is the wiki's list unchanged (the Scarecrow), eleven are extended, three substitute an unscripted
+  card (Ogre Ninja, Ogre Brute, Mogor the Ogre, Mogor's Champion, Wee Spellstopper, Gnomish Experimenter, the original
+  Wrath and Power of the Wild, and Witchwood's Touch GILA_BOSS_99t2, which is family 23's). Chuck, the 6-Cost spell, is
+  shuffled into Grubb's deck by his start block.
+
+#### What the integration changed
+
+- **Hagatha's deck is the wiki's list again.** With GILA_BOSS_27t Amalgamate scripted by family 10, the two Amalgamates of
+  her list are back (the replacement named in F01.json is no longer used).
+- **The provenance mix reaches the majors.** With Monster Hunt rows in the combat tiers, a run that already holds a GIL boss
+  takes a custom band-3 boss as its act II major: Hagatha is the act II major in 506 of 1000 seeds (1000 before), and the
+  act I major may be one of the five Dungeon Run finals (`enc-major1`). Whirt, Voone and Icarax are still met by every run
+  (c-enc-model E3).
+- **Aura removal and the fair view.** GIL_618 Glinda Crowskin's hand aura (Echo, a SET effect) was removed from the Unknown
+  stand-ins of the run player's masked hand when she died in the boss's search: NullReferenceException, a fallback decision
+  (Marin's Return against Chronomancer Inara). `Effect.RemoveAuraFrom` now returns for an entity that holds no aura effects
+  (c-w3fix X1-X4).
+- **Bountiful and the no-hand rooms.** Tad and the Treasure Vault put their nine opening cards back into their deck as any
+  opening hand (the Coin is set aside); the rules06 bosspilot probe expects 0 cards for such a boss.
+- **Tag table.** Taken numbers: 32637 (family 02), 32641 (06), 32643 (08), 32644 (09), 32645 (10); rule range 32660-32662
+  (family 05 and wave 2) and 32680 (family 06, whose rule-state tags are 32680-32699).
+- Hooked-rule bits: 11 of 31 are used (family 05: 5; family 06: ULDA_714, 715, 719, 721, 801, 804), in registration order.
+
+**Open for the close-out.** The twist pools of acts-v3h and acts-v3t are still empty (ULDA_801-804 and the Heist twists
+are rolled only on fixture schedules). A player who enters the mulligan with a full ten-card hand loses the first
+replacement card (`Generic.ChoiceMulligan` adds before it removes): Bountiful therefore gives the boss eight cards and the
+Coin, and a row with `start.bossOpeningHandBonus` 5 would meet the same limit. The five finals as act I majors won 20 of 20
+bosspilot games (balance, not tuned); Grubb is weak at tier 4. LOOTA_103 and LOOTA_BOSS_52t keep the ledger blocker
+`run:deck-mutation` from the ledger tool's phrase rule although their run deck edits are implemented. A fight's deck edits
+are applied all or none within the deck maximum (a Vault that would pass it adds nothing).
+
+**Tests of the wave.** c-rules-06 (224 checks), c-enc-09 (166), c-enc-10 (116), c-w3fix (4), and the bosspilot modes
+rules06 (each of the 21 rules against six bosses), enc09 / enc09-seeds / enc09-auto / enc09-finals / enc09-rooms /
+enc09-cards and enc10 / enc10a / enc10b / enc10-nab / enc10-cards / enc10-shrine / enc10-seeds / enc10-hagatha, each twice
+identical with 0 faults, fallbacks, failed checks and swallowed leaf exceptions; every family 06 rule was also played
+against twelve bosses of families 09 and 10 (Marin's Return and Plague of Death against the eleven they may meet).
+
+## Implementation Status (2026-11-09)
+
+All pieces are written and the plugin builds against client 37.0.2.256589 with SDK 10.0.402 (0 errors; client bindings check PASS, Mono guard PASS). Nothing has run inside the Hearthstone client yet.
+
+| Piece | State | Verified (headless, against the built engine) |
+|---|---|---|
+| Engine: run setup fields, passive powers, `DungeonRunContent` / `DungeonRunCardsGen` / `DungeonRunSetup`; 16 class powers and `RunContent.Tokens`; `ExcludeGeneratedSecrets`; `EnableCorpses` | Done | 329 content checks (the 16 class powers cast, cloned and replayed; Corpse gain and spend with Body Bagger, Army of the Dead, Tomb Guardians, Battlefield Necromancer and the Ant Husk; the Blood cards Drink Blood, Death Strike, Liferender and Emergency Surgery) (Survey, Magic Trick, Ethereal Conjurer, Runed Orb and Shifting Scroll offer no Secret in 60 run matches each, against 9 to 44 in 60 without the rule); a scan of every starter, bundle and active-treasure card and every player power (60 seeded plays each, playing what they generate) found no Secret. Also: every shell, power, shrine tier, boss passive and treasure in real engine games; each new power cast through `HeroPowerTask` (legal targets, full-board and no-target refusals, effect, clone, same-seed replay, tokens); one-turn tags; determinism and cloning |
+| Data: `run-v1.json` and `pool-v1.json`, schema 2, `dungeon-run/2` (11 classes, 33 decks, 52 bundles) | Done | Validator 0 errors, rune checks included (the client-definition check runs only in game); both files parse with the client JSON parser |
+| Run layer `plugin/DungeonRun/` (rules, validator, state machine, F2/F5/F6, upgrades, class ladder, treasure scopes, sidecar save and version-1 upgrade, `DungeonRunCatalog`) | Done | 186 checks: all 99 class/deck/power starts and plans, a won run for each Death Knight and Demon Hunter deck and power (own-class or neutral bundles only, runes still legal), refusals, ladder, challenge, scopes over 10,000 drafts, migration of synthetic version-1 saves (offers replayed against version-1 golden lines), catalog; 141 random-play matches with no engine fault |
+| Boss AI (`DungeonRunBossPilot`: namespaced deck and profile, derived plan, golden overlay) | Done | 40 games with the real `GoldenPilot` over all 33 starter decks and all 33 powers: 0 faults, 0 emergency fallbacks, no Secret in play |
+| Match path: `LocalLadder.StartRun`, `ClientBridge.PrepareRunMatch`, `NativeMatch` run constructor, `DungeonRun` Pending flag (Settle/RecoverInterrupted/Copy), outcome recording with rollback and retry, turn cap, AI-fault restage | Done | Builds; final review found 400 seeded ladder games identical before and after the change |
+| Run screen (`NativeDungeonRunUI`: Class → Deck → Power → Confirm, hub, drafts, summary with unlocks; caption laid out above the planks) and home entry | Done | Builds; untested in the client |
+| Start-a-run API for the native picker (`DungeonRunRuntime.Classes`, `DecksFor`, `PowersFor`, `ClientCardId`, `NewRun`, `Mutate`); rows carry client ids (`RunClassOption.ClientHeroCardId`, `RunPowerOption.ClientCardId`) | Done | The pure part (`DungeonRunCatalog`) is in the 186 checks; the runtime wrapper builds |
+
+**Decisions taken while wiring (2026-11-09):**
+
+- A run fight reuses the ladder's staging on a Pending flagged `DungeonRun`, which Settle and RecoverInterrupted drop like `DebugScenario`.
+- The end of a fight shows no reward screen. The outcome is recorded, the player returns to the hub, and the run screen reopens.
+- Turn cap: 100 game turns, then the boss wins.
+- A boss-AI exception is a Fault, and the floor is restaged.
+- Secrets and deck-dependent cards are admitted by the admission table (E5). The boss's fair search samples the run player's hidden Secrets from the closed run pool (`DungeonRunAdmission.SecretPrior`, FairBotState Secret worlds, the `secret-worlds` fix), so Secret cards from the run's own pool are admitted for both sides. The pool reads every deck source a version-2 run offers (`DungeonRunAdmission.DeckSourceCards`: the class's starter decks, the neutral and class bundles, reachable active-treasure shells and tokens); it is null while the pool holds no Secret and for a migrated version-1 run, whose deck comes from no listed source, so the boss keeps the open class pool there. Settlement (`secret-worlds`) runs only with a closed pool, so ladder and world NPCs keep the Secret-blind search. The bot's own starting deck list stays visible in its fair view (only the opponent's is masked), so conditions on it (Elise the Navigator, Reno) resolve as in the real game. Run matches keep `ExcludeGeneratedSecrets` on, because those worlds are complete only while the player's Secrets come from the pool; cards that generate a Secret are therefore rejected (family `secret-generated`, lifted in phase 3). The detector reads card text with tags removed and `_`, `&` and line breaks as spaces (`DungeonRunValidator.MatchText`), so a phrase split over two lines still matches.
+- Aya (`JAIL_504`) is refused, because its seat rule can put the player second.
+- Boss portraits must match their deck's class and must not equal any player hero's portrait.
+- Typed-seed runs do not count toward stats or unlocks.
+
+**Known limits:**
+
+- The caption fix and the new shells (names, art, client cost outside a match) are not checked in the client yet; the layout log line confirms the caption on first launch.
+
+- Test-hook builds refuse administrator accounts (exit 40), so the run cannot be driven through test control on this machine.
+- Shadows of Yesterday (`TIME_610`, a Death Knight Rewind spell) works as written. An early scan reported a fault when its Shades died ("Missing history board-entry annotation"), but the scan kept a `Player1` reference across a Rewind, which rebuilds the controllers; re-reading it gives 0 faults in 60 seeds, and random full games with Rewind are clean. Frost Strike was taken out of Rimeguard while this was open; the deck is fine either way.
+- Band-2 bosses (generated decks) won 1 of 12 games against a simple greedy player. They are likely too weak, and need a tuning pass against the F7 targets.
+## Open Questions
+
+- **Q1 — Display shells (content pass, blocking for bosses and treasures).** The client must know every entity it shows. For each Deckdelve boss passive and treasure, which existing client entity is its shell? Candidates are generic enchantments, an existing hero-power card, or unused passive entities already in the facts file. This needs a per-entity check that the client renders it sensibly. It also decides which Deckdelve content survives the port.
+- **Q2 — Hero health display.** Partly answered. `Player2HeroHealth` emits a HEALTH tag change in the engine's power history (§ Engine Changes, verified). It is still unconfirmed whether the client shows a 40/50-health hero correctly; that needs a run in the client (AC8).
+- **Q3 — Launch classes.** The proposal is Warrior, Warlock and Mage as analogs of Deckdelve's War, Decay and Knowledge. Each class needs 8 curated bundles and a starter deck from the active-meta pool. Confirm which classes and who curates.
+- **Q4 — Boss Coin.** R9 gives the boss the standard second-player Coin. Deckdelve has no Coin and a boss 4-card hand. Keep the standard engine behaviour, or strip The Coin in the pre-start phase?
+- **Q5 — AI value for custom boss powers.** `CardFrequencies.FaceDamage` and the deck-plan evaluator assume known powers. Is extending those tables enough, or do boss decks need hand-written plans like `DeckPlans.DragonWarrior`?
+- **Q6 — Build variants.** Pool policy, deck validation and `DebugScenario` are `ENGINE_SOURCE`-gated. Confirm the mode ships only in `ENGINE_SOURCE` builds, or define its behaviour without engine source.
+- **Q7 — Telegraphed boss intent** (Deckdelve's intent banner). It is out of scope for v1, because the NPC pilot has no dry-run forecast API. Revisit after the MVP.

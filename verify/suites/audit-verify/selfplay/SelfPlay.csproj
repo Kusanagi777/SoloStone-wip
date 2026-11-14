@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings><NuGetAudit>false</NuGetAudit><AssemblyName>AiHarness</AssemblyName>
+    <DefineConstants>$(DefineConstants);ENGINE_SOURCE</DefineConstants><NoWarn>CS0618;CS8632;CS0162</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(SoloStoneRoot)plugin/LocalBot.cs" />
+    <Reference Include="SabberStoneCore"><HintPath>$(EngineDll)</HintPath></Reference>
+  </ItemGroup>
+</Project>

@@ -340,7 +340,7 @@ internal static class NativeAchievements
     private static bool CanOpen(LocalProfile profile) => !active && !disabled && profile != null
         && ReferenceEquals(profile, NativeUIProbe.RewardProfile) && !JournalPopup.s_isShowing
         && !NativeAchievementToast.Active && !NativeRewardUI.BlocksHome && !NativeProfileSelector.BlocksHome
-        && Box.Get() != null && Box.Get().IsInStateWithButtons();
+        && !NativeDungeonRunUI.BlocksHome && Box.Get() != null && Box.Get().IsInStateWithButtons();
 
     private static void Ready(int token, WidgetInstance expected)
     {

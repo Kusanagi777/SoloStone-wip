@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
+  <Profile>
+    <Heroes>
+      <DungeonRunHeroStats Hero="ranger" Archetype="class" Runs="1" Wins="1" BestFloor="8" />
+      <DungeonRunHeroStats Hero="trapper" Archetype="specialist" Runs="1" Wins="0" BestFloor="5" />
+      <DungeonRunHeroStats Hero="pilgrim" Archetype="shrine" Runs="1" Wins="0" BestFloor="2" />
+      <DungeonRunHeroStats Hero="sellsword" Archetype="powerSelect" Runs="1" Wins="1" BestFloor="8" />
+    </Heroes>
+    <Unlocked>
+      <string>chapter2</string>
+      <string>chapter3</string>
+      <string>sellsword_floor5</string>
+      <string>sellsword_win</string>
+    </Unlocked>
+    <Archive>
+      <DungeonRunArchiveEntry Hero="ranger" Seed="5A17000000003002" TypedSeed="false" FloorReached="8" Won="true" LastBoss="hollow_sovereign">
+        <Treasures>
+          <string>spark_lantern</string>
+          <string>deep_satchel</string>
+          <string>gilded_idol</string>
+        </Treasures>
+      </DungeonRunArchiveEntry>
+      <DungeonRunArchiveEntry Hero="trapper" Seed="5A17000000003003" TypedSeed="false" FloorReached="5" Won="false" LastBoss="pit_champion">
+        <Treasures>
+          <string>old_map</string>
+          <string>frost_lantern</string>
+        </Treasures>
+      </DungeonRunArchiveEntry>
+      <DungeonRunArchiveEntry Hero="pilgrim" Seed="5A17000000003004" TypedSeed="false" FloorReached="2" Won="false" LastBoss="cellar_matron">
+        <Treasures>
+          <string>deep_satchel</string>
+        </Treasures>
+      </DungeonRunArchiveEntry>
+      <DungeonRunArchiveEntry Hero="sellsword" Seed="5A17000000003005" TypedSeed="false" FloorReached="8" Won="true" LastBoss="devouring_maw">
+        <Treasures>
+          <string>hearty_tonic</string>
+          <string>blazing_rod</string>
+          <string>gilded_idol</string>
+        </Treasures>
+      </DungeonRunArchiveEntry>
+    </Archive>
+  </Profile>
+</DungeonRun>

@@ -40,6 +40,9 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			{
 				if (p.Zone?.Type == Zone.DECK)
 					continue;
+				// A run shrine on a board is destroyed instead of shuffled (phase 7, ShrineRules).
+				if (SabberStoneCore.Actions.ShrineRules.InterceptLeave(p))
+					continue;
 				IPlayable removedEntity = p.Zone?.Remove(p) ?? p;
 				removedEntity.Reset();
 				if (removedEntity.Controller != c)

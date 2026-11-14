@@ -1,0 +1,104 @@
+PASS A1 the 29 cards are scripted
+PASS A2 their tokens, reward powers and enchantments are scripted
+PASS A3 every card keeps the client's text
+PASS A4 every card keeps the client's Cost
+PASS A5 the six Quests are Quests with the client's totals (6, 4, 5, 10, 5, 15)  (6,4,5,10,5,15)
+PASS A6 the six reward powers are clickable hero powers that cost (2)
+PASS A7 Colossus of the Moon is a 10/10 for (10) with Divine Shield and Reborn; Stone Golem is a 4/3; Locust a 1/1 with Rush
+PASS Q1 Corrupt the Waters goes to its owner's Quest slot with progress 0 of 6
+PASS Q2 a minion without a Battlecry is no progress
+PASS Q3 five Battlecry cards: progress 5, the hero power is still Totemic Call  (5)
+PASS Q4 the sixth: the Quest leaves the slot for the graveyard and the hero power is a ready Heart of Vir'naal (the old one was used this turn)  (ULD_291p)
+PASS Q5 Heart of Vir'naal costs (2): the next Battlecry this turn triggers twice (Novice Engineer draws two)  (2 drawn)
+PASS Q6 the next turn the doubling is gone (one draw) and its enchantment with it  (1 drawn)
+PASS Q7 a clone carries the Quest's progress and completes it without touching the game it came from
+PASS Q8 Bazaar Burglary: a neutral card and a Rogue card entering the hand are no progress
+PASS Q9 a Mage and a Paladin card are two steps; another neutral none  (2)
+PASS Q10 a Mage card drawn at turn start is the fourth: the hero power becomes Ancient Blades  (ULD_326p )
+PASS Q11 Ancient Blades costs (2) and equips a 3/2 Mirage Blade
+PASS Q12 the hero is Immune while attacking with it (no damage from the Yeti) and not afterwards  (30 vs 30)
+PASS Q13 Making Mummies: four Reborn minions played are four steps, a Yeti none  (4)
+PASS Q14 the fifth (Colossus of the Moon): the hero power becomes Emperor Wraps
+PASS Q15 Emperor Wraps costs (2) and summons a 2/2 copy of the chosen friendly minion (the copy keeps Divine Shield and Reborn)  (ULD_721:10/10,ULD_721:2/2)
+PASS Q16 it needs a friendly minion target: never offered on an enemy minion
+PASS Q17 Raid the Sky Temple: casting the Quest itself is no progress
+PASS Q18 nine spells (a minion is none): progress 9  (9)
+PASS Q19 the tenth: the hero power becomes Ascendant Scroll
+PASS Q20 Ascendant Scroll costs (2) and adds a random scripted Mage spell that costs (2) less  (BOT_453 costs 0)
+PASS Q21 Hack the System: four hero attacks are four steps  (4)
+PASS Q22 the fifth: the hero power becomes Anraphet's Core, with its refresh trigger started
+PASS Q23 Anraphet's Core costs (2) and summons a 4/3 Stone Golem; it is then used up
+PASS Q24 after the hero attacks it is refreshed and summons a second Golem the same turn
+PASS Q25 Activate the Obelisk: Lesser Heal restores 2, progress 2 of 15  (2)
+PASS Q26 only Health actually restored counts: Healing Touch on a hero missing 3 is 3 steps  (5)
+PASS Q27 the opponent's healing is no progress
+PASS Q28 8 more: progress 13  (13)
+PASS Q29 healing a minion counts too; at 15 the hero power becomes Obelisk's Eye
+PASS Q30 Obelisk's Eye costs (2): restores 3 Health to a minion and gives it +3/+3  (7/7 dmg 1)
+PASS Q31 on a hero it only restores 3 Health
+PASS D1 Shadow of Death shuffles three Shadows naming the chosen minion's card into its owner's deck  (3 in deck)
+PASS D2 drawing one casts it: a plain 4/5 copy is summoned and the next card is drawn, so all three chain into three Yetis and one Fatigue draw  (CS2_182:8/9,CS2_182:4/5,CS2_182:4/5,CS2_182:4/5 hand 0 dmg 1)
+PASS D3 a Shadow held in hand is a spell for (4) that summons its minion
+PASS D4 a Shadow that names no minion summons nothing and breaks nothing
+PASS D5 chosen from the enemy board too; with a full board a drawn Shadow summons nothing but still draws on  (deck 0 hand CS2_023:3)
+PASS D6 UldumRules.SummonDrawn (summon it when drawn, for a minion card): the drawn minion goes from hand to board
+PASS D7 Body Wrapper with no dead friendly minion: no choice, nothing shuffled
+PASS D8 it offers the owner's own dead minions only (one offer per card)  (EX1_096,CS2_189)
+PASS D9 the chosen one is shuffled into its owner's deck
+PASS P1 Salhet's Pride's Deathrattle draws two 1-Health minions from its owner's deck  (EX1_096:2,EX1_010:1)
+PASS P2 with one left it draws that one  (CS2_189:1)
+PASS P3 Tip the Scales needs no target and summons the Murlocs of its owner's deck (three of three)  (CS2_168:2/1,CS2_173:2/1,EX1_506:2/1)
+PASS P4 at most seven: nine Murlocs in the deck leave two
+PASS P5 Ancient Mysteries draws a Secret from its owner's deck and it costs (0)  (EX1_287:0)
+PASS P6 the Secret is then played for nothing; a second Ancient Mysteries with no Secret left draws nothing
+PASS P7 Cloud Prince with a friendly Secret in play deals 6 damage  (damage 6)
+PASS P8 without a Secret it is played with no target and deals none
+PASS H1 Anka: each Deathrattle minion in hand becomes a 1/1 that costs (1); other cards are untouched  (EX1_096:1,EX1_534:1,CS2_182:4,CS2_029:4)
+PASS H2 the changed minion is played for (1) as a 1/1 and keeps its Deathrattle (two Hyenas)  (ULD_288:5/5,EX1_534t:2/2,EX1_534t:2/2)
+PASS H3 History Buff: playing it buffs nothing
+PASS H4 whenever its owner plays a minion, a random minion in hand gets +1/+1 (the other Yeti: 5/6), never a spell
+PASS H5 with no minion left in hand nothing happens
+PASS H6 Scarlet Webweaver: exactly one Beast in hand costs (5) less (not below 0); the Yeti keeps its Cost  (CS2_125:0,EX1_534:6,CS2_182:4)
+PASS H7 with no Beast in hand it changes nothing
+PASS H8 Naga Sand Witch: every spell in hand costs (5); minions keep their Cost  (GAME_005:5,EX1_279:5,CS2_023:5,CS2_182:4)
+PASS G1 Jar Dealer's Deathrattle adds a random scripted 1-Cost minion to its owner's hand  (BOT_558)
+PASS G2 Bazaar Mugger adds a random scripted minion of another class (not Rogue, not neutral) and has Rush  (CS2_033 MAGE)
+PASS G3 Dune Sculptor: after its owner casts a spell, a random scripted Mage minion is added to hand  (TRL_319)
+PASS G4 the opponent's spell adds nothing
+PASS G5 King Phaoris summons one random scripted minion of the same Cost for each spell in hand (4, 3, 0), none for the minion  (BOT_532:4,DAL_434:3,CORE_GIL_531:0)
+PASS G6 a full board stops it
+PASS G7 the family's pools never hold a card the run's generation rejects, a Quest or an unscripted card
+PASS G8 the run player's classes are not "another class" for it; neutral cards are of no class
+PASS B1 Oasis Surger, first choice: +2/+2 (a 5/5 with Rush)  (ULD_292:5/5)
+PASS B2 second choice: a copy of itself (two 3/3)  (ULD_292:5/5,ULD_292:3/3,ULD_292:3/3)
+PASS B3 with Fandral Staghelm both: +2/+2, then a copy of the buffed minion (two 5/5)  (OG_044:3/5,ULD_292:5/5,ULD_292:5/5)
+PASS B4 Plague of Wrath destroys every damaged minion on both boards and no undamaged one
+PASS B5 Bloodsworn Mercenary cannot choose an undamaged or an enemy minion
+PASS B6 it summons a copy of the chosen damaged friendly minion as it is (8/9 with 2 damage)  (CS2_182:8/7,ULD_720:3/3,CS2_182:8/7)
+PASS B7 with no damaged friendly minion it is played without a target and copies nothing
+PASS B8 Armored Goon: its owner's hero attacking gains 5 Armor  (5 vs 0)
+PASS B9 the enemy hero attacking gains none for either side
+PASS B10 Swarm of Locusts fills the board: four 1/1 Locusts with Rush beside three minions
+PASS B11 seven on an empty board
+PASS B12 Penance cannot target a hero
+PASS B13 it deals 3 damage to a minion and, with Lifesteal, restores 3 Health to its caster  (minion 3 hero 7)
+PASS B14 Subdue sets a minion's Attack and Health to 1  (1/1)
+PASS B15 Plague of Death silences, then destroys every minion: no Deathrattle draw, no Reborn, both boards empty  ( |  hand 0 vs 0)
+PASS B16 Colossus of the Moon has Divine Shield and comes back once with 1 Health (Reborn)  (ULD_721:10/1)
+PASS R1 ULD_291: a Quest is the run player's only (family quest-hero-power; rejected for a boss with a lift that names no pending work); the boss's generation never yields it
+PASS R1 ULD_326: a Quest is the run player's only (family quest-hero-power; rejected for a boss with a lift that names no pending work); the boss's generation never yields it
+PASS R1 ULD_431: a Quest is the run player's only (family quest-hero-power; rejected for a boss with a lift that names no pending work); the boss's generation never yields it
+PASS R1 ULD_433: a Quest is the run player's only (family quest-hero-power; rejected for a boss with a lift that names no pending work); the boss's generation never yields it
+PASS R1 ULD_711: a Quest is the run player's only (family quest-hero-power; rejected for a boss with a lift that names no pending work); the boss's generation never yields it
+PASS R1 ULD_724: a Quest is the run player's only (family quest-hero-power; rejected for a boss with a lift that names no pending work); the boss's generation never yields it
+PASS R2 the other 23 cards each have an admission row that admits every scope, on legacy runs too
+PASS R3 ULD_293 and ULD_726 keep their phase-2 secret-from-deck row; the family's rows are the six families of DungeonRunAdmission.F04.cs
+PASS R4 the shipped data (regenerated catalog and encounters) validates
+PASS R5 every card of the family is a candidate of a catalog bucket entry
+PASS R6 Icarax's shipped decks list Bloodsworn Mercenary and Plague of Wrath again (no substitution left for them)
+PASS R7 no shipped boss deck lists a Quest
+PASS R8 the validator refuses a Quest in a boss deck (admission quest-hero-power)  (ULD_433: admission quest-hero-power: an Uldum Quest whose reward replaces its owner's hero power (Heart of Vir'naal, Ancient Blades, Emperor Wraps, Ascendant Scroll, Anraphet's Core, Obelisk's Eye): the run player's only. The Quest sits revealed in its owner's Quest slot with public progress tags, so the boss's fair view and its search clones carry it; every progress event is public (a card played, a spell cast, a hero attack, Health restored) or a count of cards entering the owner's hand that the engine resolves and the boss never reads by id (Bazaar Burglary). The reward is the engine's hero power replacement for this match only: the run's power record is never written (UldumRules.Advance; c-collectibles-C Q1-Q22, the f04-player bosspilot mode); lifted by none: a boss's hero power is its encounter's identity (forms, passives, shrines read it); no boss deck lists a Quest and the boss's generation never yields one (boss loot_35_brandlemar))
+PASS R9 and accepts the family's other cards there
+PASS R10 the bosspilot fixture validates: five boss rows whose decks hold the 23 cards a boss may play (no Quest), six rows that give the run player one Quest each  ( rows 5/6)
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 102 passed, 0 failed

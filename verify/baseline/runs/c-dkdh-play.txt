@@ -1,0 +1,89 @@
+DEATHKNIGHT  CATA_161       Gruesome Nightmare           seed   104729 boss mire_brute         -> boss     turns  22 played 6
+DEATHKNIGHT  CORE_EDR_002   Poison Breath                seed   209458 boss lantern_thief      -> player   turns  27 played 6
+DEATHKNIGHT  CORE_RLK_062   Nerubian Swarmguard          seed   314187 boss mire_brute         -> boss     turns  24 played 6
+DEATHKNIGHT  CORE_RLK_086   Frostmourne                  seed   418916 boss cellar_matron      -> player   turns  17 played 2
+DEATHKNIGHT  CORE_RLK_087   Asphyxiate                   seed   523645 boss tunnel_rat         -> player   turns  17 played 1
+DEATHKNIGHT  CORE_RLK_121   Acolyte of Death             seed   628374 boss cellar_matron      -> player   turns  17 played 6
+DEATHKNIGHT  CORE_RLK_745   Malignant Horror             seed   733103 boss bog_croaker        -> player   turns  19 played 4
+DEATHKNIGHT  DINO_415       Story of Umbra               seed   837832 boss lantern_thief      -> player   turns  19 played 4
+DEATHKNIGHT  DINO_416       Hollow Direhorn              seed   942561 boss lantern_thief      -> player   turns  19 played 5
+DEATHKNIGHT  DINO_417       Soulrest Ceremony            seed  1047290 boss tunnel_rat         -> boss     turns  20 played 4
+DEATHKNIGHT  EDR_816        Monstrous Mosquito           seed  1152019 boss mire_brute         -> player   turns  11 played 4
+DEATHKNIGHT  EDR_819        Ursoc                        seed  1256748 boss bog_croaker        -> boss     turns  19 played 1
+DEATHKNIGHT  END_003        Finality                     seed  1361477 boss hedge_witch        -> boss     turns  26 played 6
+DEATHKNIGHT  FIR_900        Cremate                      seed  1466206 boss mire_brute         -> player   turns  23 played 6
+DEATHKNIGHT  FIR_901        Frostburn Matriarch          seed  1570935 boss mire_brute         -> player   turns  13 played 3
+DEATHKNIGHT  JAIL_440       Tower of Ghouls              seed  1675664 boss tunnel_rat         -> boss     turns  16 played 4
+DEATHKNIGHT  JAIL_442       Disguised Doctor             seed  1780393 boss lantern_thief      -> player   turns  13 played 5
+DEATHKNIGHT  JAIL_444       Sawbones                     seed  1885122 boss tunnel_rat         -> boss     turns  14 played 3
+DEATHKNIGHT  RLK_503        Body Bagger                  seed  1989851 boss tunnel_rat         -> player   turns  17 played 8
+DEATHKNIGHT  RLK_708        Chillfallen Baron            seed  2094580 boss hedge_witch        -> boss     turns  17 played 8
+DEATHKNIGHT  RLK_720        Gnome Muncher                seed  2199309 boss mire_brute         -> player   turns  17 played 3
+DEATHKNIGHT  RLK_958        Skeletal Sidekick            seed  2304038 boss cellar_matron      -> player   turns  21 played 6
+DEATHKNIGHT  TIME_614       Liferender                   seed  2408767 boss lantern_thief      -> player   turns  19 played 6
+DEATHKNIGHT  TIME_616       Memoriam Manifest            seed  2513496 boss tunnel_rat         -> player   turns  15 played 1
+DEATHKNIGHT  TIME_618       Husk, Eternal Reaper         seed  2618225 boss bog_croaker        -> player   turns  29 played 6
+DEATHKNIGHT  TIME_619       Talanji of the Graves        seed  2722954 boss hedge_witch        -> boss     turns  16 played 6
+DEATHKNIGHT  TLC_436        Reanimated Pterrordax        seed  2827683 boss hedge_witch        -> player   turns  19 played 1
+DEATHKNIGHT  TLC_443        Reluctant Wrangler           seed  2932412 boss cellar_matron      -> player   turns  21 played 2
+DEATHKNIGHT  TLC_810        High Cultist Herenn          seed  3037141 boss bog_croaker        -> player   turns  17 played 1
+DEATHKNIGHT  TLC_EVENT_402  Staff of the Endbringer      seed  3141870 boss hedge_witch        -> player   turns  31 played 4
+DEMONHUNTER  CATA_151       Azshara, Ocean Lord          seed  3246599 boss tunnel_rat         -> player   turns  19 played 2
+DEMONHUNTER  CATA_525       Armored Bloodletter          seed  3351328 boss bog_croaker        -> player   turns  15 played 1
+DEMONHUNTER  CATA_526       Broxigar's Last Stand        seed  3456057 boss bog_croaker        -> boss     turns  18 played 6
+DEMONHUNTER  CATA_528       Sigil of the Seas            seed  3560786 boss cellar_matron      -> player   turns  21 played 5
+DEMONHUNTER  CATA_529       Ravenous Felfisher           seed  3665515 boss hedge_witch        -> player   turns  19 played 4
+DEMONHUNTER  CATA_530       Fel Infusion                 seed  3770244 boss tunnel_rat         -> player   turns  19 played 7
+DEMONHUNTER  CATA_533       Flash Flood                  seed  3874973 boss lantern_thief      -> player   turns  19 played 0
+DEMONHUNTER  CATA_533       Flash Flood                  seed  3874980 boss cellar_matron      -> player   turns  19 played 4
+DEMONHUNTER  CATA_697       Malevolent Mutant            seed  3979702 boss lantern_thief      -> player   turns  19 played 5
+DEMONHUNTER  CATA_699       Dread Leviathan              seed  4084431 boss cellar_matron      -> player   turns  19 played 1
+DEMONHUNTER  CORE_BT_035    Chaos Strike                 seed  4189160 boss hedge_witch        -> boss     turns  26 played 8
+DEMONHUNTER  CORE_BT_187    Kayn Sunfury                 seed  4293889 boss cellar_matron      -> player   turns  15 played 4
+DEMONHUNTER  CORE_BT_321    Netherwalker                 seed  4398618 boss bog_croaker        -> player   turns  17 played 3
+DEMONHUNTER  CORE_BT_351    Battlefiend                  seed  4503347 boss mire_brute         -> boss     turns  26 played 8
+DEMONHUNTER  CORE_BT_416    Raging Felscreamer           seed  4608076 boss bog_croaker        -> player   turns  19 played 3
+DEMONHUNTER  CORE_BT_480    Crimson Sigil Runner         seed  4712805 boss lantern_thief      -> player   turns  21 played 7
+DEMONHUNTER  CORE_BT_491    Spectral Sight               seed  4817534 boss bog_croaker        -> player   turns  17 played 4
+DEMONHUNTER  CORE_BT_493    Priestess of Fury            seed  4922263 boss lantern_thief      -> player   turns  20 played 3
+DEMONHUNTER  CORE_BT_801    Eye Beam                     seed  5026992 boss bog_croaker        -> boss     turns  40 played 6
+DEMONHUNTER  CORE_BT_921    Aldrachi Warblades           seed  5131721 boss hedge_witch        -> boss     turns  23 played 6
+DEMONHUNTER  CORE_CATA_001  Tichondrius                  seed  5236450 boss mire_brute         -> player   turns   7 played 3
+DEMONHUNTER  CORE_TTN_843   Eredar Deceptor              seed  5341179 boss bog_croaker        -> player   turns  21 played 5
+DEMONHUNTER  CORE_WC_701    Felrattler                   seed  5445908 boss cellar_matron      -> boss     turns  18 played 4
+DEMONHUNTER  CORE_YOP_001   Illidari Studies             seed  5550637 boss lantern_thief      -> boss     turns  12 played 4
+DEMONHUNTER  CS3_020        Illidari Inquisitor          seed  5655366 boss hedge_witch        -> player   turns  17 played 2
+DEMONHUNTER  DINO_136       Horn of Feasting             seed  5760095 boss mire_brute         -> player   turns  13 played 2
+DEMONHUNTER  EDR_421        Omen                         seed  5864824 boss bog_croaker        -> player   turns  15 played 0
+DEMONHUNTER  EDR_421        Omen                         seed  5864831 boss bog_croaker        -> player   turns  17 played 1
+DEMONHUNTER  EDR_493        Alara'shi                    seed  5969553 boss cellar_matron      -> player   turns  17 played 3
+DEMONHUNTER  EDR_820        Wyvern's Slumber             seed  6074282 boss mire_brute         -> player   turns  21 played 5
+DEMONHUNTER  EDR_840        Grim Harvest                 seed  6179011 boss bog_croaker        -> player   turns  15 played 4
+DEMONHUNTER  EDR_841        Dreadsoul Corrupter          seed  6283740 boss cellar_matron      -> player   turns  13 played 1
+DEMONHUNTER  EDR_842        Defiled Spear                seed  6388469 boss cellar_matron      -> boss     turns  12 played 1
+DEMONHUNTER  EDR_882        Jumpscare!                   seed  6493198 boss lantern_thief      -> boss     turns  12 played 4
+DEMONHUNTER  EDR_890        Nightmare Dragonkin          seed  6597927 boss lantern_thief      -> player   turns  15 played 3
+DEMONHUNTER  EDR_891        Ravenous Felhunter           seed  6702656 boss cellar_matron      -> player   turns  17 played 2
+DEMONHUNTER  EDR_892        Ferocious Felbat             seed  6807385 boss mire_brute         -> player   turns  23 played 5
+DEMONHUNTER  END_006        Chronikar                    seed  6912114 boss lantern_thief      -> player   turns  19 played 3
+DEMONHUNTER  FIR_902        Sigil of Cinder              seed  7016843 boss bog_croaker        -> player   turns  18 played 5
+DEMONHUNTER  JAIL_721       Tras'tath, Soul Parasite     seed  7121572 boss cellar_matron      -> player   turns  21 played 4
+DEMONHUNTER  JAIL_730       Stardust Scythe              seed  7226301 boss tunnel_rat         -> player   turns  13 played 1
+DEMONHUNTER  JAIL_732       Void Soul                    seed  7331030 boss cellar_matron      -> player   turns  13 played 4
+DEMONHUNTER  JAIL_733       Vicious Voidscale            seed  7435759 boss mire_brute         -> player   turns  23 played 4
+DEMONHUNTER  JAIL_891       Void Blast                   seed  7540488 boss hedge_witch        -> player   turns  21 played 7
+DEMONHUNTER  JAIL_892       Cosmic Manifestations        seed  7645217 boss hedge_witch        -> boss     turns  16 played 3
+DEMONHUNTER  TIME_021       Doomsday Prepper             seed  7749946 boss tunnel_rat         -> player   turns  21 played 5
+DEMONHUNTER  TIME_444       Time-Lost Glaive             seed  7854675 boss lantern_thief      -> boss     turns  14 played 2
+DEMONHUNTER  TLC_630        Gorishi Wasp                 seed  7959404 boss hedge_witch        -> player   turns  21 played 5
+DEMONHUNTER  TLC_631        Unleash the Colossus         seed  8064133 boss bog_croaker        -> player   turns  17 played 1
+DEMONHUNTER  TLC_633        Bugsquasher                  seed  8168862 boss lantern_thief      -> boss     turns  15 played 1
+DEMONHUNTER  TLC_833        Insect Claw                  seed  8273591 boss mire_brute         -> player   turns  19 played 4
+DEMONHUNTER  TLC_840        Gorishi Tunneler             seed  8378320 boss hedge_witch        -> player   turns  19 played 5
+DEMONHUNTER  TLC_841        Entomologist Toru            seed  8483049 boss mire_brute         -> player   turns  21 played 1
+DEMONHUNTER  TLC_900        Hive Map                     seed  8587778 boss tunnel_rat         -> boss     turns  18 played 4
+DEMONHUNTER  TLC_901        Fumigate                     seed  8692507 boss lantern_thief      -> player   turns  27 played 6
+DEMONHUNTER  TLC_902        Infestation                  seed  8797236 boss lantern_thief      -> player   turns  19 played 1
+DEMONHUNTER  TLC_903        Silithid Queen               seed  8901965 boss lantern_thief      -> player   turns  17 played 3
+cards 85 games 87 curated first drafts 66 faults 0 not played 0
+c-dkdh-play: 5 passed, 0 failed

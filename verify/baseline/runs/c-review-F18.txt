@@ -1,0 +1,36 @@
+PASS R1 a minion the owner summons has Stealth (the HasStealth flag and the STEALTH tag the client is sent)  (True/1)
+PASS R1 an enemy minion has no Stealth from the owner's Cloak
+PASS R1 a minion taken by Amulet of Domination (LOOTA_805) has Stealth  (controller p1 stealth True)
+PASS R1 the boss cannot target a Cloak-stealthed minion (Fireball's options name only heroes)  (HERO_02a,HERO_08)
+PASS R1 the boss's Mass Dispel (EX1_626) silences the minions, and they keep the Cloak's Stealth  (silenced True; stealth True/True)
+PASS R1 Stealth still holds at the owner's next turn
+PASS R1 a Cloak-stealthed minion that attacks keeps Stealth (permanent)  (attacked True; hero 30->26; stealth True)
+PASS R1 Mind Control cannot target a Cloak-stealthed minion
+PASS R1 a minion that arrives mid-turn on the owner's side (a summon outside a card play) has Stealth
+PASS R1 a minion transformed by Evolution (DALA_Shaman_HP1) keeps the Cloak's Stealth  (before True; used True; after TRL_349 stealth True)
+PASS R1 enemy minions Scroll of Confusion (LOOTA_839) moves to the owner's side are stealthed; those on the boss's side are not  (moved 2, stealthed 2; boss side 4, stealthed 0)
+PASS R1 without the Cloak a Yeti has no Stealth
+PASS R2 Elise (DRUID_PRIEST) ULDA_303: the spell Discover pool holds Druid and Priest cards, and nothing else but neutral  (druid 70, priest 75, neutral 0; hero class DRUID)
+PASS R2 Elise ULDA_303: the minion Discover pool holds Druid, Priest and neutral minions
+PASS R2 Elise playing ULDA_303 (20 games): every offered card is Druid, Priest or neutral, and Priest cards are offered  (plays 20; offered 120: druid 35, priest 37, neutral 48)
+PASS R2 Reno (MAGE_ROGUE) ULDA_301 Map of Uldum: the Discover pool holds Mage, Rogue and neutral cards and no other class  (mage 153, rogue 156, neutral 812; weapons rogue 12)
+PASS R2 Reno playing ULDA_301 after one boss (20 games): every offered card is Mage, Rogue or neutral, and Rogue cards are offered  (plays 20; offered 60: mage 8, rogue 12, neutral 40)
+PASS R2 a single-class row (MAGE) still discovers only its class and neutral
+PASS R2 the boss side is not given the run row's classes  (boss class SHAMAN)
+PASS R3 MAGE act runs holding both Quel'Delar pieces (seeds 1-120): the opening deal never combines them; a dealt pair is 3 opening cards and 3 mulligan choices; kept, they combine at turn 1 (3 cards: 2 kept + Quel'Delar + the turn's draw - the merge); mulliganed, they go back to the deck as pieces (none lost, no Quel'Delar in the deck)  (seeds with both dealt 5 (mulliganed 4); )
+PASS R3 mid-game, the second piece drawn combines with the first at once  (CFM_671,CS2_024,DAL_577,CS2_033,LOOTA_842)
+PASS R5 PublicIncomingDamage with the active enemy at -2 remaining mana returns a bound (before F17: OverflowException from new double[-1])  (remaining -2; damage 0; )
+PASS R5 the boss AI decides that turn without a fallback, and the player's turn starts with every crystal locked and 0 Mana (never below 0)  (decisions 4; fallbacks 0 ; player mana 0)
+PASS R6 the boss planner reads Cursed!'s hand self-damage (2) and no other's from a plain minion
+PASS R6 DALA_745 game 901: the boss AI plays its Cursed! cards (the first by its 4th turn), with no fallback  (curses 2 first-boss-turn 1 ended-turn-holding-a-curse-with-2-mana 0 fallbacks 0 boss-turns 9 boss bog_croaker)
+PASS R6 DALA_745 game 911: the boss AI plays its Cursed! cards (the first by its 4th turn), with no fallback  (curses 2 first-boss-turn 4 ended-turn-holding-a-curse-with-2-mana 0 fallbacks 0 boss-turns 6 boss hedge_witch)
+PASS R6 DALA_745 game 912: the boss AI plays its Cursed! cards (the first by its 4th turn), with no fallback  (curses 2 first-boss-turn 1 ended-turn-holding-a-curse-with-2-mana 0 fallbacks 0 boss-turns 8 boss tunnel_rat)
+PASS R6 DALA_745 game 913: the boss AI plays its Cursed! cards (the first by its 4th turn), with no fallback  (curses 2 first-boss-turn 1 ended-turn-holding-a-curse-with-2-mana 0 fallbacks 0 boss-turns 8 boss lantern_thief)
+PASS R7 ledger ULDA_039 Uldum Treasure Cache: implemented, offered as the power of the Tomb Divers, the stale note gone  (implemented / offered:power of ULDA_016,power of ULDA_021)
+PASS R7 ledger ULDA_Elise_HP1a: implemented, offered as a Choose One option of ULDA_Elise_HP1  (implemented / offered:option of ULDA_Elise_HP1)
+PASS R7 ledger ULDA_Elise_HP1b: implemented, offered as a Choose One option of ULDA_Elise_HP1  (implemented / offered:option of ULDA_Elise_HP1)
+PASS R8 ledger run:class:GILA_500h3: the power CS2_083b the Witchwood did not give is a recorded adaptation (adapted_by, row and portrait)  (SoloStone adaptation: CS2_083b on Tess Greymane (GILA_500h3): The Witchwood gave Tess Greymane one power, Scavenge (GILA_500p2; client ADVENTURE_HERO_POWER has no Witchwood rows). SoloStone adds the Rogue basic power Dagger Mastery as a second power, unlocked at floor 4 (gila_500h3_floor4), so a hunter row offers a power choice as the Heist and Tombs rows do.)
+PASS R8 ledger run:class:GILA_600h: the power CS2_102 the Witchwood did not give is a recorded adaptation (adapted_by, row and portrait)  (SoloStone adaptation: CS2_102 on Darius Crowley (GILA_600h): The Witchwood gave Darius Crowley one power, Fire! (GILA_600p). SoloStone adds the Warrior basic power Armor Up! as a second power, unlocked at floor 4 (gila_600h_floor4), so a hunter row offers a power choice as the Heist and Tombs rows do.)
+PASS R8 ledger run:class:GILA_400h: the power DS1h_292 the Witchwood did not give is a recorded adaptation (adapted_by, row and portrait)  (SoloStone adaptation: DS1h_292 on Houndmaster Shaw (GILA_400h): The Witchwood gave Houndmaster Shaw one power, Dog Whistle (GILA_400p). SoloStone adds the Hunter basic power Steady Shot as a second power, unlocked at floor 4 (gila_400h_floor4), so a hunter row offers a power choice as the Heist and Tombs rows do.)
+PASS R8 ledger run:class:GILA_900h: the power CS2_034 the Witchwood did not give is a recorded adaptation (adapted_by, row and portrait)  (SoloStone adaptation: CS2_034 on Toki, Time-Tinker (GILA_900h): The Witchwood gave Toki one power, Temporal Loop (GILA_900p), which restarts a turn and stays rejected (deferred: turn restart). SoloStone gives the row the Mage basic power Fireblast instead, so the row is playable.)
+c-review-F18: 35 passed, 0 failed

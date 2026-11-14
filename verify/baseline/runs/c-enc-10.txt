@@ -1,0 +1,118 @@
+PASS A1 Guttural Howl costs (1), is clickable, and is offered only while the boss holds a minion
+PASS A2 it gives the one minion in the boss's hand +1/+1 (Howling); the spells it holds get nothing  (5/6)
+PASS A3 with several minions in hand each use buffs exactly one of them, picked by the game RNG (six uses: six more buffs, on more than one minion)  (buffs 7)
+PASS A4 the boss's fair view holds its own hand exactly: the power is offered and resolves there too  (ok)
+PASS B1 Fading Bite costs (2) and gives the boss's hero +2 Attack (Fangs)  (attack 2)
+PASS B2 the hero can attack with it this turn: 2 damage to the enemy hero  (2)
+PASS B3 the Attack is gone when the turn ends  (attack 0)
+PASS C1 Shank costs (2); it can be aimed at any minion, never a hero; it deals 1 damage to the minion and draws the boss a card  (CS2_182,CS2_120 dmg 1)
+PASS C2 a hero power: Spell Damage adds nothing  (dmg 2)
+PASS D3 the row's start block: one Chuck (the 6-Cost spell) is shuffled into Grubb's deck after the mulligan  (27+5)
+PASS D1 Chuck costs (1); its targets are the boss's own minions; the minion is destroyed and its Attack dealt to the enemy hero  (hp 26)
+PASS D2 the Attack it has when it is thrown (a 2/3 with +4/+4: 6 damage); a 0-Attack minion is destroyed for no damage  (6 then 0)
+PASS D4 Chuck, the spell: every minion in the caster's hand is discarded and the Attack of each dealt to the enemy hero (4 + 2); a spell held is kept  (hp -6)
+PASS D5 in the run player's hands (taken from the boss) it resolves the same: the player's minions are discarded, their Attack dealt to the boss  (7 minions, 28 attack, boss -28)
+PASS E1 Nab costs (2); its targets are the enemy minions only  (CS2_182,CS2_120)
+PASS E2 the run player's board shrine is never a legal target (a shrine never enters a sack), and the store itself refuses one
+PASS E3 the minion leaves play for the set-aside zone of its own controller and a Stuffed Sack (0/3, Deathrattle) is summoned for the boss, holding it by one private tag  (yeti zone SETASIDE)
+PASS E4 a game clone carries the store: the sack dies in the clone and the minion is back on its controller's board there; the real game is untouched
+PASS E5 the boss's fair view carries it too (the stored minion was public): the sack dies there and the same minion returns, as it was  (ok PLAY)
+PASS E6 Stuffed Sack's Deathrattle returns the minion to its own controller's board as it left: +4/+4 and its 3 damage kept; the link is consumed  (PLAY 8/6)
+PASS E7 a silenced sack has no Deathrattle: the minion it held never returns
+PASS E8 with its controller's board full when the sack dies the minion is lost (it stays out of play; the link is consumed)
+PASS E9 a stored Knife Juggler throws no knife while it is in the sack
+PASS E10 the run player took control of the sack and it died with Deathrattles doubled: the minion returns once, to its own controller  (board 4 was 4)
+PASS E11 back in play its trigger works again (one knife for the next summon)
+PASS E12 a transformed sack returns nothing (the Sheep it became dies with no Deathrattle)
+PASS E13 a dormant shrine form is no target either
+PASS E14 Nab needs a free slot for the sack: with the boss's board full it is not offered
+PASS E15 Sack of Gnomes costs (4) and fills the caster's board with random Gnomes: five free slots, five Gnomes of the pool, more than one kind  (CS2_147,EX1_029,ICC_407,CS2_147,EX1_029)
+PASS E16 the Gnome pool is the scripted cards of the fixed list (Gnomish Experimenter has no script and is left out); with a full board the spell summons nothing  (CS2_147,EX1_029,GVG_082,GVG_098,ICC_407)
+PASS F1 Consume costs (1); its targets are the boss's own minions; the minion is destroyed, then the boss draws 3 cards  (9 from 6)
+PASS F2 with no minion of its own it is not offered
+PASS F3 Amalgamate costs (8): all minions are destroyed and one Amalgamation with their combined Attack and remaining Health is summoned for the caster  (9/12 want 9/12)
+PASS F4 the run player's board shrine goes dormant (as from any destroy effect): its dormant form holds its place
+PASS F5 the Amalgamation is a 1-Cost 1/1 of every minion type
+PASS F6 a dormant shrine form is neither counted nor destroyed: a second Amalgamate folds the first Amalgamation alone  (9/12)
+PASS F7 the destroyed minions leave first (a full board has room again, Loot Hoarder's Deathrattle drew its card), then the Amalgamation enters: 2/1 and six 1/1s make an 8/7  (8/7 hand 1)
+PASS F8 with no minion on a board Amalgamate summons nothing; in the run player's hands it summons the Amalgamation for the player
+PASS G2 with only a 2-Attack minion and the shrine (0 Attack, but it never changes sides) on the enemy board Infatuation is not offered
+PASS G1 Infatuation costs (1): the boss gains control of every enemy minion with 1 or less Attack; a 2-Attack minion stays
+PASS G3 the run player's board shrine stays where it is, awake and the player's
+PASS G4 with one free slot the first minion is taken and the next is destroyed (the engine's rule for a control change with a full board)  (GRAVEYARD)
+PASS G5 a dormant shrine form is not taken and does not make the power available
+PASS G6 Enchanting Tune costs (4): the caster gains control of all enemy minions and each is set to 1/1 (Enchanted), a damaged one included  (1/1)
+PASS G7 the run player's board shrine does not change sides and keeps its stats
+PASS G8 with one free slot: the first minion is taken and set to 1/1, the second is destroyed
+PASS G9 in the run player's hands (taken from the boss) it takes the boss's minions for the player, each at 1/1  (PLAY:1/1,PLAY:1/1,PLAY:1/1)
+PASS H1 Splinter costs (1): the boss's hero takes 2 damage and a 2/2 Treant is summoned
+PASS H2 it needs a free board slot: with a full board it is not offered
+PASS H3 the damage is real damage: at 2 Health the power is still offered and using it kills the boss  (COMPLETE LOST)
+PASS I2 with no minion on a board (a dormant shrine form does not count) Unstable Growth is not offered
+PASS I1 Unstable Growth costs (1): all minions of both boards get +1/+1 (Growing Strong); the heroes get nothing
+PASS I3 the dormant shrine form gains nothing
+PASS I4 it stacks: a second use makes the minions +2/+2
+PASS J3 the row's start block: the Scarecrow starts the fight with the Scythe equipped (a 1/1 weapon that is Immune to Durability loss); the player starts with none  (GILA_BOSS_33t 1/1)
+PASS J1 Harvest costs (1); its targets are the boss's own minions; the minion is destroyed and 8 Health restored to the boss's hero  (hp 28 from 20)
+PASS J2 with no minion of its own it is not offered
+PASS J4 on the boss's turn its hero has the Scythe's 1 Attack
+PASS J5 the hero kills a minion with it: the Scythe loses no Durability and gains +1 Attack (Bloody)  (2/1)
+PASS J6 a minion that survives the attack gives nothing; still no Durability lost
+PASS J7 a Divine Shield absorbs the hit: no kill, no gain
+PASS J8 an attack on the enemy hero gives nothing either (2 damage, the weapon stays 2/1)
+PASS J9 a game clone carries the weapon's trigger: the kill in the clone makes its Scythe 3/1, the real one stays 2/1  (3)
+PASS J10 a destroy effect still removes it (Acidic Swamp Ooze)
+PASS J11 in the run player's hands (taken from the boss) it is the same weapon: played for (3), no Durability lost, +1 Attack for the kill  (2/1)
+PASS K1 Devour Soul costs (4) and halves the enemy hero's Health; Armor is untouched and nothing else changes  (30 -> 15)
+PASS K2 an odd Health keeps the larger half: 15 -> 8 -> 4 -> 2 -> 1  (8 ... 1)
+PASS K3 it never kills: at 1 Health it is not offered
+PASS K4 it is not damage: an Immune hero is halved as well
+PASS L1 Bloodthirst costs (1); its targets are the boss's own minions; the minion gains Lifesteal (Bloodthirsty)
+PASS L2 the Lifesteal works: the minion's 4 damage to the enemy hero restores 4 Health to the boss's hero  (hp 24 from 20)
+PASS L3 a minion that has Lifesteal is no target; once every minion of the boss has it the power is not offered
+PASS L4 Vampiric Fangs costs (3) and can be aimed at any minion: the minion is destroyed and its remaining Health (3) restored to the caster's hero  (hp 23 from 20)
+PASS L5 aimed at the run player's board shrine: the shrine goes dormant (as from any destroy effect) and its Health is restored to the boss  (shrine 3)
+PASS L6 in the run player's hands (taken from the boss) it heals the player: a 4/5 destroyed, 5 Health restored
+PASS M2 with no minion on a board (a dormant shrine form does not count) Witch's Kiss is not offered
+PASS M1 Witch's Kiss costs (2): the one minion on the boards is transformed into a 0/1 Frog with Taunt, on its controller's board
+PASS M3 with a minion on each board one of the two is picked by the game RNG (12 seeds: exactly one Frog each time, on either side)  (6 boss / 6 player)
+PASS M4 the run player's awake board shrine can be picked: it is destroyed instead of transformed and goes dormant (no Frog)
+PASS M5 the power resolves in the boss's fair view (boards are public): two minions, one more Frog  (ok)
+PASS N1 It's Raining Fin costs (2): three Murlocs are drawn from the boss's deck (not its top cards)
+PASS N2 with one Murloc left it draws that one; with none it is still offered (the offer never reads the deck) and does nothing
+PASS N3 with a full hand it is not offered
+PASS N4 a minion of every type (Nightmare Amalgam) is a Murloc for it
+PASS N5 Murloc Infestation costs (3): the caster's minions gain "Deathrattle: Summon a random Murloc"; the enemy's get nothing
+PASS N6 a minion with it dies: one random scripted Murloc is summoned for its controller, with no such Deathrattle of its own  (CFM_699)
+PASS N7 twelve more deaths: every summoned minion is a scripted Murloc, of more than one kind  (CORE_EX1_507,LOE_076,CFM_650,CORE_ULD_723,OG_161,DAL_077,DAL_433,EX1_062,GVG_040)
+PASS O1 Call of the Raven costs (1): one random 1-Cost minion is added to the boss's hand  (BOT_558)
+PASS O2 sixteen more uses: always a scripted collectible 1-Cost minion, of several kinds  (CORE_EX1_509,OG_151,BOT_558,CORE_UNG_809,TRL_505,DAL_077,EDR_469,CORE_EX1_010,EX1_508,LOE_018,AT_097,GVG_013,UNG_085)
+PASS O3 with a full hand it is not offered
+PASS P1 the shipped data validates with the fifteen family 10 rows
+PASS P2 family 10 holds exactly these fifteen rows  (gila_20_mangy_wolf,gila_21_rottooth,gila_22_willie,gila_23_grubb,gila_26_gnomenapper,gila_27_experiment_3c,gila_29_sazzmi,gila_31_gnarlroot,gila_32_niira,gila_33_scarecrow,gila_34_havnixx,gila_35_chupacabran,gila_36_griselda,gila_37_wharrgarbl,gila_38_cozzlewurt)
+PASS P3 gila_20_mangy_wolf: a Monster Hunt row of tier 1 (printed Health 15) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 1)
+PASS P3 gila_21_rottooth: a Monster Hunt row of tier 1 (printed Health 15) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 1)
+PASS P3 gila_22_willie: a Monster Hunt row of tier 2 (printed Health 25) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
+PASS P3 gila_23_grubb: a Monster Hunt row of tier 4 (printed Health 50) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags [start]  (extended health 30 flags start tier 4)
+PASS P3 gila_26_gnomenapper: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags  tier 3)
+PASS P3 gila_27_experiment_3c: a Monster Hunt row of tier 4 (printed Health 60) whose plan is the row's (hero, clickable power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags  tier 4)
+PASS P3 gila_29_sazzmi: a Monster Hunt row of tier 3 (printed Health 35) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 3)
+PASS P3 gila_31_gnarlroot: a Monster Hunt row of tier 2 (printed Health 30) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
+PASS P3 gila_32_niira: a Monster Hunt row of tier 2 (printed Health 25) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
+PASS P3 gila_33_scarecrow: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags [start]  (authentic health 30 flags start tier 3)
+PASS P3 gila_34_havnixx: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags  tier 3)
+PASS P3 gila_35_chupacabran: a Monster Hunt row of tier 2 (printed Health 30) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
+PASS P3 gila_36_griselda: a Monster Hunt row of tier 2 (printed Health 30) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
+PASS P3 gila_37_wharrgarbl: a Monster Hunt row of tier 2 (printed Health 30) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
+PASS P3 gila_38_cozzlewurt: a Monster Hunt row of tier 1 (printed Health 15) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 1)
+PASS P4 every power, boss card and enchantment of the family is scripted by family 10 and keeps the client's text (15 powers, 9 cards, 7 enchantments)
+PASS P5 each has its own admission row: the fifteen powers a boss's only, the nine boss cards a boss's and (taken from a boss) the run player's; none is ever generated
+PASS P6 the five admission families of the family: boss-board-power (10), boss-own-hand-power (3), boss-control-all (1), boss-setaside-store (1), boss-hunt-card (9)  (boss-board-power,boss-control-all,boss-hunt-card,boss-own-hand-power,boss-setaside-store)
+PASS P7 the two start blocks: Grubb's deck add (one Chuck spell), the Scarecrow's weapon (the Scythe); no other family 10 row has one
+PASS P8 the listed cards that are replaced or left out are only cards the engine does not script (or the over-size tail of a longer list), each recorded  (AT_088>LOOT_383:unscripted,GVG_065>CS2_197:unscripted,GVG_088>EX1_028:unscripted,GVG_112>CS2_200:unscripted | GVG_116>-:over-size,GVG_122>-:unscripted | EX1_154>AT_037:unscripted,GVG_092>CS2_147:unscripted)
+PASS P9 the boss cards are where the wiki lists them: 4 Sacks of Gnomes, 3 Amalgamates, 2 Enchanting Tunes, 2 Vampiric Fangs, 2 Murloc Infestations; the Scarecrow's 30 cards are the wiki's unchanged
+PASS P10 a family 10 power asked for the run player is refused with its row's reason
+PASS P11 the validator checks a start block's cards: an unknown start weapon is refused  (GILA_BOSS_33x: not in the card data (boss gila_33_scarecrow start) | GILA_BOSS_33x: not in the card data (boss gila_33_scarecrow start))
+PASS P12 the tier pools: three rows in enc-t1, six in enc-t2, four in enc-t3, two in enc-t4
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 116 passed, 0 failed
