@@ -271,9 +271,37 @@ Guard("V", () =>
         }
     Check("V1 300 run seeds draw every variant of every champion, each between 60 and 140 times", rows.All(r => variantIds.All(v => counts.TryGetValue(r.id + "/" + v, out int n) && n >= 60 && n <= 140)),
         string.Join(" ", counts.Select(p => p.Key.Substring(4) + "=" + p.Value)));
+    // Wave 4 review: the restage is a real one (the state through the save file's serializer), and the variant is checked
+    // against the seed-and-floor derivation and shown to change with the floor.
     var s1 = At("MAGE", 4401, "trl_203_thekal"); var s2 = At("MAGE", 4401, "trl_203_thekal");
-    Check("V2 the variant is a function of the run seed and the floor: the same seed gives the same variant, a restage keeps it", run.CurrentVariant(s1).Id == run.CurrentVariant(s2).Id
-        && run.BuildPlan(s1, all).BossShrine == run.BuildPlan(s1, all).BossShrine);
+    var restored = DungeonRunStore.Clone(new DungeonRunSave { Active = s1 }).Active;
+    var thekal = data.Boss("trl_203_thekal");
+    DungeonRunVariant Derived(DungeonRunState st) => thekal.Variants[StableSeed.Index(StableSeed.Derive(st.Seed, DungeonRun.EncounterStream, 1000 + st.Floor), thekal.Variants.Count)];
+    var byFloor = new HashSet<string>(StringComparer.Ordinal);
+    for (int floor = 1; floor <= 12; floor++) { var sf = At("MAGE", 4401, "trl_203_thekal"); sf.Floor = floor; sf.BossSequence[floor - 1] = "trl_203_thekal"; byFloor.Add(run.CurrentVariant(sf).Id); }
+    Check("V2 the variant is a function of the run seed and the floor: the same seed gives the same variant, a state restored through the save serializer keeps it (and its plan's shrine), and other floors of the seed draw other variants",
+        run.CurrentVariant(s1).Id == run.CurrentVariant(s2).Id && run.CurrentVariant(s1).Id == Derived(s1).Id && restored != s1 && run.CurrentVariant(restored).Id == run.CurrentVariant(s1).Id
+        && run.BuildPlan(restored, all).BossShrine == run.CurrentVariant(s1).Shrine && run.BuildPlan(s1, all).BossShrine == run.CurrentVariant(s1).Shrine && byFloor.Count > 1,
+        run.CurrentVariant(s1).Id + " restored " + run.CurrentVariant(restored).Id + " floors " + string.Join(",", byFloor));
+    // Wave 4 review: a champion appears only "if the player has not chosen one of the <class> shrines" (its wiki page): a
+    // Rikkar run with a board shrine never draws the champion of its shrine's class (Voone included), on acts-v3h.
+    var mirror = new List<string>(); int shrineRuns = 0, champions = 0;
+    foreach (var deck in data.Decks.Where(x => x.Shrine != null && data.FindClass(x.Class) != null).GroupBy(x => C(x.Shrine).Class).Select(gr => gr.First()))
+        for (long seed = 1; seed <= 40; seed++)
+        {
+            var st = run.NewRun(all, deck.Class, deck.Id, data.Class(deck.Class).Powers[0], seed, schedule: "acts-v3h");
+            if (st.BoardShrine == null) continue;
+            shrineRuns++;
+            var cls = C(st.BoardShrine).Class;
+            foreach (string id in st.BossSequence)
+            {
+                var b = data.Boss(id);
+                if (b.Variants.Count > 0) champions++;
+                if (b.Variants.Any(v => v.Shrine != null && C(v.Shrine).Class == cls)) mirror.Add(deck.Id + "/" + seed + ":" + id);
+            }
+        }
+    Check("V3 a run with a board shrine never meets the champion of its shrine's class (40 seeds per shrine class on acts-v3h); it still meets the other champions",
+        shrineRuns >= 9 * 40 && mirror.Count == 0 && champions > 0, "shrine runs " + shrineRuns + " champion fights " + champions + " mirror " + string.Join(" ", mirror.Take(5)));
 });
 
 // ============================================================ Z  Steady Throw
@@ -693,7 +721,9 @@ Guard("L", () =>
 Guard("X", () =>
 {
     var g = Fight("TRLA_137", playerShrine: "TRLA_137"); ClearBoards(g); Mana(g.Player1);
-    Check("X1 a Rikkar Paladin's Vengeance against Thekal's: one shrine on each board", ShrineRules.Of(g.Player1).Single().Card.Id == "TRLA_137" && BossShrine(g)?.Card.Id == "TRLA_137");
+    // X1-X3 are engine staging: since the wave 4 review the run layer never pairs a Rikkar run with the champion of its own
+    // shrine class (V3), but the engine must still keep two shrines of one class apart.
+    Check("X1 (engine staging) a Rikkar Paladin's Vengeance against Thekal's: one shrine on each board", ShrineRules.Of(g.Player1).Single().Card.Id == "TRLA_137" && BossShrine(g)?.Card.Id == "TRLA_137");
     int me = Hp(g.Player1), boss = Hp(g.Player2);
     Play(g, ToHand(g, g.Player1, Moonfire), g.Player2.Hero);
     Check("X2 the run player's Moonfire on the boss: the boss's Vengeance answers with 5; the run player's does not answer that (recursion guard)",
@@ -701,7 +731,7 @@ Guard("X", () =>
     var g2 = Fight("TRLA_186", bossDeck: Wisp, playerDeck: Croc, playerShrine: "TRLA_186");
     var bossDeck = new HashSet<int>(g2.Player2.DeckZone.Select(p => p.Id)); var playerDeck = new HashSet<int>(g2.Player1.DeckZone.Select(p => p.Id));
     EndTurn(g2); EndTurn(g2);
-    Check("X3 two Treasures from Below: each owner steals one card of the other's deck at its own turn start",
+    Check("X3 (engine staging) two Treasures from Below: each owner steals one card of the other's deck at its own turn start",
         g2.Player2.HandZone.Count(p => playerDeck.Contains(p.Id)) == 1 && g2.Player1.HandZone.Count(p => bossDeck.Contains(p.Id)) == 1);
     var g3 = Fight("TRLA_179", playerShrine: "TRLA_137"); ToBoss(g3); ClearBoards(g3);
     me = Hp(g3.Player1); boss = Hp(g3.Player2);

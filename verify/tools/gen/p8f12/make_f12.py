@@ -51,15 +51,16 @@ BOSSES = [
                             "for the boss whenever a minion of the run player dies (a run shrine that dies and goes dormant counts as a death, as for "
                             "every death trigger); nothing with a full board.")])]),
     O([("id", "gila_30_gretta"), ("name", "Blood Witch Gretta"), ("n", "30"), ("printed", 30), ("rounds", "4-5"), ("archetype", "control"),
-       ("flags", ["passive"]), ("page", "Blood_Witch_Gretta"),
+       ("flags", ["passive", "bothPlayers"]), ("page", "Blood_Witch_Gretta"),
        ("list", cards(("Arcane Artificer", 2), ("Arcane Missiles", 1), ("Mirror Image", 2), ("Arcanologist", 1), ("Sorcerer's Apprentice", 2),
                       ("Unstable Portal", 2), ("Arcane Intellect", 2), ("Explosive Runes", 1), ("Flamewaker", 2), ("Ice Barrier", 1), ("Ice Block", 1),
                       ("Mirror Entity", 1), ("Vaporize", 1), ("Molten Reflection", 2), ("Duskbat", 1), ("Mistress of Mixtures", 1),
                       ("Violet Illusionist", 2), ("Refreshment Vendor", 1), ("Rotten Applebaum", 2), ("Arcane Giant", 2))),
        ("fillers", ["Frostbolt", "Arcane Explosion", "Water Elemental", "Mana Wyrm"]),
-       ("notes", [("power", "Blood Red Apple is the rule of Blood Pact (TRLA_113) and Elixir of Vile on the boss's side only: the boss's spells "
-                            "cost Health instead of Mana (the SPELLS_COST_HEALTH controller aura); paying Health is not damage, and the run "
-                            "player's spells cost Mana as before.")])]),
+       ("notes", [("power", "Blood Red Apple is the rule of Blood Pact (TRLA_113) and Elixir of Vile on both sides: every spell, the boss's "
+                            "and the run player's, costs Health instead of Mana (the SPELLS_COST_HEALTH controller aura on both players; the "
+                            "client text says \"Spells\", not \"Your spells\", and the wiki gives Gretta blood-magic lines for the player's "
+                            "casts); paying Health is not damage.")])]),
     O([("id", "gila_39_forlorn_lovers"), ("name", "Forlorn Lovers"), ("n", "39"), ("printed", 70), ("rounds", "6-8"), ("archetype", "control"),
        ("flags", ["passive"]), ("page", "Forlorn_Lovers"),
        ("list", cards(("Naturalize", 2), ("Grove Tender", 2), ("Nourish", 1), ("Preparation", 2), ("Shadowstep", 2), ("Cheat Death", 1), ("Evasion", 1),

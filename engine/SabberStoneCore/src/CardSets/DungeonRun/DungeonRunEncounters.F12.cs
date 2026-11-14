@@ -22,7 +22,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 	// The Mute (...), Ratcatcher Hannigul (Cannibalism) and Plaguemaster Rancel (Poison Flask, Infected Quillflinger). The
 	// texts are the client's (facts/violet-hold-2026-09.json). Every random choice uses the game RNG and is reported as a
 	// random event; the only rules beyond a trigger or an aura are in Actions/EncounterRules.F12.cs (no private tag). Hidden
-	// zones: Forlorn Lovers and Winslow Tobtock change the boss's own deck (an own-deck fact, EncounterRules.DeckRewritten);
+	// zones: Forlorn Lovers adds a public copy to the boss's own deck (presented to the own-deck ledger by the shuffle);
 	// Hypnotize changes both hands and both decks while hidden (a belief reset for both players, RunHelpers.BeliefReset).
 	public static partial class DungeonRunEncounters
 	{
@@ -34,7 +34,10 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		/// first, then its opponent. Each card of a hand goes back into its owner's deck as a plain card (its enchantments are removed
 		/// and the MoveToDeck task, Plot Twist's, resets its tags; a card that finds the deck full stays in hand and is not counted), then the
 		/// owner draws as many as went back, by the ordinary draw rules. Both hands and decks changed while hidden: a belief reset of
-		/// hand and deck is recorded for each player, and the owner's own-deck ledger is told its deck's exact list.
+		/// hand and deck is recorded for each player. No own-deck fact is recorded: the owner's own-deck ledger follows the moves
+		/// themselves (its own hand cards going back, its draws), and a list read from the real deck would name cards the owner
+		/// never saw (copies of the run player's deck that Archbishop Benedictus shuffled in; wave 4 review). An Echo copy that
+		/// goes back is a plain card: it leaves Game.GhostlyCards, so a redraw keeps it past the turn's end.
 		/// </summary>
 		public static void Hypnotize(Controller c, IEntity source)
 		{
@@ -52,14 +55,13 @@ namespace SabberStoneCore.CardSets.DungeonRun
 						foreach (Enchantment e in card.AppliedEnchantments.ToArray())
 							if (!e.Card.Modular) e.Remove();
 					new MoveToDeck(EntityType.TARGET).Process(g, p, source, card);
-					if (card.Zone == p.DeckZone) moved++;
+					if (card.Zone == p.DeckZone) { moved++; g.GhostlyCards.RemoveAll(id => id == card.Id); }
 				}
 				if (moved > 0 && p.DeckZone.Count > 1) g.OnRandomHappened(true);
 				for (int i = 0; i < moved && g.State != State.COMPLETE; i++) Generic.Draw(p);
 			}
 			RunHelpers.BeliefReset(c, RunBeliefZones.HandAndDeck);
 			RunHelpers.BeliefReset(c.Opponent, RunBeliefZones.HandAndDeck);
-			EncounterRules.DeckRewritten(c, c.DeckZone.Select(p => p.Card.Id).OrderBy(id => id, StringComparer.Ordinal));
 		}
 
 		private static void F12()
@@ -77,17 +79,21 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			BossCard(BloatedZombie, () => new CardDef(new Power { DeathrattleTask = new DamageTask(1, EntityType.ALL) }));
 
 			// ---------------- Blood Witch Gretta (GILA_BOSS_30h, 30 Health)
-			// Blood Red Apple (passive): "Spells cost Health instead of Mana." The boss's own spells (Blood Pact's rule, TRLA_113:
-			// the SPELLS_COST_HEALTH controller aura, a count). Paying Health is not damage.
+			// Blood Red Apple (passive): "Spells cost Health instead of Mana." Every spell, both players' (the text has no "Your";
+			// the wiki gives Gretta blood-magic lines for the player's casts, "Take a bite."): Blood Pact's rule (TRLA_113, the
+			// SPELLS_COST_HEALTH controller aura, a count) on both controllers, as BattlecriesTwice(bothPlayers). Paying Health is
+			// not damage. (Wave 4 review: family 12 gave it to the boss's side only.)
 			Passive("GILA_BOSS_30p", () => new Power
 			{
-				Aura = new Aura(AuraType.CONTROLLER, new Effect(GameTag.SPELLS_COST_HEALTH, EffectOperator.ADD, 1)),
+				Aura = new Aura(AuraType.CONTROLLERS, new Effect(GameTag.SPELLS_COST_HEALTH, EffectOperator.ADD, 1)),
 			});
 
 			// ---------------- Forlorn Lovers (GILA_BOSS_39h, 70 Health)
 			// Together Forever (passive): "Whenever a friendly minion dies, shuffle a copy into your deck." A fresh copy of the
-			// card (no buffs); nothing when the deck is full; a run shrine never counts. The boss's own-deck ledger is told the
-			// deck's exact list after each copy (the copy's identity is public: it is the minion that just died).
+			// card (no buffs); nothing when the deck is full; a run shrine never counts. The copy's identity is public (it is the
+			// minion that just died), so the shuffle presents it (revealGenerated, as the client's SpawnToDeck shows a known card)
+			// and the boss's own-deck ledger learns it from that move. No deck fact: a list read from the real deck would name
+			// cards the boss never saw (wave 4 review).
 			Passive("GILA_BOSS_39p", () => new Power
 			{
 				Trigger = new Trigger(TriggerType.DEATH)
@@ -97,8 +103,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 					{
 						if (!(t is Minion dead) || ShrineRules.IsMarked(dead) || c.DeckZone.IsFull || g.State == State.COMPLETE) return;
 						if (c.DeckZone.Count > 0) g.OnRandomHappened(true);
-						if (!Generic.ShuffleIntoDeck(c, s, Entity.FromCard(c, dead.Card))) return;
-						EncounterRules.DeckRewritten(c, c.DeckZone.Select(p => p.Card.Id).OrderBy(id => id, StringComparer.Ordinal));
+						Generic.ShuffleIntoDeck(c, s, Entity.FromCard(c, dead.Card), revealGenerated: true);
 					}),
 				},
 			});

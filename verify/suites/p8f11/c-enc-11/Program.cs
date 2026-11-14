@@ -202,9 +202,13 @@ Guard("Brushwood", () =>
     var pyro = Board(g2, player, Ogre);
     armor = boss.Hero.Armor;
     Cast(g2, Hack, pyro);
-    Check("B6 with Spell Damage +1 each hit deals 2, and the hits stop once the minion is dead (four hits on a 7-Health Ogre)", pyro.Zone != player.BoardZone && boss.Hero.Armor == armor,
+    Check("B6 with Spell Damage +1 each hit deals 2, and the hits stop once the minion is dead (four hits on a 7-Health Ogre)", pyro.Zone != player.BoardZone && pyro.Damage == 8 && boss.Hero.Armor == armor,
         pyro.Zone?.Type + " " + pyro.Damage);
-    Check("B7 Hack can be aimed at any minion, never a hero", !C(Hack).Implemented ? false : !g2.Player2.Options().OfType<PlayCardTask>().Any(t => t.Source?.Card.Id == Hack && t.Target is Hero));
+    // Wave 4 review: a Hack in the boss's hand, so the options are real (the earlier two were played).
+    var hackInHand = ToHand(g2, boss, Hack); Mana(boss);
+    var hackOptions = boss.Options().OfType<PlayCardTask>().Where(t => t.Source == hackInHand).ToList();
+    Check("B7 Hack can be aimed at any minion, never a hero", C(Hack).Implemented && g2.CurrentPlayer == boss && hackOptions.Any(t => t.Target is Minion) && !hackOptions.Any(t => t.Target is Hero),
+        string.Join(",", hackOptions.Select(t => t.Target?.Card.Id ?? "none")));
 });
 
 // ============================================================ C  Baran the Blind: Bulldoze

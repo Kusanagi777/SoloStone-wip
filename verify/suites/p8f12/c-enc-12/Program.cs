@@ -173,12 +173,14 @@ Guard("Gretta", () =>
 {
     var g = Fight("gila_30_gretta");
     Controller boss = g.Player2, player = g.Player1;
-    Check("B1 Blood Red Apple is a passive power started at match start: the boss's controller has the SPELLS_COST_HEALTH aura, the run player's not",
-        PassiveStarted(boss, "GILA_BOSS_30p") && boss.ControllerAuraEffects[GameTag.SPELLS_COST_HEALTH] == 1 && player.ControllerAuraEffects[GameTag.SPELLS_COST_HEALTH] == 0);
-    Mana(player, 10);
+    // Wave 4 review: "Spells cost Health instead of Mana." is both players' rule (no "Your"; the wiki's blood-magic lines for the player's casts).
+    Check("B1 Blood Red Apple is a passive power started at match start: both controllers have the SPELLS_COST_HEALTH aura",
+        PassiveStarted(boss, "GILA_BOSS_30p") && boss.ControllerAuraEffects[GameTag.SPELLS_COST_HEALTH] == 1 && player.ControllerAuraEffects[GameTag.SPELLS_COST_HEALTH] == 1);
+    Mana(player, 0);
     int playerHp = player.Hero.Health;
-    bool cast = Cast(g, Frostbolt, boss.Hero);
-    Check("B2 the run player's spells cost Mana as before", cast && player.UsedMana == 2 && player.Hero.Health == playerHp, "used " + player.UsedMana);
+    bool cast = Play(g, ToHand(g, player, Frostbolt), boss.Hero, refill: false);
+    Check("B2 the run player's spells cost Health too: Frostbolt with no Mana takes 2 Health and no Mana", cast && player.UsedMana == 0 && player.Hero.Health == playerHp - 2,
+        "used " + player.UsedMana + " health " + (playerHp - player.Hero.Health));
     ToBoss(g);
     int hp = boss.Hero.Health, damage = boss.Hero.Damage;
     var fireball = ToHand(g, boss, Fireball);
@@ -196,8 +198,9 @@ Guard("Gretta", () =>
 // ============================================================ C  Forlorn Lovers: Together Forever and the own-deck ledger
 Guard("Lovers", () =>
 {
-    var g = Fight("gila_39_forlorn_lovers", history: false);
+    var g = Fight("gila_39_forlorn_lovers");
     Controller boss = g.Player2, player = g.Player1;
+    int facts00 = g.RunDeckFacts.Count;
     Check("C1 Together Forever is a passive power started at match start", PassiveStarted(boss, "GILA_BOSS_39p"));
     ToBoss(g);
     int deck = boss.DeckZone.Count;
@@ -207,9 +210,10 @@ Guard("Lovers", () =>
     var copy = boss.DeckZone.Where(p => p.Card.Id == Croc).ToList();
     Check("C2 a friendly minion dies: a fresh copy (no buffs) is shuffled into the boss's deck", boss.DeckZone.Count == deck + 1 && copy.Count == 1 && copy[0] != croc
         && (copy[0].AppliedEnchantments == null || copy[0].AppliedEnchantments.Count == 0), "deck " + (boss.DeckZone.Count - deck));
-    var fact = g.RunDeckFacts.LastOrDefault();
-    Check("C3 the boss's own-deck ledger is told its deck's exact list (a Rewritten deck fact of the boss)", fact != null && fact.Kind == RunDeckFactKind.Rewritten && fact.ControllerId == boss.Id
-        && fact.Definitions.OrderBy(x => x, StringComparer.Ordinal).SequenceEqual(boss.DeckZone.Select(p => p.Card.Id).OrderBy(x => x, StringComparer.Ordinal)));
+    // Wave 4 review: no deck fact (a list read from the real deck would name cards the boss never saw); the shuffle presents
+    // the public copy, and the ledger learns it from the move.
+    var shown = g.PowerHistory.Full.OfType<SabberStoneCore.Kettle.PowerHistoryShowEntity>().Any(e => e.Entity.Id == copy[0].Id);
+    Check("C3 no deck fact is recorded; the shuffle presents the copy (a SHOW of the new deck card)", g.RunDeckFacts.Count == facts00 && shown);
     var ledger = Ledger(g, boss);
     Check("C4 the boss's own-deck ledger samples the copy: exactly its deck (29 Yetis and the River Crocolisk)", Known(ledger, Croc) == 1 && ledger.Values.Sum() == boss.DeckZone.Count
         && Known(ledger, Yeti) == boss.DeckZone.Count(p => p.Card.Id == Yeti), string.Join(",", ledger.Select(p => p.Key + "x" + p.Value)));
@@ -221,6 +225,9 @@ Guard("Lovers", () =>
     var a = Board(g, boss, Wisp); var b = Board(g, boss, Raptor);
     KillAll(g, a, b);
     Check("C6 two friendly minions die together: one copy of each", InDeck(boss, Wisp) == 1 && InDeck(boss, Raptor) == 1 && boss.DeckZone.Count == deck + 2);
+    var ledger6 = Ledger(g, boss);
+    Check("C6b the boss's own-deck ledger samples both copies too (each presented by its shuffle)", Known(ledger6, Wisp) == 1 && Known(ledger6, Raptor) == 1 && Known(ledger6, Croc) == 1
+        && ledger6.Values.Sum() == boss.DeckZone.Count, string.Join(",", ledger6.Select(p => p.Key + "x" + p.Value)));
     while (!boss.DeckZone.IsFull) ToDeck(boss, Yeti);
     var c2 = Board(g, boss, Croc);
     int full = boss.DeckZone.Count, before = g.RunDeckFacts.Count;
@@ -330,7 +337,10 @@ Guard("Whisperer", () =>
         string.Join(",", boss.HandZone.Select(p => p.Card.Id + (p.IsEcho ? "+e" : "") + (p[GameTag.GHOSTLY] == 1 ? "+g" : ""))) + " copies " + EncounterRules.EchoCopiesThisTurn(boss));
     var other = Fight("gila_45_sthara");
     var ghost = Entity.FromCard(other.Player1, C(Moonfire), new EntityData { { GameTag.GHOSTLY, 1 } }, other.Player1.HandZone);
-    Check("G10 outside The Whisperer's fight an Echo copy is unchanged (EncounterRules.EchoCopyFloor does nothing)", !EncounterRules.EchoRuleActive(other) && ghost.Cost == 0 && !ghost.IsEcho);
+    // Wave 4 integration: the copy floor holds in every game (the client's Echo rule); only the per-turn copy limit and the
+    // Echo on every spell are The Whisperer's.
+    Check("G10 outside The Whisperer's fight a spell has no Echo, but an Echo copy of a (0)-Cost spell still costs (1) (EncounterRules.EchoCopyFloor holds in every game)",
+        !EncounterRules.EchoRuleActive(other) && ghost.Cost == 1 && !ghost.IsEcho && ToHand(other, other.Player1, Moonfire).Cost == 0, "cost " + ghost.Cost);
 });
 
 // ============================================================ H  Sephira Dusktalon: Tangled Wrath
@@ -390,9 +400,13 @@ Guard("Winslow", () =>
     Check("I4 a belief reset of hand and deck is recorded for each player, after the draws (the new hand and the whole deck)", newResets.Count == 2
         && newResets.Any(r => r.ControllerId == boss.PlayerId && r.Zones == RunBeliefZones.HandAndDeck && r.EntityIds.Count == boss.HandZone.Count + boss.DeckZone.Count)
         && newResets.Any(r => r.ControllerId == player.PlayerId && r.Zones == RunBeliefZones.HandAndDeck && r.EntityIds.Contains(yeti.Id)));
-    var fact = g.RunDeckFacts.LastOrDefault();
-    Check("I5 the boss's own-deck ledger is told its deck's exact list", g.RunDeckFacts.Count == deckFacts + 1 && fact.Kind == RunDeckFactKind.Rewritten && fact.ControllerId == boss.Id
-        && fact.Definitions.OrderBy(x => x, StringComparer.Ordinal).SequenceEqual(boss.DeckZone.Select(p => p.Card.Id).OrderBy(x => x, StringComparer.Ordinal)));
+    // Wave 4 review: Hypnotize records no deck fact (a list read from the real deck would name cards the boss never saw); the
+    // own-deck ledger follows the moves themselves: its own hand cards going back, its draws.
+    var hypnoLedger = Ledger(g, boss);
+    var realDeck = boss.DeckZone.GroupBy(p => p.Card.Id).ToDictionary(x => x.Key, x => x.Count());
+    Check("I5 no deck fact is recorded; the boss's own-deck ledger still samples its deck exactly (its own hand cards went back, the redraw is its own)",
+        g.RunDeckFacts.Count == deckFacts && hypnoLedger.Count == realDeck.Count && realDeck.All(p => Known(hypnoLedger, p.Key) == p.Value),
+        "ledger " + string.Join(",", hypnoLedger.OrderBy(p => p.Key).Select(p => p.Key + "x" + p.Value)) + " deck " + string.Join(",", realDeck.OrderBy(p => p.Key).Select(p => p.Key + "x" + p.Value)));
     var (view, vb, vp) = FairView(g);
     bool knownAfter = vp.HandZone.Any(p => p.Id == yeti.Id && p.Card.Id == Yeti);
     Check("I6 the boss's fair view knew the sapped Yeti in the run player's hand before; after Hypnotize it does not, wherever the Yeti is now",
@@ -411,6 +425,34 @@ Guard("Winslow", () =>
     bool ok3 = Power(g3);
     Check("I9 a run player with an empty deck draws its own shuffled cards back (no Fatigue)", ok3 && g3.Player1.HandZone.Count == ph && g3.Player1.DeckZone.Count == 0 && g3.Player1.Hero.Damage == 0
         && g3.Player2.Hero.HeroPower.IsExhausted);
+    // Wave 4 review: Archbishop Benedictus (ICC_215, in Winslow's shipped deck) shuffles copies of the run player's hidden deck
+    // into the boss's; Hypnotize must not teach the boss's own-deck ledger what those copies are.
+    var g4 = Fight("gila_64_winslow");
+    Controller boss4 = g4.Player2, player4 = g4.Player1;
+    EmptyDeck(player4);
+    string[] hidden = { "EX1_116", "NEW1_030", "EX1_572" };
+    foreach (string id in hidden) Generic.ShuffleIntoDeck(player4, player4.Hero, Entity.FromCard(player4, C(id)));
+    ToBoss(g4);
+    bool benedictus = Play(g4, ToHand(g4, boss4, "ICC_215"));
+    var before4 = Ledger(g4, boss4);
+    bool used4 = Power(g4);
+    var after4 = Ledger(g4, boss4);
+    int inDeck4 = boss4.DeckZone.Count(p => hidden.Contains(p.Card.Id));
+    Check("I10 copies of the run player's hidden deck in the boss's deck (Archbishop Benedictus) stay unknown to the boss's own-deck ledger after Hypnotize",
+        benedictus && used4 && inDeck4 > 0 && hidden.All(id => Known(before4, id) == 0 && Known(after4, id) == 0),
+        "in deck " + inDeck4 + " known before " + string.Join(",", hidden.Select(id => Known(before4, id))) + " after " + string.Join(",", hidden.Select(id => Known(after4, id))));
+    // Wave 4 review: an Echo copy Hypnotize shuffles back is a plain card; drawn again the same turn it stays past the turn's end.
+    var g5 = Fight("gila_64_winslow");
+    Controller boss5 = g5.Player2;
+    ToBoss(g5);
+    EmptyHand(boss5); EmptyDeck(boss5);
+    var ghost5 = Entity.FromCard(boss5, C(Frostbolt), new EntityData { { GameTag.GHOSTLY, 1 } }, boss5.HandZone);
+    g5.GhostlyCards.Add(ghost5.Id);
+    bool used5 = Power(g5);
+    bool redrawn = ghost5.Zone == boss5.HandZone;
+    EndTurn(g5);
+    Check("I11 an Echo copy shuffled back by Hypnotize and drawn again is a plain card: it is still in the boss's hand after the turn ends",
+        used5 && redrawn && ghost5.Zone == boss5.HandZone && ghost5[GameTag.GHOSTLY] == 0 && !g5.GhostlyCards.Contains(ghost5.Id), "redrawn " + redrawn + " zone " + ghost5.Zone?.Type);
 });
 
 // ============================================================ J  Gobbles: Starving
@@ -499,7 +541,9 @@ Guard("Rancel", () =>
     EndTurn(g); EndTurn(g); Mana(boss);
     Check("M3 Divine Shield takes the hit: the minion survives and gains Poisonous", Power(g, squire) && squire.Damage == 0 && !squire.HasDivineShield && squire.Poisonous);
     EndTurn(g); EndTurn(g); Mana(boss);
-    Check("M4 a minion the hit kills gains nothing", Power(g, wisp) && wisp.IsDead || wisp.Zone == player.GraveyardZone);
+    // Wave 4 review: the killed minion is checked for the enchantment and Poisonous, and the condition is bracketed.
+    Check("M4 a minion the hit kills gains nothing", Power(g, wisp) && (wisp.IsDead || wisp.Zone == player.GraveyardZone) && !Has(wisp, "GILA_BOSS_68e") && !wisp.Poisonous && boss.UsedMana == 2,
+        "dead " + wisp.IsDead + " poison " + Has(wisp, "GILA_BOSS_68e") + "/" + wisp.Poisonous + " used " + boss.UsedMana);
     // Infected Quillflinger.
     var g2 = Fight("gila_68_rancel");
     boss = g2.Player2; player = g2.Player1;
@@ -528,7 +572,7 @@ Guard("Rows", () =>
     var rows = new (string id, string n, string name, string tier, int printed, string kind, string[] flags, bool passive)[]
     {
         ("gila_24_groddo", "24", "Groddo the Bogwarden", "2", 30, "substituted", new[] { "passive" }, true),
-        ("gila_30_gretta", "30", "Blood Witch Gretta", "2", 30, "authentic", new[] { "passive" }, true),
+        ("gila_30_gretta", "30", "Blood Witch Gretta", "2", 30, "authentic", new[] { "passive", "bothPlayers" }, true),
         ("gila_39_forlorn_lovers", "39", "Forlorn Lovers", "4", 70, "authentic", new[] { "passive" }, true),
         ("gila_45_sthara", "45", "Cultist S'thara", "3", 40, "extended", new[] { "passive", "bothPlayers" }, true),
         ("gila_46_vitus", "46", "Vitus the Exiled", "3", 40, "authentic", new[] { "passive" }, true),
@@ -578,9 +622,9 @@ Guard("Rows", () =>
     Check("P5 each has its own admission row: the thirteen powers a boss's only, the two boss cards a boss's and (taken from a boss) the run player's; none is ever generated", wrongScope.Count == 0, string.Join(",", wrongScope));
     var families = scripted.Select(id => DungeonRunAdmission.RuleFor(id)?.Family).Distinct().OrderBy(f => f, StringComparer.Ordinal).ToList();
     int Ids(string family) => DungeonRunAdmission.Rules.Where(r => r.Family == family).Sum(r => r.Ids.Length);
-    Check("P6 the six admission families of the family: boss-passive-public (5), boss-passive-both (4), boss-deck-rewrite (1), boss-hidden-shuffle (1), boss-minion-power (2), boss-hunt-minion (2)",
+    Check("P6 the six admission families of the family: boss-passive-public (4), boss-passive-both (5), boss-deck-rewrite (1), boss-hidden-shuffle (1), boss-minion-power (2), boss-hunt-minion (2)",
         families.SequenceEqual(new[] { "boss-deck-rewrite", "boss-hidden-shuffle", "boss-hunt-minion", "boss-minion-power", "boss-passive-both", "boss-passive-public" })
-        && Ids("boss-passive-public") == 5 && Ids("boss-passive-both") == 4 && Ids("boss-deck-rewrite") == 1 && Ids("boss-hidden-shuffle") == 1 && Ids("boss-minion-power") == 2 && Ids("boss-hunt-minion") == 2,
+        && Ids("boss-passive-public") == 4 && Ids("boss-passive-both") == 5 && Ids("boss-deck-rewrite") == 1 && Ids("boss-hidden-shuffle") == 1 && Ids("boss-minion-power") == 2 && Ids("boss-hunt-minion") == 2,
         string.Join(",", families));
     string Subs(string id) => string.Join(",", data.Boss(id).Source.Substitutions.Where(x => x.Listed != null).Select(x => x.Listed + ">" + (x.Used ?? "-") + ":" + x.Reason).Distinct().OrderBy(x => x, StringComparer.Ordinal));
     Check("P7 the listed cards that are replaced or left out are only cards the engine does not script (or the 31st card of Shudderwock's list), each recorded",

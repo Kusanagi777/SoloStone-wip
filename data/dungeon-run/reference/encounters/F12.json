@@ -160,7 +160,8 @@
     "original": 30
    },
    "flags": [
-    "passive"
+    "passive",
+    "bothPlayers"
    ],
    "source": {
     "url": "https://hearthstone.wiki.gg/wiki/Blood_Witch_Gretta",
@@ -269,7 +270,7 @@
     },
     {
      "kind": "power",
-     "note": "Blood Red Apple is the rule of Blood Pact (TRLA_113) and Elixir of Vile on the boss's side only: the boss's spells cost Health instead of Mana (the SPELLS_COST_HEALTH controller aura); paying Health is not damage, and the run player's spells cost Mana as before."
+     "note": "Blood Red Apple is the rule of Blood Pact (TRLA_113) and Elixir of Vile on both sides: every spell, the boss's and the run player's, costs Health instead of Mana (the SPELLS_COST_HEALTH controller aura on both players; the client text says \"Spells\", not \"Your spells\", and the wiki gives Gretta blood-magic lines for the player's casts); paying Health is not damage."
     }
    ]
   },

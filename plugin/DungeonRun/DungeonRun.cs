@@ -161,8 +161,12 @@ internal sealed class DungeonRun
             Class = cls.Id, StarterDeck = deck.Id, Power = powerId,
             // A schedule an older version released unchanged keeps that version's stamp (DungeonRunSchedule.StampVersion).
             ScheduleVersion = acts.StampVersion, Schedule = acts.Id, Node = 0,
-            BossSequence = ActBossSequence(profile, seed, acts, ledger: !typedSeed),
         };
+        // Wave 4 review: a Rumble Run champion appears only "if the player has not chosen one of the <class> shrines" (the
+        // champions' wiki pages): a run that will hold a board shrine never draws a boss row with a shrine variant of that class.
+        string runShrine = BoardShrineFor(state);
+        state.BossSequence = ActBossSequence(profile, seed, acts, ledger: !typedSeed,
+            excludeShrineClass: runShrine == null ? (CardClass?)null : Cards.FromId(runShrine).Class);
         foreach (string id in starter) DungeonRunDeck.Add(state, id, DungeonRunDeck.OriginStarter);
         // Phase 8: the acts' twists are rolled now, against the bosses just drawn (none on a schedule without twist pools).
         RollTwists(state, acts);
@@ -399,7 +403,11 @@ internal sealed class DungeonRun
     /// </summary>
     /// <param name="ledger">The run reads the profile's persistent boss damage (a random-seed run): a major pool prefers the
     /// boss with the most banked damage. Only a provenance-mix schedule reads it.</param>
-    internal List<string> ActBossSequence(DungeonRunProfile profile, long seed, DungeonRunSchedule schedule, bool ledger = false)
+    /// <param name="excludeShrineClass">The class of the run's board shrine (wave 4 review): a boss row with a shrine variant of
+    /// that class is never drawn (a Rumble Run champion meets only runs that did not choose its class's shrines). Null: no filter,
+    /// every run without a board shrine draws exactly as before.</param>
+    internal List<string> ActBossSequence(DungeonRunProfile profile, long seed, DungeonRunSchedule schedule, bool ledger = false,
+        CardClass? excludeShrineClass = null)
     {
         var sequence = new List<string>();
         var used = new HashSet<string>(StringComparer.Ordinal);
@@ -424,20 +432,21 @@ internal sealed class DungeonRun
             if (schedule.MixesProvenance)
             {
                 for (int slot = 0; slot < act.Combat.Count; slot++)
-                    foreach (string id in MixedDraw(profile, seed, schedule, act, actNo * 10 + slot, act.Combat[slot].Pool, act.Combat[slot].Count, used, drawn, null))
+                    foreach (string id in MixedDraw(profile, seed, schedule, act, actNo * 10 + slot, act.Combat[slot].Pool, act.Combat[slot].Count, used, drawn, null,
+                        excludeShrineClass))
                         sequence.Add(id);
-                sequence.AddRange(MixedDraw(profile, seed, schedule, act, actNo * 10 + 9, act.MajorPool, 1, used, drawn, ledger ? profile : null));
+                sequence.AddRange(MixedDraw(profile, seed, schedule, act, actNo * 10 + 9, act.MajorPool, 1, used, drawn, ledger ? profile : null, excludeShrineClass));
                 continue;
             }
             for (int slot = 0; slot < act.Combat.Count; slot++)
             {
-                var pool = PoolCandidates(profile, act.Combat[slot].Pool, used);
+                var pool = PoolCandidates(profile, act.Combat[slot].Pool, used, excludeShrineClass);
                 if (pool.Count < act.Combat[slot].Count)
                     throw new InvalidDataException($"Schedule {schedule.Id} act {act.Id}: pool {act.Combat[slot].Pool} needs {act.Combat[slot].Count} bosses, has {pool.Count}.");
                 Shuffle(pool, seed, ActBossStream, actNo * 10 + slot);
                 foreach (string id in pool.Take(act.Combat[slot].Count)) { sequence.Add(id); used.Add(id); }
             }
-            var majors = PoolCandidates(profile, act.MajorPool, used);
+            var majors = PoolCandidates(profile, act.MajorPool, used, excludeShrineClass);
             if (majors.Count == 0) throw new InvalidDataException($"Schedule {schedule.Id} act {act.Id}: no boss left in major pool {act.MajorPool}.");
             string major = majors[StableSeed.Index(StableSeed.Derive(seed, ActBossStream, actNo * 10 + 9), majors.Count)];
             sequence.Add(major); used.Add(major);
@@ -449,9 +458,15 @@ internal sealed class DungeonRun
     /// The unlocked bosses of pool <paramref name="pool"/> (a pool, or a schedule pool set: DungeonRunSchedules.Member) not in
     /// <paramref name="used"/>, in ordinal id order.
     /// </summary>
-    internal List<string> PoolCandidates(DungeonRunProfile profile, string pool, ICollection<string> used) =>
-        Data.Bosses.Where(b => IsUnlocked(profile, b.Unlock) && !used.Contains(b.Id) && (Data.Schedules?.Member(b, pool) ?? InPool(b, pool)))
+    internal List<string> PoolCandidates(DungeonRunProfile profile, string pool, ICollection<string> used, CardClass? excludeShrineClass = null) =>
+        Data.Bosses.Where(b => IsUnlocked(profile, b.Unlock) && !used.Contains(b.Id) && (Data.Schedules?.Member(b, pool) ?? InPool(b, pool))
+                && !(excludeShrineClass != null && HasShrineOfClass(b, excludeShrineClass.Value)))
             .Select(b => b.Id).OrderBy(id => id, StringComparer.Ordinal).ToList();
+
+    /// <summary>The boss row has a shrine variant (flag shrine) whose board shrine is of <paramref name="cls"/> (a Rumble Run
+    /// champion of that class).</summary>
+    internal static bool HasShrineOfClass(DungeonRunBoss boss, CardClass cls) =>
+        boss.HasFlag(DungeonRunEncounterData.ShrineFlag) && boss.Variants.Any(v => v.Shrine != null && Cards.FromId(v.Shrine)?.Class == cls);
 
     /// <summary>
     /// The provenance-mix draw of one slot (phase 8, schedule "draw": "provenance-mix"): <paramref name="count"/> bosses of the
@@ -462,10 +477,10 @@ internal sealed class DungeonRun
     /// (<paramref name="ledgerProfile"/>) takes the candidate with the most banked persistent damage first.
     /// </summary>
     private List<string> MixedDraw(DungeonRunProfile profile, long seed, DungeonRunSchedule schedule, DungeonRunAct act, long component, string pool,
-        int count, HashSet<string> used, Dictionary<string, int> drawn, DungeonRunProfile ledgerProfile)
+        int count, HashSet<string> used, Dictionary<string, int> drawn, DungeonRunProfile ledgerProfile, CardClass? excludeShrineClass = null)
     {
         var picks = new List<string>();
-        var candidates = PoolCandidates(profile, pool, used);
+        var candidates = PoolCandidates(profile, pool, used, excludeShrineClass);
         if (candidates.Count < count)
             throw new InvalidDataException($"Schedule {schedule.Id} act {act.Id}: pool {pool} needs {count} bosses, has {candidates.Count}.");
         var order = candidates.Select(id => Data.Boss(id).Provenance).Distinct(StringComparer.Ordinal).OrderBy(x => x, StringComparer.Ordinal).ToList();
