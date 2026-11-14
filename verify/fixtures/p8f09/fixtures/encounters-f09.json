@@ -11,7 +11,8 @@
   "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b",
   "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd",
   "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a",
-  "reference/encounters/F10.json": "525748f2fdb0cfa6c69d81f806c745152b5377df5c99f7a1ecfd1fe65933fe7d"
+  "reference/encounters/F10.json": "1a60d503f8dba089d546f68fb9651f123116b8fe0db56cd278adddb970ed229d",
+  "reference/encounters/F23.json": "7b23ae679064532dda0cb32a548ea0a98c9347316b369549a023ac8393f38671"
  },
  "decks": {
   "enc-dala_21_whirt": [
@@ -239,8 +240,8 @@
    "EX1_112"
   ],
   "enc-gila_27_experiment_3c": [
-   "EX1_606",
-   "EX1_606",
+   "GILA_BOSS_99t2",
+   "GILA_BOSS_99t2",
    "GILA_BOSS_27t",
    "GILA_BOSS_27t",
    "GILA_BOSS_27t",
@@ -399,8 +400,8 @@
    "GVG_114"
   ],
   "enc-gila_34_havnixx": [
-   "EX1_606",
-   "EX1_606",
+   "GILA_BOSS_99t2",
+   "GILA_BOSS_99t2",
    "CS2_003",
    "GVG_009",
    "GVG_009",
@@ -557,6 +558,134 @@
    "CS2_171",
    "CS2_189",
    "CS2_188"
+  ],
+  "enc-gila_48_infinite_toki": [
+   "GILA_907",
+   "GILA_BOSS_99t3",
+   "GILA_BOSS_99t3",
+   "KAR_009",
+   "KAR_009",
+   "UNG_028",
+   "UNG_020",
+   "UNG_020",
+   "UNG_941",
+   "UNG_941",
+   "EX1_608",
+   "EX1_608",
+   "GVG_003",
+   "GVG_003",
+   "EX1_287",
+   "AT_002",
+   "CS2_026",
+   "EX1_295",
+   "UNG_024",
+   "EX1_294",
+   "AT_007",
+   "AT_007",
+   "OG_090",
+   "OG_090",
+   "CS2_028",
+   "CFM_760",
+   "CFM_760",
+   "FP1_030",
+   "GILA_907",
+   "EX1_287"
+  ],
+  "enc-gila_49_glinda": [
+   "GILA_BOSS_99t3",
+   "GILA_BOSS_99t3",
+   "GILA_BOSS_49t",
+   "GILA_BOSS_49t",
+   "GILA_BOSS_49t",
+   "GILA_BOSS_49t2",
+   "GILA_BOSS_49t2",
+   "FP1_023",
+   "LOOT_014",
+   "GIL_191",
+   "CS2_062",
+   "CS2_062",
+   "GVG_045",
+   "GVG_045",
+   "EX1_313",
+   "EX1_313",
+   "EX1_309",
+   "CFM_663",
+   "CFM_663",
+   "CFM_751",
+   "CFM_751",
+   "EX1_312",
+   "LOOT_368",
+   "LOOT_368",
+   "OG_239",
+   "FP1_009",
+   "EX1_595",
+   "EX1_595",
+   "GIL_616",
+   "GIL_616"
+  ],
+  "enc-gila_59_godfrey": [
+   "GILA_503",
+   "CS2_084",
+   "CS2_084",
+   "LOE_021",
+   "EX1_610",
+   "GIL_607t",
+   "GIL_607t",
+   "ICC_021",
+   "ICC_021",
+   "EX1_534",
+   "EX1_534",
+   "LOOT_520",
+   "LOOT_520",
+   "LOOT_522",
+   "LOOT_522",
+   "GVG_049",
+   "EX1_007",
+   "EX1_007",
+   "AT_086",
+   "AT_086",
+   "OG_272",
+   "OG_272",
+   "UNG_087",
+   "GIL_646",
+   "GIL_646",
+   "BRM_019",
+   "BRM_019",
+   "EX1_399",
+   "EX1_399",
+   "OG_318"
+  ],
+  "enc-gila_60_shivers": [
+   "GILA_BOSS_60t",
+   "GILA_BOSS_60t",
+   "ICC_419",
+   "ICC_419",
+   "CS2_074",
+   "CS2_074",
+   "ICC_233",
+   "ICC_233",
+   "ICC_221",
+   "CS2_233",
+   "CS2_233",
+   "UNG_823",
+   "OG_267",
+   "OG_267",
+   "GVG_022",
+   "GVG_022",
+   "GVG_028",
+   "ICC_091",
+   "ICC_091",
+   "EX1_066",
+   "EX1_100",
+   "KAR_712",
+   "KAR_712",
+   "NEW1_024",
+   "FP1_030",
+   "GVG_118",
+   "GVG_121",
+   "GVG_121",
+   "ICC_221",
+   "UNG_823"
   ],
   "enc-gila_61_hagatha": [
    "GILA_BOSS_61t3",
@@ -5168,18 +5297,6 @@
     },
     "substitutions": [
      {
-      "wiki": "Witchwood's Touch",
-      "listed": "GILA_BOSS_99t2",
-      "used": "EX1_606",
-      "reason": "unscripted"
-     },
-     {
-      "wiki": "Witchwood's Touch",
-      "listed": "GILA_BOSS_99t2",
-      "used": "EX1_606",
-      "reason": "unscripted"
-     },
-     {
       "listed": "EX1_507",
       "reason": "over-size"
      },
@@ -5505,26 +5622,12 @@
    },
    "deck": {
     "id": "enc-gila_34_havnixx",
-    "kind": "substituted",
+    "kind": "authentic",
     "source": {
      "url": "https://hearthstone.wiki.gg/wiki/Inquisitor_Hav'nixx",
      "read": "2026-11-13",
      "list": "Deck"
-    },
-    "substitutions": [
-     {
-      "wiki": "Witchwood's Touch",
-      "listed": "GILA_BOSS_99t2",
-      "used": "EX1_606",
-      "reason": "unscripted"
-     },
-     {
-      "wiki": "Witchwood's Touch",
-      "listed": "GILA_BOSS_99t2",
-      "used": "EX1_606",
-      "reason": "unscripted"
-     }
-    ]
+    }
    }
   },
   {
@@ -5815,6 +5918,156 @@
    }
   },
   {
+   "id": "gila_48_infinite_toki",
+   "name": "Infinite Toki",
+   "provenance": "GIL",
+   "family": "23",
+   "hero": "GILA_BOSS_48h",
+   "power": "GILA_BOSS_48p",
+   "tier": "major2",
+   "archetype": "control",
+   "level": {
+    "source": "printed-health",
+    "original": 60
+   },
+   "healthOffset": 10,
+   "cards": [
+    "GILA_BOSS_48e"
+   ],
+   "deck": {
+    "id": "enc-gila_48_infinite_toki",
+    "kind": "substituted",
+    "source": {
+     "url": "https://hearthstone.wiki.gg/wiki/Infinite_Toki",
+     "read": "2026-11-14",
+     "list": "Deck"
+    },
+    "substitutions": [
+     {
+      "wiki": "Enhance-a-matic",
+      "listed": "GILA_903",
+      "reason": "admission:secret-generated"
+     },
+     {
+      "wiki": "Alternate Timeline",
+      "listed": "GILA_BOSS_48t",
+      "reason": "unscripted"
+     },
+     {
+      "used": "GILA_907",
+      "reason": "fill:second-copy"
+     },
+     {
+      "used": "EX1_287",
+      "reason": "fill:second-copy"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gila_49_glinda",
+   "name": "Glinda Crowskin",
+   "provenance": "GIL",
+   "family": "23",
+   "hero": "GILA_BOSS_49h",
+   "power": "GILA_BOSS_49p",
+   "tier": "major2",
+   "archetype": "control",
+   "level": {
+    "source": "printed-health",
+    "original": 50
+   },
+   "healthOffset": 10,
+   "flags": [
+    "passive",
+    "heroImmune"
+   ],
+   "deck": {
+    "id": "enc-gila_49_glinda",
+    "kind": "authentic",
+    "source": {
+     "url": "https://hearthstone.wiki.gg/wiki/Glinda_Crowskin_(boss)",
+     "read": "2026-11-14",
+     "list": "Deck"
+    }
+   }
+  },
+  {
+   "id": "gila_59_godfrey",
+   "name": "Lord Godfrey",
+   "provenance": "GIL",
+   "family": "23",
+   "hero": "GILA_BOSS_59h",
+   "power": "GILA_BOSS_59p",
+   "tier": "major2",
+   "archetype": "midrange",
+   "level": {
+    "source": "printed-health",
+    "original": 60
+   },
+   "healthOffset": 10,
+   "deck": {
+    "id": "enc-gila_59_godfrey",
+    "kind": "authentic",
+    "source": {
+     "url": "https://hearthstone.wiki.gg/wiki/Lord_Godfrey_(boss)",
+     "read": "2026-11-14",
+     "list": "Deck"
+    }
+   }
+  },
+  {
+   "id": "gila_60_shivers",
+   "name": "Captain Shivers",
+   "provenance": "GIL",
+   "family": "23",
+   "hero": "GILA_BOSS_60h",
+   "power": "GILA_BOSS_60p",
+   "tier": "major2",
+   "archetype": "tempo",
+   "level": {
+    "source": "printed-health",
+    "original": 75
+   },
+   "healthOffset": 10,
+   "flags": [
+    "start",
+    "passive"
+   ],
+   "start": {
+    "bossWeapon": "LOOT_542"
+   },
+   "deck": {
+    "id": "enc-gila_60_shivers",
+    "kind": "substituted",
+    "source": {
+     "url": "https://hearthstone.wiki.gg/wiki/Captain_Shivers",
+     "read": "2026-11-14",
+     "list": "Deck"
+    },
+    "substitutions": [
+     {
+      "wiki": "Fel Reaver",
+      "listed": "GVG_016",
+      "reason": "unscripted"
+     },
+     {
+      "wiki": "Fel Reaver",
+      "listed": "GVG_016",
+      "reason": "unscripted"
+     },
+     {
+      "used": "ICC_221",
+      "reason": "fill:second-copy"
+     },
+     {
+      "used": "UNG_823",
+      "reason": "fill:second-copy"
+     }
+    ]
+   }
+  },
+  {
    "id": "fix09_treasures",
    "name": "Fixture 09 A (King Togwaggle with each of his sixteen Treasures in the deck)",
    "provenance": "LOOT",
@@ -5931,6 +6184,13 @@
    "power": "GILA_900p",
    "reason": "her hero power Temporal Loop restarts the turn, which needs a run-owned turn restart",
    "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)",
+   "cards": []
+  },
+  {
+   "id": "GILA_BOSS_48t",
+   "name": "Alternate Timeline (Infinite Toki's boss card)",
+   "reason": "\"Start a new game, but your opponent's Health stays the same\": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of Infinite Toki's deck until then",
+   "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (the turn-rewind family with GILA_900p Temporal Loop and GILA_911 Rewind)",
    "cards": []
   }
  ]

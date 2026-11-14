@@ -149,6 +149,9 @@ phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] 
 // Phase 8 family 10: the rows of the Monster Hunt boss powers and boss cards it scripts (DungeonRunAdmission.F10.cs; each row names its test).
 phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] { "boss-board-power", "boss-own-hand-power", "boss-control-all", "boss-setaside-store",
     "boss-hunt-card" }.Contains(r.Family)).SelectMany(r => r.Ids));
+// Phase 8 family 23: the rows of the Monster Hunt nemeses' powers and boss cards and the rejected Alternate Timeline (DungeonRunAdmission.F23.cs).
+phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] { "nemesis-board-power", "nemesis-passive-immune", "nemesis-auto-cast", "nemesis-hunt-card",
+    "nemesis-rejected-restart" }.Contains(r.Family)).SelectMany(r => r.Ids));
 Check("the table lists only ledger rows (and the phase 6 F2/F3/F4/F7/F8/F9 run-treasure, run-hero, run-deck-token and treasure-data-gap rows, GILA_903 and ULDA_Brann_HP3)",
     runDeckTokenIds.SequenceEqual(new[] { "DALA_716t" }) && dataGapIds.SequenceEqual(new[] { "DALA_740" })
     && tableIds.All(id => ledgerIds.Contains(id) || runTreasureIds.Contains(id) || runHeroIds.Contains(id) || runDeckTokenIds.Contains(id) || dataGapIds.Contains(id) || id == "GILA_903" || id == "ULDA_Brann_HP3" || id == "ULDA_115" || phase7Ids.Contains(id)),
@@ -202,8 +205,12 @@ foreach (var rule in DungeonRunAdmission.Rules)
     // Phase 8 family 09: the run treasures King Togwaggle's Magic Candle finds (and A. F. Kay's deck lists) are admitted for a boss on catalog runs:
     // LOOTA_839's own row and the run-treasure-boss-find row (the legacy verdict of both stays the run player's only).
     var bossTreasures = DungeonRunAdmission.Rules.Where(r => r.Family == "run-treasure-side-shuffle" || r.Family == "run-treasure-boss-find").ToList();
-    Check("only the three secret-generated rules carry a catalog lift (the player side; since phase 8 the boss power DALA_BOSS_21p and the two named-Hunter-Secret cards), and since family 09 the two rows of the treasures a boss finds (Player to Player + Boss)",
-        new HashSet<AdmissionRule>(DungeonRunAdmission.Rules.Where(r => r.CatalogAdmit != null)).SetEquals(new[] { playerSide, bossSide, named }.Concat(bossTreasures)) && DungeonRunAdmission.Rules.Count(r => r.CatalogAdmit != null) == 5 && bossTreasures.Count == 2
+    // Phase 8 family 23: the two Monster Hunt treasures a nemesis's deck lists (GILA_503, GILA_907) are admitted for a boss on catalog runs too.
+    var nemesisTreasures = DungeonRunAdmission.Rules.Where(r => r.Family == "run-treasure-nemesis-deck").ToList();
+    Check("only the three secret-generated rules carry a catalog lift (the player side; since phase 8 the boss power DALA_BOSS_21p and the two named-Hunter-Secret cards), and since family 09 the two rows of the treasures a boss finds (Player to Player + Boss), since family 23 the row of the two treasures a nemesis's deck lists",
+        new HashSet<AdmissionRule>(DungeonRunAdmission.Rules.Where(r => r.CatalogAdmit != null)).SetEquals(new[] { playerSide, bossSide, named }.Concat(bossTreasures).Concat(nemesisTreasures)) && DungeonRunAdmission.Rules.Count(r => r.CatalogAdmit != null) == 6 && bossTreasures.Count == 2
+        && nemesisTreasures.Count == 1 && nemesisTreasures[0].Ids.SequenceEqual(new[] { "GILA_503", "GILA_907" }) && nemesisTreasures[0].Admit == AdmitScope.Player
+        && nemesisTreasures[0].CatalogAdmit == (AdmitScope.Player | AdmitScope.Boss) && nemesisTreasures[0].CatalogLift == DungeonRunAdmission.RunTreasureNemesisLift
         && bossTreasures.All(r => r.Admit == AdmitScope.Player && r.CatalogAdmit == (AdmitScope.Player | AdmitScope.Boss) && r.CatalogLift == DungeonRunAdmission.RunTreasureBossLift)
         && bossTreasures.SelectMany(r => r.Ids).Count() == 15);
     foreach (string id in new[] { "BOT_402", "DAL_141", "GIL_116", "ICC_204", "UNG_011", "LOOTA_833", "GILA_509", "GILA_903", "TRLA_168", "ULD_429" })

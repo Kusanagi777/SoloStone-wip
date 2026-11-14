@@ -11,7 +11,7 @@ internal static partial class DungeonRunAdmission
     {
         new AdmissionRule
         {
-            Family = "boss-board-power", Admit = AdmitScope.Boss, Lift = NoneBossPower,
+            Family = "nemesis-board-power", Admit = AdmitScope.Boss, Lift = NoneBossPower,
             Reason = "a nemesis's clickable hero power that resolves on the public boards: Chronoacceleration gives a friendly minion "
                 + "Mega-Windfury and destroys it at the end of the turn (GILA_BOSS_48p with its client enchantment GILA_BOSS_48e: Power "
                 + "Overwhelming's end-of-turn rule), Pistol Barrage deals 2 damage to a minion and the minions next to it (GILA_BOSS_59p, "
@@ -21,7 +21,7 @@ internal static partial class DungeonRunAdmission
         },
         new AdmissionRule
         {
-            Family = "boss-passive-immune", Admit = AdmitScope.Boss, Lift = NoneBossPower,
+            Family = "nemesis-passive-immune", Admit = AdmitScope.Boss, Lift = NoneBossPower,
             Reason = "Glinda Crowskin's passive False Heart: her hero is Immune while she controls a minion that is not a permanent or "
                 + "dormant one (family 06's hero aura EncounterRules.HeroImmuneWhile, the rule of ULDA_706 No-Face for one side, "
                 + "re-checked at every aura update), a public board fact both sides' searches replay; started at match start by "
@@ -31,7 +31,7 @@ internal static partial class DungeonRunAdmission
         },
         new AdmissionRule
         {
-            Family = "boss-auto-cast", Admit = AdmitScope.Boss, Lift = NoneBossPower,
+            Family = "nemesis-auto-cast", Admit = AdmitScope.Boss, Lift = NoneBossPower,
             Reason = "Captain Shivers' Plunder (0), \"Draw a weapon from your deck\", auto-cast as on the wiki (the client card is "
                 + "AI_MUST_PLAY): at the start of his turn, while his deck holds a weapon and his hand has room, one weapon of his own "
                 + "deck is drawn by the game RNG (family 09's AutoCast rule: never an option of the AI, so no choice of it depends on "
@@ -44,7 +44,7 @@ internal static partial class DungeonRunAdmission
             // Player | Boss: no player role offers one (boss decks list them), but the run player can take one from a boss (a
             // steal, a copy, Crowskin Pact's Faithful changing sides), and its effect resolves the same there. Never generated.
             NeverGenerated = true,
-            Family = "boss-hunt-card", Admit = AdmitScope.Player | AdmitScope.Boss, Lift = NoneBossOnly,
+            Family = "nemesis-hunt-card", Admit = AdmitScope.Player | AdmitScope.Boss, Lift = NoneBossOnly,
             Reason = "a Monster Hunt boss deck card whose effect is public board and hero resolution or a change to its caster's own hand "
                 + "and deck, the same in either player's hands: Crowskin Faithful draws its controller a card and shuffles a new "
                 + "Faithful into that controller's deck when it dies (GILA_BOSS_49t), Crowskin Pact transforms a minion into a "
@@ -59,7 +59,7 @@ internal static partial class DungeonRunAdmission
         {
             // The legacy verdict stays the run player's only (no legacy boss holds one); a catalog run admits a boss too. The two
             // ids left the core run-treasure rows (Tess and Darius's, Shaw and Toki's) for this one, as family 09's Kobolds rows did.
-            Family = "run-treasure-boss-deck", Admit = AdmitScope.Player, Lift = RunTreasureLift,
+            Family = "run-treasure-nemesis-deck", Admit = AdmitScope.Player, Lift = RunTreasureLift,
             Reason = "treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F3, c-treasures-F4)",
             CatalogAdmit = AdmitScope.Player | AdmitScope.Boss, CatalogLift = RunTreasureNemesisLift,
             CatalogReason = "a Monster Hunt treasure that a nemesis's wiki deck lists (Hunter's Insight in Lord Godfrey's, Clockwork "
@@ -73,7 +73,7 @@ internal static partial class DungeonRunAdmission
         new AdmissionRule
         {
             NeverGenerated = true,
-            Family = "boss-rejected-restart", Admit = AdmitScope.None, Lift = TurnRestartLift,
+            Family = "nemesis-rejected-restart", Admit = AdmitScope.None, Lift = TurnRestartLift,
             Reason = "Infinite Toki's Alternate Timeline, \"Start a new game, but your opponent's Health stays the same\": a game restart "
                 + "inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of "
                 + "her deck (data/dungeon-run/reference/encounters/F23.json \"rejected\")",
