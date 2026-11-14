@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "encountersVersion": 1,
   "generatedBy": "tools/dungeon-run-catalog (encounters); do not edit by hand",
-  "sources": { "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45", "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8", "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466", "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206", "reference/encounters/F06.json": "950c2268088073de3055ab49d444a40be440198596d0b90ef54a4a1520c644c3", "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b", "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd", "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a", "reference/encounters/F10.json": "525748f2fdb0cfa6c69d81f806c745152b5377df5c99f7a1ecfd1fe65933fe7d" },
+  "sources": { "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45", "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8", "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466", "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206", "reference/encounters/F06.json": "950c2268088073de3055ab49d444a40be440198596d0b90ef54a4a1520c644c3", "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b", "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd", "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a", "reference/encounters/F10.json": "1a60d503f8dba089d546f68fb9651f123116b8fe0db56cd278adddb970ed229d", "reference/encounters/F23.json": "7b23ae679064532dda0cb32a548ea0a98c9347316b369549a023ac8393f38671" },
   "decks": {
     "enc-dala_21_whirt": ["KAR_009", "KAR_009", "DAL_603", "DAL_603", "CS2_023", "CS2_023", "LOE_119", "LOE_119", "BOT_601", "BOT_447", "BOT_447", "EX1_004", "EX1_004", "DAL_092", "DAL_092", "DAL_086", "BOT_413", "BOT_413", "EX1_050", "EX1_050", "EX1_103", "EX1_103", "CS2_117", "CS2_117", "GVG_089", "GVG_089", "EX1_021", "EX1_021", "OG_161", "OG_161"],
     "enc-gila_20_mangy_wolf": ["CS2_005", "ICC_054", "DS1_175", "OG_045", "GIL_828", "LOOT_077", "OG_216", "OG_216", "EX1_162", "EX1_162", "CS2_005", "ICC_054", "DS1_175", "OG_045", "GIL_828", "LOOT_077", "KAR_005", "CFM_315", "EX1_531", "EX1_017", "EX1_010", "CS2_172", "CS2_125", "CS2_237", "CS2_120", "KAR_005", "CFM_315", "EX1_531", "EX1_017", "EX1_010"],
@@ -11,16 +11,20 @@
     "enc-gila_23_grubb": ["EX1_028", "EX1_607", "CS2_108", "UNG_923", "UNG_923", "EX1_391", "AT_064", "EX1_392", "CS2_104", "LOE_022", "LOE_022", "GVG_054", "CFM_631", "EX1_407", "CS2_197", "CS2_200", "LOOT_383", "CS2_200", "LOOT_383", "UNG_812", "EX1_028", "EX1_607", "CS2_108", "EX1_391", "AT_064", "EX1_392", "CS2_104", "GVG_054", "CFM_631", "EX1_407"],
     "enc-gila_25_ivan": ["AT_061", "EX1_544", "CS2_084", "DS1_184", "FP1_011", "AT_060", "KAR_004", "LOE_021", "EX1_610", "EX1_611", "CFM_026", "GIL_577", "EX1_554", "EX1_609", "LOOT_079", "NEW1_031", "NEW1_031", "KAR_006", "EX1_536", "EX1_536", "ICC_204", "EX1_537", "LOOT_080", "LOOT_080", "OG_211", "EX1_080", "CFM_653", "CFM_653", "UNG_087", "ICC_029"],
     "enc-gila_26_gnomenapper": ["GILA_BOSS_26t2", "GILA_BOSS_26t2", "GILA_BOSS_26t2", "GILA_BOSS_26t2", "EX1_608", "EX1_608", "EX1_332", "EX1_332", "EX1_332", "GVG_011", "EX1_522", "EX1_581", "EX1_581", "AT_033", "AT_033", "ICC_407", "LOOT_415", "AT_027", "CS2_104", "CS2_104", "GVG_053", "GVG_082", "EX1_029", "NEW1_019", "NEW1_029", "EX1_083", "EX1_093", "EX1_093", "EX1_085", "EX1_112"],
-    "enc-gila_27_experiment_3c": ["EX1_606", "EX1_606", "GILA_BOSS_27t", "GILA_BOSS_27t", "GILA_BOSS_27t", "CS2_013", "CS2_013", "OG_313", "EX1_164", "EX1_164", "CFM_315", "UNG_915", "EX1_531", "GVG_048", "EX1_538", "EX1_534", "AT_076", "GVG_027", "EX1_565", "UNG_201", "LOOT_344", "LOE_113", "EX1_320", "LOOT_368", "LOE_022", "EX1_509", "CFM_637", "NEW1_023", "UNG_073", "EX1_103"],
+    "enc-gila_27_experiment_3c": ["GILA_BOSS_99t2", "GILA_BOSS_99t2", "GILA_BOSS_27t", "GILA_BOSS_27t", "GILA_BOSS_27t", "CS2_013", "CS2_013", "OG_313", "EX1_164", "EX1_164", "CFM_315", "UNG_915", "EX1_531", "GVG_048", "EX1_538", "EX1_534", "AT_076", "GVG_027", "EX1_565", "UNG_201", "LOOT_344", "LOE_113", "EX1_320", "LOOT_368", "LOE_022", "EX1_509", "CFM_637", "NEW1_023", "UNG_073", "EX1_103"],
     "enc-gila_29_sazzmi": ["GILA_BOSS_29t", "GILA_BOSS_29t", "CFM_316", "CFM_316", "CFM_316", "EX1_360", "EX1_382", "GVG_011", "EX1_091", "CS1_113", "LOOT_165", "OG_241", "OG_241", "OG_241", "CFM_790", "CFM_790", "LOOT_069", "LOOT_069", "LOOT_069", "KAR_114", "EX1_360", "EX1_382", "GVG_011", "EX1_091", "CS1_113", "EX1_334", "CFM_603", "CFM_661", "EX1_085", "EX1_016"],
     "enc-gila_31_gnarlroot": ["CS2_009", "CS2_009", "CFM_614", "CS2_013", "EX1_158", "EX1_158", "FP1_019", "FP1_019", "EX1_571", "EX1_571", "LOE_010", "UNG_831", "UNG_831", "EX1_066", "FP1_003", "UNG_808", "UNG_814", "CS1_069", "KAR_041", "OG_153", "CFM_614", "CS2_013", "LOE_010", "EX1_066", "FP1_003", "UNG_808", "UNG_814", "CS1_069", "KAR_041", "OG_153"],
     "enc-gila_32_niira": ["KAR_300", "AT_037", "OG_313", "CFM_614", "CFM_614", "CFM_614", "CFM_753", "CFM_753", "LOOT_258", "UNG_809", "UNG_809", "GIL_558", "GIL_558", "GIL_513", "GIL_513", "LOOT_152", "OG_256", "EX1_005", "AT_090", "NEW1_038", "KAR_300", "AT_037", "OG_313", "LOOT_258", "LOOT_152", "OG_256", "EX1_005", "AT_090", "UNG_075", "CFM_647"],
     "enc-gila_33_scarecrow": ["KAR_300", "KAR_300", "GIL_600", "GIL_600", "GVG_050", "GVG_050", "EX1_556", "EX1_556", "EX1_556", "GVG_027", "GVG_027", "GVG_096", "GVG_096", "GVG_006", "GVG_006", "GIL_809", "GIL_809", "GIL_809", "GVG_069", "GVG_069", "CS2_221", "CS2_221", "CS2_221", "GVG_083", "GVG_083", "GVG_105", "GVG_105", "GVG_113", "GVG_079", "GVG_114"],
-    "enc-gila_34_havnixx": ["EX1_606", "EX1_606", "CS2_003", "GVG_009", "GVG_009", "DS1_233", "DS1_233", "EX1_622", "CS2_234", "CS2_234", "AT_014", "AT_014", "EX1_339", "EX1_345", "OG_100", "OG_335", "ICC_207", "OG_094", "CS1_113", "GIL_665", "GIL_665", "EX1_596", "CS2_062", "OG_116", "EX1_313", "OG_337", "AT_085", "BRM_028", "OG_142", "EX1_572"],
+    "enc-gila_34_havnixx": ["GILA_BOSS_99t2", "GILA_BOSS_99t2", "CS2_003", "GVG_009", "GVG_009", "DS1_233", "DS1_233", "EX1_622", "CS2_234", "CS2_234", "AT_014", "AT_014", "EX1_339", "EX1_345", "OG_100", "OG_335", "ICC_207", "OG_094", "CS1_113", "GIL_665", "GIL_665", "EX1_596", "CS2_062", "OG_116", "EX1_313", "OG_337", "AT_085", "BRM_028", "OG_142", "EX1_572"],
     "enc-gila_35_chupacabran": ["GILA_BOSS_35t", "GILA_BOSS_35t", "ICC_079", "CS2_012", "CS2_012", "EX1_570", "GIL_200", "GIL_200", "GIL_113", "GIL_113", "CS2_171", "CS2_171", "OG_326", "CS2_124", "CS2_124", "LOOT_383", "UNG_812", "UNG_812", "GIL_120", "GIL_120", "ICC_079", "EX1_570", "OG_326", "LOOT_383", "GIL_558", "GIL_143", "EX1_010", "EX1_017", "CS2_172", "TRL_243"],
     "enc-gila_36_griselda": ["LOOT_231", "LOOT_231", "UNG_018", "UNG_018", "CS2_024", "CS2_024", "UNG_846", "UNG_846", "CFM_065", "UNG_021", "CS2_033", "GIL_645", "KAR_036", "UNG_809", "UNG_809", "UNG_845", "UNG_845", "GIL_819", "GIL_819", "GIL_119", "CFM_065", "UNG_021", "CS2_033", "GIL_645", "KAR_036", "GIL_119", "UNG_928", "UNG_084", "UNG_816", "UNG_847"],
     "enc-gila_37_wharrgarbl": ["GILA_BOSS_37t", "GILA_BOSS_37t", "LOE_026", "UNG_942", "UNG_201", "CFM_310", "LOE_113", "LOEA10_3", "NEW1_017", "EX1_509", "EX1_506", "UNG_073", "UNG_073", "EX1_050", "EX1_103", "EX1_103", "EX1_507", "UNG_937", "UNG_937", "OG_161", "LOE_026", "UNG_201", "CFM_310", "LOE_113", "LOEA10_3", "NEW1_017", "EX1_509", "EX1_506", "EX1_050", "EX1_507"],
     "enc-gila_38_cozzlewurt": ["KAR_300", "KAR_300", "KAR_300", "LOE_115", "LOE_115", "AT_037", "AT_037", "EX1_164", "EX1_539", "LOOT_170", "LOOT_170", "GIL_664", "GIL_664", "EX1_009", "EX1_009", "EX1_015", "EX1_015", "CS2_147", "GVG_104", "UNG_801", "EX1_164", "EX1_539", "CS2_147", "GVG_104", "UNG_801", "EX1_008", "CS2_169", "CS2_171", "CS2_189", "CS2_188"],
+    "enc-gila_48_infinite_toki": ["GILA_907", "GILA_BOSS_99t3", "GILA_BOSS_99t3", "KAR_009", "KAR_009", "UNG_028", "UNG_020", "UNG_020", "UNG_941", "UNG_941", "EX1_608", "EX1_608", "GVG_003", "GVG_003", "EX1_287", "AT_002", "CS2_026", "EX1_295", "UNG_024", "EX1_294", "AT_007", "AT_007", "OG_090", "OG_090", "CS2_028", "CFM_760", "CFM_760", "FP1_030", "GILA_907", "EX1_287"],
+    "enc-gila_49_glinda": ["GILA_BOSS_99t3", "GILA_BOSS_99t3", "GILA_BOSS_49t", "GILA_BOSS_49t", "GILA_BOSS_49t", "GILA_BOSS_49t2", "GILA_BOSS_49t2", "FP1_023", "LOOT_014", "GIL_191", "CS2_062", "CS2_062", "GVG_045", "GVG_045", "EX1_313", "EX1_313", "EX1_309", "CFM_663", "CFM_663", "CFM_751", "CFM_751", "EX1_312", "LOOT_368", "LOOT_368", "OG_239", "FP1_009", "EX1_595", "EX1_595", "GIL_616", "GIL_616"],
+    "enc-gila_59_godfrey": ["GILA_503", "CS2_084", "CS2_084", "LOE_021", "EX1_610", "GIL_607t", "GIL_607t", "ICC_021", "ICC_021", "EX1_534", "EX1_534", "LOOT_520", "LOOT_520", "LOOT_522", "LOOT_522", "GVG_049", "EX1_007", "EX1_007", "AT_086", "AT_086", "OG_272", "OG_272", "UNG_087", "GIL_646", "GIL_646", "BRM_019", "BRM_019", "EX1_399", "EX1_399", "OG_318"],
+    "enc-gila_60_shivers": ["GILA_BOSS_60t", "GILA_BOSS_60t", "ICC_419", "ICC_419", "CS2_074", "CS2_074", "ICC_233", "ICC_233", "ICC_221", "CS2_233", "CS2_233", "UNG_823", "OG_267", "OG_267", "GVG_022", "GVG_022", "GVG_028", "ICC_091", "ICC_091", "EX1_066", "EX1_100", "KAR_712", "KAR_712", "NEW1_024", "FP1_030", "GVG_118", "GVG_121", "GVG_121", "ICC_221", "UNG_823"],
     "enc-gila_61_hagatha": ["GILA_BOSS_61t3", "GILA_BOSS_61t3", "GILA_BOSS_61t", "GILA_BOSS_61t", "GILA_BOSS_27t", "GILA_BOSS_27t", "GIL_800", "ICC_835", "GIL_677", "AT_052", "AT_052", "AT_054", "NEW1_010", "GIL_608", "GIL_608", "GIL_693", "GIL_693", "EX1_303", "GIL_618", "GIL_825", "GIL_681", "GIL_681", "EX1_043", "EX1_043", "GIL_620", "CFM_668", "CFM_668", "BRM_028", "CFM_060", "CFM_060", "GIL_623", "GIL_623", "OG_153", "GVG_118", "ICC_314", "EX1_563", "KAR_711", "KAR_711", "EX1_105", "EX1_105"],
     "enc-loot_04_sturmi": ["OG_179", "OG_179", "EX1_610", "EX1_611", "BRM_013", "BRM_013", "NEW1_031", "NEW1_031", "EX1_536", "EX1_536", "OG_292", "OG_292", "EX1_539", "EX1_539", "EX1_538", "EX1_538", "OG_216", "OG_216", "OG_309", "EX1_534", "EX1_534", "LOE_046", "LOE_046", "LOE_029", "EX1_096", "EX1_096", "LOE_047", "LOE_047", "EX1_016", "OG_133"],
     "enc-loot_05_hamm": ["EX1_604", "EX1_604", "EX1_604", "EX1_604", "BRM_016", "BRM_016", "BRM_016", "BRM_016", "EX1_407", "EX1_407", "ICC_405", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "GVG_099", "GVG_099", "CFM_667", "CFM_667", "CFM_667", "CFM_667", "GVG_090", "GVG_090", "GVG_090", "GVG_090", "GVG_090"],
@@ -1449,8 +1453,6 @@
         "kind": "substituted",
         "source": { "url": "https://hearthstone.wiki.gg/wiki/Experiment_3C", "read": "2026-11-13", "list": "Deck" },
         "substitutions": [
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
           { "listed": "EX1_507", "reason": "over-size" },
           { "listed": "NEW1_027", "reason": "over-size" },
           { "listed": "KAR_095", "reason": "over-size" },
@@ -1589,12 +1591,8 @@
       "level": { "source": "printed-health", "original": 40 },
       "deck": {
         "id": "enc-gila_34_havnixx",
-        "kind": "substituted",
-        "source": { "url": "https://hearthstone.wiki.gg/wiki/Inquisitor_Hav'nixx", "read": "2026-11-13", "list": "Deck" },
-        "substitutions": [
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
-        ]
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Inquisitor_Hav'nixx", "read": "2026-11-13", "list": "Deck" }
       }
     },
     {
@@ -1714,6 +1712,90 @@
           { "used": "CS2_188", "reason": "fill:curated" }
         ]
       }
+    },
+    {
+      "id": "gila_48_infinite_toki",
+      "name": "Infinite Toki",
+      "provenance": "GIL",
+      "family": "23",
+      "hero": "GILA_BOSS_48h",
+      "power": "GILA_BOSS_48p",
+      "tier": "major2",
+      "archetype": "control",
+      "level": { "source": "printed-health", "original": 60 },
+      "healthOffset": 10,
+      "cards": ["GILA_BOSS_48e"],
+      "deck": {
+        "id": "enc-gila_48_infinite_toki",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Infinite_Toki", "read": "2026-11-14", "list": "Deck" },
+        "substitutions": [
+          { "wiki": "Enhance-a-matic", "listed": "GILA_903", "reason": "admission:secret-generated" },
+          { "wiki": "Alternate Timeline", "listed": "GILA_BOSS_48t", "reason": "unscripted" },
+          { "used": "GILA_907", "reason": "fill:second-copy" },
+          { "used": "EX1_287", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "gila_49_glinda",
+      "name": "Glinda Crowskin",
+      "provenance": "GIL",
+      "family": "23",
+      "hero": "GILA_BOSS_49h",
+      "power": "GILA_BOSS_49p",
+      "tier": "major2",
+      "archetype": "control",
+      "level": { "source": "printed-health", "original": 50 },
+      "healthOffset": 10,
+      "flags": ["passive", "heroImmune"],
+      "deck": {
+        "id": "enc-gila_49_glinda",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Glinda_Crowskin_(boss)", "read": "2026-11-14", "list": "Deck" }
+      }
+    },
+    {
+      "id": "gila_59_godfrey",
+      "name": "Lord Godfrey",
+      "provenance": "GIL",
+      "family": "23",
+      "hero": "GILA_BOSS_59h",
+      "power": "GILA_BOSS_59p",
+      "tier": "major2",
+      "archetype": "midrange",
+      "level": { "source": "printed-health", "original": 60 },
+      "healthOffset": 10,
+      "deck": {
+        "id": "enc-gila_59_godfrey",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Lord_Godfrey_(boss)", "read": "2026-11-14", "list": "Deck" }
+      }
+    },
+    {
+      "id": "gila_60_shivers",
+      "name": "Captain Shivers",
+      "provenance": "GIL",
+      "family": "23",
+      "hero": "GILA_BOSS_60h",
+      "power": "GILA_BOSS_60p",
+      "tier": "major2",
+      "archetype": "tempo",
+      "level": { "source": "printed-health", "original": 75 },
+      "healthOffset": 10,
+      "flags": ["start", "passive"],
+      "start": { "bossWeapon": "LOOT_542" },
+      "deck": {
+        "id": "enc-gila_60_shivers",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Captain_Shivers", "read": "2026-11-14", "list": "Deck" },
+        "substitutions": [
+          { "wiki": "Fel Reaver", "listed": "GVG_016", "reason": "unscripted" },
+          { "wiki": "Fel Reaver", "listed": "GVG_016", "reason": "unscripted" },
+          { "used": "ICC_221", "reason": "fill:second-copy" },
+          { "used": "UNG_823", "reason": "fill:second-copy" }
+        ]
+      }
     }
   ],
   "rejected": [
@@ -1723,6 +1805,13 @@
       "power": "GILA_900p",
       "reason": "her hero power Temporal Loop restarts the turn, which needs a run-owned turn restart",
       "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)",
+      "cards": []
+    },
+    {
+      "id": "GILA_BOSS_48t",
+      "name": "Alternate Timeline (Infinite Toki's boss card)",
+      "reason": "\"Start a new game, but your opponent's Health stays the same\": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of Infinite Toki's deck until then",
+      "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (the turn-rewind family with GILA_900p Temporal Loop and GILA_911 Rewind)",
       "cards": []
     }
   ]
