@@ -153,6 +153,11 @@ Guard("Wendy", () =>
     var (view, viewBoss, viewPlayer) = FairView(g);
     Check("A3 the boss's fair view holds the taken card exactly in its own hand; the run player's hand keeps its count",
         viewBoss.HandZone.Any(p => p.Card.Id == Fireball) && viewPlayer.HandZone.Count == player.HandZone.Count, string.Join(",", viewBoss.HandZone.Select(p => p.Card.Id)));
+    for (int i = 0; i < 3; i++) Generic.Draw(player);
+    var (viewD, viewBossD, viewPlayerD) = FairView(g);
+    var shown = viewPlayerD.HandZone.Where(p => !(p is Unknown)).Select(p => p.Card.Id).ToList();
+    Check("A3b the run player's other hidden cards stay masked in the boss's fair view: three drawn Yetis are Unknown stand-ins, only the Moonfire the boss gave is known",
+        player.HandZone.Count == 4 && viewPlayerD.HandZone.Count == 4 && viewPlayerD.HandZone.Count(p => p is Unknown) == 3 && shown.SequenceEqual(new[] { Moonfire }), string.Join(",", shown));
     ToPlayer(g);
     int casts = Casts(boss);
     EmptyHand(player); EmptyHand(boss); ToHand(g, boss, Moonfire);
@@ -173,10 +178,12 @@ Guard("Wendy", () =>
     // In the boss's fair view the run player's hand is masked (Unknown stand-ins): the exchange there moves a stand-in, never throws.
     var (view2, viewBoss2, viewPlayer2) = FairView(g);
     int bossCards = viewBoss2.HandZone.Count, playerCards = viewPlayer2.HandZone.Count, unknownBefore = viewPlayer2.HandZone.Count(p => p is Unknown);
+    var shownBefore = viewPlayer2.HandZone.Where(p => !(p is Unknown)).Select(p => p.Card.Id).ToList();
     string viewSwap = "ok";
     try { if (!DungeonRunEncounters.ExchangeRandomCards(view2, viewBoss2, viewBoss2.Hero.HeroPower)) viewSwap = "nothing moved"; } catch (Exception e) { viewSwap = e.GetType().Name + ": " + e.Message; }
-    Check("A7 the exchange resolves in the boss's fair view too (a masked card of the run player's hand for one of its own); both hands keep their counts",
-        viewSwap == "ok" && unknownBefore > 0 && viewBoss2.HandZone.Count == bossCards && viewPlayer2.HandZone.Count == playerCards, viewSwap + " unknown " + unknownBefore);
+    Check("A7 the exchange resolves in the boss's fair view too (a masked card of the run player's hand for one of its own); both hands keep their counts; before it, every card of the run player's hand but the ones the boss gave was masked",
+        viewSwap == "ok" && unknownBefore > 0 && unknownBefore == player.HandZone.Count(p => p.Card.Id == Yeti) && shownBefore.All(id => id == Moonfire)
+        && viewBoss2.HandZone.Count == bossCards && viewPlayer2.HandZone.Count == playerCards, viewSwap + " unknown " + unknownBefore + " shown " + string.Join(",", shownBefore));
 });
 
 // ============================================================ B  Tala Stonerage: Twin Paths
@@ -257,9 +264,12 @@ Guard("Vasno", () =>
     Cast(g, Moonfire, player.Hero);
     Check("E3 a spell without Overload is cast once", player.Hero.Health == health - 1, (health - player.Hero.Health).ToString());
     var croc = Board(g, player, Croc);
+    var bystander = Board(g, player, Yeti); var own = Board(g, boss, Yeti);
+    int ph = player.Hero.Health, bh = boss.Hero.Health, owed = boss.OverloadOwed;
     Cast(g, Bolt, croc);
-    health = player.Hero.Health;
-    Check("E4 when the first cast kills its target, the copy has no target: it does nothing (Pirate's Mark's locked target)", croc.IsDead || croc.Zone != player.BoardZone, croc.Zone?.Type.ToString());
+    Check("E4 when the first cast kills its target, the copy has no target: it does nothing (Pirate's Mark's locked target): no other character is hit",
+        (croc.IsDead || croc.Zone != player.BoardZone) && player.Hero.Health == ph && boss.Hero.Health == bh && bystander.Damage == 0 && own.Damage == 0,
+        croc.Zone?.Type + " heroes " + (ph - player.Hero.Health) + "/" + (bh - boss.Hero.Health) + " owed +" + (boss.OverloadOwed - owed));
     ToPlayer(g);
     int bossHealth = boss.Hero.Health;
     Cast(g, Bolt, boss.Hero);
@@ -304,7 +314,7 @@ Guard("Sharky", () =>
         Round(g);
         a.Damage = 1; b.Damage = 1;
     }
-    Check("G3 with damaged minions on both boards the one destroyed is picked at random (both sides seen)", picked.Count == 2, string.Join(",", picked));
+    Check("G3 with damaged minions on both boards the one destroyed is picked at random (both sides seen)", picked.Count == 2, string.Join(",", picked.OrderBy(x => x, StringComparer.Ordinal)));
     var gs = Fight("dala_23_sharky", shrine: Shrine);
     var shrine = ShrineRules.Of(gs.Player1).First();
     ToBoss(gs);
@@ -337,6 +347,17 @@ Guard("Arha", () =>
     Check("H4 the Battlecry after it resolves once", boss.HandZone.Count == hand + 1, (boss.HandZone.Count - hand).ToString());
     Round(g);
     Check("H5 offered again next turn", Offered(g));
+    // A weapon's Battlecry is a Battlecry too: it gets the extra resolution and uses the enchantment up.
+    Board(g, boss, Raptor);
+    Power(g);
+    var hatchet = ToHand(g, boss, "TRL_111");
+    Play(g, hatchet);
+    Check("H6 Headhunter's Hatchet (her own deck's Battlecry weapon) after Ar'ha's Call: with a Beast its Battlecry resolves twice (2 + 2 Durability) and uses the enchantment up",
+        boss.Hero.Weapon?.Card.Id == "TRL_111" && boss.Hero.Weapon.Durability == 4 && BattlecryRules.Additional(boss) == 0 && boss.AppliedEnchantments.All(e => e.Card.Id != DungeonRunEncounters.ArhasCall),
+        "durability " + boss.Hero.Weapon?.Durability);
+    hand = boss.HandZone.Count;
+    Play(g, ToHand(g, boss, Engineer));
+    Check("H7 so the Battlecry minion after the weapon resolves once", boss.HandZone.Count == hand + 1, (boss.HandZone.Count - hand).ToString());
 });
 
 // ============================================================ I  Jepetto Joybuzz: Assembly, Hoard of Toys
@@ -548,7 +569,28 @@ Guard("RatKing", () =>
     Cast(g4, Moonfire, g4.Player2.Hero);
     Check("N8 the rat's Health includes its buffs (Blessing of Kings: 5 of 5)", g4.State != State.COMPLETE && g4.Player2.Hero.Health == bigHealth && g4.Player2.Hero.BaseHealth == bigMax && bigMax == 5,
         Hero(g4.Player2) + " rat " + bigHealth + "/" + bigMax);
-    ToBoss(g);
+    // A Silenced rat has lost its text: it replaces nothing.
+    var g5 = Fight("dala_30_rat_king");
+    var hushed = Board(g5, g5.Player2, Rat);
+    Cast(g5, "CS2_203", hushed);
+    g5.Player2.Hero.Armor = 0;
+    g5.Player2.Hero.Damage = g5.Player2.Hero.BaseHealth - 1;
+    Cast(g5, Moonfire, g5.Player2.Hero);
+    Check("N9 a Silenced rat (Ironbeak Owl) does not replace the hero: the boss dies and loses", hushed.IsSilenced && hushed.Zone == g5.Player2.BoardZone && g5.State == State.COMPLETE
+        && g5.Player2.PlayState == PlayState.LOST, g5.State + " " + g5.Player2.PlayState);
+    // The eldest is the rat that entered play first: a rat bounced and replayed is the youngest.
+    var g6 = Fight("dala_30_rat_king");
+    Controller b6 = g6.Player2;
+    var ratA = Board(g6, b6, Rat); var ratB = Board(g6, b6, Rat);
+    Cast(g6, "EX1_581", ratA);
+    ToBoss(g6);
+    bool replayed = Play(g6, ratA) && ratA.Zone == b6.BoardZone;
+    ToPlayer(g6);
+    b6.Hero.Armor = 0;
+    b6.Hero.Damage = b6.Hero.BaseHealth - 1;
+    Cast(g6, Moonfire, b6.Hero);
+    Check("N10 eldest by entry into play: rat A (Sapped, then replayed) is younger than rat B, so B replaces the hero and A stays", replayed && ratA.Id < ratB.Id && g6.State != State.COMPLETE
+        && ratB.Zone == b6.SetasideZone && ratA.Zone == b6.BoardZone && b6[EncounterRules.FormChanges] == 1, "A " + ratA.Zone?.Type + " B " + ratB.Zone?.Type + " " + g6.State);
 });
 
 // ============================================================ P  the rows, the admission rows, the validator

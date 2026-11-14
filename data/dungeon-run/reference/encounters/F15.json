@@ -894,7 +894,7 @@
     },
     {
      "kind": "power",
-     "note": "Ar'ha's Call (2) attaches its player enchantment (DALA_BOSS_24e, \"Triggers additional Battlecries\"): the boss's next minion with a Battlecry resolves it one more time (EXTRA_BATTLECRIES_ADDITIONAL, the shrine Tribute from the Tides' rule, on top of any doubling), then the enchantment is removed. Not offered while one is waiting."
+     "note": "Ar'ha's Call (2) attaches its player enchantment (DALA_BOSS_24e, \"Triggers additional Battlecries\"): the boss's next Battlecry resolves one more time (EXTRA_BATTLECRIES_ADDITIONAL, the shrine Tribute from the Tides' rule, on top of any doubling) and the next card with a Battlecry of any type (a minion, a weapon such as her Headhunter's Hatchet, a hero card) uses it up: the enchantment is then removed. Not offered while one is waiting."
     }
    ]
   },
@@ -1615,7 +1615,7 @@
     },
     {
      "kind": "power",
-     "note": "Underbelly Rat, \"When your hero dies, the eldest Underbelly Rat replaces your hero\": when the boss's hero dies with an Underbelly Rat on his board (alive, not dying), the eldest (summoned first) leaves the board without dying and a new The Rat King enters through the row's script form (EncounterRules.SwapForm: hero and power fresh, Armor and weapon kept) with the rat's Health (its remaining Health of its maximum), as many times as he has rats. The same holds for a run player who controls a rat: that hero stays and takes the rat's Health. In the Heist's Chapter 4 every minion's Attack and Health were swapped (the chapter twist), so the rat fought as a 1/10 there; here it is the printed 10/1 unless a rule swaps it."
+     "note": "Underbelly Rat, \"When your hero dies, the eldest Underbelly Rat replaces your hero\": when the boss's hero dies with an Underbelly Rat on his board (alive, not dying, not Silenced: the rule is the rat's own text), the eldest (the first to enter play; a rat bounced and replayed is young again) leaves the board without dying and a new The Rat King enters through the row's script form (EncounterRules.SwapForm: hero and power fresh, Armor and weapon kept) with the rat's Health (its remaining Health of its maximum), as many times as he has rats. The same holds for a run player who controls a rat: that hero stays and takes the rat's Health. In the Heist's Chapter 4 every minion's Attack and Health were swapped (the chapter twist), so the rat fought as a 1/10 there; here it is the printed 10/1 unless a rule swaps it."
     }
    ]
   }

@@ -121,8 +121,9 @@ ROWS = [
     boss(24, "arha", "Ranger Ar'ha", "Ranger_Ar'ha", 3, "tempo", 6, "\"These decks correspond only to levels 6-7\" (level 5 drops five random cards)",
          "Normal (levels 6-7)", flags=["doubleBattlecry"], cards=["DALA_BOSS_24e"],
          adaptations=[("power", "Ar'ha's Call (2) attaches its player enchantment (DALA_BOSS_24e, \"Triggers additional Battlecries\"): the boss's "
-                                "next minion with a Battlecry resolves it one more time (EXTRA_BATTLECRIES_ADDITIONAL, the shrine Tribute from the "
-                                "Tides' rule, on top of any doubling), then the enchantment is removed. Not offered while one is waiting.")]),
+                                "next Battlecry resolves one more time (EXTRA_BATTLECRIES_ADDITIONAL, the shrine Tribute from the "
+                                "Tides' rule, on top of any doubling) and the next card with a Battlecry of any type (a minion, a weapon such as her "
+                                "Headhunter's Hatchet, a hero card) uses it up: the enchantment is then removed. Not offered while one is waiting.")]),
     boss(25, "jepetto", "Jepetto Joybuzz", "Jepetto_Joybuzz_(boss)", 4, "midrange", 8, "\"the final boss that can be encountered in Chapter 3\", level 8",
          "Normal (level 8)", flags=["passive", "bothPlayers", "hiddenZone"], cards=["DALA_BOSS_25e"],
          adaptations=[("schedule", "Jepetto is a chapter's final boss in the Heist; this mode has no major slot for Heist chapter finals (the Heist's "
@@ -168,7 +169,8 @@ ROWS = [
          forms=[OD([("hero", "DALA_BOSS_30h"), ("power", "DALA_BOSS_30p"), ("at", OD([("script", True)]))])],
          adaptations=[("power", "A Tale of Kings (3) summons an Underbelly Rat (DALA_BOSS_30t, a 10/1); it needs a free board slot."),
                       ("power", "Underbelly Rat, \"When your hero dies, the eldest Underbelly Rat replaces your hero\": when the boss's hero dies "
-                                "with an Underbelly Rat on his board (alive, not dying), the eldest (summoned first) leaves the board without dying "
+                                "with an Underbelly Rat on his board (alive, not dying, not Silenced: the rule is the rat's own text), the eldest (the first "
+                                "to enter play; a rat bounced and replayed is young again) leaves the board without dying "
                                 "and a new The Rat King enters through the row's script form (EncounterRules.SwapForm: hero and power fresh, Armor "
                                 "and weapon kept) with the rat's Health (its remaining Health of its maximum), as many times as he has rats. The "
                                 "same holds for a run player who controls a rat: that hero stays and takes the rat's Health. In the Heist's Chapter 4 "

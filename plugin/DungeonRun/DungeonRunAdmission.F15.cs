@@ -42,8 +42,8 @@ internal static partial class DungeonRunAdmission
                 + "resolves: Lil' Eviscerate deals 1 damage to a character, 2 with the boss's Combo active (DALA_BOSS_19p), Shhh! "
                 + "silences every minion of both boards (DALA_BOSS_22p), Sharkbite destroys a random damaged minion of either board "
                 + "(DALA_BOSS_23p; a run shrine goes dormant as from any destroy effect), Ar'ha's Call attaches a public player "
-                + "enchantment that makes the boss's next Battlecry minion resolve its Battlecry one more time (DALA_BOSS_24p, "
-                + "EXTRA_BATTLECRIES_ADDITIONAL; then the enchantment is removed), Masterpiece! spends all the boss's remaining Mana and "
+                + "enchantment that makes the boss's next Battlecry (a minion's, a weapon's or a hero card's) resolve one more time "
+                + "(DALA_BOSS_24p, EXTRA_BATTLECRIES_ADDITIONAL; that card uses it up and the enchantment is removed), Masterpiece! spends all the boss's remaining Mana and "
                 + "summons a random scripted minion of that Cost from the pool the run's generation filter allows (DALA_BOSS_27p) and A "
                 + "Tale of Kings summons an Underbelly Rat (DALA_BOSS_30p). A power that would do nothing is not offered, by a condition "
                 + "that reads only the public boards and the boss's own player enchantments; every random pick uses the game RNG and is "
@@ -96,8 +96,8 @@ internal static partial class DungeonRunAdmission
             Family = "boss-card", Admit = AdmitScope.Player | AdmitScope.Boss, Lift = NoneBossOnly,
             Reason = "a Dalaran Heist boss card whose effect is public board and hero resolution, the same in either player's hands: "
                 + "Hoard of Toys summons 1/1 copies of five random scripted minions from the generation pool its caster's filter allows "
-                + "(DALA_BOSS_25t, Toyification) and Underbelly Rat replaces its controller's dead hero, the eldest first, giving the "
-                + "hero its Health (DALA_BOSS_30t, EncounterRules.ResolveUnderbellyRats: for The Rat King a new hero through his row's "
+                + "(DALA_BOSS_25t, Toyification) and Underbelly Rat replaces its controller's dead hero, the eldest (first to enter play) first, giving the "
+                + "hero its Health; a Silenced rat replaces nothing (DALA_BOSS_30t, EncounterRules.ResolveUnderbellyRats: for The Rat King a new hero through his row's "
                 + "script form; a run player who controls one keeps the hero entity). No hidden zone is read or written (c-enc-15 "
                 + "sections I and N; the enc15 bosspilot modes)",
             Ids = new[] { "DALA_BOSS_25t", "DALA_BOSS_30t" },

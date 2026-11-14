@@ -245,7 +245,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 			// ---------------- Ranger Ar'ha (DALA_BOSS_24h)
 			// Ar'ha's Call (2): "Your next Battlecry triggers an additional time." Its player enchantment adds one Battlecry resolution
-			// (EXTRA_BATTLECRIES_ADDITIONAL) until the boss's next Battlecry minion is played, then removes itself. Not offered while
+			// (EXTRA_BATTLECRIES_ADDITIONAL) until the boss's next Battlecry card (minion, weapon or hero card) is played, then removes itself. Not offered while
 			// one is waiting (its own player enchantments are public).
 			Power("DALA_BOSS_24p", null, () => new CustomTask((g, c, s, t, stack) =>
 			{
@@ -256,10 +256,12 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			Enchantment(ArhasCall, () => new Power
 			{
 				Aura = new Aura(AuraType.CONTROLLER, new Effect(GameTag.EXTRA_BATTLECRIES_ADDITIONAL, EffectOperator.ADD, 1)),
-				Trigger = new Trigger(TriggerType.AFTER_PLAY_MINION)
+				// Used up by the next card with a Battlecry of any type the aura doubles (PlayCard feeds BattlecryRules.Additional to
+				// minions, weapons and hero cards alike).
+				Trigger = new Trigger(TriggerType.AFTER_PLAY_CARD)
 				{
 					TriggerSource = TriggerSource.FRIENDLY,
-					Condition = SelfCondition.IsBattlecryMinion,
+					Condition = new SelfCondition(p => p is Minion m ? m.HasBattleCry : (p is Weapon || p is Hero) && p.Card[GameTag.BATTLECRY] == 1),
 					SingleTask = RemoveEnchantmentTask.Task,
 				},
 			});

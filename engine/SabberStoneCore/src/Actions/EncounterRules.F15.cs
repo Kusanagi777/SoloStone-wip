@@ -9,7 +9,8 @@ namespace SabberStoneCore.Actions
 	// Phase 8, family 15 (Dalaran Heist bosses B): The Rat King's Underbelly Rat, "When your hero dies, the eldest Underbelly Rat
 	// replaces your hero." ResolveHeroForms calls ResolveUnderbellyRats first, before the boss's forms and the run player's
 	// relay: a dead hero whose controller has a living Underbelly Rat on its board is replaced by the eldest one (the rat
-	// summoned first: the lowest entity id). The rat leaves the board without dying (no death, no Deathrattle; it goes to its
+	// that entered play first: the lowest OrderOfPlay, set on every board entry, so a rat bounced and replayed is young again).
+	// A Silenced rat has lost its text and replaces nothing. The rat leaves the board without dying (no death, no Deathrattle; it goes to its
 	// controller's set-aside zone) and the hero comes back with the rat's Health: its remaining Health out of its maximum.
 	// For the boss of an encounter that states The Rat King as a script form (the row dala_30_rat_king), a new Rat King hero
 	// enters through EncounterRules.SwapForm (hero and power fresh; Armor, weapon and the attacks made this turn stay); a
@@ -21,9 +22,10 @@ namespace SabberStoneCore.Actions
 		/// <summary>DALA_BOSS_30t Underbelly Rat (the minion A Tale of Kings summons) and the hero it brings back.</summary>
 		public const string UnderbellyRat = "DALA_BOSS_30t", RatKingHero = "DALA_BOSS_30h";
 
-		/// <summary>The rat that would replace <paramref name="c"/>'s hero now: its eldest living Underbelly Rat in play, or null.</summary>
+		/// <summary>The rat that would replace <paramref name="c"/>'s hero now: its eldest (first to enter play) living, unsilenced Underbelly Rat, or null.</summary>
 		public static Minion EldestUnderbellyRat(Controller c) =>
-			c?.BoardZone.Where(m => m.Card.Id == UnderbellyRat && !m.ToBeDestroyed && m.Health > 0 && !m.IsDormant).OrderBy(m => m.Id).FirstOrDefault();
+			c?.BoardZone.Where(m => m.Card.Id == UnderbellyRat && !m.ToBeDestroyed && m.Health > 0 && !m.IsDormant && !m.IsSilenced)
+				.OrderBy(m => m.OrderOfPlay).ThenBy(m => m.Id).FirstOrDefault();
 
 		/// <summary>The index of the encounter's Rat King script form (the hero a rat brings back for the boss), or -1.</summary>
 		private static int RatKingForm(RunEncounter enc)
