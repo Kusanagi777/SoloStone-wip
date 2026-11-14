@@ -70,6 +70,11 @@ namespace SabberStoneCore.Actions
 		/// </summary>
 		public const GameTag SetAsideStore = (GameTag)32645;
 		/// <summary>
+		/// On a hero power: 1 while the use that is resolving earned it a refresh ("If any die, refresh this"); its own Inspire
+		/// trigger readies it again and clears the mark. Family 11 (Raeth Ghostsong's Desecrate; rules in EncounterRules.F11.cs).
+		/// </summary>
+		public const GameTag PowerRefresh = (GameTag)32646;
+		/// <summary>
 		/// On the game: one bit per hooked global rule (EncounterCard.HookIndex) that was applied to this match (family 05:
 		/// DungeonRunGlobalRules.Apply runs a rule's apply hook once; a rule with no player enchantment is active by this mark).
 		/// </summary>

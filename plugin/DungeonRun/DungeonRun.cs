@@ -1860,6 +1860,13 @@ internal sealed class DungeonRun
         plan.BossDeck = Data.BossDecks[deckId].Select(Cards.FromId).ToList();
         plan.BossSideboards = Data.BossSideboards.TryGetValue(deckId, out var boards) ? boards : null;
         plan.BossShrine = variant?.Shrine;
+        // Family 11: a mirror-deck boss (Face Collector) plays a copy of the run deck as this fight plays it, less the cards the
+        // admission table does not admit for a boss; with fewer than MinDeck such cards left it keeps the row's own deck.
+        if (boss.HasFlag(DungeonRunEncounterData.MirrorDeck))
+        {
+            var mirror = plan.PlayerDeck.Where(c => DungeonRunAdmission.Classify(c, c.Id, AdmitScope.Boss, null, state.IsCatalogRun).Admitted).ToList();
+            if (mirror.Count >= DungeonRunEncounterData.MinDeck) { plan.BossDeck = mirror; plan.BossSideboards = null; }
+        }
         if (boss.Start != null)
         {
             IReadOnlyList<SabberStoneCore.Model.Card> CardsOf(List<string> ids) => ids.Select(Cards.FromId).ToList();
