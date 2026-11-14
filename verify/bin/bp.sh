@@ -83,7 +83,7 @@ B11=gila_54_cragtorr,gila_55_azalina,gila_56_face_collector,gila_57_raeth,gila_5
 CARDS11=GILA_BOSS_41t,GILA_BOSS_43t,GILA_BOSS_55t2,GILA_BOSS_57t
 W11=gila_44_sezavo
 PAD11=$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11
-SHR11=gila_62_gustave,gila_51_garrow,gila_58_grum,gila_56_face_collector,gila_57_raeth,gila_41_brushwood,gila_55_azalina,gila_40_splintergraft,gila_42_baran
+SHR11=gila_51_garrow,gila_62_gustave,gila_58_grum,gila_56_face_collector,gila_57_raeth,gila_41_brushwood,gila_55_azalina,gila_40_splintergraft,gila_42_baran
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet

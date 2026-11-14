@@ -1861,11 +1861,18 @@ internal sealed class DungeonRun
         plan.BossSideboards = Data.BossSideboards.TryGetValue(deckId, out var boards) ? boards : null;
         plan.BossShrine = variant?.Shrine;
         // Family 11: a mirror-deck boss (Face Collector) plays a copy of the run deck as this fight plays it, less the cards the
-        // admission table does not admit for a boss; with fewer than MinDeck such cards left it keeps the row's own deck.
+        // admission table does not admit for a boss; a Fabled bundle the filter split is left out whole (FabledRules); with
+        // fewer than MinDeck cards left, or a copy the Fabled rules still refuse, it keeps the row's own deck.
         if (boss.HasFlag(DungeonRunEncounterData.MirrorDeck))
         {
             var mirror = plan.PlayerDeck.Where(c => DungeonRunAdmission.Classify(c, c.Id, AdmitScope.Boss, null, state.IsCatalogRun).Admitted).ToList();
-            if (mirror.Count >= DungeonRunEncounterData.MinDeck) { plan.BossDeck = mirror; plan.BossSideboards = null; }
+            if (SabberStoneCore.Actions.FabledRules.DeckErrors(mirror.Select(c => c.Id)).Any())
+                mirror.RemoveAll(c => SabberStoneCore.Actions.FabledRules.IsFabled(c.Id) || SabberStoneCore.Actions.FabledRules.IsCompanion(c.Id));
+            if (mirror.Count >= DungeonRunEncounterData.MinDeck && !SabberStoneCore.Actions.FabledRules.DeckErrors(mirror.Select(c => c.Id)).Any())
+            {
+                plan.BossDeck = mirror;
+                plan.BossSideboards = null;
+            }
         }
         if (boss.Start != null)
         {

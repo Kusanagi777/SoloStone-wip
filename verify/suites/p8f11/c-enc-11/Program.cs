@@ -514,6 +514,25 @@ Guard("FaceCollector", () =>
     var plan3 = run.BuildPlan(s3, all);
     Check("J7 with fewer than 10 such cards (4 of 10 here) the row's own curated deck is played", plan3.BossDeck.Select(c => c.Id).SequenceEqual(data.BossDecks[data.Boss("gila_56_face_collector").Deck])
         && data.Boss("gila_56_face_collector").Source.Kind == DungeonRunDeckSource.KindCurated);
+    // A Fabled bundle (the catalog's TIME_619) the copy would split is left out whole, so the boss's deck builds.
+    var s4 = At("MAGE", 4400, "gila_56_face_collector");
+    foreach (string id in new[] { "TIME_619" }.Concat(SabberStoneCore.Actions.FabledRules.Bundle("TIME_619"))) DungeonRunDeck.Add(s4, id, DungeonRunDeck.OriginDraft);
+    var plan4 = run.BuildPlan(s4, all);
+    string built4 = "ok";
+    try { DungeonRunBossPilot.Build(data.Boss("gila_56_face_collector"), plan4, data); } catch (Exception e) { built4 = e.Message; }
+    bool companionsAdmitted = SabberStoneCore.Actions.FabledRules.Bundle("TIME_619").Concat(new[] { "TIME_619" })
+        .All(id => DungeonRunAdmission.Classify(C(id), id, AdmitScope.Boss, null, s4.IsCatalogRun).Admitted);
+    Check("J9 a Fabled bundle in the run deck is copied whole when a boss may hold all of it, else left out whole; the boss's deck passes the Fabled rules and its pilot builds",
+        built4 == "ok" && !SabberStoneCore.Actions.FabledRules.DeckErrors(plan4.BossDeck.Select(c => c.Id)).Any()
+        && (companionsAdmitted ? plan4.BossDeck.Count(c => c.Id == "TIME_619") == 1 : plan4.BossDeck.All(c => c.Id != "TIME_619" && !SabberStoneCore.Actions.FabledRules.IsCompanion(c.Id))),
+        built4 + " admitted " + companionsAdmitted + " " + string.Join(",", plan4.BossDeck.Select(c => c.Id).Where(id => id.StartsWith("TIME_"))));
+    var s5 = At("MAGE", 4400, "gila_56_face_collector");
+    DungeonRunDeck.Add(s5, "TIME_619", DungeonRunDeck.OriginDraft);
+    var plan5 = run.BuildPlan(s5, all);
+    string built5 = "ok";
+    try { DungeonRunBossPilot.Build(data.Boss("gila_56_face_collector"), plan5, data); } catch (Exception e) { built5 = e.Message; }
+    Check("J10 a Fabled card whose companions the copy would lack (the run deck holds it alone) is left out, the rest is copied", built5 == "ok" && plan5.BossDeck.All(c => c.Id != "TIME_619")
+        && plan5.BossDeck.Count == plan5.PlayerDeck.Count - 1, built5 + " " + plan5.BossDeck.Count + "/" + plan5.PlayerDeck.Count);
     var g3 = Ready(plan);
     Check("J8 a real game starts from the mirror plan with the copied deck (30 cards less the opening hand)", g3.Player2.DeckZone.Count + g3.Player2.HandZone.Count - (g3.Player2.HandZone.Any(p => p.Card.Id == "GAME_005") ? 1 : 0) == plan.BossDeck.Count
         && g3.Player2.Hero.Card.Id == "GILA_BOSS_56h");
