@@ -1,0 +1,2589 @@
+{
+ "schemaVersion": 1,
+ "family": "14",
+ "description": "Dalaran Heist bosses A (phase 8 family 14): the first fifteen encounters of The Dalaran Heist (DALA_BOSS_01 to 15: Chomper, Awilo, The Great Akazamzarak, Kaye Toogie, The Amazing \"Bonepaw\", Dazzik \"Hellscream\", Flight Master Belnaara, Applebough, Archivist Oshi, Mo Eniwhiskers, Noz Timbertail, Cravitz Lorent, Albin Eastoft, Tierra Blythe, Moon Priestess Nici) and their boss-only cards (the four magical feats, \"Scourgelord\" Dazzik, Flying!, \"Kind\" Waitress). Boss deck lists are transcribed from hearthstone.wiki.gg boss pages (read 2026-11-14), by card name; tools/dungeon-run-catalog (step 'encounters') resolves the names against facts/violet-hold-2026-09.json, checks every card and writes data/dungeon-run/encounters-v1.json. Level: the boss pages have no level table. A quantity list names its level in the page's note (level 6); a pool table's 'Total cards' column gives the deck sizes at the boss's levels, which grow with the level (10 at level 1, 15 at 2, 20 at 3, 25 at 4 and 5, 30 at 6: the notes of Whirt the All-Knowing, Albin Eastoft and Awilo), and the row takes the lowest level that holds the largest listed size; a hero printed with 10 Health is a level-1 boss. Tier: levels 1-2 tier 1, 3-4 tier 2, 5-6 tier 3 (the design's mapping); the fight's Health is the act curve's, not the printed 30 or 10.",
+ "method": "Each page's wikitext (?action=raw) was read and its deck table transcribed by verify/tools/gen/p8f14/make_f14.py: rowspan- and colspan-aware, column by column in table order, Normal and Heroic separately. A 'Possible cards' pool lists each card once; a 'Quantity' table keeps its counts (each such list sums to 30). The wiki's disambiguated link names ('Shatter (card) (card)') are written as the card names; the boss-only cards carry their id.",
+ "bosses": [
+  {
+   "id": "dala_01_chomper",
+   "name": "Chomper",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_01h",
+   "power": "DALA_BOSS_01p",
+   "tier": "1",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 1
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Chomper",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Enchanted Raven"
+      },
+      {
+       "name": "Living Roots"
+      },
+      {
+       "name": "Power of the Wild"
+      },
+      {
+       "name": "Witching Hour"
+      },
+      {
+       "name": "Bite"
+      },
+      {
+       "name": "The Beast Within"
+      },
+      {
+       "name": "Infest"
+      },
+      {
+       "name": "Dire Mole"
+      },
+      {
+       "name": "Feral Gibberer"
+      },
+      {
+       "name": "Acidic Swamp Ooze"
+      },
+      {
+       "name": "Dire Wolf Alpha"
+      },
+      {
+       "name": "River Crocolisk"
+      },
+      {
+       "name": "Flesheating Ghoul"
+      },
+      {
+       "name": "Sewer Crawler"
+      }
+     ]
+    },
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Claw"
+      },
+      {
+       "name": "Power of the Wild"
+      },
+      {
+       "name": "Feral Gibberer"
+      },
+      {
+       "name": "Murloc Raider"
+      },
+      {
+       "name": "Bilefin Tidehunter"
+      },
+      {
+       "name": "River Crocolisk"
+      },
+      {
+       "name": "Emperor Cobra"
+      },
+      {
+       "name": "Primalfin Lookout"
+      },
+      {
+       "name": "Sewer Crawler"
+      },
+      {
+       "name": "Toxic Sewer Ooze"
+      },
+      {
+       "name": "Oasis Snapjaw"
+      },
+      {
+       "name": "Green Jelly"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Power of the Wild": "Mark of the Lotus"
+   },
+   "fillers": [
+    "Bloodfen Raptor",
+    "Murloc Tidehunter"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 10; 15 of them at its levels. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool, then the curated fillers named in the row (the encounters step records each added card)."
+    },
+    {
+     "kind": "deck",
+     "note": "Power of the Wild's original printing has no script in this engine: Mark of the Lotus, as family 10."
+    },
+    {
+     "kind": "schedule",
+     "note": "Chomper's hero card is printed with 10 Health (a level-1 boss of Chapter 4; his pool table gives 10 cards at level 1 and 15 at level 2): tier 1."
+    }
+   ]
+  },
+  {
+   "id": "dala_02_awilo",
+   "name": "Awilo, Cooking Trainer",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_02h",
+   "power": "DALA_BOSS_02p",
+   "tier": "2",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 3
+   },
+   "flags": [
+    "passive"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Awilo,_Cooking_Trainer",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Improve Morale"
+      },
+      {
+       "name": "Cleave"
+      },
+      {
+       "name": "Heroic Strike"
+      },
+      {
+       "name": "Warpath"
+      },
+      {
+       "name": "Frothing Berserker"
+      },
+      {
+       "name": "Kor'kron Elite"
+      },
+      {
+       "name": "Soup Vendor"
+      },
+      {
+       "name": "Happy Ghoul"
+      },
+      {
+       "name": "Ornery Tortoise"
+      },
+      {
+       "name": "Fool's Bane"
+      }
+     ]
+    },
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "I Know a Guy"
+      },
+      {
+       "name": "Cleave"
+      },
+      {
+       "name": "Heroic Strike"
+      },
+      {
+       "name": "Rocket Boots"
+      },
+      {
+       "name": "Sweeping Strikes"
+      },
+      {
+       "name": "Fiery War Axe"
+      },
+      {
+       "name": "Abusive Sergeant"
+      },
+      {
+       "name": "Tournament Attendee"
+      },
+      {
+       "name": "Amani Berserker"
+      },
+      {
+       "name": "Friendly Bartender"
+      },
+      {
+       "name": "Soup Vendor"
+      },
+      {
+       "name": "Refreshment Vendor"
+      },
+      {
+       "name": "Summoning Stone"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 15; 20 of them at its levels. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool, then the curated fillers named in the row (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "Awilo's pool table gives 15 and 20 cards (levels 2-3); the page adds that at level 4 the deck stays at 20. Level 3: tier 2."
+    }
+   ]
+  },
+  {
+   "id": "dala_03_akazamzarak",
+   "name": "The Great Akazamzarak",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_03h",
+   "power": "DALA_BOSS_03p",
+   "tier": "1",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 1
+   },
+   "flags": [
+    "bothPlayers",
+    "hiddenZone"
+   ],
+   "cards": [
+    "DALA_BOSS_03t",
+    "DALA_BOSS_03t2",
+    "DALA_BOSS_03t3",
+    "DALA_BOSS_03t4",
+    "DALA_BOSS_03e",
+    "LOOT_106t"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/The_Great_Akazamzarak",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Magic Trick"
+      },
+      {
+       "name": "Mirror Image"
+      },
+      {
+       "name": "Magic Dart Frog"
+      },
+      {
+       "name": "Raven Familiar"
+      },
+      {
+       "name": "Sorcerer's Apprentice"
+      },
+      {
+       "name": "Splitting Image"
+      },
+      {
+       "name": "Unexpected Results"
+      },
+      {
+       "name": "Arcane Keysmith"
+      },
+      {
+       "name": "Deck of Wonders"
+      },
+      {
+       "name": "Target Dummy"
+      }
+     ]
+    },
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Shifting Scroll"
+      },
+      {
+       "name": "Babbling Book"
+      },
+      {
+       "name": "Ice Lance"
+      },
+      {
+       "name": "Magic Trick"
+      },
+      {
+       "name": "Arcane Explosion"
+      },
+      {
+       "name": "Astral Rift"
+      },
+      {
+       "name": "Book of Specters"
+      },
+      {
+       "name": "Magic Dart Frog"
+      },
+      {
+       "name": "Mana Cyclone"
+      },
+      {
+       "name": "Mana Wyrm"
+      },
+      {
+       "name": "Primordial Glyph"
+      },
+      {
+       "name": "Doomed Apprentice"
+      },
+      {
+       "name": "Mana Bind"
+      },
+      {
+       "name": "Cosmic Anomaly"
+      },
+      {
+       "name": "Dalaran Aspirant"
+      },
+      {
+       "name": "Cabalist's Tome"
+      },
+      {
+       "name": "Ethereal Conjurer"
+      },
+      {
+       "name": "Mistress of Mixtures"
+      },
+      {
+       "name": "Secretkeeper"
+      },
+      {
+       "name": "Dalaran Mage"
+      },
+      {
+       "name": "Red Mana Wyrm"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 15; 20 of them at its levels. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool, then the curated fillers named in the row (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "The Great Akazamzarak's hero card is printed with 10 Health (a level-1 boss), though his pool table gives 15 and 20 cards; the printed level decides: tier 1."
+    },
+    {
+     "kind": "power",
+     "note": "Prestidigitation adds one of the four magical feats (DALA_BOSS_03t Reductomara, 03t2 Bunnifitronus, 03t3 Presto Legendaro, 03t4 Yoggers Poggers), each with the same chance. Reductomara's (1) less sits on every spell in both hands and decks as Reductomara'd (DALA_BOSS_03e); an Echo or 'Repeatable this turn' spell is never brought below (1). Bunnifitronus's critters are the wiki's three (Frog, Sheep, Squirrel). Presto Legendaro gives each player one random scripted collectible Legendary minion its side's generation filter allows (golden is a cosmetic the engine does not model)."
+    }
+   ]
+  },
+  {
+   "id": "dala_04_kaye",
+   "name": "Kaye Toogie",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_04h",
+   "power": "DALA_BOSS_04p",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "flags": [
+    "bothPlayers",
+    "hiddenZone"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Kaye_Toogie",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Voidcaller"
+      },
+      {
+       "name": "Possessed Lackey"
+      },
+      {
+       "name": "Fel Lord Betrug"
+      },
+      {
+       "name": "Mal'Ganis"
+      },
+      {
+       "name": "Voidlord"
+      },
+      {
+       "name": "Jumbo Imp"
+      },
+      {
+       "name": "Stoneskin Basilisk"
+      },
+      {
+       "name": "Felsoul Inquisitor"
+      },
+      {
+       "name": "Fel Reaver"
+      },
+      {
+       "name": "Feugen"
+      },
+      {
+       "name": "Stalagg"
+      },
+      {
+       "name": "Zilliax"
+      },
+      {
+       "name": "Maexxna"
+      },
+      {
+       "name": "Sylvanas Windrunner"
+      },
+      {
+       "name": "Silver Vanguard"
+      },
+      {
+       "name": "Deranged Doctor"
+      },
+      {
+       "name": "Force-Tank MAX"
+      },
+      {
+       "name": "Gruul"
+      },
+      {
+       "name": "Ragnaros the Firelord"
+      },
+      {
+       "name": "Sneed's Old Shredder"
+      },
+      {
+       "name": "The Lich King"
+      },
+      {
+       "name": "Hakkar, the Soulflayer"
+      }
+     ]
+    },
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Flame Imp"
+      },
+      {
+       "name": "Spirit Bomb"
+      },
+      {
+       "name": "Darkbomb"
+      },
+      {
+       "name": "Demonic Project"
+      },
+      {
+       "name": "Felstalker"
+      },
+      {
+       "name": "Void Analyst"
+      },
+      {
+       "name": "Reckless Diretroll"
+      },
+      {
+       "name": "Felguard"
+      },
+      {
+       "name": "Dreadsteed"
+      },
+      {
+       "name": "Lakkari Felhound"
+      },
+      {
+       "name": "Pit Lord"
+      },
+      {
+       "name": "Anima Golem"
+      },
+      {
+       "name": "Ectomancy"
+      },
+      {
+       "name": "Goblin Bomb"
+      },
+      {
+       "name": "Shifter Zerus"
+      },
+      {
+       "name": "Dozing Marksman"
+      },
+      {
+       "name": "Explosive Sheep"
+      },
+      {
+       "name": "Mechanical Yeti"
+      },
+      {
+       "name": "Piloted Shredder"
+      },
+      {
+       "name": "Piloted Reaper"
+      },
+      {
+       "name": "Weaponized Piñata"
+      },
+      {
+       "name": "Bomb Squad"
+      },
+      {
+       "name": "Fel Reaver"
+      },
+      {
+       "name": "Tunnel Blaster"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Anima Golem": "Piloted Sky Golem",
+    "Fel Reaver": "Fel Cannon"
+   },
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 25 of them at its levels. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool, then the curated fillers named in the row (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "Kaye Toogie's pool table gives 25 cards (levels 4-5). Level 4: tier 2."
+    },
+    {
+     "kind": "deck",
+     "note": "Anima Golem and Fel Reaver have no script in this engine: curated replacements Piloted Sky Golem and Fel Cannon (Mechs of their Costs)."
+    },
+    {
+     "kind": "power",
+     "note": "Open Wormhole is Duel!'s rule (DAL_731): a random minion of each player's deck is summoned and the boss's attacks the other."
+    }
+   ]
+  },
+  {
+   "id": "dala_05_bonepaw",
+   "name": "The Amazing \"Bonepaw\"",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_05h",
+   "power": "DALA_BOSS_05p",
+   "tier": "2",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "flags": [
+    "bothPlayers",
+    "recast"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/The_Amazing_%22Bonepaw%22",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Arcane Artificer"
+      },
+      {
+       "name": "Primordial Glyph"
+      },
+      {
+       "name": "Sorcerer's Apprentice"
+      },
+      {
+       "name": "Unstable Portal"
+      },
+      {
+       "name": "Cinderstorm"
+      },
+      {
+       "name": "Counterspell"
+      },
+      {
+       "name": "Explosive Runes"
+      },
+      {
+       "name": "Frost Nova"
+      },
+      {
+       "name": "Ice Block"
+      },
+      {
+       "name": "Kirin Tor Mage"
+      },
+      {
+       "name": "Mana Bind"
+      },
+      {
+       "name": "Unexpected Results"
+      },
+      {
+       "name": "Cosmic Anomaly"
+      },
+      {
+       "name": "Dalaran Aspirant"
+      },
+      {
+       "name": "Blast Wave"
+      },
+      {
+       "name": "Blizzard"
+      },
+      {
+       "name": "Flamestrike"
+      },
+      {
+       "name": "Greater Arcane Missiles"
+      },
+      {
+       "name": "Power of Creation"
+      },
+      {
+       "name": "Bloodmage Thalnos"
+      },
+      {
+       "name": "Azure Drake"
+      }
+     ]
+    },
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Ice Lance"
+      },
+      {
+       "name": "Book of Specters"
+      },
+      {
+       "name": "Celestial Emissary"
+      },
+      {
+       "name": "Frostbolt"
+      },
+      {
+       "name": "Shatter"
+      },
+      {
+       "name": "Snap Freeze"
+      },
+      {
+       "name": "Conjurer's Calling"
+      },
+      {
+       "name": "Duplicate"
+      },
+      {
+       "name": "Effigy"
+      },
+      {
+       "name": "Ice Barrier"
+      },
+      {
+       "name": "Mana Bind"
+      },
+      {
+       "name": "Mirror Entity"
+      },
+      {
+       "name": "Ghastly Conjurer"
+      },
+      {
+       "name": "Polymorph"
+      },
+      {
+       "name": "Blizzard"
+      },
+      {
+       "name": "Arcane Servant"
+      },
+      {
+       "name": "Murloc Tidehunter"
+      },
+      {
+       "name": "Scarab Egg"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 20; 25 of them at its levels. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool, then the curated fillers named in the row (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "Bonepaw's pool table gives 20 and 25 cards (levels 3-5). Level 4: tier 2."
+    },
+    {
+     "kind": "power",
+     "note": "Mana Echoes casts a new copy of a random spell either player played from hand this game (the play history), targets and choices random; only a scripted spell the boss side's generation filter allows, never a Secret or a Quest (they could not enter play twice). Offered only after such a spell was played."
+    }
+   ]
+  },
+  {
+   "id": "dala_06_dazzik",
+   "name": "Dazzik \"Hellscream\"",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_06h",
+   "power": "DALA_BOSS_06p",
+   "tier": "2",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "flags": [
+    "start"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Dazzik_%22Hellscream%22",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "\"Scourgelord\" Dazzik",
+       "id": "DALA_BOSS_06dk"
+      },
+      {
+       "name": "Eternium Rover"
+      },
+      {
+       "name": "Shield Slam"
+      },
+      {
+       "name": "Armorsmith"
+      },
+      {
+       "name": "Cruel Taskmaster"
+      },
+      {
+       "name": "Drywhisker Armorer"
+      },
+      {
+       "name": "Execute"
+      },
+      {
+       "name": "Frothing Berserker"
+      },
+      {
+       "name": "Alley Armorsmith"
+      },
+      {
+       "name": "Gemstudded Golem"
+      },
+      {
+       "name": "Iron Juggernaut"
+      },
+      {
+       "name": "Gorehowl"
+      },
+      {
+       "name": "Geosculptor Yip"
+      },
+      {
+       "name": "Grommash Hellscream"
+      },
+      {
+       "name": "Rotface"
+      },
+      {
+       "name": "King Mosh"
+      },
+      {
+       "name": "Crystallizer"
+      },
+      {
+       "name": "Acolyte of Pain"
+      },
+      {
+       "name": "Ragnaros the Firelord"
+      },
+      {
+       "name": "The Lich King"
+      }
+     ]
+    },
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Animated Berserker"
+      },
+      {
+       "name": "Devastate"
+      },
+      {
+       "name": "Whirlwind"
+      },
+      {
+       "name": "Battle Rage"
+      },
+      {
+       "name": "Cruel Taskmaster"
+      },
+      {
+       "name": "Execute"
+      },
+      {
+       "name": "Vicious Scraphound"
+      },
+      {
+       "name": "Frothing Berserker"
+      },
+      {
+       "name": "Bloodhoof Brave"
+      },
+      {
+       "name": "Death's Bite"
+      },
+      {
+       "name": "Kor'kron Elite"
+      },
+      {
+       "name": "Arcanite Reaper"
+      },
+      {
+       "name": "Gorehowl"
+      },
+      {
+       "name": "King Mosh"
+      },
+      {
+       "name": "Amani Berserker"
+      },
+      {
+       "name": "Bloodsail Raider"
+      },
+      {
+       "name": "Acolyte of Pain"
+      },
+      {
+       "name": "Raging Worgen"
+      },
+      {
+       "name": "Ragnaros the Firelord"
+      },
+      {
+       "name": "The Lich King"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "start": {
+    "bossDeckAdd": [
+     "DALA_BOSS_06dk"
+    ]
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 25 of them at its levels. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool, then the curated fillers named in the row (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "Dazzik's pool table gives 25 cards (levels 4-5). Level 4: tier 2."
+    },
+    {
+     "kind": "start",
+     "note": "\"Scourgelord\" Dazzik (DALA_BOSS_06dk) is the boss card of the Heroic pool, a hero card like Scourgelord Garrosh: played, it replaces Dazzik's hero and power (Bladestorm, ICC_834h, the card's own hero power) and equips Shadowmourne; his Health and damage carry over and the card's 10 Armor is gained. The Normal pool and its second copies fill the 30 cards before the Heroic pool is reached, so one copy is shuffled into his deck after the mulligan (the row's start block), as family 10 does for Grubb's Chuck. The inventory's note (a phased Dazzik) does not match the wiki, which lists the card as a deck card: it is not a form of the row."
+    }
+   ]
+  },
+  {
+   "id": "dala_07_belnaara",
+   "name": "Flight Master Belnaara",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_07h",
+   "power": "DALA_BOSS_07p",
+   "tier": "3",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "flags": [
+    "passive",
+    "forms",
+    "heroImmune"
+   ],
+   "cards": [
+    "DALA_BOSS_07e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Flight_Master_Belnaara",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Rapid Fire",
+       "count": 1
+      },
+      {
+       "name": "Shimmerfly",
+       "count": 2
+      },
+      {
+       "name": "Snipe",
+       "count": 2
+      },
+      {
+       "name": "Animal Companion",
+       "count": 1
+      },
+      {
+       "name": "Deadly Shot",
+       "count": 1
+      },
+      {
+       "name": "Marked Shot",
+       "count": 2
+      },
+      {
+       "name": "Wing Blast",
+       "count": 2
+      },
+      {
+       "name": "Hunting Party",
+       "count": 2
+      },
+      {
+       "name": "Starving Buzzard",
+       "count": 1
+      },
+      {
+       "name": "King Krush",
+       "count": 1
+      },
+      {
+       "name": "Young Dragonhawk",
+       "count": 2
+      },
+      {
+       "name": "Vicious Scalehide",
+       "count": 2
+      },
+      {
+       "name": "Flight Master",
+       "count": 2
+      },
+      {
+       "name": "Ironbeak Owl",
+       "count": 1
+      },
+      {
+       "name": "Pterrordax Hatchling",
+       "count": 2
+      },
+      {
+       "name": "Avian Watcher",
+       "count": 1
+      },
+      {
+       "name": "Nesting Roc",
+       "count": 2
+      },
+      {
+       "name": "Exotic Mountseller",
+       "count": 1
+      },
+      {
+       "name": "Grotesque Dragonhawk",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Alleycat",
+       "count": 2
+      },
+      {
+       "name": "Cat Trick",
+       "count": 2
+      },
+      {
+       "name": "Crackling Razormaw",
+       "count": 2
+      },
+      {
+       "name": "Explosive Trap",
+       "count": 1
+      },
+      {
+       "name": "Freezing Trap",
+       "count": 1
+      },
+      {
+       "name": "Scavenging Hyena",
+       "count": 2
+      },
+      {
+       "name": "Snake Trap",
+       "count": 1
+      },
+      {
+       "name": "Animal Companion",
+       "count": 2
+      },
+      {
+       "name": "Bearshark",
+       "count": 2
+      },
+      {
+       "name": "Kill Command",
+       "count": 2
+      },
+      {
+       "name": "Unleash the Hounds",
+       "count": 1
+      },
+      {
+       "name": "Houndmaster",
+       "count": 2
+      },
+      {
+       "name": "Savannah Highmane",
+       "count": 1
+      },
+      {
+       "name": "Unleash the Beast",
+       "count": 1
+      },
+      {
+       "name": "Gahz'rilla",
+       "count": 1
+      },
+      {
+       "name": "Dire Mole",
+       "count": 2
+      },
+      {
+       "name": "Mad Scientist",
+       "count": 2
+      },
+      {
+       "name": "Bittertide Hydra",
+       "count": 2
+      },
+      {
+       "name": "Leeroy Jenkins",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "forms": [
+    {
+     "power": "DALA_BOSS_07p2",
+     "at": {
+      "script": true
+     },
+     "keepExcess": true
+    }
+   ],
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the level-6 deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "The page's note: the deck is the level-6 deck of Chapter 5 (levels 4-5: five cards fewer). Level 6: tier 3."
+    },
+    {
+     "kind": "deck",
+     "note": "Avian Watcher (KAR_037, \"Battlecry: If you control a Secret, gain +1/+1 and Taunt\") is not admitted in a boss deck (its Secret condition has no boss row); a second copy of a single of the list takes its place."
+    },
+    {
+     "kind": "power",
+     "note": "Take Flight! counts the damage her hero takes (Health lost; Armor absorbs) down from 15 on the power; at 0 she takes flight: her power becomes Flying! (form 1, a script form: the hero, its Health and Armor stay) and her hero is Immune (Flying!, DALA_BOSS_07e). Flying! counts 2 down at the start of each of her turns; at 0 she lands: Immune ends and Take Flight! returns with a fresh count (form 0). The client text leaves the turn count open: her own turns."
+    }
+   ]
+  },
+  {
+   "id": "dala_08_applebough",
+   "name": "Applebough",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_08h",
+   "power": "DALA_BOSS_08p",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 3
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Applebough",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Enchanted Raven"
+      },
+      {
+       "name": "Forbidden Ancient"
+      },
+      {
+       "name": "Living Roots"
+      },
+      {
+       "name": "Naturalize"
+      },
+      {
+       "name": "Dendrologist"
+      },
+      {
+       "name": "Dreamway Guardians"
+      },
+      {
+       "name": "Power of the Wild"
+      },
+      {
+       "name": "Witchwood Apple"
+      },
+      {
+       "name": "Grove Tender"
+      },
+      {
+       "name": "Landscaping"
+      },
+      {
+       "name": "Savage Roar"
+      },
+      {
+       "name": "Branching Paths"
+      },
+      {
+       "name": "Swipe"
+      },
+      {
+       "name": "Force of Nature"
+      },
+      {
+       "name": "Webweave"
+      },
+      {
+       "name": "Recycle"
+      },
+      {
+       "name": "The Forest's Aid"
+      },
+      {
+       "name": "Mulchmuncher"
+      },
+      {
+       "name": "Knife Juggler"
+      },
+      {
+       "name": "Rotten Applebaum"
+      }
+     ]
+    },
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Barkskin"
+      },
+      {
+       "name": "Floop's Glorious Gloop"
+      },
+      {
+       "name": "Dendrologist"
+      },
+      {
+       "name": "Witchwood Apple"
+      },
+      {
+       "name": "Landscaping"
+      },
+      {
+       "name": "Soul of the Forest"
+      },
+      {
+       "name": "Force of Nature"
+      },
+      {
+       "name": "Living Mana"
+      },
+      {
+       "name": "Treespeaker"
+      },
+      {
+       "name": "Tending Tauren"
+      },
+      {
+       "name": "Ancient of Lore"
+      },
+      {
+       "name": "Ancient of War"
+      },
+      {
+       "name": "Cenarius"
+      },
+      {
+       "name": "Mulchmuncher"
+      },
+      {
+       "name": "Banana Buffoon"
+      },
+      {
+       "name": "King Mukla"
+      },
+      {
+       "name": "Rotten Applebaum"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 15; 20 of them at its levels. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool, then the curated fillers named in the row (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "Applebough's pool table gives 15 and 20 cards (levels 2-3). Level 3: tier 2."
+    },
+    {
+     "kind": "power",
+     "note": "Apple Toss deals 1 damage to the enemy (hero or minion) with the lowest Health, a tie broken by the game RNG; while its target dies it repeats on the next lowest (at most 10 times). A hero power: no Spell Damage."
+    }
+   ]
+  },
+  {
+   "id": "dala_09_oshi",
+   "name": "Archivist Oshi",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_09h",
+   "power": "DALA_BOSS_09p",
+   "tier": "3",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Archivist_Oshi",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Flash Heal",
+       "count": 2
+      },
+      {
+       "name": "Holy Smite",
+       "count": 2
+      },
+      {
+       "name": "Light of the Naaru",
+       "count": 2
+      },
+      {
+       "name": "Radiant Elemental",
+       "count": 2
+      },
+      {
+       "name": "Resurrect",
+       "count": 2
+      },
+      {
+       "name": "Spirit Lash",
+       "count": 2
+      },
+      {
+       "name": "Mirage Caller",
+       "count": 2
+      },
+      {
+       "name": "Holy Champion",
+       "count": 2
+      },
+      {
+       "name": "Lightspawn",
+       "count": 2
+      },
+      {
+       "name": "Onyx Bishop",
+       "count": 2
+      },
+      {
+       "name": "Lesser Diamond Spellstone",
+       "count": 1
+      },
+      {
+       "name": "Prophet Velen",
+       "count": 1
+      },
+      {
+       "name": "Obsidian Statue",
+       "count": 2
+      },
+      {
+       "name": "Lightwarden",
+       "count": 2
+      },
+      {
+       "name": "Mistress of Mixtures",
+       "count": 2
+      },
+      {
+       "name": "Malygos",
+       "count": 1
+      },
+      {
+       "name": "Ysera",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Shadow Word: Pain",
+       "count": 1
+      },
+      {
+       "name": "Spirit Lash",
+       "count": 2
+      },
+      {
+       "name": "Gilded Gargoyle",
+       "count": 2
+      },
+      {
+       "name": "Shadow Word: Death",
+       "count": 1
+      },
+      {
+       "name": "Tortollan Shellraiser",
+       "count": 2
+      },
+      {
+       "name": "Mass Hysteria",
+       "count": 1
+      },
+      {
+       "name": "Coffin Crasher",
+       "count": 2
+      },
+      {
+       "name": "Lightbomb",
+       "count": 1
+      },
+      {
+       "name": "Shadow Essence",
+       "count": 2
+      },
+      {
+       "name": "Lesser Diamond Spellstone",
+       "count": 1
+      },
+      {
+       "name": "Obsidian Statue",
+       "count": 2
+      },
+      {
+       "name": "Injured Kvaldir",
+       "count": 2
+      },
+      {
+       "name": "Injured Blademaster",
+       "count": 2
+      },
+      {
+       "name": "Vryghoul",
+       "count": 2
+      },
+      {
+       "name": "Feugen",
+       "count": 1
+      },
+      {
+       "name": "Skelemancer",
+       "count": 2
+      },
+      {
+       "name": "Stalagg",
+       "count": 1
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      },
+      {
+       "name": "Sneed's Old Shredder",
+       "count": 1
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the level-6 deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "The page's note: the deck is the level-6 deck (levels 4-5: five cards fewer). Level 6: tier 3."
+    }
+   ]
+  },
+  {
+   "id": "dala_10_mo",
+   "name": "Mo Eniwhiskers",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_10h",
+   "power": "DALA_BOSS_10p",
+   "tier": "2",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "flags": [
+    "passive"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Mo_Eniwhiskers",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Counterfeit Coin"
+      },
+      {
+       "name": "Shadowstep"
+      },
+      {
+       "name": "Cutpurse"
+      },
+      {
+       "name": "Eviscerate"
+      },
+      {
+       "name": "Edwin VanCleef"
+      },
+      {
+       "name": "SI:7 Agent"
+      },
+      {
+       "name": "Fal'dorei Strider"
+      },
+      {
+       "name": "Spirit of the Shark"
+      },
+      {
+       "name": "Tomb Pillager"
+      },
+      {
+       "name": "Vilespine Slayer"
+      },
+      {
+       "name": "Trade Prince Gallywix"
+      },
+      {
+       "name": "Vanish"
+      },
+      {
+       "name": "Booty Bay Bookie"
+      },
+      {
+       "name": "Questing Adventurer"
+      },
+      {
+       "name": "Hoarding Dragon"
+      },
+      {
+       "name": "Soldier of Fortune"
+      },
+      {
+       "name": "Burgly Bully"
+      },
+      {
+       "name": "Loatheb"
+      }
+     ]
+    },
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Backstab"
+      },
+      {
+       "name": "Preparation"
+      },
+      {
+       "name": "Journey Below"
+      },
+      {
+       "name": "Cutpurse"
+      },
+      {
+       "name": "Lab Recruiter"
+      },
+      {
+       "name": "Burgle"
+      },
+      {
+       "name": "Academic Espionage"
+      },
+      {
+       "name": "Tomb Pillager"
+      },
+      {
+       "name": "WANTED!"
+      },
+      {
+       "name": "Wind-up Burglebot"
+      },
+      {
+       "name": "Booty Bay Bookie"
+      },
+      {
+       "name": "Hoarding Dragon"
+      },
+      {
+       "name": "Soldier of Fortune"
+      },
+      {
+       "name": "Burgly Bully"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 25 of them at its levels. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool, then the curated fillers named in the row (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "Mo Eniwhiskers's pool table gives 25 cards (levels 4-5). Level 4: tier 2."
+    },
+    {
+     "kind": "power",
+     "note": "Street Smarts: 'a Coin' is The Coin (GAME_005) or Counterfeit Coin (CFM_630), the cards whose text is 'Gain 1 Mana Crystal this turn only.'"
+    }
+   ]
+  },
+  {
+   "id": "dala_11_noz",
+   "name": "Noz Timbertail",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_11h",
+   "power": "DALA_BOSS_11p",
+   "tier": "3",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "flags": [
+    "passive",
+    "bothPlayers"
+   ],
+   "cards": [
+    "DALA_BOSS_11e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Noz_Timbertail",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Togwaggle's Scheme",
+       "count": 2
+      },
+      {
+       "name": "Gang Up",
+       "count": 2
+      },
+      {
+       "name": "Patient Assassin",
+       "count": 2
+      },
+      {
+       "name": "Beneath the Grounds",
+       "count": 2
+      },
+      {
+       "name": "Burgle",
+       "count": 2
+      },
+      {
+       "name": "Shaku, the Collector",
+       "count": 1
+      },
+      {
+       "name": "Sonya Shadowdancer",
+       "count": 1
+      },
+      {
+       "name": "Master of Disguise",
+       "count": 2
+      },
+      {
+       "name": "Lotus Assassin",
+       "count": 2
+      },
+      {
+       "name": "Ogre Ninja",
+       "count": 2
+      },
+      {
+       "name": "Sprint",
+       "count": 1
+      },
+      {
+       "name": "Worgen Infiltrator",
+       "count": 2
+      },
+      {
+       "name": "Gilblin Stalker",
+       "count": 2
+      },
+      {
+       "name": "Hench-Clan Sneak",
+       "count": 2
+      },
+      {
+       "name": "Genzo, the Shark",
+       "count": 1
+      },
+      {
+       "name": "Half-Time Scavenger",
+       "count": 2
+      },
+      {
+       "name": "Harbinger Celestia",
+       "count": 1
+      },
+      {
+       "name": "Mogor the Ogre",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Jade Shuriken",
+       "count": 2
+      },
+      {
+       "name": "Jade Swarmer",
+       "count": 2
+      },
+      {
+       "name": "Necrium Blade",
+       "count": 2
+      },
+      {
+       "name": "Shaku, the Collector",
+       "count": 1
+      },
+      {
+       "name": "Sonya Shadowdancer",
+       "count": 1
+      },
+      {
+       "name": "Unearthed Raptor",
+       "count": 1
+      },
+      {
+       "name": "Raiding Party",
+       "count": 1
+      },
+      {
+       "name": "Shadow Sensei",
+       "count": 2
+      },
+      {
+       "name": "Tomb Pillager",
+       "count": 2
+      },
+      {
+       "name": "Lotus Assassin",
+       "count": 2
+      },
+      {
+       "name": "Vilespine Slayer",
+       "count": 1
+      },
+      {
+       "name": "Cursed Castaway",
+       "count": 1
+      },
+      {
+       "name": "Captain Hooktusk",
+       "count": 1
+      },
+      {
+       "name": "Worgen Infiltrator",
+       "count": 2
+      },
+      {
+       "name": "Hench-Clan Sneak",
+       "count": 2
+      },
+      {
+       "name": "Southsea Captain",
+       "count": 2
+      },
+      {
+       "name": "Shade of Naxxramas",
+       "count": 2
+      },
+      {
+       "name": "Ticket Scalper",
+       "count": 2
+      },
+      {
+       "name": "Aya Blackpaw",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Mogor the Ogre": "Boulderfist Ogre",
+    "Ogre Ninja": "Stranglethorn Tiger"
+   },
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the level-6 deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "deck",
+     "note": "Ogre Ninja and Mogor the Ogre (wrong-target Ogres no phase 8 family scripts) are replaced as family 10 does: Stranglethorn Tiger (a Stealthed 5/5, for Backstabber) and Boulderfist Ogre."
+    },
+    {
+     "kind": "schedule",
+     "note": "Noz Timbertail's page names no level; its quantity list is a 30-card deck like the level-6 lists of the other Heist pages. Level 6: tier 3."
+    },
+    {
+     "kind": "power",
+     "note": "Backstabber answers every Stealthed minion summoned on either side (the client text says 'a'), +1 Attack (Backstabby, DALA_BOSS_11e)."
+    }
+   ]
+  },
+  {
+   "id": "dala_12_cravitz",
+   "name": "Cravitz Lorent",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_12h",
+   "power": "DALA_BOSS_12p",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "flags": [
+    "bothPlayers"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Cravitz_Lorent",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Kobold Librarian"
+      },
+      {
+       "name": "Dreadsteed"
+      },
+      {
+       "name": "Eager Underling"
+      },
+      {
+       "name": "Hellfire"
+      },
+      {
+       "name": "Imp-losion"
+      },
+      {
+       "name": "Voidcaller"
+      },
+      {
+       "name": "Fel Lord Betrug"
+      },
+      {
+       "name": "Voidlord"
+      },
+      {
+       "name": "Mistress of Mixtures"
+      },
+      {
+       "name": "Nerubian Egg"
+      },
+      {
+       "name": "Devilsaur Egg"
+      },
+      {
+       "name": "Piloted Shredder"
+      },
+      {
+       "name": "Spiritsinger Umbra"
+      },
+      {
+       "name": "Carnivorous Cube"
+      },
+      {
+       "name": "Sludge Belcher"
+      },
+      {
+       "name": "Cairne Bloodhoof"
+      },
+      {
+       "name": "Kodorider"
+      },
+      {
+       "name": "Piloted Sky Golem"
+      },
+      {
+       "name": "Sylvanas Windrunner"
+      },
+      {
+       "name": "Da Undatakah"
+      },
+      {
+       "name": "Sneed's Old Shredder"
+      },
+      {
+       "name": "N'Zoth, the Corruptor"
+      }
+     ]
+    },
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Forbidden Ritual"
+      },
+      {
+       "name": "Kobold Librarian"
+      },
+      {
+       "name": "Possessed Villager"
+      },
+      {
+       "name": "Imp Gang Boss"
+      },
+      {
+       "name": "Impferno"
+      },
+      {
+       "name": "Crystalweaver"
+      },
+      {
+       "name": "Dreadsteed"
+      },
+      {
+       "name": "Hellfire"
+      },
+      {
+       "name": "Imp-losion"
+      },
+      {
+       "name": "Mal'Ganis"
+      },
+      {
+       "name": "Jumbo Imp"
+      },
+      {
+       "name": "Zombie Chow"
+      },
+      {
+       "name": "Haunted Creeper"
+      },
+      {
+       "name": "Spawn of N'Zoth"
+      },
+      {
+       "name": "Voodoo Doll"
+      },
+      {
+       "name": "Spiritsinger Umbra"
+      },
+      {
+       "name": "Carnivorous Cube"
+      },
+      {
+       "name": "Feugen"
+      },
+      {
+       "name": "Stalagg"
+      },
+      {
+       "name": "Sylvanas Windrunner"
+      },
+      {
+       "name": "Tunnel Blaster"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 25 of them at its levels. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool, then the curated fillers named in the row (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "Cravitz Lorent's pool table gives 25 cards (levels 4-5). Level 4: tier 2."
+    }
+   ]
+  },
+  {
+   "id": "dala_13_albin",
+   "name": "Albin Eastoft",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_13h",
+   "power": "DALA_BOSS_13p",
+   "tier": "3",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Albin_Eastoft",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Kingsbane",
+       "count": 1
+      },
+      {
+       "name": "Cavern Shinyfinder",
+       "count": 2
+      },
+      {
+       "name": "Blightnozzle Crawler",
+       "count": 1
+      },
+      {
+       "name": "Southsea Squidface",
+       "count": 2
+      },
+      {
+       "name": "Tinker's Sharpsword Oil",
+       "count": 2
+      },
+      {
+       "name": "Tomb Pillager",
+       "count": 2
+      },
+      {
+       "name": "Lesser Onyx Spellstone",
+       "count": 2
+      },
+      {
+       "name": "Necrium Vial",
+       "count": 2
+      },
+      {
+       "name": "Dozing Marksman",
+       "count": 2
+      },
+      {
+       "name": "Nerubian Egg",
+       "count": 2
+      },
+      {
+       "name": "Devilsaur Egg",
+       "count": 2
+      },
+      {
+       "name": "Meat Wagon",
+       "count": 2
+      },
+      {
+       "name": "Captain Greenskin",
+       "count": 1
+      },
+      {
+       "name": "Spiteful Smith",
+       "count": 2
+      },
+      {
+       "name": "Mechanical Whelp",
+       "count": 2
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      },
+      {
+       "name": "Da Undatakah",
+       "count": 1
+      },
+      {
+       "name": "N'Zoth, the Corruptor",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Deadly Poison",
+       "count": 2
+      },
+      {
+       "name": "Kingsbane",
+       "count": 1
+      },
+      {
+       "name": "Cavern Shinyfinder",
+       "count": 2
+      },
+      {
+       "name": "Roll the Bones",
+       "count": 2
+      },
+      {
+       "name": "Sap",
+       "count": 2
+      },
+      {
+       "name": "Deadly Fork",
+       "count": 1
+      },
+      {
+       "name": "Academic Espionage",
+       "count": 1
+      },
+      {
+       "name": "Blightnozzle Crawler",
+       "count": 2
+      },
+      {
+       "name": "Tomb Pillager",
+       "count": 2
+      },
+      {
+       "name": "Lesser Onyx Spellstone",
+       "count": 2
+      },
+      {
+       "name": "Myra Rotspring",
+       "count": 1
+      },
+      {
+       "name": "Necrium Vial",
+       "count": 2
+      },
+      {
+       "name": "Devilsaur Egg",
+       "count": 2
+      },
+      {
+       "name": "Spiritsinger Umbra",
+       "count": 1
+      },
+      {
+       "name": "Loatheb",
+       "count": 1
+      },
+      {
+       "name": "Cairne Bloodhoof",
+       "count": 1
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      },
+      {
+       "name": "Troggzor the Earthinator",
+       "count": 1
+      },
+      {
+       "name": "Da Undatakah",
+       "count": 1
+      },
+      {
+       "name": "Sneed's Old Shredder",
+       "count": 1
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the level-6 deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "The page's note: the deck is the level-6 deck (level 5: five cards fewer). Level 6: tier 3."
+    },
+    {
+     "kind": "power",
+     "note": "Slice and Dice picks three different minions of both boards (all of them when fewer), then deals each 1 to 3 damage, each amount by the game RNG."
+    }
+   ]
+  },
+  {
+   "id": "dala_14_tierra",
+   "name": "Tierra Blythe",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_14h",
+   "power": "DALA_BOSS_14p",
+   "tier": "2",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 3
+   },
+   "cards": [
+    "DALA_BOSS_14t"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Tierra_Blythe",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Inner Rage"
+      },
+      {
+       "name": "I Know a Guy"
+      },
+      {
+       "name": "N'Zoth's First Mate"
+      },
+      {
+       "name": "Cruel Taskmaster"
+      },
+      {
+       "name": "Execute"
+      },
+      {
+       "name": "Heroic Strike"
+      },
+      {
+       "name": "Frothing Berserker"
+      },
+      {
+       "name": "Axe Flinger"
+      },
+      {
+       "name": "Bloodhoof Brave"
+      },
+      {
+       "name": "Brawl"
+      },
+      {
+       "name": "Friendly Bartender"
+      },
+      {
+       "name": "Sunfury Protector"
+      },
+      {
+       "name": "Defender of Argus"
+      },
+      {
+       "name": "Fungalmancer"
+      },
+      {
+       "name": "Bolf Ramshield"
+      }
+     ]
+    },
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Dark Iron Bouncer",
+       "id": "BRMA01_3"
+      },
+      {
+       "name": "I Know a Guy"
+      },
+      {
+       "name": "Slam"
+      },
+      {
+       "name": "Ravaging Ghoul"
+      },
+      {
+       "name": "Axe Flinger"
+      },
+      {
+       "name": "Bloodhoof Brave"
+      },
+      {
+       "name": "Brass Knuckles"
+      },
+      {
+       "name": "Brawl"
+      },
+      {
+       "name": "Darius Crowley"
+      },
+      {
+       "name": "Grim Patron"
+      },
+      {
+       "name": "Security Rover"
+      },
+      {
+       "name": "Blackhowl Gunspire"
+      },
+      {
+       "name": "Grommash Hellscream"
+      },
+      {
+       "name": "Goldshire Footman"
+      },
+      {
+       "name": "Friendly Bartender"
+      },
+      {
+       "name": "Acolyte of Pain"
+      },
+      {
+       "name": "Backroom Bouncer"
+      },
+      {
+       "name": "Refreshment Vendor"
+      },
+      {
+       "name": "Bolf Ramshield"
+      },
+      {
+       "name": "Hogger, Doom of Elwynn"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 15; 20 of them at its levels. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool, then the curated fillers named in the row (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "Tierra Blythe's pool table gives 15 and 20 cards (levels 2-3). Level 3: tier 2."
+    },
+    {
+     "kind": "deck",
+     "note": "Dark Iron Bouncer (BRMA01_3, the Blackrock Mountain adventure's \"Always wins Brawls.\", the boss card of her Normal pool) has no script in this engine (its rule changes Brawl's survivor); it is left out and the deck filled."
+    },
+    {
+     "kind": "power",
+     "note": "\"Kind\" Waitress: an enemy attacking it has a 50% chance to attack another character of the Waitress's side (the wrong-target rule of Ogre Warmaul and Anomaly - Ogreish, Actions.EncounterRules.WrongTarget50)."
+    }
+   ]
+  },
+  {
+   "id": "dala_15_nici",
+   "name": "Moon Priestess Nici",
+   "provenance": "DALA",
+   "family": "14",
+   "hero": "DALA_BOSS_15h",
+   "power": "DALA_BOSS_15p",
+   "tier": "2",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 3
+   },
+   "flags": [
+    "passive",
+    "bothPlayers"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Moon_Priestess_Nici",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Circle of Healing"
+      },
+      {
+       "name": "Binding Heal"
+      },
+      {
+       "name": "Flash Heal"
+      },
+      {
+       "name": "Light of the Naaru"
+      },
+      {
+       "name": "Auchenai Phantasm"
+      },
+      {
+       "name": "Divine Spirit"
+      },
+      {
+       "name": "Embrace the Shadow"
+      },
+      {
+       "name": "Spirit Lash"
+      },
+      {
+       "name": "Squashling"
+      },
+      {
+       "name": "Auchenai Soulpriest"
+      },
+      {
+       "name": "Convincing Infiltrator"
+      },
+      {
+       "name": "Temple Enforcer"
+      },
+      {
+       "name": "Nightscale Matriarch"
+      },
+      {
+       "name": "Prophet Velen"
+      },
+      {
+       "name": "Obsidian Statue"
+      },
+      {
+       "name": "Injured Kvaldir"
+      },
+      {
+       "name": "Injured Blademaster"
+      }
+     ]
+    },
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Flash Heal"
+      },
+      {
+       "name": "Northshire Cleric"
+      },
+      {
+       "name": "Auchenai Phantasm"
+      },
+      {
+       "name": "Holy Champion"
+      },
+      {
+       "name": "Quartz Elemental"
+      },
+      {
+       "name": "Lightwarden"
+      },
+      {
+       "name": "Zombie Chow"
+      },
+      {
+       "name": "Soup Vendor"
+      },
+      {
+       "name": "Hozen Healer"
+      },
+      {
+       "name": "Priestess of Elune"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 15; 20 of them at its levels. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool, then the curated fillers named in the row (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "Moon Priestess Nici's pool table gives 15 and 20 cards (levels 2-3). Level 3: tier 2."
+    },
+    {
+     "kind": "power",
+     "note": "Blessing of Elune doubles all healing of both players (the ALL_HEALING_DOUBLE controller aura Crystalsmith Kangor uses; with Auchenai Soulpriest or Bwonsamdi's Covenant the converted damage is the doubled amount, as Prophet Velen's doubling). The page's note on the AI (it avoids the player's hero after converting healing to damage) is the original AI's, not a rule."
+    }
+   ]
+  }
+ ],
+ "rejected": []
+}

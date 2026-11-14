@@ -2,8 +2,23 @@
   "schemaVersion": 1,
   "encountersVersion": 1,
   "generatedBy": "tools/dungeon-run-catalog (encounters); do not edit by hand",
-  "sources": { "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45", "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8", "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466", "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206", "reference/encounters/F06.json": "950c2268088073de3055ab49d444a40be440198596d0b90ef54a4a1520c644c3", "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b", "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd", "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a", "reference/encounters/F10.json": "525748f2fdb0cfa6c69d81f806c745152b5377df5c99f7a1ecfd1fe65933fe7d" },
+  "sources": { "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45", "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8", "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466", "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206", "reference/encounters/F06.json": "950c2268088073de3055ab49d444a40be440198596d0b90ef54a4a1520c644c3", "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b", "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd", "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a", "reference/encounters/F10.json": "525748f2fdb0cfa6c69d81f806c745152b5377df5c99f7a1ecfd1fe65933fe7d", "reference/encounters/F14.json": "b3b802ff15252503bd7e11037f62cb400ffc1076dddfdc4ec10a8ade26a51282" },
   "decks": {
+    "enc-dala_01_chomper": ["CS2_005", "CFM_614", "LOOT_218", "CS2_168", "OG_156", "CS2_120", "EX1_170", "UNG_937", "LOOT_069", "CFM_655", "CS2_119", "LOOT_131", "CS2_005", "CFM_614", "LOOT_218", "CS2_168", "OG_156", "CS2_120", "EX1_170", "UNG_937", "LOOT_069", "CFM_655", "CS2_119", "LOOT_131", "KAR_300", "AT_037", "GIL_571", "EX1_570", "TRL_119", "OG_045"],
+    "enc-dala_02_awilo": ["CFM_940", "CS2_114", "CS2_105", "BOT_067", "DAL_062", "CS2_106", "CS2_188", "AT_097", "EX1_393", "CFM_654", "TRL_570", "AT_111", "LOE_086", "CFM_940", "CS2_114", "CS2_105", "BOT_067", "DAL_062", "CS2_106", "CS2_188", "AT_097", "EX1_393", "CFM_654", "TRL_570", "AT_111", "LOE_086", "DAL_769", "GIL_654", "EX1_604", "NEW1_011"],
+    "enc-dala_03_akazamzarak": ["LOOT_104", "KAR_009", "CS2_031", "DAL_608", "CS2_025", "BOT_101", "GIL_548", "DAL_182", "DAL_603", "NEW1_012", "UNG_941", "ICC_083", "UNG_024", "BOT_604", "AT_006", "OG_090", "LOE_003", "CFM_120", "EX1_080", "EX1_582", "CFM_060", "LOOT_104", "KAR_009", "CS2_031", "DAL_608", "CS2_025", "BOT_101", "GIL_548", "DAL_182", "DAL_603"],
+    "enc-dala_04_kaye": ["EX1_319", "BOT_222", "GVG_015", "BOT_913", "EX1_306", "BOT_443", "TRL_551", "EX1_301", "AT_019", "UNG_833", "EX1_313", "GVG_105", "BOT_521", "BOT_031", "OG_123", "TRL_406", "GVG_076", "GVG_078", "GVG_096", "BOT_267", "BOT_401", "CFM_667", "GVG_020", "DAL_775", "EX1_319", "BOT_222", "GVG_015", "BOT_913", "EX1_306", "BOT_443"],
+    "enc-dala_05_bonepaw": ["CS2_031", "GIL_548", "BOT_531", "CS2_024", "OG_081", "GIL_801", "DAL_177", "FP1_018", "AT_002", "EX1_289", "UNG_024", "EX1_294", "ICC_069", "CS2_022", "CS2_028", "DAL_092", "EX1_506", "TRL_503", "CS2_031", "GIL_548", "BOT_531", "CS2_024", "OG_081", "GIL_801", "DAL_177", "FP1_018", "AT_002", "EX1_289", "UNG_024", "EX1_294"],
+    "enc-dala_06_dazzik": ["ICC_238", "TRL_321", "EX1_400", "EX1_392", "EX1_603", "CS2_108", "DAL_759", "EX1_604", "OG_218", "FP1_021", "NEW1_011", "CS2_112", "EX1_411", "UNG_933", "EX1_393", "NEW1_018", "EX1_007", "EX1_412", "EX1_298", "ICC_314", "ICC_238", "TRL_321", "EX1_400", "EX1_392", "EX1_603", "CS2_108", "DAL_759", "EX1_604", "OG_218", "FP1_021"],
+    "enc-dala_07_belnaara": ["DAL_373", "DAL_587", "DAL_587", "EX1_609", "EX1_609", "NEW1_031", "EX1_617", "DAL_371", "DAL_371", "GIL_518", "GIL_518", "DAL_589", "DAL_589", "CS2_237", "EX1_543", "CS2_169", "CS2_169", "GIL_143", "GIL_143", "DAL_747", "DAL_747", "CS2_203", "UNG_001", "UNG_001", "UNG_801", "UNG_801", "DAL_774", "OG_152", "OG_152", "DAL_373"],
+    "enc-dala_08_applebough": ["LOOT_047", "BOT_444", "BOT_419", "GIL_663", "BOT_420", "EX1_158", "EX1_571", "UNG_111", "TRL_341", "BOT_422", "NEW1_008", "EX1_178", "EX1_573", "BOT_523", "TRL_509", "EX1_014", "GIL_667", "LOOT_047", "BOT_419", "GIL_663", "BOT_420", "EX1_158", "EX1_571", "UNG_111", "TRL_341", "BOT_422", "NEW1_008", "EX1_178", "BOT_523", "TRL_509"],
+    "enc-dala_09_oshi": ["AT_055", "AT_055", "CS1_130", "CS1_130", "GVG_012", "GVG_012", "UNG_034", "UNG_034", "BRM_017", "BRM_017", "ICC_802", "ICC_802", "UNG_022", "UNG_022", "AT_011", "AT_011", "EX1_335", "EX1_335", "KAR_204", "KAR_204", "LOOT_507", "EX1_350", "ICC_214", "ICC_214", "EX1_001", "EX1_001", "CFM_120", "CFM_120", "EX1_563", "EX1_572"],
+    "enc-dala_10_mo": ["CS2_072", "EX1_145", "OG_072", "AT_031", "BOT_288", "AT_033", "BOT_087", "LOE_012", "GIL_687", "CFM_025", "TRL_504", "LOOT_144", "DAL_771", "CFM_669", "CS2_072", "EX1_145", "OG_072", "AT_031", "BOT_288", "AT_033", "BOT_087", "LOE_012", "GIL_687", "CFM_025", "TRL_504", "LOOT_144", "DAL_771", "CFM_669", "CFM_630", "EX1_144"],
+    "enc-dala_11_noz": ["DAL_010", "DAL_010", "BRM_007", "BRM_007", "EX1_522", "EX1_522", "AT_035", "AT_035", "AT_033", "AT_033", "CFM_781", "LOOT_165", "NEW1_014", "NEW1_014", "CFM_634", "CFM_634", "EX1_028", "EX1_028", "CS2_077", "EX1_010", "EX1_010", "GVG_081", "GVG_081", "DAL_090", "DAL_090", "CFM_808", "TRL_010", "TRL_010", "BOT_555", "CS2_200"],
+    "enc-dala_12_cravitz": ["OG_114", "LOOT_014", "OG_241", "BRM_006", "DAL_605", "CFM_610", "AT_019", "CS2_062", "GVG_045", "GVG_021", "DAL_561", "FP1_001", "FP1_002", "OG_256", "GIL_614", "UNG_900", "LOOT_161", "FP1_015", "FP1_014", "EX1_016", "DAL_775", "OG_114", "LOOT_014", "OG_241", "BRM_006", "DAL_605", "CFM_610", "AT_019", "CS2_062", "GVG_045"],
+    "enc-dala_13_albin": ["LOOT_542", "LOOT_033", "LOOT_033", "BOT_565", "OG_267", "OG_267", "GVG_022", "GVG_022", "LOE_012", "LOE_012", "LOOT_503", "LOOT_503", "BOT_508", "BOT_508", "TRL_406", "TRL_406", "FP1_007", "FP1_007", "UNG_083", "UNG_083", "ICC_812", "ICC_812", "NEW1_024", "CS2_221", "CS2_221", "BOT_066", "BOT_066", "EX1_016", "TRL_537", "OG_133"],
+    "enc-dala_14_tierra": ["CFM_940", "EX1_391", "OG_149", "BRM_016", "OG_218", "CFM_631", "EX1_407", "GIL_547", "BRM_019", "BOT_218", "GIL_152", "EX1_414", "CS1_042", "CFM_654", "EX1_007", "CFM_658", "AT_111", "AT_124", "OG_318", "CFM_940", "EX1_391", "OG_149", "BRM_016", "OG_218", "CFM_631", "EX1_407", "BRM_019", "BOT_218", "CS1_042", "CFM_654"],
+    "enc-dala_15_nici": ["AT_055", "CS2_235", "TRL_501", "AT_011", "GIL_156", "EX1_001", "FP1_001", "TRL_570", "CFM_067", "EX1_583", "AT_055", "CS2_235", "TRL_501", "AT_011", "GIL_156", "EX1_001", "FP1_001", "TRL_570", "CFM_067", "EX1_583", "EX1_621", "UNG_030", "GVG_012", "CS2_236", "OG_104", "ICC_802", "GIL_835", "EX1_591", "DAL_039", "EX1_623"],
     "enc-dala_21_whirt": ["KAR_009", "KAR_009", "DAL_603", "DAL_603", "CS2_023", "CS2_023", "LOE_119", "LOE_119", "BOT_601", "BOT_447", "BOT_447", "EX1_004", "EX1_004", "DAL_092", "DAL_092", "DAL_086", "BOT_413", "BOT_413", "EX1_050", "EX1_050", "EX1_103", "EX1_103", "CS2_117", "CS2_117", "GVG_089", "GVG_089", "EX1_021", "EX1_021", "OG_161", "OG_161"],
     "enc-gila_20_mangy_wolf": ["CS2_005", "ICC_054", "DS1_175", "OG_045", "GIL_828", "LOOT_077", "OG_216", "OG_216", "EX1_162", "EX1_162", "CS2_005", "ICC_054", "DS1_175", "OG_045", "GIL_828", "LOOT_077", "KAR_005", "CFM_315", "EX1_531", "EX1_017", "EX1_010", "CS2_172", "CS2_125", "CS2_237", "CS2_120", "KAR_005", "CFM_315", "EX1_531", "EX1_017", "EX1_010"],
     "enc-gila_21_rottooth": ["EX1_578", "OG_313", "OG_313", "GVG_030", "OG_048", "CS2_013", "AT_039", "ICC_419", "LOOT_258", "CS2_125", "EX1_578", "GVG_030", "OG_048", "CS2_013", "AT_039", "ICC_419", "LOOT_258", "CS2_125", "CS2_005", "ICC_079", "TRL_243", "EX1_570", "AT_042", "LOE_050", "CS2_172", "EX1_017", "CS2_120", "CS2_005", "ICC_079", "TRL_243"],
@@ -1712,6 +1727,446 @@
           { "used": "CS2_171", "reason": "fill:curated" },
           { "used": "CS2_189", "reason": "fill:curated" },
           { "used": "CS2_188", "reason": "fill:curated" }
+        ]
+      }
+    },
+    {
+      "id": "dala_01_chomper",
+      "name": "Chomper",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_01h",
+      "power": "DALA_BOSS_01p",
+      "tier": "1",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 1 },
+      "deck": {
+        "id": "enc-dala_01_chomper",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Chomper", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "wiki": "Power of the Wild", "listed": "EX1_160", "used": "CFM_614", "reason": "unscripted" },
+          { "used": "CS2_005", "reason": "fill:second-copy" },
+          { "used": "CFM_614", "reason": "fill:second-copy" },
+          { "used": "LOOT_218", "reason": "fill:second-copy" },
+          { "used": "CS2_168", "reason": "fill:second-copy" },
+          { "used": "OG_156", "reason": "fill:second-copy" },
+          { "used": "CS2_120", "reason": "fill:second-copy" },
+          { "used": "EX1_170", "reason": "fill:second-copy" },
+          { "used": "UNG_937", "reason": "fill:second-copy" },
+          { "used": "LOOT_069", "reason": "fill:second-copy" },
+          { "used": "CFM_655", "reason": "fill:second-copy" },
+          { "used": "CS2_119", "reason": "fill:second-copy" },
+          { "used": "LOOT_131", "reason": "fill:second-copy" },
+          { "used": "KAR_300", "reason": "fill:Heroic" },
+          { "used": "AT_037", "reason": "fill:Heroic" },
+          { "used": "GIL_571", "reason": "fill:Heroic" },
+          { "used": "EX1_570", "reason": "fill:Heroic" },
+          { "used": "TRL_119", "reason": "fill:Heroic" },
+          { "used": "OG_045", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "dala_02_awilo",
+      "name": "Awilo, Cooking Trainer",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_02h",
+      "power": "DALA_BOSS_02p",
+      "tier": "2",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 3 },
+      "flags": ["passive"],
+      "deck": {
+        "id": "enc-dala_02_awilo",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Awilo,_Cooking_Trainer", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "CFM_940", "reason": "fill:second-copy" },
+          { "used": "CS2_114", "reason": "fill:second-copy" },
+          { "used": "CS2_105", "reason": "fill:second-copy" },
+          { "used": "BOT_067", "reason": "fill:second-copy" },
+          { "used": "DAL_062", "reason": "fill:second-copy" },
+          { "used": "CS2_106", "reason": "fill:second-copy" },
+          { "used": "CS2_188", "reason": "fill:second-copy" },
+          { "used": "AT_097", "reason": "fill:second-copy" },
+          { "used": "EX1_393", "reason": "fill:second-copy" },
+          { "used": "CFM_654", "reason": "fill:second-copy" },
+          { "used": "TRL_570", "reason": "fill:second-copy" },
+          { "used": "AT_111", "reason": "fill:second-copy" },
+          { "used": "LOE_086", "reason": "fill:second-copy" },
+          { "used": "DAL_769", "reason": "fill:Heroic" },
+          { "used": "GIL_654", "reason": "fill:Heroic" },
+          { "used": "EX1_604", "reason": "fill:Heroic" },
+          { "used": "NEW1_011", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "dala_03_akazamzarak",
+      "name": "The Great Akazamzarak",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_03h",
+      "power": "DALA_BOSS_03p",
+      "tier": "1",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 1 },
+      "flags": ["bothPlayers", "hiddenZone"],
+      "cards": ["DALA_BOSS_03t", "DALA_BOSS_03t2", "DALA_BOSS_03t3", "DALA_BOSS_03t4", "DALA_BOSS_03e", "LOOT_106t"],
+      "deck": {
+        "id": "enc-dala_03_akazamzarak",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/The_Great_Akazamzarak", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "LOOT_104", "reason": "fill:second-copy" },
+          { "used": "KAR_009", "reason": "fill:second-copy" },
+          { "used": "CS2_031", "reason": "fill:second-copy" },
+          { "used": "DAL_608", "reason": "fill:second-copy" },
+          { "used": "CS2_025", "reason": "fill:second-copy" },
+          { "used": "BOT_101", "reason": "fill:second-copy" },
+          { "used": "GIL_548", "reason": "fill:second-copy" },
+          { "used": "DAL_182", "reason": "fill:second-copy" },
+          { "used": "DAL_603", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "dala_04_kaye",
+      "name": "Kaye Toogie",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_04h",
+      "power": "DALA_BOSS_04p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "flags": ["bothPlayers", "hiddenZone"],
+      "deck": {
+        "id": "enc-dala_04_kaye",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Kaye_Toogie", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "wiki": "Anima Golem", "listed": "GVG_077", "used": "GVG_105", "reason": "unscripted" },
+          { "wiki": "Fel Reaver", "listed": "GVG_016", "used": "GVG_020", "reason": "unscripted" },
+          { "used": "EX1_319", "reason": "fill:second-copy" },
+          { "used": "BOT_222", "reason": "fill:second-copy" },
+          { "used": "GVG_015", "reason": "fill:second-copy" },
+          { "used": "BOT_913", "reason": "fill:second-copy" },
+          { "used": "EX1_306", "reason": "fill:second-copy" },
+          { "used": "BOT_443", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "dala_05_bonepaw",
+      "name": "The Amazing \"Bonepaw\"",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_05h",
+      "power": "DALA_BOSS_05p",
+      "tier": "2",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "flags": ["bothPlayers", "recast"],
+      "deck": {
+        "id": "enc-dala_05_bonepaw",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/The_Amazing_%22Bonepaw%22", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "CS2_031", "reason": "fill:second-copy" },
+          { "used": "GIL_548", "reason": "fill:second-copy" },
+          { "used": "BOT_531", "reason": "fill:second-copy" },
+          { "used": "CS2_024", "reason": "fill:second-copy" },
+          { "used": "OG_081", "reason": "fill:second-copy" },
+          { "used": "GIL_801", "reason": "fill:second-copy" },
+          { "used": "DAL_177", "reason": "fill:second-copy" },
+          { "used": "FP1_018", "reason": "fill:second-copy" },
+          { "used": "AT_002", "reason": "fill:second-copy" },
+          { "used": "EX1_289", "reason": "fill:second-copy" },
+          { "used": "UNG_024", "reason": "fill:second-copy" },
+          { "used": "EX1_294", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "dala_06_dazzik",
+      "name": "Dazzik \"Hellscream\"",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_06h",
+      "power": "DALA_BOSS_06p",
+      "tier": "2",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "flags": ["start"],
+      "start": {
+        "bossDeckAdd": ["DALA_BOSS_06dk"]
+      },
+      "deck": {
+        "id": "enc-dala_06_dazzik",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Dazzik_%22Hellscream%22", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "ICC_238", "reason": "fill:second-copy" },
+          { "used": "TRL_321", "reason": "fill:second-copy" },
+          { "used": "EX1_400", "reason": "fill:second-copy" },
+          { "used": "EX1_392", "reason": "fill:second-copy" },
+          { "used": "EX1_603", "reason": "fill:second-copy" },
+          { "used": "CS2_108", "reason": "fill:second-copy" },
+          { "used": "DAL_759", "reason": "fill:second-copy" },
+          { "used": "EX1_604", "reason": "fill:second-copy" },
+          { "used": "OG_218", "reason": "fill:second-copy" },
+          { "used": "FP1_021", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "dala_07_belnaara",
+      "name": "Flight Master Belnaara",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_07h",
+      "power": "DALA_BOSS_07p",
+      "tier": "3",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["passive", "forms", "heroImmune"],
+      "cards": ["DALA_BOSS_07e"],
+      "deck": {
+        "id": "enc-dala_07_belnaara",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Flight_Master_Belnaara", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "wiki": "Avian Watcher", "listed": "KAR_037", "reason": "admission:unclassified" },
+          { "used": "DAL_373", "reason": "fill:second-copy" }
+        ]
+      },
+      "forms": [
+        {
+          "power": "DALA_BOSS_07p2",
+          "at": { "script": true },
+          "keepExcess": true
+        }
+      ]
+    },
+    {
+      "id": "dala_08_applebough",
+      "name": "Applebough",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_08h",
+      "power": "DALA_BOSS_08p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 3 },
+      "deck": {
+        "id": "enc-dala_08_applebough",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Applebough", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "LOOT_047", "reason": "fill:second-copy" },
+          { "used": "BOT_419", "reason": "fill:second-copy" },
+          { "used": "GIL_663", "reason": "fill:second-copy" },
+          { "used": "BOT_420", "reason": "fill:second-copy" },
+          { "used": "EX1_158", "reason": "fill:second-copy" },
+          { "used": "EX1_571", "reason": "fill:second-copy" },
+          { "used": "UNG_111", "reason": "fill:second-copy" },
+          { "used": "TRL_341", "reason": "fill:second-copy" },
+          { "used": "BOT_422", "reason": "fill:second-copy" },
+          { "used": "NEW1_008", "reason": "fill:second-copy" },
+          { "used": "EX1_178", "reason": "fill:second-copy" },
+          { "used": "BOT_523", "reason": "fill:second-copy" },
+          { "used": "TRL_509", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "dala_09_oshi",
+      "name": "Archivist Oshi",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_09h",
+      "power": "DALA_BOSS_09p",
+      "tier": "3",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "deck": {
+        "id": "enc-dala_09_oshi",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Archivist_Oshi", "read": "2026-11-14", "list": "Normal" }
+      }
+    },
+    {
+      "id": "dala_10_mo",
+      "name": "Mo Eniwhiskers",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_10h",
+      "power": "DALA_BOSS_10p",
+      "tier": "2",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "flags": ["passive"],
+      "deck": {
+        "id": "enc-dala_10_mo",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Mo_Eniwhiskers", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "CS2_072", "reason": "fill:second-copy" },
+          { "used": "EX1_145", "reason": "fill:second-copy" },
+          { "used": "OG_072", "reason": "fill:second-copy" },
+          { "used": "AT_031", "reason": "fill:second-copy" },
+          { "used": "BOT_288", "reason": "fill:second-copy" },
+          { "used": "AT_033", "reason": "fill:second-copy" },
+          { "used": "BOT_087", "reason": "fill:second-copy" },
+          { "used": "LOE_012", "reason": "fill:second-copy" },
+          { "used": "GIL_687", "reason": "fill:second-copy" },
+          { "used": "CFM_025", "reason": "fill:second-copy" },
+          { "used": "TRL_504", "reason": "fill:second-copy" },
+          { "used": "LOOT_144", "reason": "fill:second-copy" },
+          { "used": "DAL_771", "reason": "fill:second-copy" },
+          { "used": "CFM_669", "reason": "fill:second-copy" },
+          { "used": "CFM_630", "reason": "fill:Heroic" },
+          { "used": "EX1_144", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "dala_11_noz",
+      "name": "Noz Timbertail",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_11h",
+      "power": "DALA_BOSS_11p",
+      "tier": "3",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["passive", "bothPlayers"],
+      "cards": ["DALA_BOSS_11e"],
+      "deck": {
+        "id": "enc-dala_11_noz",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Noz_Timbertail", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "wiki": "Ogre Ninja", "listed": "GVG_088", "used": "EX1_028", "reason": "unscripted" },
+          { "wiki": "Ogre Ninja", "listed": "GVG_088", "used": "EX1_028", "reason": "unscripted" },
+          { "wiki": "Mogor the Ogre", "listed": "GVG_112", "used": "CS2_200", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "dala_12_cravitz",
+      "name": "Cravitz Lorent",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_12h",
+      "power": "DALA_BOSS_12p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "flags": ["bothPlayers"],
+      "deck": {
+        "id": "enc-dala_12_cravitz",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Cravitz_Lorent", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "OG_114", "reason": "fill:second-copy" },
+          { "used": "LOOT_014", "reason": "fill:second-copy" },
+          { "used": "OG_241", "reason": "fill:second-copy" },
+          { "used": "BRM_006", "reason": "fill:second-copy" },
+          { "used": "DAL_605", "reason": "fill:second-copy" },
+          { "used": "CFM_610", "reason": "fill:second-copy" },
+          { "used": "AT_019", "reason": "fill:second-copy" },
+          { "used": "CS2_062", "reason": "fill:second-copy" },
+          { "used": "GVG_045", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "dala_13_albin",
+      "name": "Albin Eastoft",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_13h",
+      "power": "DALA_BOSS_13p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "deck": {
+        "id": "enc-dala_13_albin",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Albin_Eastoft", "read": "2026-11-14", "list": "Normal" }
+      }
+    },
+    {
+      "id": "dala_14_tierra",
+      "name": "Tierra Blythe",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_14h",
+      "power": "DALA_BOSS_14p",
+      "tier": "2",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 3 },
+      "cards": ["DALA_BOSS_14t"],
+      "deck": {
+        "id": "enc-dala_14_tierra",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Tierra_Blythe", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "wiki": "Dark Iron Bouncer", "listed": "BRMA01_3", "reason": "unscripted" },
+          { "used": "CFM_940", "reason": "fill:second-copy" },
+          { "used": "EX1_391", "reason": "fill:second-copy" },
+          { "used": "OG_149", "reason": "fill:second-copy" },
+          { "used": "BRM_016", "reason": "fill:second-copy" },
+          { "used": "OG_218", "reason": "fill:second-copy" },
+          { "used": "CFM_631", "reason": "fill:second-copy" },
+          { "used": "EX1_407", "reason": "fill:second-copy" },
+          { "used": "BRM_019", "reason": "fill:second-copy" },
+          { "used": "BOT_218", "reason": "fill:second-copy" },
+          { "used": "CS1_042", "reason": "fill:second-copy" },
+          { "used": "CFM_654", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "dala_15_nici",
+      "name": "Moon Priestess Nici",
+      "provenance": "DALA",
+      "family": "14",
+      "hero": "DALA_BOSS_15h",
+      "power": "DALA_BOSS_15p",
+      "tier": "2",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 3 },
+      "flags": ["passive", "bothPlayers"],
+      "deck": {
+        "id": "enc-dala_15_nici",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Moon_Priestess_Nici", "read": "2026-11-14", "list": "Normal" },
+        "substitutions": [
+          { "used": "AT_055", "reason": "fill:second-copy" },
+          { "used": "CS2_235", "reason": "fill:second-copy" },
+          { "used": "TRL_501", "reason": "fill:second-copy" },
+          { "used": "AT_011", "reason": "fill:second-copy" },
+          { "used": "GIL_156", "reason": "fill:second-copy" },
+          { "used": "EX1_001", "reason": "fill:second-copy" },
+          { "used": "FP1_001", "reason": "fill:second-copy" },
+          { "used": "TRL_570", "reason": "fill:second-copy" },
+          { "used": "CFM_067", "reason": "fill:second-copy" },
+          { "used": "EX1_583", "reason": "fill:second-copy" },
+          { "used": "EX1_621", "reason": "fill:Heroic" },
+          { "used": "UNG_030", "reason": "fill:Heroic" },
+          { "used": "GVG_012", "reason": "fill:Heroic" },
+          { "used": "CS2_236", "reason": "fill:Heroic" },
+          { "used": "OG_104", "reason": "fill:Heroic" },
+          { "used": "ICC_802", "reason": "fill:Heroic" },
+          { "used": "GIL_835", "reason": "fill:Heroic" },
+          { "used": "EX1_591", "reason": "fill:Heroic" },
+          { "used": "DAL_039", "reason": "fill:Heroic" },
+          { "used": "EX1_623", "reason": "fill:Heroic" }
         ]
       }
     }
