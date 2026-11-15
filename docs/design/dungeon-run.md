@@ -821,6 +821,104 @@ enc09-cards and enc10 / enc10a / enc10b / enc10-nab / enc10-cards / enc10-shrine
 identical with 0 faults, fallbacks, failed checks and swallowed leaf exceptions; every family 06 rule was also played
 against twelve bosses of families 09 and 10 (Marin's Return and Plague of Death against the eleven they may meet).
 
+### Wave 4: Monster Hunt bosses B and C, Rumble Run champions and boss shrines (families 11, 12, 13; 2026-11-14)
+
+Three families landed together, with the DALA_850 fix: thirteen Monster Hunt encounters with a clickable power and Crooked
+Pete's form change (11), thirteen Monster Hunt encounters, ten of them with a passive power (12), and the eight Rumble Run
+champions beside War Master Voone with every board shrine admitted for a boss (13). The shipped encounter list holds 103
+rows (wave 3's 69, 13 of family 11, 13 of family 12, 8 of family 13) and 124 decks, 54 of them the wiki's list unchanged.
+The schedule is unchanged (43 rule rows). All of it stays behind acts-v3h and acts-v3t; no default changed. This is the
+first wave integrated and verified on Linux (the cloud container); `verify/baseline` now holds its results.
+
+#### Family 11: Monster Hunt bosses B (clickable powers, Crooked Pete's form change)
+
+Thirteen Witchwood encounters with a clickable power, tier by printed Health (20: tier 1; 30: tier 2; 35, 40: tier 3; 50,
+60: tier 4). Crooked Pete is the first boss whose form changes inside a match. At the start of his turn at half his maximum
+Health or less, Soot Up's trigger makes him Beastly Pete (a script form of the encounter model: GILA_BOSS_52h2 with Beast
+Within). His hand is set aside, Beastly Pete's deck replaces his, he draws 6, gains 15 Armor and keeps his Health. Face
+Collector plays a copy of the run deck (flag `mirrorDeck`: less what a boss may not hold, Fabled bundles whole, the curated
+row deck below 10 cards). Raeth's Desecrate is readied again after a use that killed (private tag `PowerRefresh` 32646, its
+own Inspire trigger). Survival of the Fittest forces every minion to attack a random enemy minion
+(`EncounterRules.AllAttackRandomEnemyMinions`). Grave Mistake resolves every Deathrattle twice. Shallow Graves never summons
+a dead run shrine. Terrify shuffles through the engine's MoveToDeck (a shrine goes dormant instead). Soul Assimilation and A
+New Face respect the shrine control and transform rules. Decks are the wiki's tables; Damph's and Sezavo's 20 cards are
+extended to 30, and Witchwood's Touch is Shield Block until family 23 scripts it. Scripts: `DungeonRunEncounters.F11.cs`,
+`Actions/EncounterRules.F11.cs`; five admission rows (`boss-hunt-power`, `boss-hunt-own-hand`, `boss-hunt-form`,
+`boss-hunt-deck-shuffle`, `boss-hunt-card-b`). Grave Mistake the spell (GILA_BOSS_43t, the hunt's treasure) is in no deck:
+scripted, admitted and tested from a fixture boss's hand.
+
+#### Family 12: Monster Hunt bosses C (passive powers)
+
+Thirteen Witchwood encounters, ten with a passive power started at match start, tier by the printed Health of the hero
+card (10 tier 1; 25, 30 tier 2; 40 tier 3; 50, 70 tier 4). Groddo raises a Bloated Zombie when an enemy minion dies; Gretta's
+Blood Red Apple makes every spell cost Health (Blood Pact's rule on both players since the review below); Forlorn Lovers
+shuffles a copy of each friendly minion that dies into her deck, presented on the shuffle so her own-deck ledger learns it; S'thara's Poisoned Drink deals 1
+damage per card drawn to either player; Vitus buffs his board; Shudderwock doubles all Battlecries for both players; The
+Whisperer gives every spell in either hand Echo, with at most ten Echo copies per player per turn (standing in for the
+client's turn timer; `EncounterRules.EchoCopiesPerTurn`); Sephira draws a spell when the run player casts one; Gobbles
+draws when a friendly Beast dies; Hannigul's Cannibalism gives +1 Attack to the minions that stood next to a dying minion,
+read inside the death pass (`EncounterRules.DeathNeighbours`). Winslow's Hypnotize shuffles both hands into their decks as
+plain cards and redraws as many, recording a hand-and-deck belief reset for both players; The Mute
+silences; Rancel's Poison Flask deals 2 and poisons a survivor, and his Infected Quillflinger hits a random enemy minion
+whenever it takes damage. Decks are the wiki's lists brought to 30 cards, each change recorded. Scripts:
+`DungeonRunEncounters.F12.cs`, `Actions/EncounterRules.F12.cs`; six admission rows. No private tag.
+
+#### Family 13: Rumble Run opponents and boss shrines
+
+The eight Rumble Run champions beside War Master Voone (Zentimo, Captain Hooktusk, High Priest Thekal, Zul'jin, Wardruid
+Loti, High Priestess Jeklik, Hex Lord Malacrass, Princess Talanji), each a row whose three variants (early, middle, late =
+challenges 1-2, 3-5, 6-8) are its class's three board shrines with that range's wiki deck. The fight's variant is drawn
+from the run seed and the floor; the shrine is armed for the boss by `ShrineRules.Arm` exactly as the run player's, and
+every shrine script reads its own controller, so the phase-7 scripts serve both sides unchanged. All 27 shrines are now
+admitted for a boss: Halazzi's Trap needs the boss's generated Secrets (Zul'jin's row turns them on), Treasure from Below's
+steal teaches the boss exactly the card it took and nothing else, and Bwonsamdi's Tome and Dark Reliquary generate through
+the boss's filter. Zul'jin's Steady Throw is scripted as Steady Shot; the other champions use basic powers. Tiers are a
+recorded spread (a champion meets the run in any round). The champions' teammate cards are not admitted for a boss and are
+left out of their decks, each recorded. The boss's fair view now tolerates a chained Discover that is not yet dealt
+(Griftah: two null guards in `plugin/FairBotState.cs`; the same hazard in `plugin/NativeMatch.cs` is left for the Windows
+plugin build). The phase-7 admission rows board-shrine, hidden-steal and shrine-token, now empty, are removed; their ids
+sit in `DungeonRunAdmission.F13.cs`.
+
+#### What the integration changed
+
+- **The Echo copy floor holds in every game.** The client's rule since Descent of Dragons is that copies of Echo cards
+  "can't cost less than (1)" (hearthstone.wiki.gg/wiki/Echo). Family 12 added `EncounterRules.EchoCopyFloor` (the last step
+  of `CostRules.AdjustCost`) for The Whisperer's fight only; family 11 then met a (0)-Cost Sound the Bells! (GIL_145) repeated
+  without end by the Rumble Mage row's run player under a cost cut, with no Whisperer in the game. The floor now applies to
+  every Echo copy (a GHOSTLY card: an Echo or "Repeatable this turn" copy) in every game; The Whisperer keeps only the
+  per-turn copy limit and the Echo on every spell (c-enc-engine G7d, c-enc-12 G10). Family 11's shrine bosspilot order is
+  restored (Gustave meets the Mage row again).
+- **DALA_850 and Unstable Evolution.** The copy Unstable Evolution puts into the hand (LOOT_504t) lacks the client's
+  "Repeatable this turn" tag 1114, so Anomaly - Arcane cut it to (0) and Hagatha's boss replayed it without end ("stuck after
+  1500 actions" in `bp.sh rules01 DALA_850`, open since the port). `DungeonRunEncounters.Repeatable` names the copy, so the
+  anomaly's floor keeps it at (1) (c-enc-engine G7c); the game ends normally (boss win, 22 turns).
+- **Tag table.** Taken numbers: 32637 (family 02), 32641 (06), 32643 (08), 32644 (09), 32645 (10), 32646 (11); families 12
+  and 13 took none.
+- The ledger gains 56 rows, not 57: FP1_029 Dancing Swords is new in both family 12's and family 13's decks.
+- **Review fixes (confirmed findings, each with a test).** Blood Red Apple ("Spells cost Health instead of Mana.", no
+  "Your"; the wiki gives Gretta blood-magic lines for the player's casts) is both players' rule (row flag `bothPlayers`,
+  admission row boss-passive-both). Hypnotize and Together Forever no longer record a deck fact read from the real deck:
+  Archbishop Benedictus (in Winslow's deck) shuffles copies of the run player's hidden deck into the boss's, and the fact
+  taught the boss's own-deck ledger what they were; the ledger now follows the moves, and the Lovers' public copy is
+  presented on its shuffle. An Echo copy Hypnotize shuffles back leaves `Game.GhostlyCards`. A Rumble Run champion appears
+  only "if the player has not chosen one of the <class> shrines" (the champions' wiki pages): a run with a board shrine
+  never draws a row with a shrine variant of that class (`DungeonRun.ActBossSequence`, `excludeShrineClass`; runs without
+  a board shrine draw exactly as before). Four tests that could not fail were made real (c-enc-11 B6/B7, c-enc-12 M4,
+  c-enc-13 V2).
+- **Steady Throw and Rikkar.** c-heroes-F14 T1/T2 pinned TRLA_065p as unscripted; it is now Zul'jin's scripted encounter
+  power, still refused as a Rikkar power (by the admission table instead of as unscripted).
+
+**Open after the wave.** Random generation can yield unscripted cards (the engine's random pools include them; the
+generation filter drops only what admission rejects; seen: DRG_301, DRG_246, DRG_402). `plugin/NativeMatch.cs:6634` has the
+chained-Discover null hazard family 13 guarded in `FairBotState.cs` (needs the Windows plugin build). The champions'
+teammates are not admitted for a boss (their decks would be more authentic with them). Witchwood's Touch (GILA_BOSS_99t2)
+is Shield Block in families 10-12 until family 23 scripts it; then rerun the encounters step and update c-enc-10 P3/P8,
+c-enc-11 P3/P7 and c-enc-12 P3/P7.
+
+**Tests of the wave.** c-enc-11 (109 checks), c-enc-12 (105), c-enc-13 (112), c-enc-engine G7c/G7d, and the bosspilot modes
+enc11a / enc11b / enc11-pete / enc11-cards / enc11-shrine, enc12 / enc12-seeds / enc12-hidden and enc13a / enc13b /
+enc13-seeds, each twice identical with 0 faults, fallbacks, failed checks and swallowed leaf exceptions.
+
 ## Implementation Status (2026-11-09)
 
 All pieces are written and the plugin builds against client 37.0.2.256589 with SDK 10.0.402 (0 errors; client bindings check PASS, Mono guard PASS). Nothing has run inside the Hearthstone client yet.

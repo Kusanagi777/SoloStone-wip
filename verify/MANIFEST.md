@@ -100,6 +100,9 @@ Each suite folder holds its `*.cs` and `*.csproj` only (no `Program.cs.pre-*` ba
 | `p8f10/suites/c-enc-10` | `verify/suites/p8f10/c-enc-10` | G3 | Enc10.csproj Program.cs |
 | `p8w3/suites/c-w3fix` | `verify/suites/p8w3/c-w3fix` | G3 | Program.cs W3Fix.csproj |
 | `audit-verify/randplay` | `verify/suites/audit-verify/randplay` | pilot | EngineProof.csproj Program.cs |
+| (new in wave 4, family 11 lane) | `verify/suites/p8f11/c-enc-11` | wave 4 | Enc11.csproj Program.cs |
+| (new in wave 4, family 12 lane) | `verify/suites/p8f12/c-enc-12` | wave 4 | Enc12.csproj Program.cs |
+| (new in wave 4, family 13 lane) | `verify/suites/p8f13/c-enc-13` | wave 4 | Enc13.csproj Program.cs |
 
 ## 3. The audit hall (all G3)
 
@@ -176,6 +179,7 @@ c-acts A10, c-enc-model F2), which gives back exactly the Windows bytes on Windo
 | `p8f08/fixtures/encounters-f08.json` | `p8f08/fixtures/` | `bp.sh enc08-cards` (ENCOUNTERS_JSON) | |
 | `p8f09/fixtures/encounters-f09.json` | `p8f09/fixtures/` | `bp.sh enc09-cards` (ENCOUNTERS_JSON) | |
 | `p8f10/fixtures/encounters-f10.json` | `p8f10/fixtures/` | `bp.sh enc10-cards` (ENCOUNTERS_JSON; proved in the pilot) | |
+| (new in wave 4) `p8f11/fixtures/encounters-f11.json` | `p8f11/fixtures/` | `bp.sh enc11-pete`, `bp.sh enc11-cards` (ENCOUNTERS_JSON) | the merged encounters-v1.json plus five fixture rows (fix11_*), written by `verify/tools/gen/p8f11/make_fixture.py` |
 | `audit-inventory/cards.tsv` | `audit-inventory/cards.tsv` | hall audit-chunk-9 (G3; was absolute) | the audit inventory |
 
 Repository files the suites read (already in git, not copied): `data/**`, `facts/violet-hold-2026-09.json`,
@@ -211,13 +215,17 @@ Repository files the suites read (already in git, not copied): `data/**`, `facts
 | `p8f08/make_fixture.py` | `verify/tools/gen/p8f08/` | G3 (ported; output byte-identical) | `encounters-f08.json` |
 | `p8f09/make_fixture.py`, `p8f09/make_harness.py` | `verify/tools/gen/p8f09/` | G3 (ported; output byte-identical) | `encounters-f09.json`; c-bosspilot-enc09 harness |
 | `p8f10/make_fixture.py` | `verify/tools/gen/p8f10/` | G3 (ported; output byte-identical) | `encounters-f10.json` |
+| (new in wave 4) `make_fixture.py`, `make_f11.py`, `patch_curation.py` | `verify/tools/gen/p8f11/` | wave 4 | `encounters-f11.json`; `data/dungeon-run/reference/encounters/F11.json` (the wiki transcription); the E11 entry of curation.json (idempotent; not rerun by the integration) |
+| (new in wave 4) `make_f12.py` | `verify/tools/gen/p8f12/` | wave 4 | `data/dungeon-run/reference/encounters/F12.json` (the wiki transcription; rerun after the review's Blood Red Apple change) |
 
 The G3 generators take no arguments: each reads the repository it sits in and writes its default output under verify/
 (`verify/fixtures/<family>/fixtures/...`, or the suite folder for the two harness generators); an optional argument
 (fixtures: `<repo or encounters file> <out file>`; harnesses: `<output folder>`) writes elsewhere. Run them with
 `python -I verify/tools/gen/<family>/<script>.py` after `gen.sh` has regenerated `encounters-v1.json`, or after the base
 harness `suites/p8f01/c-bosspilot-encounter` changes. On the export copy (2026-11-13) all six fixtures and both harnesses
-came out byte-identical to the files here.
+came out byte-identical to the files here. Wave 4 (Linux, 2026-11-14): every generator here except `patch_curation.py`
+was run twice after the last data change, each output byte-identical between the runs; the seven encounter fixtures
+(p8f02, p8f03, p8f04, p8f08, p8f09, p8f10, p8f11) were rebuilt from the merged data, the rest came out unchanged.
 
 ## 7. Not moved, and why
 

@@ -49,26 +49,30 @@ parent session's summary. No file here holds the original nine-step text verbati
 | 7 Shrines, teammates | done | `engine/.../CardSets/DungeonRun/DungeonRunShrines*.cs` (S2, S3, U, T1, T2, D) |
 | 8 Encounters | in progress | see below |
 
-The design record is `docs/design/dungeon-run.md` (sections "Phase 8: the encounter model" and "Wave 1/2/3").
+The design record is `docs/design/dungeon-run.md` (sections "Phase 8: the encounter model" and "Wave 1/2/3/4").
 
 Step 8 progress:
 - The encounter model is merged: `data/dungeon-run/encounters-v1.json` (generated from
   `data/dungeon-run/reference/encounters/F<NN>.json` by `tools/dungeon-run-catalog encounters`),
   `engine/SabberStoneCore/src/Actions/EncounterRules*.cs`, `engine/.../CardSets/DungeonRun/DungeonRunEncounters*.cs`,
   schedules acts-v3h / acts-v3t. Design: `handoff/phase8/reports/design.md`, `implement-encounter-model.md`.
-- Families 01-10 are merged (waves 1-3: 02/03/04, 05/07/08, 06/09/10). Per-family reports are in
-  `handoff/phase8/reports/`.
-- Ledger now: 4704 rows; implemented 2813, partial 295, missing 538, duplicate/support 1058.
-- Generators now: encounters "69 rows, 73 decks (43 authentic, 30 changed), 147 adaptations, 1 rejected"; catalog
+- Families 01-13 are merged (waves 1-4: 02/03/04, 05/07/08, 06/09/10, 11/12/13; wave 4 also fixed DALA_850 and made
+  the Echo copy floor general). Per-family reports are in `handoff/phase8/reports/`; wave 4:
+  `integrate-wave4.md` and `lane-family-11/12/13-*.md`.
+- Ledger now: 4760 rows; implemented 2813, partial 386, missing 503, duplicate/support 1058.
+- Generators now: encounters "103 rows, 124 decks (54 authentic, 70 changed), 278 adaptations, 1 rejected"; catalog
   "506 entries (452 offerable pool, 2 withdrawn, 52 fixed), 6508 admitted and 1 excluded".
-- Families 11-25 have empty stub files already: `DungeonRunEncounters.F<NN>.cs` and `DungeonRunAdmission.F<NN>.cs`.
+- Families 14-25 have empty stub files already: `DungeonRunEncounters.F<NN>.cs` and `DungeonRunAdmission.F<NN>.cs`.
+- `verify/` is proven on Linux (the cloud container, wave 4, 2026-11-14): the whole regression ran there and
+  `verify/baseline` now holds the Linux results (README section 6 lists the two platform differences).
 
 ## 3. What is left
 
 ### 3.1 Step 8, families 11-24
 
 Ids and notes are from `handoff/phase8/inventory.json` (full notes there). The planned waves were 11/12/13, 14/15/16,
-17/18/19, 20/21/22, 23/24, with a full regression after the 4th and 8th wave.
+17/18/19, 20/21/22, 23/24, with a full regression after the 4th and 8th wave. **Families 11, 12 and 13 are merged (wave
+4, 2026-11-14); their rows below are kept for reference.**
 
 | Family | Ids | Notes (short) |
 |---|---|---|
@@ -113,13 +117,27 @@ twice byte-identical, all suites twice, hall, every bosspilot mode, a seeds swee
 
 ### 3.4 Open issues
 
-Found by the port (2026-11-13), not by wave 3, which did not rerun the mode:
-- **`bp.sh rules01 DALA_850` faults on the current tree** (and with the original wave-3 binary): with Anomaly - Arcane
-  ("All spells cost (2) less") Hagatha's boss plays Unstable Evolution (Echo) at 0 cost over and over in one turn until
-  the harness stops the game ("stuck after 1500 actions"). In wave 2 that game ended normally. Fix it in the engine or
-  the encounter rules (start by checking whether the engine applies the rule that an Echo card cannot cost less than
-  (1)), then re-record
-  `verify/baseline/bp-port/bp-rules01-DALA_850-a.txt`. Details: `verify/README.md` section 4.
+Closed in wave 4: **`bp.sh rules01 DALA_850`** no longer faults. Unstable Evolution's hand copy (LOOT_504t) lacks the
+client's tag 1114, so Anomaly - Arcane cut it to (0); `DungeonRunEncounters.Repeatable` names it (c-enc-engine G7c), the
+game ends normally (boss win), and the record is re-recorded. The general Echo rule ("Copies can't cost less than (1)")
+now holds in every game (`EncounterRules.EchoCopyFloor`, c-enc-engine G7d).
+
+From the wave-4 integration (details in `handoff/phase8/reports/integrate-wave4.md`):
+- Random generation can yield unscripted cards: the engine's random pools (`Cards.AllWild`) include unscripted cards and
+  the generation filter drops only ids admission rejects (Bwonsamdi's Tome, Dark Reliquary, any random generation; seen:
+  DRG_301, DRG_246, DRG_402). Close-out or phase 9.
+- `plugin/NativeMatch.cs:6634` (`next.Choices.Contains(id)`) has the chained-Discover null hazard family 13 guarded in
+  `plugin/FairBotState.cs` (Griftah): fix and check it with the Windows plugin build (section 7).
+- The Rumble Run champions' teammate cards are not admitted for a boss and are left out of their decks (29 slots, each
+  recorded); admitting teammates for a boss would make those decks more authentic. A boss's Treasure from Below can take
+  a run player's teammate from the run deck (authentic for the champion's shrine; the teammates' admission rows still say
+  only the run player holds them).
+- Witchwood's Touch (GILA_BOSS_99t2) is Shield Block in the decks of families 10, 11 and 12 until family 23 scripts it.
+  Then rerun the encounters step and update c-enc-10 P3/P8, c-enc-11 P3/P7 (Pete's form deck, Cragtorr, Azalina,
+  Gustave) and c-enc-12 P3/P7 (Groddo, Sephira, Hannigul); P7 also moves when Ogre Ninja, Ogre Brute, Mogor's Champion,
+  the original Wrath or Power of the Wild are scripted.
+- F14's `rejected` note for TRLA_065p in curation.json ("waits unscripted") is stale (the tool ignores it); the close-out
+  may delete it.
 
 From the wave-3 integration:
 - The twist pools are empty, so ULDA_801-804 roll only on the fixture `verify/fixtures/p8f06/fixtures/schedule-plagues.json`.
@@ -136,9 +154,9 @@ From the wave-3 integration:
 
 ## 4. Build and test in the cloud
 
-**The Linux run has never been tried.** Everything in `verify/` was proved on Windows only (2026-11-13). The first
-cloud task is: build and run the whole `verify/` suite once on Linux and compare with the baseline. Any difference
-must be explained (and the port fixed, never the test) before new work starts.
+**`verify/` is proven on Linux** (the baseline proof of 2026-11-14, then the whole wave-4 regression). The only platform
+differences are c-p7fix H1 (`·` where the Windows log has a mangled byte) and the c-enc-model F2 save lengths (Linux
+line ends); `verify/baseline` now holds Linux results (README section 6).
 
 Needs: .NET SDK **10.0.402** exactly (`global.json`, `rollForward: disable`), bash, coreutils, git, python 3.
 Installing the SDK is a download: ask the user first. No Hearthstone files are needed for any of this.

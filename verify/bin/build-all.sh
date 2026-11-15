@@ -1,6 +1,6 @@
 #!/bin/bash
 # verify/bin/build-all.sh: the plugin-free build of everything the verification needs, in one call: the engine, the catalog
-# tool, the 67 suite projects, randplay and the 39 audit hall projects. Nothing here needs the Hearthstone client
+# tool, the 70 suite projects, randplay and the 39 audit hall projects. Nothing here needs the Hearthstone client
 # libraries (references/): the plugin itself (plugin/OfflineProbe.csproj) is NOT built; the suites compile the plugin
 # sources they test directly. Runs no harness, so it needs no lock.
 # Expect: engine 0 warnings / 0 errors; every other line "build exit=0 0 Error(s)" (or NOT PORTED for a suite not ported yet).
