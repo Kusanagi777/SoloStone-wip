@@ -1,0 +1,2376 @@
+{
+ "schemaVersion": 1,
+ "family": "20",
+ "description": "Tombs of Terror bosses B (phase 8 family 20): eighteen encounters of Saviors of Uldum's Tombs of Terror (ULDA_BOSS_19 to ULDA_BOSS_36: Sothis, Kham, Illidara Sunsdawn, Colossus of the Sun, Skarik, Suspicious Palm Tree, Beetle Herder Zenda, Thudd Lockspring, Ol' Toomba, Sazin, Ozara, Ermavar, Pillager Drasar, Edra, Runaway Ruby, Dovo Fastfuse, Earthrager Ptah, Kasa Softspeaker). Boss deck lists are transcribed from hearthstone.wiki.gg boss pages (read 2026-11-14), by card name; tools/dungeon-run-catalog (step 'encounters') resolves the names against facts/violet-hold-2026-09.json, checks every card and writes data/dungeon-run/encounters-v1.json. Every Tombs boss hero prints 10 Health: Health is the act curve's, and the tier is the boss's level band read from its page's deck table (levels 1-2: tier 1; 2-3 and 3-4: tier 2; 5-6: tier 3; 7: tier 4; verify/tools/gen/p8f19/tombs_tiers.py, family 19's rule).",
+ "method": "Each page's wikitext (action=raw) was read and its deck table expanded (rowspans and colspans) into a grid; the Normal and Heroic columns are transcribed in table order with their counts (25 or 30 cards); a table of possible cards without counts (\"10; 15\", \"15; 20\", Skarik's) is transcribed with count null. Where the Normal list is shorter than 30 the Heroic table is transcribed too and is the row's extend list. A page's level note (\"These decks correspond only to level N\") and its chapter line are recorded in the row's schedule adaptation. The file is written by verify/tools/gen/p8f20/make_f20.py.",
+ "bosses": [
+  {
+   "id": "ulda_19_sothis",
+   "name": "Sothis",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_19h",
+   "power": "ULDA_BOSS_19p",
+   "tier": "3",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "cards": [
+    "ULD_705",
+    "ULD_705t"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Sothis",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 6)",
+     "cards": [
+      {
+       "name": "Call to Adventure",
+       "count": 2
+      },
+      {
+       "name": "Hammer of Twilight",
+       "count": 2
+      },
+      {
+       "name": "Mogu Fleshshaper",
+       "count": 2
+      },
+      {
+       "name": "Into the Fray",
+       "count": 1
+      },
+      {
+       "name": "Dead Man's Hand",
+       "count": 1
+      },
+      {
+       "name": "Execute",
+       "count": 2
+      },
+      {
+       "name": "Forge of Souls",
+       "count": 1
+      },
+      {
+       "name": "Heroic Strike",
+       "count": 2
+      },
+      {
+       "name": "Ogre Warmaul",
+       "count": 1
+      },
+      {
+       "name": "Restless Mummy",
+       "count": 2
+      },
+      {
+       "name": "Sul'thraze",
+       "count": 1
+      },
+      {
+       "name": "Mogu Cultist",
+       "count": 3
+      },
+      {
+       "name": "Temple Berserker",
+       "count": 2
+      },
+      {
+       "name": "Conjured Mirage",
+       "count": 1
+      },
+      {
+       "name": "Cult Master",
+       "count": 2
+      },
+      {
+       "name": "Mogu'shan Warden",
+       "count": 2
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      },
+      {
+       "name": "Wrapped Golem",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 6)"
+   },
+   "replacements": {
+    "Conjured Mirage": "Sen'jin Shieldmasta"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 5-6 (the 30-card level-6 list; the page notes that on level 5 five random cards are missing) = tier 3. The page names chapter 4 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's list is the level 6 deck; on level 5 the original removes 5 random cards. Here the row always uses the level 6 list."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Conjured Mirage (a 4-Cost Taunt) by Sen'jin Shieldmasta (a 4-Cost Taunt)."
+    },
+    {
+     "kind": "power",
+     "note": "Titan Ritual (2) summons two 1/1 Mogu Cultists (ULD_705) for the boss, as many as the board has room for (summoned, so their Battlecry does not run). Mogu Cultist is scripted by this family: \"Battlecry: If your board is full of Mogu Cultists, sacrifice them all and summon Highkeeper Ra\" (seven Mogu Cultists, the played one included, are destroyed, then Highkeeper Ra ULD_705t, a 20/20 that deals 20 damage to all enemies at the end of its owner's turn, is summoned). The power needs a free board slot."
+    }
+   ]
+  },
+  {
+   "id": "ulda_20_kham",
+   "name": "Kham",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_20h",
+   "power": "ULDA_BOSS_20p",
+   "tier": "3",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "flags": [
+    "passive"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Kham",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 6)",
+     "cards": [
+      {
+       "name": "Ancestral Guardian",
+       "count": 2
+      },
+      {
+       "name": "Ghostly Charger",
+       "count": 2
+      },
+      {
+       "name": "Beneath the Grounds",
+       "count": 2
+      },
+      {
+       "name": "Hooked Scimitar",
+       "count": 2
+      },
+      {
+       "name": "Blade Flurry",
+       "count": 2
+      },
+      {
+       "name": "Shadow of Death",
+       "count": 1
+      },
+      {
+       "name": "Spectral Cutlass",
+       "count": 2
+      },
+      {
+       "name": "Sprint",
+       "count": 1
+      },
+      {
+       "name": "Cursed Blade",
+       "count": 1
+      },
+      {
+       "name": "Forge of Souls",
+       "count": 2
+      },
+      {
+       "name": "Jar Dealer",
+       "count": 1
+      },
+      {
+       "name": "Murmy",
+       "count": 2
+      },
+      {
+       "name": "Lost Spirit",
+       "count": 2
+      },
+      {
+       "name": "Phantom Militia",
+       "count": 2
+      },
+      {
+       "name": "Ancient Shade",
+       "count": 2
+      },
+      {
+       "name": "Phantom Freebooter",
+       "count": 2
+      },
+      {
+       "name": "Wrapped Golem",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 6)"
+   },
+   "replacements": {
+    "Cursed Blade": "Light's Justice",
+    "Murmy": "Micro Mummy"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 5-6 (the 30-card level-6 list; the page notes that on level 5 five random cards are missing) = tier 3. The page names chapter 3 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's list is the level 6 deck; on level 5 the original removes 5 random cards. Here the row always uses the level 6 list."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Cursed Blade by Light's Justice (a 1-Cost weapon, so Spectral Swordsman keeps as many weapons) and Murmy by Micro Mummy (a Reborn minion)."
+    },
+    {
+     "kind": "power",
+     "note": "Spectral Swordsman (passive): while the boss has a weapon equipped its hero has Stealth (enemy attacks, spells, hero powers and Battlecries cannot aim at it; area and random effects still reach it). The Stealth is set when a weapon is equipped and cleared when the boss's last weapon is destroyed; the hero's own attacks do not end it (the text ties it to the weapon only)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_21_illidara",
+   "name": "Illidara Sunsdawn",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_21h",
+   "power": "ULDA_BOSS_21p",
+   "tier": "4",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 7
+   },
+   "flags": [
+    "passive",
+    "bothPlayers"
+   ],
+   "cards": [
+    "ULDA_BOSS_21e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Illidara_Sunsdawn",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 7)",
+     "cards": [
+      {
+       "name": "Brazen Zealot",
+       "count": 2
+      },
+      {
+       "name": "Meanstreet Marshal",
+       "count": 2
+      },
+      {
+       "name": "Never Surrender!",
+       "count": 1
+      },
+      {
+       "name": "Noble Sacrifice",
+       "count": 1
+      },
+      {
+       "name": "Redemption",
+       "count": 1
+      },
+      {
+       "name": "A Light in the Darkness",
+       "count": 2
+      },
+      {
+       "name": "Hydrologist",
+       "count": 2
+      },
+      {
+       "name": "Subdue",
+       "count": 2
+      },
+      {
+       "name": "Call to Adventure",
+       "count": 2
+      },
+      {
+       "name": "Muster for Battle",
+       "count": 1
+      },
+      {
+       "name": "Consecration",
+       "count": 1
+      },
+      {
+       "name": "Ivory Knight",
+       "count": 1
+      },
+      {
+       "name": "A New Challenger...",
+       "count": 2
+      },
+      {
+       "name": "Guardian of Kings",
+       "count": 2
+      },
+      {
+       "name": "Secretkeeper",
+       "count": 1
+      },
+      {
+       "name": "Dwarven Archaeologist",
+       "count": 2
+      },
+      {
+       "name": "Golden Scarab",
+       "count": 2
+      },
+      {
+       "name": "Vulpera Scoundrel",
+       "count": 1
+      },
+      {
+       "name": "Body Wrapper",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 7)"
+   },
+   "replacements": {
+    "Hydrologist": "Jeweled Scarab"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: level 7 (a full 30-card list with no smaller lower-level version, the shape of a chapter's seventh boss, the last before its Plague Lord) = tier 4. The page names chapter 3 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Hydrologist (its Discover offers Secrets, and this row generates no boss Secret) by Jeweled Scarab (a 2-Cost Discover minion, so Staking A Claim keeps as many Discover cards)."
+    },
+    {
+     "kind": "power",
+     "note": "Staking A Claim (passive): whenever either player plays a card with the Discover keyword (the card's DISCOVER tag), every minion on both boards gains +1/+1 (enchantment ULDA_BOSS_21e; a dormant run shrine is left out). The trigger is the public play, never a hidden card."
+    }
+   ]
+  },
+  {
+   "id": "ulda_22_colossus",
+   "name": "Colossus of the Sun",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_22h",
+   "power": "ULDA_BOSS_22p",
+   "tier": "4",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 7
+   },
+   "flags": [
+    "bothPlayers"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Colossus_of_the_Sun",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 7)",
+     "cards": [
+      {
+       "name": "Pharaoh's Blessing",
+       "count": 2
+      },
+      {
+       "name": "Ragnaros, Lightlord",
+       "count": 1
+      },
+      {
+       "name": "Whirlwind",
+       "count": 2
+      },
+      {
+       "name": "Battle Rage",
+       "count": 2
+      },
+      {
+       "name": "Frightened Flunky",
+       "count": 2
+      },
+      {
+       "name": "Rampage",
+       "count": 2
+      },
+      {
+       "name": "Blood Warriors",
+       "count": 2
+      },
+      {
+       "name": "Bloodsworn Mercenary",
+       "count": 2
+      },
+      {
+       "name": "Frothing Berserker",
+       "count": 2
+      },
+      {
+       "name": "Restless Mummy",
+       "count": 2
+      },
+      {
+       "name": "Plague of Wrath",
+       "count": 2
+      },
+      {
+       "name": "Tomb Warden",
+       "count": 2
+      },
+      {
+       "name": "Neferset Ritualist",
+       "count": 2
+      },
+      {
+       "name": "History Buff",
+       "count": 2
+      },
+      {
+       "name": "Phantom Militia",
+       "count": 2
+      },
+      {
+       "name": "Colossus of the Moon",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 7)"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: level 7 (a full 30-card list with no smaller lower-level version, the shape of a chapter's seventh boss, the last before its Plague Lord) = tier 4. The page names chapter 2 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "power",
+     "note": "Power of Wrath (0) deals 1 damage to every damaged minion on either board (the damaged minions are taken before any damage is dealt, so a minion it damages is not hit twice). Offered while a damaged minion is on a board."
+    }
+   ]
+  },
+  {
+   "id": "ulda_23_skarik",
+   "name": "Skarik",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_23h",
+   "power": "ULDA_BOSS_23p",
+   "tier": "1",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 2
+   },
+   "cards": [
+    "ULDA_BOSS_23e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Skarik",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 2)",
+     "cards": [
+      {
+       "name": "Claw",
+       "count": null
+      },
+      {
+       "name": "Spirit of the Raptor",
+       "count": null
+      },
+      {
+       "name": "Bite",
+       "count": null
+      },
+      {
+       "name": "Stampede",
+       "count": null
+      },
+      {
+       "name": "Snake Trap",
+       "count": null
+      },
+      {
+       "name": "Pit Snake",
+       "count": null
+      },
+      {
+       "name": "Serpent Egg",
+       "count": null
+      },
+      {
+       "name": "Emperor Cobra",
+       "count": null
+      },
+      {
+       "name": "Golden Scarab",
+       "count": null
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Acornbearer",
+       "count": null
+      },
+      {
+       "name": "Dire Mole",
+       "count": null
+      },
+      {
+       "name": "Enchanted Raven",
+       "count": null
+      },
+      {
+       "name": "Mark of the Lotus",
+       "count": null
+      },
+      {
+       "name": "BEEEES!!!",
+       "count": null
+      },
+      {
+       "name": "Savage Roar",
+       "count": null
+      },
+      {
+       "name": "Dire Wolf Alpha",
+       "count": null
+      },
+      {
+       "name": "Haunted Creeper",
+       "count": null
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 2)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 1-2 (a \"10; 15\" table of possible cards: 10 cards on level 1, 15 on level 2) = tier 1. The page names chapter 2 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists the possible cards of the level 1-2 deck (10 or 15 of them, no counts). A combat tier fights with 30: each listed card once, a second copy of each, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "power",
+     "note": "Hatching Time (2) reduces the Cost of each Beast in the boss's hand by (1) (enchantment ULDA_BOSS_23e). Offered while the boss holds a Beast."
+    },
+    {
+     "kind": "deck",
+     "note": "Skarik's page lists the possible cards of each table without the \"10; 15\" total line the other low-level pages carry; the table has the same shape (nine possible cards, no counts), so the row takes the levels 1-2 band."
+    }
+   ]
+  },
+  {
+   "id": "ulda_24_palm_tree",
+   "name": "Suspicious Palm Tree",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_24h",
+   "power": "ULDA_BOSS_24p",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "cards": [
+    "GIL_663t"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Suspicious_Palm_Tree",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 4)",
+     "cards": [
+      {
+       "name": "Acornbearer",
+       "count": 1
+      },
+      {
+       "name": "Living Roots",
+       "count": 2
+      },
+      {
+       "name": "Dendrologist",
+       "count": 2
+      },
+      {
+       "name": "Addled Grizzly",
+       "count": 2
+      },
+      {
+       "name": "BEEEES!!!",
+       "count": 2
+      },
+      {
+       "name": "Landscaping",
+       "count": 2
+      },
+      {
+       "name": "Garden Gnome",
+       "count": 2
+      },
+      {
+       "name": "Poison Seeds",
+       "count": 1
+      },
+      {
+       "name": "Soul of the Forest",
+       "count": 2
+      },
+      {
+       "name": "Force of Nature",
+       "count": 2
+      },
+      {
+       "name": "Oasis Surger",
+       "count": 2
+      },
+      {
+       "name": "Hidden Oasis",
+       "count": 1
+      },
+      {
+       "name": "Tending Tauren",
+       "count": 1
+      },
+      {
+       "name": "Overflow",
+       "count": 1
+      },
+      {
+       "name": "Ironbark Protector",
+       "count": 1
+      },
+      {
+       "name": "The Forest's Aid",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Acornbearer",
+       "count": 2
+      },
+      {
+       "name": "Mark of the Lotus",
+       "count": 2
+      },
+      {
+       "name": "Dendrologist",
+       "count": 2
+      },
+      {
+       "name": "BEEEES!!!",
+       "count": 2
+      },
+      {
+       "name": "Ferocious Howl",
+       "count": 2
+      },
+      {
+       "name": "Landscaping",
+       "count": 2
+      },
+      {
+       "name": "Soul of the Forest",
+       "count": 1
+      },
+      {
+       "name": "Wispering Woods",
+       "count": 2
+      },
+      {
+       "name": "Bewitched Guardian",
+       "count": 2
+      },
+      {
+       "name": "Mulchmuncher",
+       "count": 2
+      },
+      {
+       "name": "Arena Fanatic",
+       "count": 2
+      },
+      {
+       "name": "Twilight Drake",
+       "count": 2
+      },
+      {
+       "name": "Mountain Giant",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 4)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Garden Gnome": "Keeper of the Grove"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 3-4 (the 25-card level-4 list; on level 3 five random cards are missing) = tier 2. The page names chapter 2 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-4 list has 25 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Garden Gnome by Keeper of the Grove (a 4-Cost Druid minion)."
+    },
+    {
+     "kind": "power",
+     "note": "Corrupted Oasis (2) adds two 2/2 Treants (Witchwood Apple's GIL_663t, the power's template) to the boss's hand, as many as it has room for. Offered while its hand has room."
+    }
+   ]
+  },
+  {
+   "id": "ulda_25_zenda",
+   "name": "Beetle Herder Zenda",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_25h",
+   "power": "ULDA_BOSS_25p",
+   "tier": "1",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 2
+   },
+   "cards": [
+    "LOOT_413"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Beetle_Herder_Zenda",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 2)",
+     "cards": [
+      {
+       "name": "Biology Project",
+       "count": null
+      },
+      {
+       "name": "Lesser Jasper Spellstone",
+       "count": null
+      },
+      {
+       "name": "Crystal Merchant",
+       "count": null
+      },
+      {
+       "name": "Bug Collector",
+       "count": null
+      },
+      {
+       "name": "Jeweled Scarab",
+       "count": null
+      },
+      {
+       "name": "Plated Beetle",
+       "count": null
+      },
+      {
+       "name": "Golden Scarab",
+       "count": null
+      },
+      {
+       "name": "Infested Goblin",
+       "count": null
+      },
+      {
+       "name": "Snapjaw Shellfighter",
+       "count": null
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Enchanted Raven",
+       "count": null
+      },
+      {
+       "name": "Lesser Jasper Spellstone",
+       "count": null
+      },
+      {
+       "name": "Mark of the Lotus",
+       "count": null
+      },
+      {
+       "name": "Mark of Y'Shaarj",
+       "count": null
+      },
+      {
+       "name": "Astral Tiger",
+       "count": null
+      },
+      {
+       "name": "Ironwood Golem",
+       "count": null
+      },
+      {
+       "name": "Oaken Summons",
+       "count": null
+      },
+      {
+       "name": "Plated Beetle",
+       "count": null
+      },
+      {
+       "name": "Infested Goblin",
+       "count": null
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 2)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Bug Collector": "Murloc Tidehunter",
+    "Crystal Merchant": "Enchanted Raven"
+   },
+   "fillers": [
+    "Ironfur Grizzly"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 1-2 (a \"10; 15\" table of possible cards: 10 cards on level 1, 15 on level 2) = tier 1. The page names chapter 2 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists the possible cards of the level 1-2 deck (10 or 15 of them, no counts). A combat tier fights with 30: each listed card once, a second copy of each, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Bug Collector by Murloc Tidehunter (a 2-Cost minion that summons a 1/1) and Crystal Merchant by Enchanted Raven (a Druid minion of the boss's Heroic list)."
+    },
+    {
+     "kind": "deck",
+     "note": "The Normal and Heroic tables share cards, so with two copies of each the deck stays short of 30; the last cards are curated fillers of the boss's class and theme: Ironfur Grizzly."
+    },
+    {
+     "kind": "power",
+     "note": "Beetle Stampede (2) summons a Plated Beetle (LOOT_413, the 2/3 \"Deathrattle: Gain 3 Armor\") for the boss; it needs a free slot."
+    }
+   ]
+  },
+  {
+   "id": "ulda_26_thudd",
+   "name": "Thudd Lockspring",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_26h",
+   "power": "ULDA_BOSS_26p",
+   "tier": "1",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 2
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Thudd_Lockspring",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 2)",
+     "cards": [
+      {
+       "name": "Forbidden Flame",
+       "count": null
+      },
+      {
+       "name": "Mirror Image",
+       "count": null
+      },
+      {
+       "name": "Primordial Glyph",
+       "count": null
+      },
+      {
+       "name": "Micro Mummy",
+       "count": null
+      },
+      {
+       "name": "Clockwork Goblin",
+       "count": null
+      },
+      {
+       "name": "Clockwork Gnome",
+       "count": null
+      },
+      {
+       "name": "Cogmaster",
+       "count": null
+      },
+      {
+       "name": "Skaterbot",
+       "count": null
+      },
+      {
+       "name": "Clockwork Automaton",
+       "count": null
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Goblin Blastmage",
+       "count": null
+      },
+      {
+       "name": "Glow-Tron",
+       "count": null
+      },
+      {
+       "name": "Micro Mummy",
+       "count": null
+      },
+      {
+       "name": "Clockwork Goblin",
+       "count": null
+      },
+      {
+       "name": "Mecharoo",
+       "count": null
+      },
+      {
+       "name": "Annoy-o-Tron",
+       "count": null
+      },
+      {
+       "name": "Galvanizer",
+       "count": null
+      },
+      {
+       "name": "Mechwarper",
+       "count": null
+      },
+      {
+       "name": "Tinkertown Technician",
+       "count": null
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 2)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 1-2 (a \"10; 15\" table of possible cards: 10 cards on level 1, 15 on level 2) = tier 1. The page names chapter 4 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists the possible cards of the level 1-2 deck (10 or 15 of them, no counts). A combat tier fights with 30: each listed card once, a second copy of each, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "power",
+     "note": "Gatling Wand (2) deals 2 damage split among the run player's minions: two 1-damage hits, each on a random enemy minion still alive (Arcane Missiles' rule, minions only; a dormant run shrine is left out). Offered while the run player has a minion."
+    }
+   ]
+  },
+  {
+   "id": "ulda_27_toomba",
+   "name": "Ol' Toomba",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_27h",
+   "power": "ULDA_BOSS_27p",
+   "tier": "4",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 7
+   },
+   "flags": [
+    "hiddenZone"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Ol'_Toomba_(Tombs_of_Terror)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 7)",
+     "cards": [
+      {
+       "name": "Swashburglar",
+       "count": 2
+      },
+      {
+       "name": "Bloodsail Howler",
+       "count": 2
+      },
+      {
+       "name": "Clever Disguise",
+       "count": 2
+      },
+      {
+       "name": "Stolen Steel",
+       "count": 2
+      },
+      {
+       "name": "Edwin VanCleef",
+       "count": 1
+      },
+      {
+       "name": "Face Collector",
+       "count": 1
+      },
+      {
+       "name": "Fan of Knives",
+       "count": 2
+      },
+      {
+       "name": "Shady Dealer",
+       "count": 2
+      },
+      {
+       "name": "Hench-Clan Burglar",
+       "count": 2
+      },
+      {
+       "name": "Sahket Sapper",
+       "count": 2
+      },
+      {
+       "name": "Cannon Barrage",
+       "count": 2
+      },
+      {
+       "name": "Sprint",
+       "count": 1
+      },
+      {
+       "name": "Captain Hooktusk",
+       "count": 1
+      },
+      {
+       "name": "Patches the Pirate",
+       "count": 1
+      },
+      {
+       "name": "Captain's Parrot",
+       "count": 2
+      },
+      {
+       "name": "Ticket Scalper",
+       "count": 2
+      },
+      {
+       "name": "Salty Dog",
+       "count": 2
+      },
+      {
+       "name": "Skycap'n Kragg",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 7)"
+   },
+   "replacements": {
+    "Sahket Sapper": "Vilespine Slayer"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: level 7 (a full 30-card list with no smaller lower-level version, the shape of a chapter's seventh boss, the last before its Plague Lord) = tier 4. The page names chapter 1 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Sahket Sapper by Vilespine Slayer (a Rogue minion that removes an enemy minion, of the boss's Heroic list)."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's Normal table sums to 32: it lists two copies each of the Legendaries Edwin VanCleef and Skycap'n Kragg. The row keeps one of each (one copy of a Legendary per deck), which gives the 30 cards of a full list."
+    },
+    {
+     "kind": "power",
+     "note": "\"Retired\" Treasure Hunter (2) puts a copy of a random card of the run player's hand into the boss's hand (Mind Vision's rule). The boss learns that one card: the copy is its own; the run player sees which card was copied. In the boss's fair-view search the run player's hand holds only masked cards, so there the copy is made only from a card the boss already saw go into that hand (else nothing): the search never reads the hidden hand. Offered while the run player's hand (a public count) holds a card and the boss's hand has room."
+    }
+   ]
+  },
+  {
+   "id": "ulda_28_sazin",
+   "name": "Sazin",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_28h",
+   "power": "ULDA_BOSS_28p",
+   "tier": "4",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 7
+   },
+   "flags": [
+    "bothPlayers",
+    "hiddenZone"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Sazin",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 7)",
+     "cards": [
+      {
+       "name": "Blazing Invocation",
+       "count": 2
+      },
+      {
+       "name": "Crackle",
+       "count": 2
+      },
+      {
+       "name": "Elementary Reaction",
+       "count": 2
+      },
+      {
+       "name": "Eternal Sentinel",
+       "count": 1
+      },
+      {
+       "name": "Murmuring Elemental",
+       "count": 2
+      },
+      {
+       "name": "Lightning Storm",
+       "count": 2
+      },
+      {
+       "name": "Unbound Elemental",
+       "count": 2
+      },
+      {
+       "name": "Hex",
+       "count": 1
+      },
+      {
+       "name": "Rumbling Elemental",
+       "count": 2
+      },
+      {
+       "name": "Thunderhead",
+       "count": 2
+      },
+      {
+       "name": "Earth Elemental",
+       "count": 2
+      },
+      {
+       "name": "Hallazeal the Ascended",
+       "count": 1
+      },
+      {
+       "name": "Grumble, Worldshaker",
+       "count": 1
+      },
+      {
+       "name": "Neptulon",
+       "count": 1
+      },
+      {
+       "name": "Stone Sentinel",
+       "count": 2
+      },
+      {
+       "name": "Al'Akir the Windlord",
+       "count": 1
+      },
+      {
+       "name": "Quicksand Elemental",
+       "count": 2
+      },
+      {
+       "name": "Tar Creeper",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 7)"
+   },
+   "replacements": {
+    "Quicksand Elemental": "Tar Creeper"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: level 7 (a full 30-card list with no smaller lower-level version, the shape of a chapter's seventh boss, the last before its Plague Lord) = tier 4. The page names chapter 1 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Quicksand Elemental by Tar Creeper (an Elemental of the boss's list)."
+    },
+    {
+     "kind": "power",
+     "note": "Mighty Windstorm (0): each player, the boss first, swaps a random minion of their hand with a random minion of their board: the board minion returns to its owner's hand (as a fresh card) and the hand minion is put onto the board in its place (summoned, so no Battlecry). A player with no minion in hand or none on board swaps nothing. A run shrine is never chosen (a run shrine never leaves the board). The run player's hand minion becomes public as it is summoned; the hidden hand is not read for anything else, and in the boss's fair-view search that hand holds only masked cards, so there the run player swaps only a minion the boss already saw go into that hand. Offered while the boss can swap (its own hand and board) or the run player has a minion on board and a card in hand (public facts)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_29_ozara",
+   "name": "Ozara",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_29h",
+   "power": "ULDA_BOSS_29p",
+   "tier": "4",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 7
+   },
+   "flags": [
+    "passive"
+   ],
+   "cards": [
+    "EX1_243"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Ozara",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 7)",
+     "cards": [
+      {
+       "name": "Tunnel Trogg",
+       "count": 2
+      },
+      {
+       "name": "Ancestral Knowledge",
+       "count": 2
+      },
+      {
+       "name": "Crushing Hand",
+       "count": 2
+      },
+      {
+       "name": "Earthen Might",
+       "count": 2
+      },
+      {
+       "name": "Menacing Nimbus",
+       "count": 2
+      },
+      {
+       "name": "Sandstorm Elemental",
+       "count": 2
+      },
+      {
+       "name": "Far Sight",
+       "count": 2
+      },
+      {
+       "name": "Unbound Elemental",
+       "count": 2
+      },
+      {
+       "name": "Thunderhead",
+       "count": 2
+      },
+      {
+       "name": "Earth Elemental",
+       "count": 2
+      },
+      {
+       "name": "Earthquake",
+       "count": 2
+      },
+      {
+       "name": "Lesser Sapphire Spellstone",
+       "count": 2
+      },
+      {
+       "name": "Mogu Fleshshaper",
+       "count": 2
+      },
+      {
+       "name": "Quicksand Elemental",
+       "count": 2
+      },
+      {
+       "name": "Cauldron Elemental",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 7)"
+   },
+   "replacements": {
+    "Quicksand Elemental": "Tar Creeper"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: level 7 (a full 30-card list with no smaller lower-level version, the shape of a chapter's seventh boss, the last before its Plague Lord) = tier 4. The page names chapter 2 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Quicksand Elemental by Tar Creeper (a cheap Elemental)."
+    },
+    {
+     "kind": "power",
+     "note": "Mother of Sand (passive): after the boss plays a card with Overload, it summons a Dust Devil (EX1_243; summoned, so its own Overload does not apply); it needs a free slot."
+    }
+   ]
+  },
+  {
+   "id": "ulda_30_ermavar",
+   "name": "Ermavar",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_30h",
+   "power": "ULDA_BOSS_30p",
+   "tier": "2",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 3
+   },
+   "flags": [
+    "passive"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Ermavar",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 3)",
+     "cards": [
+      {
+       "name": "Forbidden Flame",
+       "count": null
+      },
+      {
+       "name": "Flame Geyser",
+       "count": null
+      },
+      {
+       "name": "Lesser Ruby Spellstone",
+       "count": null
+      },
+      {
+       "name": "Pyros",
+       "count": null
+      },
+      {
+       "name": "Dune Sculptor",
+       "count": null
+      },
+      {
+       "name": "Flame Ward",
+       "count": null
+      },
+      {
+       "name": "Flamewaker",
+       "count": null
+      },
+      {
+       "name": "Dragon's Fury",
+       "count": null
+      },
+      {
+       "name": "Flamestrike",
+       "count": null
+      },
+      {
+       "name": "Fire Fly",
+       "count": null
+      },
+      {
+       "name": "Flame Juggler",
+       "count": null
+      },
+      {
+       "name": "Injured Tol'vir",
+       "count": null
+      },
+      {
+       "name": "Neferset Ritualist",
+       "count": null
+      },
+      {
+       "name": "Fire Plume Phoenix",
+       "count": null
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Mirror Image",
+       "count": null
+      },
+      {
+       "name": "Flame Geyser",
+       "count": null
+      },
+      {
+       "name": "Flamecannon",
+       "count": null
+      },
+      {
+       "name": "Sorcerer's Apprentice",
+       "count": null
+      },
+      {
+       "name": "Cinderstorm",
+       "count": null
+      },
+      {
+       "name": "Flame Ward",
+       "count": null
+      },
+      {
+       "name": "Flamewaker",
+       "count": null
+      },
+      {
+       "name": "Fireball",
+       "count": null
+      },
+      {
+       "name": "Fire Fly",
+       "count": null
+      },
+      {
+       "name": "Flame Juggler",
+       "count": null
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 3)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Injured Tol'vir": "Frostwolf Grunt"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 2-3 (a \"15; 20\" table: 15 cards on level 2, 20 on level 3); the upper level, 3, = tier 2. The page names chapter 1 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists the possible cards of the level 2-3 deck (15 or 20 of them, no counts). A combat tier fights with 30: each listed card once, a second copy of each, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Injured Tol'vir by Frostwolf Grunt (a 2-Cost Taunt)."
+    },
+    {
+     "kind": "power",
+     "note": "Fireshaper (passive): after the boss casts a spell, 2 damage randomly split among all enemies (two 1-damage hits on the run player's hero or minions; Flamewaker's rule, the power's template). A hero power deals no Spell Damage."
+    }
+   ]
+  },
+  {
+   "id": "ulda_31_drasar",
+   "name": "Pillager Drasar",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_31h",
+   "power": "ULDA_BOSS_31p",
+   "tier": "1",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 2
+   },
+   "cards": [
+    "ULDA_BOSS_31e1"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Pillager_Drasar",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 2)",
+     "cards": [
+      {
+       "name": "Beakered Lightning",
+       "count": null
+      },
+      {
+       "name": "Tunnel Trogg",
+       "count": null
+      },
+      {
+       "name": "Ancestral Knowledge",
+       "count": null
+      },
+      {
+       "name": "Likkim",
+       "count": null
+      },
+      {
+       "name": "Sandstorm Elemental",
+       "count": null
+      },
+      {
+       "name": "Murmy",
+       "count": null
+      },
+      {
+       "name": "Injured Tol'vir",
+       "count": null
+      },
+      {
+       "name": "Stonesplinter Trogg",
+       "count": null
+      },
+      {
+       "name": "Candletaker",
+       "count": null
+      },
+      {
+       "name": "Burly Rockjaw Trogg",
+       "count": null
+      },
+      {
+       "name": "Trogg Gloomeater",
+       "count": null
+      },
+      {
+       "name": "Troggzor the Earthinator",
+       "count": null
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Sludge Slurper",
+       "count": null
+      },
+      {
+       "name": "Tunnel Trogg",
+       "count": null
+      },
+      {
+       "name": "Eternal Sentinel",
+       "count": null
+      },
+      {
+       "name": "Likkim",
+       "count": null
+      },
+      {
+       "name": "Primalfin Totem",
+       "count": null
+      },
+      {
+       "name": "Totem Golem",
+       "count": null
+      },
+      {
+       "name": "Unbound Elemental",
+       "count": null
+      },
+      {
+       "name": "Doomhammer",
+       "count": null
+      },
+      {
+       "name": "Nerubian Egg",
+       "count": null
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 2)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Injured Tol'vir": "Frostwolf Grunt",
+    "Murmy": "Micro Mummy"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 1-2 (a \"10; 15\" table of possible cards: 10 cards on level 1, 15 on level 2) = tier 1. The page names chapter 4 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists the possible cards of the level 1-2 deck (10 or 15 of them, no counts). A combat tier fights with 30: each listed card once, a second copy of each, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Injured Tol'vir by Frostwolf Grunt (a 2-Cost Taunt) and Murmy by Micro Mummy (a Reborn minion)."
+    },
+    {
+     "kind": "power",
+     "note": "Pillaged Relics (2): the boss chooses any minion; it gets, at random, +1/+1 (enchantment ULDA_BOSS_31e1), Divine Shield or Taunt."
+    }
+   ]
+  },
+  {
+   "id": "ulda_32_edra",
+   "name": "Edra",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_32h",
+   "power": "ULDA_BOSS_32p",
+   "tier": "1",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 2
+   },
+   "cards": [
+    "CS2_231",
+    "DAL_568e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Edra",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 2)",
+     "cards": [
+      {
+       "name": "Moonfire",
+       "count": null
+      },
+      {
+       "name": "Acornbearer",
+       "count": null
+      },
+      {
+       "name": "Forbidden Ancient",
+       "count": null
+      },
+      {
+       "name": "Worthy Expedition",
+       "count": null
+      },
+      {
+       "name": "Crystal Merchant",
+       "count": null
+      },
+      {
+       "name": "Dreamway Guardians",
+       "count": null
+      },
+      {
+       "name": "Druid of the Saber",
+       "count": null
+      },
+      {
+       "name": "Grove Tender",
+       "count": null
+      },
+      {
+       "name": "Keeper of the Grove",
+       "count": null
+      },
+      {
+       "name": "Wispering Woods",
+       "count": null
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Acornbearer",
+       "count": null
+      },
+      {
+       "name": "Living Roots",
+       "count": null
+      },
+      {
+       "name": "Dreamway Guardians",
+       "count": null
+      },
+      {
+       "name": "Druid of the Swarm",
+       "count": null
+      },
+      {
+       "name": "Power of the Wild",
+       "count": null
+      },
+      {
+       "name": "BEEEES!!!",
+       "count": null
+      },
+      {
+       "name": "Crypt Lord",
+       "count": null
+      },
+      {
+       "name": "Wardruid Loti",
+       "count": null
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 2)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Crystal Merchant": "Enchanted Raven"
+   },
+   "fillers": [
+    "Ironbark Protector"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 1-2 (a \"10; 15\" table of possible cards: 10 cards on level 1, 15 on level 2) = tier 1. The page names chapter 4 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists the possible cards of the level 1-2 deck (10 or 15 of them, no counts). A combat tier fights with 30: each listed card once, a second copy of each, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Crystal Merchant by Enchanted Raven (a 1-Cost Druid minion)."
+    },
+    {
+     "kind": "deck",
+     "note": "The Normal and Heroic tables share cards, so with two copies of each the deck stays short of 30; the last cards are curated fillers of the boss's class and theme: Ironbark Protector."
+    },
+    {
+     "kind": "power",
+     "note": "Whispering Sentinel (1) summons a 1/1 Wisp (CS2_231) for the boss and gives it Lifesteal (Lightforged Blessing's enchantment DAL_568e: the client has no enchantment of the power's own); it needs a free slot."
+    }
+   ]
+  },
+  {
+   "id": "ulda_33_ruby",
+   "name": "Runaway Ruby",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_33h",
+   "power": "ULDA_BOSS_33p",
+   "tier": "3",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "flags": [
+    "bothPlayers",
+    "position"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Runaway_Ruby",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 6)",
+     "cards": [
+      {
+       "name": "Boommaster Flark",
+       "count": 1
+      },
+      {
+       "name": "Eternium Rover",
+       "count": 2
+      },
+      {
+       "name": "Omega Assembly",
+       "count": 2
+      },
+      {
+       "name": "Warbot",
+       "count": 2
+      },
+      {
+       "name": "Battle Rage",
+       "count": 2
+      },
+      {
+       "name": "Vicious Scraphound",
+       "count": 2
+      },
+      {
+       "name": "Brawl",
+       "count": 2
+      },
+      {
+       "name": "Security Rover",
+       "count": 2
+      },
+      {
+       "name": "Cogmaster",
+       "count": 2
+      },
+      {
+       "name": "Mechwarper",
+       "count": 2
+      },
+      {
+       "name": "Galvanizer",
+       "count": 2
+      },
+      {
+       "name": "Flying Machine",
+       "count": 2
+      },
+      {
+       "name": "SN1P-SN4P",
+       "count": 1
+      },
+      {
+       "name": "Spider Tank",
+       "count": 2
+      },
+      {
+       "name": "Tinkertown Technician",
+       "count": 2
+      },
+      {
+       "name": "Clockwork Automaton",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 6)"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 5-6 (the 30-card level-6 list; the page notes that on level 5 five random cards are missing) = tier 3. The page names chapter 2 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's list is the level 6 deck; on level 5 the original removes 5 random cards. Here the row always uses the level 6 list."
+    },
+    {
+     "kind": "power",
+     "note": "Out of Control (1) deals 1 damage to the center-most minions of each board: on a board of an odd count the middle minion, of an even count the two middle ones (positions are counted over every minion of that board, a dormant run shrine included, which takes no damage). Offered while a board holds a minion."
+    }
+   ]
+  },
+  {
+   "id": "ulda_34_dovo",
+   "name": "Dovo Fastfuse",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_34h",
+   "power": "ULDA_BOSS_34p",
+   "tier": "1",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 2
+   },
+   "flags": [
+    "bothPlayers"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Dovo_Fastfuse",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 2)",
+     "cards": [
+      {
+       "name": "EVIL Miscreant",
+       "count": null
+      },
+      {
+       "name": "Rocket Boots",
+       "count": null
+      },
+      {
+       "name": "Clockwork Gnome",
+       "count": null
+      },
+      {
+       "name": "Goblin Bomb",
+       "count": null
+      },
+      {
+       "name": "Booty Bay Bookie",
+       "count": null
+      },
+      {
+       "name": "EVIL Cable Rat",
+       "count": null
+      },
+      {
+       "name": "Mad Bomber",
+       "count": null
+      },
+      {
+       "name": "Whirliglider",
+       "count": null
+      },
+      {
+       "name": "Explodinator",
+       "count": null
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Devastate",
+       "count": null
+      },
+      {
+       "name": "Eternium Rover",
+       "count": null
+      },
+      {
+       "name": "Armorsmith",
+       "count": null
+      },
+      {
+       "name": "Clockwork Goblin",
+       "count": null
+      },
+      {
+       "name": "Frothing Berserker",
+       "count": null
+      },
+      {
+       "name": "Axe Flinger",
+       "count": null
+      },
+      {
+       "name": "Bloodhoof Brave",
+       "count": null
+      },
+      {
+       "name": "Bomb Lobber",
+       "count": null
+      },
+      {
+       "name": "Grim Patron",
+       "count": null
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 2)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 1-2 (a \"10; 15\" table of possible cards: 10 cards on level 1, 15 on level 2) = tier 1. The page names chapter 3 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists the possible cards of the level 1-2 deck (10 or 15 of them, no counts). A combat tier fights with 30: each listed card once, a second copy of each, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "power",
+     "note": "Tomb Boomin' (2) deals 4 damage split randomly between all characters: four 1-damage hits, each on a random character of either side still alive (both heroes included; Mad Bomber's rule, the power's template, with the boss's own hero in the pool)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_35_ptah",
+   "name": "Earthrager Ptah",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_35h",
+   "power": "ULDA_BOSS_35p",
+   "tier": "4",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 7
+   },
+   "flags": [
+    "position"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Earthrager_Ptah",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 7)",
+     "cards": [
+      {
+       "name": "Tunnel Trogg",
+       "count": 2
+      },
+      {
+       "name": "Ancestral Knowledge",
+       "count": 2
+      },
+      {
+       "name": "Fire Plume Harbinger",
+       "count": 2
+      },
+      {
+       "name": "Lava Shock",
+       "count": 2
+      },
+      {
+       "name": "Flametongue Totem",
+       "count": 2
+      },
+      {
+       "name": "Magma Rager",
+       "count": 2
+      },
+      {
+       "name": "Unbound Elemental",
+       "count": 2
+      },
+      {
+       "name": "Fireguard Destroyer",
+       "count": 2
+      },
+      {
+       "name": "Earth Elemental",
+       "count": 2
+      },
+      {
+       "name": "Fire Elemental",
+       "count": 2
+      },
+      {
+       "name": "Earthquake",
+       "count": 1
+      },
+      {
+       "name": "Kalimos, Primal Lord",
+       "count": 1
+      },
+      {
+       "name": "The Runespear",
+       "count": 1
+      },
+      {
+       "name": "Vryghoul",
+       "count": 2
+      },
+      {
+       "name": "Bone Wraith",
+       "count": 2
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      },
+      {
+       "name": "Troggzor the Earthinator",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 7)"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: level 7 (a full 30-card list with no smaller lower-level version, the shape of a chapter's seventh boss, the last before its Plague Lord) = tier 4. The page names chapter 4 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "power",
+     "note": "Vengeful Construct (3): the boss chooses a minion of either side with 2 or less Health; it and the minions next to it on its board are destroyed (a run shrine goes dormant, as from any destroy effect; a dormant one is left as it is)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_36_kasa",
+   "name": "Kasa Softspeaker",
+   "provenance": "ULDA",
+   "family": "20",
+   "hero": "ULDA_BOSS_36h",
+   "power": "ULDA_BOSS_36p",
+   "tier": "2",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "flags": [
+    "forcedAttack"
+   ],
+   "cards": [
+    "ULDA_BOSS_36e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Kasa_Softspeaker",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 4)",
+     "cards": [
+      {
+       "name": "Plague of Madness",
+       "count": 2
+      },
+      {
+       "name": "Cursed Blade",
+       "count": 1
+      },
+      {
+       "name": "Whirlwind",
+       "count": 1
+      },
+      {
+       "name": "Bring It On!",
+       "count": 1
+      },
+      {
+       "name": "Cleave",
+       "count": 2
+      },
+      {
+       "name": "Cornered Sentry",
+       "count": 1
+      },
+      {
+       "name": "Heroic Strike",
+       "count": 2
+      },
+      {
+       "name": "Weapons Project",
+       "count": 1
+      },
+      {
+       "name": "Fiery War Axe",
+       "count": 2
+      },
+      {
+       "name": "Mountainfire Armor",
+       "count": 2
+      },
+      {
+       "name": "Shield Block",
+       "count": 2
+      },
+      {
+       "name": "Arcanite Reaper",
+       "count": 1
+      },
+      {
+       "name": "Swamp Leech",
+       "count": 2
+      },
+      {
+       "name": "Voodoo Doctor",
+       "count": 2
+      },
+      {
+       "name": "Earthen Ring Farseer",
+       "count": 2
+      },
+      {
+       "name": "Hench-Clan Thug",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Eternium Rover",
+       "count": 2
+      },
+      {
+       "name": "Whirlwind",
+       "count": 1
+      },
+      {
+       "name": "Armorsmith",
+       "count": 2
+      },
+      {
+       "name": "Vicious Scraphound",
+       "count": 2
+      },
+      {
+       "name": "Frothing Berserker",
+       "count": 2
+      },
+      {
+       "name": "Shield Block",
+       "count": 2
+      },
+      {
+       "name": "Restless Mummy",
+       "count": 2
+      },
+      {
+       "name": "Alley Armorsmith",
+       "count": 2
+      },
+      {
+       "name": "Armored Goon",
+       "count": 2
+      },
+      {
+       "name": "Sharkfin Fan",
+       "count": 1
+      },
+      {
+       "name": "Hench-Clan Thug",
+       "count": 2
+      },
+      {
+       "name": "Violet Illusionist",
+       "count": 2
+      },
+      {
+       "name": "Zilliax",
+       "count": 1
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 4)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Plague of Madness": "Upgrade!",
+    "Cursed Blade": "Light's Justice"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 3-4 (the 25-card level-4 list; on level 3 five random cards are missing) = tier 2. The page names chapter 2 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-4 list has 25 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script yet are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Plague of Madness (\"Each player equips a 2/2 Knife with Poisonous\") by Upgrade! (a 1-Cost card that equips or upgrades the boss's weapon) and Cursed Blade by Light's Justice (a 1-Cost weapon)."
+    },
+    {
+     "kind": "power",
+     "note": "Madness Incarnate (1): the boss's hero gains +1 Attack this turn (enchantment ULDA_BOSS_36e), then attacks up to three different random enemy minions, one after another (forced attacks: a frozen or exhausted hero attacks too, a Taunt does not redirect, a Stealthed or Immune minion is not picked, a minion that died is not picked; the hero takes each minion's damage, an equipped weapon loses Durability, and the attacks stop when either hero dies). Offered while the run player has a minion it can attack."
+    }
+   ]
+  }
+ ],
+ "rejected": []
+}
