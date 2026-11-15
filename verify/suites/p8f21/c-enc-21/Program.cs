@@ -238,15 +238,24 @@ Guard("Jolene", () =>
     used = Power(g);
     Check("C4 with no spell in the run player's hand it is offered (the boss cannot know) and does nothing", used && boss.HandZone.Count == 0);
     var seen = new HashSet<string>();
+    var costs = new List<string>();
+    bool spoiled = true;
     for (int i = 0; i < 12; i++)
     {
         Round(g);
         EmptyHand(player); EmptyHand(boss);
         ToHand(g, player, Moonfire); ToHand(g, player, Frostbolt); ToHand(g, player, Yeti);
         Power(g);
-        if (boss.HandZone.Count == 1) seen.Add(boss.HandZone[0].Card.Id);
+        if (boss.HandZone.Count != 1) continue;
+        var got = boss.HandZone[0];
+        seen.Add(got.Card.Id);
+        costs.Add(got.Card.Id + "=" + got.Cost);
+        spoiled &= Has(got, "ULDA_BOSS_43e1");
     }
-    Check("C5 twelve uses with two spells in that hand: both are copied (random by the game RNG); the Moonfire copy costs 0, not less", seen.SetEquals(new[] { Moonfire, Frostbolt }), string.Join(",", seen));
+    Check("C5 twelve uses with two spells in that hand: both are copied (random by the game RNG), each Spoiled; the Frostbolt copy costs 0 (2 less) and the Moonfire copy 0, not less",
+        seen.SetEquals(new[] { Moonfire, Frostbolt }) && spoiled && costs.Count > 0
+        && costs.All(x => x == Moonfire + "=0" || x == Frostbolt + "=" + Math.Max(0, C(Frostbolt).Cost - 2)) && C(Frostbolt).Cost == 2 && C(Moonfire).Cost == 0,
+        string.Join(",", costs.Distinct()));
     Round(g);
     FillHand(boss);
     Check("C6 with the boss's hand full it is not offered", !Offered(g));
@@ -477,10 +486,21 @@ Guard("Kasmut", () =>
     Kill(g, theirs);
     var theirsBack = player.BoardZone.FirstOrDefault(m => m.Card.Id == MicroMummy);
     Check("K3 the run player's Reborn minion is restored to full too (\"a minion\")", theirsBack != null && theirsBack.Health == 2);
-    var copy = (Minion)Entity.FromCard(boss, C(Yeti), new EntityData { [GameTag.HAS_BEEN_REBORN] = 1 });
-    Generic.SummonBlock(g, copy, -1, boss.Hero);
-    Hit(g, copy, 2);
-    Check("K4 a minion that merely carries the Reborn-returned mark but was not just Reborn keeps its damage", copy.Damage == 2);
+    // A minion summoned already damaged with the Reborn-returned mark (as a copy can carry it, BonusEffects.CopyState) is no Reborn
+    // return unless its creator is a dead minion of its card in a graveyard: with no creator, and with a living one of its card.
+    // (Damage set as Game.ResolveReborns sets it: on the new entity, before its summon.)
+    var marked = (Minion)Entity.FromCard(boss, C(Yeti), new EntityData { [GameTag.HAS_BEEN_REBORN] = 1 });
+    marked.Damage = 2;
+    Generic.SummonBlock(g, marked, -1, boss.Hero);
+    g.DeathProcessingAndAuraUpdate();
+    var living = Board(g, boss, Yeti);
+    var linked = (Minion)Entity.FromCard(boss, C(Yeti), new EntityData { [GameTag.HAS_BEEN_REBORN] = 1, [GameTag.DISPLAYED_CREATOR] = living.Id });
+    linked.Damage = 2;
+    Generic.SummonBlock(g, linked, -1, boss.Hero);
+    g.DeathProcessingAndAuraUpdate();
+    Check("K4 a damaged minion summoned with the Reborn-returned mark but not by Reborn (no creator, or a living creator of its card) keeps its damage",
+        marked.Zone == boss.BoardZone && marked.Damage == 2 && linked.Zone == boss.BoardZone && linked.Damage == 2 && living.Zone == boss.BoardZone,
+        marked.Damage + "/" + linked.Damage);
 });
 
 // ============================================================ L  Taskmaster Maru: E.V.I.L. Conscription
