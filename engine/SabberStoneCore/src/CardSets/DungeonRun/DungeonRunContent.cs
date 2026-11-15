@@ -509,6 +509,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			TombsActives();
 			TombsPassives();
 			Deferrals();
+			PlagueLordTreasures(); // phase 8 family 24: ULDA_115 (DungeonRunEncounters.F24.cs)
 
 			ByKeyMap = Entries.ToDictionary(e => e.Key);
 		}

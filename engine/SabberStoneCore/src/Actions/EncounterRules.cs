@@ -70,6 +70,13 @@ namespace SabberStoneCore.Actions
 		/// </summary>
 		public const GameTag SetAsideStore = (GameTag)32645;
 		/// <summary>
+		/// Family 24 (the Plague Lords; rules in EncounterRules.F24.cs), one counter on two kinds of entity: on the run player's
+		/// controller, the ULDA_115 "Gnomebliterator"s it cast this match (each banks damage for the run's next Plague Lord:
+		/// <see cref="Harvest"/>); on a Mur-nado hero power (ULDA_BOSS_39p3), the Murlocs that died while it was active (each
+		/// makes it cost (1) less).
+		/// </summary>
+		public const GameTag PlagueCount = (GameTag)32659;
+		/// <summary>
 		/// On the game: one bit per hooked global rule (EncounterCard.HookIndex) that was applied to this match (family 05:
 		/// DungeonRunGlobalRules.Apply runs a rule's apply hook once; a rule with no player enchantment is active by this mark).
 		/// </summary>
@@ -422,7 +429,7 @@ namespace SabberStoneCore.Actions
 				.OrderBy(h => h.Id).Select(h => h.Card.Id).ToList();
 			bool bossDead = boss.Hero.ToBeDestroyed || boss.Hero.Health <= 0;
 			return new RunMatchEnd(bossDead ? 0 : boss.Hero.Health, boss[FormIndex], boss[FormChanges],
-				Math.Max(0, player.Hero.Damage), heroes, game[NoLoss] == 1);
+				Math.Max(0, player.Hero.Damage), heroes, game[NoLoss] == 1, player[PlagueCount]);
 		}
 	}
 }

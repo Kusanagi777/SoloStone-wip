@@ -34,7 +34,7 @@ internal sealed class DungeonRun
     internal const int BattleScarsHealth = 100;
     /// <summary>ULDA_729 Multiclassing (a run-scope rule): "Loot can be from any class" (<see cref="LootClasses"/>).</summary>
     internal const string Multiclassing = "ULDA_729";
-    /// <summary>ULDA_115 "Gnomebliterator": while the run holds it, a persistent-damage boss starts with this much extra damage.</summary>
+    /// <summary>ULDA_115 "Gnomebliterator": each cast banks this much damage for the run's next persistent-damage boss (DungeonRunState.PlagueLordDamage).</summary>
     internal const string Gnomebliterator = "ULDA_115";
     internal const int GnomebliteratorDamage = 10;
     /// <summary>The drafts phase 7 adds (DungeonRunDraft.Kind): picked on the treasure screen.</summary>
@@ -1038,7 +1038,7 @@ internal sealed class DungeonRun
     /// boss prior holds them (DungeonRunAdmission.CatalogSecretPrior).
     /// </summary>
     internal static bool TreasureOfferedOn(DungeonRunTreasure t, DungeonRunState state) =>
-        t.OfferedOn(state.IsActRun) && DungeonRunAdmission.Classify(null, t.Id, AdmitScope.Player, null, state.IsCatalogRun).Admitted;
+        t.OfferedOn(state.IsActRun, state.ScheduleVersion >= 3) && DungeonRunAdmission.Classify(null, t.Id, AdmitScope.Player, null, state.IsCatalogRun).Admitted;
 
     internal void PickTreasure(DungeonRunState state, string treasureId)
     {
@@ -1769,7 +1769,7 @@ internal sealed class DungeonRun
 
     /// <summary>
     /// A persistent-damage boss's Health at the start of the current fight: its full Health, or what the profile's record left
-    /// (a run that reads the ledger), less <see cref="GnomebliteratorDamage"/> while the run holds ULDA_115; at least 1.
+    /// (a run that reads the ledger), less the damage the run's ULDA_115 casts banked for it (DungeonRunState.PlagueLordDamage); at least 1.
     /// </summary>
     internal int PersistentRemaining(DungeonRunState state, DungeonRunProfile profile)
     {
@@ -1777,7 +1777,7 @@ internal sealed class DungeonRun
         int full = BossHealth(state);
         if (!boss.HasFlag(DungeonRunEncounterData.PersistentDamage)) return full;
         int remaining = ReadsLedger(state) && profile?.DamageOf(boss.Id) is DungeonRunBossDamage record ? Math.Min(full, Math.Max(1, record.Remaining)) : full;
-        if (state.ActiveTreasures.Contains(Gnomebliterator) || state.Treasures.Contains(Gnomebliterator)) remaining -= GnomebliteratorDamage;
+        if (state.PlagueLordDamage > 0) remaining -= state.PlagueLordDamage;
         return Math.Max(1, remaining);
     }
 
@@ -1792,7 +1792,7 @@ internal sealed class DungeonRun
         var boss = CurrentBoss(state);
         string own = RunClass(state).HeroCard;
         var cards = boss.HeroCards.Where(h => !h.SkipFor.Contains(own)).ToList();
-        var relay = boss.Relay.Where(h => !h.SkipFor.Contains(own)).ToList();
+        var relay = RelayFor(state, boss);
         if (cards.Count == 0 && relay.Count == 0) return null;
         var result = new DungeonRunHeroSwitch { Floor = state.Floor, Kind = relay.Count > 0 ? DungeonRunHeroSwitch.KindRelay : DungeonRunHeroSwitch.KindHunters };
         foreach (var h in cards)
@@ -1803,6 +1803,26 @@ internal sealed class DungeonRun
             result.Options.Add(new DungeonRunHeroOption { Hero = h.Hero, Power = power });
         }
         foreach (var h in relay) result.Options.Add(new DungeonRunHeroOption { Hero = h.Hero, Power = h.Power, Deck = h.Deck, Health = h.Health });
+        return result;
+    }
+
+    /// <summary>
+    /// The relay heroes of the current fight against <paramref name="boss"/> (phase 8), in the order they enter: each listed
+    /// hero once, in first-listed order, less the ones the run's own hero card is listed to skip. A hero listed more than once
+    /// (family 24: a Tombs explorer with its three client finale decks) enters with one of its entries, drawn from the run seed
+    /// and the floor (EncounterStream, 2000 + floor, the hero's index), so a restage keeps it. Pure.
+    /// </summary>
+    internal List<DungeonRunRelayHero> RelayFor(DungeonRunState state, DungeonRunBoss boss)
+    {
+        string own = RunClass(state).HeroCard;
+        var rows = boss.Relay.Where(h => !h.SkipFor.Contains(own)).ToList();
+        var heroes = rows.Select(h => h.Hero).Distinct(StringComparer.Ordinal).ToList();
+        var result = new List<DungeonRunRelayHero>();
+        for (int i = 0; i < heroes.Count; i++)
+        {
+            var entries = rows.Where(h => h.Hero == heroes[i]).ToList();
+            result.Add(entries.Count == 1 ? entries[0] : entries[StableSeed.Index(StableSeed.Derive(state.Seed, EncounterStream, 2000 + state.Floor, i), entries.Count)]);
+        }
         return result;
     }
 
@@ -1911,7 +1931,7 @@ internal sealed class DungeonRun
         string own = RunClass(state).HeroCard;
         foreach (var h in boss.HeroCards.Where(h => !h.SkipFor.Contains(own)))
             plan.PlayerHeroCards.Add(new RunFightHero { Hero = Cards.FromId(h.Hero), Deck = h.Deck.Select(Cards.FromId).ToList(), Passives = h.Passives.ToList() });
-        foreach (var h in boss.Relay.Where(h => !h.SkipFor.Contains(own)))
+        foreach (var h in RelayFor(state, boss))
             plan.PlayerRelay.Add(new RunFightHero
             {
                 Hero = Cards.FromId(h.Hero), Power = Cards.FromId(DungeonRunSetup.PowerCardId(h.Power)), Health = h.Health,
@@ -1950,6 +1970,9 @@ internal sealed class DungeonRun
                 }
             }
         }
+        // Family 24: a persistent-damage fight spends the damage ULDA_115 banked for it; every other fight banks its casts.
+        if (boss != null && boss.HasFlag(DungeonRunEncounterData.PersistentDamage)) state.PlagueLordDamage = 0;
+        else if (boss != null && end != null && end.Gnomebliterators > 0) state.PlagueLordDamage += GnomebliteratorDamage * end.Gnomebliterators;
         if (outcome == DungeonRunOutcome.Win && end != null && ownHero && rules.Any(r => r.Id == BattleScars))
             state.HeroDamage = Math.Max(0, Math.Min(end.PlayerHeroDamage, BattleScarsHealth - 1));
         state.HeroSwitch = null;

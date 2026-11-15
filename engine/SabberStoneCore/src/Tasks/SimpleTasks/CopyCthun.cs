@@ -30,8 +30,10 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			if (controller.ProxyCthun == 0)
 				return TaskState.STOP;
 
-			var proxyCthun = (Minion) game.IdEntityDic[controller.ProxyCthun];
-			var minionTarget = (Minion) target;
+			// Phase 8 family 24: a ZONE event whose target is not a minion (seen in a boss's fair-view search with K'zrath's
+			// C'Thun deck: InvalidCastException, a fallback) copies nothing instead of throwing.
+			if (!(game.IdEntityDic.TryGetValue(controller.ProxyCthun, out IPlayable proxy) && proxy is Minion proxyCthun) || !(target is Minion minionTarget))
+				return TaskState.STOP;
 
 			if (game.History)
 			{

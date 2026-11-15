@@ -22,6 +22,7 @@
 #                        bp.sh enc09-auto|enc09-finals|enc09-rooms|enc09-cards   (c-bosspilot-enc09)
 #   family 10 modes:     bp.sh enc10|enc10-nab|enc10-seeds|enc10-hagatha        (twice per call)
 #                        bp.sh enc10a|enc10b|enc10-cards|enc10-shrine <k>         (one run per call, k = 1 or 2; then `bp.sh same <mode>`)
+#   family 24 modes:     bp.sh enc24 | plague24 <carried 95|110|195|210> | tekahn24  (twice per call; tekahn24: the fixture finale with the relay)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -75,6 +76,9 @@ CARDS10=GILA_BOSS_23t,GILA_BOSS_26t2,GILA_BOSS_27t,GILA_BOSS_29t,GILA_BOSS_35t,G
 W10=gila_38_cozzlewurt
 PAD10=$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10
 SHR10=gila_26_gnomenapper,gila_27_experiment_3c,gila_29_sazzmi,gila_32_niira,gila_35_chupacabran,gila_36_griselda,gila_22_willie,gila_26_gnomenapper,gila_29_sazzmi
+# family 24: the three Plague Lords it adds (Icarax is family 01's enc01 / plague) and the boss cards they play from hand
+LORDS24=ulda_37_xatma,ulda_38_kzrath,ulda_39_vesh
+CARDS24=ULDA_BOSS_37t,LOEA10_5,LOEA10_5H,KARA_13_12H,LOEA16_24H,UNG_942t,ULDA_033,ULDA_031,ULDA_BOSS_67t
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -214,6 +218,11 @@ enc10-shrine) need $E; once enc10-shrine "$2" BOSS=$PAD10,$SHR10 GAMES=1
   echo "fights against a shrine row (TRLA_209h_*) by the nine rows: $(grep -v "^$W10" "$LOGS/enc10-shrine-$2.txt" | grep -c 'TRLA_209h_') of 9" ;;
 enc10-seeds) need $E; twice enc10-seeds FAMILY=10 SEED_BASE=19000 WATCH=$CARDS10 ;;
 enc10-hagatha) need $E; twice enc10-hagatha BOSS=gila_61_hagatha GAMES=6 WATCH=GILA_BOSS_27t ;;
+enc24) need $E; twice enc24 BOSS=$LORDS24 GAMES=2 WATCH=$CARDS24 ;;
+plague24) # each lord starts with <carried> damage banked: 110 / 210 start phase 2 / 3, 95 / 195 cross a threshold in play
+  need $E; c=${2:-95}; twice plague24-$c BOSS=$LORDS24 GAMES=1 CARRIED=$c WATCH=$CARDS24 ;;
+tekahn24) # fixture schedule: acts-v3t's finale enabled on Tekahn with the hero relay; the run hero starts at 1 Health so the explorers enter
+  need $E; twice tekahn24 FINALE=1 GAMES=2 PLAYER_HEALTH=1 SCHEDULE=acts-v3t SCHEDULE_JSON=$FX/p8f24/fixtures/schedule-tekahn.json WATCH=$CARDS24 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;

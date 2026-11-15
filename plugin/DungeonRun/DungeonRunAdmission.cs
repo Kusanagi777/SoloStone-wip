@@ -775,7 +775,8 @@ internal static partial class DungeonRunAdmission
         // The Tombs active treasures offered to an explorer's act run (run-v1.json: the explorers' sixteen starters, pool Tombs),
         // their Twinspell copies and their tokens are the run player's: no boss deck lists one and the boss's generation never
         // yields one. ULDA_044 Blade of the Burning Sun is the deck-wide-change row and ULDA_503 Advanced Targeting Monocle the
-        // from-own-deck row above. ULDA_115 stays rejected (phase 8). Each row names its regression test (c-treasures-F12).
+        // from-own-deck row above. ULDA_115 is admitted by phase 8 family 24 (DungeonRunAdmission.F24.cs). Each row names its
+        // regression test (c-treasures-F12).
         new AdmissionRule
         {
             Family = "run-treasure", Admit = AdmitScope.Player, Lift = RunTreasureLift,
@@ -824,15 +825,6 @@ internal static partial class DungeonRunAdmission
                 + "deals half its hero's Health; every part is public, so the boss's own-deck sample and search see the result "
                 + "(c-treasures-F12 T19)",
             Ids = new[] { "ULDA_118" },
-        },
-        new AdmissionRule
-        {
-            Family = "finale-state", Admit = AdmitScope.None, Lift = PlagueLordLift,
-            Reason = "its second half damages the Plague Lord of the act finale whenever the run fights it; the run has no Plague Lord "
-                + "finale and no state that carries damage to it until phase 8, and a Gnomebliterator that only dealt its first half "
-                + "would misstate the card (c-treasures-F12 T28)",
-            Requires = "the phase 8 Plague Lord finale encounters, and run state that carries damage dealt to a Plague Lord into its fight",
-            Ids = new[] { DungeonRunContent.Gnomebliterator },
         },
 
         // ---------------------------------------------------------------- Dalaran Heist active treasures (phase 6 F7)

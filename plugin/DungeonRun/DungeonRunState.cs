@@ -404,6 +404,13 @@ public sealed class DungeonRunState
     /// </summary>
     [XmlAttribute] public int HeroDamage;
     public bool ShouldSerializeHeroDamage() => HeroDamage != 0;
+    /// <summary>
+    /// Phase 8 family 24: damage banked for the run's next Plague Lord fight (a persistentDamage encounter) by ULDA_115
+    /// "Gnomebliterator", 10 per cast in the run's other fights ("Also deal 10 damage to the Plague Lord when you fight it");
+    /// that fight's start spends it (DungeonRun.PersistentRemaining) and its end clears it. 0 (omitted) otherwise.
+    /// </summary>
+    [XmlAttribute] public int PlagueLordDamage;
+    public bool ShouldSerializePlagueLordDamage() => PlagueLordDamage != 0;
 
     /// <summary>The run deck as card ids (pool cards and active-treasure shells).</summary>
     public List<string> Deck = new List<string>();

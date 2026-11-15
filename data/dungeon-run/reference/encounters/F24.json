@@ -1,0 +1,2807 @@
+{
+ "schemaVersion": 1,
+ "family": "24",
+ "description": "Phase 8 family 24: the Plague Lords Xatma, K'zrath and Vesh (Tombs of Terror chapter 1-3 final bosses; family 01's F01.json keeps Icarax, chapter 4, family 24's own row), phased bosses with persistent damage, and Tekahn, the Tombs finale fought with the explorers' hero relay. Boss deck lists are transcribed from hearthstone.wiki.gg boss pages (read 2026-11-14), by card name; Tekahn's relay decks are the client's finale decks, by card id.",
+ "method": "The wiki's raw wikitext (?action=raw) was read for each page and the Normal deck tables transcribed in table order, rowspan-aware, up to the \"Extra cards in 33-deck\" rows; a boss-only or ambiguous card carries its id. Written by verify/tools/gen/p8f24/make_f24.py; tools/dungeon-run-catalog (step 'encounters') resolves and checks every card.",
+ "bosses": [
+  {
+   "id": "ulda_37_xatma",
+   "name": "Xatma, Plague Lord of Death",
+   "provenance": "ULDA",
+   "family": "24",
+   "hero": "ULDA_BOSS_37h",
+   "power": "ULDA_BOSS_37p1",
+   "tier": "major3",
+   "archetype": "control",
+   "level": {
+    "source": "printed-health",
+    "original": 300
+   },
+   "health": 300,
+   "fixedHealth": true,
+   "flags": [
+    "forms",
+    "persistentDamage",
+    "deckReplace"
+   ],
+   "cards": [
+    "ULDA_BOSS_37t"
+   ],
+   "incompatibleModifiers": [
+    "mod_iron_bosses",
+    "mod_open_road"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Xatma,_Plague_Lord_of_Death",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal phase 1",
+     "cards": [
+      {
+       "name": "Webspinner",
+       "count": 2
+      },
+      {
+       "name": "Corpse Widow",
+       "count": 2
+      },
+      {
+       "name": "Dead Ringer",
+       "count": 2
+      },
+      {
+       "name": "Grandmummy",
+       "count": 2
+      },
+      {
+       "name": "Shadow Word: Death",
+       "count": 2
+      },
+      {
+       "name": "Twilight's Call",
+       "count": 2
+      },
+      {
+       "name": "Shifting Shade",
+       "count": 1
+      },
+      {
+       "name": "Plague of Death",
+       "count": 1
+      },
+      {
+       "name": "Shadow of Death",
+       "count": 2
+      },
+      {
+       "name": "Undertaker",
+       "count": 2
+      },
+      {
+       "name": "Kobold Sandtrooper",
+       "count": 1
+      },
+      {
+       "name": "Deathlord",
+       "count": 2
+      },
+      {
+       "name": "Infested Goblin",
+       "count": 2
+      },
+      {
+       "name": "Polluted Hoarder",
+       "count": 2
+      },
+      {
+       "name": "Feugen",
+       "count": 1
+      },
+      {
+       "name": "Stalagg",
+       "count": 1
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      },
+      {
+       "name": "The Beast",
+       "count": 1
+      },
+      {
+       "name": "Hakkar, the Soulflayer",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Normal phase 2",
+     "cards": [
+      {
+       "name": "Dead Ringer",
+       "count": 2
+      },
+      {
+       "name": "Shadow Visions",
+       "count": 2
+      },
+      {
+       "name": "Dark Cultist",
+       "count": 2
+      },
+      {
+       "name": "Convincing Infiltrator",
+       "count": 2
+      },
+      {
+       "name": "Obsidian Statue",
+       "count": 2
+      },
+      {
+       "name": "Plague of Death",
+       "count": 2
+      },
+      {
+       "name": "Shadow of Death",
+       "count": 2
+      },
+      {
+       "name": "Bloodmage Thalnos",
+       "count": 1
+      },
+      {
+       "name": "Cursed Disciple",
+       "count": 2
+      },
+      {
+       "name": "Abomination",
+       "count": 2
+      },
+      {
+       "name": "Feugen",
+       "count": 1
+      },
+      {
+       "name": "Leeroy Jenkins",
+       "count": 1
+      },
+      {
+       "name": "Sludge Belcher",
+       "count": 2
+      },
+      {
+       "name": "Stalagg",
+       "count": 1
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      },
+      {
+       "name": "Da Undatakah",
+       "count": 1
+      },
+      {
+       "name": "Octosari",
+       "count": 1
+      },
+      {
+       "name": "Sneed's Old Shredder",
+       "count": 2
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      },
+      {
+       "name": "N'Zoth, the Corruptor",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Normal phase 3",
+     "cards": [
+      {
+       "name": "Embalming Ritual",
+       "count": 2
+      },
+      {
+       "name": "Psychopomp",
+       "count": 2
+      },
+      {
+       "name": "Entomb",
+       "count": 2
+      },
+      {
+       "name": "Catrina Muerte",
+       "count": 1
+      },
+      {
+       "name": "Plague of Death",
+       "count": 2
+      },
+      {
+       "name": "Shadow of Death",
+       "count": 2
+      },
+      {
+       "name": "Murmy",
+       "count": 2
+      },
+      {
+       "name": "Bloodmage Thalnos",
+       "count": 1
+      },
+      {
+       "name": "Acolyte of Pain",
+       "count": 2
+      },
+      {
+       "name": "Clockwork Automaton",
+       "count": 2
+      },
+      {
+       "name": "Feugen",
+       "count": 1
+      },
+      {
+       "name": "Mortuary Machine",
+       "count": 2
+      },
+      {
+       "name": "Stalagg",
+       "count": 1
+      },
+      {
+       "name": "Wasteland Assassin",
+       "count": 2
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      },
+      {
+       "name": "Dr. Boom",
+       "count": 1
+      },
+      {
+       "name": "Wrapped Golem",
+       "count": 2
+      },
+      {
+       "name": "Violet Wurm",
+       "count": 1
+      },
+      {
+       "name": "N'Zoth, the Corruptor",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal phase 1"
+   },
+   "forms": [
+    {
+     "hero": "ULDA_BOSS_37h2",
+     "power": "ULDA_BOSS_37p2",
+     "health": 200,
+     "at": {
+      "healthAtMost": 200
+     },
+     "keepExcess": true,
+     "deck": {
+      "list": "Normal phase 2"
+     },
+     "draw": 3
+    },
+    {
+     "hero": "ULDA_BOSS_37h3",
+     "power": "ULDA_BOSS_37p3",
+     "health": 100,
+     "at": {
+      "healthAtMost": 100
+     },
+     "keepExcess": true,
+     "deck": {
+      "list": "Normal phase 3"
+     },
+     "draw": 3
+    }
+   ],
+   "fillers": [
+    "Shadow Word: Pain",
+    "Northshire Cleric",
+    "Holy Nova",
+    "Cabal Shadow Priest",
+    "Loot Hoarder",
+    "Harvest Golem",
+    "Haunted Creeper",
+    "Kel'Thuzad"
+   ],
+   "adaptations": [
+    {
+     "kind": "health",
+     "note": "The three phases are forms of one row with one falling Health total (300; phase 2 at 200 or less, phase 3 at 100 or less, the remaining Health kept); a lost fight's damage is banked per encounter at profile scope (DungeonRunProfile.BossDamage, as family 01's Icarax), because a lost fight ends the run; ULDA_115 casts bank 10 more per cast in the run's other fights (DungeonRunState.PlagueLordDamage)."
+    },
+    {
+     "kind": "deck",
+     "note": "A phase change replaces the deck with the phase's Normal list and draws 3 cards from it (the wiki: \"draws three extra cards before his main deck\"); the wiki's extra cards of the 33-card phase decks are not added, and a fight that starts in phase 2 or 3 (banked damage) starts with that phase's deck and no extra cards, as the wiki says."
+    },
+    {
+     "kind": "power",
+     "note": "The wiki marks some phase powers \"Auto-cast\"; here every clickable power is the boss AI's choice (family 01's precedent for Elder Brandlemar)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_38_kzrath",
+   "name": "K'zrath, Plague Lord of Madness",
+   "provenance": "ULDA",
+   "family": "24",
+   "hero": "ULDA_BOSS_38h",
+   "power": "ULDA_BOSS_38p2",
+   "tier": "major3",
+   "archetype": "tempo",
+   "level": {
+    "source": "printed-health",
+    "original": 300
+   },
+   "health": 300,
+   "fixedHealth": true,
+   "flags": [
+    "forms",
+    "persistentDamage",
+    "deckReplace"
+   ],
+   "cards": [
+    "ULDA_BOSS_38p2e1"
+   ],
+   "incompatibleModifiers": [
+    "mod_iron_bosses",
+    "mod_open_road"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/K%27zrath,_Plague_Lord_of_Madness",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal phase 1",
+     "cards": [
+      {
+       "name": "Shadow Madness",
+       "count": 2
+      },
+      {
+       "name": "Surrender to Madness",
+       "count": 1
+      },
+      {
+       "name": "Mass Hysteria",
+       "count": 2
+      },
+      {
+       "name": "Conceal",
+       "count": 2
+      },
+      {
+       "name": "Plague of Madness",
+       "count": 2
+      },
+      {
+       "name": "Clever Disguise",
+       "count": 2
+      },
+      {
+       "name": "Blightnozzle Crawler",
+       "count": 2
+      },
+      {
+       "name": "Blade of C'Thun",
+       "count": 2
+      },
+      {
+       "name": "Spreading Madness",
+       "count": 2
+      },
+      {
+       "name": "Runic Egg",
+       "count": 2
+      },
+      {
+       "name": "Dirty Rat",
+       "count": 2
+      },
+      {
+       "name": "Serpent Egg",
+       "count": 2
+      },
+      {
+       "name": "Twilight Geomancer",
+       "count": 1
+      },
+      {
+       "name": "Twilight Elder",
+       "count": 2
+      },
+      {
+       "name": "Ticking Abomination",
+       "count": 1
+      },
+      {
+       "name": "Crazed Worshipper",
+       "count": 2
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Normal phase 2",
+     "cards": [
+      {
+       "name": "Dark Cultist",
+       "count": 2
+      },
+      {
+       "name": "Kabal Talonpriest",
+       "count": 2
+      },
+      {
+       "name": "Surrender to Madness",
+       "count": 1
+      },
+      {
+       "name": "Mass Hysteria",
+       "count": 1
+      },
+      {
+       "name": "Vol'jin",
+       "count": 1
+      },
+      {
+       "name": "Psychic Scream",
+       "count": 2
+      },
+      {
+       "name": "Zerek's Cloning Gallery",
+       "count": 1
+      },
+      {
+       "name": "Plague of Madness",
+       "count": 2
+      },
+      {
+       "name": "Thistle Tea",
+       "count": 1
+      },
+      {
+       "name": "Blade of C'Thun",
+       "count": 2
+      },
+      {
+       "name": "Spreading Madness",
+       "count": 2
+      },
+      {
+       "name": "Beckoner of Evil",
+       "count": 2
+      },
+      {
+       "name": "Disciple of C'Thun",
+       "count": 2
+      },
+      {
+       "name": "Twilight Elder",
+       "count": 2
+      },
+      {
+       "name": "Cult Master",
+       "count": 2
+      },
+      {
+       "name": "Twilight Drake",
+       "count": 2
+      },
+      {
+       "name": "Twin Emperor Vek'lor",
+       "count": 1
+      },
+      {
+       "name": "Doomcaller",
+       "count": 1
+      },
+      {
+       "name": "C'Thun",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Normal phase 3",
+     "cards": [
+      {
+       "name": "Mass Hysteria",
+       "count": 2
+      },
+      {
+       "name": "Psychic Scream",
+       "count": 1
+      },
+      {
+       "name": "Plague of Madness",
+       "count": 2
+      },
+      {
+       "name": "Fan of Knives",
+       "count": 2
+      },
+      {
+       "name": "Blade of C'Thun",
+       "count": 2
+      },
+      {
+       "name": "Tentacle of N'Zoth",
+       "count": 2
+      },
+      {
+       "name": "Beckoner of Evil",
+       "count": 2
+      },
+      {
+       "name": "Unstable Ghoul",
+       "count": 2
+      },
+      {
+       "name": "Disciple of C'Thun",
+       "count": 2
+      },
+      {
+       "name": "Twilight Elder",
+       "count": 2
+      },
+      {
+       "name": "C'Thun's Chosen",
+       "count": 2
+      },
+      {
+       "name": "Twin Emperor Vek'lor",
+       "count": 1
+      },
+      {
+       "name": "Doomcaller",
+       "count": 2
+      },
+      {
+       "name": "Splitting Festeroot",
+       "count": 2
+      },
+      {
+       "name": "C'Thun",
+       "count": 1
+      },
+      {
+       "name": "N'Zoth, the Corruptor",
+       "count": 1
+      },
+      {
+       "name": "Y'Shaarj, Rage Unbound",
+       "count": 1
+      },
+      {
+       "name": "Yogg-Saron, Hope's End",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal phase 1"
+   },
+   "forms": [
+    {
+     "hero": "ULDA_BOSS_38h2",
+     "power": "ULDA_BOSS_38p1",
+     "health": 200,
+     "at": {
+      "healthAtMost": 200
+     },
+     "keepExcess": true,
+     "deck": {
+      "list": "Normal phase 2"
+     },
+     "draw": 3
+    },
+    {
+     "hero": "ULDA_BOSS_38h3",
+     "power": "ULDA_BOSS_38p3",
+     "health": 100,
+     "at": {
+      "healthAtMost": 100
+     },
+     "keepExcess": true,
+     "deck": {
+      "list": "Normal phase 3"
+     },
+     "draw": 3
+    }
+   ],
+   "fillers": [
+    "Shadow Word: Pain",
+    "Shadow Word: Death",
+    "Cabal Shadow Priest",
+    "Sap",
+    "SI:7 Agent",
+    "Faceless Manipulator",
+    "Loot Hoarder",
+    "Harvest Golem"
+   ],
+   "adaptations": [
+    {
+     "kind": "health",
+     "note": "The three phases are forms of one row with one falling Health total (300; phase 2 at 200 or less, phase 3 at 100 or less, the remaining Health kept); a lost fight's damage is banked per encounter at profile scope (DungeonRunProfile.BossDamage, as family 01's Icarax), because a lost fight ends the run; ULDA_115 casts bank 10 more per cast in the run's other fights (DungeonRunState.PlagueLordDamage)."
+    },
+    {
+     "kind": "deck",
+     "note": "A phase change replaces the deck with the phase's Normal list and draws 3 cards from it (the wiki: \"draws three extra cards before his main deck\"); the wiki's extra cards of the 33-card phase decks are not added, and a fight that starts in phase 2 or 3 (banked damage) starts with that phase's deck and no extra cards, as the wiki says."
+    },
+    {
+     "kind": "power",
+     "note": "The wiki marks some phase powers \"Auto-cast\"; here every clickable power is the boss AI's choice (family 01's precedent for Elder Brandlemar)."
+    },
+    {
+     "kind": "power",
+     "note": "The client links the 300 form to Systematic Betrayal (ULDA_BOSS_38p2) and the 200 form to Evoke Panic (ULDA_BOSS_38p1), as the wiki's phase table does; the forms follow it. Counter-clockwise is as the run player sees the boards (family 16's EncounterRules.Rotate)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_39_vesh",
+   "name": "Vesh, Plague Lord of Murlocs",
+   "provenance": "ULDA",
+   "family": "24",
+   "hero": "ULDA_BOSS_39h",
+   "power": "ULDA_BOSS_39p1",
+   "tier": "major3",
+   "archetype": "aggro",
+   "level": {
+    "source": "printed-health",
+    "original": 300
+   },
+   "health": 300,
+   "fixedHealth": true,
+   "flags": [
+    "forms",
+    "persistentDamage",
+    "deckReplace"
+   ],
+   "cards": [
+    "ULDA_BOSS_39m",
+    "ULDA_BOSS_39me"
+   ],
+   "incompatibleModifiers": [
+    "mod_iron_bosses",
+    "mod_open_road"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Vesh,_Plague_Lord_of_Murlocs",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal phase 1",
+     "cards": [
+      {
+       "name": "Mrgl Mrgl Nyah Nyah",
+       "id": "LOEA10_5",
+       "count": 1
+      },
+      {
+       "name": "Tip the Scales",
+       "count": 1
+      },
+      {
+       "name": "Anyfin Can Happen",
+       "count": 1
+      },
+      {
+       "name": "Primalfin Totem",
+       "count": 2
+      },
+      {
+       "name": "Underbelly Angler",
+       "count": 2
+      },
+      {
+       "name": "Plague of Murlocs",
+       "count": 2
+      },
+      {
+       "name": "Call in the Finishers",
+       "count": 2
+      },
+      {
+       "name": "Scargil",
+       "count": 1
+      },
+      {
+       "name": "Earthquake",
+       "count": 1
+      },
+      {
+       "name": "Neptulon",
+       "count": 1
+      },
+      {
+       "name": "Seadevil Stinger",
+       "count": 1
+      },
+      {
+       "name": "Fool's Bane",
+       "count": 2
+      },
+      {
+       "name": "Murmy",
+       "count": 2
+      },
+      {
+       "name": "Blowgill Sniper",
+       "count": 1
+      },
+      {
+       "name": "Fishflinger",
+       "count": 2
+      },
+      {
+       "name": "Murloc Warleader",
+       "count": 2
+      },
+      {
+       "name": "Primalfin Lookout",
+       "count": 2
+      },
+      {
+       "name": "Old Murk-Eye",
+       "count": 1
+      },
+      {
+       "name": "Finja, the Flying Star",
+       "count": 1
+      },
+      {
+       "name": "Corrupted Seer",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Normal phase 2",
+     "cards": [
+      {
+       "name": "Demonic Presence",
+       "id": "KARA_13_12H",
+       "count": 2
+      },
+      {
+       "name": "Mrgl Mrgl Nyah Nyah",
+       "id": "LOEA10_5H",
+       "count": 2
+      },
+      {
+       "name": "Megafin",
+       "id": "UNG_942t",
+       "count": 3
+      },
+      {
+       "name": "Murloc Knight",
+       "count": 2
+      },
+      {
+       "name": "Anyfin Can Happen",
+       "count": 2
+      },
+      {
+       "name": "Crushing Hand",
+       "count": 2
+      },
+      {
+       "name": "Primalfin Totem",
+       "count": 1
+      },
+      {
+       "name": "Plague of Murlocs",
+       "count": 2
+      },
+      {
+       "name": "Scargil",
+       "count": 1
+      },
+      {
+       "name": "Everyfin is Awesome",
+       "count": 1
+      },
+      {
+       "name": "Fishflinger",
+       "count": 1
+      },
+      {
+       "name": "Coldlight Oracle",
+       "count": 2
+      },
+      {
+       "name": "Murloc Tastyfin",
+       "count": 2
+      },
+      {
+       "name": "Old Murk-Eye",
+       "count": 2
+      },
+      {
+       "name": "Finja, the Flying Star",
+       "count": 1
+      },
+      {
+       "name": "Mukla's Champion",
+       "count": 2
+      },
+      {
+       "name": "Corrupted Seer",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Normal phase 3",
+     "cards": [
+      {
+       "name": "Mrgl Mrgl Nyah Nyah",
+       "id": "LOEA10_5H",
+       "count": 2
+      },
+      {
+       "name": "Megafin",
+       "id": "UNG_942t",
+       "count": 2
+      },
+      {
+       "name": "Giantfin",
+       "id": "LOEA16_24H",
+       "count": 2
+      },
+      {
+       "name": "Tip the Scales",
+       "count": 2
+      },
+      {
+       "name": "Anyfin Can Happen",
+       "count": 2
+      },
+      {
+       "name": "Underbelly Angler",
+       "count": 2
+      },
+      {
+       "name": "Plague of Murlocs",
+       "count": 2
+      },
+      {
+       "name": "Scargil",
+       "count": 2
+      },
+      {
+       "name": "The Mistcaller",
+       "count": 1
+      },
+      {
+       "name": "Everyfin is Awesome",
+       "count": 2
+      },
+      {
+       "name": "Neptulon",
+       "count": 1
+      },
+      {
+       "name": "Murmy",
+       "count": 2
+      },
+      {
+       "name": "Fishflinger",
+       "count": 2
+      },
+      {
+       "name": "Coldlight Oracle",
+       "count": 2
+      },
+      {
+       "name": "Primalfin Lookout",
+       "count": 1
+      },
+      {
+       "name": "Murloc Tastyfin",
+       "count": 1
+      },
+      {
+       "name": "Old Murk-Eye",
+       "count": 1
+      },
+      {
+       "name": "Finja, the Flying Star",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal phase 1"
+   },
+   "forms": [
+    {
+     "hero": "ULDA_BOSS_39h2",
+     "power": "ULDA_BOSS_39p2",
+     "health": 200,
+     "at": {
+      "healthAtMost": 200
+     },
+     "keepExcess": true,
+     "deck": {
+      "list": "Normal phase 2"
+     },
+     "draw": 5
+    },
+    {
+     "hero": "ULDA_BOSS_39h3",
+     "power": "ULDA_BOSS_39p3",
+     "health": 100,
+     "at": {
+      "healthAtMost": 100
+     },
+     "keepExcess": true,
+     "deck": {
+      "list": "Normal phase 3"
+     },
+     "draw": 5
+    }
+   ],
+   "fillers": [
+    "Murloc Raider",
+    "Bluegill Warrior",
+    "Murloc Tidehunter",
+    "Coldlight Seer",
+    "Grimscale Oracle",
+    "Murloc Tidecaller",
+    "Puddlestomper",
+    "Lightning Bolt"
+   ],
+   "adaptations": [
+    {
+     "kind": "health",
+     "note": "The three phases are forms of one row with one falling Health total (300; phase 2 at 200 or less, phase 3 at 100 or less, the remaining Health kept); a lost fight's damage is banked per encounter at profile scope (DungeonRunProfile.BossDamage, as family 01's Icarax), because a lost fight ends the run; ULDA_115 casts bank 10 more per cast in the run's other fights (DungeonRunState.PlagueLordDamage)."
+    },
+    {
+     "kind": "deck",
+     "note": "A phase change replaces the deck with the phase's Normal list and draws 5 cards from it (the wiki: \"draws five extra cards before his main deck\"); the wiki's extra cards of the 33-card phase decks are not added, and a fight that starts in phase 2 or 3 (banked damage) starts with that phase's deck and no extra cards, as the wiki says."
+    },
+    {
+     "kind": "power",
+     "note": "The wiki marks some phase powers \"Auto-cast\"; here every clickable power is the boss AI's choice (family 01's precedent for Elder Brandlemar)."
+    },
+    {
+     "kind": "power",
+     "note": "Made of Murlocs: any Murloc of either board; the 3 Health is lost, not dealt as damage, so the Immune hero still loses it. The Heroic powers ULDA_BOSS_39px2 and 39px3 are not used (support rows)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_67_tekahn",
+   "name": "Tekahn, Plague Lord of Flame",
+   "provenance": "ULDA",
+   "family": "24",
+   "hero": "ULDA_BOSS_67h",
+   "power": "ULDA_BOSS_67p1",
+   "tier": "finale",
+   "archetype": "control",
+   "level": {
+    "source": "printed-health",
+    "original": 300
+   },
+   "health": 300,
+   "fixedHealth": true,
+   "flags": [
+    "forms",
+    "deckReplace",
+    "relay"
+   ],
+   "cards": [
+    "ULDA_032",
+    "ULDA_BOSS_67p2e",
+    "ULD_168e",
+    "ULD_168e3",
+    "OG_280",
+    "OG_133",
+    "OG_042",
+    "OG_134"
+   ],
+   "incompatibleModifiers": [
+    "mod_iron_bosses",
+    "mod_open_road"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Tekahn,_Plague_Lord_of_Flame",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal phase 1",
+     "cards": [
+      {
+       "name": "Rakanishu",
+       "id": "ULDA_033",
+       "count": 1
+      },
+      {
+       "name": "Sanctum Golem",
+       "id": "ULDA_031",
+       "count": 8
+      },
+      {
+       "name": "EVIL Conscripter",
+       "count": 2
+      },
+      {
+       "name": "EVIL Miscreant",
+       "count": 2
+      },
+      {
+       "name": "Heistbaron Togwaggle",
+       "count": 1
+      },
+      {
+       "name": "Sludge Slurper",
+       "count": 2
+      },
+      {
+       "name": "EVIL Totem",
+       "count": 2
+      },
+      {
+       "name": "Plague of Flames",
+       "count": 2
+      },
+      {
+       "name": "Sinister Deal",
+       "count": 2
+      },
+      {
+       "name": "The Soularium",
+       "count": 1
+      },
+      {
+       "name": "EVIL Genius",
+       "count": 2
+      },
+      {
+       "name": "EVIL Recruiter",
+       "count": 2
+      },
+      {
+       "name": "Eager Underling",
+       "count": 1
+      },
+      {
+       "name": "Shadowflame",
+       "count": 1
+      },
+      {
+       "name": "Bane of Doom",
+       "count": 2
+      },
+      {
+       "name": "Glinda Crowskin",
+       "count": 1
+      },
+      {
+       "name": "Fel Lord Betrug",
+       "count": 1
+      },
+      {
+       "name": "EVIL Cable Rat",
+       "count": 2
+      },
+      {
+       "name": "Nerubian Egg",
+       "count": 2
+      },
+      {
+       "name": "Cult Master",
+       "count": 2
+      },
+      {
+       "name": "Arch-Thief Rafaam",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Normal phase 2",
+     "cards": [
+      {
+       "name": "Plague of Flames",
+       "count": 2
+      },
+      {
+       "name": "Corrupting Mist",
+       "count": 2
+      },
+      {
+       "name": "Defile",
+       "count": 2
+      },
+      {
+       "name": "Ratcatcher",
+       "count": 2
+      },
+      {
+       "name": "Lord Godfrey",
+       "count": 1
+      },
+      {
+       "name": "Twisting Nether",
+       "count": 2
+      },
+      {
+       "name": "Serpent Egg",
+       "count": 2
+      },
+      {
+       "name": "Sunfury Protector",
+       "count": 2
+      },
+      {
+       "name": "Devilsaur Egg",
+       "count": 2
+      },
+      {
+       "name": "Baron Rivendare",
+       "count": 1
+      },
+      {
+       "name": "Defender of Argus",
+       "count": 2
+      },
+      {
+       "name": "Spiritsinger Umbra",
+       "count": 1
+      },
+      {
+       "name": "Weaponized Piñata",
+       "count": 1
+      },
+      {
+       "name": "Feugen",
+       "count": 1
+      },
+      {
+       "name": "Stalagg",
+       "count": 1
+      },
+      {
+       "name": "Tomb Lurker",
+       "count": 2
+      },
+      {
+       "name": "Bone Drake",
+       "count": 2
+      },
+      {
+       "name": "Piloted Sky Golem",
+       "count": 2
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      },
+      {
+       "name": "The Skeleton Knight",
+       "count": 1
+      },
+      {
+       "name": "Dr. Boom",
+       "count": 1
+      },
+      {
+       "name": "Kel'Thuzad",
+       "count": 1
+      },
+      {
+       "name": "Octosari",
+       "count": 1
+      },
+      {
+       "name": "Sneed's Old Shredder",
+       "count": 1
+      },
+      {
+       "name": "Splitting Festeroot",
+       "count": 2
+      },
+      {
+       "name": "Colossus of the Moon",
+       "count": 1
+      },
+      {
+       "name": "N'Zoth, the Corruptor",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Normal phase 3",
+     "cards": [
+      {
+       "name": "The Final Plague?!",
+       "id": "ULDA_BOSS_67t",
+       "count": 1
+      },
+      {
+       "name": "Queen of Pain",
+       "count": 2
+      },
+      {
+       "name": "Duskbat",
+       "count": 2
+      },
+      {
+       "name": "Nethersoul Buster",
+       "count": 2
+      },
+      {
+       "name": "Diseased Vulture",
+       "count": 2
+      },
+      {
+       "name": "Deathweb Spider",
+       "count": 2
+      },
+      {
+       "name": "Floating Watcher",
+       "count": 2
+      },
+      {
+       "name": "Siphon Soul",
+       "count": 2
+      },
+      {
+       "name": "Demonbolt",
+       "count": 2
+      },
+      {
+       "name": "DOOM!",
+       "count": 1
+      },
+      {
+       "name": "Violet Illusionist",
+       "count": 2
+      },
+      {
+       "name": "Lifedrinker",
+       "count": 2
+      },
+      {
+       "name": "Bloodworm",
+       "count": 2
+      },
+      {
+       "name": "Rotten Applebaum",
+       "count": 2
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      },
+      {
+       "name": "Countess Ashmore",
+       "count": 1
+      },
+      {
+       "name": "Chromaggus",
+       "count": 1
+      },
+      {
+       "name": "Ragnaros the Firelord",
+       "count": 1
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      },
+      {
+       "name": "Anubisath Warbringer",
+       "count": 2
+      },
+      {
+       "name": "Hakkar, the Soulflayer",
+       "count": 1
+      },
+      {
+       "name": "Yogg-Saron, Hope's End",
+       "count": 1
+      },
+      {
+       "name": "Arcane Giant",
+       "count": 2
+      },
+      {
+       "name": "Molten Giant",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Elise finale deck 1 (ULDA_Elise_Tekanh_Deck_1, client DECK 2569: Tokens & Restoration)",
+     "cards": [
+      {
+       "name": "Dreamway Guardians",
+       "id": "DAL_733",
+       "count": 2
+      },
+      {
+       "name": "Power of the Wild",
+       "id": "EX1_160",
+       "count": 1
+      },
+      {
+       "name": "Wrath",
+       "id": "EX1_154",
+       "count": 2
+      },
+      {
+       "name": "Blessing of the Ancients",
+       "id": "DAL_351",
+       "count": 1
+      },
+      {
+       "name": "Lifeweaver",
+       "id": "DAL_355",
+       "count": 1
+      },
+      {
+       "name": "Archmage Vargoth",
+       "id": "DAL_558",
+       "count": 1
+      },
+      {
+       "name": "High Priest Amet",
+       "id": "ULD_262",
+       "count": 1
+      },
+      {
+       "name": "Holy Champion",
+       "id": "AT_011",
+       "count": 1
+      },
+      {
+       "name": "Priest of the Feast",
+       "id": "KAR_035",
+       "count": 1
+      },
+      {
+       "name": "Holy Nova",
+       "id": "CS1_112",
+       "count": 1
+      },
+      {
+       "name": "Sandhoof Waterbearer",
+       "id": "ULD_270",
+       "count": 2
+      },
+      {
+       "name": "Hidden Oasis",
+       "id": "ULD_135",
+       "count": 2
+      },
+      {
+       "name": "Holy Fire",
+       "id": "EX1_624",
+       "count": 1
+      },
+      {
+       "name": "Prophet Velen",
+       "id": "EX1_350",
+       "count": 1
+      },
+      {
+       "name": "The Forest's Aid",
+       "id": "DAL_256",
+       "count": 1
+      },
+      {
+       "name": "BEEEES!!!",
+       "id": "ULD_134",
+       "count": 2
+      },
+      {
+       "name": "Crystal Merchant",
+       "id": "ULD_133",
+       "count": 1
+      },
+      {
+       "name": "Psychopomp",
+       "id": "ULD_268",
+       "count": 2
+      },
+      {
+       "name": "Mark of Nature",
+       "id": "EX1_155",
+       "count": 2
+      },
+      {
+       "name": "Embalming Ritual",
+       "id": "ULD_265",
+       "count": 1
+      },
+      {
+       "name": "Extra Arms",
+       "id": "BOT_219",
+       "count": 1
+      },
+      {
+       "name": "Velen's Chosen",
+       "id": "GVG_010",
+       "count": 1
+      },
+      {
+       "name": "Lyra the Sunshard",
+       "id": "UNG_963",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Elise finale deck 2 (ULDA_Elise_Tekanh_Deck_2, client DECK 2570: Spell Value)",
+     "cards": [
+      {
+       "name": "Test Subject",
+       "id": "BOT_558",
+       "count": 2
+      },
+      {
+       "name": "Radiant Elemental",
+       "id": "UNG_034",
+       "count": 2
+      },
+      {
+       "name": "Dragon Soul",
+       "id": "LOOT_209",
+       "count": 1
+      },
+      {
+       "name": "Omega Medic",
+       "id": "BOT_216",
+       "count": 1
+      },
+      {
+       "name": "Sand Drudge",
+       "id": "TRL_131",
+       "count": 2
+      },
+      {
+       "name": "Velen's Chosen",
+       "id": "GVG_010",
+       "count": 2
+      },
+      {
+       "name": "Fandral Staghelm",
+       "id": "OG_044",
+       "count": 1
+      },
+      {
+       "name": "Mark of the Loa",
+       "id": "TRL_254",
+       "count": 2
+      },
+      {
+       "name": "Mire Keeper",
+       "id": "OG_202",
+       "count": 2
+      },
+      {
+       "name": "Swipe",
+       "id": "CS2_012",
+       "count": 2
+      },
+      {
+       "name": "Lyra the Sunshard",
+       "id": "UNG_963",
+       "count": 1
+      },
+      {
+       "name": "Power Word: Tentacles",
+       "id": "OG_094",
+       "count": 2
+      },
+      {
+       "name": "Vol'jin",
+       "id": "GVG_014",
+       "count": 1
+      },
+      {
+       "name": "Nourish",
+       "id": "EX1_164",
+       "count": 2
+      },
+      {
+       "name": "Zerek, Master Cloner",
+       "id": "BOT_258",
+       "count": 1
+      },
+      {
+       "name": "Ancient of War",
+       "id": "EX1_178",
+       "count": 2
+      },
+      {
+       "name": "Overflow",
+       "id": "ULD_273",
+       "count": 1
+      },
+      {
+       "name": "Cenarius",
+       "id": "EX1_573",
+       "count": 1
+      },
+      {
+       "name": "Grave Horror",
+       "id": "TRL_408",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Elise finale deck 3 (ULDA_Elise_Tekanh_Deck_3, client DECK 2571: Shadows)",
+     "cards": [
+      {
+       "name": "Embalming Ritual",
+       "id": "ULD_265",
+       "count": 1
+      },
+      {
+       "name": "Resurrect",
+       "id": "BRM_017",
+       "count": 2
+      },
+      {
+       "name": "Greedy Sprite",
+       "id": "LOOT_351",
+       "count": 1
+      },
+      {
+       "name": "Twilight's Call",
+       "id": "LOOT_187",
+       "count": 2
+      },
+      {
+       "name": "Wild Growth",
+       "id": "CS2_013",
+       "count": 1
+      },
+      {
+       "name": "Wretched Reclaimer",
+       "id": "ULD_269",
+       "count": 1
+      },
+      {
+       "name": "Branching Paths",
+       "id": "LOOT_054",
+       "count": 2
+      },
+      {
+       "name": "Eternal Servitude",
+       "id": "ICC_213",
+       "count": 2
+      },
+      {
+       "name": "Juicy Psychmelon",
+       "id": "BOT_404",
+       "count": 1
+      },
+      {
+       "name": "Psychopomp",
+       "id": "ULD_268",
+       "count": 2
+      },
+      {
+       "name": "Convincing Infiltrator",
+       "id": "DAL_039",
+       "count": 2
+      },
+      {
+       "name": "Ixlid, Fungal Lord",
+       "id": "LOOT_329",
+       "count": 1
+      },
+      {
+       "name": "Mass Hysteria",
+       "id": "TRL_258",
+       "count": 2
+      },
+      {
+       "name": "Entomb",
+       "id": "LOE_104",
+       "count": 2
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "id": "EX1_016",
+       "count": 1
+      },
+      {
+       "name": "Lesser Diamond Spellstone",
+       "id": "LOOT_507",
+       "count": 1
+      },
+      {
+       "name": "Malorne",
+       "id": "GVG_035",
+       "count": 1
+      },
+      {
+       "name": "Catrina Muerte",
+       "id": "DAL_721",
+       "count": 1
+      },
+      {
+       "name": "Hadronox",
+       "id": "ICC_835",
+       "count": 1
+      },
+      {
+       "name": "Obsidian Statue",
+       "id": "ICC_214",
+       "count": 2
+      },
+      {
+       "name": "Ultimate Infestation",
+       "id": "ICC_085",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Finley finale deck 1 (ULDA_Finley_Tekanh_Deck_1, client DECK 2578: Minion Swarm)",
+     "cards": [
+      {
+       "name": "Evolve",
+       "id": "OG_027",
+       "count": 1
+      },
+      {
+       "name": "Ghost Light Angler",
+       "id": "GIL_678",
+       "count": 2
+      },
+      {
+       "name": "Micro Mummy",
+       "id": "ULD_217",
+       "count": 2
+      },
+      {
+       "name": "Soul of the Murloc",
+       "id": "DAL_710",
+       "count": 2
+      },
+      {
+       "name": "Flametongue Totem",
+       "id": "EX1_565",
+       "count": 2
+      },
+      {
+       "name": "Mana Tide Totem",
+       "id": "EX1_575",
+       "count": 1
+      },
+      {
+       "name": "Sword of Justice",
+       "id": "EX1_366",
+       "count": 1
+      },
+      {
+       "name": "Bolvar Fordragon",
+       "id": "GVG_063",
+       "count": 1
+      },
+      {
+       "name": "Bloodlust",
+       "id": "CS2_046",
+       "count": 2
+      },
+      {
+       "name": "Sunkeeper Tarim",
+       "id": "UNG_015",
+       "count": 1
+      },
+      {
+       "name": "Vinecleaver",
+       "id": "UNG_950",
+       "count": 1
+      },
+      {
+       "name": "Brazen Zealot",
+       "id": "ULD_145",
+       "count": 2
+      },
+      {
+       "name": "Ancestral Guardian",
+       "id": "ULD_207",
+       "count": 2
+      },
+      {
+       "name": "Pharaoh's Blessing",
+       "id": "ULD_143",
+       "count": 1
+      },
+      {
+       "name": "Sandstorm Elemental",
+       "id": "ULD_158",
+       "count": 2
+      },
+      {
+       "name": "Ancestral Knowledge",
+       "id": "AT_053",
+       "count": 1
+      },
+      {
+       "name": "Finders Keepers",
+       "id": "CFM_313",
+       "count": 2
+      },
+      {
+       "name": "Competitive Spirit",
+       "id": "AT_073",
+       "count": 1
+      },
+      {
+       "name": "Lay on Hands",
+       "id": "EX1_354",
+       "count": 1
+      },
+      {
+       "name": "Murloc Knight",
+       "id": "AT_076",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Finley finale deck 2 (ULDA_Finley_Tekanh_Deck_2, client DECK 2579: Buffs and Control)",
+     "cards": [
+      {
+       "name": "Ancestral Healing",
+       "id": "CS2_041",
+       "count": 1
+      },
+      {
+       "name": "Blessing of Wisdom",
+       "id": "EX1_363",
+       "count": 1
+      },
+      {
+       "name": "Crystalsmith Kangor",
+       "id": "BOT_236",
+       "count": 1
+      },
+      {
+       "name": "Devolve",
+       "id": "CFM_696",
+       "count": 2
+      },
+      {
+       "name": "Hydrologist",
+       "id": "UNG_011",
+       "count": 2
+      },
+      {
+       "name": "Immortal Prelate",
+       "id": "TRL_306",
+       "count": 2
+      },
+      {
+       "name": "Lightforged Blessing",
+       "id": "DAL_568",
+       "count": 1
+      },
+      {
+       "name": "Potion of Heroism",
+       "id": "LOOT_088",
+       "count": 1
+      },
+      {
+       "name": "Primalfin Champion",
+       "id": "UNG_953",
+       "count": 2
+      },
+      {
+       "name": "Sound the Bells!",
+       "id": "GIL_145",
+       "count": 1
+      },
+      {
+       "name": "Windfury",
+       "id": "CS2_039",
+       "count": 1
+      },
+      {
+       "name": "Aldor Peacekeeper",
+       "id": "EX1_382",
+       "count": 1
+      },
+      {
+       "name": "Electra Stormsurge",
+       "id": "BOT_411",
+       "count": 1
+      },
+      {
+       "name": "Healing Rain",
+       "id": "LOOT_373",
+       "count": 1
+      },
+      {
+       "name": "Seal of Champions",
+       "id": "AT_074",
+       "count": 2
+      },
+      {
+       "name": "Wickerflame Burnbristle",
+       "id": "CFM_815",
+       "count": 1
+      },
+      {
+       "name": "Zentimo",
+       "id": "TRL_085",
+       "count": 1
+      },
+      {
+       "name": "Blessing of Kings",
+       "id": "CS2_092",
+       "count": 2
+      },
+      {
+       "name": "Keeper of Uldaman",
+       "id": "LOE_017",
+       "count": 1
+      },
+      {
+       "name": "Rain of Toads",
+       "id": "TRL_351",
+       "count": 2
+      },
+      {
+       "name": "Spikeridged Steed",
+       "id": "UNG_952",
+       "count": 2
+      },
+      {
+       "name": "Lynessa Sunsorrow",
+       "id": "LOOT_216",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Finley finale deck 3 (ULDA_Finley_Tekanh_Deck_3, client DECK 2580: Big Value)",
+     "cards": [
+      {
+       "name": "Omega Mind",
+       "id": "BOT_543",
+       "count": 2
+      },
+      {
+       "name": "Lava Burst",
+       "id": "EX1_241",
+       "count": 2
+      },
+      {
+       "name": "Fireguard Destroyer",
+       "id": "BRM_012",
+       "count": 2
+      },
+      {
+       "name": "Flamewreathed Faceless",
+       "id": "OG_024",
+       "count": 2
+      },
+      {
+       "name": "Truesilver Champion",
+       "id": "CS2_097",
+       "count": 1
+      },
+      {
+       "name": "Zandalari Templar",
+       "id": "TRL_545",
+       "count": 2
+      },
+      {
+       "name": "Volcano",
+       "id": "UNG_025",
+       "count": 2
+      },
+      {
+       "name": "Avenging Wrath",
+       "id": "EX1_384",
+       "count": 2
+      },
+      {
+       "name": "Fire Elemental",
+       "id": "CS2_042",
+       "count": 2
+      },
+      {
+       "name": "Krag'wa, the Frog",
+       "id": "TRL_345",
+       "count": 1
+      },
+      {
+       "name": "Val'anyr",
+       "id": "LOOT_500",
+       "count": 1
+      },
+      {
+       "name": "Swampqueen Hagatha",
+       "id": "DAL_431",
+       "count": 1
+      },
+      {
+       "name": "Al'Akir the Windlord",
+       "id": "NEW1_010",
+       "count": 1
+      },
+      {
+       "name": "Dinosize",
+       "id": "UNG_004",
+       "count": 2
+      },
+      {
+       "name": "Lay on Hands",
+       "id": "EX1_354",
+       "count": 2
+      },
+      {
+       "name": "Ragnaros, Lightlord",
+       "id": "OG_229",
+       "count": 1
+      },
+      {
+       "name": "Tirion Fordring",
+       "id": "EX1_383",
+       "count": 1
+      },
+      {
+       "name": "Walking Fountain",
+       "id": "DAL_047",
+       "count": 2
+      },
+      {
+       "name": "Shudderwock",
+       "id": "GIL_820",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Brann finale deck 1 (ULDA_Brann_Tekanh_Deck_1, client DECK 2575: Rush to Victory)",
+     "cards": [
+      {
+       "name": "Springpaw",
+       "id": "TRL_348",
+       "count": 2
+      },
+      {
+       "name": "Town Crier",
+       "id": "GIL_580",
+       "count": 2
+      },
+      {
+       "name": "Redband Wasp",
+       "id": "GIL_155",
+       "count": 1
+      },
+      {
+       "name": "Animal Companion",
+       "id": "NEW1_031",
+       "count": 2
+      },
+      {
+       "name": "Rabid Worgen",
+       "id": "GIL_113",
+       "count": 2
+      },
+      {
+       "name": "Spider Bomb",
+       "id": "BOT_251",
+       "count": 1
+      },
+      {
+       "name": "Dire Frenzy",
+       "id": "GIL_828",
+       "count": 1
+      },
+      {
+       "name": "Restless Mummy",
+       "id": "ULD_206",
+       "count": 2
+      },
+      {
+       "name": "Darius Crowley",
+       "id": "GIL_547",
+       "count": 1
+      },
+      {
+       "name": "Direhorn Hatchling",
+       "id": "UNG_957",
+       "count": 2
+      },
+      {
+       "name": "Unleash the Beast",
+       "id": "DAL_378",
+       "count": 2
+      },
+      {
+       "name": "The Boom Reaver",
+       "id": "DAL_070",
+       "count": 1
+      },
+      {
+       "name": "Desert Spear",
+       "id": "ULD_430",
+       "count": 1
+      },
+      {
+       "name": "Hunter's Pack",
+       "id": "ULD_429",
+       "count": 2
+      },
+      {
+       "name": "Swarm of Locusts",
+       "id": "ULD_713",
+       "count": 1
+      },
+      {
+       "name": "Frightened Flunky",
+       "id": "ULD_195",
+       "count": 2
+      },
+      {
+       "name": "Tomb Warden",
+       "id": "ULD_253",
+       "count": 2
+      },
+      {
+       "name": "Battle Rage",
+       "id": "EX1_392",
+       "count": 1
+      },
+      {
+       "name": "Shield Block",
+       "id": "EX1_606",
+       "count": 1
+      },
+      {
+       "name": "Tracking",
+       "id": "DS1_184",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Brann finale deck 2 (ULDA_Brann_Tekanh_Deck_2, client DECK 2576: Face is the Place)",
+     "cards": [
+      {
+       "name": "Inner Rage",
+       "id": "EX1_607",
+       "count": 2
+      },
+      {
+       "name": "Arcane Shot",
+       "id": "DS1_185",
+       "count": 2
+      },
+      {
+       "name": "N'Zoth's First Mate",
+       "id": "OG_312",
+       "count": 2
+      },
+      {
+       "name": "Bomb Toss",
+       "id": "BOT_033",
+       "count": 2
+      },
+      {
+       "name": "Heroic Strike",
+       "id": "CS2_105",
+       "count": 2
+      },
+      {
+       "name": "Lock and Load",
+       "id": "AT_061",
+       "count": 2
+      },
+      {
+       "name": "Frothing Berserker",
+       "id": "EX1_604",
+       "count": 2
+      },
+      {
+       "name": "Kill Command",
+       "id": "EX1_539",
+       "count": 2
+      },
+      {
+       "name": "Unleash the Hounds",
+       "id": "EX1_538",
+       "count": 2
+      },
+      {
+       "name": "Wrenchcalibur",
+       "id": "DAL_063",
+       "count": 2
+      },
+      {
+       "name": "Tundra Rhino",
+       "id": "DS1_178",
+       "count": 2
+      },
+      {
+       "name": "Savannah Highmane",
+       "id": "EX1_534",
+       "count": 2
+      },
+      {
+       "name": "Gahz'rilla",
+       "id": "GVG_049",
+       "count": 1
+      },
+      {
+       "name": "Malkorok",
+       "id": "OG_220",
+       "count": 1
+      },
+      {
+       "name": "Grommash Hellscream",
+       "id": "EX1_414",
+       "count": 1
+      },
+      {
+       "name": "Call of the Wild",
+       "id": "OG_211",
+       "count": 2
+      },
+      {
+       "name": "King Krush",
+       "id": "EX1_543",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Brann finale deck 3 (ULDA_Brann_Tekanh_Deck_3, client DECK 2577: Control Huntwar)",
+     "cards": [
+      {
+       "name": "Candleshot",
+       "id": "LOOT_222",
+       "count": 1
+      },
+      {
+       "name": "Omega Assembly",
+       "id": "BOT_299",
+       "count": 2
+      },
+      {
+       "name": "Execute",
+       "id": "CS2_108",
+       "count": 2
+      },
+      {
+       "name": "Explosive Trap",
+       "id": "EX1_610",
+       "count": 2
+      },
+      {
+       "name": "Freezing Trap",
+       "id": "EX1_611",
+       "count": 2
+      },
+      {
+       "name": "Hunter's Mark",
+       "id": "CS2_084",
+       "count": 2
+      },
+      {
+       "name": "Slam",
+       "id": "EX1_391",
+       "count": 1
+      },
+      {
+       "name": "Warpath",
+       "id": "GIL_654",
+       "count": 2
+      },
+      {
+       "name": "Shield Block",
+       "id": "EX1_606",
+       "count": 2
+      },
+      {
+       "name": "Houndmaster Shaw",
+       "id": "GIL_650",
+       "count": 1
+      },
+      {
+       "name": "Omega Devastator",
+       "id": "DAL_770",
+       "count": 2
+      },
+      {
+       "name": "Brawl",
+       "id": "EX1_407",
+       "count": 2
+      },
+      {
+       "name": "Gorehowl",
+       "id": "EX1_411",
+       "count": 1
+      },
+      {
+       "name": "Swamp King Dred",
+       "id": "UNG_919",
+       "count": 1
+      },
+      {
+       "name": "Tar Lord",
+       "id": "UNG_838",
+       "count": 2
+      },
+      {
+       "name": "Rotface",
+       "id": "ICC_405",
+       "count": 1
+      },
+      {
+       "name": "Dimensional Ripper",
+       "id": "DAL_059",
+       "count": 2
+      },
+      {
+       "name": "Emeriss",
+       "id": "GIL_128",
+       "count": 1
+      },
+      {
+       "name": "Varian Wrynn",
+       "id": "AT_072",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Reno finale deck 1 (ULDA_Reno_Tekanh_Deck_1, client DECK 2572: The Magician)",
+     "cards": [
+      {
+       "name": "Arcane Artificer",
+       "id": "LOOT_231",
+       "count": 1
+      },
+      {
+       "name": "Eviscerate",
+       "id": "EX1_124",
+       "count": 2
+      },
+      {
+       "name": "Pyros",
+       "id": "UNG_027",
+       "count": 1
+      },
+      {
+       "name": "Shiv",
+       "id": "EX1_278",
+       "count": 1
+      },
+      {
+       "name": "Sorcerer's Apprentice",
+       "id": "EX1_608",
+       "count": 2
+      },
+      {
+       "name": "Arcane Intellect",
+       "id": "CS2_023",
+       "count": 2
+      },
+      {
+       "name": "Blink Fox",
+       "id": "GIL_827",
+       "count": 1
+      },
+      {
+       "name": "Flamewaker",
+       "id": "BRM_002",
+       "count": 2
+      },
+      {
+       "name": "Headcrack",
+       "id": "EX1_137",
+       "count": 1
+      },
+      {
+       "name": "Fireball",
+       "id": "CS2_029",
+       "count": 1
+      },
+      {
+       "name": "Shadow of Death",
+       "id": "ULD_286",
+       "count": 2
+      },
+      {
+       "name": "Ethereal Conjurer",
+       "id": "LOE_003",
+       "count": 2
+      },
+      {
+       "name": "Thistle Tea",
+       "id": "OG_073",
+       "count": 1
+      },
+      {
+       "name": "Archmage Antonidas",
+       "id": "EX1_559",
+       "count": 1
+      },
+      {
+       "name": "Cheat Death",
+       "id": "LOOT_204",
+       "count": 1
+      },
+      {
+       "name": "Dune Sculptor",
+       "id": "ULD_329",
+       "count": 2
+      },
+      {
+       "name": "Puzzle Box of Yogg-Saron",
+       "id": "ULD_216",
+       "count": 1
+      },
+      {
+       "name": "Flame Ward",
+       "id": "ULD_239",
+       "count": 1
+      },
+      {
+       "name": "Pharaoh Cat",
+       "id": "ULD_186",
+       "count": 2
+      },
+      {
+       "name": "Clever Disguise",
+       "id": "ULD_328",
+       "count": 2
+      },
+      {
+       "name": "Sahket Sapper",
+       "id": "ULD_280",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Reno finale deck 2 (ULDA_Reno_Tekanh_Deck_2, client DECK 2573: Weaponized Mage)",
+     "cards": [
+      {
+       "name": "Deadly Poison",
+       "id": "CS2_074",
+       "count": 2
+      },
+      {
+       "name": "Doomerang",
+       "id": "ICC_233",
+       "count": 2
+      },
+      {
+       "name": "Kingsbane",
+       "id": "LOOT_542",
+       "count": 1
+      },
+      {
+       "name": "Swashburglar",
+       "id": "KAR_069",
+       "count": 1
+      },
+      {
+       "name": "Cavern Shinyfinder",
+       "id": "LOOT_033",
+       "count": 1
+      },
+      {
+       "name": "Flame Geyser",
+       "id": "UNG_018",
+       "count": 2
+      },
+      {
+       "name": "Goblin Auto-Barber",
+       "id": "GVG_023",
+       "count": 1
+      },
+      {
+       "name": "Primordial Glyph",
+       "id": "UNG_941",
+       "count": 2
+      },
+      {
+       "name": "Unstable Portal",
+       "id": "GVG_003",
+       "count": 1
+      },
+      {
+       "name": "Burgle",
+       "id": "AT_033",
+       "count": 2
+      },
+      {
+       "name": "Dune Sculptor",
+       "id": "ULD_329",
+       "count": 2
+      },
+      {
+       "name": "Edwin VanCleef",
+       "id": "EX1_613",
+       "count": 1
+      },
+      {
+       "name": "Envenom Weapon",
+       "id": "UNG_823",
+       "count": 1
+      },
+      {
+       "name": "Stargazer Luna",
+       "id": "BOT_103",
+       "count": 1
+      },
+      {
+       "name": "Academic Espionage",
+       "id": "BOT_087",
+       "count": 1
+      },
+      {
+       "name": "Echo of Medivh",
+       "id": "GVG_005",
+       "count": 1
+      },
+      {
+       "name": "Tinker's Sharpsword Oil",
+       "id": "GVG_022",
+       "count": 2
+      },
+      {
+       "name": "Waggle Pick",
+       "id": "DAL_720",
+       "count": 1
+      },
+      {
+       "name": "Xaril, Poisoned Mind",
+       "id": "OG_080",
+       "count": 1
+      },
+      {
+       "name": "Aluneth",
+       "id": "LOOT_108",
+       "count": 1
+      },
+      {
+       "name": "Meteor",
+       "id": "UNG_955",
+       "count": 1
+      },
+      {
+       "name": "Flamestrike",
+       "id": "CS2_032",
+       "count": 1
+      },
+      {
+       "name": "Sprint",
+       "id": "CS2_077",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Reno finale deck 3 (ULDA_Reno_Tekanh_Deck_3, client DECK 2574: The Big Stuff)",
+     "cards": [
+      {
+       "name": "Preparation",
+       "id": "EX1_145",
+       "count": 2
+      },
+      {
+       "name": "Bloodmage Thalnos",
+       "id": "EX1_012",
+       "count": 1
+      },
+      {
+       "name": "Khadgar",
+       "id": "DAL_575",
+       "count": 1
+      },
+      {
+       "name": "Conjurer's Calling",
+       "id": "DAL_177",
+       "count": 2
+      },
+      {
+       "name": "Molten Reflection",
+       "id": "UNG_948",
+       "count": 1
+      },
+      {
+       "name": "Polymorph",
+       "id": "CS2_022",
+       "count": 2
+      },
+      {
+       "name": "Arcane Tyrant",
+       "id": "LOOT_130",
+       "count": 2
+      },
+      {
+       "name": "Cabalist's Tome",
+       "id": "OG_090",
+       "count": 2
+      },
+      {
+       "name": "Shadowcaster",
+       "id": "OG_291",
+       "count": 2
+      },
+      {
+       "name": "Blizzard",
+       "id": "CS2_028",
+       "count": 2
+      },
+      {
+       "name": "Firelands Portal",
+       "id": "KAR_076",
+       "count": 2
+      },
+      {
+       "name": "Greater Arcane Missiles",
+       "id": "CFM_623",
+       "count": 2
+      },
+      {
+       "name": "Anomalus",
+       "id": "OG_120",
+       "count": 1
+      },
+      {
+       "name": "Power of Creation",
+       "id": "DAL_578",
+       "count": 2
+      },
+      {
+       "name": "Rhonin",
+       "id": "AT_009",
+       "count": 1
+      },
+      {
+       "name": "Kalecgos",
+       "id": "DAL_609",
+       "count": 1
+      },
+      {
+       "name": "Puzzle Box of Yogg-Saron",
+       "id": "ULD_216",
+       "count": 2
+      },
+      {
+       "name": "Pyroblast",
+       "id": "EX1_279",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal phase 1"
+   },
+   "forms": [
+    {
+     "power": "ULDA_BOSS_67p2",
+     "at": {
+      "healthAtMost": 200
+     },
+     "keepExcess": true,
+     "deck": {
+      "list": "Normal phase 2"
+     },
+     "draw": 0
+    },
+    {
+     "power": "ULDA_BOSS_67p3",
+     "at": {
+      "healthAtMost": 100
+     },
+     "keepExcess": true,
+     "deck": {
+      "list": "Normal phase 3"
+     },
+     "draw": 0
+    }
+   ],
+   "relay": [
+    {
+     "hero": "ULDA_Elise",
+     "power": "ULDA_Elise_HP1",
+     "deck": {
+      "list": "Elise finale deck 1 (ULDA_Elise_Tekanh_Deck_1, client DECK 2569: Tokens & Restoration)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Elise"
+     ]
+    },
+    {
+     "hero": "ULDA_Elise",
+     "power": "ULDA_Elise_HP2",
+     "deck": {
+      "list": "Elise finale deck 2 (ULDA_Elise_Tekanh_Deck_2, client DECK 2570: Spell Value)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Elise"
+     ]
+    },
+    {
+     "hero": "ULDA_Elise",
+     "power": "ULDA_Elise_HP3",
+     "deck": {
+      "list": "Elise finale deck 3 (ULDA_Elise_Tekanh_Deck_3, client DECK 2571: Shadows)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Elise"
+     ]
+    },
+    {
+     "hero": "ULDA_Finley",
+     "power": "ULDA_Finley_HP1",
+     "deck": {
+      "list": "Finley finale deck 1 (ULDA_Finley_Tekanh_Deck_1, client DECK 2578: Minion Swarm)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Finley"
+     ]
+    },
+    {
+     "hero": "ULDA_Finley",
+     "power": "ULDA_Finley_HP2",
+     "deck": {
+      "list": "Finley finale deck 2 (ULDA_Finley_Tekanh_Deck_2, client DECK 2579: Buffs and Control)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Finley"
+     ]
+    },
+    {
+     "hero": "ULDA_Finley",
+     "power": "ULDA_Finley_HP3",
+     "deck": {
+      "list": "Finley finale deck 3 (ULDA_Finley_Tekanh_Deck_3, client DECK 2580: Big Value)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Finley"
+     ]
+    },
+    {
+     "hero": "ULDA_Brann",
+     "power": "ULDA_Brann_HP1",
+     "deck": {
+      "list": "Brann finale deck 1 (ULDA_Brann_Tekanh_Deck_1, client DECK 2575: Rush to Victory)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Brann"
+     ]
+    },
+    {
+     "hero": "ULDA_Brann",
+     "power": "ULDA_Brann_HP2",
+     "deck": {
+      "list": "Brann finale deck 2 (ULDA_Brann_Tekanh_Deck_2, client DECK 2576: Face is the Place)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Brann"
+     ]
+    },
+    {
+     "hero": "ULDA_Brann",
+     "power": "ULDA_Brann_HP3",
+     "deck": {
+      "list": "Brann finale deck 3 (ULDA_Brann_Tekanh_Deck_3, client DECK 2577: Control Huntwar)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Brann"
+     ]
+    },
+    {
+     "hero": "ULDA_Reno",
+     "power": "ULDA_Reno_HP1",
+     "deck": {
+      "list": "Reno finale deck 1 (ULDA_Reno_Tekanh_Deck_1, client DECK 2572: The Magician)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Reno"
+     ]
+    },
+    {
+     "hero": "ULDA_Reno",
+     "power": "ULDA_Reno_HP2",
+     "deck": {
+      "list": "Reno finale deck 2 (ULDA_Reno_Tekanh_Deck_2, client DECK 2573: Weaponized Mage)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Reno"
+     ]
+    },
+    {
+     "hero": "ULDA_Reno",
+     "power": "ULDA_Reno_HP3",
+     "deck": {
+      "list": "Reno finale deck 3 (ULDA_Reno_Tekanh_Deck_3, client DECK 2574: The Big Stuff)"
+     },
+     "health": 50,
+     "skipFor": [
+      "ULDA_Reno"
+     ]
+    }
+   ],
+   "fillers": [
+    "Voidwalker",
+    "Flame Imp",
+    "Hellfire",
+    "Shadow Bolt",
+    "Dread Infernal",
+    "Abyssal Enforcer",
+    "Lord Jaraxxus",
+    "Siphon Soul"
+   ],
+   "adaptations": [
+    {
+     "kind": "health",
+     "note": "Tekahn keeps one hero (ULDA_BOSS_67h, 300 Health) through three phases; the wiki names no phase thresholds, so they are the Plague Lords' (phase 2 at 200 or less, phase 3 at 100 or less): power-only forms that replace the deck with the phase's Normal list (40 cards each) and draw no extra card (the wiki states none). Tekahn keeps no damage between attempts (the wiki), so the row has no persistentDamage."
+    },
+    {
+     "kind": "relay",
+     "note": "The finale's hero relay (schedule finale heroRelay): the run's own hero fights first, then the four explorers less the run's own (skipFor), each at 50 Health with one of its three client finale decks (ULDA_<Explorer>_Tekanh_Deck_n) and its hero power n, the entry drawn from the run seed and the floor (DungeonRun.RelayFor). The original lets the player choose the next explorer and its hero power; here they enter in the wiki's order (Elise, Finley, Brann, Reno) and the entering hero draws the model's RelayDraw cards (family 01), not a full hand; collected signature treasures are not shuffled in."
+    },
+    {
+     "kind": "power",
+     "note": "Curse of Flame's enchantment fires at the start of the boss's next turn while the cursed minion is in play, then the curse ends; Soul Pyre deals the Cost paid for the card (the engine's last known Cost in hand)."
+    }
+   ]
+  }
+ ],
+ "rejected": []
+}

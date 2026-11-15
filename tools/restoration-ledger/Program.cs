@@ -926,7 +926,13 @@ namespace RestorationLedger
                     Offer(h.Hero, "fight hero card:" + boss.Id + Reached(boss));
                     foreach (string id in h.Deck.Distinct()) Use(id, "fight hero card deck " + boss.Id + Reached(boss));
                 }
-                foreach (var h in boss.Relay) Offer(h.Hero, "relay hero:" + boss.Id + Reached(boss));
+                foreach (var h in boss.Relay)
+                {
+                    Offer(h.Hero, "relay hero:" + boss.Id + Reached(boss));
+                    // Family 24: a relay hero's deck (the Tombs finale decks) is the finale-deck use of its cards.
+                    if (h.Deck != null && data.BossDecks.TryGetValue(h.Deck, out var relayCards))
+                        foreach (string id in relayCards.Distinct()) Use(id, "relay hero deck " + boss.Id + Reached(boss));
+                }
             }
             foreach (var schedule in schedules.Schedules.Values.OrderBy(x => x.Id, StringComparer.Ordinal))
             {

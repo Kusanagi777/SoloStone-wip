@@ -3538,9 +3538,16 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("BOT_543e", new CardDef(new Power
 			{
-				// TODO [BOT_543e] Mind Meld && Test: Mind Meld_BOT_543e
-				//PowerTask = null,
-				//Trigger = null,
+				// Phase 8 family 24 (the Tombs finale decks hold Omega Mind): until the turn ends, each spell its owner casts has
+				// Lifesteal, given as the spell is cast (before its effect resolves); the enchantment is gone at the end of the turn.
+				Trigger = new MultiTrigger(
+					new Trigger(TriggerType.CAST_SPELL)
+					{
+						TriggerSource = TriggerSource.FRIENDLY,
+						FastExecution = true,
+						SingleTask = new CustomTask((g, c, s, t, stack) => { if (t is Spell spell) spell[GameTag.LIFESTEAL] = 1; }),
+					},
+					new Trigger(TriggerType.TURN_END) { SingleTask = RemoveEnchantmentTask.Task })
 			}));
 
 			// ---------------------------------- ENCHANTMENT - NEUTRAL

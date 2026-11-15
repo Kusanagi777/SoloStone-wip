@@ -627,7 +627,7 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     var byId = rows.ToDictionary(r => r["card_id"], r => r, StringComparer.Ordinal);
     Check("ledger: no explorer is blocked by run:dual-class since phase 6 F10 (all four rows ship), and each is its row's offered portrait",
         new[] { ("ULDA_Reno", "MAGE_ROGUE"), ("ULDA_Finley", "PALADIN_SHAMAN"), ("ULDA_Elise", "DRUID_PRIEST"), ("ULDA_Brann", "HUNTER_WARRIOR") }
-            .All(p => !byId[p.Item1]["blocked_by"].Split(';').Contains("run:dual-class") && byId[p.Item1]["player_availability"] == "offered:hero portrait:" + p.Item2));
+            .All(p => !byId[p.Item1]["blocked_by"].Split(';').Contains("run:dual-class") && byId[p.Item1]["player_availability"].Split(',')[0] == "offered:hero portrait:" + p.Item2));
     Check("ledger: Reno's original powers are not blocked by run:dual-class", rows.Where(r => r["card_id"].StartsWith("ULDA_Reno_HP", StringComparison.Ordinal))
         .All(r => !r["blocked_by"].Split(';').Contains("run:dual-class")) && rows.Any(r => r["card_id"].StartsWith("ULDA_Reno_HP", StringComparison.Ordinal)));
     Check("ledger: the run:class row of every dual row is implemented and unblocked since phase 6 F10 (none ships disabled)",
@@ -643,7 +643,7 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // the Tombs explorers pass as heroes, and ULDA_Reno, MAGE_ROGUE's portrait, is offered and implemented.
     Check("ledger: the Tombs explorers validate as run heroes (phase 6); ULDA_Reno is MAGE_ROGUE's offered portrait",
         new[] { "ULDA_Reno", "ULDA_Finley", "ULDA_Elise", "ULDA_Brann" }.All(id => byId[id]["validation"] == "passes:hero")
-        && byId["ULDA_Reno"]["player_availability"] == "offered:hero portrait:MAGE_ROGUE" && byId["ULDA_Reno"]["classification"] == "implemented"
+        && byId["ULDA_Reno"]["player_availability"].Split(',')[0] == "offered:hero portrait:MAGE_ROGUE" && byId["ULDA_Reno"]["classification"] == "implemented"
         && !rows.Any(r => r["validation"] == "rejected:unscripted-portrait"));
     var classes = rows.GroupBy(r => r["classification"]).ToDictionary(g => g.Key, g => g.Count());
     // Phase 5 (I2) moved the 22 active tavern option rows (21 options and the ULDA_912 alias, tavern-v1.json) from missing
@@ -705,9 +705,9 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // Phase 8 wave 3 (families 06, 09, 10): + 60 rows, all "partial" (26 run:boss rows: 11 of family 09, 15 of family 10; 34
     // cards of their decks that are new to the ledger: 15 and 19), and 70 rows leave "missing" for "partial" (21 rules and
     // tokens of family 06; 25 powers, cards and tokens of family 09; 15 boss powers and 9 boss cards of family 10).
-    Check("ledger golden (phase 8 wave 3: families 06, 09, 10): 4704 rows; 2813 implemented, 295 partial, 538 missing, 1058 duplicate/support, 0 intentionally adapted",
-        rows.Count == 4704 && classes.GetValueOrDefault("implemented") == 2813 && classes.GetValueOrDefault("partial") == 295 && classes.GetValueOrDefault("missing") == 538
-        && classes.GetValueOrDefault("duplicate/support") == 1058 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
+    Check("ledger golden (phase 8 wave 3: families 06, 09, 10; family 24): 4716 rows; 2814 implemented, 325 partial, 518 missing, 1059 duplicate/support, 0 intentionally adapted",
+        rows.Count == 4716 && classes.GetValueOrDefault("implemented") == 2814 && classes.GetValueOrDefault("partial") == 325 && classes.GetValueOrDefault("missing") == 518
+        && classes.GetValueOrDefault("duplicate/support") == 1059 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
 }
 
 static List<Dictionary<string, string>> ReadLedger(string path)

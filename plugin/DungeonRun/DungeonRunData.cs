@@ -181,8 +181,15 @@ internal sealed class DungeonRunTreasure
     /// </summary>
     internal string Runs = RunsAll;
     internal const string RunsAll = "all", RunsAct = "act", RunsLegacy = "legacy";
-    /// <summary><see cref="Runs"/> lets an act run (<paramref name="actRun"/>) or a legacy run offer it.</summary>
-    internal bool OfferedOn(bool actRun) => Runs == RunsAll || Runs == RunsAct && actRun || Runs == RunsLegacy && !actRun;
+    /// <summary>
+    /// Phase 8 family 24: <see cref="Runs"/> "encounters", an act run on a schedule that meets the imported encounters
+    /// (schedule stamp 3 and above: ULDA_115 "Gnomebliterator" banks damage for a Plague Lord, which only those runs meet), so
+    /// the offers of every earlier schedule stay as released.
+    /// </summary>
+    internal const string RunsEncounters = "encounters";
+    /// <summary><see cref="Runs"/> lets an act run (<paramref name="actRun"/>; one of an encounter schedule: <paramref name="encounters"/>) or a legacy run offer it.</summary>
+    internal bool OfferedOn(bool actRun, bool encounters = false) =>
+        Runs == RunsAll || Runs == RunsAct && actRun || Runs == RunsLegacy && !actRun || Runs == RunsEncounters && actRun && encounters;
     internal const string UpgradeOnFloors = "floors", UpgradeOnActClear = "actClear", UpgradeOnBossWins = "bossWins";
     internal const string SlotDeck = "deck", SlotPower = "power", SlotPassive = "passive";
 
