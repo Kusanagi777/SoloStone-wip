@@ -314,13 +314,20 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			}), usable: TombsB.WindstormUsable);
 
 			// ---------------- Ozara (ULDA_BOSS_29h)
-			// Mother of Sand (passive): "After you Overload, summon a Dust Devil." After a card of the boss's Overloads.
+			// Mother of Sand (passive): "After you Overload, summon a Dust Devil." When a card of the boss's Overloads (the Overload
+			// event of Generic.OverloadBlock, raised as the card is played).
 			Passive("ULDA_BOSS_29p", () => new Power
 			{
 				Trigger = new Trigger(TriggerType.OVERLOAD)
 				{
 					TriggerSource = TriggerSource.FRIENDLY,
-					SingleTask = new CustomTask((g, c, s, t, stack) => TombsB.Summon(g, c, s, TombsB.DustDevil)),
+					// Resolved in place, as TRLA_158 Overcharged Totem's (a task queued by the Overload event is not run): the
+					// Overload is raised as the card is played, before its effect resolves.
+					FastExecution = true,
+					SingleTask = new CustomTask((g, c, s, t, stack) =>
+					{
+						if (g.State != State.COMPLETE) TombsB.Summon(g, c, s, TombsB.DustDevil);
+					}),
 				},
 			});
 

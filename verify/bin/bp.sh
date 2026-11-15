@@ -22,6 +22,7 @@
 #                        bp.sh enc09-auto|enc09-finals|enc09-rooms|enc09-cards   (c-bosspilot-enc09)
 #   family 10 modes:     bp.sh enc10|enc10-nab|enc10-seeds|enc10-hagatha        (twice per call)
 #                        bp.sh enc10a|enc10b|enc10-cards|enc10-shrine <k>         (one run per call, k = 1 or 2; then `bp.sh same <mode>`)
+#   family 20 modes:     bp.sh enc20a|enc20b|enc20-seeds-a|enc20-seeds-b         (twice per call; a = ULDA_BOSS_19-27, b = 28-36)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -75,6 +76,10 @@ CARDS10=GILA_BOSS_23t,GILA_BOSS_26t2,GILA_BOSS_27t,GILA_BOSS_29t,GILA_BOSS_35t,G
 W10=gila_38_cozzlewurt
 PAD10=$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10
 SHR10=gila_26_gnomenapper,gila_27_experiment_3c,gila_29_sazzmi,gila_32_niira,gila_35_chupacabran,gila_36_griselda,gila_22_willie,gila_26_gnomenapper,gila_29_sazzmi
+# family 20
+A20=ulda_19_sothis,ulda_20_kham,ulda_21_illidara,ulda_22_colossus,ulda_23_skarik,ulda_24_palm_tree,ulda_25_zenda,ulda_26_thudd,ulda_27_toomba
+B20=ulda_28_sazin,ulda_29_ozara,ulda_30_ermavar,ulda_31_drasar,ulda_32_edra,ulda_33_ruby,ulda_34_dovo,ulda_35_ptah,ulda_36_kasa
+CARDS20=ULD_705,LOE_029,EX1_243,CS2_091
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -214,6 +219,10 @@ enc10-shrine) need $E; once enc10-shrine "$2" BOSS=$PAD10,$SHR10 GAMES=1
   echo "fights against a shrine row (TRLA_209h_*) by the nine rows: $(grep -v "^$W10" "$LOGS/enc10-shrine-$2.txt" | grep -c 'TRLA_209h_') of 9" ;;
 enc10-seeds) need $E; twice enc10-seeds FAMILY=10 SEED_BASE=19000 WATCH=$CARDS10 ;;
 enc10-hagatha) need $E; twice enc10-hagatha BOSS=gila_61_hagatha GAMES=6 WATCH=GILA_BOSS_27t ;;
+enc20a) need $E; twice enc20a BOSS=$A20 WATCH=$CARDS20 ;;
+enc20b) need $E; twice enc20b BOSS=$B20 WATCH=$CARDS20 ;;
+enc20-seeds-a) need $E; twice enc20-seeds-a BOSS=$A20 SEED_BASE=20000 WATCH=$CARDS20 ;;
+enc20-seeds-b) need $E; twice enc20-seeds-b BOSS=$B20 SEED_BASE=20000 WATCH=$CARDS20 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;
