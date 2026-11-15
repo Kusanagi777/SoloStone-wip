@@ -245,6 +245,9 @@ namespace SabberStoneCore.Model
                             throw new InvalidOperationException($"Cannot clone engine handler {handler.Method.DeclaringType}.{handler.Method.Name}: missing target mapping.");
                         copies.Add(handler.Target, target);
                     }
+                    // Phase 8 wave 4: a detached callback whose owner the game does not hold (a fair view that masked and
+                    // renumbered the opponent's hidden hand: TRL_313 Scorch's cost callback) has nothing to act on; dropped.
+                    if (target == null) { rebound++; continue; }
                     result += (TriggerHandler)Delegate.CreateDelegate(typeof(TriggerHandler), target, handler.Method);
                 }
                 rebound++;
