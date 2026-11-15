@@ -94,7 +94,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 			/// <summary>
 			/// ULDA_BOSS_14p Sword Dance: a new copy of the destroyed <paramref name="weapon"/> (its Attack and every enchantment it
-			/// holds, Kingsbane's rule; Durability is the card's again) is shuffled into its controller's deck as a public shuffle.
+			/// holds, Kingsbane's rule; its Durability is the card's plus what those enchantments add, with no damage carried) is shuffled into its controller's deck as a public shuffle.
 			/// Called while the weapon still holds its enchantments (the trigger runs at once, before Hero.ClearWeapon removes them).
 			/// Returns the copy, or null (a full deck takes none).
 			/// </summary>
@@ -107,6 +107,8 @@ namespace SabberStoneCore.CardSets.DungeonRun
 					{ GameTag.ATK, weapon[GameTag.ATK] },
 					{ GameTag.POISONOUS, weapon[GameTag.POISONOUS] },
 					{ GameTag.LIFESTEAL, weapon[GameTag.LIFESTEAL] },
+					// The Durability tag holds what the kept enchantments added (Greenskin's +1); Durability lost is DAMAGE, not copied.
+					{ GameTag.DURABILITY, weapon[GameTag.DURABILITY] },
 				};
 				IPlayable copy = Entity.FromCard(c, weapon.Card, tags);
 				if (weapon.AppliedEnchantments != null)

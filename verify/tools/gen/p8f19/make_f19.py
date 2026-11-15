@@ -212,7 +212,7 @@ B.append(boss(14, "sirinell", "Sword Dancer Sirinell", "Sword_Dancer_Sirinell", 
     ("Tinker's Sharpsword Oil", 2), ("Luckydo Buccaneer", 2), ("Hench-Clan Thug", 2), ("Dread Corsair", 2), ("Captain Greenskin", 1)],
     notes=[("power", "Sword Dance (passive): when a weapon of the boss is destroyed (out of Durability, by an effect, or replaced), a "
                      "new copy of it with its Attack and its enchantments is shuffled into the boss's deck as a public shuffle "
-                     "(Kingsbane's rule; Durability is the card's again). The boss knows what it shuffled into its own deck.")]))
+                     "(Kingsbane's rule; its Durability is the card's plus what its enchantments add, no damage carried: a weapon Captain Greenskin buffed comes back with +1/+1). The boss knows what it shuffled into its own deck.")]))
 B.append(boss(15, "herring", "Lt. Herring", "Lt._Herring", 1, "1", "aggro", [
     "Beakered Lightning", "Zap!", "Primalfin Totem", "Siltfin Spiritwalker", "Murloc Tinyfin", "Deadscale Knight", "Murloc Raider", "Murmy",
     "Puddlestomper", "Murloc Tastyfin"],

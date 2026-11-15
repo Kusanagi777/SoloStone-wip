@@ -1891,7 +1891,7 @@
     },
     {
      "kind": "power",
-     "note": "Sword Dance (passive): when a weapon of the boss is destroyed (out of Durability, by an effect, or replaced), a new copy of it with its Attack and its enchantments is shuffled into the boss's deck as a public shuffle (Kingsbane's rule; Durability is the card's again). The boss knows what it shuffled into its own deck."
+     "note": "Sword Dance (passive): when a weapon of the boss is destroyed (out of Durability, by an effect, or replaced), a new copy of it with its Attack and its enchantments is shuffled into the boss's deck as a public shuffle (Kingsbane's rule; its Durability is the card's plus what its enchantments add, no damage carried: a weapon Captain Greenskin buffed comes back with +1/+1). The boss knows what it shuffled into its own deck."
     }
    ]
   },

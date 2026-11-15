@@ -564,6 +564,23 @@ Guard("Sirinell", () =>
     Cast(g2, WarAxe);
     Cast(g2, Reaper);
     Check("N6 with the boss's deck full the copy is lost (nothing breaks)", g2.Player2.Hero.Weapon?.Card.Id == Reaper && g2.Player2.DeckZone.All(p => p.Card.Id == Yeti));
+    // A Durability buff is kept with its enchantment: Captain Greenskin's +1/+1 (NEW1_024o) on a War Axe that lost Durability.
+    var g3 = Fight("ulda_14_sirinell", bossDeck: Croc);
+    Controller b3 = g3.Player2;
+    ToBoss(g3);
+    Cast(g3, WarAxe);
+    var buffed = b3.Hero.Weapon;
+    Play(g3, ToHand(g3, b3, "NEW1_024"));
+    HeroAttack(g3, g3.Player1.Hero);
+    bool greenskin = buffed != null && Has(buffed, "NEW1_024o") && buffed.AttackDamage == 4 && buffed.Durability == 2 && buffed[GameTag.DURABILITY] == 3;
+    Cast(g3, Reaper);
+    var kept = b3.DeckZone.FirstOrDefault(p => p.Card.Id == WarAxe) as Weapon;
+    Check("N7 a weapon buffed by Captain Greenskin (+1/+1) that lost a Durability point: its copy keeps the enchantment's +1 Attack and +1 Durability, and no damage (4/3, not 4/2)",
+        greenskin && kept != null && Has(kept, "NEW1_024o") && kept.AttackDamage == 4 && kept.Durability == 3 && kept.Damage == 0,
+        kept == null ? "none" : kept.AttackDamage + "/" + kept.Durability + " dmg " + kept.Damage);
+    var drawn3 = Generic.Draw(b3, kept);
+    bool equipped3 = drawn3 == kept && Play(g3, kept);
+    Check("N8 drawn and equipped, it is a 4/3", equipped3 && b3.Hero.Weapon == kept && kept.AttackDamage == 4 && kept.Durability == 3);
 });
 
 // ============================================================ O  Lt. Herring: Puffertrooper
@@ -696,15 +713,17 @@ Guard("Rows", () =>
         var cfg = new GameConfig { RandomSeed = 5, Shuffle = true, SkipMulligan = false, History = false, Logging = false, FormatType = FormatType.FT_WILD };
         DungeonRunSetup.Configure(cfg, plan);
         // The tier rule (verify/tools/gen/p8f19/tombs_tiers.py): level 1-2 tier 1, 3-4 tier 2 (the 2-3 table takes 3), 5-6 tier 3, 7 tier 4.
-        string ruleTier = r.level <= 2 ? "1" : r.level <= 4 ? "2" : r.level <= 6 ? "3" : "4";
+        // The shipped row's recorded level is read from the data, so a wrong level in tombs_tiers.py or make_f19.py fails here.
+        int shipped = b.LevelOriginal;
+        string ruleTier = shipped <= 2 ? "1" : shipped <= 4 ? "2" : shipped <= 6 ? "3" : "4";
         Check("S3 " + r.id + ": a Tombs row of tier " + r.tier + " (wiki level " + r.level + ", chapter " + r.chapter + ") whose plan is the row's (hero, power, a 30-card " + r.kind
             + " deck, the act curve's Health, not the printed 10)",
-            b.Provenance == "ULDA" && b.Name == r.name && b.Tier == r.tier && ruleTier == r.tier && b.HeroCard == hero && b.Power == power && b.Source.Kind == r.kind && b.Flags.Count == 0
+            b.Provenance == "ULDA" && b.Name == r.name && b.Tier == r.tier && b.LevelSource == "wiki-level-table" && shipped == r.level && ruleTier == r.tier && b.HeroCard == hero && b.Power == power && b.Source.Kind == r.kind && b.Flags.Count == 0
             && plan.EncounterId == r.id && plan.EncounterDeck && plan.BossHero.Id == hero && plan.BossHeroPowerId == power && plan.BossDeck.Count == 30 && data.BossDecks[b.Deck].Count == 30
             && !b.FixedHealth && b.Health == null && plan.BossHealth == 30 && C(hero).Type == CardType.HERO && C(hero).Health == 10 && C(hero)[chapterTag[r.chapter]] > 0
             && C(power).Type == CardType.HERO_POWER && C(hero).Name == r.name && data.Schedules.Member(b, DungeonRunEncounterData.PoolOf(b.Tier))
             && b.Source.Url.StartsWith("https://hearthstone.wiki.gg/wiki/") && !b.BossGeneratedSecrets && b.Forms.Count == 0 && b.Start == null && b.Pools.SequenceEqual(new[] { "enc-t" + r.tier }),
-            b.Source.Kind + " health " + plan.BossHealth + " tier " + b.Tier + " pools " + string.Join(",", b.Pools));
+            b.Source.Kind + " health " + plan.BossHealth + " tier " + b.Tier + " level " + b.LevelSource + ":" + b.LevelOriginal + " pools " + string.Join(",", b.Pools));
     }
     string[] passives = { "ULDA_BOSS_03p", "ULDA_BOSS_06p", "ULDA_BOSS_11p", "ULDA_BOSS_14p", "ULDA_BOSS_16p" };
     string[] powers = rows.Select(r => "ULDA_BOSS_" + r.n + "p").ToArray();
