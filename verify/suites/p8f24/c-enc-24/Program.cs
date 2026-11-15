@@ -248,6 +248,15 @@ Guard("Xatma", () =>
     var again = Board(g, player, Wisp);
     Kill(g, again);
     Check("X4 the next turn the first death is reborn again", Count(player, Wisp) == 1);
+    var gsx = Fight(Xatma, Banked(Xatma, 150), shrine: Shrine);
+    Controller px = gsx.Player1;
+    var xshrine = px.BoardZone.First(m => ShrineRules.IsMarked(m));
+    var xyeti = Board(gsx, px, Yeti);
+    Kill(gsx, xshrine);
+    bool dormant = px.BoardZone.Any(m => ShrineRules.IsMarked(m) && m.IsDormant);
+    Kill(gsx, xyeti);
+    Check("X4b a run shrine that goes dormant has not died for Death's Embrace: the run player's Yeti dying after it this turn is still the first death and is reborn",
+        dormant && Count(px, Yeti) == 1 && px.BoardZone.First(m => m.Card.Id == Yeti).Health == 1, Row(px));
 
     // Phase 3: Death's Gaze and Untimely Demise.
     foreach (var m in player.BoardZone.ToArray()) Kill(g, m);
@@ -384,11 +393,14 @@ Guard("Vesh", () =>
         && boss.DeckZone.Count(p => p.Card.Id == Yeti) >= 1 && boss.DeckZone.Count(p => p.Card.Id == Wisp) == 1 && boss.DeckZone.Count(p => p.Card.Id == Croc) == 1 && py.Controller == boss,
         $"deck {deck} -> {boss.DeckZone.Count}");
     var gs = Fight(Vesh, Banked(Vesh, 90), shrine: Shrine);
-    var shrine = gs.Player1.BoardZone.First(m => ShrineRules.IsMarked(m));
+    for (int i = 0; i < 5; i++) Kill(gs, Board(gs, gs.Player2, MurlocRaider));
+    var shrineYeti = Board(gs, gs.Player1, Yeti);
     ToBoss(gs);
-    Power(gs);
-    Check("V8 a run board shrine is not shuffled away: it goes dormant on its board, as from any such effect", shrine.Controller == gs.Player1
-        && gs.Player1.BoardZone.Any(m => ShrineRules.IsMarked(m)), Row(gs.Player1));
+    bool used8 = Power(gs);
+    var marked = gs.Player1.BoardZone.Where(m => ShrineRules.IsMarked(m)).ToList();
+    Check("V8 Mur-nado (now at 10) takes the run player's Yeti into the boss's deck but not its board shrine: the shrine goes dormant on its own board, as from any such effect",
+        used8 && shrineYeti.Controller == gs.Player2 && shrineYeti.Zone.Type == Zone.DECK && marked.Count == 1 && marked[0].Controller == gs.Player1 && marked[0].IsDormant
+        && gs.Player1.BoardZone.Count == 1 && !gs.Player2.DeckZone.Any(p => ShrineRules.IsMarked(p)), Row(gs.Player1));
 
     // Vesh's special cards.
     var gc = Fight(Vesh, Banked(Vesh, 150));
@@ -496,44 +508,58 @@ Guard("Relay", () =>
     var plan = run.BuildPlan(s, all);
     run.BeginMatch(s);
     var sw = s.HeroSwitch;
-    Check("L1 the relay plan: the run's own hero first, then the four explorers in order (Elise, Finley, Brann, Reno), each at 50 Health with one of its three entries; the run state records the same heroes and decks for the floor",
-        plan.PlayerRelay.Count == 4 && plan.PlayerRelay.Select(h => h.Hero.Id).SequenceEqual(new[] { "ULDA_Elise", "ULDA_Finley", "ULDA_Brann", "ULDA_Reno" })
+    Check("L1 the relay plan: the run's own hero first, then the four explorers in order (Elise, Finley, Brann, Reno), each with its three entries (hero power n and finale deck n) at 50 Health; the run state records the same heroes and decks for the floor",
+        plan.PlayerRelay.Count == 12 && plan.PlayerRelay.Select(h => h.Hero.Id).Distinct().SequenceEqual(new[] { "ULDA_Elise", "ULDA_Finley", "ULDA_Brann", "ULDA_Reno" })
         && plan.PlayerRelay.All(h => h.Health == 50 && h.Deck.Count == 30) && sw != null && sw.Kind == DungeonRunHeroSwitch.KindRelay && sw.Floor == s.Floor
         && sw.Options.Select(o => o.Hero + "/" + o.Power).SequenceEqual(plan.PlayerRelay.Select(h => h.Hero.Id + "/" + h.Power.Id))
-        && sw.Options.All(o => o.Deck != null && data.BossDecks[o.Deck].Count == 30 && o.Health == 50),
-        string.Join(",", plan.PlayerRelay.Select(h => h.Hero.Id + "/" + h.Power.Id)));
-    var again = At("MAGE", 4410, Tekahn);
-    var plan2 = run.BuildPlan(again, all);
-    var picks = new HashSet<string>();
-    for (long seed = 4400; seed < 4440; seed++)
-        foreach (var h in run.BuildPlan(At("MAGE", seed, Tekahn), all).PlayerRelay) picks.Add(h.Power.Id);
-    Check("L2 the deck and power of each explorer is drawn from the run seed: the same seed gives the same relay, and forty seeds use all twelve entries",
-        plan2.PlayerRelay.Select(h => h.Power.Id).SequenceEqual(plan.PlayerRelay.Select(h => h.Power.Id)) && picks.Count == 12, picks.Count + " entries");
+        && sw.Options.All(o => o.Deck != null && data.BossDecks[o.Deck].Count == 30 && o.Health == 50), plan.PlayerRelay.Count + " entries");
     var reno = At("MAGE_ROGUE", 4410, Tekahn);
     var renoPlan = run.BuildPlan(reno, all);
-    Check("L3 a run whose own hero is an explorer (Reno) meets the other three only", renoPlan.PlayerRelay.Select(h => h.Hero.Id).SequenceEqual(new[] { "ULDA_Elise", "ULDA_Finley", "ULDA_Brann" }),
-        string.Join(",", renoPlan.PlayerRelay.Select(h => h.Hero.Id)));
-    Check("L4 the match classes cover every relay hero (the boss's Secret prior): Druid, Paladin, Hunter, Mage and the run's own", run.MatchClasses(s).Contains("DRUID") && run.MatchClasses(s).Contains("PALADIN")
+    Check("L2 a run whose own hero is an explorer (Reno) meets the other three only", renoPlan.PlayerRelay.Select(h => h.Hero.Id).Distinct().SequenceEqual(new[] { "ULDA_Elise", "ULDA_Finley", "ULDA_Brann" }),
+        string.Join(",", renoPlan.PlayerRelay.Select(h => h.Hero.Id).Distinct()));
+    Check("L3 the match classes cover every relay hero (the boss's Secret prior): Druid, Paladin, Hunter, Mage and the run's own", run.MatchClasses(s).Contains("DRUID") && run.MatchClasses(s).Contains("PALADIN")
         && run.MatchClasses(s).Contains("HUNTER") && run.MatchClasses(s).Contains("MAGE"), string.Join(",", run.MatchClasses(s)));
 
-    // A seed whose Finley entry is the third (Big Value, with BOT_543 Omega Mind).
-    long omegaSeed = -1;
-    for (long seed = 4400; seed < 4600 && omegaSeed < 0; seed++)
-        if (run.BuildPlan(At("MAGE", seed, Tekahn), all).PlayerRelay[1].Power.Id == "ULDA_Finley_HP3") omegaSeed = seed;
-    var fs = At("MAGE", omegaSeed, Tekahn);
-    var fplan = run.BuildPlan(fs, all);
-    fplan.BossDeck = Thirty(Yeti).Select(C).ToList();
-    var g = Ready(fplan);
+    Game Relay(int seed) { var p = run.BuildPlan(At("MAGE", 4410, Tekahn), all); p.BossDeck = Thirty(Yeti).Select(C).ToList(); return Ready(p, seed); }
+    // Which entry of an explorer enters is drawn by the game RNG when it enters: the same game seed, the same entry; seeds use all three.
+    string Enter(Game g) { Hurt(g, g.Player1.Hero, 0); return g.Player1.Hero.HeroPower.Card.Id; }
+    var eliseBySeed = Enumerable.Range(1, 12).Select(seed => Enter(Relay(seed))).ToList();
+    Check("L4 the entering explorer's entry (power and deck) is drawn by the match's game RNG as it enters: the same seed gives the same entry, twelve seeds give all three of Elise's",
+        Enter(Relay(3)) == eliseBySeed[2] && eliseBySeed.Distinct().OrderBy(x => x).SequenceEqual(new[] { "ULDA_Elise_HP1", "ULDA_Elise_HP2", "ULDA_Elise_HP3" }), string.Join(",", eliseBySeed));
+    // The boss's fair view cannot see which entry the real game will draw: its clone has its own RNG.
+    var real = Relay(5);
+    ToBoss(real);
+    var viewPowers = new List<string>();
+    for (int k = 1; k <= 8; k++)
+    {
+        var view = FairBotState.Create(real, real.Player2.PlayerId, k, DeckStyle.Tempo).FingerprintGame;
+        var vp = view.Player1.PlayerId == real.Player1.PlayerId ? view.Player1 : view.Player2;
+        vp.Hero.Damage += vp.Hero.Health; vp.Hero.ToBeDestroyed = true; view.DeathProcessingAndAuraUpdate();
+        viewPowers.Add(vp.Hero.HeroPower.Card.Id);
+    }
+    string realPower = Enter(real);
+    Check("L5 hidden information: the boss's fair view does not know which of Elise's three entries the real game draws (its simulations, seeded on their own, enter different ones); the real game then draws its own",
+        viewPowers.All(p => p.StartsWith("ULDA_Elise_HP")) && viewPowers.Distinct().Count() >= 2 && realPower.StartsWith("ULDA_Elise_HP"), string.Join(",", viewPowers) + " real " + realPower);
+
+    // A seed whose Finley entry is the third (Big Value, with two BOT_543 Omega Mind).
+    int omegaSeed = -1;
+    Game g = null;
+    for (int seed = 1; seed < 200 && omegaSeed < 0; seed++)
+    {
+        var tryGame = Relay(seed);
+        Enter(tryGame);
+        if (Enter(tryGame) == "ULDA_Finley_HP3") { omegaSeed = seed; g = Relay(seed); }
+    }
     Controller player = g.Player1, boss = g.Player2;
     int bossHealth = boss.Hero.Health;
     Hurt(g, player.Hero, 0);
-    string eliseWhy = $"{Hero(player)} want {fplan.PlayerRelay[0].Power.Id} hand {player.HandZone.Count} deck {player.DeckZone.Count} state {g.State} boss {bossHealth}->{boss.Hero.Health}";
-    bool elise = player.Hero.Card.Id == "ULDA_Elise" && player.Hero.Health == 50 && player.Hero.HeroPower.Card.Id == fplan.PlayerRelay[0].Power.Id && player.HandZone.Count == EncounterRules.RelayDraw
+    string eliseWhy = $"{Hero(player)} hand {player.HandZone.Count} deck {player.DeckZone.Count} state {g.State} boss {bossHealth}->{boss.Hero.Health}";
+    bool elise = player.Hero.Card.Id == "ULDA_Elise" && player.Hero.Health == 50 && player.Hero.HeroPower.Card.Id.StartsWith("ULDA_Elise_HP") && player.HandZone.Count == EncounterRules.RelayDraw
         && player.DeckZone.Count == 30 - EncounterRules.RelayDraw && g.State != State.COMPLETE && boss.Hero.Health == bossHealth;
     Hurt(g, player.Hero, 0);
     bool finley = player.Hero.Card.Id == "ULDA_Finley" && player.Hero.HeroPower.Card.Id == "ULDA_Finley_HP3"
         && player.HandZone.Concat(player.DeckZone).Count(p => p.Card.Id == Omega) == 2;
-    Check("L5 in the game the run hero's death brings Elise (50 Health, her power, a new hand of 4 from her finale deck; the boss keeps its Health), the next death Finley with his third deck (two BOT_543 in it)",
+    Check("L6 in the game the run hero's death brings Elise (50 Health, a power of hers, a new hand of 4 from her finale deck; the boss keeps its Health), the next death Finley (with his third deck: two BOT_543)",
         omegaSeed > 0 && elise && finley, $"seed {omegaSeed} {Hero(player)} elise {eliseWhy}");
     ToPlayer(g);
     EmptyHand(player);
@@ -543,24 +569,28 @@ Guard("Relay", () =>
     bool omegaPlayed = Play(g, omega);
     int healthBefore = player.Hero.Health;
     bool moon = Cast(g, Moonfire, boss.Hero);
+    var secret = (Spell)ToHand(g, player, "EX1_610");
+    bool secretCast = Play(g, secret);
+    bool secretLifesteal = secret.HasLifeSteal;
     EndTurn(g);
     bool gone = player.AppliedEnchantments?.Any(e => e.Card.Id == "BOT_543e") != true;
-    Check("L6 BOT_543 Omega Mind, played by the relay hero with 10 Mana Crystals, gives its spells Lifesteal this turn (Moonfire heals the hero 1; Mind Meld is gone when the turn ends)", omegaPlayed && moon
-        && player.Hero.Health == healthBefore + 1 && gone, healthBefore + " -> " + player.Hero.Health);
+    Check("L7 BOT_543 Omega Mind, played with 10 Mana Crystals, gives the spells cast this turn Lifesteal (Moonfire heals the hero 1; a Secret cast then has it); when the turn ends Mind Meld is gone and the Secret still waiting loses its Lifesteal",
+        omegaPlayed && moon && player.Hero.Health == healthBefore + 1 && secretCast && secretLifesteal && gone && !secret.HasLifeSteal && secret.Zone.Type == Zone.SECRET,
+        $"{healthBefore} -> {player.Hero.Health} secret {secretLifesteal}/{secret.HasLifeSteal}");
     ToPlayer(g);
     Hurt(g, player.Hero, 0); Hurt(g, player.Hero, 0);
     bool renoIn = player.Hero.Card.Id == "ULDA_Reno";
     Hurt(g, player.Hero, 0);
     var end = DungeonRunSetup.Harvest(g);
-    Check("L7 after the fourth explorer the next death ends the game; the harvest lists every hero the run player used, in order", renoIn && g.State == State.COMPLETE
+    Check("L8 after the fourth explorer the next death ends the game; the harvest lists every hero the run player used, in order", renoIn && g.State == State.COMPLETE
         && end.HeroesUsed.Count == 5 && end.HeroesUsed.Skip(1).SequenceEqual(new[] { "ULDA_Elise", "ULDA_Finley", "ULDA_Brann", "ULDA_Reno" }), string.Join(">", end.HeroesUsed));
+    var fs = At("MAGE", 4410, Tekahn);
     run.BeginMatch(fs);
     run.RecordOutcome(fs, all, DungeonRunOutcome.Loss, null, end);
-    Check("L8 the fight's end clears the run's relay state and records the heroes used; the run's own class, hero and deck are untouched", fs.HeroSwitch == null
+    Check("L9 the fight's end clears the run's relay state and records the heroes used; the run's own class, hero and deck are untouched", fs.HeroSwitch == null
         && fs.Matches.Last().HeroesUsed == string.Join(",", end.HeroesUsed) && fs.Class == "MAGE" && run.RunClass(fs).HeroCard == data.Class("MAGE").HeroCard, fs.Matches.Last().HeroesUsed ?? "-");
 });
 
-// ============================================================ G  ULDA_115 "Gnomebliterator" and the run state it carries
 Guard("Gnomebliterator", () =>
 {
     Check("G1 ULDA_115 is scripted as a Tombs active treasure on its own id (Cost 2, the client's name and text)", C("ULDA_115").Implemented && C("ULDA_115").Cost == 2
@@ -573,12 +603,29 @@ Guard("Gnomebliterator", () =>
     Board(g, player, "CS2_142");
     bool two = Cast(g, "ULDA_115", boss.Hero);
     var end = DungeonRunSetup.Harvest(g);
-    Check("G2 it deals 10 damage (Spell Damage applies: 11 with Kobold Geomancer) and each cast is counted for the run (the harvest reports 2)", one && minion.Zone.Type != Zone.PLAY
-        && two && boss.Hero.Health == health - 11 && player[EncounterRules.PlagueCount] == 2 && end.Gnomebliterators == 2, $"{health} -> {boss.Hero.Health}, casts {end.Gnomebliterators}");
+    Check("G2 it deals 10 damage (Spell Damage applies: 11 with Kobold Geomancer); outside a Plague Lord fight each cast banks as much again with its cast-time Spell Damage (10 + 11: the harvest reports 21)",
+        one && minion.Zone.Type != Zone.PLAY && two && boss.Hero.Health == health - 11 && player[EncounterRules.PlagueCount] == 21 && end.GnomebliteratorDamage == 21,
+        $"{health} -> {boss.Hero.Health}, banked {end.GnomebliteratorDamage}");
+    ToBoss(g);
+    bool bossCast = Cast(g, "ULDA_115", player.Hero);
+    var end2 = DungeonRunSetup.Harvest(g);
+    Check("G2b a copy the boss casts counts too (an enemy's copied or stolen cast still adds its 10, the wiki): the harvest reports 31", bossCast && boss[EncounterRules.PlagueCount] == 10
+        && end2.GnomebliteratorDamage == 31, end2.GnomebliteratorDamage.ToString());
     var s = At("MAGE", 4420, "dala_21_whirt");
     run.BeginMatch(s);
     run.RecordOutcome(s, all, DungeonRunOutcome.Win, null, end);
-    Check("G3 the casts of a fight against another boss bank 10 damage each for the run's next Plague Lord (DungeonRunState.PlagueLordDamage)", s.PlagueLordDamage == 20, s.PlagueLordDamage.ToString());
+    Check("G3 a fight against another boss banks that damage for the run's next Plague Lord (DungeonRunState.PlagueLordDamage)", s.PlagueLordDamage == 21, s.PlagueLordDamage.ToString());
+    var gl = Fight(Xatma, Banked(Xatma, 250));
+    Controller lordBoss = gl.Player2, lordPlayer = gl.Player1;
+    var lordMinion = Board(gl, lordBoss, Yeti);
+    int lordHealth = lordBoss.Hero.Health;
+    bool inFight = Cast(gl, "ULDA_115", lordMinion);
+    Board(gl, lordPlayer, "CS2_142");
+    int lordHealth2 = lordBoss.Hero.Health;
+    bool inFight2 = Cast(gl, "ULDA_115", lordBoss.Hero);
+    Check("G3b cast during a Plague Lord fight, it also deals its 10 (with Spell Damage) to the Plague Lord at once: 10 on a minion cast, 11 + 11 with Kobold Geomancer on a cast at the lord; nothing is banked",
+        inFight && lordMinion.Zone.Type != Zone.PLAY && lordHealth2 == lordHealth - 10 && inFight2 && lordBoss.Hero.Health == lordHealth2 - 22
+        && DungeonRunSetup.Harvest(gl).GnomebliteratorDamage == 0, $"{lordHealth} -> {lordHealth2} -> {lordBoss.Hero.Health}");
     var lord = At("MAGE", 4421, Xatma);
     lord.PlagueLordDamage = 20;
     var plan = run.BuildPlan(lord, all);
@@ -592,8 +639,8 @@ Guard("Gnomebliterator", () =>
     var wplan = run.BuildPlan(ws, all);
     Check("G5 a boss without persistent damage carries none of it", wplan.BossCarriedDamage == 0);
     run.BeginMatch(lord);
-    run.RecordOutcome(lord, all, DungeonRunOutcome.Loss, null, new RunMatchEnd(250, 0, 0, 30, new[] { "HERO_08" }, false, 1));
-    Check("G6 the Plague Lord fight spends it (a cast inside that fight banks nothing more)", lord.PlagueLordDamage == 0, lord.PlagueLordDamage.ToString());
+    run.RecordOutcome(lord, all, DungeonRunOutcome.Loss, null, new RunMatchEnd(250, 0, 0, 30, new[] { "HERO_08" }, false, 0));
+    Check("G6 the Plague Lord fight spends the banked damage", lord.PlagueLordDamage == 0, lord.PlagueLordDamage.ToString());
     var save = new DungeonRunSave { Profile = all, Active = At("MAGE", 4423, Xatma) };
     string plain = Xml(save);
     save.Active.PlagueLordDamage = 30;

@@ -93,8 +93,9 @@ def lord(rid, name, n, page, lists, powers, archetype, draw, fillers, extra_adap
     adapt = [
         O([("kind", "health"), ("note", "The three phases are forms of one row with one falling Health total (300; phase 2 at 200 or less, "
             "phase 3 at 100 or less, the remaining Health kept); a lost fight's damage is banked per encounter at profile scope "
-            "(DungeonRunProfile.BossDamage, as family 01's Icarax), because a lost fight ends the run; ULDA_115 casts bank 10 more "
-            "per cast in the run's other fights (DungeonRunState.PlagueLordDamage).")]),
+            "(DungeonRunProfile.BossDamage, as family 01's Icarax), because a lost fight ends the run; each ULDA_115 cast in the run's "
+            "other fights banks its 10 plus its Spell Damage (DungeonRunState.PlagueLordDamage), and a cast inside the fight deals it to "
+            "the lord at once.")]),
         O([("kind", "deck"), ("note", "A phase change replaces the deck with the phase's Normal list and draws %d cards from it (the wiki: "
             "\"draws %s extra cards before his main deck\"); the wiki's extra cards of the 33-card phase decks are not added, and a fight "
             "that starts in phase 2 or 3 (banked damage) starts with that phase's deck and no extra cards, as the wiki says." % (draw, {3: "three", 5: "five"}[draw]))]),
@@ -120,7 +121,7 @@ def tekahn(repo):
     lists = [lst(label, pairs) for label, pairs in TEKAHN]
     relay = []
     # The wiki's player table order: Elise, Finley, Brann, Reno. Each explorer is listed three times, deck n with hero power n
-    # (the run draws one entry per explorer: DungeonRun.RelayFor).
+    # (which entry enters is drawn by the match's game RNG when that explorer enters: EncounterRules.ResolveRelay).
     for explorer in ("Elise", "Finley", "Brann", "Reno"):
         for n in (1, 2, 3):
             note = "ULDA_%s_Tekanh_Deck_%d" % (explorer, n)
@@ -144,7 +145,8 @@ def tekahn(repo):
             "between attempts (the wiki), so the row has no persistentDamage.")]),
         O([("kind", "relay"), ("note", "The finale's hero relay (schedule finale heroRelay): the run's own hero fights first, then the four "
             "explorers less the run's own (skipFor), each at 50 Health with one of its three client finale decks (ULDA_<Explorer>_Tekanh_Deck_n) "
-            "and its hero power n, the entry drawn from the run seed and the floor (DungeonRun.RelayFor). The original lets the player "
+            "and its hero power n, the entry drawn by the match's game RNG as the explorer enters (EncounterRules.ResolveRelay; the boss's "
+            "fair view, a clone with its own RNG, cannot know it beforehand). The original lets the player "
             "choose the next explorer and its hero power; here they enter in the wiki's order (Elise, Finley, Brann, Reno) and the "
             "entering hero draws the model's RelayDraw cards (family 01), not a full hand; collected signature treasures are not "
             "shuffled in.")]),

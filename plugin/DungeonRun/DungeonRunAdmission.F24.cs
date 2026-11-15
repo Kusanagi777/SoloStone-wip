@@ -68,10 +68,11 @@ internal static partial class DungeonRunAdmission
         {
             Family = "run-treasure-plague-lord", Admit = AdmitScope.Player, Lift = RunTreasureLift,
             Reason = "treasure: only the player can hold it; offered on act runs of an encounter schedule only (run-v1.json \"runs\": "
-                + "\"encounters\"), where a Plague Lord can be met. Its spell deals 10 damage (Spell Damage applies); each cast is counted "
-                + "on the caster's controller (EncounterRules.PlagueCount), the match harvest reports the run player's casts "
-                + "(RunMatchEnd.Gnomebliterators) and the run banks 10 damage per cast in its other fights for its next Plague Lord "
-                + "(DungeonRunState.PlagueLordDamage, spent by that fight). Nothing hidden is read (c-enc-24 G checks)",
+                + "\"encounters\"), where a Plague Lord can be met. Its spell deals 10 damage (Spell Damage applies), and as much again: "
+                + "to the Plague Lord at once in a Plague Lord fight, otherwise banked on the caster's controller (EncounterRules.PlagueCount; "
+                + "a cast by either player counts), reported by the match harvest (RunMatchEnd.GnomebliteratorDamage) and carried by the "
+                + "run into its next Plague Lord fight (DungeonRunState.PlagueLordDamage, spent by that fight). Nothing hidden is read "
+                + "(c-enc-24 G checks)",
             Ids = new[] { "ULDA_115" },
         },
     };

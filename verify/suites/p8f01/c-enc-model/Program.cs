@@ -257,6 +257,7 @@ Guard("E", () =>
     // encounter major or a custom boss; a tie is the slot's seeded order). Family 10 put Monster Hunt rows into the combat
     // tiers, so Hagatha is no longer the act II major of every run (she was while no other GIL row could be drawn before her).
     var lords = new[] { "ulda_40_icarax", "ulda_37_xatma", "ulda_38_kzrath", "ulda_39_vesh" };
+    var lordHits = lords.ToDictionary(l => l, l => 0);
     bool MajorByMix(List<string> seq, int at, string encounter, string customPool)
     {
         string provenance = data.Boss(encounter).Provenance;
@@ -277,12 +278,13 @@ Guard("E", () =>
         // Family 24: the act III major is one of the four Plague Lords (all ULDA) or a custom final.
         majors &= MajorByMix(seq, 9, "gila_61_hagatha", "band3") && lords.Any(l => MajorByMix(seq, 14, l, "final")) && (data.Boss(seq[4]).Pools.Contains("band3") || data.Boss(seq[4]).Pools.Contains("enc-major1"));
         if (seq[9] == "gila_61_hagatha") hagatha++;
-        if (lords.Contains(seq[14])) icarax++;
+        if (lords.Contains(seq[14])) { icarax++; lordHits[seq[14]]++; }
     }
     Check("E1 1000 seeds: 15 distinct known bosses each, and the same seed gives the same sequence", distinct && known && deterministic);
     Check("E2 an encounter lands only on floors whose pool set holds its tier", whirtActs && voone, $"whirt in {withWhirt}, voone in {withVoone}");
-    Check("E3 the least-used provenance is drawn first: every run meets Whirt and Voone (the only Heist and Rumble rows), and each major is of the provenance the run holds fewer bosses of (act II: Hagatha or a custom band3 boss; act III: a Plague Lord or a custom final)",
-        withWhirt == 1000 && withVoone == 1000 && majors && hagatha > 0 && icarax > 0, $"whirt in {withWhirt}, voone in {withVoone}, Hagatha the act II major in {hagatha}, a Plague Lord the act III major in {icarax}");
+    Check("E3 the least-used provenance is drawn first: every run meets Whirt and Voone (the only Heist and Rumble rows), and each major is of the provenance the run holds fewer bosses of (act II: Hagatha or a custom band3 boss; act III: a Plague Lord, each of the four in some seeds, or a custom final)",
+        withWhirt == 1000 && withVoone == 1000 && majors && hagatha > 0 && lordHits.Values.All(n => n > 0),
+        $"whirt in {withWhirt}, voone in {withVoone}, Hagatha the act II major in {hagatha}, the act III major: {string.Join(" ", lordHits.Select(p => p.Key + " " + p.Value))}");
     // Persistent damage steers the act III major on a run that reads the ledger: a second lord (a fixture clone) with banked damage is taken first.
     var d2 = Load(encounters: encountersJson);
     var clone = d2.Boss("ulda_40_icarax");

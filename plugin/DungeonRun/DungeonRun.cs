@@ -34,7 +34,7 @@ internal sealed class DungeonRun
     internal const int BattleScarsHealth = 100;
     /// <summary>ULDA_729 Multiclassing (a run-scope rule): "Loot can be from any class" (<see cref="LootClasses"/>).</summary>
     internal const string Multiclassing = "ULDA_729";
-    /// <summary>ULDA_115 "Gnomebliterator": each cast banks this much damage for the run's next persistent-damage boss (DungeonRunState.PlagueLordDamage).</summary>
+    /// <summary>ULDA_115 "Gnomebliterator": each cast outside a Plague Lord fight banks this much (plus its Spell Damage) for the run's next persistent-damage boss (DungeonRunState.PlagueLordDamage).</summary>
     internal const string Gnomebliterator = "ULDA_115";
     internal const int GnomebliteratorDamage = 10;
     /// <summary>The drafts phase 7 adds (DungeonRunDraft.Kind): picked on the treasure screen.</summary>
@@ -1807,23 +1807,15 @@ internal sealed class DungeonRun
     }
 
     /// <summary>
-    /// The relay heroes of the current fight against <paramref name="boss"/> (phase 8), in the order they enter: each listed
-    /// hero once, in first-listed order, less the ones the run's own hero card is listed to skip. A hero listed more than once
-    /// (family 24: a Tombs explorer with its three client finale decks) enters with one of its entries, drawn from the run seed
-    /// and the floor (EncounterStream, 2000 + floor, the hero's index), so a restage keeps it. Pure.
+    /// The relay entries of the current fight against <paramref name="boss"/> (phase 8), in list order, less the ones the run's
+    /// own hero card is listed to skip. A hero listed more than once (family 24: a Tombs explorer with its three client finale
+    /// decks and powers) is one relay slot: which of its entries enters is drawn by the match's game RNG when it enters
+    /// (Actions.EncounterRules.ResolveRelay), so the boss's fair view cannot know it beforehand. Pure.
     /// </summary>
     internal List<DungeonRunRelayHero> RelayFor(DungeonRunState state, DungeonRunBoss boss)
     {
         string own = RunClass(state).HeroCard;
-        var rows = boss.Relay.Where(h => !h.SkipFor.Contains(own)).ToList();
-        var heroes = rows.Select(h => h.Hero).Distinct(StringComparer.Ordinal).ToList();
-        var result = new List<DungeonRunRelayHero>();
-        for (int i = 0; i < heroes.Count; i++)
-        {
-            var entries = rows.Where(h => h.Hero == heroes[i]).ToList();
-            result.Add(entries.Count == 1 ? entries[0] : entries[StableSeed.Index(StableSeed.Derive(state.Seed, EncounterStream, 2000 + state.Floor, i), entries.Count)]);
-        }
-        return result;
+        return boss.Relay.Where(h => !h.SkipFor.Contains(own)).ToList();
     }
 
     /// <summary>
@@ -1972,7 +1964,7 @@ internal sealed class DungeonRun
         }
         // Family 24: a persistent-damage fight spends the damage ULDA_115 banked for it; every other fight banks its casts.
         if (boss != null && boss.HasFlag(DungeonRunEncounterData.PersistentDamage)) state.PlagueLordDamage = 0;
-        else if (boss != null && end != null && end.Gnomebliterators > 0) state.PlagueLordDamage += GnomebliteratorDamage * end.Gnomebliterators;
+        else if (boss != null && end != null && end.GnomebliteratorDamage > 0) state.PlagueLordDamage += end.GnomebliteratorDamage;
         if (outcome == DungeonRunOutcome.Win && end != null && ownHero && rules.Any(r => r.Id == BattleScars))
             state.HeroDamage = Math.Max(0, Math.Min(end.PlayerHeroDamage, BattleScarsHealth - 1));
         state.HeroSwitch = null;

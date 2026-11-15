@@ -74,11 +74,33 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		/// the first minion of its player to die this turn gets Reborn (a minion reborn before is reborn again). A run shrine or
 		/// a permanent is never given it.
 		/// </summary>
-		private static void Embrace(IPlayable t)
+		private static void Embrace(Game g, IPlayable t)
 		{
-			if (!Died(t, out Minion m) || m.Controller.NumFriendlyMinionsThatDiedThisTurn != 0) return;
+			if (!Died(t, out Minion m)) return;
+			// The deaths of its player this turn before this one (the history records each death before its triggers run); a run
+			// shrine that went dormant or a permanent has not "died" for this power, so it does not use up the turn's first death.
+			int earlier = g.HistoryFacts.Query.Deaths().Count(f => f.Turn == g.Turn && f.ControllerId == m.Controller.Id && f.EntityId != m.Id
+				&& !(g.IdEntityDic.TryGetValue(f.EntityId, out IPlayable dead) && (ShrineRules.IsMarked(dead) || dead.Card.Untouchable)));
+			if (earlier != 0) return;
 			m[GameTag.REBORN] = 1;
 			m[GameTag.HAS_BEEN_REBORN] = 0;
+		}
+
+		/// <summary>A Plague Lord's hero (any form of ULDA_BOSS_37h-40h: Xatma, K'zrath, Vesh, Icarax; Tekahn is not one).</summary>
+		public static bool IsPlagueLordHero(Hero h) => h != null && System.Text.RegularExpressions.Regex.IsMatch(h.Card.Id, @"^ULDA_BOSS_(37|38|39|40)h[23]?$");
+
+		/// <summary>
+		/// ULDA_115 "Gnomebliterator"'s second half, after its 10 damage to the target: "Also deal $10 damage to the Plague Lord when
+		/// you fight it". The amount is 10 with the cast's Spell Damage. In a Plague Lord fight it is dealt to the Plague Lord at
+		/// once (the wiki: an additional 10 damage); in any other fight it is banked on the caster's controller
+		/// (Actions.EncounterRules.PlagueCount, either player: a copied or stolen cast counts) for the run's next Plague Lord.
+		/// </summary>
+		internal static void Gnomebliterate(Game g, Controller c, IPlayable source)
+		{
+			int amount = SpellDamageRules.Amount(source, GnomebliteratorDamage);
+			Hero lord = new[] { c.Opponent.Hero, c.Hero }.FirstOrDefault(IsPlagueLordHero);
+			if (lord != null) { if (!lord.ToBeDestroyed && lord.Health > 0) Generic.DamageCharFunc(source, lord, amount, false); }
+			else c[EncounterRules.PlagueCount] = c[EncounterRules.PlagueCount] + amount;
 		}
 
 		/// <summary>
@@ -178,7 +200,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 				{
 					TriggerSource = TriggerSource.ALL_MINIONS,
 					FastExecution = true,
-					SingleTask = new CustomTask((g, c, s, t, stack) => Embrace(t)),
+					SingleTask = new CustomTask((g, c, s, t, stack) => Embrace(g, t)),
 				},
 			});
 			// Death's Gaze (1): "Deal 1 damage to all minions. If any die, add an Untimely Demise to your hand."
@@ -323,9 +345,10 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		// ---------------------------------------------------------------- PlagueLordTreasures (phase 8, family 24)
 		// ULDA_115 "Gnomebliterator", the Tombs active treasure phase 6 left out until the Plague Lords existed: keyed and shelled
 		// by its own client id like the other Tombs actives (name and text the client's). Its first half is a spell (10 damage,
-		// Spell Damage applies); its second half is run state: each cast is counted on the caster's controller
-		// (Actions.EncounterRules.PlagueCount), the match harvest reports the run player's count (RunMatchEnd.Gnomebliterators),
-		// and the run banks 10 damage per cast for its next Plague Lord fight (DungeonRunState.PlagueLordDamage).
+		// Spell Damage applies); its second half (DungeonRunEncounters.Gnomebliterate) deals as much again to the Plague Lord at
+		// once in a Plague Lord fight, and otherwise banks it on the caster's controller (Actions.EncounterRules.PlagueCount): the
+		// match harvest reports both players' banked damage (RunMatchEnd.GnomebliteratorDamage) and the run carries it into its
+		// next Plague Lord fight (DungeonRunState.PlagueLordDamage).
 		private static void PlagueLordTreasures()
 		{
 			Active(Gnomebliterator, "\"Gnomebliterator\"", "Deal $10 damage. Also deal $10 damage to the <b>Plague Lord</b> when you fight it.", 2,
@@ -333,7 +356,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 				{
 					PowerTask = ComplexTask.Create(
 						new DamageTask(DungeonRunEncounters.GnomebliteratorDamage, EntityType.TARGET, true),
-						new CustomTask((g, c, s, t, stack) => c[EncounterRules.PlagueCount] = c[EncounterRules.PlagueCount] + 1)),
+						new CustomTask((g, c, s, t, stack) => DungeonRunEncounters.Gnomebliterate(g, c, (IPlayable)s))),
 				}, PlayReq.REQ_TARGET_TO_PLAY));
 		}
 	}
