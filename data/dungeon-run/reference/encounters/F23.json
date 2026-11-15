@@ -2,7 +2,7 @@
  "schemaVersion": 1,
  "family": "23",
  "description": "Monster Hunt nemeses (phase 8 family 23): the four Final Nemesis encounters of The Witchwood's Monster Hunt (Infinite Toki, Glinda Crowskin, Lord Godfrey, Captain Shivers) as act II majors beside Hagatha the Witch (her row is in F01.json: family 01 built the run player's fight-only hero cards on her). Boss deck lists are transcribed from hearthstone.wiki.gg boss pages (read 2026-11-14), by card name; tools/dungeon-run-catalog (step 'encounters') resolves the names against facts/violet-hold-2026-09.json, checks every card and writes data/dungeon-run/encounters-v1.json.",
- "method": "Each boss page was read as wikitext (?action=raw) by verify/tools/gen/p8f23/make_f23.py's author and its one deck table transcribed in table order with the table's own counts; every table sums to 30 (checked by the script). Boss-only and Monster Hunt treasure cards carry their id; the wiki's row name \"Witchwood's Touch (3)\" is the card GILA_BOSS_99t3 (the wiki's page for it lists exactly Glinda Crowskin and Infinite Toki). The pages' notes are followed: Infinite Toki casts Alternate Timeline as soon as she can (left out here, rejected), Captain Shivers starts with Kingsbane equipped and his Plunder is auto-cast.",
+ "method": "Each boss page was read as wikitext (?action=raw) by verify/tools/gen/p8f23/make_f23.py's author and its one deck table transcribed in table order with the table's own counts; every table sums to 30 (checked by the script). Boss-only and Monster Hunt treasure cards carry their id; the wiki's row name \"Witchwood's Touch (3)\" is the card GILA_BOSS_99t3 (the wiki's page for it lists exactly Glinda Crowskin and Infinite Toki). The pages' notes are followed: Infinite Toki casts Alternate Timeline as soon as she can (left out here, rejected), Captain Shivers starts with Kingsbane equipped and his Plunder is auto-cast. The overview page https://hearthstone.wiki.gg/wiki/Final_Nemesis (read 2026-11-14) adds that Lord Godfrey starts the game with Hunter's Insight (his row's start block; his deck lists the table's other 29 cards).",
  "bosses": [
   {
    "id": "gila_48_infinite_toki",
@@ -274,6 +274,14 @@
     "original": 60
    },
    "healthOffset": 10,
+   "start": {
+    "bossHandAdd": [
+     "GILA_503"
+    ]
+   },
+   "flags": [
+    "start"
+   ],
    "source": {
     "url": "https://hearthstone.wiki.gg/wiki/Lord_Godfrey_(boss)",
     "read": "2026-11-14"
@@ -282,11 +290,6 @@
     {
      "label": "Deck",
      "cards": [
-      {
-       "name": "Hunter's Insight",
-       "count": 1,
-       "id": "GILA_503"
-      },
       {
        "name": "Hunter's Mark",
        "count": 2
@@ -365,6 +368,10 @@
     {
      "kind": "health",
      "note": "A Final Nemesis of the Monster Hunt (the last fight of Darius Crowley's hunt, 60 Health on its hero card). In the one mode it is a major of act II beside Hagatha: Health is the act curve at the major's floor plus 10 (rule adaptation health-policy), not the printed 60."
+    },
+    {
+     "kind": "start",
+     "note": "He starts the game with Hunter's Insight (GILA_503) in hand \"for a very aggressive start\" (https://hearthstone.wiki.gg/wiki/Final_Nemesis, Lord Godfrey's section, read 2026-11-14; his own page lists the card once in its deck table and under Special cards). The table's one copy is that card: the row's start block puts it in his hand after the mulligan and his deck holds the table's other 29 cards (a major keeps its listed count), 30 cards in all as on the wiki."
     },
     {
      "kind": "power",

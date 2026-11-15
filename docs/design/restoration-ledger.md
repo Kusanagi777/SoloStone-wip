@@ -46,7 +46,7 @@ A row with several adventures counts once in each column it belongs to, so the l
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | bucket member | 1,713 | 0 | 0 | 0 | 0 | 1,713 |
 | starter | 809 | 0 | 0 | 0 | 0 | 809 |
-| card | 667 | 101 | 37 | 0 | 0 | 805 |
+| card | 666 | 101 | 37 | 0 | 0 | 804 |
 | bucket label | 0 | 0 | 0 | 440 | 0 | 440 |
 | enchantment | 0 | 0 | 0 | 396 | 0 | 396 |
 | boss power | 20 | 73 | 188 | 85 | 0 | 366 |
@@ -162,7 +162,7 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Tombs of Terror | portrait |  |  |  | 8 |  | 8 |
 | Tombs of Terror | twist |  | 4 |  |  |  | 4 |
 | SoloStone | starter | 791 |  |  |  |  | 791 |
-| SoloStone | card | 651 | 99 |  |  |  | 750 |
+| SoloStone | card | 650 | 99 |  |  |  | 749 |
 | SoloStone | enchantment |  |  |  | 166 |  | 166 |
 | SoloStone | boss power | 20 |  |  |  |  | 20 |
 | SoloStone | boss hero |  |  |  | 18 |  | 18 |
@@ -607,7 +607,7 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | Input | SHA-256 (first 16) |
 | --- | --- |
 | `data/dungeon-run/catalog-v1.json` | `ce68329f5cb1c094` |
-| `data/dungeon-run/encounters-v1.json` | `f8cc8cb1331cf92c` |
+| `data/dungeon-run/encounters-v1.json` | `c450dead73612211` |
 | `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
 | `data/dungeon-run/reference/adventure-reference.csv` | `4a608dfa596733e7` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |
@@ -618,6 +618,6 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | `data/dungeon-run/tavern-v1.json` | `f69c185d773c8414` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
-| `tools/restoration-ledger/curation.json` | `ddef136e57ff0713` |
+| `tools/restoration-ledger/curation.json` | `e5167eb8cc18923e` |
 
 Plus the engine card data and DungeonRunContent compiled from the working tree.

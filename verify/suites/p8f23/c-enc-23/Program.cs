@@ -286,6 +286,15 @@ Guard("Godfrey", () =>
     var insight = ToHand(g2, boss, Insight);
     bool cast = Play(g2, insight);
     Check("C4 Hunter's Insight played by the boss (Lord Godfrey's deck card): the cards in its own hand cost (3) less", cast && big.Cost == 7 && yeti.Cost == 1 && g2.Player1.HandZone.All(p => p.Cost == p.Card.Cost));
+    // The row's start block (the wiki's Final Nemesis page): Godfrey holds Hunter's Insight after the mulligan; his deck is the table's other 29.
+    var gplan = RowPlan(Godfrey);
+    var g3 = Ready(gplan, 13);
+    var gdeck = data.BossDecks[data.Boss(Godfrey).Deck];
+    Check("C6 Lord Godfrey starts the game with Hunter's Insight in hand (one copy, after the mulligan); his deck holds the wiki table's other 29 cards, none a Hunter's Insight",
+        gplan.Start?.BossHandAdd.Select(x => x.Id).SequenceEqual(new[] { Insight }) == true && g3.Player2.HandZone.Count(p => p.Card.Id == Insight) == 1
+        && g3.Player2.DeckZone.All(p => p.Card.Id != Insight) && gdeck.Count == 29 && !gdeck.Contains(Insight) && g3.Player1.HandZone.All(p => p.Card.Id != Insight)
+        && data.Boss(Godfrey).HasFlag("start") && data.Boss(Godfrey).Source.Kind == DungeonRunDeckSource.KindAuthentic,
+        "hand " + string.Join(",", g3.Player2.HandZone.Select(p => p.Card.Id)) + " deck " + gdeck.Count);
     var verdictBoss = DungeonRunAdmission.Classify(C(Insight), Insight, AdmitScope.Boss, null, catalogRun: true);
     var verdictLegacy = DungeonRunAdmission.Classify(C(Insight), Insight, AdmitScope.Boss);
     Check("C5 Hunter's Insight and Clockwork Assistant: admitted for a boss on a catalog run (a nemesis deck lists them), the run player's only on a legacy run",
@@ -466,7 +475,7 @@ Guard("Rows", () =>
     {
         (Toki, "48", "Infinite Toki", 60, "substituted", new string[0]),
         (Glinda, "49", "Glinda Crowskin", 50, "authentic", new[] { "heroImmune", "passive" }),
-        (Godfrey, "59", "Lord Godfrey", 60, "authentic", new string[0]),
+        (Godfrey, "59", "Lord Godfrey", 60, "authentic", new[] { "start" }),
         (Shivers, "60", "Captain Shivers", 75, "substituted", new[] { "passive", "start" }),
     };
     Check("H2 family 23 holds the four nemeses and Hagatha, all act II majors", data.Encounters.Where(b => b.Family == "23").Select(b => b.Id).OrderBy(i => i, StringComparer.Ordinal)
@@ -477,9 +486,9 @@ Guard("Rows", () =>
         var b = data.Boss(r.id);
         var plan = RowPlan(r.id);
         string hero = "GILA_BOSS_" + r.n + "h", power = "GILA_BOSS_" + r.n + "p";
-        Check("H3 " + r.id + ": a Monster Hunt major of printed Health " + r.printed + " whose plan is the row's (hero, power, a 30-card " + r.kind + " deck, the curve's Health plus 10), flags [" + string.Join(",", r.flags) + "]",
+        Check("H3 " + r.id + ": a Monster Hunt major of printed Health " + r.printed + " whose plan is the row's (hero, power, a " + (r.id == Godfrey ? 29 : 30) + "-card " + r.kind + " deck, the curve's Health plus 10), flags [" + string.Join(",", r.flags) + "]",
             b.Provenance == "GIL" && b.Name == r.name && b.HeroCard == hero && b.Power == power && b.Source.Kind == r.kind && b.Flags.OrderBy(f => f).SequenceEqual(r.flags.OrderBy(f => f))
-            && plan.EncounterId == r.id && plan.EncounterDeck && plan.BossHero.Id == hero && plan.BossHeroPowerId == power && plan.BossDeck.Count == 30 && data.BossDecks[b.Deck].Count == 30
+            && plan.EncounterId == r.id && plan.EncounterDeck && plan.BossHero.Id == hero && plan.BossHeroPowerId == power && plan.BossDeck.Count == (r.id == Godfrey ? 29 : 30) && data.BossDecks[b.Deck].Count == plan.BossDeck.Count
             && !b.FixedHealth && b.Health == null && b.HealthOffset == 10 && C(hero).Health == r.printed && C(hero).Name == r.name && b.HeroCards.Count == 0 && b.Forms.Count == 0
             && data.Schedules.Member(b, "major-2") && b.Source.Url.StartsWith("https://hearthstone.wiki.gg/wiki/") && !b.BossGeneratedSecrets,
             b.Source.Kind + " flags " + string.Join(",", b.Flags) + " offset " + b.HealthOffset);

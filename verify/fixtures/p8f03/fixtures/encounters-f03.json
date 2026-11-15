@@ -12,7 +12,7 @@
   "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd",
   "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a",
   "reference/encounters/F10.json": "1a60d503f8dba089d546f68fb9651f123116b8fe0db56cd278adddb970ed229d",
-  "reference/encounters/F23.json": "7b23ae679064532dda0cb32a548ea0a98c9347316b369549a023ac8393f38671"
+  "reference/encounters/F23.json": "08dd3bf1382e8bb6a8aeceacc8a0cbeb71b65defc0482723266a23728b9f0e5f"
  },
  "decks": {
   "enc-dala_21_whirt": [
@@ -624,7 +624,6 @@
    "GIL_616"
   ],
   "enc-gila_59_godfrey": [
-   "GILA_503",
    "CS2_084",
    "CS2_084",
    "LOE_021",
@@ -6102,6 +6101,14 @@
     "original": 60
    },
    "healthOffset": 10,
+   "flags": [
+    "start"
+   ],
+   "start": {
+    "bossHandAdd": [
+     "GILA_503"
+    ]
+   },
    "deck": {
     "id": "enc-gila_59_godfrey",
     "kind": "authentic",

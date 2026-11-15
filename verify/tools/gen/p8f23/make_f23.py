@@ -56,6 +56,8 @@ shivers = cards(("Cursed Crewmember", 2, "GILA_BOSS_60t"), ("Bearshark", 2), ("D
     ("Blade Flurry", 2), ("Envenom Weapon", 1), ("Southsea Squidface", 2), ("Tinker's Sharpsword Oil", 2), ("Trade Prince Gallywix", 1),
     ("Dead Man's Hand", 2), ("Acidic Swamp Ooze", 1), ("Lorewalker Cho", 1), ("Violet Illusionist", 2), ("Captain Greenskin", 1),
     ("Fel Reaver", 2), ("Loatheb", 1), ("Troggzor the Earthinator", 1), ("Clockwork Giant", 2))
+# Lord Godfrey starts the game holding the table's one Hunter's Insight (the Final Nemesis page): his deck is the other 29.
+godfrey_deck = [r for r in godfrey if r.get("id") != "GILA_503"]
 for label, rows, n in (("toki", toki, 30), ("glinda", glinda, 30), ("godfrey", godfrey, 30), ("shivers", shivers, 30)):
     if total(rows) != n: raise SystemExit("%s sums to %d, the wiki table to %d" % (label, total(rows), n))
 
@@ -83,8 +85,12 @@ ROWS = [
                 "minion; a run shrine picked is destroyed and goes dormant instead (the transform rule of Actions.Generic) and never "
                 "changes sides; a Faithful taken with the caster's board full is destroyed (the engine's rule for a control change)."),
          ]),
-    boss("gila_59_godfrey", "Lord Godfrey", "GILA_BOSS_59h", "GILA_BOSS_59p", "midrange", 60, "Darius Crowley", "Lord_Godfrey_(boss)", godfrey,
-         adaptations=[
+    boss("gila_59_godfrey", "Lord Godfrey", "GILA_BOSS_59h", "GILA_BOSS_59p", "midrange", 60, "Darius Crowley", "Lord_Godfrey_(boss)", godfrey_deck,
+         flags=["start"], start=O([("bossHandAdd", ["GILA_503"])]), adaptations=[
+            ("start", "He starts the game with Hunter's Insight (GILA_503) in hand \"for a very aggressive start\" (" + WIKI + "Final_Nemesis, "
+                "Lord Godfrey's section, read " + READ + "; his own page lists the card once in its deck table and under Special cards). The "
+                "table's one copy is that card: the row's start block puts it in his hand after the mulligan and his deck holds the "
+                "table's other 29 cards (a major keeps its listed count), 30 cards in all as on the wiki."),
             ("power", "Pistol Barrage (1), \"Deal 2 damage to a minion and the minions next to it\": a hero power, so no Spell Damage; "
                 "the three hits are one damage event (Explosive Shot's rule)."),
          ]),
@@ -115,7 +121,8 @@ DOC = O([
         "Boss-only and Monster Hunt treasure cards carry their id; the wiki's row name \"Witchwood's Touch (3)\" is the card "
         "GILA_BOSS_99t3 (the wiki's page for it lists exactly Glinda Crowskin and Infinite Toki). The pages' notes are "
         "followed: Infinite Toki casts Alternate Timeline as soon as she can (left out here, rejected), Captain Shivers starts "
-        "with Kingsbane equipped and his Plunder is auto-cast."),
+        "with Kingsbane equipped and his Plunder is auto-cast. The overview page " + WIKI + "Final_Nemesis (read " + READ + ") adds "
+        "that Lord Godfrey starts the game with Hunter's Insight (his row's start block; his deck lists the table's other 29 cards)."),
     ("bosses", ROWS), ("rejected", REJECTED),
 ])
 
