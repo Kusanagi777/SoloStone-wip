@@ -10,9 +10,9 @@ One ledger for the unified Dungeon Run (gap review 2026-11-10, implementation st
 | --- | ---: |
 | Reference-CSV records (original adventure ids) | 2,050 |
 | Original bucket / starter / finale-deck / loadout cards and labels not in the CSV | 1,791 |
-| Of those, original cards also in SoloStone's current pool | 973 |
-| SoloStone-only rows (run catalog entries and current pool cards) | 863 |
-| **Total rows** | **4,704** |
+| Of those, original cards also in SoloStone's current pool | 1,034 |
+| SoloStone-only rows (run catalog entries and current pool cards) | 885 |
+| **Total rows** | **4,726** |
 
 The reference CSV has 2,050 records and every one is a row. 22 bucket labels without a CSV record (Monster Hunt's Darius and Toki labels) were added as `label:` rows. A card that has several provenances is one row whose `adventures`, `roles`, `buckets` and `decks` columns list all of them.
 
@@ -20,12 +20,12 @@ The reference CSV has 2,050 records and every one is a row. 22 bucket labels wit
 
 | Classification | Rows | Original (non-SoloStone) rows | SoloStone rows |
 | --- | ---: | ---: | ---: |
-| implemented | 2,813 | 2,192 | 1,867 |
-| partial | 295 | 146 | 163 |
-| missing | 538 | 538 | 0 |
+| implemented | 2,813 | 2,192 | 1,928 |
+| partial | 335 | 164 | 185 |
+| missing | 520 | 520 | 0 |
 | duplicate/support | 1,058 | 965 | 228 |
 | intentionally adapted | 0 | 0 | 0 |
-| **Total** | 4,704 | 3,841 | 2,258 |
+| **Total** | 4,726 | 3,841 | 2,341 |
 
 A row with several adventures counts once in each column it belongs to, so the last two columns can overlap.
 
@@ -37,25 +37,25 @@ A row with several adventures counts once in each column it belongs to, so the l
 | Monster Hunt | 513 | 27 | 116 | 109 | 0 | 765 |
 | Rumble Run | 979 | 0 | 10 | 163 | 0 | 1,152 |
 | The Dalaran Heist | 1,433 | 22 | 185 | 284 | 0 | 1,924 |
-| Tombs of Terror | 1,128 | 27 | 178 | 276 | 0 | 1,609 |
-| SoloStone | 1,867 | 163 | 0 | 228 | 0 | 2,258 |
+| Tombs of Terror | 1,128 | 45 | 160 | 276 | 0 | 1,609 |
+| SoloStone | 1,928 | 185 | 0 | 228 | 0 | 2,341 |
 
 ### Classification by role
 
 | Role | implemented | partial | missing | duplicate/support | intentionally adapted | Rows |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | bucket member | 1,713 | 0 | 0 | 0 | 0 | 1,713 |
+| card | 755 | 101 | 37 | 0 | 0 | 893 |
 | starter | 809 | 0 | 0 | 0 | 0 | 809 |
-| card | 630 | 96 | 37 | 0 | 0 | 763 |
 | bucket label | 0 | 0 | 0 | 440 | 0 | 440 |
 | enchantment | 0 | 0 | 0 | 396 | 0 | 396 |
-| boss power | 20 | 69 | 192 | 85 | 0 | 366 |
+| boss power | 20 | 87 | 174 | 85 | 0 | 366 |
 | boss hero | 0 | 0 | 263 | 31 | 0 | 294 |
 | finale deck | 232 | 2 | 0 | 0 | 0 | 234 |
 | treasure | 195 | 0 | 2 | 19 | 0 | 216 |
 | boss deck | 172 | 0 | 0 | 0 | 0 | 172 |
 | bundle member | 156 | 0 | 0 | 0 | 0 | 156 |
-| boss | 20 | 69 | 0 | 0 | 0 | 89 |
+| boss | 20 | 86 | 0 | 0 | 0 | 106 |
 | hero power | 76 | 0 | 1 | 0 | 0 | 77 |
 | passive treasure | 75 | 0 | 2 | 0 | 0 | 77 |
 | boss card | 0 | 27 | 37 | 0 | 0 | 64 |
@@ -109,8 +109,8 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Monster Hunt | final boss |  |  | 1 |  |  | 1 |
 | Monster Hunt | portrait |  |  |  | 4 |  | 4 |
 | Rumble Run | bucket member | 804 |  |  |  |  | 804 |
-| Rumble Run | starter | 234 |  |  |  |  | 234 |
 | Rumble Run | card | 1 |  |  |  |  | 1 |
+| Rumble Run | starter | 234 |  |  |  |  | 234 |
 | Rumble Run | bucket label |  |  |  | 92 |  | 92 |
 | Rumble Run | enchantment |  |  |  | 41 |  | 41 |
 | Rumble Run | boss power |  |  | 1 |  |  | 1 |
@@ -124,8 +124,8 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Rumble Run | portrait |  |  |  | 1 |  | 1 |
 | Rumble Run | shrine upgrade | 9 |  |  |  |  | 9 |
 | The Dalaran Heist | bucket member | 1,280 |  |  |  |  | 1,280 |
-| The Dalaran Heist | starter | 262 |  |  |  |  | 262 |
 | The Dalaran Heist | card | 9 |  | 9 |  |  | 18 |
+| The Dalaran Heist | starter | 262 |  |  |  |  | 262 |
 | The Dalaran Heist | bucket label |  |  |  | 108 |  | 108 |
 | The Dalaran Heist | enchantment |  |  |  | 115 |  | 115 |
 | The Dalaran Heist | boss power |  | 1 | 75 | 47 |  | 123 |
@@ -141,11 +141,11 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | The Dalaran Heist | support |  |  |  | 4 |  | 4 |
 | The Dalaran Heist | twist |  | 4 | 1 |  |  | 5 |
 | Tombs of Terror | bucket member | 983 |  |  |  |  | 983 |
-| Tombs of Terror | starter | 124 |  |  |  |  | 124 |
 | Tombs of Terror | card | 6 |  | 6 |  |  | 12 |
+| Tombs of Terror | starter | 124 |  |  |  |  | 124 |
 | Tombs of Terror | bucket label |  |  |  | 88 |  | 88 |
 | Tombs of Terror | enchantment |  |  |  | 120 |  | 120 |
-| Tombs of Terror | boss power |  | 4 | 85 | 38 |  | 127 |
+| Tombs of Terror | boss power |  | 22 | 67 | 38 |  | 127 |
 | Tombs of Terror | boss hero |  |  | 80 | 8 |  | 88 |
 | Tombs of Terror | finale deck | 232 | 2 |  |  |  | 234 |
 | Tombs of Terror | treasure | 33 |  | 2 |  |  | 35 |
@@ -161,15 +161,15 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Tombs of Terror | final boss |  |  | 5 |  |  | 5 |
 | Tombs of Terror | portrait |  |  |  | 8 |  | 8 |
 | Tombs of Terror | twist |  | 4 |  |  |  | 4 |
+| SoloStone | card | 739 | 99 |  |  |  | 838 |
 | SoloStone | starter | 791 |  |  |  |  | 791 |
-| SoloStone | card | 614 | 94 |  |  |  | 708 |
 | SoloStone | enchantment |  |  |  | 166 |  | 166 |
 | SoloStone | boss power | 20 |  |  |  |  | 20 |
 | SoloStone | boss hero |  |  |  | 18 |  | 18 |
 | SoloStone | treasure | 195 |  |  | 19 |  | 214 |
 | SoloStone | boss deck | 172 |  |  |  |  | 172 |
 | SoloStone | bundle member | 156 |  |  |  |  | 156 |
-| SoloStone | boss | 20 | 69 |  |  |  | 89 |
+| SoloStone | boss | 20 | 86 |  |  |  | 106 |
 | SoloStone | hero power | 67 |  |  |  |  | 67 |
 | SoloStone | passive treasure | 74 |  |  |  |  | 74 |
 | SoloStone | bundle | 52 |  |  |  |  | 52 |
@@ -186,9 +186,9 @@ Empty cells are zero. A row is counted under each adventure-role pair it carries
 
 | gaps | partial rows | of which original (non-SoloStone) |
 | --- | ---: | ---: |
-| reach | 295 | 146 |
+| reach | 335 | 164 |
 
-75 partial rows are collectible cards that only need a place in the draft catalog (engine, AI and admission already pass).
+79 partial rows are collectible cards that only need a place in the draft catalog (engine, AI and admission already pass).
 
 ## Blocking capability gaps
 
@@ -197,32 +197,34 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | Gap | Rows blocked | Only blocker | Collectible rows | What it needs |
 | --- | ---: | ---: | ---: | --- |
 | `ai:turn-rewind` | 2 | 0 | 0 | Admission family `turn-rewind`: restarts the turn or the game, which rebuilds the controllers; bot state and plan cache must restart (admitted: none; lifted by phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6); GILA_900p, GILA_911). |
+| `ai:boss-tombs-c-rejected` | 1 | 0 | 0 | Admission family `boss-tombs-c-rejected`: Jythiros of Questions' Riddle of the Sphinx, "Guess which card the Boss will play to banish it": the run player guesses on the boss's turn among the boss's hand and its draw, and a right guess counters the boss's card of any type. The engine's decision loop, NativeMatch and the harnesses answer only the current player's decisions, and the engine counters spells only; the encounter is left out (reference/encounters/F21.json "rejected") (admitted: none; lifted by phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard; ULDA_BOSS_58p). |
 | `ai:finale-state` | 1 | 0 | 0 | Admission family `finale-state`: its second half damages the Plague Lord of the act finale whenever the run fights it; the run has no Plague Lord finale and no state that carries damage to it until phase 8, and a Gnomebliterator that only dealt its first half would misstate the card (c-treasures-F12 T28) (admitted: none; lifted by phase 8 (encounters/anomalies): the Plague Lord finale encounters and the run state that carries damage to a Plague Lord into its fight; ULDA_115). |
 | `ai:global-rule-rejected` | 1 | 0 | 0 | Admission family `global-rule-rejected`: Glittering ("After a player plays a card that costs (8) or more, that player adds a Treasure to their hand"): the wiki states the pool is the Dalaran Heist treasures, which are run rewards the table admits for the run player's run deck only (no boss and no generation pool may hold one: RunTreasureLift), and several of them write run state (DALA_718, DALA_719, DALA_721). A rule for both players needs each treasure admitted for a boss and as a generation result; until then the rule is rejected in schedule-v1.json and not scripted (admitted: none; lifted by phase 8 (encounters/anomalies): the Dalaran Heist active treasures admitted for a boss and as a generation result (the treasure-on-boss work of the encounter families that give a boss treasure cards: LOOTA_BOSS_99p, Ol' Toomba); DALA_857). |
 | `ai:start-of-game-draw` | 1 | 0 | 0 | Admission family `start-of-game-draw`: ends the fight and edits the run deck (admitted: none; lifted by phase 9 (economy): a run-owned match exit (an escape outcome and a skipped fight node) that edits the run deck (deferred there by phase 6); ULDA_111). |
 | `ai:treasure-data-gap` | 1 | 0 | 0 |  |
-| `engine:unscripted` | 275 | 0 | 0 | No engine script for the card id (CardDefs has no implemented entry). |
+| `engine:unscripted` | 257 | 0 | 0 | No engine script for the card id (CardDefs has no implemented entry). |
+| `validation:encounter-rejected` | 1 | 0 | 0 | Current DungeonRunValidator admission rule `encounter-rejected` rejects the card. |
 | `validation:rule-rejected` | 1 | 0 | 0 | Current DungeonRunValidator admission rule `rule-rejected` rejects the card. |
-| `run:encounter-roster` | 422 | 0 | 0 | Original encounters: boss heroes, powers, special cards and setups in the encounter pool. |
-| `run:default-schedule` | 286 | 190 | 73 | Placed on the version-3 schedules (acts-v3h, acts-v3t), which a new run follows only once schedule-v1.json "defaults" names them (the phase-8 close-out, after the encounter families fill the pools and enable the finales). |
-| `run:adventure-cards` | 133 | 0 | 73 | Adventure-only cards (boss/treasure support cards in the original namespaces) that need an owning feature to appear. |
+| `run:encounter-roster` | 387 | 0 | 0 | Original encounters: boss heroes, powers, special cards and setups in the encounter pool. |
+| `run:default-schedule` | 326 | 225 | 77 | Placed on the version-3 schedules (acts-v3h, acts-v3t), which a new run follows only once schedule-v1.json "defaults" names them (the phase-8 close-out, after the encounter families fill the pools and enable the finales). |
+| `run:adventure-cards` | 138 | 0 | 77 | Adventure-only cards (boss/treasure support cards in the original namespaces) that need an owning feature to appear. |
 | `run:global-rules` | 10 | 8 | 0 | Anomalies and chapter twists as validated global rules on the match plan. |
 | `run:special-finales` | 7 | 2 | 2 | Special finales (Tekahn Inner Sanctum hand-off, Hagatha, Heist finale). |
 | `run:treasure-content` | 4 | 0 | 0 | Original passive and active treasures as run content entries (DungeonRunContent + run-v1.json). |
 | `run:deck-mutation` | 3 | 0 | 0 | Persistent run-deck mutation and run-scoped state ("Dungeon Deck", "this run", bosses defeated). |
 | `run:tavern` | 2 | 0 | 0 | Bob's tavern services between fights (deck edits, recruits). |
 | `run:adventure-heroes` | 1 | 0 | 0 | The 18 adventure heroes and their special player powers. |
-| `data:original-boss-decks-absent` | 193 | 0 | 0 | Original boss decks are server-side: the client database has none, so an encounter needs a reconstructed deck. |
+| `data:original-boss-decks-absent` | 176 | 0 | 0 | Original boss decks are server-side: the client database has none, so an encounter needs a reconstructed deck. |
 
-764 rows carry at least one gap.
+769 rows carry at least one gap.
 
 ### AI support
 
 | ai_support | Rows |
 | --- | ---: |
-| ok | 2,692 |
+| ok | 2,714 |
 | not applicable | 1,058 |
-| unknown:unscripted | 270 |
+| unknown:unscripted | 251 |
 | ok:run-treasure | 117 |
 | ok:secret-card | 42 |
 | ok:teammate | 41 |
@@ -246,11 +248,13 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:secret-generated (player only; boss after phase 8 (encounters/anomalies): the boss and finale encounters (run:special-finales) turn the boss side's generated Secrets on) | 8 |
 | ok:shrine-upgrade (player only; boss after phase 8 (encounters/anomalies): boss shrine rosters (BossShrineLift); the run player's only until then) | 8 |
 | ok:quest-hero-power | 7 |
+| ok:boss-tombs-c-board-power | 6 |
 | ok:global-rule-hidden | 6 |
 | ok:global-rule-start | 6 |
 | ok:highlander | 6 |
 | ok:not-started-in-deck | 6 |
 | ok:run-treasure-discover | 6 |
+| ok:boss-tombs-c-passive | 5 |
 | ok:collectible-generated | 5 |
 | ok:boss-both-players | 4 |
 | ok:boss-passive-trigger | 4 |
@@ -263,6 +267,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:boss-power-own-hand | 3 |
 | ok:boss-room | 3 |
 | ok:boss-shrine | 3 |
+| ok:boss-tombs-c-own-zone-power | 3 |
 | ok:collectible-own-deck | 3 |
 | ok:deck-condition | 3 |
 | ok:generated-pool | 3 |
@@ -279,6 +284,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:boss-control | 2 |
 | ok:boss-player-deck-insert | 2 |
 | ok:boss-run-edit | 2 |
+| ok:boss-tombs-c-rule-cast | 2 |
 | ok:empty-deck | 2 |
 | ok:global-rule-run | 2 |
 | ok:hidden-steal | 2 |
@@ -291,6 +297,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:run-treasure-paid-cost | 2 |
 | ok:run-treasure-rule | 2 |
 | ok:run-treasure-run-log | 2 |
+| blocked:boss-tombs-c-rejected (phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard) | 1 |
 | blocked:finale-state (phase 8 (encounters/anomalies): the Plague Lord finale encounters and the run state that carries damage to a Plague Lord into its fight) | 1 |
 | blocked:global-rule-rejected (phase 8 (encounters/anomalies): the Dalaran Heist active treasures admitted for a boss and as a generation result (the treasure-on-boss work of the encounter families that give a boss treasure cards: LOOTA_BOSS_99p, Ol' Toomba)) | 1 |
 | blocked:start-of-game-draw (phase 9 (economy): a run-owned match exit (an escape outcome and a skipped fight node) that edits the run deck (deferred there by phase 6)) | 1 |
@@ -304,6 +311,8 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:boss-setaside-store | 1 |
 | ok:boss-token | 1 |
 | ok:boss-token (boss only; player after none: boss decks only; no player role offers it) | 1 |
+| ok:boss-tombs-c-form-power | 1 |
+| ok:boss-tombs-c-hidden-steal | 1 |
 | ok:boss-treasure-find | 1 |
 | ok:deck-wide-change | 1 |
 | ok:deckbuilding | 1 |
@@ -507,6 +516,13 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `boss-control-all` | boss | Sazzmi Gentlehorn's Infatuation, "Gain control of enemy minions with 1 or less Attack": a control change of every such public board minion, in board order (the engine's ControlTask on each: one taken while the boss's board is full is destroyed). A run shrine never changes sides and is left as it is, awake or dormant (ShrineRules.CanChangeController); the power is offered only while a minion it can take is on the enemy board, which is public (c-enc-10 G1-G5; the enc10a bosspilot mode) | none: a boss hero power |  | 1 of 1 |
 | `boss-setaside-store` | boss | Gnomenapper's Nab, "Put an enemy minion into a sack": a public board minion of the run player leaves play for the set-aside store of a Stuffed Sack summoned for the boss (EncounterRules.Store: the minion itself, its damage and enchantments kept, in its own controller's set-aside zone; the link is one private tag on the sack, EncounterRules.SetAsideStore, that game clones and the boss's fair view carry). The stored minion was public and stays known to both sides; no hidden zone is read. Nab needs a free slot on the boss's board, and a run shrine is never a legal target, awake or dormant (a shrine never enters a store) (c-enc-10 E1-E14; the enc10a and enc10-nab bosspilot modes) | none: a boss hero power |  | 1 of 1 |
 | `boss-hunt-card` | player, boss | a Monster Hunt boss deck card, start weapon or token whose effect is public board and hero resolution, the same in either player's hands: Chuck, the spell, discards every minion its caster holds and deals the Attack of each to the enemy hero (GILA_BOSS_23t: the caster's own hand), Stuffed Sack returns the minion it holds to that minion's own controller when it dies (GILA_BOSS_26t, EncounterRules.Release; a silenced, transformed or bounced sack returns nothing), Sack of Gnomes fills its caster's board with random Gnomes of a fixed list behind the generation filter (GILA_BOSS_26t2), Amalgamate destroys all minions and summons one Amalgamation with their combined Attack and Health (GILA_BOSS_27t; a run shrine goes dormant as from any destroy effect) and the Amalgamation is every minion type (GILA_BOSS_27t2), Enchanting Tune takes control of all enemy minions and sets them to 1/1 (GILA_BOSS_29t; a run shrine never changes sides), the Scythe never loses Durability from an attack and gains +1 Attack when its hero kills a minion with it (GILA_BOSS_33t), Vampiric Fangs destroys a minion and restores its Health to the caster's hero (GILA_BOSS_35t) and Murloc Infestation gives the caster's minions "Deathrattle: Summon a random Murloc" (GILA_BOSS_37t: a scripted Murloc behind the generation filter). No hidden zone of the other side is read or written (c-enc-10 D3-D5, E3-E16, F3-F8, G6-G9, J3-J11, L4-L6, N5-N7; the enc10a, enc10b, enc10-nab and enc10-cards bosspilot modes) | none: boss decks only; no player role offers it |  | 9 of 9 |
+| `boss-tombs-c-board-power` | boss | a clickable Tombs of Terror boss hero power whose whole effect is public board and hero state the engine resolves: What's in the Jar? summons a 1/1 copy of any minion for the boss, never of a run shrine (ULDA_BOSS_47p), Demon Emissary summons a random scripted Demon of Cost 3 or less the run's generation filter allows (ULDA_BOSS_49p), Cavalry of E.V.I.L. deals 1 damage to a minion and gives it Charge (ULDA_BOSS_54p), Fish Food restores 2 Health to every Murloc (ULDA_BOSS_55p), Titan's Beast sets a minion's Attack and Health to 3 (ULDA_BOSS_57p) and Food Chain deals 2 damage to a minion and restores 5 Health to the boss's hero if it dies (ULDA_BOSS_59p). A power that would do nothing is not offered, by a condition that reads only the public boards; no hidden zone is read (c-enc-21 sections G, I, M, N, P, R; the enc21 bosspilot modes) | none: a boss hero power |  | 6 of 6 |
+| `boss-tombs-c-own-zone-power` | boss | a clickable Tombs of Terror boss hero power that reads or writes only the boss's own hand and deck, which the boss knows exactly: Running Wild draws a random minion of the boss's own deck and adds a second copy of a Beast (ULDA_BOSS_41p), Sand Shapin' shuffles a plain copy of an enemy minion's card (the board is public; never a run shrine) into the boss's own deck as a public shuffle, marked "Summon when Drawn" (ULDA_BOSS_42p, ULDA_BOSS_42e: drawn, it is summoned and its holder draws), E.V.I.L. Conscription adds a random scripted Lackey behind the generation filter (ULDA_BOSS_53p). Offered by the public counts of the boss's hand and deck only (c-enc-21 sections A, B, L; the enc21 bosspilot modes) | none: a boss hero power |  | 3 of 3 |
+| `boss-tombs-c-hidden-steal` | boss | Jolene Knottley's Spoil the Ending, "Copy a spell in your opponent's hand. It costs (2) less": in the real game a new copy of the card of a random spell of the run player's hand goes to the boss's hand (the boss learns exactly that card, now its own); nothing links the copy to the source card, so the boss's fair view keeps the run player's hand masked, and its search, which sees that hand as stand-ins, finds no spell to copy (it under-knows, never over-knows). Offered by the public hand counts only (c-enc-21 section C; the enc21 bosspilot modes) | none: a boss hero power |  | 1 of 1 |
+| `boss-tombs-c-passive` | boss | a passive Tombs of Terror boss hero power started at match start (EncounterRules.ActivatePower) that reacts to a public event: Reliquary's Relics copies a spell the run player casts into the boss's hand (ULDA_BOSS_45p; the cast is public), Desert Warfare adds a random scripted Hunter card (no Quest, no Secret) after the boss's hero attacks (ULDA_BOSS_50p), Tol'vir Necromancy restores a minion that was Reborn to full Health (ULDA_BOSS_51p, either player's), Sandy Surprise gives Stealth to a 1-Cost minion the boss plays (ULDA_BOSS_56p) and Broken Phylactery doubles the boss's fatigue damage (ULDA_BOSS_52p2, Lich Baz'hial's form 1; Draw.PreDrawPhase). The trigger is a public cast, attack, summon, play or fatigue, never the identity of a hidden card (c-enc-21 sections D, J, K, O, H; the enc21 bosspilot modes) | none: a boss hero power |  | 5 of 5 |
+| `boss-tombs-c-rule-cast` | boss | a Tombs of Terror boss hero power the wiki marks Auto-cast, cast by rule at the start of the boss's turn (family 09's rule-cast powers; never an option of the boss's AI): Maw of the Desert destroys the minion of either board with the lowest Health (ULDA_BOSS_46p; a run shrine goes dormant) and Arena Expert summons a random minion of each player's deck and the boss's attacks the run player's (ULDA_BOSS_48p, Duel!'s rule: the summon makes each card public). The condition reads only the public boards (c-enc-21 sections E, F; the enc21 bosspilot modes) | none: a boss hero power |  | 2 of 2 |
+| `boss-tombs-c-form-power` | boss | Lich Baz'hial's Lich's Phylactery, "Restore @ Health to your Hero. Reduce by 1 for every friendly minion that dies": @ is the power's own public script number (20, lowered by each friendly minion's death); used once, it breaks: the boss enters the row's script form 1 (power only: hero, Health, Armor and weapon stay), Broken Phylactery. Every fact is public board and hero state; the form index and change count are the model's tags (c-enc-21 section H; the enc21 bosspilot modes) | none: a boss hero power |  | 1 of 1 |
+| `boss-tombs-c-rejected` | none | Jythiros of Questions' Riddle of the Sphinx, "Guess which card the Boss will play to banish it": the run player guesses on the boss's turn among the boss's hand and its draw, and a right guess counters the boss's card of any type. The engine's decision loop, NativeMatch and the harnesses answer only the current player's decisions, and the engine counters spells only; the encounter is left out (reference/encounters/F21.json "rejected") | phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard |  | 1 of 1 |
 
 ### Validation (current DungeonRunValidator admission)
 
@@ -514,15 +530,16 @@ Client entity checks ran against the CARD table in `data/dungeon-run/reference/c
 
 | Validation | Rows |
 | --- | ---: |
-| passes (all forms) | 3,379 |
-| rejected (one rule or more) | 234 |
-| not applicable | 1,091 |
-| rejected: `not-scripted` | 232 |
+| passes (all forms) | 3,424 |
+| rejected (one rule or more) | 217 |
+| not applicable | 1,085 |
+| rejected: `not-scripted` | 214 |
+| rejected: `encounter-rejected` | 2 |
 | rejected: `rule-rejected` | 1 |
-| rejected: `encounter-rejected` | 1 |
 | rejected: `admission:turn-rewind` | 1 |
 | rejected: `admission:start-of-game-draw` | 1 |
 | rejected: `admission:finale-state` | 1 |
+| rejected: `admission:boss-tombs-c-rejected` | 1 |
 
 Current run data as shipped: **0 validator errors**.
 
@@ -593,7 +610,7 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | Input | SHA-256 (first 16) |
 | --- | --- |
 | `data/dungeon-run/catalog-v1.json` | `ce68329f5cb1c094` |
-| `data/dungeon-run/encounters-v1.json` | `b4503f6407670464` |
+| `data/dungeon-run/encounters-v1.json` | `066a21380652d207` |
 | `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
 | `data/dungeon-run/reference/adventure-reference.csv` | `4a608dfa596733e7` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |
@@ -604,6 +621,6 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | `data/dungeon-run/tavern-v1.json` | `f69c185d773c8414` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
-| `tools/restoration-ledger/curation.json` | `c45893e7e5ae2a82` |
+| `tools/restoration-ledger/curation.json` | `93a122b13f0447bd` |
 
 Plus the engine card data and DungeonRunContent compiled from the working tree.

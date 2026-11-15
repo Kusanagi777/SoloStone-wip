@@ -104,9 +104,9 @@ Guard("A", () =>
         string.Join(" | ", oldErrors.Take(3)));
     Check("A3 the encounters follow the custom bosses, whose order is unchanged", data.Bosses.Take(20).Select(b => b.Id).SequenceEqual(old.Bosses.Select(b => b.Id))
         && data.Bosses.Skip(20).All(b => b.IsEncounter) && data.Bosses.Take(20).All(b => !b.IsEncounter && b.Tier == null));
-    Check("A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)", data.Encounters.Take(8).Select(b => b.Id).SequenceEqual(new[] { "ulda_40_icarax", "gila_61_hagatha", "dala_21_whirt", "trl_200_voone",
+    Check("A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; family 21's seventeen; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)", data.Encounters.Take(8).Select(b => b.Id).SequenceEqual(new[] { "ulda_40_icarax", "gila_61_hagatha", "dala_21_whirt", "trl_200_voone",
         "loot_35_brandlemar", "loot_48_trapped_room", "gila_25_ivan", "ulda_44_trap_room" }) && data.Encounters.Skip(8).All(b => b.Family != "01")
-        && string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())) == "01:5,07:18,08:17,09:11,10:15,13:1,23:1,24:1",
+        && string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())) == "01:5,07:18,08:17,09:11,10:15,13:1,21:17,23:1,24:1",
         string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())));
     var icarax = data.Boss("ulda_40_icarax"); var hagatha = data.Boss("gila_61_hagatha"); var whirt = data.Boss("dala_21_whirt"); var voone = data.Boss("trl_200_voone");
     Check("A5 Icarax: 300 fixed Health, two more forms at 200 and 100 with their own heroes, powers and decks", icarax.Health == 300 && icarax.FixedHealth && icarax.Forms.Count == 2
@@ -120,8 +120,8 @@ Guard("A", () =>
         && voone.Variants.All(v => data.BossDecks[v.Deck].Count == 30) && voone.HasFlag("shrine"));
     Check("A9 every deck states its kind and source; a deck is authentic exactly when nothing was substituted and it is not a curated one (family 09: the Treasure Vault, which has no deck on the wiki)",
         data.Encounters.All(b => b.Source != null && b.Source.Url != null && b.Source.Read != null && (b.Source.Kind == "authentic") == (b.Source.Substitutions.Count == 0 && b.Source.Kind != "curated")));
-    Check("A10 the rejected list names Toki's hero card with its reason and lift", data.RejectedEncounters.Count == 1 && data.RejectedEncounters[0].Id == "GILA_900h2"
-        && data.RejectedEncounters[0].Reason.Length > 0 && data.RejectedEncounters[0].Lift.StartsWith("phase 9"));
+    Check("A10 the rejected list names Toki's hero card with its reason and lift (family 21: then Jythiros of Questions)", data.RejectedEncounters.Count == 2 && data.RejectedEncounters[0].Id == "GILA_900h2"
+        && data.RejectedEncounters[1].Id == "ULDA_BOSS_58h" && data.RejectedEncounters.All(r => r.Reason.Length > 0 && r.Lift.StartsWith("phase 9")));
     Check("A11 PoolOf maps tiers to pools", DungeonRunEncounterData.PoolOf("1") == "enc-t1" && DungeonRunEncounterData.PoolOf("major2") == "enc-major2" && DungeonRunEncounterData.PoolOf("finale") == "finale");
 });
 
@@ -624,7 +624,8 @@ Guard("J", () =>
         && DungeonRunEncounters.All.Where(e => e.Kind == EncounterCardKind.Rule && e.Family == "01").Select(e => e.Id).OrderBy(id => id, StringComparer.Ordinal).SequenceEqual(new[] { "DALA_850", "DALA_864", "DALA_866" })
         && DungeonRunGlobalRules.Scripted.SequenceEqual(DungeonRunGlobalRules.Scripted.OrderBy(id => id, StringComparer.Ordinal)) && DungeonRunGlobalRules.EffectOf("DALA_866") == "DALA_866e"
         && DungeonRunEncounters.PassivePowers.SequenceEqual(new[] { "LOOTA_BOSS_48p", "LOOTA_BOSS_16p", "LOOTA_BOSS_17p", "LOOTA_BOSS_38p", "LOOTA_BOSS_19p", "LOOTA_BOSS_33p", "LOOTA_BOSS_31p", "LOOTA_BOSS_47p",
-            "LOOTA_BOSS_20p", "LOOTA_BOSS_26p8", "LOOTA_BOSS_34p", "LOOTA_BOSS_52p", "LOOTA_BOSS_53p" })); // Trapped Room's Alarm, the first passive registered here; then family 08's seven and family 09's five
+            "LOOTA_BOSS_20p", "LOOTA_BOSS_26p8", "LOOTA_BOSS_34p", "LOOTA_BOSS_52p", "LOOTA_BOSS_53p",
+            "ULDA_BOSS_45p", "ULDA_BOSS_46p", "ULDA_BOSS_48p", "ULDA_BOSS_50p", "ULDA_BOSS_51p", "ULDA_BOSS_52p2", "ULDA_BOSS_56p" })); // Trapped Room's Alarm, the first passive registered here; then family 08's seven, family 09's five and family 21's seven
     Check("J14 every scripted encounter card is implemented in the card database", DungeonRunEncounters.All.All(e => Cards.FromId(e.Id).Implemented), string.Join(",", DungeonRunEncounters.All.Where(e => !Cards.FromId(e.Id).Implemented).Select(e => e.Id)));
 });
 
