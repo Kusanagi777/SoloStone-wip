@@ -136,6 +136,8 @@ bool Clickable(Game g) => !g.Player2.Hero.HeroPower.IsPassiveHeroPower;
 // A passive (or rule-cast) power: never an option, started at match start (its trigger or aura is live).
 bool PassiveStarted(Game g, string power) => g.Player2.Hero.HeroPower.Card.Id == power && g.Player2.Hero.HeroPower.IsPassiveHeroPower
     && DungeonRunEncounters.PassivePowers.Contains(power) && g.Player2.Hero.HeroPower[EncounterRules.PowerActive] == 1;
+// The engine appends " @spelldmg" to a text with a $ (Card: the client's Spell Damage marker); the text itself is the client's.
+string EngineText(string id) => (C(id).Text ?? "").Replace(" @spelldmg", "");
 string ClientText(string id) => factById[id].GetProperty("text").GetString();
 
 // ============================================================ A  Zaraam: Forbidden Power
@@ -145,7 +147,7 @@ Guard("Zaraam", () =>
     Controller boss = g.Player2, player = g.Player1;
     var power = BossPower(g);
     Check("A1 Forbidden Power costs (4), is clickable and untargeted; its number (the @) starts at 1; its trigger is started", Cost("ULDA_BOSS_60p") == 4 && Clickable(g)
-        && DungeonRunEncounters.TombsD.Number(power) == 1 && power[EncounterRules.PowerActive] == 1 && C("ULDA_BOSS_60p").Text == ClientText("ULDA_BOSS_60p"));
+        && DungeonRunEncounters.TombsD.Number(power) == 1 && power[EncounterRules.PowerActive] == 1 && EngineText("ULDA_BOSS_60p") == ClientText("ULDA_BOSS_60p"));
     ToBoss(g);
     int hp = player.Hero.Health;
     bool used = Power(g);
@@ -247,10 +249,10 @@ Guard("Oasis", () =>
         played && player.BoardZone.Any(m => m == illusion) && player.HandZone.Count == hand - 2 && player.GraveyardZone.Count == grave + 1
         && DungeonRunEncounters.TombsD.Illusion(power) == null && player.DiscardedEntities.Count == 1, $"hand {hand}->{player.HandZone.Count}");
     bool twinKept = twin.Zone == player.HandZone;
-    int afterPlay = player.HandZone.Count;
-    EndTurn(g);
-    Check("C5 the pair is resolved: the twin, if not discarded, is an ordinary card that stays at the end of the turn", player.HandZone.Count == afterPlay
-        && (!twinKept || twin.Zone == player.HandZone));
+    var kept = player.HandZone.Select(p => p.Id).ToList();
+    EndTurn(g); // the run player's turn ends; the boss's turn starts and casts Mirage again
+    Check("C5 the pair is resolved: the twin, if not discarded, is an ordinary card that stays at the end of the turn (every card kept; the next cast adds one)",
+        kept.All(id => player.HandZone.Any(p => p.Id == id)) && player.HandZone.Count == kept.Count + 1 && (!twinKept || twin.Zone == player.HandZone));
     // The twin is played: no discard; the illusion leaves the hand at the end of the turn.
     var g2 = Fight("ulda_62_oasis", playerDeck: Croc, seed: 11);
     ToBoss(g2);
@@ -260,9 +262,9 @@ Guard("Oasis", () =>
     Play(g2, twin2, null);
     Check("C6 the twin played: no discard", g2.Player1.HandZone.Count == h2 - 1 && g2.Player1.DiscardedEntities.Count == 0 && ill2.Zone == g2.Player1.HandZone);
     EndTurn(g2);
-    Check("C7 at the end of the run player's turn the illusion leaves the hand (not discarded: no Discard trigger, set aside)", ill2.Zone == g2.Player1.SetasideZone
-        && g2.Player1.HandZone.Count == h2 - 2 + 1 && g2.Player1.DiscardedEntities.Count == 0 && DungeonRunEncounters.TombsD.Illusion(p2) == null,
-        $"hand {h2}->{g2.Player1.HandZone.Count} (one drawn)");
+    Check("C7 at the end of the run player's turn the illusion leaves the hand (set aside, not discarded); the boss's next turn start casts a new one",
+        ill2.Zone == g2.Player1.SetasideZone && g2.Player1.HandZone.Count == h2 - 2 + 1 && g2.Player1.DiscardedEntities.Count == 0
+        && DungeonRunEncounters.TombsD.Illusion(p2) != ill2 && DungeonRunEncounters.AutoCasts(p2) == 2, $"hand {h2}->{g2.Player1.HandZone.Count}");
     // Neither played: the copy leaves, the original stays, nothing is discarded.
     bool sawCopyIllusion = false, sawOriginalIllusion = false;
     for (int seed = 1; seed <= 16; seed++)
@@ -272,11 +274,13 @@ Guard("Oasis", () =>
         ToBoss(g3);
         var p3 = BossPower(g3); var ill3 = DungeonRunEncounters.TombsD.Illusion(p3); if (ill3 == null) continue;
         bool isCopy = DungeonRunEncounters.TombsD.IllusionIsCopy(ill3);
+        var added = isCopy ? ill3 : DungeonRunEncounters.TombsD.Twin(ill3);
         sawCopyIllusion |= isCopy; sawOriginalIllusion |= !isCopy;
         ToPlayer(g3);
-        int drawn = g3.Player1.HandZone.Count - start.Count - 1;
+        var held = g3.Player1.HandZone.Where(p => p != added).Select(p => p.Id).ToList(); // the originals and the card drawn
         EndTurn(g3);
-        bool back = g3.Player1.HandZone.Count == start.Count + drawn && start.All(id => g3.Player1.HandZone.Any(p => p.Id == id)) && g3.Player1.DiscardedEntities.Count == 0;
+        bool back = added.Zone == g3.Player1.SetasideZone && held.All(id => g3.Player1.HandZone.Any(p => p.Id == id)) && g3.Player1.HandZone.Count == held.Count + 1
+            && g3.Player1.DiscardedEntities.Count == 0;
         if (!back) { Check("C8 seed " + seed + ": neither card played: the copy leaves, every original card stays, nothing is discarded", false); break; }
     }
     Check("C8 neither card played: the copy leaves, every original card stays, nothing is discarded; the illusion is the copy in some games and the original in others",
@@ -339,8 +343,9 @@ Guard("Thrud", () =>
     Check("E3 the run player's other deck cards stay unknown slots in the boss's view (count = the deck's)",
         bot.Facts.Opponent.DeckCount == player.DeckZone.Count && vp.DeckZone.Count == player.DeckZone.Count && vp.DeckZone.All(p => p is Unknown), $"{bot.Facts.Opponent.DeckCount} {vp.DeckZone.Count}");
     var (pview, pv, pb, pbot) = FairView(g, player);
-    Check("E4 the run player's fair view: the stolen card is a hidden card of the boss's hand", pb.HandZone.Count == boss.HandZone.Count && pb.HandZone.Any(p => p.Id == card.Id && p is Unknown),
-        pb.HandZone.Count.ToString());
+    Check("E4 the run player's fair view: the stolen card is a hidden card of the boss's hand", pb.HandZone.Count == boss.HandZone.Count && pb.HandZone.All(p => p is Unknown)
+        && !pbot.Facts.Opponent.Hand.Any(c => !c.Unknown),
+        pb.HandZone.Count + " " + string.Join(",", pb.HandZone.Select(p => p.Id + ":" + p.GetType().Name + ":" + p.Card.Id)) + " stolen " + card.Id);
     Round(g);
     var (view2, vb2, vp2, _) = FairView(g);
     string simulated = "ok"; int vh = vb2.HandZone.Count, vd = vp2.DeckZone.Count;
@@ -367,23 +372,24 @@ Guard("Siamat", () =>
     ToBoss(g);
     bool used = Power(g);
     var servant = boss.BoardZone.LastOrDefault();
-    int keywords(Minion m) => DungeonRunEncounters.TombsD.DjinnKeywords.Count(k => m[k] == 1);
+    bool HasKeyword(Minion m, GameTag k) => k == GameTag.TAUNT ? m.HasTaunt : m[k] == 1;
+    int keywords(Minion m) => DungeonRunEncounters.TombsD.DjinnKeywords.Count(k => HasKeyword(m, k));
     Check("F1 Masterful Djinn costs (2): a 1/4 Servant of Siamat (ULDA_026, an Elemental) with exactly one of Taunt, Rush, Windfury, Divine Shield",
         Cost("ULDA_BOSS_66p") == 2 && used && servant != null && servant.Card.Id == "ULDA_026" && servant.AttackDamage == 1 && servant.Health == 4 && servant.IsRace(Race.ELEMENTAL)
-        && keywords(servant) == 1, servant == null ? "none" : string.Join(",", DungeonRunEncounters.TombsD.DjinnKeywords.Where(k => servant[k] == 1)));
+        && keywords(servant) == 1, servant == null ? "none" : string.Join(",", DungeonRunEncounters.TombsD.DjinnKeywords.Where(k => HasKeyword(servant, k))));
     var seen = new HashSet<GameTag>();
     for (int seed = 1; seed <= 20 && seen.Count < 4; seed++)
     {
         var g2 = Fight("ulda_66_siamat", seed: seed); ToBoss(g2);
         for (int i = 0; i < 3; i++) { Power(g2); Round(g2); }
-        foreach (var m in g2.Player2.BoardZone.Where(m => m.Card.Id == "ULDA_026")) seen.UnionWith(DungeonRunEncounters.TombsD.DjinnKeywords.Where(k => m[k] == 1));
+        foreach (var m in g2.Player2.BoardZone.Where(m => m.Card.Id == "ULDA_026")) seen.UnionWith(DungeonRunEncounters.TombsD.DjinnKeywords.Where(k => HasKeyword(m, k)));
     }
     Check("F2 over several games every one of the four keywords comes up", seen.Count == 4, string.Join(",", seen));
     var shielded = Enumerable.Range(1, 30).Select(seed => { var gs = Fight("ulda_66_siamat", seed: seed); ToBoss(gs); Power(gs); return (gs, m: gs.Player2.BoardZone.Last()); })
         .First(x => x.m.HasDivineShield || x.m.HasTaunt || x.m.HasWindfury || x.m.IsRush);
     ToPlayer(shielded.gs);
     Play(shielded.gs, ToHand(shielded.gs, shielded.gs.Player1, Silence), shielded.m);
-    Check("F3 Silence removes the servant's keyword (its own tag)", keywords(shielded.m) == 0 || !(shielded.m.HasDivineShield || shielded.m.HasTaunt || shielded.m.HasWindfury || shielded.m.IsRush));
+    Check("F3 Silence removes the servant's keyword (its own)", keywords(shielded.m) == 0 && !(shielded.m.HasDivineShield || shielded.m.HasTaunt || shielded.m.HasWindfury || shielded.m.IsRush));
     Round(g); FillBoard(g, boss);
     Check("F4 with a full board it is not offered", !Offered(g));
     Check("F5 Servant of Siamat is scripted (a token without text) and keeps the client's stats", C("ULDA_026").Implemented && C("ULDA_026").ATK == 1 && C("ULDA_026").Health == 4
@@ -415,7 +421,7 @@ Guard("Isiset", () =>
     int hand = player.HandZone.Count;
     Cast(g, Moonfire, boss.Hero);
     var copy = player.HandZone.LastOrDefault();
-    Check("H2 the run player's first spell (Moonfire): a copy joins the run player's hand", player.HandZone.Count == hand && copy != null && copy.Card.Id == Moonfire && copy.Controller == player,
+    Check("H2 the run player's first spell (Moonfire): a copy joins the run player's hand", player.HandZone.Count == hand + 1 && copy != null && copy.Card.Id == Moonfire && copy.Controller == player,
         hand + "->" + player.HandZone.Count);
     hand = player.HandZone.Count;
     Play(g, copy, boss.Hero);
@@ -424,13 +430,15 @@ Guard("Isiset", () =>
     int bossHand = boss.HandZone.Count;
     Cast(g, Moonfire, player.Hero);
     var own = boss.HandZone.LastOrDefault();
-    Check("H4 the boss's own first spell: a copy joins the boss's hand", boss.HandZone.Count == bossHand && own?.Card.Id == Moonfire);
+    Check("H4 the boss's own first spell: a copy joins the boss's hand", boss.HandZone.Count == bossHand + 1 && own?.Card.Id == Moonfire);
     var g2 = Fight("ulda_69_isiset");
     Cast(g2, Moonfire, g2.Player2.Hero);
     var pcopy = g2.Player1.HandZone.Last();
     ToBoss(g2);
     var (view, vb, vp, bot) = FairView(g2);
-    Check("H5 the boss's fair view keeps the run player's copy masked (it under-knows)", vp.HandZone.Any(p => p.Id == pcopy.Id && p is Unknown));
+    Check("H5 the boss's fair view keeps the run player's copy masked (it under-knows)", vp.HandZone.Count == g2.Player1.HandZone.Count && vp.HandZone.All(p => p is Unknown)
+        && bot.Facts.Opponent.Hand.All(c => c.Unknown),
+        string.Join(",", vp.HandZone.Select(p => p.Id + ":" + p.GetType().Name)) + " copy " + pcopy.Id);
     var g3 = Fight("ulda_69_isiset");
     FillHand(g3.Player1); g3.Player1.HandZone.Remove(g3.Player1.HandZone[0]);
     var moon = ToHand(g3, g3.Player1, Moonfire);
@@ -504,9 +512,12 @@ Guard("Setesh", () =>
     Check("K6 two curses: 4 damage at the end of the run player's turn", player.Hero.Health == hp - 4, hp + "->" + player.Hero.Health);
     EndTurn(g); Mana(player);
     Play(g, ToHand(g, player, Silence), victim);
+    int left = Count(victim, "ULDA_BOSS_72e");
     hp = player.Hero.Health;
     EndTurn(g);
-    Check("K7 Silence removes the curses: no damage", Count(victim, "ULDA_BOSS_72e") == 0 && player.Hero.Health == hp);
+    Check("K7 Silence removes the curses: no damage at the end of that turn (the boss's next turn start curses it anew)", left == 0 && player.Hero.Health == hp
+        && Count(victim, "ULDA_BOSS_72e") == 1,
+        $"curses {Count(victim, "ULDA_BOSS_72e")} hp {hp}->{player.Hero.Health} silenced {victim.IsSilenced} zone {victim.Zone?.Type}");
 });
 
 // ============================================================ L  General Husam: Shockwave
@@ -551,7 +562,7 @@ Guard("Avozu", () =>
     var power = BossPower(g);
     var yeti = Board(g, player, Yeti);
     ToBoss(g);
-    Check("N1 Hunt the Weak costs (2); its number starts at 1", Cost("ULDA_BOSS_75p") == 2 && DungeonRunEncounters.TombsD.Number(power) == 1 && C("ULDA_BOSS_75p").Text == ClientText("ULDA_BOSS_75p"));
+    Check("N1 Hunt the Weak costs (2); its number starts at 1", Cost("ULDA_BOSS_75p") == 2 && DungeonRunEncounters.TombsD.Number(power) == 1 && EngineText("ULDA_BOSS_75p") == ClientText("ULDA_BOSS_75p"));
     Power(g, yeti);
     Check("N2 1 damage to the Yeti; the number becomes 2", yeti.Damage == 1 && DungeonRunEncounters.TombsD.Number(power) == 2);
     Round(g);
@@ -589,7 +600,7 @@ Guard("Gorebite", () =>
     bool used = Power(g);
     Check("P2 with a 3-Attack weapon it doubles the hero's Attack this turn (+3, ULDA_BOSS_77e)", used && boss.Hero.AttackDamage == 6 && Has(boss.Hero, "ULDA_BOSS_77e"), boss.Hero.AttackDamage.ToString());
     Round(g);
-    Check("P3 next turn the hero's Attack is the weapon's again", boss.Hero.AttackDamage == 3 && !Has(boss.Hero, "ULDA_BOSS_77e"));
+    Check("P3 next turn the hero's Attack is the weapon's again", boss.Hero.AttackDamage == 3 && !Has(boss.Hero, "ULDA_BOSS_77e"), boss.Hero.AttackDamage + " " + Has(boss.Hero, "ULDA_BOSS_77e") + " weapon " + boss.Hero.Weapon?.AttackDamage);
 });
 
 // ============================================================ Q  Octosari: Massive Tentacles (shrines go dormant)
@@ -707,7 +718,7 @@ Guard("Rows", () =>
     string[] enchantments = { "ULDA_BOSS_70e", "ULDA_BOSS_72e", "ULDA_BOSS_73e", "ULDA_BOSS_77e", "ULDA_BOSS_79e" };
     var scripted = powers.Concat(new[] { "ULDA_026" }).ToArray();
     var unscripted = scripted.Concat(enchantments).Where(id => !C(id).Implemented || DungeonRunEncounters.Find(id)?.Family != "22").ToList();
-    var retexted = scripted.Concat(enchantments).Where(id => (C(id).Text ?? "") != (factById[id].TryGetProperty("text", out var t) ? t.GetString() : "")).ToList();
+    var retexted = scripted.Concat(enchantments).Where(id => EngineText(id) != (factById[id].TryGetProperty("text", out var t) ? t.GetString() : "")).ToList();
     Check("S4 every power, the Servant and every enchantment of the family is scripted by family 22 and keeps the client's text (18 powers, 1 token, 5 enchantments)", unscripted.Count == 0
         && retexted.Count == 0 && scripted.Length == 19, string.Join(",", unscripted.Concat(retexted)));
     int ClientCost(string p) => factById[p].GetProperty("tags").EnumerateArray().Where(t => t[0].GetInt32() == 48).Select(t => t[1].GetInt32()).FirstOrDefault();

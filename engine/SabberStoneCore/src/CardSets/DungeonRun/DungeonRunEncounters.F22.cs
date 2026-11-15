@@ -105,7 +105,10 @@ namespace SabberStoneCore.CardSets.DungeonRun
 				if (c.BoardZone.IsFull) return null;
 				g.OnRandomHappened(true);
 				GameTag keyword = DjinnKeywords[g.Random.Next(DjinnKeywords.Count)];
-				var servant = (Minion)Entity.FromCard(c, Cards.FromId(Servant), new EntityData { [keyword] = 1, [GameTag.DISPLAYED_CREATOR] = source.Id });
+				var servant = (Minion)Entity.FromCard(c, Cards.FromId(Servant), new EntityData { [GameTag.DISPLAYED_CREATOR] = source.Id });
+				// Taunt is a character property (an override of the card's printed Taunt), the other three are plain tags.
+				if (keyword == GameTag.TAUNT) servant.HasTaunt = true;
+				else servant[keyword] = 1;
 				Generic.SummonBlock.Invoke(g, servant, -1, source);
 				return servant.Zone?.Type == Zone.PLAY ? servant : null;
 			}
@@ -352,10 +355,19 @@ namespace SabberStoneCore.CardSets.DungeonRun
 				if (minions.Count > 1) g.OnRandomHappened(true);
 				Generic.AddEnchantmentBlock(g, Cards.FromId("ULDA_BOSS_72e"), (IPlayable)s, minions[minions.Count == 1 ? 0 : g.Random.Next(minions.Count)]);
 			});
-			// Cursed!: "Deal 2 damage to your hero at the end of your turn." The minion's controller's hero, at the end of that turn.
+			// Cursed!: "Deal 2 damage to your hero at the end of your turn." "Your" is the cursed minion's controller (the enchantment's
+			// creator is the boss's power): its hero takes 2 at the end of each of its turns.
 			Enchantment("ULDA_BOSS_72e", () => new Power
 			{
-				Trigger = new Trigger(TriggerType.TURN_END) { SingleTask = new DamageTask(TombsD.CurseDamage, EntityType.HERO) },
+				Trigger = new Trigger(TriggerType.TURN_END)
+				{
+					EitherTurn = true,
+					SingleTask = new CustomTask((g, c, s, t, stack) =>
+					{
+						if (!((s as Model.Entities.Enchantment)?.Target is Minion cursed) || cursed.Zone?.Type != Zone.PLAY || g.CurrentPlayer != cursed.Controller) return;
+						Generic.DamageCharFunc((IPlayable)s, cursed.Controller.Hero, TombsD.CurseDamage, false);
+					}),
+				},
 			});
 
 			// ---------------- General Husam (ULDA_BOSS_73h)
@@ -400,7 +412,10 @@ namespace SabberStoneCore.CardSets.DungeonRun
 				int attack = c.Hero.AttackDamage;
 				if (attack > 0) Generic.AddEnchantmentBlock(g, Cards.FromId("ULDA_BOSS_77e"), (IPlayable)s, c.Hero, attack);
 			}), usable: c => c.Hero.AttackDamage > 0);
-			Enchantment("ULDA_BOSS_77e", () => new Power { Enchant = new Enchant(Effects.Attack_N(0)) { UseScriptTag = true, IsOneTurnEffect = true } });
+			// The client's Strong Jaw has no one-turn tag (Sunshine and Auto Piloted do): the script marks it so the enchantment
+			// itself, not only its Attack, ends with the turn.
+			Add("ULDA_BOSS_77e", EncounterCardKind.Enchantment, () => new CardDef(new Power { Enchant = new Enchant(Effects.Attack_N(0)) { UseScriptTag = true, IsOneTurnEffect = true } }),
+				card => card.Tags[GameTag.TAG_ONE_TURN_EFFECT] = 1);
 
 			// ---------------- Octosari (ULDA_BOSS_78h)
 			// Massive Tentacles (0): "If there are 8 or more minions on the battlefield, destroy them all." Auto-cast (the wiki): at
