@@ -127,9 +127,9 @@ B.append(boss(62, "oasis", "A Beautiful Oasis", "A_Beautiful_Oasis", 2, "3", "mi
                      "Played, the illusion resolves as its card and its player discards a random card of the hand (the second copy "
                      "too, if chosen). At the end of the run player's turn the illusion leaves the hand if it is still there; when "
                      "both are still there the copy leaves and the original stays, so the hand is as before (\"if the player does not "
-                     "play any of the two copies ... none of the player's cards will be discarded\"). Which card is the illusion is "
-                     "kept in private encounter tags; the boss never learns the copied card (a hidden card of the run player's "
-                     "hand).")]))
+                     "play any of the two copies ... none of the player's cards will be discarded\"). The illusion card is marked by a "
+                     "private encounter tag; the boss's power holds only the illusion's public hand position, so the boss knows which "
+                     "slot is the illusion and never learns the copied card (a hidden card of the run player's hand).")]))
 B.append(boss(63, "vessina", "Vessina", "Vessina_(boss)", 4, "3", "midrange", [
     ("Sludge Slurper", 2), ("Tunnel Trogg", 2), ("Witch's Apprentice", 2), ("Ancestral Knowledge", 2), ("Eternal Sentinel", 2),
     ("EVIL Totem", 2), ("Lava Shock", 2), ("Likkim", 2), ("Haunting Visions", 2), ("Jinyu Waterspeaker", 2), ("Thunderhead", 1),

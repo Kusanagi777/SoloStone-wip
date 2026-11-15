@@ -70,8 +70,8 @@ namespace SabberStoneCore.Actions
 		/// </summary>
 		public const GameTag SetAsideStore = (GameTag)32645;
 		/// <summary>
-		/// A Beautiful Oasis's Mirage (family 22; rules in DungeonRunEncounters.TombsD): on the boss's hero power, the entity id of the
-		/// illusion card it gave; on that illusion, its twin's entity id times two, plus one when the illusion is the added copy.
+		/// A Beautiful Oasis's Mirage (family 22; rules in DungeonRunEncounters.TombsD): on the boss's hero power, the illusion's public
+		/// hand position (1-based); on the illusion card, its twin's entity id times four, plus two, plus one when it is the added copy.
 		/// </summary>
 		public const GameTag MirageIllusion = (GameTag)32657;
 		/// <summary>

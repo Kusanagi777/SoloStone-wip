@@ -242,12 +242,44 @@ Guard("Oasis", () =>
     var (view, vb, vp, bot) = FairView(g);
     Check("C3 the boss's fair view: the run player's hand (the copy too) stays unknown cards, one more of them", vp.HandZone.Count == player.HandZone.Count
         && vp.HandZone.All(p => p is Unknown) && bot.Facts.Opponent.Hand.All(c => c.Unknown), vp.HandZone.Count.ToString());
+    // The boss's power holds only the illusion's public hand position; in the boss's fair view the illusion is the masked slot there.
+    HeroPower ViewPower(Controller viewBoss) => viewBoss.Hero.HeroPower;
+    int slot = illusion.ZonePosition + 1;
+    var viewIllusion = DungeonRunEncounters.TombsD.Illusion(ViewPower(vb));
+    Check("C3b the boss's power holds the illusion's hand position, not an entity id; in the boss's fair view Illusion() is the masked slot at that position (no twin known)",
+        DungeonRunEncounters.TombsD.IllusionSlot(power) == slot && ViewPower(vb)[EncounterRules.MirageIllusion] == slot && viewIllusion != null && viewIllusion is Unknown
+        && viewIllusion == vp.HandZone[slot - 1] && DungeonRunEncounters.TombsD.Twin(viewIllusion) == null, $"slot {slot} power {DungeonRunEncounters.TombsD.IllusionSlot(power)} view {ViewPower(vb)[EncounterRules.MirageIllusion]}");
+    // A card to the illusion's left leaves the hand (a discard on the boss's turn): the position follows the illusion.
+    var left = player.HandZone.FirstOrDefault(p => p.ZonePosition < illusion.ZonePosition) ?? player.HandZone.Last(p => p != illusion && p != twin);
+    bool shifts = left.ZonePosition < illusion.ZonePosition;
+    new DiscardTask(EntityType.TARGET).Process(g, player, boss.Hero, left, null);
+    g.DeathProcessingAndAuraUpdate();
+    int moved = illusion.ZonePosition + 1;
+    var (view2, vb2, vp2, _) = FairView(g);
+    var viewIllusion2 = DungeonRunEncounters.TombsD.Illusion(ViewPower(vb2));
+    Check("C3c a card leaving the hand moves the position with the illusion (aura update); the new fair view's illusion is the masked slot at the new position",
+        DungeonRunEncounters.TombsD.IllusionSlot(power) == moved && moved == (shifts ? slot - 1 : slot) && viewIllusion2 == vp2.HandZone[moved - 1]
+        && DungeonRunEncounters.TombsD.Illusion(power) == illusion, $"{slot}->{moved} power {DungeonRunEncounters.TombsD.IllusionSlot(power)}");
+    // The boss's search may run on past its turn in its view: at the end of the run player's turn the view's illusion slot fades,
+    // and at the boss's next turn start nothing is copied (the hand is masked).
+    string simulated = "ok"; int viewHand = -1, viewAfter = -1; IPlayable faded = null;
+    try
+    {
+        view2.Process(EndTurnTask.Any(view2.CurrentPlayer));
+        viewHand = vp2.HandZone.Count;
+        view2.Process(EndTurnTask.Any(view2.CurrentPlayer));
+        viewAfter = vp2.HandZone.Count;
+        faded = DungeonRunEncounters.TombsD.Illusion(ViewPower(vb2));
+    }
+    catch (Exception e) { simulated = e.GetType().Name + ": " + e.Message; }
+    Check("C3d in the view the masked illusion slot leaves at the end of the run player's turn and the boss's next turn start copies nothing; no exception",
+        simulated == "ok" && viewAfter == viewHand - 1 && faded == null && viewIllusion2.Zone != vp2.HandZone, $"{simulated} hand {viewHand}->{viewAfter}");
     ToPlayer(g);
-    int hand = player.HandZone.Count, grave = player.GraveyardZone.Count;
+    int hand = player.HandZone.Count, grave = player.GraveyardZone.Count, discarded = player.DiscardedEntities.Count;
     bool played = Play(g, illusion, null);
     Check("C4 the run player plays the illusion: it resolves as its card (a River Crocolisk on the board) and a random card of the hand is discarded",
         played && player.BoardZone.Any(m => m == illusion) && player.HandZone.Count == hand - 2 && player.GraveyardZone.Count == grave + 1
-        && DungeonRunEncounters.TombsD.Illusion(power) == null && player.DiscardedEntities.Count == 1, $"hand {hand}->{player.HandZone.Count}");
+        && DungeonRunEncounters.TombsD.Illusion(power) == null && DungeonRunEncounters.TombsD.IllusionSlot(power) == 0 && player.DiscardedEntities.Count == discarded + 1, $"hand {hand}->{player.HandZone.Count}");
     bool twinKept = twin.Zone == player.HandZone;
     var kept = player.HandZone.Select(p => p.Id).ToList();
     EndTurn(g); // the run player's turn ends; the boss's turn starts and casts Mirage again
@@ -321,6 +353,15 @@ Guard("Vessina", () =>
         theirs.Cost == 4 && player.OverloadOwed == 0);
     Play(g, theirs, boss.Hero);
     Check("D6 the run player's Fireball Overloads nothing", player.OverloadOwed == 0);
+    var g2 = Fight("ulda_63_vessina");
+    ToBoss(g2);
+    var thunderhead = Board(g2, g2.Player2, "BOT_407");
+    int Sparks() => g2.Player2.BoardZone.Count(m => m.Card.Id == "BOT_102t");
+    Cast(g2, Moonfire, g2.Player1.Hero);
+    int afterMoonfire = Sparks();
+    Cast(g2, Bolt, g2.Player1.Hero);
+    Check("D7 Thunderhead sees a spell that Overloads only by Plaguebringer as a card with Overload (Moonfire: two Sparks); Lightning Bolt, with its own Overload, two more (not four)",
+        afterMoonfire == 2 && Sparks() == 4, $"{afterMoonfire} {Sparks()}");
 });
 
 // ============================================================ E  Thrud: Ogre-Sized Thief, the deck steal

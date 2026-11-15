@@ -23,8 +23,9 @@ namespace SabberStoneCore.CardSets.DungeonRun
 	// card and nothing else), and Mirage copies a hidden card of the run player's hand into that same hand (the boss never learns
 	// it). A power that would do nothing is not offered, by a condition that reads only public zones or the boss's own hand
 	// (never a deck's cards). Every random choice uses the game RNG and is reported as a random event. State: the two growing
-	// powers keep their number in the power's own client script number (the @ of their text); Mirage keeps its illusion in the
-	// private tag EncounterRules.MirageIllusion. A run shrine destroyed by a power goes dormant (ShrineRules).
+	// powers keep their number in the power's own client script number (the @ of their text); Mirage marks its illusion with the
+	// private tag EncounterRules.MirageIllusion and keeps only the illusion's public hand position on the boss's power. A run
+	// shrine destroyed by a power goes dormant (ShrineRules).
 	public static partial class DungeonRunEncounters
 	{
 		/// <summary>
@@ -115,7 +116,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 			/// <summary>
 			/// ULDA_BOSS_63p Plaguebringer: the extra Overload of a spell <paramref name="c"/> played, as any Overload (Tunnel Trogg's
-			/// "whenever you Overload" counts it).
+			/// "whenever you Overload" counts it, and Thunderhead sees the spell as a card with Overload).
 			/// </summary>
 			internal static void Overload(Controller c, IPlayable spell, int amount)
 			{
@@ -125,25 +126,46 @@ namespace SabberStoneCore.CardSets.DungeonRun
 				c.Game.TriggerManager.OnOverloadTrigger(spell, amount);
 				foreach (Minion trogg in c.BoardZone.Where(m => m.Card.Id == "LOE_018" && !m.IsSilenced && Pickable(m)).ToList())
 					Generic.AddEnchantmentBlock(c.Game, Cards.FromId("LOE_018e"), trogg, trogg, amount);
+				// Thunderhead ("After you play a card with Overload, summon two 1/1 Sparks with Rush"): a spell that Overloads only by
+				// this rule is now a card with Overload too; one with its own Overload already triggered Thunderhead itself.
+				if (!spell.Card.HasOverload)
+					foreach (Minion thunderhead in c.BoardZone.Where(m => m.Card.Id == "BOT_407" && !m.IsSilenced && Pickable(m)).ToList())
+						new SummonTask("BOT_102t", 2, SummonSide.ALTERNATE).Process(c.Game, c, thunderhead, null, null);
 			}
 
 			/// <summary>ULDA_BOSS_69p Mistress of Magic: <paramref name="spell"/> is its player's first spell played this game.</summary>
 			public static bool FirstSpell(IPlayable spell) => spell is Spell && spell.Controller.NumSpellsPlayedThisGame == 0;
 
 			// ------------------------------------------------------------------ Mirage (ULDA_BOSS_62p)
+			// The illusion card carries the mark (EncounterRules.MirageIllusion: its twin's entity id times four, plus two, plus one
+			// when it is the added copy); a hidden card of the run player's hand, so the boss's fair view masks it with the rest of
+			// that hand. The boss's power carries only the illusion's public hand position (1-based, 0 for none), kept current by
+			// MirageSlot, an aura of the power: no private entity id is ever on a card the boss sees. In the boss's fair view the
+			// masked slot at that position is the illusion (MirageSlot marks it there), so the boss knows which slot it made the
+			// illusion and nothing more.
 
-			/// <summary>The illusion card Mirage gave and has not cleared yet, or null.</summary>
+			private const int ViewMark = 2;
+
+			/// <summary>The illusion card Mirage gave and has not cleared yet (a marked card of the opponent's hand), or null.</summary>
 			public static IPlayable Illusion(HeroPower power)
 			{
-				int id = power?[EncounterRules.MirageIllusion] ?? 0;
-				return id != 0 && power.Game.IdEntityDic.TryGetValue(id, out IPlayable p) ? p : null;
+				if (power == null) return null;
+				Controller op = power.Controller.Opponent;
+				foreach (IPlayable p in op.HandZone)
+					if (p[EncounterRules.MirageIllusion] != 0) return p;
+				// The boss's fair view (the hand's cards are masked, marks and all): the masked slot at the power's position.
+				int at = power[EncounterRules.MirageIllusion];
+				return at > 0 && at <= op.HandZone.Count && op.HandZone[at - 1] is Unknown ? op.HandZone[at - 1] : null;
 			}
 
-			/// <summary>The illusion's twin (the other card of the pair), or null.</summary>
+			/// <summary>The illusion's hand position the boss's power holds (1-based; 0 for none): a public fact.</summary>
+			public static int IllusionSlot(HeroPower power) => power?[EncounterRules.MirageIllusion] ?? 0;
+
+			/// <summary>The illusion's twin (the other card of the pair), or null (also in the boss's fair view, where the link is masked).</summary>
 			public static IPlayable Twin(IPlayable illusion)
 			{
 				int link = illusion?[EncounterRules.MirageIllusion] ?? 0;
-				return link > 1 && illusion.Game.IdEntityDic.TryGetValue(link >> 1, out IPlayable p) ? p : null;
+				return link >> 2 > 0 && illusion.Game.IdEntityDic.TryGetValue(link >> 2, out IPlayable p) ? p : null;
 			}
 
 			/// <summary>The illusion is the copy Mirage added (else it is the run player's original card).</summary>
@@ -160,6 +182,8 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			{
 				Controller op = c.Opponent;
 				if (!MirageReady(c) || g.State == State.COMPLETE) return null;
+				// The boss's fair view: the hand is masked, so a search that reaches the boss's next turn start copies nothing.
+				if (op.HandZone.Any(p => p is Unknown)) return null;
 				Clear(power);
 				IPlayable original = RandomPick(g, op.HandZone.ToList());
 				IPlayable copy = Entity.FromCard(op, original.Card, new EntityData { [GameTag.CREATOR] = power.Id });
@@ -167,8 +191,8 @@ namespace SabberStoneCore.CardSets.DungeonRun
 				g.OnRandomHappened(true);
 				bool copyIsIllusion = g.Random.Next(2) == 0;
 				IPlayable illusion = copyIsIllusion ? copy : original, twin = copyIsIllusion ? original : copy;
-				illusion[EncounterRules.MirageIllusion] = (twin.Id << 1) | (copyIsIllusion ? 1 : 0);
-				power[EncounterRules.MirageIllusion] = illusion.Id;
+				illusion[EncounterRules.MirageIllusion] = (twin.Id << 2) | ViewMark | (copyIsIllusion ? 1 : 0);
+				power[EncounterRules.MirageIllusion] = illusion.ZonePosition + 1;
 				return copy;
 			}
 
@@ -178,8 +202,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			/// </summary>
 			internal static void IllusionPlayed(Game g, HeroPower power, IPlayable played)
 			{
-				IPlayable illusion = Illusion(power);
-				if (illusion == null || played == null || played.Id != illusion.Id) return;
+				if (played == null || played[EncounterRules.MirageIllusion] == 0) return;
 				Clear(power);
 				Controller holder = played.Controller;
 				IPlayable discard = RandomPick(g, holder.HandZone.ToList());
@@ -193,22 +216,68 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			internal static void IllusionFades(HeroPower power)
 			{
 				IPlayable illusion = Illusion(power);
-				if (illusion == null) return;
+				if (illusion == null) { Clear(power); return; }
 				IPlayable twin = Twin(illusion);
 				bool illusionIsCopy = IllusionIsCopy(illusion);
 				Controller holder = illusion.Controller;
-				bool illusionHeld = illusion.Zone == holder.HandZone, twinHeld = twin != null && twin.Zone == holder.HandZone;
-				IPlayable leaves = illusionHeld && twinHeld ? (illusionIsCopy ? illusion : twin) : illusionHeld ? illusion : null;
+				bool twinHeld = twin != null && twin.Zone == holder.HandZone;
+				IPlayable leaves = twinHeld && !illusionIsCopy ? twin : illusion;
 				Clear(power);
-				if (leaves != null) holder.SetasideZone.Add(leaves.Zone.Remove(leaves));
+				holder.SetasideZone.Add(leaves.Zone.Remove(leaves));
 			}
 
-			// Drops the marks of the current pair.
+			// Drops the marks of the current pair: the power's position and the mark of any card of the opponent's.
 			private static void Clear(HeroPower power)
 			{
-				IPlayable illusion = Illusion(power);
-				if (illusion != null && illusion.NativeTags.ContainsKey(EncounterRules.MirageIllusion)) illusion.NativeTags.Remove(EncounterRules.MirageIllusion);
+				Controller op = power.Controller.Opponent;
+				foreach (IPlayable p in op.HandZone.Concat(op.DeckZone).Concat(op.GraveyardZone).Concat(op.SetasideZone).Concat(op.BoardZone).ToList())
+					if (p.NativeTags.ContainsKey(EncounterRules.MirageIllusion)) p.NativeTags.Remove(EncounterRules.MirageIllusion);
 				if (power.NativeTags.ContainsKey(EncounterRules.MirageIllusion)) power.NativeTags.Remove(EncounterRules.MirageIllusion);
+			}
+
+			/// <summary>
+			/// Mirage's aura: at every aura update the power's position follows the marked illusion in the opponent's hand (cards
+			/// leaving the hand to its left move it); once the illusion has left the hand the position is cleared. In the boss's
+			/// fair view, where the hand is masked, it marks the masked slot at the position instead, so the view's illusion is that
+			/// slot. It reads only the opponent's hand order, which is public, and the mark the engine set.
+			/// </summary>
+			internal static IAura MirageSlot() => new MirageSlotAura();
+
+			private sealed class MirageSlotAura : IAura
+			{
+				private readonly IPlayable _owner;
+				private bool _on = true;
+				internal MirageSlotAura() { }
+				private MirageSlotAura(MirageSlotAura prototype, IPlayable owner) { _owner = owner; _on = prototype._on; }
+				IPlayable IAura.Owner => _owner;
+				public void Activate(IPlayable owner)
+				{
+					var instance = new MirageSlotAura(this, owner);
+					owner.Game.Auras.Add(instance);
+					owner.OngoingEffect = instance;
+				}
+				public void Clone(IPlayable clone) => Activate(clone);
+				public void Remove() { _owner.OngoingEffect = null; _on = false; }
+				public void Update()
+				{
+					if (!_on) { _owner.Game.Auras.Remove(this); return; }
+					int at = _owner[EncounterRules.MirageIllusion];
+					if (at == 0) return;
+					Controller op = _owner.Controller.Opponent;
+					IPlayable marked = op.HandZone.FirstOrDefault(p => p[EncounterRules.MirageIllusion] != 0);
+					if (marked == null && at <= op.HandZone.Count && op.HandZone[at - 1] is Unknown)
+					{
+						marked = op.HandZone[at - 1];
+						marked[EncounterRules.MirageIllusion] = ViewMark;
+					}
+					int now = marked == null ? 0 : marked.ZonePosition + 1;
+					if (now != at)
+					{
+						if (now == 0) _owner.NativeTags.Remove(EncounterRules.MirageIllusion);
+						else _owner[EncounterRules.MirageIllusion] = now;
+					}
+				}
+				public override string ToString() => "[MirageSlot:" + _owner + "]";
 			}
 		}
 
@@ -246,11 +315,13 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			// ---------------- A Beautiful Oasis (ULDA_BOSS_62h)
 			// Mirage (0): "Give your opponent an illusion card. If played, they discard a random card." Auto-cast (the wiki), as
 			// AutoCast does: at the start of the boss's turn while the run player's hand holds a card and has room. A copy of a
-			// random card of that hand joins it; one of the two is the illusion (the private tag MirageIllusion). Played, the
+			// random card of that hand joins it; one of the two is the illusion (marked by the private tag MirageIllusion; the power
+			// holds only its public hand position, TombsD.MirageSlot). Played, the
 			// illusion makes its player discard a random card; at the end of its player's turn it leaves the hand (both still
 			// there: the copy leaves).
 			Passive("ULDA_BOSS_62p", () => new Power
 			{
+				Aura = TombsD.MirageSlot(),
 				Trigger = new MultiTrigger(
 					new Trigger(TriggerType.TURN_START)
 					{
