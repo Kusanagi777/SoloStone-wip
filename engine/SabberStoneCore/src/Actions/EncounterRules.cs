@@ -70,6 +70,11 @@ namespace SabberStoneCore.Actions
 		/// </summary>
 		public const GameTag SetAsideStore = (GameTag)32645;
 		/// <summary>
+		/// A Beautiful Oasis's Mirage (family 22; rules in DungeonRunEncounters.TombsD): on the boss's hero power, the entity id of the
+		/// illusion card it gave; on that illusion, its twin's entity id times two, plus one when the illusion is the added copy.
+		/// </summary>
+		public const GameTag MirageIllusion = (GameTag)32657;
+		/// <summary>
 		/// On the game: one bit per hooked global rule (EncounterCard.HookIndex) that was applied to this match (family 05:
 		/// DungeonRunGlobalRules.Apply runs a rule's apply hook once; a rule with no player enchantment is active by this mark).
 		/// </summary>
