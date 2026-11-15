@@ -58,7 +58,7 @@ var run = new DungeonRun(data);
 var all = new DungeonRunProfile(); all.Unlocked.AddRange(data.Unlocks.Keys);
 
 const string Yeti = "CS2_182", Croc = "CS2_120", Wisp = "CS2_231", Moonfire = "CS2_008", Fireball = "CS2_029", Hoarder = "EX1_096";
-const string Coin = "GAME_005", FakeCoin = "CFM_630", Squire = "EX1_008", Shrine = "TRLA_154", Spellstone = "LOOT_064", Bolt = "EX1_238";
+const string Coin = "GAME_005", FakeCoin = "CFM_630", Squire = "EX1_008", Shrine = "TRLA_154", Spellstone = "LOOT_064", Bolt = "EX1_238", Trogg = "LOE_018";
 const string Apprentice = "EX1_608", Arcane = "CS2_025", Intellect = "CS2_023", Frostbolt = "CS2_024", Tinyfin = "LOEA10_3", Howl = "GILA_BOSS_20e";
 const string Rock = DungeonRunEncounters.MoltenRock, VoidShift = DungeonRunEncounters.VoidShiftCard, Voided = EncounterRules.VoidedCard;
 const string Bomb = DungeonRunEncounters.SquirrelBomb, Chicken = DungeonRunEncounters.ThoriumChicken, Guard17 = DungeonRunEncounters.KirinTorGuard;
@@ -417,6 +417,29 @@ Guard("Zibb", () =>
     Check("I8 the boss's own spell Overloads the boss (Arcane Explosion: 2; both players, the text names none)", boss.OverloadOwed == 2, "owed " + boss.OverloadOwed);
     EndTurn(g);
     Check("I9 at the run player's turn start its owed Overload locks 4 crystals", player.OverloadLocked == 4, "locked " + player.OverloadLocked);
+    // Tunnel Trogg ("Whenever you Overload, gain +1 Attack per locked Mana Crystal", two in Zibb's deck): the engine's Trogg
+    // answers a card with printed Overload, so Spell Lock's Overload reaches it through EncounterRules.OverloadFor.
+    var g2 = Fight("dala_54_zibb");
+    boss = g2.Player2; player = g2.Player1;
+    var mine = Board(g2, player, Trogg); var quiet = Board(g2, player, Trogg);
+    new SilenceTask(EntityType.TARGET).Process(g2, player, player.Hero, quiet, null); g2.DeathProcessingAndAuraUpdate();
+    var theirs = Board(g2, boss, Trogg);
+    int a0 = mine.AttackDamage, q0 = quiet.AttackDamage, t0 = theirs.AttackDamage;
+    Mana(player);
+    PlayKeep(g2, ToHand(g2, player, Fireball), boss.Hero);
+    Check("I10 the run player's Fireball (4, no printed Overload): its Tunnel Trogg gains 4 Attack; a silenced Trogg and the boss's Trogg gain none",
+        player.OverloadOwed == 4 && mine.AttackDamage == a0 + 4 && quiet.AttackDamage == q0 && theirs.AttackDamage == t0,
+        $"{a0}>{mine.AttackDamage} silenced {q0}>{quiet.AttackDamage} boss {t0}>{theirs.AttackDamage}");
+    Mana(player);
+    a0 = mine.AttackDamage;
+    PlayKeep(g2, ToHand(g2, player, Bolt), boss.Hero);
+    Check("I11 Lightning Bolt (1, Overload: (1)): 2 crystals Overloaded, the Trogg gains 2 (1 from its own rule for the printed Overload, 1 from Spell Lock)",
+        player.OverloadOwed == 2 && mine.AttackDamage == a0 + 2, $"owed {player.OverloadOwed} attack {a0}>{mine.AttackDamage}");
+    ToBoss(g2);
+    t0 = theirs.AttackDamage; a0 = mine.AttackDamage;
+    PlayKeep(g2, ToHand(g2, boss, Arcane));
+    Check("I12 the boss's Arcane Explosion (2): the boss's Trogg gains 2, the run player's none", theirs.AttackDamage == t0 + 2 && mine.AttackDamage == a0,
+        $"boss {t0}>{theirs.AttackDamage} player {a0}>{mine.AttackDamage}");
 });
 
 // ============================================================ J  Captain Hannigan: Raise the Alarm (cast by rule)
@@ -579,6 +602,18 @@ Guard("Goya", () =>
     int casts = Casts(boss);
     BossTurnFull(g);
     Check("N5 with the run player's hand empty Blackmail is not cast", Casts(boss) == casts && boss.UsedMana == 0);
+    // A replacement keeps the slot: hand [Wisp, Moonfire, Squire, Fireball], the Extortion takes the taken card's place.
+    ToPlayer(g);
+    EmptyHand(player);
+    var before = new[] { Wisp, Moonfire, Squire, Fireball }.Select(id => ToHand(g, player, id)).ToList();
+    BossTurnFull(g);
+    var ext2 = player.HandZone.FirstOrDefault(p => p.Card.Id == Extortion);
+    var gone = before.FirstOrDefault(p => p.Zone != player.HandZone);
+    int slot = gone == null ? -1 : before.IndexOf(gone);
+    var expected = before.Select(p => p == gone ? ext2 : p).ToList();
+    Check("N5b the Extortion takes the taken card's slot: the other cards keep their order and places (taken: slot " + slot + ")",
+        ext2 != null && gone != null && ext2.ZonePosition == slot && player.HandZone.ToList().SequenceEqual(expected)
+        && player.HandZone.Select((p, i) => p.ZonePosition == i).All(x => x), string.Join(",", player.HandZone.Select(p => p.Card.Id)));
     // In the boss's own simulation the hand is masked: Blackmail takes a stand-in and never throws.
     ToPlayer(g);
     ToHand(g, player, Fireball); ToHand(g, player, Wisp);

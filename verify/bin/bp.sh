@@ -224,8 +224,15 @@ enc17-seeds) need $E9; once enc17-seeds "$2" FAMILY=17 SEED_BASE=19000 WATCH=$CA
 enc17-void) need $E9; once enc17-void "$2" BOSS=dala_48_zuramat GAMES=6 WATCH=$CARDS17 ;;
 enc17-cards) need $E9; once enc17-cards "$2" BOSS=fix17_zuramat,fix17_millificent,fix17_wagtoggle,fix17_goya,fix17_gallywix GAMES=4 WATCH=$CARDS17 ENCOUNTERS_JSON=$FX/p8f17/fixtures/encounters-f17.json ;;
 enc17-check) # after `bp.sh same enc17-cards`: every boss card of the family was played from hand by a boss at least once
-  unplayed=$(tail -n 1 "$R/bp-enc17-cards-a.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Za-z0-9_]+ x0( |$)" | xargs)
-  [ -z "$unplayed" ] && echo "bosspilot enc17-cards: all 7 boss cards played by the boss" || echo "bosspilot enc17-cards UNPLAYED: $unplayed" ;;
+  [ -f "$R/bp-enc17-cards-a.txt" ] || { echo "bosspilot enc17-check FAIL: no $R/bp-enc17-cards-a.txt (run bp.sh enc17-cards 1 and 2, then bp.sh same enc17-cards)"; exit 1; }
+  last=$(tail -n 1 "$R/bp-enc17-cards-a.txt"); missing=""; unplayed=""
+  case "$last" in *", watched "*) ;; *) echo "bosspilot enc17-check FAIL: the last line holds no watched counts: $last"; exit 1 ;; esac
+  for id in ${CARDS17//,/ }; do
+    n=$(echo "$last" | grep -oE "(^| )$id x[0-9]+" | sed 's/.* x//' | head -n 1)
+    if [ -z "$n" ]; then missing="$missing $id"; elif [ "$n" -eq 0 ]; then unplayed="$unplayed $id"; fi
+  done
+  if [ -n "$missing$unplayed" ]; then echo "bosspilot enc17-check FAIL: missing:${missing:- none} unplayed:${unplayed:- none}"; exit 1; fi
+  echo "bosspilot enc17-cards: all $(echo ${CARDS17//,/ } | wc -w) boss cards played by the boss" ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;

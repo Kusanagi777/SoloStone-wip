@@ -181,7 +181,9 @@ ROWS = [
                 ("power", "Spell Lock, \"Spells Overload for their cost.\": the text names no player, so it holds for both (the lesson of "
                  "earlier families: an unqualified \"Spells\" is both players'). Each spell a player plays (cast from hand, not cancelled) "
                  "Overloads that player for the Cost it was played for (the Cost it last had in hand), on top of its own Overload, through the engine's Overload bookkeeping "
-                 "and event (Tunnel Trogg, Likkim and Lava Shock of the deck see it). A spell cast by another effect is not played and "
+                 "and event (Likkim and Lava Shock of the deck see it; the engine's Tunnel Trogg answers only a card with printed "
+                 "Overload, so Spell Lock gives each Tunnel Trogg of that player, not silenced, its Attack for the amount itself). A "
+                 "spell cast by another effect is not played and "
                  "brings none.")]),
     dict(n="55", key="hannigan", page="Captain_Hannigan", tier="4", level=8, archetype="control", flags=["passive"], cards=["DALA_503"],
          notes=[("schedule", tier_note("Captain Hannigan is \"the final boss that can be encountered in Chapter 3\" (the chapter's eighth fight).", 8, 4)),

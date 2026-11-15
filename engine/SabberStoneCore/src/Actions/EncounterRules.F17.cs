@@ -91,7 +91,7 @@ namespace SabberStoneCore.Actions
 		/// <summary>
 		/// DALA_BOSS_59p Blackmail, "Replace a random card in your opponent's hand with an 'Extortion.'": one card of
 		/// <paramref name="boss"/>'s opponent's hand (the game RNG) goes to that player's set-aside zone (the hand escrow) and an
-		/// Extortion that holds it joins that hand. Returns the Extortion, or null with an empty hand.
+		/// Extortion that holds it takes its slot in that hand. Returns the Extortion, or null with an empty hand.
 		/// </summary>
 		public static IPlayable Blackmail(Controller boss, IEntity source)
 		{
@@ -114,6 +114,10 @@ namespace SabberStoneCore.Actions
 			IPlayable extortion = Entity.FromCard(victim, Cards.FromId(ExtortionCard));
 			extortion[ExtortionEscrow] = card.Id;
 			Generic.AddHandPhase(victim, extortion);
+			// A replacement takes the replaced card's slot (as a transform keeps it): the Extortion enters at the right end
+			// (the hand had room: one card just left) and moves left past the cards that followed the taken one.
+			while (extortion.Zone == victim.HandZone && extortion.ZonePosition > pick)
+				victim.HandZone.Swap(extortion, victim.HandZone[extortion.ZonePosition - 1]);
 			return extortion;
 		}
 
@@ -143,9 +147,16 @@ namespace SabberStoneCore.Actions
 			return card.Zone == c.HandZone ? card : null;
 		}
 
+		/// <summary>LOE_018 Tunnel Trogg and its enchantment (LOE_018e: +Attack by its script number).</summary>
+		private const string TunnelTrogg = "LOE_018", TunnelTroggBuff = "LOE_018e";
+
 		/// <summary>
 		/// DALA_BOSS_54p Spell Lock: <paramref name="c"/> Overloads <paramref name="amount"/> for <paramref name="spell"/>, as a
-		/// card's own Overload does (Generic.OverloadBlock: Overload owed, the game's count, the Overload event).
+		/// card's own Overload does (Generic.OverloadBlock: Overload owed, the game's count, the Overload event). The engine's
+		/// Tunnel Trogg ("Whenever you Overload, gain +1 Attack per locked Mana Crystal") answers the play of a card with printed
+		/// Overload, not the Overload event, so it would never see this Overload: each Tunnel Trogg of <paramref name="c"/>'s
+		/// board that is not silenced or dying gains <paramref name="amount"/> Attack here (its own LOE_018e, as its script
+		/// gives it), the same as for a printed Overload of that amount.
 		/// </summary>
 		public static void OverloadFor(Controller c, IPlayable spell, int amount)
 		{
@@ -153,6 +164,8 @@ namespace SabberStoneCore.Actions
 			c.OverloadOwed += amount;
 			c.OverloadThisGame += amount;
 			c.Game.TriggerManager.OnOverloadTrigger(spell, amount);
+			foreach (Minion trogg in c.BoardZone.Where(m => m.Card.Id == TunnelTrogg && !m.IsSilenced && !m.ToBeDestroyed && !m.Untouchable).ToList())
+				Generic.AddEnchantmentBlock(c.Game, Cards.FromId(TunnelTroggBuff), trogg, trogg, amount);
 		}
 
 		/// <summary>DALA_BOSS_58t The Wire and DALA_BOSS_58t2 The Other Wire.</summary>

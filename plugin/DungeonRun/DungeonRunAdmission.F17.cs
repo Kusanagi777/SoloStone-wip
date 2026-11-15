@@ -38,7 +38,8 @@ internal static partial class DungeonRunAdmission
             Reason = "a passive Dalaran Heist boss hero power (registered with the passive powers, started at match start; never an "
                 + "option) whose trigger answers public events: Uncontrollable Energy deals 1 damage to all enemies after the boss casts "
                 + "a spell (DALA_BOSS_49p), Spell Lock makes every spell either player plays Overload its player for the Cost it was played "
-                + "for (DALA_BOSS_54p: EncounterRules.OverloadFor, the engine's Overload bookkeeping and event) and Greed is Good puts a "
+                + "for (DALA_BOSS_54p: EncounterRules.OverloadFor, the engine's Overload bookkeeping and event; each Tunnel Trogg of that "
+                + "player gains its Attack for the amount, as for a printed Overload) and Greed is Good puts a "
                 + "new copy of the first card the run player plays each turn in the boss's hand and gives the run player a Gallywix's "
                 + "Coin (DALA_BOSS_57p: a played card is public; the turn of the last purchase is a public tag of the power). No hidden "
                 + "zone is read (c-enc-17 sections D, I, L; the enc17 bosspilot modes)",
