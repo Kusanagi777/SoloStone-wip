@@ -79,7 +79,7 @@ SHR10=gila_26_gnomenapper,gila_27_experiment_3c,gila_29_sazzmi,gila_32_niira,gil
 # family 20
 A20=ulda_19_sothis,ulda_20_kham,ulda_21_illidara,ulda_22_colossus,ulda_23_skarik,ulda_24_palm_tree,ulda_25_zenda,ulda_26_thudd,ulda_27_toomba
 B20=ulda_28_sazin,ulda_29_ozara,ulda_30_ermavar,ulda_31_drasar,ulda_32_edra,ulda_33_ruby,ulda_34_dovo,ulda_35_ptah,ulda_36_kasa
-CARDS20=ULD_705,LOE_029,EX1_243,CS2_091
+CARDS20=ULD_705,LOE_029,CS2_091,EX1_409
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
