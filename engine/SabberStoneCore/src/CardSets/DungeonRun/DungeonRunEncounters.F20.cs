@@ -177,15 +177,9 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			public static List<Minion> MadnessTargets(Controller c) =>
 				Touchable(c.Opponent).Where(m => !m.HasStealth && !m.IsImmune && !m.IsDead).ToList();
 
-			// A forced attack of the hero (PastColossalCombat.Force's rule for a minion): the attack is resolved at once, with its
-			// triggers and the death pass; the event the power runs in is restored afterwards.
-			internal static void ForceHeroAttack(Hero hero, ICharacter target)
-			{
-				Game g = hero.Game;
-				var previous = g.CurrentEventData;
-				try { Generic.AttackBlock(hero.Controller, hero, target, true, false); }
-				finally { g.CurrentEventData = previous; }
-			}
+			// A forced attack of the hero: EncounterRules.ForcedAttack (the shared forced-attack rule: resolved at once with its triggers
+			// and the death pass, no attack option of the turn spent, the event the power runs in restored).
+			internal static bool ForceHeroAttack(Hero hero, ICharacter target) => EncounterRules.ForcedAttack(hero, target);
 
 			// A minion summoned for c, with an optional enchantment (Titan Ritual, Beetle Stampede, Mother of Sand, Whispering
 			// Sentinel); none on a full board. Returns the minion, or null.
@@ -290,7 +284,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 			// ---------------- Ol' Toomba (ULDA_BOSS_27h)
 			// "Retired" Treasure Hunter (2): "Copy a card from your opponent's hand and add it to your hand." A random card of the
-			// opponent's hand, as a fresh copy (marked a copy of an opponent's card). Offered while the boss's hand has room and the
+			// opponent's hand, copied with its in-hand enchantments (Generic.Copy). Offered while the boss's hand has room and the
 			// opponent's hand (a public count) holds a card.
 			Power("ULDA_BOSS_27p", null, () => new CustomTask((g, c, s, t, stack) =>
 			{
@@ -299,9 +293,9 @@ namespace SabberStoneCore.CardSets.DungeonRun
 				if (cards.Count == 0) return;
 				if (c.Opponent.HandZone.Count > 1) g.OnRandomHappened(true);
 				IPlayable pick = cards.Count == 1 ? cards[0] : cards[g.Random.Next(cards.Count)];
-				IPlayable copy = Entity.FromCard(c, pick.Card);
-				PayloadRules.MarkCopy(c.Opponent, copy);
-				Generic.AddHandPhase.Invoke(c, copy);
+				// A hand-to-hand copy keeps the card's in-hand enchantments (Mind Vision's rule, the power's template); Generic.Copy
+				// also marks it a copy of an opponent's card and records the power as its creator.
+				Generic.Copy(c, s, pick, Zone.HAND);
 			}), usable: c => !c.HandZone.IsFull && c.Opponent.HandZone.Count > 0);
 
 			// ---------------- Sazin (ULDA_BOSS_28h)

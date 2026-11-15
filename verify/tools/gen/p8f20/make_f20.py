@@ -174,8 +174,8 @@ B.append(boss(27, "toomba", "Ol' Toomba", "Ol'_Toomba_(Tombs_of_Terror)", 1, "4"
     why="Sahket Sapper by Vilespine Slayer (a Rogue minion that removes an enemy minion, of the boss's Heroic list).",
     notes=[("deck", "The wiki's Normal table sums to 32: it lists two copies each of the Legendaries Edwin VanCleef and Skycap'n Kragg. "
                     "The row keeps one of each (one copy of a Legendary per deck), which gives the 30 cards of a full list."),
-           ("power", "\"Retired\" Treasure Hunter (2) puts a copy of a random card of the run player's hand into the boss's hand (Mind "
-                     "Vision's rule). The boss learns that one card: the copy is its own; the run player sees which card was copied. In the "
+           ("power", "\"Retired\" Treasure Hunter (2) puts a copy of a random card of the run player's hand into the boss's hand, with the "
+                     "card's in-hand enchantments (Mind Vision's rule, the power's template). The boss learns that one card: the copy is its own; the run player sees which card was copied. In the "
                      "boss's fair-view search the run player's hand holds only masked cards, so there the copy is made only from a card "
                      "the boss already saw go into that hand (else nothing): the search never reads the hidden hand. Offered while the run "
                      "player's hand (a public count) holds a card and the boss's hand has room.")]))

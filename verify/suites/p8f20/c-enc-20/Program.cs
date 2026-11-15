@@ -383,6 +383,16 @@ Guard("Toomba", () =>
     Round(g);
     FillHand(g, boss);
     Check("I6 with the boss's hand full it is not offered", !Offered(g));
+    var g2 = Fight("ulda_27_toomba");
+    ToBoss(g2);
+    EmptyHand(g2.Player1); EmptyHand(g2.Player2);
+    var buffed = ToHand(g2, g2.Player1, Yeti);
+    Generic.AddEnchantmentBlock(g2, C("ULDA_BOSS_23e"), g2.Player1.Hero, buffed);
+    Power(g2);
+    var copied = g2.Player2.HandZone.FirstOrDefault();
+    Check("I7 the copy keeps the card's in-hand enchantments (Mind Vision's rule): a Yeti made to cost (1) less is copied at (3), with the enchantment, marked created by the power",
+        buffed.Cost == 3 && copied?.Card.Id == Yeti && copied != buffed && copied.Cost == 3 && Has(copied, "ULDA_BOSS_23e")
+        && copied[GameTag.DISPLAYED_CREATOR] == g2.Player2.Hero.HeroPower.Id, copied == null ? "none" : copied.Cost + " creator " + copied[GameTag.DISPLAYED_CREATOR]);
 });
 
 // ============================================================ J  Sazin: Mighty Windstorm
@@ -464,8 +474,9 @@ Guard("Ermavar", () =>
     Cast(g, Moonfire, player.Hero);
     Check("L3 the boss casts a spell: Moonfire's 1 and 2 more split among the enemies (3 in all on the run player's side); the boss's side takes none", Lost(player) == 3
         && own.Damage == 0 && boss.Hero.Damage == 1, Lost(player).ToString());
-    Board(g, boss, Croc);
-    Check("L4 a minion played is no spell: nothing", Lost(player) == 3);
+    var played = ToHand(g, boss, Croc);
+    bool ok = Play(g, played);
+    Check("L4 a minion the boss plays from hand is no spell: nothing", ok && played.Zone == boss.BoardZone && Lost(player) == 3, Lost(player).ToString());
 });
 
 // ============================================================ M  Pillager Drasar: Pillaged Relics
@@ -601,9 +612,13 @@ Guard("Kasa", () =>
     var mins = new[] { Board(g, player, Yeti), Board(g, player, Yeti), Board(g, player, Yeti), Board(g, player, Yeti) };
     ToBoss(g);
     boss.Hero.IsFrozen = true;
-    int hp = boss.Hero.Health;
+    int hp = boss.Hero.Health, options = boss.NumOptionsPlayedThisTurn;
     bool used = Power(g);
     var hit = mins.Where(m => m.Damage > 0).ToList();
+    // A forced attack spends no option of the turn (EncounterRules.ForcedAttack undoes the count AttackPhase adds; the engine's
+    // hero power path adds none), so three forced attacks leave NUM_OPTIONS_PLAYED_THIS_TURN as it was (+3 without the undo).
+    Check("R2b the forced attacks spend no option of the turn: NUM_OPTIONS_PLAYED_THIS_TURN is unchanged by the three attacks", boss.NumOptionsPlayedThisTurn == options,
+        options + " -> " + boss.NumOptionsPlayedThisTurn);
     Check("R2 the hero gains +1 Attack this turn (ULDA_BOSS_36e) and attacks three different random enemy minions (forced: even frozen), taking 4 from each",
         used && hit.Count == 3 && hit.All(m => m.Damage == 1) && boss.Hero.Health == hp - 12 && boss.Hero.AttackDamage == 1 && Has(boss.Hero, "ULDA_BOSS_36e"),
         hit.Count + " hit, hero " + hp + "->" + boss.Hero.Health);
