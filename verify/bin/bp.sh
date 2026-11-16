@@ -40,6 +40,7 @@
 #   family 22 modes:     bp.sh enc22a|enc22b|enc22-seeds-a|enc22-seeds-b         (twice per call; a = ULDA_BOSS_60-69, b = 70-79)
 #   family 23 modes:     bp.sh enc23|enc23-seeds                                 (twice per call; FAMILY=23: the four nemeses and Hagatha)
 #                        bp.sh enc23-cards <k>                                    (one run per call, k = 1 or 2; then `bp.sh same enc23-cards`)
+#   family 24 modes:     bp.sh enc24 | plague24 <carried 95|110|195|210> | tekahn24  (twice per call; tekahn24: the fixture finale with the relay)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -139,6 +140,9 @@ CARDS22=LOE_018,EX1_556,GVG_006
 # family 23
 CARDS23=GILA_BOSS_49t,GILA_BOSS_49t2,GILA_BOSS_60t,GILA_BOSS_99t,GILA_BOSS_99t2,GILA_BOSS_99t3,GILA_503,GILA_907,GILA_BOSS_61t,GILA_BOSS_61t3
 FIX23=fix23_glinda,fix23_shivers,fix23_toki,fix23_godfrey
+# family 24: the three Plague Lords it adds (Icarax is family 01's enc01 / plague) and the boss cards they play from hand
+LORDS24=ulda_37_xatma,ulda_38_kzrath,ulda_39_vesh
+CARDS24=ULDA_BOSS_37t,LOEA10_5,LOEA10_5H,KARA_13_12H,LOEA16_24H,UNG_942t,ULDA_033,ULDA_031,ULDA_BOSS_67t
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -351,6 +355,11 @@ enc22-seeds-b) need $E; twice enc22-seeds-b BOSS=$B22 SEED_BASE=19000 WATCH=$CAR
 enc23) need $E; twice enc23 FAMILY=23 WATCH=$CARDS23 ;;
 enc23-seeds) need $E; twice enc23-seeds FAMILY=23 SEED_BASE=19000 WATCH=$CARDS23 ;;
 enc23-cards) need $E; once enc23-cards "$2" BOSS=$FIX23 GAMES=4 WATCH=$CARDS23 ENCOUNTERS_JSON=$FX/p8f23/fixtures/encounters-f23.json ;;
+enc24) need $E; twice enc24 BOSS=$LORDS24 GAMES=2 WATCH=$CARDS24 ;;
+plague24) # each lord starts with <carried> damage banked: 110 / 210 start phase 2 / 3, 95 / 195 cross a threshold in play
+  need $E; c=${2:-95}; twice plague24-$c BOSS=$LORDS24 GAMES=1 CARRIED=$c WATCH=$CARDS24 ;;
+tekahn24) # fixture schedule: acts-v3t's finale enabled on Tekahn with the hero relay; the run hero starts at 1 Health so the explorers enter
+  need $E; twice tekahn24 FINALE=1 GAMES=2 PLAYER_HEALTH=1 SCHEDULE=acts-v3t SCHEDULE_JSON=$FX/p8f24/fixtures/schedule-tekahn.json WATCH=$CARDS24 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;

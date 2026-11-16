@@ -104,9 +104,9 @@ Guard("A", () =>
         string.Join(" | ", oldErrors.Take(3)));
     Check("A3 the encounters follow the custom bosses, whose order is unchanged", data.Bosses.Take(20).Select(b => b.Id).SequenceEqual(old.Bosses.Select(b => b.Id))
         && data.Bosses.Skip(20).All(b => b.IsEncounter) && data.Bosses.Take(20).All(b => !b.IsEncounter && b.Tier == null));
-    Check("A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; wave 4: family 11's thirteen, family 12's thirteen and family 13's eight Rumble Run champions beside Voone; wave 5: family 14's fifteen, family 15's fourteen, family 16's fourteen, family 17's fourteen, family 18's sixteen, family 19's eighteen; wave 6: family 20's eighteen, family 21's seventeen, family 22's eighteen, family 23's four nemeses; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)", data.Encounters.Take(8).Select(b => b.Id).SequenceEqual(new[] { "ulda_40_icarax", "gila_61_hagatha", "dala_21_whirt", "trl_200_voone",
+    Check("A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; wave 4: family 11's thirteen, family 12's thirteen and family 13's eight Rumble Run champions beside Voone; wave 5: family 14's fifteen, family 15's fourteen, family 16's fourteen, family 17's fourteen, family 18's sixteen, family 19's eighteen; wave 6: family 20's eighteen, family 21's seventeen, family 22's eighteen, family 23's four nemeses, family 24's three Plague Lords and Tekahn; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)", data.Encounters.Take(8).Select(b => b.Id).SequenceEqual(new[] { "ulda_40_icarax", "gila_61_hagatha", "dala_21_whirt", "trl_200_voone",
         "loot_35_brandlemar", "loot_48_trapped_room", "gila_25_ivan", "ulda_44_trap_room" }) && data.Encounters.Skip(8).All(b => b.Family != "01")
-        && string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())) == "01:5,07:18,08:17,09:11,10:15,11:13,12:13,13:9,14:15,15:14,16:14,17:14,18:16,19:18,20:18,21:17,22:18,23:5,24:1",
+        && string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())) == "01:5,07:18,08:17,09:11,10:15,11:13,12:13,13:9,14:15,15:14,16:14,17:14,18:16,19:18,20:18,21:17,22:18,23:5,24:5",
         string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())));
     var icarax = data.Boss("ulda_40_icarax"); var hagatha = data.Boss("gila_61_hagatha"); var whirt = data.Boss("dala_21_whirt"); var voone = data.Boss("trl_200_voone");
     Check("A5 Icarax: 300 fixed Health, two more forms at 200 and 100 with their own heroes, powers and decks", icarax.Health == 300 && icarax.FixedHealth && icarax.Forms.Count == 2
@@ -263,6 +263,8 @@ Guard("E", () =>
     // A major slot follows the mix as every slot does: it takes the provenance the run holds fewer bosses of so far (the
     // encounter major or a custom boss; a tie is the slot's seeded order). Family 10 put Monster Hunt rows into the combat
     // tiers, so Hagatha is no longer the act II major of every run (she was while no other GIL row could be drawn before her).
+    var lords = new[] { "ulda_40_icarax", "ulda_37_xatma", "ulda_38_kzrath", "ulda_39_vesh" };
+    var lordHits = lords.ToDictionary(l => l, l => 0);
     // Family 23: the act II major pool holds Hagatha and the four Monster Hunt nemeses (all GIL), so any enc-major2 row counts as
     // the encounter major there (encounterPool).
     bool MajorByMix(List<string> seq, int at, string encounter, string customPool, string encounterPool = null)
@@ -285,17 +287,19 @@ Guard("E", () =>
         if (seq.Any(id => data.Boss(id).Provenance == "TRL")) withRumble++;                // family 13: nine Rumble Run rows over the four tiers
         if (seq.Any(id => data.Boss(id).Provenance == "DALA")) withHeist++;            // family 14: Whirt is no longer the only Heist row
         // Family 09: the act I major is a custom band-3 boss or one of the five Dungeon Run final bosses (enc-major1).
-        majors &= MajorByMix(seq, 9, "gila_61_hagatha", "band3", "enc-major2") && MajorByMix(seq, 14, "ulda_40_icarax", "final") && (data.Boss(seq[4]).Pools.Contains("band3") || data.Boss(seq[4]).Pools.Contains("enc-major1"));
+        // Family 24: the act III major is one of the four Plague Lords (all ULDA) or a custom final.
+        majors &= MajorByMix(seq, 9, "gila_61_hagatha", "band3", "enc-major2") && lords.Any(l => MajorByMix(seq, 14, l, "final")) && (data.Boss(seq[4]).Pools.Contains("band3") || data.Boss(seq[4]).Pools.Contains("enc-major1"));
         if (seq[9] == "gila_61_hagatha") hagatha++;
         if (data.Boss(seq[9]).IsEncounter && seq[9] != "gila_61_hagatha") nemesis++;
-        if (seq[14] == "ulda_40_icarax") icarax++;
+        if (lords.Contains(seq[14])) { icarax++; lordHits[seq[14]]++; }
     }
     Check("E1 1000 seeds: 15 distinct known bosses each, and the same seed gives the same sequence", distinct && known && deterministic);
     Check("E2 an encounter lands only on floors whose pool set holds its tier", whirtActs && voone, $"whirt in {withWhirt}, voone in {withVoone}");
     // Family 13 put eight more Rumble Run rows into the four tiers: every run still meets a Rumble Run row, Voone in some runs only.
     // Families 14-18 put more Heist rows into the tiers: every run meets a Heist row, Whirt in some runs only.
-    Check("E3 the least-used provenance is drawn first: every run meets a Heist row (Whirt and, since wave 5, the Heist families' rows) and a Rumble Run row (Voone and family 13's champions), and each major is of the provenance the run holds fewer bosses of (act II: Hagatha, since family 23 a Monster Hunt nemesis, or a custom band3 boss; act III: Icarax or a custom final)",
-        withHeist == 1000 && withWhirt > 0 && withRumble == 1000 && withVoone > 0 && majors && hagatha > 0 && nemesis > 0 && icarax > 0, $"heist in {withHeist}, whirt in {withWhirt}, a Rumble Run row in {withRumble}, voone in {withVoone}, Hagatha the act II major in {hagatha}, a nemesis in {nemesis}, Icarax the act III major in {icarax}");
+    Check("E3 the least-used provenance is drawn first: every run meets a Heist row (Whirt and, since wave 5, the Heist families' rows) and a Rumble Run row (Voone and family 13's champions), and each major is of the provenance the run holds fewer bosses of (act II: Hagatha, since family 23 a Monster Hunt nemesis, or a custom band3 boss; act III: since family 24 a Plague Lord, each of the four in some seeds, or a custom final)",
+        withHeist == 1000 && withWhirt > 0 && withRumble == 1000 && withVoone > 0 && majors && hagatha > 0 && nemesis > 0 && lordHits.Values.All(n => n > 0),
+        $"heist in {withHeist}, whirt in {withWhirt}, a Rumble Run row in {withRumble}, voone in {withVoone}, Hagatha the act II major in {hagatha}, a nemesis in {nemesis}, the act III major: {string.Join(" ", lordHits.Select(p => p.Key + " " + p.Value))}");
     // Persistent damage steers the act III major on a run that reads the ledger: a second lord (a fixture clone) with banked damage is taken first.
     var d2 = Load(encounters: encountersJson);
     var clone = d2.Boss("ulda_40_icarax");
@@ -309,7 +313,8 @@ Guard("E", () =>
         if (r2.ActBossSequence(banked, seed, d2.Schedules.Find("acts-v3h"), ledger: true)[14] == "ulda_zz_fixture") bankedFirst++;
         if (r2.ActBossSequence(banked, seed, d2.Schedules.Find("acts-v3h"), ledger: false)[14] == "ulda_zz_fixture") freshFixture++;
     }
-    Check("E4 a ledger run's act III major is the lord with banked damage; a run that does not read the ledger draws it from the seed", bankedFirst == 200 && freshFixture > 40 && freshFixture < 160, $"banked {bankedFirst}, no-ledger {freshFixture}");
+    // Family 24: five major3 candidates now (four lords and the fixture), so the fixture is a seeded fifth of the lord picks.
+    Check("E4 a ledger run's act III major is the lord with banked damage; a run that does not read the ledger draws it from the seed", bankedFirst == 200 && freshFixture > 10 && freshFixture < 100, $"banked {bankedFirst}, no-ledger {freshFixture}");
     var typed = r2.NewRun(banked, "MAGE", d2.Class("MAGE").Decks[0], d2.Class("MAGE").Powers[0], 12, typedSeed: true, schedule: "acts-v3h");
     var random = r2.NewRun(banked, "MAGE", d2.Class("MAGE").Decks[0], d2.Class("MAGE").Powers[0], 12, schedule: "acts-v3h");
     Check("E5 NewRun reads the ledger on a random seed only", random.BossSequence[14] == "ulda_zz_fixture" && typed.BossSequence.SequenceEqual(r2.ActBossSequence(banked, 12, d2.Schedules.Find("acts-v3h"))));
@@ -547,13 +552,13 @@ Guard("I", () =>
     run.RecordOutcome(s4, profile, DungeonRunOutcome.Win, null, new RunMatchEnd(0, 2, 0, 12, new[] { "HERO_01" }, false));
     Check("I10 a win clears the record and wins the run (the act III major)", profile.DamageOf("ulda_40_icarax") == null && s4.Phase == DungeonRunPhase.Victory && s4.Matches.Last().BossRemaining == 0);
     var gnome = At(run, "MAGE", 3007, "ulda_40_icarax", 15);
-    gnome.ActiveTreasures.Add("ULDA_115");
+    gnome.PlagueLordDamage = 10; // family 24: one ULDA_115 cast banked in the run (DungeonRunState.PlagueLordDamage)
     var gplan = run.BuildPlan(gnome, All());
     var gplan2 = run.BuildPlan(gnome, new DungeonRunProfile { BossDamage = { new DungeonRunBossDamage { Boss = "ulda_40_icarax", Remaining = 205, Attempts = 1 } } });
-    Check("I11 ULDA_115 adds 10 damage to the Plague Lord's start (and can tip it into its next phase)", gplan.BossCarriedDamage == 10 && gplan.BossFormStart == 0
+    Check("I11 a banked ULDA_115 cast adds 10 damage to the Plague Lord's start (and can tip it into its next phase)", gplan.BossCarriedDamage == 10 && gplan.BossFormStart == 0
         && gplan2.BossFormStart == 1 && gplan2.BossHealth == 200 && gplan2.BossCarriedDamage == 5);
     var whirt = At(run, "MAGE", 3008, "dala_21_whirt", 8);
-    whirt.ActiveTreasures.Add("ULDA_115");
+    whirt.PlagueLordDamage = 10;
     var wp = All();
     run.BeginMatch(whirt);
     var wplan = run.BuildPlan(At(run, "MAGE", 3008, "dala_21_whirt", 8), wp);
@@ -658,7 +663,8 @@ Guard("J", () =>
             "ULDA_BOSS_20p", "ULDA_BOSS_21p", "ULDA_BOSS_29p", "ULDA_BOSS_30p",
             "ULDA_BOSS_45p", "ULDA_BOSS_46p", "ULDA_BOSS_48p", "ULDA_BOSS_50p", "ULDA_BOSS_51p", "ULDA_BOSS_52p2", "ULDA_BOSS_56p",
             "ULDA_BOSS_62p", "ULDA_BOSS_63p", "ULDA_BOSS_69p", "ULDA_BOSS_72p", "ULDA_BOSS_73p", "ULDA_BOSS_78p",
-            "GILA_BOSS_49p", "GILA_BOSS_60p" })); // Trapped Room's Alarm, the first passive registered here; then family 08's seven, family 09's five, family 12's ten, family 14's six, family 15's seven, family 16's six, family 17's seven, family 18's four, family 19's five, family 20's four, family 21's seven, family 22's six and family 23's two
+            "GILA_BOSS_49p", "GILA_BOSS_60p",
+            "ULDA_BOSS_37p2", "ULDA_BOSS_38p3", "ULDA_BOSS_39p1", "ULDA_BOSS_67p3" })); // Trapped Room's Alarm, the first passive registered here; then family 08's seven, family 09's five, family 12's ten, family 14's six, family 15's seven, family 16's six, family 17's seven, family 18's four, family 19's five, family 20's four, family 21's seven, family 22's six, family 23's two and family 24's four
     Check("J14 every scripted encounter card is implemented in the card database", DungeonRunEncounters.All.All(e => Cards.FromId(e.Id).Implemented), string.Join(",", DungeonRunEncounters.All.Where(e => !Cards.FromId(e.Id).Implemented).Select(e => e.Id)));
 });
 

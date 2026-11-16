@@ -573,8 +573,9 @@ internal static class DungeonRunValidator
             // before its content entry exists. A treasure the table admits for catalog runs only (LOOTA_833's generated
             // Secrets) passes: DungeonRun.TreasureOfferedOn offers it on a catalog run only.
             TreasureAdmission(null, t.Id, t.Id);
-            if (t.Runs != DungeonRunTreasure.RunsAll && t.Runs != DungeonRunTreasure.RunsAct && t.Runs != DungeonRunTreasure.RunsLegacy)
-                Fail(t.Id, $"runs {t.Runs} must be all, act or legacy");
+            if (t.Runs != DungeonRunTreasure.RunsAll && t.Runs != DungeonRunTreasure.RunsAct && t.Runs != DungeonRunTreasure.RunsLegacy
+                && t.Runs != DungeonRunTreasure.RunsEncounters)
+                Fail(t.Id, $"runs {t.Runs} must be all, act, legacy or encounters");
             if (!TryContent(t.Id, out var content)) { Fail(t.Id, "no engine content entry"); continue; }
             // LOOTA_802 Justicar's Ring: offered only to a run whose power it can upgrade, so its scope lists powers and only
             // powers, each with an upgraded form that a run player may use.

@@ -222,10 +222,16 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		public IReadOnlyList<string> HeroesUsed { get; }
 		/// <summary>A script ended the fight with no loss for the run player.</summary>
 		public bool NoLoss { get; }
-		public RunMatchEnd(int bossRemainingHealth, int bossForm, int bossFormChanges, int playerHeroDamage, IEnumerable<string> heroesUsed, bool noLoss)
+		/// <summary>
+		/// Family 24: the damage the fight's ULDA_115 "Gnomebliterator" casts banked for the run's next Plague Lord (10 plus the
+		/// cast's Spell Damage each; a cast by either player counts, as a copied or stolen one does in the original).
+		/// </summary>
+		public int GnomebliteratorDamage { get; }
+		public RunMatchEnd(int bossRemainingHealth, int bossForm, int bossFormChanges, int playerHeroDamage, IEnumerable<string> heroesUsed, bool noLoss,
+			int gnomebliteratorDamage = 0)
 		{
 			BossRemainingHealth = bossRemainingHealth; BossForm = bossForm; BossFormChanges = bossFormChanges; PlayerHeroDamage = playerHeroDamage;
-			HeroesUsed = (heroesUsed ?? new string[0]).ToArray(); NoLoss = noLoss;
+			HeroesUsed = (heroesUsed ?? new string[0]).ToArray(); NoLoss = noLoss; GnomebliteratorDamage = gnomebliteratorDamage;
 		}
 	}
 

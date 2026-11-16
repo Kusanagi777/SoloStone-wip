@@ -91,6 +91,14 @@ namespace SabberStoneCore.Actions
 		/// </summary>
 		public const GameTag MirageIllusion = (GameTag)32657;
 		/// <summary>
+		/// Family 24 (the Plague Lords; rules in EncounterRules.F24.cs), one counter on three kinds of entity: on a controller, the
+		/// damage its ULDA_115 "Gnomebliterator" casts banked this match for the run's next Plague Lord (10 plus the cast's Spell
+		/// Damage each, outside a Plague Lord fight: <see cref="Harvest"/>); on a Mur-nado hero power (ULDA_BOSS_39p3), the
+		/// Murlocs that died while it was active (each makes it cost (1) less); on a spell, 1 while BOT_543 Omega Mind's Mind Meld
+		/// gave it Lifesteal (taken back when the turn ends).
+		/// </summary>
+		public const GameTag PlagueCount = (GameTag)32659;
+		/// <summary>
 		/// On the game: one bit per hooked global rule (EncounterCard.HookIndex) that was applied to this match (family 05:
 		/// DungeonRunGlobalRules.Apply runs a rule's apply hook once; a rule with no player enchantment is active by this mark).
 		/// </summary>
@@ -375,9 +383,20 @@ namespace SabberStoneCore.Actions
 			Hero hero = player.Hero;
 			if (player.PlayState == PlayState.CONCEDED || !(hero.ToBeDestroyed || hero.Health <= 0)) return;
 			int used = player[RelayIndex];
-			if (used >= enc.PlayerRelay.Count) return;
+			// Family 24: a hero listed more than once (a Tombs explorer with its three finale decks) is one relay slot; which of its
+			// entries enters is drawn by the game RNG when it enters (as the original's player choice is made then), so a boss's
+			// fair-view simulation, whose clone has its own RNG, never learns it beforehand. One entry per hero: no draw.
+			var heroes = enc.PlayerRelay.Select(h => h.Hero.Id).Distinct().ToList();
+			if (used >= heroes.Count) return;
 			player[RelayIndex] = used + 1;
-			EnterRelayHero(player, enc.PlayerRelay[used]);
+			var entries = enc.PlayerRelay.Where(h => h.Hero.Id == heroes[used]).ToList();
+			RunFightHero next = entries[0];
+			if (entries.Count > 1)
+			{
+				game.OnRandomHappened(true);
+				next = entries[game.Random.Next(entries.Count)];
+			}
+			EnterRelayHero(player, next);
 		}
 
 		/// <summary>
@@ -461,7 +480,7 @@ namespace SabberStoneCore.Actions
 				.OrderBy(h => h.Id).Select(h => h.Card.Id).ToList();
 			bool bossDead = boss.Hero.ToBeDestroyed || boss.Hero.Health <= 0;
 			return new RunMatchEnd(bossDead ? 0 : boss.Hero.Health, boss[FormIndex], boss[FormChanges],
-				Math.Max(0, player.Hero.Damage), heroes, game[NoLoss] == 1);
+				Math.Max(0, player.Hero.Damage), heroes, game[NoLoss] == 1, player[PlagueCount] + boss[PlagueCount]);
 		}
 	}
 }

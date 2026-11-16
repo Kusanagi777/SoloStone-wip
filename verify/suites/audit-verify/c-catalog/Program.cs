@@ -627,7 +627,7 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     var byId = rows.ToDictionary(r => r["card_id"], r => r, StringComparer.Ordinal);
     Check("ledger: no explorer is blocked by run:dual-class since phase 6 F10 (all four rows ship), and each is its row's offered portrait",
         new[] { ("ULDA_Reno", "MAGE_ROGUE"), ("ULDA_Finley", "PALADIN_SHAMAN"), ("ULDA_Elise", "DRUID_PRIEST"), ("ULDA_Brann", "HUNTER_WARRIOR") }
-            .All(p => !byId[p.Item1]["blocked_by"].Split(';').Contains("run:dual-class") && byId[p.Item1]["player_availability"] == "offered:hero portrait:" + p.Item2));
+            .All(p => !byId[p.Item1]["blocked_by"].Split(';').Contains("run:dual-class") && byId[p.Item1]["player_availability"].Split(',')[0] == "offered:hero portrait:" + p.Item2));
     Check("ledger: Reno's original powers are not blocked by run:dual-class", rows.Where(r => r["card_id"].StartsWith("ULDA_Reno_HP", StringComparison.Ordinal))
         .All(r => !r["blocked_by"].Split(';').Contains("run:dual-class")) && rows.Any(r => r["card_id"].StartsWith("ULDA_Reno_HP", StringComparison.Ordinal)));
     Check("ledger: the run:class row of every dual row is implemented and unblocked since phase 6 F10 (none ships disabled)",
@@ -643,7 +643,7 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // the Tombs explorers pass as heroes, and ULDA_Reno, MAGE_ROGUE's portrait, is offered and implemented.
     Check("ledger: the Tombs explorers validate as run heroes (phase 6); ULDA_Reno is MAGE_ROGUE's offered portrait",
         new[] { "ULDA_Reno", "ULDA_Finley", "ULDA_Elise", "ULDA_Brann" }.All(id => byId[id]["validation"] == "passes:hero")
-        && byId["ULDA_Reno"]["player_availability"] == "offered:hero portrait:MAGE_ROGUE" && byId["ULDA_Reno"]["classification"] == "implemented"
+        && byId["ULDA_Reno"]["player_availability"].Split(',')[0] == "offered:hero portrait:MAGE_ROGUE" && byId["ULDA_Reno"]["classification"] == "implemented"
         && !rows.Any(r => r["validation"] == "rejected:unscripted-portrait"));
     var classes = rows.GroupBy(r => r["classification"]).ToDictionary(g => g.Key, g => g.Count());
     // Phase 5 (I2) moved the 22 active tavern option rows (21 options and the ULDA_912 alias, tavern-v1.json) from missing

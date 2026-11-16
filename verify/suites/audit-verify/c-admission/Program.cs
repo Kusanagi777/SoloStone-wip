@@ -97,14 +97,15 @@ var runHeroIds = DungeonRunAdmission.Rules.Where(r => r.Ids != null && r.Family.
 // ULDA_002); ULDA_016, ULDA_021 (secret-from-deck) and ULDA_024 (deck-wide-change) keep their rows.
 // Phase 6 F12 adds the Tombs active treasures: 28 run-treasure* ids (21 run-treasure with the Twinspell copies and tokens, ULDA_110
 // hand-steal, ULDA_035/035ts hand-escrow, ULDA_301/306/504 run-state, ULDA_118 burn); ULDA_044 (deck-wide-change) and ULDA_503
-// (from-own-deck) keep their rows; ULDA_115 is the one finale-state row (rejected, phase 8).
+// (from-own-deck) keep their rows; ULDA_115 was the one finale-state row (rejected, phase 8) until phase 8 family 24 admitted it
+// (run-treasure-plague-lord, player only).
 // Phase 6 F13 adds the Tombs passive treasures: 15 run-treasure* ids (8 run-treasure, ULDA_042/103 paid-cost, ULDA_009/117
 // match-start, ULDA_102 forced-pass, ULDA_205 discover, ULDA_011 run-flag).
-Check("phase 6 F2 + F3 + F4 + F5 + F7 + F8 + F9 + F11 + F12 + F13: 30 LOOTA_8, 59 GILA, 45 DALA_7 and 70 ULDA run-treasure rows, every one admitted for the player only",
+Check("phase 6 F2 + F3 + F4 + F5 + F7 + F8 + F9 + F11 + F12 + F13 (+ phase 8 family 24: ULDA_115): 30 LOOTA_8, 59 GILA, 45 DALA_7 and 71 ULDA run-treasure rows, every one admitted for the player only",
     runTreasureIds.Count(id => id.StartsWith("LOOTA_8", StringComparison.Ordinal)) == 30 && runTreasureIds.Count(id => id.StartsWith("GILA_", StringComparison.Ordinal)) == 59
-    && runTreasureIds.Count(id => id.StartsWith("DALA_7", StringComparison.Ordinal)) == 45 && runTreasureIds.Count(id => id.StartsWith("ULDA_", StringComparison.Ordinal)) == 70
-    && runTreasureIds.Contains("ULDA_039") && runTreasureIds.Contains("ULDA_201") && runTreasureIds.Contains("ULDA_002") && runTreasureIds.Count == 204
-    && DungeonRunAdmission.RuleFor("ULDA_115")?.Family == "finale-state" && DungeonRunAdmission.RuleFor("ULDA_115").Admit == AdmitScope.None
+    && runTreasureIds.Count(id => id.StartsWith("DALA_7", StringComparison.Ordinal)) == 45 && runTreasureIds.Count(id => id.StartsWith("ULDA_", StringComparison.Ordinal)) == 71
+    && runTreasureIds.Contains("ULDA_039") && runTreasureIds.Contains("ULDA_201") && runTreasureIds.Contains("ULDA_002") && runTreasureIds.Count == 205
+    && DungeonRunAdmission.RuleFor("ULDA_115")?.Family == "run-treasure-plague-lord" && DungeonRunAdmission.RuleFor("ULDA_115").Admit == AdmitScope.Player
     && DungeonRunAdmission.RuleFor("DALA_740")?.Family == "treasure-data-gap" && DungeonRunAdmission.RuleFor("DALA_740").Admit == AdmitScope.None
     && DungeonRunAdmission.RuleFor("DALA_716t")?.Family == "run-deck-token" && DungeonRunAdmission.RuleFor("DALA_716t").Admit == AdmitScope.Both
     && DungeonRunAdmission.Rules.Where(r => r.Family.StartsWith("run-treasure", StringComparison.Ordinal)).All(r => r.Admit == AdmitScope.Player && DungeonRunAdmission.IsNoneLift(r.Lift)));
@@ -177,6 +178,9 @@ phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && r.Fami
 // Phase 8 family 23: the rows of the Monster Hunt nemeses' powers and boss cards and the rejected Alternate Timeline (DungeonRunAdmission.F23.cs).
 phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] { "nemesis-board-power", "nemesis-passive-immune", "nemesis-auto-cast", "nemesis-hunt-card",
     "nemesis-rejected-restart" }.Contains(r.Family)).SelectMany(r => r.Ids));
+// Phase 8 family 24: the rows of the Plague Lord and Tekahn powers and boss cards it scripts (DungeonRunAdmission.F24.cs; each row names its test).
+phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] { "boss-plague-power", "boss-plague-passive", "boss-plague-own-deck",
+    "boss-plague-card" }.Contains(r.Family)).SelectMany(r => r.Ids));
 Check("the table lists only ledger rows (and the phase 6 F2/F3/F4/F7/F8/F9 run-treasure, run-hero, run-deck-token and treasure-data-gap rows, GILA_903 and ULDA_Brann_HP3)",
     runDeckTokenIds.SequenceEqual(new[] { "DALA_716t" }) && dataGapIds.SequenceEqual(new[] { "DALA_740" })
     && tableIds.All(id => ledgerIds.Contains(id) || runTreasureIds.Contains(id) || runHeroIds.Contains(id) || runDeckTokenIds.Contains(id) || dataGapIds.Contains(id) || id == "GILA_903" || id == "ULDA_Brann_HP3" || id == "ULDA_115" || phase7Ids.Contains(id)),

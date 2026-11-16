@@ -2246,9 +2246,13 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_168e", new CardDef(new Power
 			{
-				// TODO [ULD_168e] Lackey Empowerment && Test: Lackey Empowerment_ULD_168e
+				// Phase 8 family 24 (ULDA_033 Rakanishu, the same text): a player enchantment whose aura makes every Lackey in the
+				// owner's hand and on its board 4/4 (Crystal Core's UNG_067t1e pattern). ULD_168 itself is still unscripted.
 				InfoCardId = "ULD_168e2",
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_168e")
+				Aura = new Aura(AuraType.HAND_AND_BOARD, "ULD_168e3")
+				{
+					Condition = new SelfCondition(p => p is Minion && p.Card[GameTag.MARK_OF_EVIL] == 1)
+				}
 			}));
 
 			// ---------------------------------- ENCHANTMENT - WARLOCK
@@ -2274,8 +2278,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_168e3", new CardDef(new Power
 			{
-				// TODO [ULD_168e3] Lackey Empowerment && Test: Lackey Empowerment_ULD_168e3
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_168e3")
+				// Phase 8 family 24: "4/4." (ULD_168e's aura; Crystal Core's UNG_067t1e2 rule)
+				Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_168e3")
 			}));
 
 			// --------------------------------------- MINION - WARLOCK

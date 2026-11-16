@@ -287,9 +287,13 @@ namespace DungeonRunCatalogTool
                     }
                     if (heroCards.Count > 0) row.Add("heroCards", heroCards);
                     var relay = new List<object>();
+                    var relayEntries = new Dictionary<string, int>(StringComparer.Ordinal);
                     foreach (var h in Rows(boss, "relay"))
                     {
-                        string hero = Text(h, "hero"), deckId = "enc-" + id + "-relay-" + hero;
+                        // Family 24: a hero listed more than once (a Tombs explorer with its three finale decks) numbers its later decks.
+                        string hero = Text(h, "hero");
+                        int entry = relayEntries[hero] = (relayEntries.TryGetValue(hero, out int seenEntries) ? seenEntries : 0) + 1;
+                        string deckId = "enc-" + id + "-relay-" + hero + (entry > 1 ? "-" + entry : "");
                         Deck(deckId, Obj(h["deck"]), 0, AdmitScope.Player, where + " relay " + hero);
                         relay.Add(Map(("hero", hero), ("power", Text(h, "power")), ("deck", deckId), ("health", h.TryGetValue("health", out object hp) ? hp : null), ("skipFor", Strings(h, "skipFor"))));
                     }
