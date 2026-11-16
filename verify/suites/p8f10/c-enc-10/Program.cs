@@ -827,10 +827,11 @@ Guard("Rows", () =>
     }).ToList();
     Check("P5 each has its own admission row: the fifteen powers a boss's only, the nine boss cards a boss's and (taken from a boss) the run player's; none is ever generated", wrongScope.Count == 0, string.Join(",", wrongScope));
     var families = scripted.Select(id => DungeonRunAdmission.RuleFor(id)?.Family).Distinct().OrderBy(f => f, StringComparer.Ordinal).ToList();
+    // The family's own rows of each family name: family 18 (wave 5) reuses boss-own-hand-power for its own rows.
+    int Own(string family) => DungeonRunAdmission.Rules.Where(r => r.Family == family && r.Ids != null && r.Ids.Any(scripted.Contains)).Sum(r => r.Ids.Length);
     Check("P6 the five admission families of the family: boss-board-power (10), boss-own-hand-power (3), boss-control-all (1), boss-setaside-store (1), boss-hunt-card (9)",
         families.SequenceEqual(new[] { "boss-board-power", "boss-control-all", "boss-hunt-card", "boss-own-hand-power", "boss-setaside-store" })
-        && DungeonRunAdmission.Rules.Where(r => r.Family == "boss-board-power").Sum(r => r.Ids.Length) == 10 && DungeonRunAdmission.Rules.Where(r => r.Family == "boss-own-hand-power").Sum(r => r.Ids.Length) == 3
-        && DungeonRunAdmission.Rules.Where(r => r.Family == "boss-hunt-card").Sum(r => r.Ids.Length) == 9, string.Join(",", families));
+        && Own("boss-board-power") == 10 && Own("boss-own-hand-power") == 3 && Own("boss-hunt-card") == 9, string.Join(",", families));
     var grubb = data.Boss("gila_23_grubb"); var scarecrow = data.Boss("gila_33_scarecrow");
     Check("P7 the two start blocks: Grubb's deck add (one Chuck spell), the Scarecrow's weapon (the Scythe); no other family 10 row has one", grubb.Start != null && grubb.Start.BossDeckAdd.SequenceEqual(new[] { ChuckSpell })
         && grubb.Start.BossWeapon == null && scarecrow.Start != null && scarecrow.Start.BossWeapon == Scythe && scarecrow.Start.BossDeckAdd.Count == 0

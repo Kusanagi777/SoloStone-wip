@@ -621,7 +621,8 @@ Guard("Rows", () =>
     }).ToList();
     Check("P5 each has its own admission row: the thirteen powers a boss's only, the two boss cards a boss's and (taken from a boss) the run player's; none is ever generated", wrongScope.Count == 0, string.Join(",", wrongScope));
     var families = scripted.Select(id => DungeonRunAdmission.RuleFor(id)?.Family).Distinct().OrderBy(f => f, StringComparer.Ordinal).ToList();
-    int Ids(string family) => DungeonRunAdmission.Rules.Where(r => r.Family == family).Sum(r => r.Ids.Length);
+    // The family's own rows of each family name: family 18 (wave 5) reuses boss-hidden-shuffle for Marei Loom's row.
+    int Ids(string family) => DungeonRunAdmission.Rules.Where(r => r.Family == family && r.Ids != null && r.Ids.Any(scripted.Contains)).Sum(r => r.Ids.Length);
     Check("P6 the six admission families of the family: boss-passive-public (4), boss-passive-both (5), boss-deck-rewrite (1), boss-hidden-shuffle (1), boss-minion-power (2), boss-hunt-minion (2)",
         families.SequenceEqual(new[] { "boss-deck-rewrite", "boss-hidden-shuffle", "boss-hunt-minion", "boss-minion-power", "boss-passive-both", "boss-passive-public" })
         && Ids("boss-passive-public") == 4 && Ids("boss-passive-both") == 5 && Ids("boss-deck-rewrite") == 1 && Ids("boss-hidden-shuffle") == 1 && Ids("boss-minion-power") == 2 && Ids("boss-hunt-minion") == 2,
