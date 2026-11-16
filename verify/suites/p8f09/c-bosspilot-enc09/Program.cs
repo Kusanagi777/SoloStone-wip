@@ -273,7 +273,10 @@ foreach (var boss in bosses)
                 {
                     var form = end.BossForm > 0 ? boss.Forms[end.BossForm - 1] : null;
                     Check(game.Player2.Hero.Card.Id == (boss.Forms.Take(end.BossForm).Select(f => f.Hero).LastOrDefault(h => h != null) ?? boss.HeroCard), "the boss hero is not its form's", problems);
-                    if (form != null && form.HealthAtMost > 0 && !bossDead) Check(game.Player2.Hero.Health <= form.HealthAtMost, "the boss's Health is above its form's threshold", problems);
+                    // Only a form with its own Health caps the hero at the threshold (the Plague Lords' 200 / 100 heroes); a form without
+                    // one keeps the hero's maximum (Tekahn's power-only forms: the client's one 300-Health hero), so the boss may heal above
+                    // the threshold and stays in the form (wave 6: tekahn24, healed 195 -> 219 in Curse of Flame).
+                    if (form != null && form.HealthAtMost > 0 && form.Health > 0 && !bossDead) Check(game.Player2.Hero.Health <= form.HealthAtMost, "the boss's Health is above its form's threshold", problems);
                     if (!bossDead && end.BossForm + 1 <= boss.Forms.Count && boss.Forms[end.BossForm].HealthAtMost > 0)
                         Check(game.Player2.Hero.Health > boss.Forms[end.BossForm].HealthAtMost, "the boss should be in its next form", problems);
                     formChangesSeen += end.BossFormChanges;
