@@ -20,7 +20,7 @@ with fewer than 3; the catalog marks every card `clientChecked: false` for that 
 | `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |
 | `data/dungeon-run/reference/buckets.json` | `b3015218a0ea9193` |
-| `data/dungeon-run/run-v1.json` | `5e04059e19cdafbe` |
+| `data/dungeon-run/run-v1.json` | `98f0a1acd73ded60` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `facts/violet-hold-2026-09.json` | `19422dfe2da6fde5` |
 | `tools/dungeon-run-catalog/curation.json` | `caecd0e7309be048` |
