@@ -1,0 +1,176 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using SabberStoneCore.Actions;
+using SabberStoneCore.CardSets.DungeonRun;
+using SabberStoneCore.Config;
+using SabberStoneCore.Enums;
+using SabberStoneCore.Model;
+using SabberStoneCore.Model.Entities;
+using SabberStoneCore.Tasks.PlayerTasks;
+
+// Phase 8 wave 5 integration (families 14-19): the fixes the merged tree needed, asserted in real engine games through the
+// run setup path (DungeonRunSetup.Configure / ApplyAfterStart) and on the run layer; the helpers are c-w4fix's.
+//   W1-W3  Game.ClearWeapons names the hero, not the weapon: a weapon broken in an attack (its removal pending until the
+//          next death pass) that is replaced before that pass took the new weapon with it (family 19 found it through
+//          Mister Chu's "Confiscated" Goods, c-enc-19 F3). Hero.AddWeapon now drops the replaced weapon's pending removal.
+//   Q1-Q6  A run never meets a boss row of the character it plays (family 19 flag 3: the run hero DALA_Squeamlish against
+//          the Tombs boss ulda_07_squeamlish): a hero row's "excludeBosses" (run-v1.json) keeps those rows out of the act draw.
+int failures = 0, passes = 0;
+void Check(string name, bool ok, string detail = "")
+{
+    if (ok) passes++; else failures++;
+    Console.WriteLine((ok ? "PASS " : "FAIL ") + name + (detail.Length > 0 ? "  (" + detail + ")" : ""));
+}
+void Guard(string name, Action body)
+{
+    try { body(); }
+    catch (Exception e) { failures++; Console.WriteLine("FAIL " + name + " threw " + e.GetType().Name + ": " + e.Message.Split('\n')[0] + " @ " + (e.StackTrace ?? "").Split('\n').FirstOrDefault()?.Trim()); }
+}
+static object FromJson(System.Text.Json.JsonElement e)
+{
+    switch (e.ValueKind)
+    {
+        case System.Text.Json.JsonValueKind.Object: { var d = new Dictionary<string, object>(); foreach (var p in e.EnumerateObject()) d[p.Name] = FromJson(p.Value); return d; }
+        case System.Text.Json.JsonValueKind.Array: { var l = new List<object>(); foreach (var x in e.EnumerateArray()) l.Add(FromJson(x)); return l; }
+        case System.Text.Json.JsonValueKind.String: return e.GetString();
+        case System.Text.Json.JsonValueKind.Number: return e.TryGetInt64(out long v) ? (object)v : e.GetDouble();
+        case System.Text.Json.JsonValueKind.True: return true;
+        case System.Text.Json.JsonValueKind.False: return false;
+        default: return null;
+    }
+}
+NpcWorldJson.Parser = text => { using var doc = System.Text.Json.JsonDocument.Parse(text); return FromJson(doc.RootElement); };
+Card C(string id) => Cards.FromId(id);
+string root = VerifyPaths.Data;
+string R(string f) => File.ReadAllText(Path.Combine(root, f));
+var data = DungeonRunData.Parse(R("dungeon-run/run-v1.json"), R("dungeon-run/pool-v1.json"), R("npc/decks-v1.json"), R("dungeon-run/catalog-v1.json"),
+    R("dungeon-run/schedule-v1.json"), R("dungeon-run/tavern-v1.json"), R("dungeon-run/encounters-v1.json"));
+var run = new DungeonRun(data);
+var all = new DungeonRunProfile(); all.Unlocked.AddRange(data.Unlocks.Keys);
+
+string yeti = "CS2_182"; // Chillwind Yeti 4/5, cost 4
+string[] Deck(params (string id, int n)[] cards) => cards.SelectMany(c => Enumerable.Repeat(c.id, c.n)).ToArray();
+string[] filler = Deck((yeti, 30));
+RunMatchPlan Plan(string[] playerDeck = null, string[] bossDeck = null, string playerHero = "HERO_08", string playerPower = "CS2_034") => new RunMatchPlan
+{
+    PlayerHero = C(playerHero), PlayerHeroPowerId = playerPower, PlayerDeck = (playerDeck ?? filler).Select(C).ToList(),
+    BossHero = C("LOOTA_BOSS_35h"), BossHeroPowerId = "LOOTA_BOSS_35p", BossHealth = 30, BossDeck = (bossDeck ?? filler).Select(C).ToList(),
+    PlayerGeneratedSecrets = true, EncounterId = "test", EncounterDeck = true,
+    ExcludedGenerated = DungeonRunAdmission.GeneratedRejects(true), ExcludedGeneratedBoss = DungeonRunAdmission.GeneratedRejectsBoss(true),
+};
+Game Ready(RunMatchPlan plan, int seed = 7, bool history = true)
+{
+    var cfg = new GameConfig { RandomSeed = seed, Shuffle = true, SkipMulligan = false, History = history, Logging = false, FormatType = FormatType.FT_WILD };
+    DungeonRunSetup.Configure(cfg, plan);
+    var g = new Game(cfg);
+    g.StartGame();
+    DungeonRunSetup.ApplyAfterStart(g, plan);
+    g.Process(ChooseTask.Mulligan(g.Player1, new List<int>()));
+    g.Process(ChooseTask.Mulligan(g.Player2, new List<int>()));
+    g.MainBegin();
+    if (g.CurrentPlayer != g.Player1) throw new Exception("run player not first");
+    return g;
+}
+void Mana(Controller c, int n = 10) { c.BaseMana = n; c.UsedMana = 0; c.OverloadLocked = 0; c.OverloadOwed = 0; }
+IPlayable ToHand(Game g, Controller c, string id)
+{
+    while (c.HandZone.Count >= 9) { var old = c.HandZone[0]; c.HandZone.Remove(old); c.SetasideZone.Add(old); }
+    var e = Entity.FromCard(c, C(id)); Generic.AddHandPhase.Invoke(c, e); g.DeathProcessingAndAuraUpdate(); return e;
+}
+Minion Board(Game g, Controller c, string id, bool ready = true)
+{
+    var m = (Minion)Entity.FromCard(c, C(id)); Generic.SummonBlock(g, m, -1, c.Hero); g.DeathProcessingAndAuraUpdate();
+    if (ready) m.IsExhausted = false;
+    return m;
+}
+bool Play(Game g, IPlayable card, ICharacter target = null) { Mana(g.CurrentPlayer); return g.Process(PlayCardTask.Any(g.CurrentPlayer, card, target, -1, 0)); }
+bool PlayNew(Game g, string id, ICharacter target = null) => Play(g, ToHand(g, g.CurrentPlayer, id), target);
+void EndTurn(Game g) => g.Process(EndTurnTask.Any(g.CurrentPlayer));
+bool Power(Game g, ICharacter target = null) { Mana(g.CurrentPlayer); return g.Process(HeroPowerTask.Any(g.CurrentPlayer, target)); }
+bool Attack(Game g, Minion m, ICharacter target) { m.IsExhausted = false; return g.Process(MinionAttackTask.Any(g.CurrentPlayer, m, target)); }
+void ToBoss(Game g) { if (g.CurrentPlayer == g.Player1) EndTurn(g); Mana(g.Player2); }
+void ToPlayer(Game g) { if (g.CurrentPlayer == g.Player2) EndTurn(g); Mana(g.Player1); }
+void Round(Game g) { EndTurn(g); EndTurn(g); Mana(g.CurrentPlayer); }
+List<string> Hand(Controller c) => c.HandZone.Select(p => p.Card.Id).ToList();
+List<string> Secrets(Controller c) => c.SecretZone.Select(s => s.Card.Id).ToList();
+void SecretsToDeck(Controller c) { foreach (var s in c.HandZone.Where(p => p.Card.IsSecret).ToList()) { c.HandZone.Remove(s); c.DeckZone.Add(s); } }
+bool Pick(Game g, Controller c, int index = 0) => c.Choice != null && g.Process(ChooseTask.Pick(c, c.Choice.Choices[index]));
+List<Card> Offers(Game g, Controller c) => c.Choice == null ? new List<Card>() : c.Choice.Choices.Select(id => g.IdEntityDic[id].Card).ToList();
+void ClearHand(Controller c) { foreach (var p in c.HandZone.ToList()) { c.HandZone.Remove(p); c.SetasideZone.Add(p); } }
+
+
+const string Axe = "CS2_106", Reaper = "CS2_112"; // Fiery War Axe 3/2, Arcanite Reaper 5/2
+
+// ============================================================ W. a weapon broken in an attack, replaced before the death pass
+Guard("W", () =>
+{
+    var g = Ready(Plan());
+    Controller p1 = g.Player1;
+    PlayNew(g, Axe);
+    var axe = p1.Hero.Weapon;
+    // What a weapon's last Durability point does (Weapon.ToBeDestroyed): its removal waits for the next death pass.
+    axe.ToBeDestroyed = true;
+    bool pending = g.ClearWeapons != null && g.ClearWeapons.Contains(p1.Hero.Id);
+    var reaper = (Weapon)Entity.FromCard(p1, C(Reaper));
+    new SabberStoneCore.Tasks.SimpleTasks.WeaponTask().Process(g, p1, p1.Hero, null, new TaskStack { Playables = new List<IPlayable> { reaper } });
+    g.DeathProcessingAndAuraUpdate();
+    Check("W1 a weapon whose removal is pending (Game.ClearWeapons names the hero) is replaced before the death pass: the pass keeps the new weapon, the old one is in the graveyard",
+        pending && p1.Hero.Weapon == reaper && reaper.Zone == null && p1.GraveyardZone.Contains(axe) && !p1.GraveyardZone.Contains(reaper) && g.ClearWeapons == null,
+        $"pending {pending} weapon {p1.Hero.Weapon?.Card.Id ?? "none"} axe in graveyard {p1.GraveyardZone.Contains(axe)}");
+    reaper.ToBeDestroyed = true;
+    g.DeathProcessingAndAuraUpdate();
+    Check("W2 with no replacement the pending removal still breaks the weapon at the death pass", p1.Hero.Weapon == null && p1.GraveyardZone.Contains(reaper) && g.ClearWeapons == null);
+    var g2 = Ready(Plan());
+    Controller q1 = g2.Player1, q2 = g2.Player2;
+    PlayNew(g2, Axe);
+    var axe2 = q1.Hero.Weapon;
+    axe2[GameTag.DAMAGE] = 1;
+    var foe = Board(g2, q2, "CS2_231"); // Wisp 1/1
+    q1.Hero.IsExhausted = false;
+    bool attacked = g2.Process(HeroAttackTask.Any(q1, foe));
+    Check("W3 an ordinary attack with the last Durability point: the minion dies and the axe breaks (no weapon left)", attacked && foe.IsDead && q1.Hero.Weapon == null && q1.GraveyardZone.Contains(axe2),
+        $"attacked {attacked} weapon {q1.Hero.Weapon?.Card.Id ?? "none"}");
+});
+
+// ============================================================ Q. a run never meets a boss row of its own character
+Guard("Q", () =>
+{
+    const string Hero = "DALA_Squeamlish", Boss = "ulda_07_squeamlish";
+    var errors = DungeonRunValidator.Validate(data, null);
+    Check("Q1 the shipped data validates", errors.Count == 0, string.Join(" | ", errors.Take(3)));
+    var row = data.Class(Hero);
+    Check("Q2 the hero row Squeamlish (the Heist villain as a run hero) excludes the Tombs boss row of the same character", row.IsHero && row.ExcludeBosses.SequenceEqual(new[] { Boss })
+        && data.Boss(Boss).IsEncounter && data.Classes.Where(c => c.Id != Hero).All(c => c.ExcludeBosses.Count == 0));
+    DungeonRunData Copy() => DungeonRunData.Parse(R("dungeon-run/run-v1.json"), R("dungeon-run/pool-v1.json"), R("npc/decks-v1.json"), R("dungeon-run/catalog-v1.json"),
+        R("dungeon-run/schedule-v1.json"), R("dungeon-run/tavern-v1.json"), R("dungeon-run/encounters-v1.json"));
+    var without = Copy();
+    without.Class(Hero).ExcludeBosses.Clear();
+    var runWithout = new DungeonRun(without);
+    int met = 0, metWithout = 0, metDruid = 0;
+    const int Seeds = 600;
+    for (long seed = 1; seed <= Seeds; seed++)
+    {
+        var s = run.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed, schedule: "acts-v3h");
+        if (s.BossSequence.Contains(Boss)) met++;
+        var w = runWithout.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed, schedule: "acts-v3h");
+        if (w.BossSequence.Contains(Boss)) metWithout++;
+        var druid = data.Class("DRUID");
+        var d = run.NewRun(all, "DRUID", druid.Decks[0], druid.Powers[0], seed, schedule: "acts-v3h");
+        if (d.BossSequence.Contains(Boss)) metDruid++;
+    }
+    Check($"Q3 {Seeds} Squeamlish runs on acts-v3h: none meets Squeamlish the Tombs boss", met == 0, "met in " + met);
+    Check($"Q4 the same {Seeds} seeds with the row's exclusion removed: some run meets him (Q3 can fail)", metWithout > 0, "met in " + metWithout);
+    Check($"Q5 the exclusion is the hero row's only: {Seeds} Druid class-row runs meet him in some runs", metDruid > 0, "met in " + metDruid);
+    var bogus = Copy();
+    bogus.Class(Hero).ExcludeBosses.Add("ulda_99_nobody");
+    var classRow = Copy();
+    classRow.Class("DRUID").ExcludeBosses.Add(Boss);
+    var e1 = DungeonRunValidator.Validate(bogus, null); var e2 = DungeonRunValidator.Validate(classRow, null);
+    Check("Q6 the validator refuses an excluded id that is no boss row, and excludeBosses on a class row", e1.Any(e => e.Contains("excludeBosses names unknown boss ulda_99_nobody"))
+        && e2.Any(e => e.Contains("only a hero row may exclude a boss row")), string.Join(" | ", e1.Concat(e2).Take(3)));
+});
+
+Console.WriteLine($"RESULT {passes} passed, {failures} failed");
+return failures;

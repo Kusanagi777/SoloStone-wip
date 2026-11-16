@@ -1,11 +1,11 @@
 #!/bin/bash
 # verify/bin/builds.sh: the build stage (wave-3 p8w3/builds.sh), against verify/.out/engine-out. No harness runs, no lock.
-#   builds.sh list              the 71 suite projects (the wave-3 order, then wave 4)
+#   builds.sh list              the 78 suite projects (the wave-3 order, then waves 4 and 5)
 #   builds.sh <from> <to>       build entries <from>..<to> (1-based)
-#   builds.sh all               all 71
+#   builds.sh all               all 78
 #   builds.sh pilot             the pilot set (lib/suites.sh PILOT_LIST)
 #   builds.sh only <dir>...     the named suites (paths relative to verify/suites, e.g. p8f01/c-enc-model)
-#   builds.sh randplay          randplay (not in the 71)
+#   builds.sh randplay          randplay (not in the 78)
 #   builds.sh tool              the catalog tool c-catalog runs (tools/dungeon-run-catalog -> verify/.out/tools/...)
 # Build logs: verify/.out/builds/<name>.txt. Each line: "<i> <name> build exit=<rc> <n> Error(s)", plus a WARNING when the
 # suite's out/SabberStoneCore.dll is not the engine build. A suite that has no .csproj under verify/suites yet prints NOT PORTED.
