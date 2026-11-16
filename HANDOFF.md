@@ -125,6 +125,17 @@ client's tag 1114, so Anomaly - Arcane cut it to (0); `DungeonRunEncounters.Repe
 game ends normally (boss win), and the record is re-recorded. The general Echo rule ("Copies can't cost less than (1)")
 now holds in every game (`EncounterRules.EchoCopyFloor`, c-enc-engine G7d).
 
+From the wave-6 integration (stage A; details in `handoff/phase8/reports/integrate-wave6.md`):
+- Incompatible modifiers with five act II majors (family 23 flag 3), a step-9 input (incompatible-modifier prevention):
+  Hagatha's `incompatibleModifiers` (mod_iron_bosses, mod_open_road, mod_hot_start) follow from her own row (fixed 100
+  Health, the hero switch); the four nemeses take the act curve's Health plus 10 and neither the wiki nor the client data
+  says anything about SoloStone's modifiers, so they list none. On a seed whose act II major is a nemesis the act's modifier
+  node may now offer those three (c-enc-model J1: Whirt 46 -> 51 with mod_iron_bosses). Not redesigned here.
+- A finale's fixed bosses are not filtered by a hero row's `excludeBosses`: DALA_Tekahn excludes ulda_67_tekahn (the same
+  character), which no act pool holds; when the close-out enables acts-v3t's finale on Tekahn it decides what a DALA_Tekahn
+  run meets there. Infinite Toki is not excluded for the Toki hero row: the original Monster Hunt makes her Toki's own
+  Final Nemesis.
+
 From the wave-5 integration (details in `handoff/phase8/reports/integrate-wave5.md`):
 - Closed: auto-cast powers act after the turn-start draw (`EncounterRules.AfterTurnStartDraw`); a run never meets a boss
   row of the character it plays (`excludeBosses`: Squeamlish, Mr. Chu, George the Fallen; Barkeye in family 21 uses the

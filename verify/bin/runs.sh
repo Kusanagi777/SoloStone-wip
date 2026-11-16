@@ -1,9 +1,9 @@
 #!/bin/bash
 # verify/bin/runs.sh: the run stage (wave-3 p8w3/runs.sh): every suite harness once, as `dotnet out/<Name>.dll`, from its
 # own folder. k is the run number (1 or 2; same.sh compares run 1 with run 2 and with the wave-3 baseline).
-#   runs.sh list                 the 65 entries (the wave-3 order, then waves 4 and 5)
+#   runs.sh list                 the 70 entries (the wave-3 order, then waves 4, 5 and 6)
 #   runs.sh <k> <from> <to>      entries <from>..<to>
-#   runs.sh <k> all | pilot      all 65 | the pilot entries
+#   runs.sh <k> all | pilot      all 70 | the pilot entries
 #   runs.sh <k> only <dir>...    the named entries (paths relative to verify/suites)
 # Logs: verify/.out/runs/<name>-<k>.txt (selfplay also writes selfplay-games-<k>.txt, randplay randplay-games-<k>.txt).
 # Each entry prints "<i> <name> <k> exit=<rc> <result line>" and its time. On a shared machine wrap the call in the
