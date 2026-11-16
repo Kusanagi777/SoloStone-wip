@@ -1,0 +1,520 @@
+{
+ "schemaVersion": 1,
+ "family": "23",
+ "description": "Monster Hunt nemeses (phase 8 family 23): the four Final Nemesis encounters of The Witchwood's Monster Hunt (Infinite Toki, Glinda Crowskin, Lord Godfrey, Captain Shivers) as act II majors beside Hagatha the Witch (her row is in F01.json: family 01 built the run player's fight-only hero cards on her). Boss deck lists are transcribed from hearthstone.wiki.gg boss pages (read 2026-11-14), by card name; tools/dungeon-run-catalog (step 'encounters') resolves the names against facts/violet-hold-2026-09.json, checks every card and writes data/dungeon-run/encounters-v1.json.",
+ "method": "Each boss page was read as wikitext (?action=raw) by verify/tools/gen/p8f23/make_f23.py's author and its one deck table transcribed in table order with the table's own counts; every table sums to 30 (checked by the script). Boss-only and Monster Hunt treasure cards carry their id; the wiki's row name \"Witchwood's Touch (3)\" is the card GILA_BOSS_99t3 (the wiki's page for it lists exactly Glinda Crowskin and Infinite Toki). The pages' notes are followed: Infinite Toki casts Alternate Timeline as soon as she can (left out here, rejected), Captain Shivers starts with Kingsbane equipped and his Plunder is auto-cast. The overview page https://hearthstone.wiki.gg/wiki/Final_Nemesis (read 2026-11-14) adds that Lord Godfrey starts the game with Hunter's Insight (his row's start block; his deck lists the table's other 29 cards).",
+ "bosses": [
+  {
+   "id": "gila_48_infinite_toki",
+   "name": "Infinite Toki",
+   "provenance": "GIL",
+   "family": "23",
+   "hero": "GILA_BOSS_48h",
+   "power": "GILA_BOSS_48p",
+   "tier": "major2",
+   "archetype": "control",
+   "level": {
+    "source": "printed-health",
+    "original": 60
+   },
+   "healthOffset": 10,
+   "cards": [
+    "GILA_BOSS_48e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Infinite_Toki",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Clockwork Assistant",
+       "count": 1,
+       "id": "GILA_907"
+      },
+      {
+       "name": "Enhance-a-matic",
+       "count": 1,
+       "id": "GILA_903"
+      },
+      {
+       "name": "Witchwood's Touch",
+       "count": 2,
+       "id": "GILA_BOSS_99t3"
+      },
+      {
+       "name": "Alternate Timeline",
+       "count": 1,
+       "id": "GILA_BOSS_48t"
+      },
+      {
+       "name": "Babbling Book",
+       "count": 2
+      },
+      {
+       "name": "Open the Waygate",
+       "count": 1
+      },
+      {
+       "name": "Arcanologist",
+       "count": 2
+      },
+      {
+       "name": "Primordial Glyph",
+       "count": 2
+      },
+      {
+       "name": "Sorcerer's Apprentice",
+       "count": 2
+      },
+      {
+       "name": "Unstable Portal",
+       "count": 2
+      },
+      {
+       "name": "Counterspell",
+       "count": 1
+      },
+      {
+       "name": "Effigy",
+       "count": 1
+      },
+      {
+       "name": "Frost Nova",
+       "count": 1
+      },
+      {
+       "name": "Ice Block",
+       "count": 1
+      },
+      {
+       "name": "Mana Bind",
+       "count": 1
+      },
+      {
+       "name": "Mirror Entity",
+       "count": 1
+      },
+      {
+       "name": "Spellslinger",
+       "count": 2
+      },
+      {
+       "name": "Cabalist's Tome",
+       "count": 2
+      },
+      {
+       "name": "Blizzard",
+       "count": 1
+      },
+      {
+       "name": "Kabal Crystal Runner",
+       "count": 2
+      },
+      {
+       "name": "Loatheb",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "adaptations": [
+    {
+     "kind": "health",
+     "note": "A Final Nemesis of the Monster Hunt (the last fight of Toki, Time-Tinker's hunt, 60 Health on its hero card). In the one mode it is a major of act II beside Hagatha: Health is the act curve at the major's floor plus 10 (rule adaptation health-policy), not the printed 60."
+    },
+    {
+     "kind": "deck",
+     "note": "Alternate Timeline (GILA_BOSS_48t, \"Start a new game, but your opponent's Health stays the same.\") restarts the game: that needs a run-owned game restart (the turn-rewind family, phase 9), so the card is left out and rejected with that reason. Enhance-a-matic (GILA_903, Toki's treasure, \"Add a random spell from each class to your hand\") can yield a Secret of any class: a boss may hold such a card only on a row that turns its generated Secrets on with a closed, boss-admitted Secret pool for every class it names (eleven), which is not lifted here, so it is left out too. A major keeps its listed count: the encounters step fills the two places with second copies of the list's first singles (recorded with the deck)."
+    },
+    {
+     "kind": "power",
+     "note": "Chronoacceleration (2), \"Give a friendly minion Mega-Windfury. At the end of your turn, it dies.\": the client's own enchantment Accelerated (GILA_BOSS_48e, \"Mega-Windfury. Will die at the end of this turn.\"); the minion dies at the end of the turn it was given it (Power Overwhelming's rule). The wiki's note that she rarely uses it is the AI's choice here, as for every clickable power."
+    }
+   ]
+  },
+  {
+   "id": "gila_49_glinda",
+   "name": "Glinda Crowskin",
+   "provenance": "GIL",
+   "family": "23",
+   "hero": "GILA_BOSS_49h",
+   "power": "GILA_BOSS_49p",
+   "tier": "major2",
+   "archetype": "control",
+   "level": {
+    "source": "printed-health",
+    "original": 50
+   },
+   "healthOffset": 10,
+   "flags": [
+    "passive",
+    "heroImmune"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Glinda_Crowskin_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Witchwood's Touch",
+       "count": 2,
+       "id": "GILA_BOSS_99t3"
+      },
+      {
+       "name": "Crowskin Faithful",
+       "count": 3,
+       "id": "GILA_BOSS_49t"
+      },
+      {
+       "name": "Crowskin Pact",
+       "count": 2,
+       "id": "GILA_BOSS_49t2"
+      },
+      {
+       "name": "Dark Cultist",
+       "count": 1
+      },
+      {
+       "name": "Kobold Librarian",
+       "count": 1
+      },
+      {
+       "name": "Fiendish Circle",
+       "count": 1
+      },
+      {
+       "name": "Hellfire",
+       "count": 2
+      },
+      {
+       "name": "Imp-losion",
+       "count": 2
+      },
+      {
+       "name": "Pit Lord",
+       "count": 2
+      },
+      {
+       "name": "Siphon Soul",
+       "count": 1
+      },
+      {
+       "name": "Kabal Trafficker",
+       "count": 2
+      },
+      {
+       "name": "Abyssal Enforcer",
+       "count": 2
+      },
+      {
+       "name": "Twisting Nether",
+       "count": 1
+      },
+      {
+       "name": "Voidlord",
+       "count": 2
+      },
+      {
+       "name": "DOOM!",
+       "count": 1
+      },
+      {
+       "name": "Deathlord",
+       "count": 1
+      },
+      {
+       "name": "Cult Master",
+       "count": 2
+      },
+      {
+       "name": "Splitting Festeroot",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "adaptations": [
+    {
+     "kind": "health",
+     "note": "A Final Nemesis of the Monster Hunt (the last fight of Houndmaster Shaw's hunt, 50 Health on its hero card). In the one mode it is a major of act II beside Hagatha: Health is the act curve at the major's floor plus 10 (rule adaptation health-policy), not the printed 50."
+    },
+    {
+     "kind": "power",
+     "note": "False Heart, \"Passive Hero Power. While you control a minion, your hero is Immune.\": family 06's hero aura (Actions.EncounterRules.HeroImmuneWhile, ULDA_706 No-Face's rule for one side), re-checked at every aura update; a dormant or permanent minion (an untouchable card) does not count."
+    },
+    {
+     "kind": "deck",
+     "note": "Crowskin Pact (GILA_BOSS_49t2), \"Transform a minion into a 'Crowskin Faithful' and take control of it\": any minion; a run shrine picked is destroyed and goes dormant instead (the transform rule of Actions.Generic) and never changes sides; a Faithful taken with the caster's board full is destroyed (the engine's rule for a control change)."
+    }
+   ]
+  },
+  {
+   "id": "gila_59_godfrey",
+   "name": "Lord Godfrey",
+   "provenance": "GIL",
+   "family": "23",
+   "hero": "GILA_BOSS_59h",
+   "power": "GILA_BOSS_59p",
+   "tier": "major2",
+   "archetype": "midrange",
+   "level": {
+    "source": "printed-health",
+    "original": 60
+   },
+   "healthOffset": 10,
+   "start": {
+    "bossHandAdd": [
+     "GILA_503"
+    ]
+   },
+   "flags": [
+    "start"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Lord_Godfrey_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Hunter's Mark",
+       "count": 2
+      },
+      {
+       "name": "Dart Trap",
+       "count": 1
+      },
+      {
+       "name": "Explosive Trap",
+       "count": 1
+      },
+      {
+       "name": "Hunting Mastiff",
+       "count": 2
+      },
+      {
+       "name": "Exploding Bloatbat",
+       "count": 2
+      },
+      {
+       "name": "Savannah Highmane",
+       "count": 2
+      },
+      {
+       "name": "Seeping Oozeling",
+       "count": 2
+      },
+      {
+       "name": "Crushing Walls",
+       "count": 2
+      },
+      {
+       "name": "Gahz'rilla",
+       "count": 1
+      },
+      {
+       "name": "Acolyte of Pain",
+       "count": 2
+      },
+      {
+       "name": "Saboteur",
+       "count": 2
+      },
+      {
+       "name": "Twilight Summoner",
+       "count": 2
+      },
+      {
+       "name": "Bittertide Hydra",
+       "count": 1
+      },
+      {
+       "name": "Clockwork Automaton",
+       "count": 2
+      },
+      {
+       "name": "Grim Patron",
+       "count": 2
+      },
+      {
+       "name": "Gurubashi Berserker",
+       "count": 2
+      },
+      {
+       "name": "Hogger, Doom of Elwynn",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "adaptations": [
+    {
+     "kind": "health",
+     "note": "A Final Nemesis of the Monster Hunt (the last fight of Darius Crowley's hunt, 60 Health on its hero card). In the one mode it is a major of act II beside Hagatha: Health is the act curve at the major's floor plus 10 (rule adaptation health-policy), not the printed 60."
+    },
+    {
+     "kind": "start",
+     "note": "He starts the game with Hunter's Insight (GILA_503) in hand \"for a very aggressive start\" (https://hearthstone.wiki.gg/wiki/Final_Nemesis, Lord Godfrey's section, read 2026-11-14; his own page lists the card once in its deck table and under Special cards). The table's one copy is that card: the row's start block puts it in his hand after the mulligan and his deck holds the table's other 29 cards (a major keeps its listed count), 30 cards in all as on the wiki."
+    },
+    {
+     "kind": "power",
+     "note": "Pistol Barrage (1), \"Deal 2 damage to a minion and the minions next to it\": a hero power, so no Spell Damage; the three hits are one damage event (Explosive Shot's rule)."
+    }
+   ]
+  },
+  {
+   "id": "gila_60_shivers",
+   "name": "Captain Shivers",
+   "provenance": "GIL",
+   "family": "23",
+   "hero": "GILA_BOSS_60h",
+   "power": "GILA_BOSS_60p",
+   "tier": "major2",
+   "archetype": "tempo",
+   "level": {
+    "source": "printed-health",
+    "original": 75
+   },
+   "healthOffset": 10,
+   "start": {
+    "bossWeapon": "LOOT_542"
+   },
+   "flags": [
+    "start",
+    "passive"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Captain_Shivers",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Deck",
+     "cards": [
+      {
+       "name": "Cursed Crewmember",
+       "count": 2,
+       "id": "GILA_BOSS_60t"
+      },
+      {
+       "name": "Bearshark",
+       "count": 2
+      },
+      {
+       "name": "Deadly Poison",
+       "count": 2
+      },
+      {
+       "name": "Doomerang",
+       "count": 2
+      },
+      {
+       "name": "Leeching Poison",
+       "count": 1
+      },
+      {
+       "name": "Blade Flurry",
+       "count": 2
+      },
+      {
+       "name": "Envenom Weapon",
+       "count": 1
+      },
+      {
+       "name": "Southsea Squidface",
+       "count": 2
+      },
+      {
+       "name": "Tinker's Sharpsword Oil",
+       "count": 2
+      },
+      {
+       "name": "Trade Prince Gallywix",
+       "count": 1
+      },
+      {
+       "name": "Dead Man's Hand",
+       "count": 2
+      },
+      {
+       "name": "Acidic Swamp Ooze",
+       "count": 1
+      },
+      {
+       "name": "Lorewalker Cho",
+       "count": 1
+      },
+      {
+       "name": "Violet Illusionist",
+       "count": 2
+      },
+      {
+       "name": "Captain Greenskin",
+       "count": 1
+      },
+      {
+       "name": "Fel Reaver",
+       "count": 2
+      },
+      {
+       "name": "Loatheb",
+       "count": 1
+      },
+      {
+       "name": "Troggzor the Earthinator",
+       "count": 1
+      },
+      {
+       "name": "Clockwork Giant",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Deck"
+   },
+   "adaptations": [
+    {
+     "kind": "health",
+     "note": "A Final Nemesis of the Monster Hunt (the last fight of Tess Greymane's hunt, 75 Health on its hero card). In the one mode it is a major of act II beside Hagatha: Health is the act curve at the major's floor plus 10 (rule adaptation health-policy), not the printed 75."
+    },
+    {
+     "kind": "start",
+     "note": "He starts with Kingsbane (LOOT_542) equipped (the wiki's note); its Deathrattle shuffles it into his deck."
+    },
+    {
+     "kind": "power",
+     "note": "Plunder (0), \"Draw a weapon from your deck\", is auto-cast on the wiki (the client card carries AI_MUST_PLAY): it is used by rule, not by the AI's choice, at the start of his turn while his deck holds a weapon (a random one, by the game RNG): in practice Kingsbane after its Deathrattle. Not offered as a click (family 09's AutoCast rule)."
+    }
+   ]
+  }
+ ],
+ "rejected": [
+  {
+   "id": "GILA_BOSS_48t",
+   "name": "Alternate Timeline (Infinite Toki's boss card)",
+   "power": null,
+   "reason": "\"Start a new game, but your opponent's Health stays the same\": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of Infinite Toki's deck until then",
+   "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (the turn-rewind family with GILA_900p Temporal Loop and GILA_911 Rewind)",
+   "cards": []
+  }
+ ]
+}

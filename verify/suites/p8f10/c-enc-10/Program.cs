@@ -783,7 +783,7 @@ Guard("Rows", () =>
         ("gila_31_gnarlroot", "31", "Gnarlroot", "2", 30, "extended", new string[0]),
         ("gila_32_niira", "32", "Niira the Trickster", "2", 25, "extended", new string[0]),
         ("gila_33_scarecrow", "33", "The Scarecrow", "3", 40, "authentic", new[] { "start" }),
-        ("gila_34_havnixx", "34", "Inquisitor Hav'nixx", "3", 40, "substituted", new string[0]),
+        ("gila_34_havnixx", "34", "Inquisitor Hav'nixx", "3", 40, "authentic", new string[0]),   // family 23 scripted Witchwood's Touch (was substituted)
         ("gila_35_chupacabran", "35", "Chupacabran", "2", 30, "extended", new string[0]),
         ("gila_36_griselda", "36", "Griselda", "2", 30, "extended", new string[0]),
         ("gila_37_wharrgarbl", "37", "Wharrgarbl", "2", 30, "extended", new string[0]),
@@ -840,8 +840,8 @@ Guard("Rows", () =>
     Check("P8 the listed cards that are replaced or left out are only cards the engine does not script (or the over-size tail of a longer list), each recorded",
         Subs("gila_23_grubb") == "AT_088>LOOT_383:unscripted,GVG_065>CS2_197:unscripted,GVG_088>EX1_028:unscripted,GVG_112>CS2_200:unscripted"
         && Subs("gila_26_gnomenapper") == "GVG_116>-:over-size,GVG_122>-:unscripted" && Subs("gila_31_gnarlroot") == "EX1_160>CFM_614:unscripted" && Subs("gila_32_niira") == "EX1_160>CFM_614:unscripted"
-        && Subs("gila_34_havnixx") == "GILA_BOSS_99t2>EX1_606:unscripted" && Subs("gila_38_cozzlewurt") == "EX1_154>AT_037:unscripted,GVG_092>CS2_147:unscripted"
-        && Subs("gila_27_experiment_3c").StartsWith("CFM_344>-:over-size,") && Subs("gila_27_experiment_3c").Contains("GILA_BOSS_99t2>EX1_606:unscripted")
+        && Subs("gila_34_havnixx") == "" && Subs("gila_38_cozzlewurt") == "EX1_154>AT_037:unscripted,GVG_092>CS2_147:unscripted"
+        && Subs("gila_27_experiment_3c").StartsWith("CFM_344>-:over-size,") && !Subs("gila_27_experiment_3c").Contains("GILA_BOSS_99t2")
         && data.Boss("gila_27_experiment_3c").Source.Substitutions.Count(x => x.Reason == "over-size") == 15
         && rows.SelectMany(r => data.Boss(r.id).Source.Substitutions).Where(x => x.Reason == "unscripted").All(x => !C(x.Listed).Implemented),
         Subs("gila_23_grubb") + " | " + Subs("gila_26_gnomenapper") + " | " + Subs("gila_38_cozzlewurt"));

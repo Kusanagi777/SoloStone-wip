@@ -733,6 +733,9 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // Phase 8 family 22 (Tombs bosses D): + 23 rows, all "partial" (18 run:boss rows; 5 cards of its decks that are new to the
     // ledger: DAL_614, EX1_025, EX1_179, GVG_093, ICC_023), and 19 rows leave "missing" for "partial" (the 18 boss powers and
     // Servant of Siamat).
+    // Phase 8 family 23: + 4 rows, all "partial" (the four nemeses' run:boss rows; every card of their decks was in the ledger
+    // already), and 10 rows leave "missing" for "partial" (4 boss powers, Crowskin Faithful, Crowskin Pact, Cursed Crewmember and
+    // the three Witchwood's Touch).
     Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13; wave 5: families 14-19): 4918 rows; 2813 implemented, 660 partial, 387 missing, 1058 duplicate/support, 0 intentionally adapted",
         rows.Count == 4918 && classes.GetValueOrDefault("implemented") == 2813 && classes.GetValueOrDefault("partial") == 660 && classes.GetValueOrDefault("missing") == 387
         && classes.GetValueOrDefault("duplicate/support") == 1058 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));

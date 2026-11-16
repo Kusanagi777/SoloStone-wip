@@ -529,8 +529,9 @@ internal static partial class DungeonRunAdmission
             Family = "run-treasure", Admit = AdmitScope.Player, Lift = RunTreasureLift,
             Reason = "treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F3 T5-T22)",
             // Phase 8 family 15: GILA_500p2t A Small Rock left this row for run-treasure-boss-find in DungeonRunAdmission.F15.cs
-            // (the same legacy verdict; on catalog runs Mama Diggs's Excavate finds it for a boss).
-            Ids = new[] { "GILA_500t", "GILA_500t2", "GILA_500t3", "GILA_501", "GILA_503", "GILA_507", "GILA_508", "GILA_510",
+            // (the same legacy verdict; on catalog runs Mama Diggs's Excavate finds it for a boss). Phase 8 family 23: GILA_503
+            // Hunter's Insight left it for run-treasure-nemesis-deck in DungeonRunAdmission.F23.cs (Lord Godfrey's deck lists it).
+            Ids = new[] { "GILA_500t", "GILA_500t2", "GILA_500t3", "GILA_501", "GILA_507", "GILA_508", "GILA_510",
                 "GILA_604", "GILA_608", "GILA_610", "GILA_611", "GILA_612" },
         },
         new AdmissionRule
@@ -556,7 +557,7 @@ internal static partial class DungeonRunAdmission
         {
             Family = "run-treasure", Admit = AdmitScope.Player, Lift = RunTreasureLift,
             Reason = "treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F4 T4-T18)",
-            Ids = new[] { "GILA_400t", "GILA_401", "GILA_403", "GILA_410", "GILA_412", "GILA_413", "GILA_904", "GILA_907", "GILA_910" },
+            Ids = new[] { "GILA_400t", "GILA_401", "GILA_403", "GILA_410", "GILA_412", "GILA_413", "GILA_904", "GILA_910" },
         },
         new AdmissionRule
         {

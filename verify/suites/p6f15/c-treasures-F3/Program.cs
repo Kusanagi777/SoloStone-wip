@@ -161,7 +161,9 @@ var transport = new Dictionary<string, string>
             t != null && t.Active == !passive && t.Offered && !t.Legacy && !t.Signature && t.Runs == DungeonRunTreasure.RunsAct && t.Pool == "MonsterHunt"
             && t.Scope.Decks.SequenceEqual(new[] { deck }) && t.Scope.Classes.Count == 0 && t.Scope.Powers.Count == 0);
     }
-    foreach (string id in f3.Concat(tokens).Where(i => i != Tess && i != Darius && !passives.Contains(i)))
+    // Phase 8 family 23: GILA_503 Hunter's Insight is in Lord Godfrey's nemesis deck, so its row (run-treasure-nemesis-deck) admits a
+    // boss on a catalog run too; it is checked on its own below, as strictly.
+    foreach (string id in f3.Concat(tokens).Where(i => i != Tess && i != Darius && !passives.Contains(i) && i != "GILA_503"))
     {
         var p = DungeonRunAdmission.Classify(C(id), id, AdmitScope.Player, null, catalogRun: true);
         var b = DungeonRunAdmission.Classify(C(id), id, AdmitScope.Boss, null, catalogRun: true);
@@ -170,6 +172,15 @@ var transport = new Dictionary<string, string>
         Check($"T2 admission {id}: a row admitting the player (catalog run), never the boss{(id == "GILA_500p2t" ? " (but Mama Diggs's Excavate, family 15, on a catalog run)" : "")}",
             p.Subject && p.Admitted && (!b.Admitted || rockForBoss && b.Admitted) && DungeonRunAdmission.RuleFor(id) != null, p.Family + " " + p.Admit);
         Check($"T2 admission {id}: the boss's generation never yields it", DungeonRunAdmission.GeneratedRejectsBoss(true).Contains(id));
+    }
+    {
+        var p = DungeonRunAdmission.Classify(C("GILA_503"), "GILA_503", AdmitScope.Player, null, catalogRun: true);
+        var b = DungeonRunAdmission.Classify(C("GILA_503"), "GILA_503", AdmitScope.Boss, null, catalogRun: true);
+        Check("T2 admission GILA_503: the run-treasure-nemesis-deck row (phase 8 family 23) admits the player on legacy and catalog runs, a boss on a catalog run only (Lord Godfrey's deck)",
+            p.Subject && p.Admitted && DungeonRunAdmission.Classify(C("GILA_503"), "GILA_503", AdmitScope.Player).Admitted && b.Admitted
+            && !DungeonRunAdmission.Classify(C("GILA_503"), "GILA_503", AdmitScope.Boss).Admitted && DungeonRunAdmission.RuleFor("GILA_503")?.Family == "run-treasure-nemesis-deck",
+            p.Family + " " + p.Admit + " / boss " + b.Admit);
+        Check("T2 admission GILA_503: the boss's generation never yields it", DungeonRunAdmission.GeneratedRejectsBoss(true).Contains("GILA_503"));
     }
     Check("T2 admission GILA_509: the secret-generated row, admitted for the player on catalog runs only (legacy runs block generated Secrets)",
         DungeonRunAdmission.RuleFor("GILA_509").Family == "secret-generated" && !DungeonRunAdmission.Classify(C("GILA_509"), "GILA_509", AdmitScope.Player).Admitted

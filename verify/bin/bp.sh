@@ -38,6 +38,8 @@
 #   family 20 modes:     bp.sh enc20a|enc20b|enc20-seeds-a|enc20-seeds-b         (twice per call; a = ULDA_BOSS_19-27, b = 28-36)
 #   family 21 modes:     bp.sh enc21a|enc21b|enc21-seeds-a|enc21-seeds-b         (twice per call; a = ULDA_BOSS_41-49, b = 50-59)
 #   family 22 modes:     bp.sh enc22a|enc22b|enc22-seeds-a|enc22-seeds-b         (twice per call; a = ULDA_BOSS_60-69, b = 70-79)
+#   family 23 modes:     bp.sh enc23|enc23-seeds                                 (twice per call; FAMILY=23: the four nemeses and Hagatha)
+#                        bp.sh enc23-cards <k>                                    (one run per call, k = 1 or 2; then `bp.sh same enc23-cards`)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -134,6 +136,9 @@ CARDS21=ULD_286,ULD_217,ULD_206,DAL_614,FP1_007
 A22=ulda_60_zaraam,ulda_61_kyriss,ulda_62_oasis,ulda_63_vessina,ulda_65_thrud,ulda_66_siamat,ulda_68_wasp,ulda_69_isiset
 B22=ulda_70_rajh,ulda_71_ammunae,ulda_72_setesh,ulda_73_husam,ulda_74_barim,ulda_75_avozu,ulda_76_tarkus,ulda_77_gorebite,ulda_78_octosari,ulda_79_armadillobot
 CARDS22=LOE_018,EX1_556,GVG_006
+# family 23
+CARDS23=GILA_BOSS_49t,GILA_BOSS_49t2,GILA_BOSS_60t,GILA_BOSS_99t,GILA_BOSS_99t2,GILA_BOSS_99t3,GILA_503,GILA_907,GILA_BOSS_61t,GILA_BOSS_61t3
+FIX23=fix23_glinda,fix23_shivers,fix23_toki,fix23_godfrey
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -343,6 +348,9 @@ enc22a) need $E; twice enc22a BOSS=$A22 WATCH=$CARDS22 ;;
 enc22b) need $E; twice enc22b BOSS=$B22 WATCH=$CARDS22 ;;
 enc22-seeds-a) need $E; twice enc22-seeds-a BOSS=$A22 SEED_BASE=19000 WATCH=$CARDS22 ;;
 enc22-seeds-b) need $E; twice enc22-seeds-b BOSS=$B22 SEED_BASE=19000 WATCH=$CARDS22 ;;
+enc23) need $E; twice enc23 FAMILY=23 WATCH=$CARDS23 ;;
+enc23-seeds) need $E; twice enc23-seeds FAMILY=23 SEED_BASE=19000 WATCH=$CARDS23 ;;
+enc23-cards) need $E; once enc23-cards "$2" BOSS=$FIX23 GAMES=4 WATCH=$CARDS23 ENCOUNTERS_JSON=$FX/p8f23/fixtures/encounters-f23.json ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;
