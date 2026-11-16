@@ -311,7 +311,8 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 			// ---------------- A Beautiful Oasis (ULDA_BOSS_62h)
 			// Mirage (0): "Give your opponent an illusion card. If played, they discard a random card." Auto-cast (the wiki), as
-			// AutoCast does: at the start of the boss's turn while the run player's hand holds a card and has room. A copy of a
+			// AutoCast does: after the boss's turn-start draw (EncounterCard.AfterDraw, EncounterRules.AfterTurnStartDraw; a TURN_START
+			// trigger before the draw until the wave-6 merge review) while the run player's hand holds a card and has room. A copy of a
 			// random card of that hand joins it; one of the two is the illusion (marked by the private tag MirageIllusion; the power
 			// holds only its public hand position, TombsD.MirageSlot). Played, the
 			// illusion makes its player discard a random card; at the end of its player's turn it leaves the hand (both still
@@ -320,17 +321,6 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			{
 				Aura = TombsD.MirageSlot(),
 				Trigger = new MultiTrigger(
-					new Trigger(TriggerType.TURN_START)
-					{
-						SingleTask = new CustomTask((g, c, s, t, stack) =>
-						{
-							int cost = (s as HeroPower)?.Cost ?? 0;
-							if (c.RemainingMana < cost || !TombsD.MirageReady(c)) return;
-							c.UsedMana += cost;
-							s[GameTag.TAG_SCRIPT_DATA_NUM_2] = s[GameTag.TAG_SCRIPT_DATA_NUM_2] + 1;
-							TombsD.Mirage(g, c, (HeroPower)s);
-						}),
-					},
 					new Trigger(TriggerType.AFTER_PLAY_CARD)
 					{
 						TriggerSource = TriggerSource.ENEMY,
@@ -344,6 +334,13 @@ namespace SabberStoneCore.CardSets.DungeonRun
 							if (g.CurrentPlayer == c.Opponent) TombsD.IllusionFades((HeroPower)s);
 						}),
 					}),
+			}).AfterDraw = new CustomTask((g, c, s, t, stack) =>
+			{
+				int cost = (s as HeroPower)?.Cost ?? 0;
+				if (c.RemainingMana < cost || !TombsD.MirageReady(c)) return;
+				c.UsedMana += cost;
+				s[GameTag.TAG_SCRIPT_DATA_NUM_2] = s[GameTag.TAG_SCRIPT_DATA_NUM_2] + 1;
+				TombsD.Mirage(g, c, (HeroPower)s);
 			});
 
 			// ---------------- Vessina (ULDA_BOSS_63h)

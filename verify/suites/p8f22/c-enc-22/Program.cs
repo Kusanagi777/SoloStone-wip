@@ -324,6 +324,16 @@ Guard("Oasis", () =>
     EmptyHand(g5.Player1); ToBoss(g5);
     Check("C9 not cast while the run player's hand is full or empty", DungeonRunEncounters.AutoCasts(BossPower(g4)) == 0 && DungeonRunEncounters.AutoCasts(BossPower(g5)) == 0
         && g4.Player1.HandZone.Count == 10 && g5.Player1.HandZone.Count == 0);
+    // Auto-cast comes after the boss's turn-start draw (the wave-5 rule, EncounterRules.AfterTurnStartDraw; wave-6 merge review):
+    // a boss at 1 Health with an empty deck dies of Fatigue in that draw, so Mirage is never cast. Cast at TURN_START (before
+    // the draw) it would copy a card first.
+    var g6 = Fight("ulda_62_oasis", playerDeck: Croc);
+    EmptyDeck(g6.Player2); g6.Player2.Hero.Armor = 0; g6.Player2.Hero.Damage = g6.Player2.Hero.BaseHealth - 1;
+    int h6 = g6.Player1.HandZone.Count;
+    EndTurn(g6);
+    Check("C9b Mirage acts after the turn-start draw: a 1-Health boss with an empty deck dies of Fatigue in its draw and casts nothing (no copy, no use)",
+        g6.State == State.COMPLETE && g6.Player2.Hero.IsDead && DungeonRunEncounters.AutoCasts(BossPower(g6)) == 0 && g6.Player1.HandZone.Count == h6
+        && DungeonRunEncounters.TombsD.Illusion(BossPower(g6)) == null, $"state {g6.State} uses {DungeonRunEncounters.AutoCasts(BossPower(g6))} hand {h6}->{g6.Player1.HandZone.Count}");
     // The run player's own view knows its hand; a played non-illusion of another game never discards.
     var (pview, pv, _, _) = FairView(g2, g2.Player1);
     Check("C10 the run player's own fair view holds its hand's cards (known to their owner)", pv.HandZone.All(p => !(p is Unknown)) && pv.HandZone.Count == g2.Player1.HandZone.Count);
