@@ -358,6 +358,9 @@ namespace SabberStoneCore.Model.Entities
 			if (minion != null && !outgoingApplied && damage > 0 && Actions.CombatRules.Shellfighter(minion) is Minion shellfighter)
 				return shellfighter.TakeDamage(source, damage, combat, outgoingApplied: true);
 
+			// DALA_BOSS_72p Steelskin (phase 8 family 18): "You can't damage yourself" (EncounterRules.PreventsSelfDamage).
+			if (hero != null && damage > 0 && Actions.EncounterRules.PreventsSelfDamage(hero, source)) return 0;
+
 			// TRLA_179 Hir'eek's Hunger (phase 7 S3): damage to its owner's hero on the owner's turn hits the enemy hero instead.
 			if (hero != null && damage > 0 && !IsImmune && CardSets.DungeonRun.DungeonRunShrines.HungerRedirect(hero) is Hero enemy)
 				return CardSets.DungeonRun.DungeonRunShrines.Redirect(enemy, source, damage);

@@ -1307,6 +1307,13 @@ internal sealed class DungeonRunSchedules
                 act.TavernGold = NpcWorldJson.Integer(tavern, "gold", 0);
                 act.TavernOffers = NpcWorldJson.Integer(tavern, "offers", 0);
             }
+            // Family 18: the finale's own twist (acts-v3h: DALA_830 The Finale, the rule the four fixed fights are), rolled at NewRun
+            // like an act's twist.
+            if (finale.TryGetValue("twist", out object ftw) && ftw is IDictionary<string, object> finaleTwist)
+            {
+                act.TwistPool = NpcWorldJson.Strings(finaleTwist, "pool") ?? new List<string>();
+                act.TwistChance = NpcWorldJson.Integer(finaleTwist, "chance", 0);
+            }
             pair.Key.Acts.Add(act);
         }
         foreach (var m in NpcWorldJson.List(root, "modifiers").Cast<object>().Select(NpcWorldJson.Object))

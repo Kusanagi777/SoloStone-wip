@@ -32,6 +32,8 @@
 #   family 16 modes:     bp.sh enc16|enc16-seeds|enc16-carousel|enc16-cards        (twice per call; enc16-cards: the fixture rows play every boss card and treasure)
 #   family 17 modes:     bp.sh enc17|enc17-seeds|enc17-void|enc17-cards <k>  (c-bosspilot-enc09; one run per call, k = 1 or 2; then `bp.sh same <mode>`,
 #                        and for enc17-cards `bp.sh enc17-check`: the fixture rows played every boss card)
+#   family 18 modes:     bp.sh enc18a|enc18b|enc18-finale <k>                     (one run per call, k = 1 or 2; then `bp.sh same <mode>`;
+#                                                                                  enc18-finale on the fixture schedule with the Heist finale enabled)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -108,6 +110,10 @@ CARDS16=DALA_BOSS_38t,LOOTA_811,LOOTA_837,LOOTA_841,LOOTA_842
 # family 17: the boss cards a boss plays from hand; the rows whose power is cast by rule (c-bosspilot-enc09 reports "auto N")
 CARDS17=DALA_BOSS_48t,DALA_BOSS_51t2,DALA_503,DALA_BOSS_56t,DALA_BOSS_59t,DALA_BOSS_59t2,DALA_502
 AUTO17=dala_50_nozari,dala_55_hannigan,dala_56_wagtoggle,dala_59_goya
+# family 18 (Dalaran Heist bosses E): the twelve combat rows (the four finale rows have no floor on the shipped schedule, whose
+# finale is disabled: enc18-finale fights them on the fixture schedule with the finale enabled)
+A18=dala_61_saelorn,dala_62_haro,dala_63_dagg,dala_64_biggs,dala_65_valdera,dala_66_marei
+B18=dala_68_lilayell,dala_70_smiggs,dala_71_anarii,dala_72_kazamon,dala_73_hesutu,dala_74_kara
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -297,6 +303,10 @@ enc17-check) # after `bp.sh same enc17-cards`: every boss card of the family was
   done
   if [ -n "$missing$unplayed" ]; then echo "bosspilot enc17-check FAIL: missing:${missing:- none} unplayed:${unplayed:- none}"; exit 1; fi
   echo "bosspilot enc17-cards: all $(echo ${CARDS17//,/ } | wc -w) boss cards played by the boss" ;;
+enc18a) need $E; once enc18a "$2" BOSS=$A18 ;;
+enc18b) need $E; once enc18b "$2" BOSS=$B18 ;;
+enc18-finale) # the Heist finale (fixture: acts-v3h with its finale enabled): Norroa, Vargoth, Kalec, Khadgar in order, floors 16-19
+  need $E; once enc18-finale "$2" FINALE=1 WATCH=KARA_00_08 SCHEDULE_JSON=$FX/p8f18/fixtures/schedule-finale18.json ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;

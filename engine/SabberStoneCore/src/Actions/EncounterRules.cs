@@ -25,8 +25,8 @@ namespace SabberStoneCore.Actions
 		// ------------------------------------------------------------------ tag table (32630-32699)
 		// One allocation table for every encounter family: a family that needs a counter adds a constant here (32636-32659; family NN's
 		// reserved number is 32635 + NN: taken 32637 by family 02, 32641 by family 06, 32643 by family 08, 32644 by family 09,
-		// 32645 by family 10, 32646 by family 11 and 32652 by family 17; families 12-16 took none), never a number in its own
-		// file, so two families cannot collide. 32660-32699 are the global rules' (DungeonRunGlobalRules: 32660-32662 taken by
+		// 32645 by family 10, 32646 by family 11, 32652 by family 17 and 32653 by family 18; families 12-16 took none), never a
+		// number in its own file, so two families cannot collide. 32660-32699 are the global rules' (DungeonRunGlobalRules: 32660-32662 taken by
 		// family 05 and the wave 2 integration, 32680 by family 06, whose rule-state tags are 32680-32699).
 		// All of them are private: NativeMatch never sends them (IsPrivateTag joins NativeMatch.IsDecisionInternalTag).
 		/// <summary>On the boss's controller: the index of its current form (<see cref="RunEncounter.BossForms"/>).</summary>
@@ -79,6 +79,11 @@ namespace SabberStoneCore.Actions
 		/// Family 17 (Madam Goya's Blackmail; rules in EncounterRules.F17.cs).
 		/// </summary>
 		public const GameTag ExtortionEscrow = (GameTag)32652;
+		/// <summary>
+		/// On a hero power (Kazamon Steelskin's Steelskin, "You can't damage yourself"): damage its owner's sources deal to its
+		/// owner's hero is prevented. Family 18 (rules in EncounterRules.F18.cs: <see cref="PreventsSelfDamage"/>).
+		/// </summary>
+		public const GameTag SelfDamageImmune = (GameTag)32653;
 		/// <summary>
 		/// On the game: one bit per hooked global rule (EncounterCard.HookIndex) that was applied to this match (family 05:
 		/// DungeonRunGlobalRules.Apply runs a rule's apply hook once; a rule with no player enchantment is active by this mark).
