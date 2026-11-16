@@ -17,7 +17,9 @@ using SabberStoneCore.Tasks.PlayerTasks;
 //          Mister Chu's "Confiscated" Goods, c-enc-19 F3). Hero.AddWeapon now drops the replaced weapon's pending removal.
 //   Q1-Q6  A run never meets a boss row of the character it plays (family 19 flag 3: the run hero DALA_Squeamlish against
 //          the Tombs boss ulda_07_squeamlish; the merge review added DALA_Chu / ulda_06_chu and DALA_George /
-//          loot_15_george_karl): a hero row's "excludeBosses" (run-v1.json) keeps those rows out of the act draw.
+//          loot_15_george_karl): a hero row's "excludeBosses" (run-v1.json) keeps those rows out of the act draw. Wave 6
+//          (families 20-24) adds DALA_Barkeye / ulda_50_barkeye (family 21 flag 6), DALA_Vessina / ulda_63_vessina (family
+//          22) and DALA_Tekahn / ulda_67_tekahn (family 24's finale row, Q7).
 //   E1-E3  Unstable Evolution's hand copy (LOOT_504t) never costs less than (1) (the Echo copy floor; the client prints the
 //          card with Echo since patch 23.0.3): under Millhouse Manastorm's "enemy spells cost (0)" the run player's copies
 //          looped without end against Rasil (bp.sh enc15, "stuck after 1500 actions", found by this regression).
@@ -146,13 +148,19 @@ Guard("Q", () =>
     // Every hero row whose character is also an encounter's boss, with a class row of the same class (Q5): the Heist villains
     // Squeamlish and Mr. Chu are the Tombs bosses Squeamlish and Mister Chu; George the Fallen is the George of the Kobolds
     // boss George and Karl (hearthstone.wiki.gg George_the_Fallen, Lore: "They later make an appearance as a boss in Dungeon Run").
+    // Wave 6: the Heist villains Ol' Barkeye and Vessina are the Tombs bosses Ol' Barkeye and Vessina (hearthstone.wiki.gg
+    // Ol'_Barkeye_(boss) and Vessina_(boss), Lore: "one of League of E.V.I.L.'s henchmen that made debut in The Dalaran Heist");
+    // the Heist villain Tekahn (Dark Pharaoh Tekahn) is Tekahn, Plague Lord of Flame, family 24's finale row (Q7).
     var pairs = new[] { (Hero: "DALA_Squeamlish", Boss: "ulda_07_squeamlish", Class: "DRUID"), (Hero: "DALA_Chu", Boss: "ulda_06_chu", Class: "WARRIOR"),
-        (Hero: "DALA_George", Boss: "loot_15_george_karl", Class: "PALADIN") };
+        (Hero: "DALA_George", Boss: "loot_15_george_karl", Class: "PALADIN"), (Hero: "DALA_Barkeye", Boss: "ulda_50_barkeye", Class: "HUNTER"),
+        (Hero: "DALA_Vessina", Boss: "ulda_63_vessina", Class: "SHAMAN") };
+    var finalePairs = new[] { (Hero: "DALA_Tekahn", Boss: "ulda_67_tekahn") };
     var errors = DungeonRunValidator.Validate(data, null);
     Check("Q1 the shipped data validates", errors.Count == 0, string.Join(" | ", errors.Take(3)));
     var excluding = data.Classes.Where(c => c.ExcludeBosses.Count > 0).Select(c => c.Id + ":" + string.Join(",", c.ExcludeBosses)).OrderBy(x => x).ToList();
-    Check("Q2 exactly the hero rows of a boss's character exclude that boss row (Squeamlish, Mr. Chu, George the Fallen), each a hero row naming one encounter row",
-        excluding.SequenceEqual(pairs.Select(p => p.Hero + ":" + p.Boss).OrderBy(x => x)) && pairs.All(p => data.Class(p.Hero).IsHero && data.Boss(p.Boss).IsEncounter),
+    Check("Q2 exactly the hero rows of a boss's character exclude that boss row (Squeamlish, Mr. Chu, George the Fallen; since wave 6 Ol' Barkeye, Vessina and Tekahn), each a hero row naming one encounter row",
+        excluding.SequenceEqual(pairs.Select(p => p.Hero + ":" + p.Boss).Concat(finalePairs.Select(p => p.Hero + ":" + p.Boss)).OrderBy(x => x))
+        && pairs.Select(p => (p.Hero, p.Boss)).Concat(finalePairs.Select(p => (p.Hero, p.Boss))).All(p => data.Class(p.Hero).IsHero && data.Boss(p.Boss).IsEncounter),
         string.Join(" ", excluding));
     DungeonRunData Copy() => DungeonRunData.Parse(R("dungeon-run/run-v1.json"), R("dungeon-run/pool-v1.json"), R("npc/decks-v1.json"), R("dungeon-run/catalog-v1.json"),
         R("dungeon-run/schedule-v1.json"), R("dungeon-run/tavern-v1.json"), R("dungeon-run/encounters-v1.json"));
@@ -174,6 +182,23 @@ Guard("Q", () =>
         Check($"Q3 {Seeds} {Hero} runs on acts-v3h: none meets {Boss}", met == 0, "met in " + met);
         Check($"Q4 the same {Seeds} seeds with {Hero}'s exclusion removed: some run meets {Boss} (Q3 can fail)", metWithout > 0, "met in " + metWithout);
         Check($"Q5 the exclusion is the hero row's only: {Seeds} {Class} class-row runs meet {Boss} in some runs", metClass > 0, "met in " + metClass);
+    }
+    // Tekahn's row is the acts-v3t finale (tier finale): no act pool holds it, so no act draw meets it with or without the key;
+    // a finale's fixed bosses are not filtered by excludeBosses (the close-out, which enables that finale, decides it).
+    foreach (var (Hero, Boss) in finalePairs)
+    {
+        var row = data.Class(Hero);
+        var without = Copy();
+        without.Class(Hero).ExcludeBosses.Clear();
+        var runWithout = new DungeonRun(without);
+        int met = 0, metWithout = 0;
+        for (long seed = 1; seed <= Seeds; seed++)
+        {
+            if (run.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed, schedule: "acts-v3h").BossSequence.Contains(Boss)) met++;
+            if (runWithout.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed, schedule: "acts-v3h").BossSequence.Contains(Boss)) metWithout++;
+        }
+        Check($"Q7 {Boss} is a finale row (in no act pool): {Seeds} {Hero} acts-v3h runs meet it {met} times with the key and {metWithout} without",
+            data.Boss(Boss).Tier == "finale" && met == 0 && metWithout == 0, "met " + met + " / " + metWithout + ", tier " + data.Boss(Boss).Tier);
     }
     var bogus = Copy();
     bogus.Class("DALA_Squeamlish").ExcludeBosses.Add("ulda_99_nobody");
