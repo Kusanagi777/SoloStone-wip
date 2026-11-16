@@ -28,6 +28,7 @@
 #   family 12 modes:     bp.sh enc12|enc12-seeds|enc12-hidden                     (twice per call)
 #   family 13 modes:     bp.sh enc13a|enc13b|enc13-seeds   (the nine Rumble Run champions, every shrine variant; twice per call)
 #   family 14 modes:     bp.sh enc14|enc14-seeds|enc14-flight|enc14-cards           (twice per call; enc14-cards: the fixture rows play every boss card)
+#   family 15 modes:     bp.sh enc15|enc15-seeds|enc15-rat|enc15-toys            (twice per call)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -96,6 +97,8 @@ B13=trl_205_loti,trl_206_jeklik,trl_207_malacrass,trl_208_talanji
 CARDS13=TRLA_168,TRLA_129s
 # family 14: the boss cards played from hand (the four magical feats, "Scourgelord" Dazzik)
 CARDS14=DALA_BOSS_03t,DALA_BOSS_03t2,DALA_BOSS_03t3,DALA_BOSS_03t4,DALA_BOSS_06dk
+# family 15 (Dalaran Heist bosses B): the boss card Jepetto's deck lists (the Underbelly Rat is summoned by A Tale of Kings)
+CARDS15=DALA_BOSS_25t
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -258,6 +261,12 @@ enc14-cards) need $E; twice enc14-cards BOSS=fix14_dazzik,fix14_akazamzarak GAME
   # every boss card of the family was played from hand by a boss at least once
   unplayed=$(tail -n 1 "$R/bp-enc14-cards-a.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Za-z0-9_]+ x0( |$)" | xargs)
   [ -z "$unplayed" ] && echo "bosspilot enc14-cards: all 5 boss cards played by the boss" || echo "bosspilot enc14-cards UNPLAYED: $unplayed" ;;
+enc15) need $E; twice enc15 FAMILY=15 WATCH=$CARDS15 ;;
+enc15-seeds) need $E; twice enc15-seeds FAMILY=15 SEED_BASE=19000 WATCH=$CARDS15 ;;
+enc15-rat) # The Rat King: the Underbelly Rat's hero replacement (form changes) in games he loses or nearly loses
+  need $E; twice enc15-rat BOSS=dala_30_rat_king GAMES=8 ;;
+enc15-toys) # Jepetto Joybuzz: Assembly on both sides and Hoard of Toys played from hand by the boss
+  need $E; twice enc15-toys BOSS=dala_25_jepetto GAMES=8 WATCH=$CARDS15 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;

@@ -165,8 +165,10 @@ var transport = new Dictionary<string, string>
     {
         var p = DungeonRunAdmission.Classify(C(id), id, AdmitScope.Player, null, catalogRun: true);
         var b = DungeonRunAdmission.Classify(C(id), id, AdmitScope.Boss, null, catalogRun: true);
-        Check($"T2 admission {id}: a row admitting the player (catalog run), never the boss",
-            p.Subject && p.Admitted && !b.Admitted && DungeonRunAdmission.RuleFor(id) != null, p.Family + " " + p.Admit);
+        // Phase 8 family 15: Mama Diggs's Excavate finds A Small Rock, so a catalog run admits GILA_500p2t for a boss too (its legacy verdict stays the player's).
+        bool rockForBoss = id == "GILA_500p2t" && DungeonRunAdmission.RuleFor(id)?.Family == "run-treasure-boss-find" && !DungeonRunAdmission.Classify(C(id), id, AdmitScope.Boss).Admitted;
+        Check($"T2 admission {id}: a row admitting the player (catalog run), never the boss{(id == "GILA_500p2t" ? " (but Mama Diggs's Excavate, family 15, on a catalog run)" : "")}",
+            p.Subject && p.Admitted && (!b.Admitted || rockForBoss && b.Admitted) && DungeonRunAdmission.RuleFor(id) != null, p.Family + " " + p.Admit);
         Check($"T2 admission {id}: the boss's generation never yields it", DungeonRunAdmission.GeneratedRejectsBoss(true).Contains(id));
     }
     Check("T2 admission GILA_509: the secret-generated row, admitted for the player on catalog runs only (legacy runs block generated Secrets)",
