@@ -150,16 +150,18 @@ Guard("Q", () =>
     // boss George and Karl (hearthstone.wiki.gg George_the_Fallen, Lore: "They later make an appearance as a boss in Dungeon Run").
     // Wave 6: the Heist villains Ol' Barkeye and Vessina are the Tombs bosses Ol' Barkeye and Vessina (hearthstone.wiki.gg
     // Ol'_Barkeye_(boss) and Vessina_(boss), Lore: "one of League of E.V.I.L.'s henchmen that made debut in The Dalaran Heist");
-    // the Heist villain Tekahn (Dark Pharaoh Tekahn) is Tekahn, Plague Lord of Flame, family 24's finale row (Q7).
+    // the Heist villain Tekahn (Dark Pharaoh Tekahn) is Tekahn, Plague Lord of Flame, family 24's finale row: no act pool holds
+    // it and a finale's fixed bosses ignore excludeBosses, so a key there would do nothing (wave-6 merge review). The pair is open
+    // for the close-out (HANDOFF 3.4); Q7 fails once a shipped finale can hand that row to a run.
     var pairs = new[] { (Hero: "DALA_Squeamlish", Boss: "ulda_07_squeamlish", Class: "DRUID"), (Hero: "DALA_Chu", Boss: "ulda_06_chu", Class: "WARRIOR"),
         (Hero: "DALA_George", Boss: "loot_15_george_karl", Class: "PALADIN"), (Hero: "DALA_Barkeye", Boss: "ulda_50_barkeye", Class: "HUNTER"),
         (Hero: "DALA_Vessina", Boss: "ulda_63_vessina", Class: "SHAMAN") };
-    var finalePairs = new[] { (Hero: "DALA_Tekahn", Boss: "ulda_67_tekahn") };
+    var finalePairs = new[] { (Hero: "DALA_Tekahn", Boss: "ulda_67_tekahn") }; // open for the close-out (Q7), no key
     var errors = DungeonRunValidator.Validate(data, null);
     Check("Q1 the shipped data validates", errors.Count == 0, string.Join(" | ", errors.Take(3)));
     var excluding = data.Classes.Where(c => c.ExcludeBosses.Count > 0).Select(c => c.Id + ":" + string.Join(",", c.ExcludeBosses)).OrderBy(x => x).ToList();
-    Check("Q2 exactly the hero rows of a boss's character exclude that boss row (Squeamlish, Mr. Chu, George the Fallen; since wave 6 Ol' Barkeye, Vessina and Tekahn), each a hero row naming one encounter row",
-        excluding.SequenceEqual(pairs.Select(p => p.Hero + ":" + p.Boss).Concat(finalePairs.Select(p => p.Hero + ":" + p.Boss)).OrderBy(x => x))
+    Check("Q2 exactly the hero rows of a boss's character in an act pool exclude that boss row (Squeamlish, Mr. Chu, George the Fallen; since wave 6 Ol' Barkeye and Vessina), each a hero row naming one encounter row",
+        excluding.SequenceEqual(pairs.Select(p => p.Hero + ":" + p.Boss).OrderBy(x => x))
         && pairs.Select(p => (p.Hero, p.Boss)).Concat(finalePairs.Select(p => (p.Hero, p.Boss))).All(p => data.Class(p.Hero).IsHero && data.Boss(p.Boss).IsEncounter),
         string.Join(" ", excluding));
     DungeonRunData Copy() => DungeonRunData.Parse(R("dungeon-run/run-v1.json"), R("dungeon-run/pool-v1.json"), R("npc/decks-v1.json"), R("dungeon-run/catalog-v1.json"),
@@ -183,22 +185,20 @@ Guard("Q", () =>
         Check($"Q4 the same {Seeds} seeds with {Hero}'s exclusion removed: some run meets {Boss} (Q3 can fail)", metWithout > 0, "met in " + metWithout);
         Check($"Q5 the exclusion is the hero row's only: {Seeds} {Class} class-row runs meet {Boss} in some runs", metClass > 0, "met in " + metClass);
     }
-    // Tekahn's row is the acts-v3t finale (tier finale): no act pool holds it, so no act draw meets it with or without the key;
-    // a finale's fixed bosses are not filtered by excludeBosses (the close-out, which enables that finale, decides it).
+    // Tekahn's row is the acts-v3t finale (tier finale): no act pool holds it, so no act draw meets it, and a finale's fixed
+    // bosses are not filtered by excludeBosses. Today no shipped finale names it (acts-v3t's finale ships disabled, the row
+    // "pending"), so no run can meet it. This check is the close-out's tripwire: it fails on purpose once a shipped finale
+    // (or an act pool) can hand the row to a run; the close-out then decides what a DALA_Tekahn run meets there and pins it.
     foreach (var (Hero, Boss) in finalePairs)
     {
         var row = data.Class(Hero);
-        var without = Copy();
-        without.Class(Hero).ExcludeBosses.Clear();
-        var runWithout = new DungeonRun(without);
-        int met = 0, metWithout = 0;
+        var naming = data.Schedules.Schedules.Values.Where(sc => sc.Acts.Any(x => x.IsFinale && x.FixedBosses.Contains(Boss))).Select(sc => sc.Id).ToList();
+        int met = 0;
         for (long seed = 1; seed <= Seeds; seed++)
-        {
             if (run.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed, schedule: "acts-v3h").BossSequence.Contains(Boss)) met++;
-            if (runWithout.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed, schedule: "acts-v3h").BossSequence.Contains(Boss)) metWithout++;
-        }
-        Check($"Q7 {Boss} is a finale row (in no act pool): {Seeds} {Hero} acts-v3h runs meet it {met} times with the key and {metWithout} without",
-            data.Boss(Boss).Tier == "finale" && met == 0 && metWithout == 0, "met " + met + " / " + metWithout + ", tier " + data.Boss(Boss).Tier);
+        Check($"Q7 {Boss} (the character of {Hero}, no key) is a finale row in no act pool and no shipped finale's fixed bosses: {Seeds} {Hero} acts-v3h runs meet it {met} times (open for the close-out)",
+            data.Boss(Boss).Tier == "finale" && naming.Count == 0 && met == 0 && row.ExcludeBosses.Count == 0,
+            "met " + met + ", tier " + data.Boss(Boss).Tier + ", finales " + string.Join(",", naming));
     }
     var bogus = Copy();
     bogus.Class("DALA_Squeamlish").ExcludeBosses.Add("ulda_99_nobody");

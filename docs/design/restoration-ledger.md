@@ -756,14 +756,14 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 
 | Input | SHA-256 (first 16) |
 | --- | --- |
-| `data/dungeon-run/catalog-v1.json` | `8bad87efdb81eb09` |
+| `data/dungeon-run/catalog-v1.json` | `3ea21c8a034be992` |
 | `data/dungeon-run/encounters-v1.json` | `51bd9760b8a25132` |
 | `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
 | `data/dungeon-run/reference/adventure-reference.csv` | `4a608dfa596733e7` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |
 | `data/dungeon-run/reference/buckets.json` | `b3015218a0ea9193` |
 | `data/dungeon-run/reference/client-tables.json` | `c7b51c98f568706a` |
-| `data/dungeon-run/run-v1.json` | `f932d6493d4b4091` |
+| `data/dungeon-run/run-v1.json` | `4b192445c21a2231` |
 | `data/dungeon-run/schedule-v1.json` | `36b0c79d6a1fe287` |
 | `data/dungeon-run/tavern-v1.json` | `f69c185d773c8414` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |

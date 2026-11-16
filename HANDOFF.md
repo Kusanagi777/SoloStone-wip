@@ -130,11 +130,15 @@ From the wave-6 integration (stage A; details in `handoff/phase8/reports/integra
   Hagatha's `incompatibleModifiers` (mod_iron_bosses, mod_open_road, mod_hot_start) follow from her own row (fixed 100
   Health, the hero switch); the four nemeses take the act curve's Health plus 10 and neither the wiki nor the client data
   says anything about SoloStone's modifiers, so they list none. On a seed whose act II major is a nemesis the act's modifier
-  node may now offer those three (c-enc-model J1: Whirt 46 -> 51 with mod_iron_bosses). Not redesigned here.
-- A finale's fixed bosses are not filtered by a hero row's `excludeBosses`: DALA_Tekahn excludes ulda_67_tekahn (the same
-  character), which no act pool holds; when the close-out enables acts-v3t's finale on Tekahn it decides what a DALA_Tekahn
-  run meets there. Infinite Toki is not excluded for the Toki hero row: the original Monster Hunt makes her Toki's own
-  Final Nemesis.
+  node may now offer those three (on the family 23 lane c-enc-model J1's seed 5001 took mod_iron_bosses, Whirt 46 -> 51; on
+  the merged tree the same seed's first modifier is mod_lean_supply and Whirt stays at 46, which J1 now pins). Not
+  redesigned here.
+- Open for the close-out: the Heist hero Tekahn (DALA_Tekahn) and the Plague Lord Tekahn (ulda_67_tekahn, family 24's
+  finale row) are the same character. No act pool holds the row and a finale's fixed bosses are not filtered by
+  `excludeBosses`, so a key would do nothing; DALA_Tekahn has none (the merge review dropped stage A's inert key). When the
+  close-out enables acts-v3t's finale on Tekahn it decides what a DALA_Tekahn run meets there and pins it: c-w5fix Q7 fails
+  on purpose once a shipped finale (or an act pool) can hand that row to a run. Infinite Toki is not excluded for the Toki
+  hero row: the original Monster Hunt makes her Toki's own Final Nemesis.
 
 From the wave-5 integration (details in `handoff/phase8/reports/integrate-wave5.md`):
 - Closed: auto-cast powers act after the turn-start draw (`EncounterRules.AfterTurnStartDraw`); a run never meets a boss
