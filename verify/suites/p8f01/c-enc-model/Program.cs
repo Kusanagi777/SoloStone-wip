@@ -595,10 +595,12 @@ Guard("J", () =>
 {
     var s = At(run, "MAGE", 5001, "dala_21_whirt", 8);
     var plan = run.BuildPlan(s, all);
-    // Family 23: this seed's act II major is now Glinda Crowskin, who (unlike Hagatha) leaves mod_iron_bosses in the act's
-    // modifier offer; the walk takes the first offer, so Whirt's Health is the act curve's 46 plus Iron Bosses' 5.
-    Check("J1 Whirt's plan: the boss's generated Secrets on, the act curve's Health (46) plus the act's Iron Bosses modifier (5), no forms, no shrine", plan.BossGeneratedSecrets && plan.BossHealth == 51
-        && s.ActiveRules.Select(x => x.Id).SequenceEqual(new[] { "mod_iron_bosses" }) && plan.BossForms == null && plan.BossShrine == null
+    // Family 23: this seed's act II major is now Glinda Crowskin, who (unlike Hagatha) leaves Hagatha's three modifiers in the
+    // act's offer; the walk takes the first offer. On the family 23 lane that was mod_iron_bosses (46 + 5 = 51); on the wave-6
+    // tree (the Tombs rows of families 20-22 and the lords of family 24 move the walk) it is mod_lean_supply, which changes no
+    // boss Health: Whirt's Health is the act curve's 46.
+    Check("J1 Whirt's plan: the boss's generated Secrets on, the act curve's Health (46; the act's modifier, Lean Supply, changes no boss Health), no forms, no shrine", plan.BossGeneratedSecrets && plan.BossHealth == 46
+        && s.ActiveRules.Select(x => x.Id).SequenceEqual(new[] { "mod_lean_supply" }) && plan.BossForms == null && plan.BossShrine == null
         && plan.EncounterId == "dala_21_whirt" && plan.BossHeroPowerId == "DALA_BOSS_21p", "health " + plan.BossHealth + " rules " + string.Join(",", s.ActiveRules.Select(x => x.Id)) + " seq " + string.Join(",", s.BossSequence));
     var cfg = new GameConfig { RandomSeed = 5, Shuffle = true, SkipMulligan = false, History = false, Logging = false, FormatType = FormatType.FT_WILD };
     DungeonRunSetup.Configure(cfg, plan);

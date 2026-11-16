@@ -316,8 +316,12 @@ Guard("Shivers", () =>
         && power[EncounterRules.PowerActive] == 1 && Cost("GILA_BOSS_60p") == 0);
     ToDeck(boss, Axe);
     int uses = DungeonRunEncounters.AutoCasts(power);
+    // Wave 6: an auto-cast power acts after the turn-start draw (EncounterRules.AfterTurnStartDraw), so the premise is that the
+    // shuffled-in weapon is not the deck's top card (the draw takes another card; D3b covers a weapon on top).
+    bool axeUnderTop = boss.DeckZone.Count > 1 && boss.DeckZone.TopCard.Card.Id != Axe;
     ToBoss(g);
-    Check("D3 at the start of his turn with a weapon in his deck, the weapon is drawn (one use)", DungeonRunEncounters.AutoCasts(power) == uses + 1 && boss.HandZone.Any(p => p.Card.Id == Axe)
+    Check("D3 at the start of his turn with a weapon in his deck (under the top card), the turn's draw takes another card and Plunder draws the weapon (one use)",
+        axeUnderTop && DungeonRunEncounters.AutoCasts(power) == uses + 1 && boss.HandZone.Any(p => p.Card.Id == Axe)
         && boss.DeckZone.All(p => !(p is Weapon)));
     int used = DungeonRunEncounters.AutoCasts(power);
     Round(g);
@@ -325,9 +329,9 @@ Guard("Shivers", () =>
     // Kingsbane's cycle: destroyed by the run player's Acidic Swamp Ooze, shuffled into his deck, drawn back by Plunder.
     ToPlayer(g);
     Play(g, ToHand(g, player, Ooze));
-    bool shuffled = boss.Hero.Weapon == null && boss.DeckZone.Any(p => p.Card.Id == Kingsbane);
+    bool shuffled = boss.Hero.Weapon == null && boss.DeckZone.Any(p => p.Card.Id == Kingsbane) && boss.DeckZone.TopCard.Card.Id != Kingsbane;
     ToBoss(g);
-    Check("D5 Kingsbane's Deathrattle shuffles it into his deck and Plunder draws it back at his next turn start", shuffled && boss.HandZone.Any(p => p.Card.Id == Kingsbane)
+    Check("D5 Kingsbane's Deathrattle shuffles it into his deck (under the top card) and Plunder draws it back at his next turn start, after the turn's draw", shuffled && boss.HandZone.Any(p => p.Card.Id == Kingsbane)
         && DungeonRunEncounters.AutoCasts(power) == used + 1);
     // A full hand: not cast (the weapon would burn).
     ToPlayer(g);
@@ -336,6 +340,16 @@ Guard("Shivers", () =>
     int before = DungeonRunEncounters.AutoCasts(power);
     ToBoss(g);
     Check("D6 with his hand full it is not cast", DungeonRunEncounters.AutoCasts(power) == before);
+    // Wave 6: Plunder acts after the turn-start draw. A weapon on top of his deck is that draw, so the cast finds no weapon left.
+    var gt = Fight(Shivers);
+    Controller bt = gt.Player2;
+    bt.DeckZone.Add(Entity.FromCard(bt, C(Axe)));
+    bool axeOnTop = bt.DeckZone.TopCard.Card.Id == Axe && bt.DeckZone.Count(p => p is Weapon) == 1;
+    int castsT = DungeonRunEncounters.AutoCasts(bt.Hero.HeroPower);
+    ToBoss(gt);
+    Check("D3b after the draw: a weapon on top of his deck is the turn's draw, and Plunder, cast after it, finds no weapon and is not cast",
+        axeOnTop && bt.HandZone.Count(p => p.Card.Id == Axe) == 1 && bt.DeckZone.All(p => !(p is Weapon)) && DungeonRunEncounters.AutoCasts(bt.Hero.HeroPower) == castsT,
+        "top " + axeOnTop + " casts " + DungeonRunEncounters.AutoCasts(bt.Hero.HeroPower) + "/" + castsT);
     // Cursed Crewmember.
     var g2 = Fight(Shivers);
     boss = g2.Player2;

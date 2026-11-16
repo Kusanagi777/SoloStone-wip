@@ -670,7 +670,10 @@ Guard("Rows", () =>
         ("ulda_36_kasa", "36", "Kasa Softspeaker", "2", 4, "extended", 2, "forcedAttack"),
     };
     Check("S2 family 20 holds exactly these eighteen rows, appended after the earlier families' rows", data.Encounters.Where(b => b.Family == "20").Select(b => b.Id)
-        .SequenceEqual(rows.Select(r => r.id)) && data.Encounters.SkipWhile(b => b.Family != "20").All(b => b.Family == "20"),
+        .SequenceEqual(rows.Select(r => r.id))
+        // wave 6: later families' rows follow (families 20-24): the family's rows are one block and only later families come after it
+        && data.Encounters.SkipWhile(b => b.Family != "20").TakeWhile(b => b.Family == "20").Count() == rows.Length
+        && data.Encounters.SkipWhile(b => b.Family != "20").SkipWhile(b => b.Family == "20").All(b => string.CompareOrdinal(b.Family, "20") > 0),
         string.Join(",", data.Encounters.Where(b => b.Family == "20").Select(b => b.Id)));
     var chapterTag = new Dictionary<int, GameTag> { { 1, (GameTag)1202 }, { 2, (GameTag)1203 }, { 3, (GameTag)1204 }, { 4, (GameTag)1205 } };
     foreach (var r in rows)
