@@ -11,6 +11,10 @@
 #     rules05        the 18 family 05 rules        cross05   the 18 rules on the 07/08 bosses (cross05.sh)
 #     w4             the family 11/12/13 modes (wave 4): enc11-pete enc12 enc12-seeds enc12-hidden enc13a enc13b enc13-seeds,
 #                    and enc11a enc11b enc11-cards enc11-shrine (one run per call, then `bp.sh same`)
+#     w5             the family 14-19 modes (wave 5): enc14 enc14-seeds enc14-flight enc14-cards enc15 enc15-seeds enc15-rat
+#                    enc15-toys enc16 enc16-seeds enc16-carousel enc16-cards enc19a enc19b enc19-seeds-a enc19-seeds-b, and
+#                    enc17 enc17-seeds enc17-void enc17-cards enc18a enc18b enc18-finale (one run per call, then `bp.sh same`),
+#                    then enc17-check
 # Each stage writes verify/.out/final-<stage>.log (and prints it). The wave-3 set takes about 3 hours on a quiet machine
 # (cross06 and rules06 are most of it); the five extra stages about 2 more. On a machine shared with other harness runs,
 # run stages or slices through the harness lock instead (README.md), each call under about 6 minutes.
@@ -53,6 +57,13 @@ for stage in "$@"; do
     for m in enc11a enc11b enc11-cards enc11-shrine; do
       bash "$B/bp.sh" $m 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" $m 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same $m >> "$L" 2>&1
     done ;;
+  w5)
+    for m in enc14 enc14-seeds enc14-flight enc14-cards enc15 enc15-seeds enc15-rat enc15-toys enc16 enc16-seeds enc16-carousel enc16-cards \
+      enc19a enc19b enc19-seeds-a enc19-seeds-b; do bash "$B/bp.sh" $m 2>&1 | cut -c1-700 >> "$L"; done
+    for m in enc17 enc17-seeds enc17-void enc17-cards enc18a enc18b enc18-finale; do
+      bash "$B/bp.sh" $m 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" $m 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same $m >> "$L" 2>&1
+    done
+    bash "$B/bp.sh" enc17-check >> "$L" 2>&1 ;;
   rules05) for r in $RULES05; do bash "$B/bp.sh" rules05 $r 2>&1 | cut -c1-330 >> "$L"; done ;;
   cross05) : > "$OUT/bp/cross05.log"; bash "$B/cross05.sh" $RULES05 > /dev/null; cat "$OUT/bp/cross05.log" >> "$L" ;;
   hall) { bash "$B/hall.sh" harness; bash "$B/hall.sh" 1 999; bash "$B/hall.sh" same; } >> "$L" 2>&1 ;;

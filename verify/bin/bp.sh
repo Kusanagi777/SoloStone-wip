@@ -262,7 +262,7 @@ enc11a) need $E; once enc11a "$2" BOSS=$A11 GAMES=4 WATCH=$CARDS11 ;;
 enc11b) need $E; once enc11b "$2" BOSS=$B11 GAMES=4 WATCH=$CARDS11 ;;
 enc11-pete) need $E; twice enc11-pete BOSS=fix11_pete GAMES=6 ENCOUNTERS_JSON=$FX/p8f11/fixtures/encounters-f11.json ;;
 enc11-cards) need $E; once enc11-cards "$2" BOSS=fix11_brushwood,fix11_damph,fix11_azalina,fix11_raeth GAMES=6 WATCH=$CARDS11 ENCOUNTERS_JSON=$FX/p8f11/fixtures/encounters-f11.json
-  unplayed=$(tail -n 1 "$LOGS/enc11-cards-$2.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Z0-9_]+ x0( |$)" | xargs)
+  unplayed=$(tail -n 1 "$LOGS/enc11-cards-$2.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Za-z0-9_]+ x0( |$)" | xargs)
   [ -z "$unplayed" ] && echo "bosspilot enc11-cards: the boss played Hack, Grave Mistake, Soul Assimilation and Shallow Graves from hand" || echo "bosspilot enc11-cards UNPLAYED: $unplayed" ;;
 enc11-shrine) need $E; once enc11-shrine "$2" BOSS=$PAD11,$SHR11 GAMES=1
   echo "fights against a shrine row (TRLA_209h_*) by the nine rows: $(grep -v "^$W11" "$LOGS/enc11-shrine-$2.txt" | grep -c 'TRLA_209h_') of 9" ;;
