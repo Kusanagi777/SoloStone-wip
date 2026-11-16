@@ -1,0 +1,20 @@
+fix16_tipsi        DALA t3      floor  8 DRUID/druid_thicket/CS2_017                    deck 29 -> player   turns  13 decisions  14 fallbacks  0 health  51 mana+0 power  1 checks ok
+fix16_tipsi        DALA t3      floor  8 HUNTER/hunter_kennel/DS1h_292                  deck 30 -> player   turns  31 decisions  63 fallbacks  0 health  51 mana+0 power  8 checks ok
+fix16_tipsi        DALA t3      floor  8 MAGE/mage_rimeward/CS2_034                     deck 31 -> boss     turns  20 decisions  35 fallbacks  0 health  46 mana+0 power  4 checks ok
+fix16_tipsi        DALA t3      floor  8 PALADIN/paladin_gleaming/CS2_101               deck 20 -> player   turns  21 decisions  34 fallbacks  0 health  46 mana+0 power  4 checks ok
+fix16_tipsi        DALA t3      floor  8 PRIEST/priest_mending/CS1h_001                 deck 28 -> player   turns  13 decisions  17 fallbacks  0 health  51 mana+0 power  3 checks ok
+fix16_tipsi        DALA t3      floor  8 ROGUE/rogue_backalley/CS2_083b                 deck 15 -> boss     turns  20 decisions  38 fallbacks  0 health  46 mana+0 power  2 checks ok
+fix16_toomba       DALA t3      floor  8 SHAMAN/shaman_stormdebt/CS2_049                deck 34 -> boss     turns  14 decisions  34 fallbacks  0 health  46 mana+0 power  0 checks ok
+fix16_toomba       DALA t3      floor  8 WARLOCK/warlock_fiendpact/CS2_056              deck 30 -> boss     turns  12 decisions  37 fallbacks  0 health  46 mana+0 power  0 checks ok
+fix16_toomba       DALA t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 35 -> player   turns  21 decisions  53 fallbacks  0 health  46 mana+0 power  8 checks ok
+fix16_toomba       DALA t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 34 -> boss     turns   8 decisions  27 fallbacks  0 health  46 mana+0 power  1 checks ok
+fix16_toomba       DALA t3      floor  8 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 33 -> player   turns  21 decisions  41 fallbacks  0 health  46 mana+0 power  1 checks ok
+fix16_toomba       DALA t3      floor  8 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 34 -> boss     turns  21 decisions  51 fallbacks  0 health  46 mana+0 power  0 checks ok
+fix16_quel         DALA t3      floor  8 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 33 -> boss     turns   6 decisions  13 fallbacks  0 health  46 mana+1 power  0 checks ok
+fix16_quel         DALA t3      floor  8 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 32 -> boss     turns  10 decisions  23 fallbacks  0 health  46 mana+0 power  1 checks ok
+fix16_quel         DALA t3      floor  8 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 34 -> boss     turns   6 decisions   7 fallbacks  0 health  51 mana+0 power  0 checks ok
+fix16_quel         DALA t3      floor  8 GILA_500h3/mh_tess_scavenger/GILA_500p2        deck 31 -> boss     turns   6 decisions   7 fallbacks  0 health  46 mana+0 power  0 checks ok
+fix16_quel         DALA t3      floor  8 GILA_600h/mh_darius_militia/GILA_600p          deck 35 -> boss     turns   6 decisions   7 fallbacks  0 health  46 mana+0 power  0 checks ok
+fix16_quel         DALA t3      floor  8 GILA_400h/mh_shaw_kennel/GILA_400p             deck 30 -> boss     turns   6 decisions   7 fallbacks  0 health  46 mana+0 power  0 checks ok
+encounter run: schedule acts-v3h; power unused: -; form unreached: -
+games 18, boss wins 12, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched DALA_BOSS_38t x20 LOOTA_811 x0 LOOTA_837 x11 LOOTA_841 x10 LOOTA_842 x6, most boss Secrets 0

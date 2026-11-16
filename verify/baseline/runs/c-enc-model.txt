@@ -1,13 +1,13 @@
 PASS A1 the six data files validate together
 PASS A2 the data without the encounter file validates and holds the 20 custom bosses only
 PASS A3 the encounters follow the custom bosses, whose order is unchanged
-PASS A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; wave 4: family 11's thirteen, family 12's thirteen and family 13's eight Rumble Run champions beside Voone; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)  (01:5,07:18,08:17,09:11,10:15,11:13,12:13,13:9,23:1,24:1)
+PASS A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; wave 4: family 11's thirteen, family 12's thirteen and family 13's eight Rumble Run champions beside Voone; wave 5: family 14's fifteen, family 15's fourteen, family 16's fourteen, family 17's fourteen, family 18's sixteen, family 19's eighteen; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)  (01:5,07:18,08:17,09:11,10:15,11:13,12:13,13:9,14:15,15:14,16:14,17:14,18:16,19:18,23:1,24:1)
 PASS A5 Icarax: 300 fixed Health, two more forms at 200 and 100 with their own heroes, powers and decks
 PASS A6 Hagatha: 100 fixed Health, 2 start Mana Crystals, a 40-card deck, two hero cards with 12 cards and 3 passives each
 PASS A7 Whirt: tier 3, 30 cards, the boss's generated Secrets on
 PASS A8 Voone: tier 2, three shrine variants (the Warrior shrines), each a 30-card deck
 PASS A9 every deck states its kind and source; a deck is authentic exactly when nothing was substituted and it is not a curated one (family 09: the Treasure Vault, which has no deck on the wiki)
-PASS A10 the rejected list names Toki's hero card with its reason and lift
+PASS A10 the rejected list names Toki's hero card with its reason and lift, then (family 18) Commander Bolan's with his data gap
 PASS A11 PoolOf maps tiers to pools
 PASS B1 an unknown tier  (1 errors; first: boss dala_21_whirt: unknown tier 9)
 PASS B2 an unknown flag  (1 errors; first: boss dala_21_whirt: unknown flag sparkly)
@@ -60,9 +60,9 @@ PASS C13 the finale's last win wins the run
 PASS D1 legacy, acts-v1, acts-v2 and act1 boss sequences for 200 seeds x 2 unlock states and 1100 new runs match the pre-phase-8 recording (2700 lines)  (0 lines differ of 2700)
 PASS D2 a new run with no named schedule is still an acts-v2 run stamped 2
 PASS E1 1000 seeds: 15 distinct known bosses each, and the same seed gives the same sequence
-PASS E2 an encounter lands only on floors whose pool set holds its tier  (whirt in 1000, voone in 559)
-PASS E3 the least-used provenance is drawn first: every run meets Whirt (the only Heist row) and a Rumble Run row, and each major is of the provenance the run holds fewer bosses of (act II: Hagatha or a custom band3 boss; act III: Icarax or a custom final)  (whirt in 1000, a Rumble Run row in 1000, voone in 559, Hagatha the act II major in 601, Icarax the act III major in 1000)
-PASS E4 a ledger run's act III major is the lord with banked damage; a run that does not read the ledger draws it from the seed  (banked 200, no-ledger 96)
+PASS E2 an encounter lands only on floors whose pool set holds its tier  (whirt in 28, voone in 368)
+PASS E3 the least-used provenance is drawn first: every run meets a Heist row (Whirt and, since wave 5, the Heist families' rows) and a Rumble Run row (Voone and family 13's champions), and each major is of the provenance the run holds fewer bosses of (act II: Hagatha or a custom band3 boss; act III: Icarax or a custom final)  (heist in 1000, whirt in 28, a Rumble Run row in 1000, voone in 368, Hagatha the act II major in 567, Icarax the act III major in 510)
+PASS E4 a ledger run's act III major is the lord with banked damage; a run that does not read the ledger draws it from the seed  (banked 200, no-ledger 46)
 PASS E5 NewRun reads the ledger on a random seed only
 PASS E6 a run on acts-v3h is stamped 3; ScheduleFor loads a stamped-2 run under the version-3 file
 PASS E7 with "defaults" a new run rolls its schedule from the seed (both appear, the same seed the same one)  (98 v3h)
@@ -86,7 +86,7 @@ PASS G6 "none" takes no rule
 PASS G7 a rule that is not on offer is refused
 PASS G8 the rule ends with its act: act II's fights carry only what act II took
 PASS G9 a rule taken at each node: act II's node comes before its modifier node and its offer leaves nothing active out
-PASS G10 a rule a boss flag excludes is left out of that boss's act only  (seed 4001 voone act 1 shrine-free act 2)
+PASS G10 a rule a boss flag excludes is left out of that boss's act only  (seed 4002 voone act 2 shrine-free act 1)
 PASS G11 a board-shrine run on acts-v3h keeps its shrine and is never offered a rule that excludes shrine runs
 PASS G12 rule against rule is checked both ways, and an active rule is not offered again
 PASS G13 a run-scope rule is offered at act I only

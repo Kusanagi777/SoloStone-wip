@@ -49,30 +49,33 @@ parent session's summary. No file here holds the original nine-step text verbati
 | 7 Shrines, teammates | done | `engine/.../CardSets/DungeonRun/DungeonRunShrines*.cs` (S2, S3, U, T1, T2, D) |
 | 8 Encounters | in progress | see below |
 
-The design record is `docs/design/dungeon-run.md` (sections "Phase 8: the encounter model" and "Wave 1/2/3/4").
+The design record is `docs/design/dungeon-run.md` (sections "Phase 8: the encounter model" and "Wave 1/2/3/4/5").
 
 Step 8 progress:
 - The encounter model is merged: `data/dungeon-run/encounters-v1.json` (generated from
   `data/dungeon-run/reference/encounters/F<NN>.json` by `tools/dungeon-run-catalog encounters`),
   `engine/SabberStoneCore/src/Actions/EncounterRules*.cs`, `engine/.../CardSets/DungeonRun/DungeonRunEncounters*.cs`,
   schedules acts-v3h / acts-v3t. Design: `handoff/phase8/reports/design.md`, `implement-encounter-model.md`.
-- Families 01-13 are merged (waves 1-4: 02/03/04, 05/07/08, 06/09/10, 11/12/13; wave 4 also fixed DALA_850 and made
-  the Echo copy floor general). Per-family reports are in `handoff/phase8/reports/`; wave 4:
-  `integrate-wave4.md` and `lane-family-11/12/13-*.md`.
-- Ledger now: 4760 rows; implemented 2813, partial 386, missing 503, duplicate/support 1058.
-- Generators now: encounters "103 rows, 124 decks (54 authentic, 70 changed), 278 adaptations, 1 rejected"; catalog
+- Families 01-19 are merged (waves 1-5: 02/03/04, 05/07/08, 06/09/10, 11/12/13, 14-19; wave 4 also fixed DALA_850 and
+  made the Echo copy floor general; wave 5 moved auto-cast powers after the turn-start draw, added the same-character
+  rule `excludeBosses` and fixed `Game.ClearWeapons`). Per-family reports are in `handoff/phase8/reports/`; wave 5:
+  `integrate-wave5.md` and `lane-family-14/15/16/17/18/19-*.md`.
+- Ledger now: 4918 rows; implemented 2813, partial 660, missing 387, duplicate/support 1058.
+- Generators now: encounters "194 rows, 215 decks (95 authentic, 120 changed), 618 adaptations, 2 rejected"; catalog
   "506 entries (452 offerable pool, 2 withdrawn, 52 fixed), 6508 admitted and 1 excluded".
-- Families 14-25 have empty stub files already: `DungeonRunEncounters.F<NN>.cs` and `DungeonRunAdmission.F<NN>.cs`.
-- `verify/` is proven on Linux (the cloud container, wave 4, 2026-11-14): the whole regression ran there and
-  `verify/baseline` now holds the Linux results (README section 6 lists the two platform differences).
+- Families 20-25 have empty stub files already: `DungeonRunEncounters.F<NN>.cs` and `DungeonRunAdmission.F<NN>.cs`.
+- `verify/` is proven on Linux (the cloud container, waves 4 and 5): the whole regression ran there and
+  `verify/baseline` holds the wave-5 Linux results (README section 6 lists the two platform differences).
 
 ## 3. What is left
 
 ### 3.1 Step 8, families 11-24
 
 Ids and notes are from `handoff/phase8/inventory.json` (full notes there). The planned waves were 11/12/13, 14/15/16,
-17/18/19, 20/21/22, 23/24, with a full regression after the 4th and 8th wave. **Families 11, 12 and 13 are merged (wave
-4, 2026-11-14); their rows below are kept for reference.**
+17/18/19, 20/21/22, 23/24, with a full regression after the 4th and 8th wave; families 14-19 landed as one wave.
+**Families 11-13 (wave 4, 2026-11-14) and 14-19 (wave 5, 2026-11-16) are merged; their rows below are kept for reference.**
+Family 18 rejected Commander Bolan (DALA_BOSS_75h/75p: his quests have no text, requirement or reward in the client
+data), Phase Spider (61t, unused) and Cheerful Spirit (DALA_501, unused); the close-out checks they are recorded.
 
 | Family | Ids | Notes (short) |
 |---|---|---|
@@ -122,7 +125,25 @@ client's tag 1114, so Anomaly - Arcane cut it to (0); `DungeonRunEncounters.Repe
 game ends normally (boss win), and the record is re-recorded. The general Echo rule ("Copies can't cost less than (1)")
 now holds in every game (`EncounterRules.EchoCopyFloor`, c-enc-engine G7d).
 
-From the wave-5 integration (stage A; details in `handoff/phase8/reports/integrate-wave5.md`):
+From the wave-5 integration (details in `handoff/phase8/reports/integrate-wave5.md`):
+- Closed: auto-cast powers act after the turn-start draw (`EncounterRules.AfterTurnStartDraw`); a run never meets a boss
+  row of the character it plays (`excludeBosses`: Squeamlish, Mr. Chu, George the Fallen; Barkeye in family 21 uses the
+  same key); `Game.ClearWeapons` no longer takes a replacement weapon (`Hero.AddWeapon`); one chained-Discover guard in
+  `FairBotState.cs`; Unstable Evolution's copy (LOOT_504t) has the Echo floor (`EncounterRules.EchoCopyFloor`; the endless
+  (0)-Cost chain under Millhouse Manastorm the regression found in `bp.sh enc15`).
+- Norroa's Kaironomaly turn timer: `plugin/NativeMatch.cs` now asks `EncounterRules.ShortTurnSeconds` where it hard-coded
+  15 seconds. Build the plugin on the Windows PC and check the 25-second turn (and Nozdormu's 15) in the client.
+- Own-deck ledger under-information (family 16 flag 7): cards shuffled in with a reveal (Tales of Fortune) and later
+  burned by overdraw drop out of the boss's own-deck sample, so the boss knows fewer cards than its deck holds. Never a
+  leak; exact without burns (c-enc-16 G2/G4/L5). It is in OwnDeckLedger's tentative-arrival/burn logic.
+- Kingsbane's engine helper (the weapon copy shuffled back) loses Durability added by enchantments, the gap family 19
+  fixed for Sword Dance; shared code, left alone.
+- The engine's Lackey pool (AddLackeyTask, e.g. EVIL Cable Rat) can hand out the unscripted Titanic Lackey (ULD_616) and
+  Draconic Lackey (DRG_052) with no generation filter (older than wave 5).
+- Unscripted Saviors of Uldum collectibles in family 19's decks are replaced by named scripted cards; when they get
+  scripts, rerun the encounters step (c-enc-19 S8 pins Vera's and Zafarr's substitutions).
+- The acts-v3h finale block carries DALA_830 as its twist pool but ships disabled; enabling it re-pins acts-v3h's shape
+  digest (family 18: `09B43E71F9440039`; `verify/tools/gen/p8f18/make_fixture.py` makes the edit).
 - Tunnel Trogg (LOE_018, `engine/.../CardSets/LoeCardsGen.cs`) answers the play of a card with printed Overload, not the
   Overload event, and has no trigger source (the opponent's Overload cards count too). Family 17's Spell Lock Overload has
   no card behind it, so `EncounterRules.OverloadFor` (EncounterRules.F17.cs) buffs each Tunnel Trogg by hand; family 22
@@ -165,7 +186,7 @@ From the wave-3 integration:
 ## 4. Build and test in the cloud
 
 **`verify/` is proven on Linux** (step 1, 2026-11-14/15: every `final.sh` stage on the unchanged wave-3 tree, hall 39 of
-39 equal, 955 tests / 8285 checks; then the whole wave-4 regression). The only platform differences are c-p7fix H1 (`·`
+39 equal, 955 tests / 8285 checks; then the whole wave-4 and wave-5 regressions). The only platform differences are c-p7fix H1 (`·`
 where the Windows log has a mangled console byte, 2 lines), the c-enc-model F2 save lengths (13954 / 25744 on Linux,
 14306 / 26370 on Windows: LF vs CRLF, 4 lines), c-secretsearch timing lines, and the released harnesses' stderr line
 (45/46 bytes per run on Linux, 46/47 on Windows). `verify/baseline` now holds the Linux results (README section 6).
@@ -174,19 +195,20 @@ Needs: .NET SDK **10.0.402** exactly (`global.json`, `rollForward: disable`), ba
 Installing the SDK is a download: ask the user first. No Hearthstone files are needed for any of this.
 
 ```bash
-bash verify/bin/build-all.sh          # engine (expect 0 warnings / 0 errors), catalog tool, 71 suites, randplay, 39 hall projects
+bash verify/bin/build-all.sh          # engine (expect 0 warnings / 0 errors), catalog tool, 78 suites, randplay, 39 hall projects
 bash verify/bin/gen.sh                # generators: encounters, catalog, ledger; all six files must come out unchanged
-bash verify/bin/final.sh runs1 enc rules06 cross06 released released-all w1 w2 rules05 cross05 w4 runs2 same hall
+bash verify/bin/final.sh runs1 enc rules06 cross06 released released-all w1 w2 rules05 cross05 w4 w5 runs2 same hall
 ```
 
 `final.sh` stages and `bp.sh` modes are listed in `verify/README.md` section 4, with every expected number. In short:
-58 suite entries (`runs.sh`, `same.sh`: run 1 = run 2, 0 differing lines vs `verify/baseline/runs`), the hall
-(955 tests / 8285 checks), and the bosspilot modes (`bp.sh`: 152 results, each mode twice identical, 0 faults /
+65 suite entries (`runs.sh`, `same.sh`: run 1 = run 2, 0 differing lines vs `verify/baseline/runs`), the hall
+(955 tests / 8285 checks), and the bosspilot modes (`bp.sh`: 175 results, each mode twice identical, 0 faults /
 fallbacks / failed checks / swallowed, 0 differing lines vs `verify/baseline/bp`, which holds every mode since wave 4).
-Headline numbers (wave 4): c-runlayer 244, c-catalog 127, c-content 904, c-admission 3301, c-acts 181, c-deckops 174,
-c-enc-engine 124, c-enc-11 109, c-enc-12 105, c-enc-13 112, c-w4fix 4; selfplay digest 2CE546A18F96DCBC; randplay digest
-40207800B289E504 (regkeys 2363); released run 40/27, act 40/26. Engine md5 on Linux d1c13be4cb4b836b335e91c6448c9da5
-(builds are not byte-identical across platforms; not a failure by itself).
+Headline numbers (wave 5): c-runlayer 244, c-catalog 127, c-content 904, c-admission 3772, c-acts 181, c-deckops 174,
+c-enc-model 141, c-enc-engine 124, c-enc-14 117, c-enc-15 103, c-enc-16 124, c-enc-17 123, c-enc-18 109, c-enc-19 115,
+c-w5fix 19; selfplay digest 2CE546A18F96DCBC; randplay digest 40207800B289E504 (regkeys 2479); released run 40/27, act
+40/26. Engine md5 on Linux a9483c3c69d3444c0608c0aea06409ba (builds are not byte-identical across platforms; not a
+failure by itself).
 
 Things to watch on Linux (README section 6): file-name case; fixtures compared with XmlSerializer output
 (`VerifyPaths.ReadText`); recorded hashes over Windows text (`VerifyPaths.WindowsText`, used by c-acts and c-deckops);
@@ -271,15 +293,15 @@ Details: `docs/BUILDING.md`.
 - `verify/`: the regression suites, fixtures, baselines and runners (`verify/README.md`, `verify/MANIFEST.md`):
   - `bin/`: runners (`build-all.sh`, `engine.sh`, `builds.sh`, `runs.sh`, `same.sh`, `bp.sh`, `cross05.sh`,
     `cross06.sh`, `hall.sh`, `final.sh`, `gen.sh`); `lib/`: `env.sh`, the suite registry `suites.sh`, `VerifyPaths.cs`
-  - `suites/<origin>/<name>/`: 71 suite projects + randplay; `suites/hall/`: the base harness and 38 audit harnesses
-  - `fixtures/`: inputs; `baseline/`: `runs/` (suite logs), `bp/` (every bosspilot mode, wave 4, Linux), `bp-port/`,
+  - `suites/<origin>/<name>/`: 78 suite projects + randplay; `suites/hall/`: the base harness and 38 audit harnesses
+  - `fixtures/`: inputs; `baseline/`: `runs/` (suite logs), `bp/` (every bosspilot mode, wave 5, Linux), `bp-port/`,
     `bp-w1/`, `bp-w2/` (older records, history), `hall.txt`
   - `tools/`: `port_paths.py`, `gen/<family>/` fixture and harness generators
   - `.out/`: gitignored build output and logs
 - `handoff/phase8/` (reference; Windows paths of the original PC; do not run its scripts):
   - `inventory.json`: the 25 families with ids and notes, and the inventory report
   - `reports/`: `design.md` (the phase-8 design), `implement-encounter-model.md`, `map-encounters.md`, the family
-    reports, `integrate-wave1/2/3/4.md` (wave 4 = the current baseline), `lane-setup.md`, `lane-sync-w1/2/3.md`
+    reports, `integrate-wave1/2/3/4/5.md` (wave 5 = the current baseline), `lane-setup.md`, `lane-sync-w1/2/3.md`
   - `workflow-encounters-lanes.js`: the old orchestration (lane rules, waves, close-out and review prompts)
   - `LANE-GUIDE.md`, `lanes.py`, `lanes.json`, `hrun.sh`: the old lane tool and harness lock
 - `docs/design/`: `dungeon-run.md` (design record), `restoration-ledger.csv/.md`, `dungeon-run-catalog.md`.

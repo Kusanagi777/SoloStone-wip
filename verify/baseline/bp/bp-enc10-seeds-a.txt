@@ -6,11 +6,11 @@ gila_22_willie     GIL  t2      floor  3 PRIEST/priest_mending/CS1h_001         
 gila_22_willie     GIL  t2      floor  3 ROGUE/rogue_backalley/CS2_083b                 deck 16 -> boss     turns  20 decisions  44 fallbacks  0 health  34 mana+0 power  7 checks ok
 gila_23_grubb      GIL  t4      floor 13 SHAMAN/shaman_stormdebt/CS2_049                deck 36 -> player   turns  25 decisions  40 fallbacks  0 health  62 mana+2 power  1 checks ok
 gila_23_grubb      GIL  t4      floor 13 WARLOCK/warlock_fiendpact/CS2_056              deck 41 -> player   turns  17 decisions  22 fallbacks  0 health  62 mana+1 power  0 checks ok
-gila_26_gnomenapper GIL  t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 31 -> boss     turns  39 decisions 102 fallbacks  0 health  46 mana+1 power 14 checks ok
+gila_26_gnomenapper GIL  t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 32 -> boss     turns  26 decisions  73 fallbacks  0 health  46 mana+0 power  8 checks ok
 gila_26_gnomenapper GIL  t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 20 -> boss     turns  24 decisions  65 fallbacks  0 health  46 mana+0 power  9 checks ok
 gila_27_experiment_3c GIL  t4      floor 13 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 30 -> boss     turns  16 decisions  37 fallbacks  0 health  62 mana+1 power  4 checks ok
 gila_27_experiment_3c GIL  t4      floor 13 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 50 -> boss     turns  16 decisions  39 fallbacks  0 health  62 mana+2 power  3 checks ok
-gila_29_sazzmi     GIL  t3      floor  8 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 31 -> boss     turns  32 decisions  86 fallbacks  0 health  46 mana+1 power  6 checks ok
+gila_29_sazzmi     GIL  t3      floor  8 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 30 -> boss     turns  36 decisions  81 fallbacks  0 health  46 mana+0 power  5 checks ok
 gila_29_sazzmi     GIL  t3      floor  8 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 32 -> boss     turns  20 decisions  40 fallbacks  0 health  46 mana+0 power  2 checks ok
 gila_31_gnarlroot  GIL  t2      floor  3 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 18 -> boss     turns  14 decisions  29 fallbacks  0 health  34 mana+0 power  4 checks ok
 gila_31_gnarlroot  GIL  t2      floor  3 GILA_500h3/mh_tess_scavenger/GILA_500p2        deck 17 -> boss     turns  10 decisions  26 fallbacks  0 health  34 mana+0 power  4 checks ok

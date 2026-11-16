@@ -1,5 +1,5 @@
 cards=10713
 TB implemented=109 collectible=0
 fingerprint=3P8WszxUCKAlWZ2fjNvMTYbE6XZvizgq4H41594PVpE=
-regkeys(nonTB)=2363 hash=5693BCBC381AE6A4
+regkeys(nonTB)=2479 hash=B56EA6A1E69036AD
 games=200 digest=40207800B289E504

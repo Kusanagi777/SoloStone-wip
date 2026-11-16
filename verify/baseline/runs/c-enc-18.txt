@@ -1,0 +1,110 @@
+PASS A1 Web Grab costs (0), is clickable, and is offered only while the run player's hand holds a card (an empty hand: not offered)
+PASS A2 the run player's only minion in hand is summoned to that player's board; the two spells stay in hand  (1 on board)
+PASS A3 with only spells in that hand the power is offered (the hand's content is hidden) and summons nothing
+PASS A4 with the run player's board full it is not offered
+PASS A5 the boss's fair view masks the run player's hand (no Crocolisk there), and the power resolves there without pulling a hidden card  (ok)
+PASS A6 the real pull reveals the minion as any summon does: the Crocolisk is on the run player's board
+PASS B1 Darken costs (2) and is offered only while a minion is on a board
+PASS B2 every minion of both boards gets Darkened: -2 Attack (a 1-Attack minion goes to 0)  (2/0/0)
+PASS B3 it lasts through the run player's turn
+PASS B4 it is gone when the boss's next turn starts (both boards)  (4/2)
+PASS C1 Bully costs (2); it is offered only at a damaged minion, of either board (never an undamaged one or a hero)  (CS2_182,CS2_182)
+PASS C2 it deals 2 damage to the target (a hero power: the boss's Spell Damage does not add)  (damage 3)
+PASS D1 Invest! costs (4) and is aimed only at a minion of the boss (none on its board: not offered)
+PASS D2 the minion returns to the boss's hand undamaged with Capital Gains: an 8/9 Yeti there  (8/9)
+PASS D3 with the boss's hand full it is not offered (the bounce would destroy the minion)
+PASS E1 Impervious is passive (started at match start, never an option) and carries the hero damage cap 3  (cap 3)
+PASS E2 a 6-damage Fireball at the boss's hero deals 3  (3)
+PASS E3 a 1-damage hit deals 1
+PASS E4 the cap comes before Armor: a Fireball takes 3 Armor and no Health  (armor 2)
+PASS E5 the run player's hero is not capped: the boss's Fireball deals 6
+PASS F1 Next... costs (0) and is offered while a player has a card in hand and in deck
+PASS F2 each left-most hand card goes into its owner's deck and a card of that deck takes the left-most slot: the boss now holds a Crocolisk first, the run player a Raptor  (CS2_120 / CS2_172)
+PASS F3 what each side believed about the other's hand and deck is reset (one belief reset per player)  (2,1)
+PASS F4 the boss's fair view does not learn the run player's new card: its hand is masked there (no Raptor, no Fireball), its own new Crocolisk is exact  (,)
+PASS F5 with no card in either hand (and the run player's deck empty) it is not offered
+PASS F6 a hand card shuffled into the deck loses its hand enchantments (Fireball back at (4))  (3 -> 4)
+PASS F7 an Echo copy swapped into the deck is an ordinary card there (it leaves the ghostly list): the turn ends in the boss's fair view and in the game  (ok)
+PASS G1 Bombardment costs (2) and is offered only while a minion is on a board
+PASS G2 it deals 2 damage to every minion of both boards  (2/2)
+PASS G3 reloading: the boss's next turn it is not offered (minions on the boards)
+PASS G4 the boss's turn after that it is ready again
+PASS G5 a game clone carries the shot's turn (a tag of the power)
+PASS H1 Summon Protectors costs (2) and summons a 2/2 Treant with Taunt
+PASS H2 with the boss's board full it is not offered
+PASS I1 Mini Portal is passive (started at match start, never an option)
+PASS I2 after the boss casts a spell a random 1-Cost minion is summoned for it  (BOT_558:1)
+PASS I3 the pool is scripted 1-Cost minions the run's generation filter allows for the boss  (136 minions)
+PASS I4 the run player's spells summon nothing
+PASS I5 with the boss's board full nothing is summoned
+PASS J1 Earthmother's Rage costs (2) and is aimed only at a minion of the boss
+PASS J2 it gives the minion Windfury (Earthmother's Rancor)
+PASS K1 Steelskin is passive (started at match start, never an option)
+PASS K2 the boss's Hellfire deals 3 to every character but its own hero  (boss 0 player 3)
+PASS K3 its Kobold Librarian (2 damage to its own hero) costs it nothing, Armor included
+PASS K4 its own Fireball at its own hero deals nothing
+PASS K5 the run player's Fireball hurts it as usual (6)  (6)
+PASS K6 Fatigue is the game's rule, not its source: it still hurts  (24 -> 23)
+PASS K7 the rule is the power's: the run player's own self-damage is not prevented
+PASS L1 Soul Weave costs (3) and is offered only while the boss holds a card
+PASS L2 it discards the card (the only one) and summons a random minion of its Cost (4)  (CORE_EX1_043:4)
+PASS L3 with the boss's board full it is not offered
+PASS N1 Kaironomaly is passive; the run player's first turn runs under a 25-second timer (TIMEOUT), the boss's under the ordinary one  (25/75)
+PASS N2 every turn of the run player's starts under it
+PASS N3 a shorter timer stays (Nozdormu the Eternal's 15 is not lengthened to 25)
+PASS N4 without the power the timer is the ordinary one (no short turn)  (75)
+PASS N5 a clone carries the timer
+PASS N6 classic Nozdormu alone gives no short turn (its aura is not a timer NativeMatch enforces)  (20 -> 0)
+PASS N7 with classic Nozdormu in play Norroa's 25 seconds hold for the run player's turn  (25)
+PASS N8 Nozdormu the Eternal's 15 (the base tag MainBegin writes) is unchanged, with or without classic Nozdormu's aura
+PASS O1 Arcane Runes costs (0) and adds one Arcane spell of the wiki's five each use; 24 uses meet at least four of them and nothing else  (AT_004,EX1_277,CFM_623,CS2_025,CS2_023)
+PASS O2 with the boss's hand full it is not offered
+PASS O3 the five are scripted and admitted for a boss
+PASS P1 Dragonwrath costs (2) and gives the boss's hero Spell Damage +1
+PASS P2 the boss's Moonfire then deals 2
+PASS P3 a second use stacks: Spell Damage +2, kept across turns
+PASS P4 still +2 two turns later; a clone carries it
+PASS Q1 Summon Elemental costs (3) and summons a 2/3 Kirin Tor Elemental
+PASS Q2 the boss's Moonfire is cast an additional time on the same target (2 damage)  (2)
+PASS Q3 with two Elementals each adds one cast (3 damage; a copy never casts again)  (3)
+PASS Q4 a Secret is not cast twice (one Ice Barrier in play)
+PASS Q5 an untargeted spell copies too (Arcane Intellect three times: six cards)  (True hand 6 deck 25->19 CS2_182,CS2_182,CS2_182,CS2_182,CS2_182,CS2_182)
+PASS Q6 the run player's spells are not copied (its Moonfire deals 1)
+PASS Q7 an Elemental the run player controls copies that player's spells
+PASS Q8 a silenced Elemental copies nothing  (1)
+PASS R1 the shipped acts-v3h keeps its finale disabled (three acts; its four bosses pending) and DALA_830 is an admitted twist with effect run, in no shipped act's twist pool
+PASS R2 the fixture (the shipped schedule with the finale enabled on its four pending bosses) validates but for the released-shape pin of acts-v3h (new digest 09B43E71F9440039); acts-v3h then ends with the finale act: the four bosses in order, its twist DALA_830 at 100  (schedule acts-v3h: its node shape changed (digest 09B43E71F9440039, scheduleVersion 3 shipped FF4FEC05953AA0DE); bump scheduleVersion and keep version 3 loadable)
+PASS R3 the validator checks the finale's twist as an act's: an anomaly named there is refused  (schedule acts-v3h: its node shape changed (digest 09B43E71F9440039, scheduleVersion 3 shipped FF4FEC05953AA0DE); bump scheduleVersion and keep version 3 loadable | schedule acts-v3h act IV: twist pool names DALA_850, which is not a twist rule)
+PASS R4 40 new runs on the fixture: each rolls DALA_830 as the finale act's twist (chance 100) and no other twist  (40 of 40)
+PASS R5 the four fixed bosses are floors 16-19 in order, and never drawn on floors 1-15  (40/40)
+PASS R6 a run on the shipped acts-v3h has 15 floors, no finale and no DALA_830
+PASS R7 at the finale's first fight (after its tavern) DALA_830 is the act's active rule, the boss is Norroa, and the rule never reaches the match plan (effect run)  (act 4 rules DALA_830 plan dala_43_norroa)
+PASS R8 the finale fight's Health is the finale's curve (70) and its deck the row's own count (35 cards)  (70 / 35)
+PASS M1 the shipped data validates with the sixteen family 18 rows
+PASS M2 family 18 holds exactly these sixteen rows  (dala_61_saelorn,dala_62_haro,dala_63_dagg,dala_64_biggs,dala_65_valdera,dala_66_marei,dala_68_lilayell,dala_70_smiggs,dala_71_anarii,dala_72_kazamon,dala_73_hesutu,dala_74_kara,dala_43_norroa,dala_67_vargoth,dala_69_kalec,dala_60_khadgar)
+PASS M3 dala_61_saelorn: a Heist row of tier 3 (level 6, printed Health 30) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the curve's Health), flags [hiddenZone]  (authentic deck 30 flags hiddenZone tier 3 level 6)
+PASS M3 dala_62_haro: a Heist row of tier 3 (level 6, printed Health 30) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the curve's Health), flags [bothPlayers]  (authentic deck 30 flags bothPlayers tier 3 level 6)
+PASS M3 dala_63_dagg: a Heist row of tier 2 (level 4, printed Health 30) whose plan is the row's (hero, clickable power, a 30-card extended deck, the curve's Health), flags []  (extended deck 30 flags  tier 2 level 4)
+PASS M3 dala_64_biggs: a Heist row of tier 3 (level 6, printed Health 30) whose plan is the row's (hero, clickable power, a 30-card substituted deck, the curve's Health), flags []  (substituted deck 30 flags  tier 3 level 6)
+PASS M3 dala_65_valdera: a Heist row of tier 3 (level 6, printed Health 30) whose plan is the row's (hero, passive power, a 30-card authentic deck, the curve's Health), flags [passive,damageCap]  (authentic deck 30 flags passive,damageCap tier 3 level 6)
+PASS M3 dala_66_marei: a Heist row of tier 1 (level 1, printed Health 10) whose plan is the row's (hero, clickable power, a 30-card extended deck, the curve's Health), flags [bothPlayers,hiddenZone]  (extended deck 30 flags bothPlayers,hiddenZone tier 1 level 1)
+PASS M3 dala_68_lilayell: a Heist row of tier 3 (level 6, printed Health 30) whose plan is the row's (hero, passive power, a 30-card authentic deck, the curve's Health), flags [passive]  (authentic deck 30 flags passive tier 3 level 6)
+PASS M3 dala_70_smiggs: a Heist row of tier 3 (level 6, printed Health 30) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the curve's Health), flags [bothPlayers]  (authentic deck 30 flags bothPlayers tier 3 level 6)
+PASS M3 dala_71_anarii: a Heist row of tier 3 (level 6, printed Health 30) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the curve's Health), flags []  (authentic deck 30 flags  tier 3 level 6)
+PASS M3 dala_72_kazamon: a Heist row of tier 3 (level 6, printed Health 30) whose plan is the row's (hero, passive power, a 30-card authentic deck, the curve's Health), flags [passive]  (authentic deck 30 flags passive tier 3 level 6)
+PASS M3 dala_73_hesutu: a Heist row of tier 2 (level 3, printed Health 30) whose plan is the row's (hero, clickable power, a 30-card extended deck, the curve's Health), flags []  (extended deck 30 flags  tier 2 level 3)
+PASS M3 dala_74_kara: a Heist row of tier 3 (level 6, printed Health 30) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the curve's Health), flags []  (authentic deck 30 flags  tier 3 level 6)
+PASS M3 dala_43_norroa: a Heist row of tier finale (level 9, printed Health 30) whose plan is the row's (hero, passive power, a 35-card authentic deck, the curve's Health), flags [passive]  (authentic deck 35 flags passive tier finale level 9)
+PASS M3 dala_67_vargoth: a Heist row of tier finale (level 10, printed Health 30) whose plan is the row's (hero, clickable power, a 35-card authentic deck, the curve's Health), flags []  (authentic deck 35 flags  tier finale level 10)
+PASS M3 dala_69_kalec: a Heist row of tier finale (level 11, printed Health 30) whose plan is the row's (hero, clickable power, a 40-card authentic deck, the curve's Health), flags []  (authentic deck 40 flags  tier finale level 11)
+PASS M3 dala_60_khadgar: a Heist row of tier finale (level 12, printed Health 30) whose plan is the row's (hero, clickable power, a 40-card authentic deck, the curve's Health), flags [recast]  (authentic deck 40 flags recast tier finale level 12)
+PASS M4 the four finale rows are tier finale (pool finale only): the combat and major slots never draw them; the twelve others sit in the combat tiers
+PASS M5 every power, the boss card and the three enchantments are scripted by family 18 and keep the client's text (16 powers, 1 card, 3 enchantments)
+PASS M6 each has its own admission row: the sixteen powers a boss's only, Kirin Tor Elemental a boss's and (taken from a boss) the run player's; none is ever generated
+PASS M7 the admission families: boss-public-power (8), boss-own-hand-power (2), boss-passive-trigger (4), boss-hidden-reveal (1), boss-hidden-shuffle (1), boss-card (1)  (boss-card,boss-hidden-reveal,boss-hidden-shuffle,boss-own-hand-power,boss-passive-trigger,boss-public-power)
+PASS M8 Commander Bolan is rejected (no row; the rejected list states the data gap and its lift); his power has an admission row that admits nothing
+PASS M9 the two unused cards (Phase Spider, Cheerful Spirit) are rejected: unscripted, an admission row that admits nothing, in no deck
+PASS M10 the listed cards replaced are only cards the engine does not script, each recorded: Biggs's two Ogre Brutes, Hesutu's Whirlwind Tempest  (GVG_065>-:unscripted | DAL_742>-:unscripted)
+PASS M11 Khadgar's deck holds the wiki's two Archmage's Apprentices (family 09's card); the four finale decks keep the wiki's counts (35, 35, 40, 40)
+PASS M12 the client's match reads the short turn timer from the engine rule (NativeMatch: EncounterRules.ShortTurnSeconds, no fixed 15 left)
+RESULT 109 passed, 0 failed

@@ -58,7 +58,7 @@ PASS J2 the minion becomes a random scripted minion that costs (2) more, still t
 PASS J3 ten more uses on the boss's own Wisp (Cost 0): always a scripted 2-Cost minion, of several kinds  (CORE_EX1_096,OG_330,CORE_KAR_062,ULD_195,DAL_603,EX1_049,OG_338,CORE_EX1_012,EX1_616,LOOT_013)
 PASS J4 aimed at the run player's board shrine: the shrine is destroyed instead and goes dormant (the transform rule)
 PASS J5 flag mirrorDeck: the boss's deck is the run deck as this fight plays it, less what a boss may not hold (here all of it)  (10 of 10)
-PASS J6 a card the admission table keeps from a boss (a run treasure) is left out of the copy  (14 of 15 LOOTA_811 admitted 14 catalog True deck DAL_577,DAL_577,ICC_836,CS2_024,ICC_068,GVG_002,ICC_252,CS2_026,CS2_033,CFM_671,DAL_577,DAL_577,ICC_836,CS2_024,LOOTA_811)
+PASS J6 a card the admission table keeps from a boss (a run treasure) is left out of the copy  (14 of 15 LOOTA_814 admitted 14 catalog True deck DAL_577,DAL_577,ICC_836,CS2_024,ICC_068,GVG_002,ICC_252,CS2_026,CS2_033,CFM_671,DAL_577,DAL_577,ICC_836,CS2_024,LOOTA_814)
 PASS J7 with fewer than 10 such cards (4 of 10 here) the row's own curated deck is played
 PASS J9 a Fabled bundle in the run deck is copied whole when a boss may hold all of it, else left out whole; the boss's deck passes the Fabled rules and its pilot builds  (ok admitted True TIME_619,TIME_619t,TIME_619t2)
 PASS J10 a Fabled card whose companions the copy would lack (the run deck holds it alone) is left out, the rest is copied  (ok 10/11)

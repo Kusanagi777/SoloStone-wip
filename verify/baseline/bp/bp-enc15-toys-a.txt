@@ -1,0 +1,10 @@
+dala_25_jepetto    DALA t4      floor 13 DRUID/druid_thicket/CS2_017                    deck 40 -> player   turns  39 decisions  71 fallbacks  0 health  62 mana+2 power  0 checks ok
+dala_25_jepetto    DALA t4      floor 13 HUNTER/hunter_kennel/DS1h_292                  deck 44 -> boss     turns  10 decisions  23 fallbacks  0 health  62 mana+2 power  0 checks ok
+dala_25_jepetto    DALA t4      floor 13 MAGE/mage_rimeward/CS2_034                     deck 45 -> player   turns  25 decisions  48 fallbacks  0 health  62 mana+2 power  0 checks ok
+dala_25_jepetto    DALA t4      floor 13 PALADIN/paladin_gleaming/CS2_101               deck 47 -> boss     turns  24 decisions  61 fallbacks  0 health  62 mana+1 power  0 checks ok
+dala_25_jepetto    DALA t4      floor 13 PRIEST/priest_mending/CS1h_001                 deck 39 -> boss     turns  52 decisions 110 fallbacks  0 health  62 mana+2 power  0 checks ok
+dala_25_jepetto    DALA t4      floor 13 ROGUE/rogue_backalley/CS2_083b                 deck 40 -> boss     turns  16 decisions  37 fallbacks  0 health  67 mana+1 power  0 checks ok
+dala_25_jepetto    DALA t4      floor 13 SHAMAN/shaman_stormdebt/CS2_049                deck 42 -> boss     turns  14 decisions  47 fallbacks  0 health  62 mana+1 power  0 checks ok
+dala_25_jepetto    DALA t4      floor 13 WARLOCK/warlock_fiendpact/CS2_056              deck 44 -> player   turns  43 decisions  76 fallbacks  0 health  67 mana+1 power  0 checks ok
+encounter run: schedule acts-v3h; power unused: -; form unreached: -
+games 8, boss wins 5, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched DALA_BOSS_25t x9, most boss Secrets 0

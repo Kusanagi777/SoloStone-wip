@@ -104,6 +104,13 @@ Each suite folder holds its `*.cs` and `*.csproj` only (no `Program.cs.pre-*` ba
 | (new in wave 4, family 12 lane) | `verify/suites/p8f12/c-enc-12` | wave 4 | Enc12.csproj Program.cs |
 | (new in wave 4, family 13 lane) | `verify/suites/p8f13/c-enc-13` | wave 4 | Enc13.csproj Program.cs |
 | (new in wave 4, the integration's fix) | `verify/suites/p8w4/c-w4fix` | wave 4 | Program.cs W4Fix.csproj |
+| (new in wave 5, family 14 lane) | `verify/suites/p8f14/c-enc-14` | wave 5 | Enc14.csproj Program.cs |
+| (new in wave 5, family 15 lane) | `verify/suites/p8f15/c-enc-15` | wave 5 | Enc15.csproj Program.cs |
+| (new in wave 5, family 16 lane) | `verify/suites/p8f16/c-enc-16` | wave 5 | Enc16.csproj Program.cs |
+| (new in wave 5, family 17 lane) | `verify/suites/p8f17/c-enc-17` | wave 5 | Enc17.csproj Program.cs |
+| (new in wave 5, family 18 lane) | `verify/suites/p8f18/c-enc-18` | wave 5 | Enc18.csproj Program.cs |
+| (new in wave 5, family 19 lane) | `verify/suites/p8f19/c-enc-19` | wave 5 | Enc19.csproj Program.cs |
+| (new in wave 5, the integration's fixes) | `verify/suites/p8w5/c-w5fix` | wave 5 | Program.cs W5Fix.csproj |
 
 ## 3. The audit hall (all G3)
 
@@ -181,6 +188,10 @@ c-acts A10, c-enc-model F2), which gives back exactly the Windows bytes on Windo
 | `p8f09/fixtures/encounters-f09.json` | `p8f09/fixtures/` | `bp.sh enc09-cards` (ENCOUNTERS_JSON) | |
 | `p8f10/fixtures/encounters-f10.json` | `p8f10/fixtures/` | `bp.sh enc10-cards` (ENCOUNTERS_JSON; proved in the pilot) | |
 | (new in wave 4) `p8f11/fixtures/encounters-f11.json` | `p8f11/fixtures/` | `bp.sh enc11-pete`, `bp.sh enc11-cards` (ENCOUNTERS_JSON) | the merged encounters-v1.json plus five fixture rows (fix11_*), written by `verify/tools/gen/p8f11/make_fixture.py` |
+| (new in wave 5) `p8f14/fixtures/encounters-f14.json` | `p8f14/fixtures/` | `bp.sh enc14-cards` (ENCOUNTERS_JSON) | the merged encounters-v1.json plus two fixture rows (fix14_dazzik, fix14_akazamzarak), written by `verify/tools/gen/p8f14/make_fixture.py` |
+| (new in wave 5) `p8f16/fixtures/encounters-f16.json` | `p8f16/fixtures/` | `bp.sh enc16-cards` (ENCOUNTERS_JSON) | the merged encounters-v1.json plus three fixture rows (fix16_tipsi, fix16_toomba, fix16_quel), written by `verify/tools/gen/p8f16/make_fixture.py` |
+| (new in wave 5) `p8f17/fixtures/encounters-f17.json` | `p8f17/fixtures/` | `bp.sh enc17-cards`, `bp.sh enc17-check` (ENCOUNTERS_JSON) | the merged encounters-v1.json plus five fixture rows (fix17_zuramat, fix17_millificent, fix17_wagtoggle, fix17_goya, fix17_gallywix), written by `verify/tools/gen/p8f17/make_fixture.py` |
+| (new in wave 5) `p8f18/fixtures/schedule-finale18.json` | `p8f18/fixtures/` | c-enc-18, `bp.sh enc18-finale` (SCHEDULE_JSON) | schedule-v1.json with the acts-v3h finale block enabled (fixedBosses from pending), written by `verify/tools/gen/p8f18/make_fixture.py` |
 | `audit-inventory/cards.tsv` | `audit-inventory/cards.tsv` | hall audit-chunk-9 (G3; was absolute) | the audit inventory |
 
 Repository files the suites read (already in git, not copied): `data/**`, `facts/violet-hold-2026-09.json`,
@@ -190,9 +201,9 @@ Repository files the suites read (already in git, not copied): `data/**`, `facts
 
 ## 5. Baselines (what the runners compare against; LF)
 
-Since wave 4 (2026-11-16) `runs/`, `bp/` and `hall.txt` hold the wave-4 results recorded on Linux in the cloud container
-(`runs/<name>.txt` = run 2 of each of the 58 entries, CR removed; `bp/bp-<mode>-a.txt` = every one of the 152 bosspilot
-results, each equal to its `-b`; `hall.txt` unchanged). The rows below say where the wave-3 versions of those files came
+Since wave 5 (2026-11-16) `runs/`, `bp/` and `hall.txt` hold the wave-5 results recorded on Linux in the cloud container
+(`runs/<name>.txt` = run 2 of each of the 65 entries, CR removed; `bp/bp-<mode>-a.txt` = every one of the 175 bosspilot
+results, each equal to its `-b`; `hall.txt` unchanged). The wave-4 versions (58 entries, 152 results) are in git history. The rows below say where the wave-3 versions of those files came
 from; those versions are in git history. `bp-port/`, `bp-w1/` and `bp-w2/` are history now: `bp.sh` reads one only for a
 mode `bp/` does not hold.
 
@@ -224,6 +235,12 @@ mode `bp/` does not hold.
 | `p8f10/make_fixture.py` | `verify/tools/gen/p8f10/` | G3 (ported; output byte-identical) | `encounters-f10.json` |
 | (new in wave 4) `make_fixture.py`, `make_f11.py`, `patch_curation.py` | `verify/tools/gen/p8f11/` | wave 4 | `encounters-f11.json`; `data/dungeon-run/reference/encounters/F11.json` (the wiki transcription); the E11 entry of curation.json (idempotent; not rerun by the integration) |
 | (new in wave 4) `make_f12.py` | `verify/tools/gen/p8f12/` | wave 4 | `data/dungeon-run/reference/encounters/F12.json` (the wiki transcription; rerun after the review's Blood Red Apple change) |
+| (new in wave 5) `make_f14.py`, `make_fixture.py` | `verify/tools/gen/p8f14/` | wave 5 | `data/dungeon-run/reference/encounters/F14.json` (the wiki transcription; reads gitignored pages); `encounters-f14.json` |
+| (new in wave 5) `make_f15.py` | `verify/tools/gen/p8f15/` | wave 5 | `data/dungeon-run/reference/encounters/F15.json` (the wiki transcription) |
+| (new in wave 5) `make_f16.py`, `make_fixture.py` | `verify/tools/gen/p8f16/` | wave 5 | `F16.json` (the wiki transcription; rerun by the integration for the review's Gold Elemental note, byte-identical to the committed file); `encounters-f16.json` |
+| (new in wave 5) `make_f17.py`, `make_fixture.py` | `verify/tools/gen/p8f17/` | wave 5 | `F17.json` (the wiki transcription); `encounters-f17.json` |
+| (new in wave 5) `make_f18.py`, `make_fixture.py` | `verify/tools/gen/p8f18/` | wave 5 | `F18.json` (the wiki transcription); `schedule-finale18.json` (the acts-v3h finale enabled) |
+| (new in wave 5) `make_f19.py`, `tombs_tiers.py`, `patch_curation.py` | `verify/tools/gen/p8f19/` | wave 5 | `F19.json` (the wiki transcription); the Tombs tier rule shared with families 20-22; the E19 entry of curation.json (idempotent; not rerun by the integration) |
 
 The G3 generators take no arguments: each reads the repository it sits in and writes its default output under verify/
 (`verify/fixtures/<family>/fixtures/...`, or the suite folder for the two harness generators); an optional argument
@@ -233,6 +250,12 @@ harness `suites/p8f01/c-bosspilot-encounter` changes. On the export copy (2026-1
 came out byte-identical to the files here. Wave 4 (Linux, 2026-11-14): every generator here except `patch_curation.py`
 was run twice after the last data change, each output byte-identical between the runs; the seven encounter fixtures
 (p8f02, p8f03, p8f04, p8f08, p8f09, p8f10, p8f11) were rebuilt from the merged data, the rest came out unchanged.
+Wave 5 (Linux, 2026-11-16): the 17 data-derived generators (every `make_fixture.py`, `make_bp_collect.py`,
+`make_bp_rules.py`, `make_bp_rules06.py`, `make_harness.py`) ran twice after the merges and twice again after the last
+data change, byte-identical between the runs; the encounter fixtures of p8f02-p8f04, p8f08-p8f11, p8f14, p8f16 and p8f17
+and the schedule fixtures of p8f05/p8f06 (family 18's DALA_830 row) were rebuilt; p8f18's finale schedule and the four
+generated harnesses came out unchanged. The wiki `make_fNN.py` generators read gitignored pages and were not rerun,
+except `make_f16.py` (from the family 16 lane's pages) to prove the corrected F16.json.
 
 ## 7. Not moved, and why
 

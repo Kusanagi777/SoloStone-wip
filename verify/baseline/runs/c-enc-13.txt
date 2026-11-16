@@ -29,7 +29,7 @@ PASS A15 trl_207_malacrass: the plan of each variant is the row's (hero, power, 
 PASS A15 trl_208_talanji: the plan of each variant is the row's (hero, power, Health 30 on floor 1) with that variant's shrine and deck  (early:TRLA_146,middle:TRLA_147,late:TRLA_114)
 PASS V1 300 run seeds draw every variant of every champion, each between 60 and 140 times  (201_zentimo/middle=97 201_zentimo/late=90 201_zentimo/early=113 202_hooktusk/middle=97 202_hooktusk/late=90 202_hooktusk/early=113 203_thekal/middle=97 203_thekal/late=90 203_thekal/early=113 204_zuljin/middle=97 204_zuljin/late=90 204_zuljin/early=113 205_loti/middle=97 205_loti/late=90 205_loti/early=113 206_jeklik/middle=97 206_jeklik/late=90 206_jeklik/early=113 207_malacrass/middle=97 207_malacrass/late=90 207_malacrass/early=113 208_talanji/middle=97 208_talanji/late=90 208_talanji/early=113)
 PASS V2 the variant is a function of the run seed and the floor: the same seed gives the same variant, a state restored through the save serializer keeps it (and its plan's shrine), and other floors of the seed draw other variants  (late restored late floors late,middle,early)
-PASS V3 a run with a board shrine never meets the champion of its shrine's class (40 seeds per shrine class on acts-v3h); it still meets the other champions  (shrine runs 360 champion fights 1116 mirror )
+PASS V3 a run with a board shrine never meets the champion of its shrine's class (40 seeds per shrine class on acts-v3h); it still meets the other champions  (shrine runs 360 champion fights 846 mirror )
 PASS Z1 Zul'jin's hero power is Steady Throw (2), scripted by family 13 with the client's text  (<b>Hero Power</b>
 Deal $2 damage to the enemy hero.@<b>Hero Power</b>
 Deal $2 damage. @spelldmg)

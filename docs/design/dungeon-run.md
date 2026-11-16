@@ -924,6 +924,156 @@ c-enc-11 P3/P7 and c-enc-12 P3/P7.
 enc11a / enc11b / enc11-pete / enc11-cards / enc11-shrine, enc12 / enc12-seeds / enc12-hidden and enc13a / enc13b /
 enc13-seeds, each twice identical with 0 faults, fallbacks, failed checks and swallowed leaf exceptions.
 
+### Wave 5: Dalaran Heist bosses, the Heist finale and Tombs of Terror bosses A (families 14-19; 2026-11-16)
+
+Six families landed together: the Dalaran Heist's regular encounters in five lanes (14: DALA_BOSS_01-15, 15: 16-30, 16:
+31-45, 17: 46-59, 18: 60-75 with the four fixed bosses of the Heist finale and its rule DALA_830) and the first eighteen
+Tombs of Terror encounters (19). The shipped encounter list holds 194 rows (wave 4's 103, 15 of family 14, 14 each of
+families 15, 16 and 17, 16 of family 18, 18 of family 19) and 215 decks, 95 of them the wiki's list unchanged; the
+schedule lists 44 rule rows (DALA_830 is new). Everything stays behind acts-v3h and acts-v3t: no default changed, the
+acts-v3h finale block (now with the twist pool DALA_830) ships disabled with its bosses pending.
+
+The Heist boss pages have no level table and their heroes print 30 Health (10 at level 1), so all five Heist families
+tier by one rule: a page's stated level, else its deck table's size (10/15/20/25/30 cards: levels 1/2/3/4-5/6, the lowest
+level holding the largest size), a chapter's final boss level 8 (tier 4); the fight's Health is the act curve's. The Tombs
+heroes print 10 Health; family 19's tier rule (`verify/tools/gen/p8f19/tombs_tiers.py`) is shared with the later Tombs
+families.
+
+#### Family 14: Dalaran Heist bosses A
+
+Fifteen encounters (DALA_BOSS_01-15); tiers 1/2/3 hold two, nine and four rows. Decks are the Normal pool with second
+copies, then the Heroic pool, brought to 30; Oshi's and Albin's quantity lists are unchanged. New engine rule: a
+power-only script form (`EncounterRules.SwapPowerForm`) keeps the hero entity, Health, Armor and enchantments while the
+power changes: Belnaara's Take Flight! counts 15 Health damage on the power's public counter, then becomes Flying! with
+her hero Immune for two of her turns, then lands. "Scourgelord" Dazzik is a Heroic deck card (Scourgelord Garrosh's rule)
+shuffled in by the row's start block, not a form. Akazamzarak's four feats act on both players: Reductomara's (1) less
+never takes an Echo or Repeatable spell below (1) and records each owner's deck as rewritten; Presto Legendaro uses each
+side's generation filter. Open Wormhole is Duel!'s rule. Mana Echoes recasts a spell of the public play history through
+the boss's generation filter: never a Quest, and a Secret only when it is the boss's own and its Secret zone has room and
+no copy (the Monocle's rule; a run player's Secret would be a boss-generated Secret of any class, which only a row with
+`bossGeneratedSecrets` may hold). The "Kind" Waitress uses the wrong-target rule (WrongTarget50) as a defender. Blessing of
+Elune is ALL_HEALING_DOUBLE on both players; converted healing (Auchenai, Bwonsamdi's Covenant) deals the doubled damage.
+
+#### Family 15: Dalaran Heist bosses B
+
+Fourteen encounters (DALA_BOSS_16-20, 22-30); Jepetto, a chapter final, is tier 4. Equivalent Exchange and Totemic Summons
+are cast by rule (the wiki's auto-cast). Equivalent Exchange moves one random card each way by the hand-transfer rule, so
+each side knows the card it gave. Twin Paths uses Fandral's CHOOSE_BOTH aura. Stormswell recasts Overload spells on the
+same target, and the copy overloads too. Ar'ha's Call adds one Battlecry resolution to the next friendly card with a
+Battlecry (a minion, weapon or hero card: the cards `BattlecryRules.Additional` serves). Assembly gives either drawer a 1/1
+copy of a drawn minion. Scroll Savvy makes any drawn spell cost (0) that turn (its text names no player). Excavate takes
+the wiki's six listed results with equal odds; A Small Rock is also admitted for a boss on catalog runs. The Underbelly
+Rat replaces a dead hero (`Actions/EncounterRules.F15.cs`, called first in `ResolveHeroForms`): the eldest living rat (by
+entry into play; a Silenced rat has lost the text) leaves the board without dying and the hero returns with its Health;
+for The Rat King that is a new hero through his row's script form.
+
+#### Family 16: Dalaran Heist bosses C
+
+Fourteen encounters (DALA_BOSS_31-42, 44, 45); Moragg is tier 4. New engine rule: the board rotation
+(`Actions/EncounterRules.F16.cs`, `EncounterRules.Rotate(bottom, clockwise, source)`): the two rows are one ring, one step
+moves one minion across each way as a control change, rows keep their size (an empty row gains the crossing minion), and
+untouchable entities and run shrines never move. The Carousel Gryphon rotates counter-clockwise as the run player sees it
+at the end of its turn; family 24's K'zrath reuses it. Kizi's Makeover and Aki's For The Light! are auto-cast (family
+09's AutoCast). Bling it On! uses the client's Golden (PREMIUM) tag. Import "Pet" is Build-A-Beast's craft through the
+boss's generation filter, the pet named Exotic Pet. Tales of Fortune shuffles one of twenty Kobolds treasures into Ol'
+Toomba's deck, shown (Gloves of Mugging and Aleatoric Cube left out: hidden zones); five more treasures (Orb of
+Destruction, Horn of Cenarius, Portable Forge, Quel'Delar and its Blade) are admitted for a boss on catalog runs.
+Pogoshuffle's copies are shown as shuffled; Dark Tidings reveals a deck minion and puts it on top in place, recorded as
+DeckTopKnown. PARTY PORTAL!'s Partygoers are the wiki's five (Mime enters silenced). Gold Elemental's Heroic pool begins
+with Infuriated Banker, which family 17 scripts: in the merged deck it and Flame Imp are the two Heroic fills.
+
+#### Family 17: Dalaran Heist bosses D
+
+Fourteen encounters (DALA_BOSS_46-59) with ten boss cards. Zuramat's To The Void banishes a minion into the Void (family
+10's set-aside store, held by its Voided enchantment): no death, and a run shrine never enters it. Void Shift destroys all
+minions and summons new copies of the Void for its caster; the run player starts with two. Boommaster Flark: the run
+player starts with The Wire, a Murloc Tinyfin and The Other Wire; touching wires deal 5 damage once per pair at the start
+of that player's turn. Madam Goya's Blackmail puts a run player's card in hand escrow (the Extortion takes its slot),
+linked by the private tag `ExtortionEscrow` 32652; the boss never sees it, and Extortion returns the card itself. Queen
+Wagtoggle's Bribery summons a minion from the run player's deck (Tad's Pole's rule) that returns as a copy when it dies.
+Spell Lock Overloads both players for the cost each spell was played for; the engine's Tunnel Trogg answers only printed
+Overload, so `EncounterRules.OverloadFor` buffs each Trogg itself. Greed is Good buys the first card the run player plays
+each turn for a Gallywix's Coin. Sand Breath and Raise the Alarm (wiki auto-cast) and Bribery and Blackmail (their value is
+hidden from the boss's fair view) are cast by rule. Infuriated Banker replaces Gallywix's unscripted Fel Reavers.
+
+#### Family 18: Dalaran Heist bosses E and the Heist finale
+
+Twelve encounters (Sael'orn, Haro Setting-Sun, Dagg Cruelmight, Banker Biggs, Valdera Highborne, Marei Loom, Lilayell
+Suntear, Sky Captain Smiggs, Anarii Duskgrove, Kazamon Steelskin, Hesutu Stonewind, Kara Stamper) and the four fixed
+bosses of the Heist finale (Magistrix Norroa, Archmage Vargoth, Archmage Kalec, Archmage Khadgar; tier finale, levels
+9-12, decks of 35/35/40/40). Twist - The Finale (DALA_830) is the rule of acts-v3h's finale block: a twist with effect
+run, rolled with chance 100 for the finale act, never in a match plan. The block ships disabled; the fixture
+`verify/fixtures/p8f18/fixtures/schedule-finale18.json` enables it (the close-out re-pins acts-v3h's shape digest when it
+enables the block). New engine rules (`Actions/EncounterRules.F18.cs`): a player's short turn timer (`ShortTurnSeconds`,
+read from the base TIMEOUT tag: Nozdormu the Eternal's 15, Kaironomaly's 25, which NativeMatch now enforces; classic
+Nozdormu's aura neither makes nor cancels one), Steelskin's self-damage prevention (tag `SelfDamageImmune` 32653, read in
+`Character.TakeDamage`; Fatigue still hurts), and Marei Loom's left-most hand/deck swap with belief resets for both
+players (an Echo copy swapped into the deck stops being ghostly). Kirin Tor Elemental recasts its controller's spells
+(RecastRules). Rejected with reasons: Commander Bolan (75h/75p: his quests have no text, requirement or reward in the
+client data), the unused Phase Spider (61t) and Cheerful Spirit (DALA_501).
+
+#### Family 19: Tombs of Terror bosses A
+
+Eighteen encounters (ULDA_BOSS_01-18) and Sinkhole's Sand Trap (ULDA_030). A row's Health is the act curve's and its tier
+the boss's level in its chapter, read from its wiki deck table ("10; 15" levels 1-2 tier 1; "15; 20" and the 25-card
+level-4 lists tier 2; the 30-card level-6 lists tier 3; a full 30-card list with no lower level tier 4). Thirteen
+clickable powers and five passives (E.V.I.L. Promotion keeps its growing bonus in the power's own script number; Sword
+Dance shuffles a copy of the boss's destroyed weapon, enchantments and their Durability kept, into its deck; Under Wraps,
+Unstable Weaponry, "Confiscated" Goods). Mummy Ritual and Belch read the public graveyards and never raise a dead run
+shrine; Venomous Stinger's destroy makes a shrine go dormant. Sand Surge puts Sand Trap into the run player's deck as a
+public shuffle (match only, never a run deck record); drawn, it moves the top two cards of its holder's deck to the
+graveyard and draws; the boss's fair view keeps that deck masked. Brick by Brick is a boss-side Discover through the
+generation filter. Decks are the wiki's Normal lists, brought to 30 with second copies and the Heroic list; unscripted
+Saviors of Uldum collectibles are replaced by named scripted cards of the same role (Lackeys for Vera's).
+
+#### What the integration changed
+
+- **Auto-cast powers act after the turn-start draw.** Family 09's `AutoCast` fired on TURN_START, before `MainDraw`, so a
+  rule-cast power acted before its boss drew; the wiki puts it after the draw (Hero Power page: "the boss's first action
+  each turn"; Auto-cast page: after start-of-turn triggered effects). A new hook, `EncounterRules.AfterTurnStartDraw`, runs
+  in `Game.MainStart` right after `MainDraw()` and before the death and aura pass; `AutoCast` registers its power's
+  `AfterDraw` task there (cost, condition, cast count and effect unchanged). All eleven auto-cast powers of families 09,
+  15, 16 and 17 move; every bosspilot game where one plays moves with them. Checks c-enc-16 I6 (For The Light! buffs the
+  minion drawn that turn) and I7 (a hand of spells plus a drawn minion still casts); c-enc-16 I2 and c-enc-15 A1 restage
+  their premise after the draw.
+- **A run never meets a boss row of the character it plays.** A hero row may name boss rows in `excludeBosses`
+  (run-v1.json, `DungeonRunClass.ExcludeBosses`); `DungeonRun.NewRun` passes them to `ActBossSequence`, which treats them
+  as already used. Squeamlish (DALA_Squeamlish) excludes the Tombs boss Squeamlish, Mr. Chu (DALA_Chu) the Tombs boss
+  Mister Chu, George the Fallen (DALA_George) the Kobolds boss George and Karl (the wiki's George_the_Fallen lore: "They
+  later make an appearance as a boss in Dungeon Run"). Rows without the key draw exactly as before; the validator refuses
+  an unknown boss id and the key on a class row (c-w5fix Q1-Q6). Family 21's Barkeye will use the same key.
+- **A weapon replaced before the death pass.** `Game.ClearWeapons` names the hero, not the weapon, so a weapon broken in
+  an attack and replaced before the next death pass took the new weapon with it. `Hero.AddWeapon` now drops the hero's
+  pending entry when it replaces the weapon; family 19's local workaround is removed (c-w5fix W1-W3, c-enc-19 F3/F4).
+- **Unstable Evolution's copy has the Echo floor.** The regression met an endless chain in `bp.sh enc15`: against Rasil,
+  whose Millhouse Manastorm makes the run player's spells cost (0), Vessina's Unstable Evolution on a Clockwork Giant (no
+  minion costs one more, so it stays) put a (0)-Cost copy into the hand each time. The engine's copy (LOOT_504t) is no
+  GHOSTLY card, so wave 4's Echo copy floor missed it; the client prints the card with Echo since patch 23.0.3 (the wiki:
+  changed from "Repeatable this turn" to stop such a loop), so `EncounterRules.EchoCopyFloor` floors that copy at (1) too
+  (c-w5fix E1-E3).
+- **One chained-Discover guard.** Families 13 and 16 both guarded a queued Discover with no offers yet in
+  `plugin/FairBotState.cs`; family 13's guard covers both cases (c-enc-16 A8), so the file is unchanged since wave 4.
+  `plugin/NativeMatch.cs:6634` still waits for the Windows build.
+- **Tag table.** Taken numbers: 32637 (family 02), 32641 (06), 32643 (08), 32644 (09), 32645 (10), 32646 (11), 32652
+  (17, ExtortionEscrow), 32653 (18, SelfDamageImmune); families 12-16 and 19 took none.
+- **Tunnel Trogg.** The shared LOE_018 script answers printed Overload only; family 17 buffs Troggs by hand for Spell
+  Lock (a comment at the shared script says so; HANDOFF 3.4).
+- **Merge-review fixes.** The Gold Elemental deck note said Infuriated Banker had no script (family 17 scripts it; the
+  merged deck holds it); c-w5fix N1 checks that no encounter note says "no script yet" of a card a deck holds. c-enc-15 A1
+  restages Equivalent Exchange so each hand holds one card after the boss's draw.
+
+**Open after the wave.** Norroa's turn timer needs the Windows plugin build and a client check (NativeMatch). The
+own-deck ledger under-informs the boss when revealed shuffled-in cards are later burned (family 16 flag 7; never a
+leak). Kingsbane's engine helper drops enchantment Durability as Sword Dance did before its fix. The engine's Lackey
+pool can hand out the unscripted Titanic Lackey and Draconic Lackey. Commander Bolan, Phase Spider and Cheerful Spirit
+stay rejected.
+
+**Tests of the wave.** c-enc-14 (117 checks), c-enc-15 (103), c-enc-16 (124), c-enc-17 (123), c-enc-18 (109), c-enc-19
+(115), c-w5fix (19), and the bosspilot modes enc14 / enc14-seeds / enc14-flight / enc14-cards, enc15 / enc15-seeds /
+enc15-rat / enc15-toys, enc16 / enc16-seeds / enc16-carousel / enc16-cards, enc17 / enc17-seeds / enc17-void / enc17-cards
+(+ enc17-check), enc18a / enc18b / enc18-finale and enc19a / enc19b / enc19-seeds-a / enc19-seeds-b, each twice identical
+with 0 faults, fallbacks, failed checks and swallowed leaf exceptions.
+
 ## Implementation Status (2026-11-09)
 
 All pieces are written and the plugin builds against client 37.0.2.256589 with SDK 10.0.402 (0 errors; client bindings check PASS, Mono guard PASS). Nothing has run inside the Hearthstone client yet.

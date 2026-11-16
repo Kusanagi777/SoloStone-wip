@@ -3,14 +3,14 @@ loot_21_gnosh      LOOT t2      floor  3 HUNTER/hunter_kennel/DS1h_292          
 loot_04_sturmi     LOOT t2      floor  3 MAGE/mage_rimeward/CS2_034                     deck 17 -> boss     turns  14 decisions  37 fallbacks  0 health  34 mana+0 power  4 checks ok rule DALA_831 seen 12
 loot_28_hamm       LOOT t3      floor  8 PALADIN/paladin_gleaming/CS2_101               deck 29 -> player   turns  21 decisions  29 fallbacks  0 health  51 mana+0 power  5 checks ok rule DALA_831 seen 9
 loot_13_thaddock   LOOT t2      floor  3 PRIEST/priest_mending/CS1h_001                 deck 17 -> boss     turns  16 decisions  45 fallbacks  0 health  34 mana+0 power  2 checks ok rule DALA_831 seen 14
-loot_15_george_karl LOOT t3      floor  8 ROGUE/rogue_backalley/CS2_083b                 deck 29 -> boss     turns  20 decisions  48 fallbacks  0 health  30 mana+0 power  6 checks ok rule DALA_831 seen 10
+loot_15_george_karl LOOT t3      floor  8 ROGUE/rogue_backalley/CS2_083b                 deck 29 -> boss     turns  26 decisions  61 fallbacks  0 health  30 mana+0 power  9 checks ok rule DALA_831 seen 6
 loot_39_kraxx      LOOT t2      floor  3 SHAMAN/shaman_stormdebt/CS2_049                deck 16 -> player   turns  27 decisions  46 fallbacks  0 health  34 mana+0 power  8 checks ok rule DALA_831 seen 18
 loot_51_russell    LOOT t2      floor  3 WARLOCK/warlock_fiendpact/CS2_056              deck 17 -> boss     turns  17 decisions  38 fallbacks  0 health  34 mana+0 power  3 checks ok rule DALA_831 seen 8
 loot_46_flurgl     LOOT t2      floor  3 WARRIOR/warrior_plated/CS2_102                 deck 16 -> boss     turns  30 decisions  55 fallbacks  0 health  34 mana+0 power 12 checks ok rule DALA_831 seen 15
 loot_47_lava_chamber LOOT t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 32 -> player   turns  17 decisions  16 fallbacks  0 health  46 mana+0 power  0 checks ok rule DALA_831 seen 3
 loot_16_azun       LOOT t2      floor  3 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 16 -> boss     turns  22 decisions  43 fallbacks  0 health  34 mana+0 power  0 checks ok rule DALA_831 seen 16
 loot_17_jinzo      LOOT t2      floor  3 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 18 -> boss     turns  14 decisions  22 fallbacks  0 health  34 mana+0 power  0 checks ok rule DALA_831 seen 7
-loot_24_mothergloop LOOT t3      floor  8 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 30 -> boss     turns  16 decisions  33 fallbacks  0 health  46 mana+1 power  2 checks ok rule DALA_831 seen 5
+loot_24_mothergloop LOOT t3      floor  8 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 30 -> boss     turns  24 decisions  43 fallbacks  0 health  46 mana+0 power  1 checks ok rule DALA_831 seen 19
 loot_41_whompwhisker LOOT t2      floor  3 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 18 -> boss     turns  18 decisions  29 fallbacks  0 health  34 mana+0 power  7 checks ok rule DALA_831 seen 18
 encounter run: schedule acts-v3h, rule DALA_831; power unused: -; form unreached: -
-games 14, boss wins 11, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, rule-seen 152, rule-unseen -
+games 14, boss wins 11, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, rule-seen 162, rule-unseen -

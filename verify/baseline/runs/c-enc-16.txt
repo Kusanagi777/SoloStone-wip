@@ -1,0 +1,126 @@
+PASS A1 with no minion on a board Bling it On! is not offered
+PASS A2 Bling it On! costs (2), is clickable and can be aimed at any minion of either board, never a hero  (CS2_182,CS2_120)
+PASS A3 a minion that is not Golden becomes Golden (the client's PREMIUM tag, a public tag change) and keeps its stats
+PASS A4 the boss's fair view sees the Golden tag (a board minion's public tag)
+PASS A5 used on an already Golden minion it gives Blinged Out! (+4/+4) instead; the minion stays Golden
+PASS A6 the run player's minion: Golden first, then +4/+4 (8/9)
+PASS A7 a minion that came into play Golden gets +4/+4 at the first use
+PASS A8 Griftah's open Discover chain (a queued second choice without offers yet): the boss's fair view is built
+PASS A9 both Discovers answered: one card in each hand from Griftah, no choice left
+PASS B1 Makeover (1) is cast by rule (a registered passive, started at match start), never an option of the boss
+PASS B2 with no friendly minion nothing is cast and no Mana is paid
+PASS B3 at the start of her turn with a friendly minion: (1) Mana is paid and it gets one of the four haircuts  (DALA_BOSS_32e1)
+PASS B4 the run player's minions never get a haircut
+PASS B5 twenty-four casts: all four haircuts seen, each as its text (Stealth, Taunt, +2 Health, +2 Attack)  (DALA_BOSS_32e1,DALA_BOSS_32e4,DALA_BOSS_32e2,DALA_BOSS_32e3)
+PASS C1 Made of Coins is a passive power, never offered, started at match start
+PASS C2 each hit to his hero adds one Coin to his hand (two Moonfires, two Coins)  (GAME_005,GAME_005)
+PASS C3 damage to his minions or to the run player's hero adds none
+PASS C4 a hit his Armor absorbs whole still counts as damage taken (the wiki's Armor rule): one Coin
+PASS C5 with a full hand no Coin is added (the hand stays at 10)
+PASS D1 Merry Go Round is a passive power, never offered, started at match start
+PASS D2 at the end of the boss's turn: counter-clockwise as the run player sees it (its row moves right, the boss's row moves left): run player [Wisp, Yeti, Croc], boss [Squire, Raptor]  (72,69,70 | 73,71)
+PASS D3 the two that crossed changed controller (the CONTROLLER tag too); the others did not; each row keeps its size
+PASS D4 a crossing minion keeps its enchantments; a moving one its damage; two control changes are recorded  (2)
+PASS D5 at the end of the run player's turn nothing rotates
+PASS D6 the minion that crossed to the boss's side can attack on the boss's turn
+PASS D7 the minion that crossed to the run player's side can attack on its turn
+PASS D8 an empty run player's row gains the boss's leftmost minion: run player [Wisp], boss [Croc, Yeti]  (69 | 70,71)
+PASS D9 a single minion crosses at each of the boss's turn ends: up to the boss, then back
+PASS D10 full rows (7 and 7): one minion crosses each way, both rows stay at 7
+PASS D11 EncounterRules.Rotate clockwise: the run player's leftmost goes up to the boss's left end, the boss's rightmost comes down to its right end; it returns the two that crossed  (70,72 | 69,71)
+PASS D12 (shrine) the run player's awake shrine is left out of the ring: it stays the run player's; Croc goes up, Wisp comes down  (72,69,70 | 71)
+PASS D13 (shrine) a shrine alone on the run player's row: the boss's leftmost still comes down, the shrine never goes up
+PASS D14 (shrine) a dormant shrine stays too: only the other minions rotate  (74,75 | 73)
+PASS E1 Healing Hands is a passive power, never offered, started at match start
+PASS E2 at the start of her turn each of her minions is restored 2 Health (not past its maximum); her hero and the run player's minions are not  (1/0/3)
+PASS E3 not at the start of the run player's turn
+PASS F1 the two part pools are the engine's Build-A-Beast pools less what the boss's generation filter denies (none of them blocked, all scripted)  (80/28)
+PASS F2 Import "Pet" costs (2) and opens a Discover of three first-part Beasts for the boss  (CFM_095,DAL_743,UNG_801)
+PASS F3 then a Discover of three second-part Beasts  (CS2_125,EX1_017,UNG_814)
+PASS F4 one minion joins his hand named Exotic Pet (the client name of DALA_BOSS_36t), made of the two picks: summed Cost, Attack and Health  (Exotic Pet CFM_095+EX1_017)
+PASS F5 the Exotic Pet is played as a minion of the boss
+PASS F6 with a full hand Import "Pet" is not offered
+PASS G1 Tales of Fortune costs (2): one card joins his deck, an old Treasure of the list  (LOOTA_812)
+PASS G2 the treasure is shown as it is shuffled: his own-deck ledger holds it (the sample equals his deck)  (CS2_182x25,LOOTA_812x1)
+PASS G3 sixty uses: only the twenty listed treasures, most of them seen, never Gloves of Mugging or Aleatoric Cube  (19 LOOT_998k,LOOT_998l,LOOTA_806,LOOTA_811,LOOTA_812,LOOTA_816,LOOTA_819,LOOTA_821,LOOTA_826,LOOTA_827,LOOTA_835,LOOTA_836,LOOTA_837,LOOTA_838,LOOTA_839,LOOTA_841,LOOTA_842a,LOOTA_843,LOOTA_847)
+PASS G4 after sixty shuffles his own-deck ledger still equals his deck  (CS2_182x4,LOOTA_819x1,LOOTA_826x4,LOOTA_835x2,LOOTA_836x1,LOOTA_837x3,LOOTA_841x2,LOOTA_842ax4,LOOTA_843x2,LOOTA_847x1,LOOT_998kx1,LOOT_998lx1 vs CS2_182x4,LOOTA_819x1,LOOTA_826x4,LOOTA_835x2,LOOTA_836x1,LOOTA_837x3,LOOTA_841x2,LOOTA_842ax4,LOOTA_843x2,LOOTA_847x1,LOOT_998kx1,LOOT_998lx1)
+PASS G5 the twenty: the wiki's 22 less LOOTA_834 and LOOTA_820, each scripted and admitted for a boss on catalog runs
+PASS G6 Gloves of Mugging and Aleatoric Cube stay the run player's only (hidden-zone rows)
+PASS H1 Portal Party costs (2): one Portal joins her hand
+PASS H2 forty-one uses: all seven Portals of the wiki, nothing else  (KAR_073,GVG_003,KAR_075,KAR_076,DALA_BOSS_38t,KAR_077,KAR_091)
+PASS H3 with a full hand it is not offered
+PASS H4 PARTY PORTAL! (4) summons one Partygoer: thirty casts, all five of the wiki's list, nothing else  (CFM_659,BRM_019,DAL_721,KARA_13_22,GIL_805)
+PASS H5 a Mime enters play silenced (its text: 'Always silenced.'); the others do not
+PASS H6 with a full board PARTY PORTAL! cannot be played
+PASS H7 the run player's PARTY PORTAL! (taken from a boss) summons a Partygoer for the run player
+PASS H8 PARTY PORTAL! is a card of her shipped deck; the five Partygoers are scripted and admitted for a boss
+PASS I1 For The Light! (2) is cast by rule (a registered passive, started at match start), never an option of the boss
+PASS I2 with no minion in her hand after her turn-start draw (she drew a spell) nothing is cast and no Mana is paid
+PASS I3 with (1) Mana nothing is cast
+PASS I4 at the start of her turn with (2) Mana and minions in hand: the Mana is paid and each minion then in her hand gets Light-imbued (+1/+1)  (casts 1 used 2)
+PASS I5 the run player's hand is untouched
+PASS I6 the minion she drew at the start of that turn is Light-imbued too (the cast comes after the turn-start draw)  (CS2_182+light)
+PASS I7 a hand of spells only plus the minion she draws: the power is still cast, the drawn minion is Light-imbued and the spell is not  (casts 1 drew CS2_182)
+PASS J1 Immolation Aura is a passive power, never offered, started at match start
+PASS J2 a Yeti that attacks her hero deals its 4 and then takes 2 from the power  (yeti damage 2)
+PASS J3 a 3/2 that attacks her hero dies to it
+PASS J4 an attack on one of her minions is not answered
+PASS J5 her own minion attacking the run player's hero takes nothing
+PASS K1 Summon Companion costs (4): one of Huffer, Leokk, Misha joins his board
+PASS K2 twenty-one uses: all three companions, nothing else  (NEW1_034,NEW1_032,NEW1_033)
+PASS K3 with a full board it is not offered
+PASS K4 Huffer has Charge: it can attack at once
+PASS L1 with no minion on a board Pogoshuffle is not offered
+PASS L2 Pogoshuffle costs (2) and can be aimed at any minion of either board
+PASS L3 three new copies of its card join his deck: the printed card, without its enchantment; the board minion stays
+PASS L4 aimed at the run player's minion: three copies of that card join the boss's deck, the boss's own
+PASS L5 the copies are shown as they are shuffled: his own-deck ledger holds them (the sample equals his deck)  (CS2_120x3,CS2_172x3,CS2_182x24)
+PASS M1 Dark Tidings costs (1): a minion of his deck gets Forseen (+2/+2) and is on top of the deck; the deck keeps its size  (CS2_120)
+PASS M2 the move is a reorder inside the deck: no zone change is recorded
+PASS M3 the top card is recorded for the own-deck ledger (a TopKnown fact of the boss naming it)
+PASS M4 his own-deck ledger keeps the deck's exact multiset (nothing gained or lost by the reveal)  (CS2_008x18,CS2_120x3,CS2_182x4)
+PASS M5 his next draw is that card, with its +2/+2
+PASS M6 a deck without minions: offered (its count is public), nothing changes
+PASS M7 with an empty deck it is not offered
+PASS N1 Ray of Suffering costs (3), clickable, its number (TAG_SCRIPT_DATA_NUM_1) starts at 1
+PASS N2 the first use deals 1 to the run player's hero; the number becomes 2
+PASS N3 the next uses deal 2 and 3 (6 in all); the number is 4  (6)
+PASS N4 the boss's fair view holds the number on the power (a public tag)
+PASS N5 Armor absorbs it as any damage (4: 2 Armor, 2 Health)
+PASS T1 Orb of Destruction cast by the boss: the run player loses 2 Mana Crystals and discards 2 cards
+PASS T2 Horn of Cenarius cast by the boss: three minions of his own deck join his board
+PASS T3 Portable Forge cast by the boss: a Discover of three scripted Legendary weapons, none the boss's generation filter denies  (LOOT_392,LOOT_500,LOOT_209)
+PASS T4 the chosen weapon is equipped
+PASS T5 the Blade and the Hilt of Quel'Delar in the boss's hand combine into Quel'Delar  (LOOTA_842)
+PASS T6 Quel'Delar equipped by the boss: after its hero attacks, 6 damage to all enemies  (health 30>18)
+PASS T7 the five are admitted for a boss on catalog runs only (their legacy verdict stays the run player's) by the run-treasure-boss-shuffle row
+PASS T8 the core run-treasure row keeps Wish and Wax Rager
+PASS P1 the shipped data validates with the fourteen family 16 rows
+PASS P2 family 16 holds exactly these fourteen rows  (dala_31_timothy,dala_32_kizi,dala_33_gold_elemental,dala_34_carousel,dala_35_zoie,dala_36_draemus,dala_37_toomba,dala_38_tipsi,dala_39_aki,dala_40_oxana,dala_41_ungan,dala_42_pogo,dala_44_erekem,dala_45_moragg)
+PASS P3 dala_31_timothy: a Dalaran Heist row of tier 2 (level 4) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2 level 4)
+PASS P3 dala_32_kizi: a Dalaran Heist row of tier 1 (level 1) whose plan is the row's (hero, passive power, a 30-card extended deck, the act curve's Health), flags [passive]  (extended health 30 flags passive tier 1 level 1)
+PASS P3 dala_33_gold_elemental: a Dalaran Heist row of tier 2 (level 4) whose plan is the row's (hero, passive power, a 30-card extended deck, the act curve's Health), flags [passive]  (extended health 30 flags passive tier 2 level 4)
+PASS P3 dala_34_carousel: a Dalaran Heist row of tier 2 (level 3) whose plan is the row's (hero, passive power, a 30-card extended deck, the act curve's Health), flags [passive,bothPlayers,position]  (extended health 30 flags passive,bothPlayers,position tier 2 level 3)
+PASS P3 dala_35_zoie: a Dalaran Heist row of tier 2 (level 3) whose plan is the row's (hero, passive power, a 30-card extended deck, the act curve's Health), flags [passive]  (extended health 30 flags passive tier 2 level 3)
+PASS P3 dala_36_draemus: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3 level 6)
+PASS P3 dala_37_toomba: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3 level 6)
+PASS P3 dala_38_tipsi: a Dalaran Heist row of tier 2 (level 4) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2 level 4)
+PASS P3 dala_39_aki: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive tier 3 level 6)
+PASS P3 dala_40_oxana: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive tier 3 level 6)
+PASS P3 dala_41_ungan: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3 level 6)
+PASS P3 dala_42_pogo: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, clickable power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags  tier 3 level 6)
+PASS P3 dala_44_erekem: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags [hiddenZone]  (authentic health 30 flags hiddenZone tier 3 level 6)
+PASS P3 dala_45_moragg: a Dalaran Heist row of tier 4 (level 8) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 4 level 8)
+PASS P4 every power, boss card and enchantment of the family is scripted by family 16 and keeps the client's text (14 powers, 3 cards, 7 enchantments)
+PASS P4b the fourteen boss heroes need no script (portraits: their text is the encounter description)
+PASS P5 each has its own admission row: the fourteen powers a boss's only, the three boss cards a boss's and (taken from a boss) the run player's; none is ever generated
+PASS P6 the seven admission families of the family: heist-c-board-power (3), heist-c-auto-cast (2), heist-c-passive (4), heist-c-craft (1), heist-c-own-deck-power (3), heist-c-own-hand-power (1), heist-c-boss-card (3)  (heist-c-auto-cast,heist-c-board-power,heist-c-boss-card,heist-c-craft,heist-c-own-deck-power,heist-c-own-hand-power,heist-c-passive)
+PASS P7 the listed cards that are replaced or left out are only cards the engine does not script or a boss deck does not admit, each recorded  (KAR_096>-:admission:unclassified,PRO_001>-:unscripted | GIL_130>-:admission:unclassified | GVG_016>GVG_020:unscripted)
+PASS P8 the quantity lists are the wiki's: P.O.G.O. holds four Pogo-Hoppers and two Fel Cannons, Moragg one DOOM!, Draemus one Oondasta; Tipsi's pool holds PARTY PORTAL!; the Carousel's Hyena is EX1_534t
+PASS P9 a family 16 power asked for the run player is refused with its row's reason
+PASS P10 the tier pools: one row in enc-t1, five in enc-t2, seven in enc-t3, one in enc-t4
+PASS P11 the extra cards each row names are its 'cards': the haircuts, Blinged Out!, the Coin, the Exotic Pet, the twenty treasures, the Portals and Partygoers, the companions, Light-imbued, Forseen
+PASS P12 the validator checks a row's cards: Gloves of Mugging (not admitted for a boss) in Toomba's cards is refused  (LOOTA_834: admission run-treasure-hand-steal: treasure: only the player can hold it; moves cards from the boss's hand by the hand-transfer facts, so the boss knows what left its hand and the player's fair view sees only what it was shown; lifted by none: a run treasure; no boss deck or generation pool offers it (boss dala_37_toomba card))
+PASS P13 the reserved model tag of the family is unused: no family 16 state is a private tag (Golden and Ray of Suffering's number are public tags)
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 124 passed, 0 failed

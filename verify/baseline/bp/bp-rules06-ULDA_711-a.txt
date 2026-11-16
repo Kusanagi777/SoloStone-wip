@@ -10,9 +10,9 @@ trl_200_voone      TRL  t2      floor  3 DALA_Barkeye/heist_hunter_1/DS1h_292   
 trl_200_voone      TRL  t2      floor  3 DALA_Squeamlish/heist_druid_1/CS2_017          deck 16 -> player   turns  11 decisions  16 fallbacks  0 health  34 mana+0 power  3 checks ok variant drum shrine TRLA_170 rule ULDA_711 seen 221
 trl_200_voone      TRL  t2      floor  3 DALA_Tekahn/heist_warlock_1/CS2_056            deck 16 -> boss     turns  14 decisions  26 fallbacks  0 health  34 mana+0 power  4 checks ok variant champion shrine TRLA_104 rule ULDA_711 seen 78
 trl_200_voone      TRL  t2      floor  3 TRLA_209h_Mage/rumble_mage_108/CS2_034         deck 17 -> boss     turns   6 decisions  15 fallbacks  0 health  34 mana+0 power  1 checks ok variant champion shrine TRLA_104 rule ULDA_711 seen 49
-dala_21_whirt      DALA t3      floor  8 TRLA_209h_Druid/rumble_druid_112/CS2_017       deck 33 -> player   turns  13 decisions  18 fallbacks  0 health  51 mana+0 power  6 checks ok rule ULDA_711 seen 438
-dala_21_whirt      DALA t3      floor  8 TRLA_209h_Hunter/rumble_hunter_110/DS1h_292    deck 34 -> player   turns  15 decisions  20 fallbacks  0 health  51 mana+0 power  5 checks ok rule ULDA_711 seen 294
-ulda_44_trap_room  ULDA t3      floor  8 TRLA_209h_Paladin/rumble_paladin_105/CS2_101   deck 32 -> player   turns  11 decisions  22 fallbacks  0 health  46 mana+1 power  3 checks ok rule ULDA_711 seen 264
+dala_21_whirt      DALA t3      floor  8 TRLA_209h_Druid/rumble_druid_112/CS2_017       deck 36 -> player   turns   7 decisions   9 fallbacks  0 health  46 mana+0 power  2 checks ok rule ULDA_711 seen 273
+dala_21_whirt      DALA t3      floor  8 TRLA_209h_Hunter/rumble_hunter_110/DS1h_292    deck 35 -> player   turns  23 decisions  40 fallbacks  0 health  46 mana+0 power  9 checks ok rule ULDA_711 seen 563
+ulda_44_trap_room  ULDA t3      floor  8 TRLA_209h_Paladin/rumble_paladin_105/CS2_101   deck 32 -> player   turns   9 decisions  10 fallbacks  0 health  46 mana+0 power  2 checks ok rule ULDA_711 seen 217
 ulda_44_trap_room  ULDA t3      floor  8 TRLA_209h_Priest/rumble_priest_114/CS1h_001    deck 35 -> player   turns  19 decisions  29 fallbacks  0 health  46 mana+0 power  2 checks ok rule ULDA_711 seen 338
 encounter run: schedule acts-v3h, rule ULDA_711; power unused: -; form unreached: -
-games 16, boss wins 8, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, rule-seen 3185, rule-unseen -
+games 16, boss wins 8, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, rule-seen 3242, rule-unseen -

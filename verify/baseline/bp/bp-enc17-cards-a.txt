@@ -1,0 +1,22 @@
+fix17_zuramat      DALA t3      floor  8 DRUID/druid_thicket/CS2_017                    deck 29 -> player   turns  19 decisions  24 fallbacks  0 health  51 mana+0 power  0 checks ok
+fix17_zuramat      DALA t3      floor  8 HUNTER/hunter_kennel/DS1h_292                  deck 30 -> player   turns  25 decisions  35 fallbacks  0 health  51 mana+0 power  2 checks ok
+fix17_zuramat      DALA t3      floor  8 MAGE/mage_rimeward/CS2_034                     deck 31 -> boss     turns  46 decisions  62 fallbacks  0 health  46 mana+0 power  0 checks ok
+fix17_zuramat      DALA t3      floor  8 PALADIN/paladin_gleaming/CS2_101               deck 20 -> player   turns  25 decisions  41 fallbacks  0 health  46 mana+0 power  1 checks ok
+fix17_millificent  DALA t3      floor  8 PRIEST/priest_mending/CS1h_001                 deck 34 -> boss     turns  10 decisions  15 fallbacks  0 health  46 mana+0 power  2 checks ok
+fix17_millificent  DALA t3      floor  8 ROGUE/rogue_backalley/CS2_083b                 deck 30 -> player   turns  17 decisions  22 fallbacks  0 health  46 mana+0 power  5 checks ok
+fix17_millificent  DALA t3      floor  8 SHAMAN/shaman_stormdebt/CS2_049                deck 36 -> boss     turns  18 decisions  26 fallbacks  0 health  46 mana+0 power  6 checks ok
+fix17_millificent  DALA t3      floor  8 WARLOCK/warlock_fiendpact/CS2_056              deck 33 -> player   turns  15 decisions  18 fallbacks  0 health  46 mana+0 power  7 checks ok
+fix17_wagtoggle    DALA t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 34 -> boss     turns  16 decisions  42 fallbacks  0 health  46 mana+1 power  0 checks ok auto 5
+fix17_wagtoggle    DALA t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 33 -> player   turns  19 decisions  36 fallbacks  0 health  46 mana+0 power  0 checks ok auto 7
+fix17_wagtoggle    DALA t3      floor  8 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 33 -> player   turns  21 decisions  29 fallbacks  0 health  51 mana+0 power  0 checks ok auto 7
+fix17_wagtoggle    DALA t3      floor  8 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 30 -> player   turns  15 decisions  19 fallbacks  0 health  46 mana+0 power  0 checks ok auto 5
+fix17_goya         DALA t3      floor  8 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 37 -> player   turns  21 decisions  23 fallbacks  0 health  46 mana+0 power  0 checks ok auto 9
+fix17_goya         DALA t3      floor  8 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 32 -> player   turns  11 decisions   7 fallbacks  0 health  49 mana+0 power  0 checks ok auto 4
+fix17_goya         DALA t3      floor  8 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 31 -> player   turns  17 decisions  12 fallbacks  0 health  46 mana+0 power  0 checks ok auto 7
+fix17_goya         DALA t3      floor  8 GILA_500h3/mh_tess_scavenger/GILA_500p2        deck 37 -> boss     turns  24 decisions  35 fallbacks  0 health  46 mana+1 power  0 checks ok auto 11
+fix17_gallywix     DALA t3      floor  8 GILA_600h/mh_darius_militia/GILA_600p          deck 28 -> boss     turns  26 decisions  54 fallbacks  0 health  46 mana+0 power  0 checks ok
+fix17_gallywix     DALA t3      floor  8 GILA_400h/mh_shaw_kennel/GILA_400p             deck 31 -> player   turns  15 decisions  20 fallbacks  0 health  46 mana+0 power  0 checks ok
+fix17_gallywix     DALA t3      floor  8 GILA_900h/mh_toki_workshop/CS2_034             deck 31 -> player   turns  21 decisions  31 fallbacks  0 health  46 mana+0 power  0 checks ok
+fix17_gallywix     DALA t3      floor  8 DALA_Rakanishu/heist_mage_1/CS2_034            deck 31 -> player   turns  25 decisions  44 fallbacks  0 health  51 mana+0 power  0 checks ok
+encounter run: schedule acts-v3h; power unused: -; form unreached: -
+games 20, boss wins 6, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, no-loss 0, watched DALA_BOSS_48t x16 DALA_BOSS_51t2 x9 DALA_503 x1 DALA_BOSS_56t x9 DALA_BOSS_59t x2 DALA_BOSS_59t2 x7 DALA_502 x3, most boss Secrets 0

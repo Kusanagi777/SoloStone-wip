@@ -1,0 +1,117 @@
+PASS A1 Boom Bullets costs (2), is clickable and untargeted: it summons a 0/2 Goblin Bomb for the boss  (BOT_031)
+PASS A2 every other Goblin Bomb on either board gains +1 Attack (ULDA_BOSS_01e); the new one and the other minions get nothing  (1/1)
+PASS A3 used again: the older Bombs reach +2, the previous new one +1
+PASS A4 with a full board it is not offered
+PASS B1 Mummy Ritual costs (3); it is not offered while only a non-Reborn minion of the boss's and a Reborn minion of the run player's died
+PASS B2 a Reborn minion of the boss's that died (its Reborn return died too) makes it offered
+PASS B3 it summons a new copy of that minion with 1 Health, keeping its card's Reborn  (ULD_217 1hp reborn 1)
+PASS B4 the copy's own Reborn brings it back once more (1 Health, no Reborn)
+PASS B5 with a full board it is not offered
+PASS C1 E.V.I.L. Promotion is passive: started at match start, never an option; its count starts at 1
+PASS C1b the passive is not offered on the boss's turn
+PASS C2 the first Lackey the boss plays gets +1/+1 (ULDA_BOSS_03e), and the count rises to 2  (2/2)
+PASS C3 a minion that is not a Lackey gets nothing and the count stays
+PASS C4 a Lackey summoned without being played gets nothing
+PASS C5 the second Lackey played gets +2/+2; the count is 3  (3/3)
+PASS C6 a Lackey the run player plays gets nothing
+PASS C7 the boss's fair view carries the count (the power's own public tag)  (3)
+PASS D1 Belch costs (3); with no minion dead yet it is not offered
+PASS D2 a minion of the run player's that died: the boss summons a new copy of it for itself  (CS2_120)
+PASS D3 twelve more uses with a dead minion of each side: both are raised  (CS2_172,CS2_120)
+PASS D4 with a full board it is not offered
+PASS D5 a run shrine destroyed is a corpse in its owner's graveyard (its dormant form takes its slot): Belch never raises it and is not offered
+PASS E1 Venomous Stinger costs (2); it can be aimed at any minion, never a hero
+PASS E2 it stings the minion (ULDA_BOSS_05e) and does nothing else yet
+PASS E3 a stung minion is no longer a target  (CS2_120)
+PASS E4 the stung minion takes 1 damage and is destroyed
+PASS E5 a stung run shrine that takes damage is destroyed as a shrine is: its dormant form takes its slot
+PASS F1 "Confiscated" Goods is passive: started at match start, never an option
+PASS F2 the boss's hero attacks a minion that survives: no new weapon
+PASS F3 it attacks and kills a minion with the axe's last Durability: the broken axe is replaced by a random scripted weapon (a new entity) of the pool the generation filter allows, which the death pass keeps  (CFM_717 pool 70)
+PASS F4 eight more kills: weapons of several kinds, every one scripted  (CS2_097,OG_033,CFM_631,DAL_063,EX1_366,CS2_091,GVG_043)
+PASS F5 the run player's hero killing a minion gives the boss nothing
+PASS G1 Druid of the Rat costs (2); with no minion of the boss's it is not offered
+PASS G2 it gives each of the boss's minions +1/+1 (ULDA_BOSS_07e); the run player's get nothing
+PASS G3 untargeted
+PASS H1 Sand Surge costs (1): one Sand Trap joins the run player's deck; the boss's deck is unchanged
+PASS H2 the boss's fair view keeps the run player's deck masked, the Sand Trap too (the boss's search never learns where it is or what else is there): as long as the real deck, no card shown  (0 traps shown)
+PASS H3 used again: a second Sand Trap
+PASS H4 the run player draws a Sand Trap: it is cast (not kept), the top 2 cards of the deck go to the graveyard, then a card is drawn  (deck 26->22 grave +2 hand +1)
+PASS H5 in the boss's view the two removed cards are known in the graveyard, the deck is as long as the real one
+PASS H6 with one card under it, that card is removed and the draw finds an empty deck (fatigue)  (fatigue 1)
+PASS H7 with the run player's deck full it is not offered
+PASS H8 a Sand Trap in the boss's own deck works the same for the boss (its own top 2 cards)
+PASS H9 Sand Trap keeps the client's text and is a Casts When Drawn card
+PASS I1 Armor Repairs costs (2): 4 Armor from 0  (4)
+PASS I2 below 10 Armor (9): 4 more (13)  (13)
+PASS I3 at 10 Armor: 2 (12)  (12)
+PASS J1 Well Equipped costs (2): one random Rogue spell or weapon joins the boss's hand  (BRM_007)
+PASS J2 twenty-four more uses: always a scripted Rogue spell (never a Quest or a Secret) or weapon, of many kinds, weapons and spells both  (19 kinds, pool 71)
+PASS J3 with a full hand it is not offered
+PASS J4 the Rogue pool holds no Secret although the class has some (the generation filter of this row)
+PASS K1 Unstable Weaponry is passive: started at match start, never an option
+PASS K2 the boss plays a Mech: 2 damage to a random enemy (the run player's hero or a minion); a minion that is no Mech does nothing  (0>0>2)
+PASS K3 a Mech summoned (not played) counts too  (4)
+PASS K4 a Mech of the run player's does nothing
+PASS L1 Brick by Brick costs (3): a Discover of three distinct Elementals of the boss's class (Shaman) or neutral  (CFM_715,CS2_118,UNG_202)
+PASS L2 the boss picks: the card joins its hand with "Bricked" (ULDA_BOSS_12e) and costs (2) less  (CFM_715 2/4)
+PASS L3 ten more uses: many kinds offered, every one of the pool (scripted Shaman or neutral Elementals the generation filter allows)  (25 kinds, pool 62)
+PASS L4 with a full hand it is not offered
+PASS M1 Snakeshot costs (2): a 1/1 Snake (EX1_554t) with Poisonous (ULDA_BOSS_13e)
+PASS M2 the Snake attacks a 4/5: the Poisonous Snake destroys it
+PASS M3 with a full board it is not offered
+PASS N1 Sword Dance is passive: started at match start, never an option
+PASS N2 a weapon of the boss's destroyed by a new one: a copy with its enchantments (Deadly Poison: 5 Attack) and full Durability is shuffled into the boss's deck  (5/2)
+PASS N2b the boss's own-deck ledger holds the shuffled copy (a public shuffle of its own card) and exactly its deck's cards  (CS2_120x25,CS2_106x1)
+PASS N3 a weapon out of Durability (Arcanite Reaper after its second attack) is shuffled back too  (deck 25->26)
+PASS N4 the shuffled copy drawn and played is the poisoned weapon (5 Attack)
+PASS N5 the run player's weapon destroyed goes into no deck
+PASS N6 with the boss's deck full the copy is lost (nothing breaks)
+PASS N7 a weapon buffed by Captain Greenskin (+1/+1) that lost a Durability point: its copy keeps the enchantment's +1 Attack and +1 Durability, and no damage (4/3, not 4/2)  (4/3 dmg 0)
+PASS N8 drawn and equipped, it is a 4/3
+PASS O1 Puffertrooper costs (2); with no Murloc of the boss's it is not offered (the run player's do not count)
+PASS O2 it gives the boss's Murlocs Rush (ULDA_BOSS_15e); the other minions and the run player's Murloc get nothing
+PASS O3 the Murloc summoned this turn can now attack a minion (Rush)
+PASS O4 with every Murloc of the boss's already holding Rush it is not offered
+PASS P1 Under Wraps is passive: started at match start, never an option
+PASS P2 a minion the boss plays gets Reborn (ULDA_BOSS_16e); one summoned without being played and the run player's do not
+PASS P3 it dies and comes back with 1 Health and no Reborn
+PASS P4 Silence removes it
+PASS Q1 Spreading the Curse costs (2): a Leper Gnome (EX1_029) with Rush (ULDA_BOSS_17e)
+PASS Q2 it can attack a minion at once, not the hero
+PASS Q3 its Deathrattle hits the run player's hero for 2  (30->28)
+PASS Q4 with a full board it is not offered
+PASS R1 Plagued Horde costs (2); any minion is a target, never a hero
+PASS R2 the boss's minion with "Deathrattle: Deal 2 damage to the enemy hero" (ULDA_BOSS_18e) dies: the run player's hero takes 2  (30->28)
+PASS R3 on the run player's minion it hits the boss's hero (the enemy of the minion's controller)  (30->28)
+PASS R4 given twice, it deals 2 twice  (28->24)
+PASS S1 the shipped data validates with the eighteen family 19 rows
+PASS S2 family 19 holds exactly these eighteen rows, appended after the earlier families' rows  (ulda_01_cardish,ulda_02_zafarr,ulda_03_vera,ulda_04_nash,ulda_05_glack,ulda_06_chu,ulda_07_squeamlish,ulda_08_sinkhole,ulda_09_demolisher,ulda_10_terraviss,ulda_11_robold,ulda_12_pyramad,ulda_13_scalesnout,ulda_14_sirinell,ulda_15_herring,ulda_16_battrund,ulda_17_ichabod,ulda_18_twizzleflux)
+PASS S3 ulda_01_cardish: a Tombs row of tier 4 (wiki level 7, chapter 2) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted health 30 tier 4 level wiki-level-table:7 pools enc-t4)
+PASS S3 ulda_02_zafarr: a Tombs row of tier 3 (wiki level 6, chapter 3) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted health 30 tier 3 level wiki-level-table:6 pools enc-t3)
+PASS S3 ulda_03_vera: a Tombs row of tier 2 (wiki level 4, chapter 4) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 2 level wiki-level-table:4 pools enc-t2)
+PASS S3 ulda_04_nash: a Tombs row of tier 3 (wiki level 6, chapter 2) whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health, not the printed 10)  (authentic health 30 tier 3 level wiki-level-table:6 pools enc-t3)
+PASS S3 ulda_05_glack: a Tombs row of tier 2 (wiki level 4, chapter 3) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 2 level wiki-level-table:4 pools enc-t2)
+PASS S3 ulda_06_chu: a Tombs row of tier 4 (wiki level 7, chapter 3) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted health 30 tier 4 level wiki-level-table:7 pools enc-t4)
+PASS S3 ulda_07_squeamlish: a Tombs row of tier 4 (wiki level 7, chapter 2) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted health 30 tier 4 level wiki-level-table:7 pools enc-t4)
+PASS S3 ulda_08_sinkhole: a Tombs row of tier 3 (wiki level 6, chapter 1) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted health 30 tier 3 level wiki-level-table:6 pools enc-t3)
+PASS S3 ulda_09_demolisher: a Tombs row of tier 2 (wiki level 4, chapter 2) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 2 level wiki-level-table:4 pools enc-t2)
+PASS S3 ulda_10_terraviss: a Tombs row of tier 2 (wiki level 3, chapter 3) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 2 level wiki-level-table:3 pools enc-t2)
+PASS S3 ulda_11_robold: a Tombs row of tier 2 (wiki level 4, chapter 2) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 2 level wiki-level-table:4 pools enc-t2)
+PASS S3 ulda_12_pyramad: a Tombs row of tier 2 (wiki level 4, chapter 4) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 2 level wiki-level-table:4 pools enc-t2)
+PASS S3 ulda_13_scalesnout: a Tombs row of tier 1 (wiki level 2, chapter 3) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 1 level wiki-level-table:2 pools enc-t1)
+PASS S3 ulda_14_sirinell: a Tombs row of tier 3 (wiki level 6, chapter 4) whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health, not the printed 10)  (authentic health 30 tier 3 level wiki-level-table:6 pools enc-t3)
+PASS S3 ulda_15_herring: a Tombs row of tier 1 (wiki level 2, chapter 1) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 1 level wiki-level-table:2 pools enc-t1)
+PASS S3 ulda_16_battrund: a Tombs row of tier 2 (wiki level 4, chapter 4) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 2 level wiki-level-table:4 pools enc-t2)
+PASS S3 ulda_17_ichabod: a Tombs row of tier 2 (wiki level 4, chapter 3) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 2 level wiki-level-table:4 pools enc-t2)
+PASS S3 ulda_18_twizzleflux: a Tombs row of tier 2 (wiki level 4, chapter 1) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 2 level wiki-level-table:4 pools enc-t2)
+PASS S4 every power, Sand Trap and every enchantment of the family is scripted by family 19 and keeps the client's text (18 powers, 1 card, 10 enchantments)
+PASS S5 the five passive powers are the registry's passive ones (never an option), the thirteen others clickable; each power's Cost is the client's
+PASS S6 each has its own admission row of its family: the powers a boss's only, Sand Trap a boss's and the run player's (it lives in the run player's deck); none is ever generated
+PASS S7 a family 19 power asked for the run player is refused with its row's reason
+PASS S8 the listed cards replaced are only cards the engine does not script (or Hunter's Pack, which could give a boss a Secret), each with its named replacement  (ULD_160>DAL_614:unscripted,ULD_170>DAL_606:unscripted,ULD_184>EX1_029:unscripted,ULD_708>DAL_739:unscripted | ULD_214>ULD_206:unscripted,ULD_723>ULD_217:unscripted | ULD_180>CS2_182:unscripted,ULD_184>EX1_029:unscripted,ULD_271>CS2_121:unscripted,ULD_429>NEW1_031:admission:secret-generated)
+PASS S9 the decks keep the wiki's signature cards: Mister Chu's two Mirage Blades (ULD_326t), Demolisher's six Demolishers, Vera's Lackey cards (EVIL Cable Rat, EVIL Genius, Kobold and Goblin Lackey), Zafarr's Reborn minions  (zafarr reborn 14)
+PASS S10 the tier pools: two rows in enc-t1, nine in enc-t2, four in enc-t3, three in enc-t4
+PASS S11 the validator refuses a row whose power is not scripted (the Heroic Sand Surge ULDA_BOSS_08px)  (ULDA_BOSS_08px: not scripted (boss ulda_08_sinkhole))
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 115 passed, 0 failed
