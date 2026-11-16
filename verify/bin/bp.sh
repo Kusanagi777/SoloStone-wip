@@ -35,6 +35,7 @@
 #   family 18 modes:     bp.sh enc18a|enc18b|enc18-finale <k>                     (one run per call, k = 1 or 2; then `bp.sh same <mode>`;
 #                                                                                  enc18-finale on the fixture schedule with the Heist finale enabled)
 #   family 19 modes:     bp.sh enc19a|enc19b|enc19-seeds-a|enc19-seeds-b         (twice per call; a = ULDA_BOSS_01-09, b = 10-18)
+#   family 20 modes:     bp.sh enc20a|enc20b|enc20-seeds-a|enc20-seeds-b         (twice per call; a = ULDA_BOSS_19-27, b = 28-36)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -119,6 +120,10 @@ B18=dala_68_lilayell,dala_70_smiggs,dala_71_anarii,dala_72_kazamon,dala_73_hesut
 A19=ulda_01_cardish,ulda_02_zafarr,ulda_03_vera,ulda_04_nash,ulda_05_glack,ulda_06_chu,ulda_07_squeamlish,ulda_08_sinkhole,ulda_09_demolisher
 B19=ulda_10_terraviss,ulda_11_robold,ulda_12_pyramad,ulda_13_scalesnout,ulda_14_sirinell,ulda_15_herring,ulda_16_battrund,ulda_17_ichabod,ulda_18_twizzleflux
 CARDS19=ULD_326t,DAL_606,DAL_614,DAL_739
+# family 20
+A20=ulda_19_sothis,ulda_20_kham,ulda_21_illidara,ulda_22_colossus,ulda_23_skarik,ulda_24_palm_tree,ulda_25_zenda,ulda_26_thudd,ulda_27_toomba
+B20=ulda_28_sazin,ulda_29_ozara,ulda_30_ermavar,ulda_31_drasar,ulda_32_edra,ulda_33_ruby,ulda_34_dovo,ulda_35_ptah,ulda_36_kasa
+CARDS20=ULD_705,LOE_029,CS2_091,EX1_409
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -316,6 +321,10 @@ enc19a) need $E; twice enc19a BOSS=$A19 WATCH=$CARDS19 ;;
 enc19b) need $E; twice enc19b BOSS=$B19 WATCH=$CARDS19 ;;
 enc19-seeds-a) need $E; twice enc19-seeds-a BOSS=$A19 SEED_BASE=19000 WATCH=$CARDS19 ;;
 enc19-seeds-b) need $E; twice enc19-seeds-b BOSS=$B19 SEED_BASE=19000 WATCH=$CARDS19 ;;
+enc20a) need $E; twice enc20a BOSS=$A20 WATCH=$CARDS20 ;;
+enc20b) need $E; twice enc20b BOSS=$B20 WATCH=$CARDS20 ;;
+enc20-seeds-a) need $E; twice enc20-seeds-a BOSS=$A20 SEED_BASE=20000 WATCH=$CARDS20 ;;
+enc20-seeds-b) need $E; twice enc20-seeds-b BOSS=$B20 SEED_BASE=20000 WATCH=$CARDS20 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;

@@ -3166,9 +3166,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_705", new CardDef(new Power
 			{
-				// TODO [ULD_705] Mogu Cultist && Test: Mogu Cultist_ULD_705
-				//PowerTask = null,
-				//Trigger = null,
+				// Phase 8 family 20 (Sothis's Titan Ritual summons it): with a full board of Mogu Cultists they are destroyed and
+				// Highkeeper Ra is summoned (DungeonRunEncounters.TombsB.MoguCultistBattlecry).
+				PowerTask = CardSets.DungeonRun.DungeonRunEncounters.TombsB.MoguCultistBattlecry
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -3527,9 +3527,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_705t", new CardDef(new Power
 			{
-				// TODO [ULD_705t] Highkeeper Ra && Test: Highkeeper Ra_ULD_705t
-				//PowerTask = null,
-				//Trigger = null,
+				// Phase 8 family 20: 20 damage to every enemy at the end of its owner's turn (DungeonRunEncounters.TombsB.HighkeeperRaTrigger).
+				Trigger = CardSets.DungeonRun.DungeonRunEncounters.TombsB.HighkeeperRaTrigger
 			}));
 
 			// ---------------------------------------- SPELL - NEUTRAL

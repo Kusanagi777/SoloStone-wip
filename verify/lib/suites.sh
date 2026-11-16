@@ -20,7 +20,8 @@ BUILD_LIST="audit-verify/c-runlayer audit-verify/c-catalog audit-verify/c-conten
  p8f05/c-rules-05 p8f05/c-bosspilot-rules05 p8f07/c-enc-07 p8f08/c-enc-08
  p8f06/c-rules-06 p8f06/c-bosspilot-rules06 p8f09/c-enc-09 p8f09/c-bosspilot-enc09 p8f10/c-enc-10 p8w3/c-w3fix
  p8f11/c-enc-11 p8f12/c-enc-12 p8f13/c-enc-13 p8w4/c-w4fix
- p8f14/c-enc-14 p8f15/c-enc-15 p8f16/c-enc-16 p8f17/c-enc-17 p8f18/c-enc-18 p8f19/c-enc-19 p8w5/c-w5fix"
+ p8f14/c-enc-14 p8f15/c-enc-15 p8f16/c-enc-16 p8f17/c-enc-17 p8f18/c-enc-18 p8f19/c-enc-19 p8w5/c-w5fix
+ p8f20/c-enc-20"
 
 # The run stage: 65 entries (54 through wave 3, + the four wave-4 suites, + the seven wave-5 suites) (runs.sh <k> <from> <to>). How each one is run is in runs.sh; most are plain.
 RUN_LIST="audit-verify/c-runlayer audit-verify/c-catalog audit-verify/c-content audit-verify/c-admission
@@ -37,7 +38,8 @@ RUN_LIST="audit-verify/c-runlayer audit-verify/c-catalog audit-verify/c-content 
  p8f05/c-rules-05 p8f07/c-enc-07 p8f08/c-enc-08 p8f06/c-rules-06 p8f09/c-enc-09 p8f10/c-enc-10 p8w3/c-w3fix
  audit-verify/c-secretscan audit-verify/c-secretsearch audit-verify/selfplay audit-verify/randplay
  p8f11/c-enc-11 p8f12/c-enc-12 p8f13/c-enc-13 p8w4/c-w4fix
- p8f14/c-enc-14 p8f15/c-enc-15 p8f16/c-enc-16 p8f17/c-enc-17 p8f18/c-enc-18 p8f19/c-enc-19 p8w5/c-w5fix"
+ p8f14/c-enc-14 p8f15/c-enc-15 p8f16/c-enc-16 p8f17/c-enc-17 p8f18/c-enc-18 p8f19/c-enc-19 p8w5/c-w5fix
+ p8f20/c-enc-20"
 
 # The audit hall (hall.sh): the base harness, then the 38 audit harnesses in this order (hall.sh <from> <to>).
 HALL_BASE="hall/audit-harness"

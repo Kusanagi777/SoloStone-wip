@@ -726,6 +726,8 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // ledger), and 19 rows leave "missing" for "partial" (the 18 boss powers and Sand Trap).
     // Wave 5 merged (14-19): + 158 rows, not the families' 189: 18 cards are new in the decks of two or three of these families
     // (20 repeats) and 11 were new in wave 4 already; all 158 partial, and 116 rows leave "missing" for "partial".
+    // Phase 8 family 20 (Tombs bosses B): + 26 rows, all "partial" (18 run:boss rows; 8 cards of its decks that are new to the
+    // ledger, Mogu Cultist ULD_705 among them), and 18 rows leave "missing" for "partial" (the 18 boss powers).
     Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13; wave 5: families 14-19): 4918 rows; 2813 implemented, 660 partial, 387 missing, 1058 duplicate/support, 0 intentionally adapted",
         rows.Count == 4918 && classes.GetValueOrDefault("implemented") == 2813 && classes.GetValueOrDefault("partial") == 660 && classes.GetValueOrDefault("missing") == 387
         && classes.GetValueOrDefault("duplicate/support") == 1058 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
