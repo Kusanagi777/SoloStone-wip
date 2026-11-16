@@ -34,6 +34,7 @@
 #                        and for enc17-cards `bp.sh enc17-check`: the fixture rows played every boss card)
 #   family 18 modes:     bp.sh enc18a|enc18b|enc18-finale <k>                     (one run per call, k = 1 or 2; then `bp.sh same <mode>`;
 #                                                                                  enc18-finale on the fixture schedule with the Heist finale enabled)
+#   family 19 modes:     bp.sh enc19a|enc19b|enc19-seeds-a|enc19-seeds-b         (twice per call; a = ULDA_BOSS_01-09, b = 10-18)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -114,6 +115,10 @@ AUTO17=dala_50_nozari,dala_55_hannigan,dala_56_wagtoggle,dala_59_goya
 # finale is disabled: enc18-finale fights them on the fixture schedule with the finale enabled)
 A18=dala_61_saelorn,dala_62_haro,dala_63_dagg,dala_64_biggs,dala_65_valdera,dala_66_marei
 B18=dala_68_lilayell,dala_70_smiggs,dala_71_anarii,dala_72_kazamon,dala_73_hesutu,dala_74_kara
+# family 19
+A19=ulda_01_cardish,ulda_02_zafarr,ulda_03_vera,ulda_04_nash,ulda_05_glack,ulda_06_chu,ulda_07_squeamlish,ulda_08_sinkhole,ulda_09_demolisher
+B19=ulda_10_terraviss,ulda_11_robold,ulda_12_pyramad,ulda_13_scalesnout,ulda_14_sirinell,ulda_15_herring,ulda_16_battrund,ulda_17_ichabod,ulda_18_twizzleflux
+CARDS19=ULD_326t,DAL_606,DAL_614,DAL_739
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -307,6 +312,10 @@ enc18a) need $E; once enc18a "$2" BOSS=$A18 ;;
 enc18b) need $E; once enc18b "$2" BOSS=$B18 ;;
 enc18-finale) # the Heist finale (fixture: acts-v3h with its finale enabled): Norroa, Vargoth, Kalec, Khadgar in order, floors 16-19
   need $E; once enc18-finale "$2" FINALE=1 WATCH=KARA_00_08 SCHEDULE_JSON=$FX/p8f18/fixtures/schedule-finale18.json ;;
+enc19a) need $E; twice enc19a BOSS=$A19 WATCH=$CARDS19 ;;
+enc19b) need $E; twice enc19b BOSS=$B19 WATCH=$CARDS19 ;;
+enc19-seeds-a) need $E; twice enc19-seeds-a BOSS=$A19 SEED_BASE=19000 WATCH=$CARDS19 ;;
+enc19-seeds-b) need $E; twice enc19-seeds-b BOSS=$B19 SEED_BASE=19000 WATCH=$CARDS19 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;
