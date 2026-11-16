@@ -1,0 +1,3008 @@
+{
+ "schemaVersion": 1,
+ "family": "21",
+ "description": "Tombs of Terror bosses C (phase 8 family 21): seventeen encounters of Saviors of Uldum's Tombs of Terror (ULDA_BOSS_41 to ULDA_BOSS_59 without 44, Trap Room, which is family 01's, and without 58, Jythiros of Questions, rejected below: Alda Petrik, Sandshaper Rhogi, Jolene Knottley, Belloc Brightblade, Wildtooth, Totally Normal Jar, Ilza Grimdrum, Craz, Ol' Barkeye, Kasmut, Lich Baz'hial, Taskmaster Maru, Janak, Water-Toting Murlocs, Sand Puffer Frog, Winged Guardian, Dire Bat). Boss deck lists are transcribed from hearthstone.wiki.gg boss pages (read 2026-11-14), by card name; tools/dungeon-run-catalog (step 'encounters') resolves the names against facts/violet-hold-2026-09.json, checks every card and writes data/dungeon-run/encounters-v1.json. Every Tombs boss hero prints 10 Health: Health is the act curve's, and the tier is the boss's level band read from its page's deck table (family 19's rule, verify/tools/gen/p8f19/tombs_tiers.py).",
+ "method": "The wikitext of each boss page (action=raw) was read and its deck tables transcribed in table order with their own counts; a table of possible cards without counts is transcribed with count null. The Heroic table is the row's extend list. A page's level note and its chapter line are recorded in the row's schedule adaptation. Ol' Barkeye's and Winged Guardian's pages are the boss pages \"Ol' Barkeye (boss)\" and \"Winged Guardian (boss)\". The file is written by verify/tools/gen/p8f21/make_f21.py.",
+ "bosses": [
+  {
+   "id": "ulda_41_alda",
+   "name": "Alda Petrik",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_41h",
+   "power": "ULDA_BOSS_41p",
+   "tier": "1",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 2
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Alda_Petrik",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 2)",
+     "cards": [
+      {
+       "name": "Rapid Fire",
+       "count": null
+      },
+      {
+       "name": "Secret Plan",
+       "count": null
+      },
+      {
+       "name": "Tracking",
+       "count": null
+      },
+      {
+       "name": "Kindly Grandmother",
+       "count": null
+      },
+      {
+       "name": "Trogg Beastrager",
+       "count": null
+      },
+      {
+       "name": "Wandering Monster",
+       "count": null
+      },
+      {
+       "name": "Desert Spear",
+       "count": null
+      },
+      {
+       "name": "Dire Frenzy",
+       "count": null
+      },
+      {
+       "name": "Worgen Infiltrator",
+       "count": null
+      },
+      {
+       "name": "Ironbeak Owl",
+       "count": null
+      },
+      {
+       "name": "Raging Worgen",
+       "count": null
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Timber Wolf",
+       "count": null
+      },
+      {
+       "name": "Headhunter's Hatchet",
+       "count": null
+      },
+      {
+       "name": "Scavenging Hyena",
+       "count": null
+      },
+      {
+       "name": "Desert Camel",
+       "count": null
+      },
+      {
+       "name": "Spirit of the Lynx",
+       "count": null
+      },
+      {
+       "name": "Dire Frenzy",
+       "count": null
+      },
+      {
+       "name": "Halazzi, the Lynx",
+       "count": null
+      },
+      {
+       "name": "Dire Wolf Alpha",
+       "count": null
+      },
+      {
+       "name": "Untamed Beastmaster",
+       "count": null
+      },
+      {
+       "name": "Lifedrinker",
+       "count": null
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 2)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Secret Plan": "Animal Companion"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 1-2 (a \"10; 15\" table of possible cards: 10 cards on level 1, 15 on level 2) = tier 1. The page names chapter 3 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists the possible cards of the level 1-2 deck (10 or 15 of them, no counts). A combat tier fights with 30: each listed card once, a second copy of each, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Secret Plan (it Discovers a Secret for the boss; this row generates none) by Animal Companion."
+    },
+    {
+     "kind": "power",
+     "note": "Running Wild (2) draws a random minion of the boss's deck (its own deck, which the boss knows); if it is a Beast, a second copy of that card goes to its hand (while the hand has room). Offered while its hand has room and its deck is not empty (both counts are public)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_42_rhogi",
+   "name": "Sandshaper Rhogi",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_42h",
+   "power": "ULDA_BOSS_42p",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "cards": [
+    "ULDA_BOSS_42e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Sandshaper_Rhogi",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 4)",
+     "cards": [
+      {
+       "name": "Dust Devil",
+       "count": 2
+      },
+      {
+       "name": "Lightning Bolt",
+       "count": 2
+      },
+      {
+       "name": "Ancestral Knowledge",
+       "count": 2
+      },
+      {
+       "name": "Crushing Hand",
+       "count": 2
+      },
+      {
+       "name": "EVIL Totem",
+       "count": 2
+      },
+      {
+       "name": "Maelstrom Portal",
+       "count": 2
+      },
+      {
+       "name": "Sandstorm Elemental",
+       "count": 2
+      },
+      {
+       "name": "Stormforged Axe",
+       "count": 1
+      },
+      {
+       "name": "Drakkari Defender",
+       "count": 1
+      },
+      {
+       "name": "Elemental Destruction",
+       "count": 2
+      },
+      {
+       "name": "Mana Tide Totem",
+       "count": 2
+      },
+      {
+       "name": "Wicked Witchdoctor",
+       "count": 2
+      },
+      {
+       "name": "Bogshaper",
+       "count": 1
+      },
+      {
+       "name": "Livewire Lance",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Maelstrom Portal",
+       "count": 2
+      },
+      {
+       "name": "Sandstorm Elemental",
+       "count": 2
+      },
+      {
+       "name": "Feral Spirit",
+       "count": 2
+      },
+      {
+       "name": "Hot Spring Guardian",
+       "count": 2
+      },
+      {
+       "name": "Storm Chaser",
+       "count": 2
+      },
+      {
+       "name": "Tidal Surge",
+       "count": 2
+      },
+      {
+       "name": "Rain of Toads",
+       "count": 2
+      },
+      {
+       "name": "Mistress of Mixtures",
+       "count": 2
+      },
+      {
+       "name": "Murmy",
+       "count": 2
+      },
+      {
+       "name": "Annoy-o-Tron",
+       "count": 2
+      },
+      {
+       "name": "Bloodmage Thalnos",
+       "count": 1
+      },
+      {
+       "name": "Lifedrinker",
+       "count": 2
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 4)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "EVIL Totem": "Flametongue Totem",
+    "Livewire Lance": "Fiery War Axe",
+    "Murmy": "Bluegill Warrior"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 3-4 (the 25-card level-4 list; on level 3 five random cards are missing) = tier 2. The page names chapter 2 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-4 list has 25 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): EVIL Totem by Flametongue Totem (a 2-Cost Shaman Totem), Livewire Lance by Fiery War Axe (a 2-Cost weapon of the same Attack) and Murmy (Heroic list) by Bluegill Warrior."
+    },
+    {
+     "kind": "power",
+     "note": "Sand Shapin' (3) shuffles a plain copy of an enemy minion's card (the board is public; never a run shrine) into the boss's deck as a public shuffle, marked \"Summon when Drawn\" (ULDA_BOSS_42e). When the boss draws it, it is summoned from its hand while the board has room and the boss draws a card (the Casts When Drawn rule, as family 04's Shadow of Death); with a full board it stays in hand as a playable card. Offered while the deck has room."
+    },
+    {
+     "kind": "power",
+     "note": "The client's Sand Rush Player Enchantment (ULDA_BOSS_42e2), Sandy Speed (ULDA_BOSS_42e3, \"Has Rush\") and the Sand Shapin Dummy (ULDA_BOSS_42d) are client script holders the text does not name; the summoned copy gets no Rush."
+    }
+   ]
+  },
+  {
+   "id": "ulda_43_jolene",
+   "name": "Jolene Knottley",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_43h",
+   "power": "ULDA_BOSS_43p",
+   "tier": "4",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 7
+   },
+   "flags": [
+    "hiddenZone"
+   ],
+   "cards": [
+    "ULDA_BOSS_43e1"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Jolene_Knottley",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 7)",
+     "cards": [
+      {
+       "name": "Mortal Coil",
+       "count": 1
+      },
+      {
+       "name": "Sinister Deal",
+       "count": 2
+      },
+      {
+       "name": "Soul Infusion",
+       "count": 1
+      },
+      {
+       "name": "Voidwalker",
+       "count": 2
+      },
+      {
+       "name": "Darkshire Librarian",
+       "count": 2
+      },
+      {
+       "name": "Defile",
+       "count": 2
+      },
+      {
+       "name": "Drain Soul",
+       "count": 2
+      },
+      {
+       "name": "EVIL Genius",
+       "count": 2
+      },
+      {
+       "name": "Expired Merchant",
+       "count": 2
+      },
+      {
+       "name": "Gnomeferatu",
+       "count": 2
+      },
+      {
+       "name": "Queen of Pain",
+       "count": 2
+      },
+      {
+       "name": "EVIL Recruiter",
+       "count": 2
+      },
+      {
+       "name": "Aranasi Broodmother",
+       "count": 2
+      },
+      {
+       "name": "Dr. Morrigan",
+       "count": 1
+      },
+      {
+       "name": "Siphon Soul",
+       "count": 2
+      },
+      {
+       "name": "Twisting Nether",
+       "count": 1
+      },
+      {
+       "name": "EVIL Cable Rat",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Flame Imp",
+       "count": 2
+      },
+      {
+       "name": "Kobold Librarian",
+       "count": 2
+      },
+      {
+       "name": "Mortal Coil",
+       "count": 1
+      },
+      {
+       "name": "Defile",
+       "count": 2
+      },
+      {
+       "name": "Gnomeferatu",
+       "count": 2
+      },
+      {
+       "name": "Darkshire Councilman",
+       "count": 2
+      },
+      {
+       "name": "Imp Gang Boss",
+       "count": 2
+      },
+      {
+       "name": "Imp-losion",
+       "count": 2
+      },
+      {
+       "name": "Despicable Dreadlord",
+       "count": 2
+      },
+      {
+       "name": "Twisting Nether",
+       "count": 1
+      },
+      {
+       "name": "Bloodmage Thalnos",
+       "count": 1
+      },
+      {
+       "name": "Stonesplinter Trogg",
+       "count": 2
+      },
+      {
+       "name": "Auctionmaster Beardo",
+       "count": 1
+      },
+      {
+       "name": "Archmage Vargoth",
+       "count": 1
+      },
+      {
+       "name": "Burly Rockjaw Trogg",
+       "count": 2
+      },
+      {
+       "name": "Violet Teacher",
+       "count": 2
+      },
+      {
+       "name": "Loatheb",
+       "count": 1
+      },
+      {
+       "name": "Gadgetzan Auctioneer",
+       "count": 1
+      },
+      {
+       "name": "Troggzor the Earthinator",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 7)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Sinister Deal": "Kobold Lackey",
+    "Expired Merchant": "Voidwalker",
+    "EVIL Recruiter": "Imp Gang Boss"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: level 7 (a full 30-card list with no smaller lower-level version, the shape of a chapter's seventh boss, the last before its Plague Lord) = tier 4. The page names chapter 2 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Sinister Deal by Kobold Lackey (the Lackey it would Discover), Expired Merchant by Voidwalker and EVIL Recruiter by Imp Gang Boss (of the boss's Heroic list)."
+    },
+    {
+     "kind": "power",
+     "note": "Spoil the Ending (2) puts into the boss's hand a new copy of the card of a random spell in the run player's hand (the card, Mind Vision's rule, not its enchantments), Spoiled: it costs (2) less (ULDA_BOSS_43e1). The boss learns exactly that card (the copy in its own hand); nothing links the copy to the run player's hand card, whose hand stays masked in the boss's fair view. Offered while the run player holds a card and the boss's hand has room (both counts are public); with no spell in that hand it does nothing (the boss cannot know beforehand)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_45_belloc",
+   "name": "Belloc Brightblade",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_45h",
+   "power": "ULDA_BOSS_45p",
+   "tier": "3",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "flags": [
+    "passive"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Belloc_Brightblade",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 6)",
+     "cards": [
+      {
+       "name": "Brazen Zealot",
+       "count": 2
+      },
+      {
+       "name": "Crystalsmith Kangor",
+       "count": 1
+      },
+      {
+       "name": "Sandwasp Queen",
+       "count": 2
+      },
+      {
+       "name": "Salhet's Pride",
+       "count": 2
+      },
+      {
+       "name": "Seal of Champions",
+       "count": 2
+      },
+      {
+       "name": "Wickerflame Burnbristle",
+       "count": 1
+      },
+      {
+       "name": "Ancestral Guardian",
+       "count": 2
+      },
+      {
+       "name": "Chillblade Champion",
+       "count": 2
+      },
+      {
+       "name": "Hammer of Wrath",
+       "count": 2
+      },
+      {
+       "name": "Keeper of Uldaman",
+       "count": 1
+      },
+      {
+       "name": "Pharaoh's Blessing",
+       "count": 1
+      },
+      {
+       "name": "Sunkeeper Tarim",
+       "count": 1
+      },
+      {
+       "name": "Lynessa Sunsorrow",
+       "count": 1
+      },
+      {
+       "name": "Mortal Coil",
+       "count": 1
+      },
+      {
+       "name": "Reliquary Seeker",
+       "count": 2
+      },
+      {
+       "name": "Sinister Deal",
+       "count": 2
+      },
+      {
+       "name": "Riftcleaver",
+       "count": 2
+      },
+      {
+       "name": "Blood Knight",
+       "count": 2
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Brazen Zealot",
+       "count": 1
+      },
+      {
+       "name": "Crystology",
+       "count": 2
+      },
+      {
+       "name": "Righteous Protector",
+       "count": 2
+      },
+      {
+       "name": "Selfless Hero",
+       "count": 2
+      },
+      {
+       "name": "Crystalsmith Kangor",
+       "count": 1
+      },
+      {
+       "name": "Micro Mummy",
+       "count": 2
+      },
+      {
+       "name": "Shielded Minibot",
+       "count": 2
+      },
+      {
+       "name": "Subdue",
+       "count": 2
+      },
+      {
+       "name": "Divine Favor",
+       "count": 2
+      },
+      {
+       "name": "Muster for Battle",
+       "count": 2
+      },
+      {
+       "name": "Unidentified Maul",
+       "count": 2
+      },
+      {
+       "name": "Consecration",
+       "count": 2
+      },
+      {
+       "name": "Keeper of Uldaman",
+       "count": 2
+      },
+      {
+       "name": "Truesilver Champion",
+       "count": 1
+      },
+      {
+       "name": "Spikeridged Steed",
+       "count": 2
+      },
+      {
+       "name": "Sunkeeper Tarim",
+       "count": 1
+      },
+      {
+       "name": "Val'anyr",
+       "count": 1
+      },
+      {
+       "name": "Silver Sword",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 6)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Sinister Deal": "Kobold Lackey",
+    "Riftcleaver": "Truesilver Champion"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 5-6 (the 30-card level-6 list; the page notes that on level 5 five random cards are missing) = tier 3. The page names chapter 4 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's list is the level 6 deck; on level 5 the original removes 5 random cards. Here the row always uses the level 6 list."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Sinister Deal by Kobold Lackey (the Lackey it would Discover) and Riftcleaver by Truesilver Champion (of the boss's Heroic list)."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-6 table sums to 31 cards (its Paladin rows 20, Warlock 7, Neutral 4); a combat tier fights with 30, so the last listed card's second copy (Khartut Defender) is left out."
+    },
+    {
+     "kind": "power",
+     "note": "Reliquary's Relics (passive): after the run player casts a spell (a public cast; a Secret too: the cast tells its card, as the original's copy did), a new copy of that card goes to the boss's hand while it has room."
+    }
+   ]
+  },
+  {
+   "id": "ulda_46_wildtooth",
+   "name": "Wildtooth",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_46h",
+   "power": "ULDA_BOSS_46p",
+   "tier": "3",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "flags": [
+    "passive",
+    "bothPlayers"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Wildtooth",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 6)",
+     "cards": [
+      {
+       "name": "Hunter's Mark",
+       "count": 2
+      },
+      {
+       "name": "Carrion Grub",
+       "count": 2
+      },
+      {
+       "name": "Bearshark",
+       "count": 4
+      },
+      {
+       "name": "Desert Camel",
+       "count": 2
+      },
+      {
+       "name": "Exploding Bloatbat",
+       "count": 2
+      },
+      {
+       "name": "Baited Arrow",
+       "count": 2
+      },
+      {
+       "name": "Gral, the Shark",
+       "count": 1
+      },
+      {
+       "name": "Dire Mole",
+       "count": 2
+      },
+      {
+       "name": "Tentacle of N'Zoth",
+       "count": 2
+      },
+      {
+       "name": "Nat Pagle",
+       "count": 1
+      },
+      {
+       "name": "Serpent Egg",
+       "count": 2
+      },
+      {
+       "name": "Desert Hare",
+       "count": 2
+      },
+      {
+       "name": "Arena Treasure Chest",
+       "count": 2
+      },
+      {
+       "name": "Twilight Summoner",
+       "count": 2
+      },
+      {
+       "name": "Sated Threshadon",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Fiery Bat",
+       "count": 2
+      },
+      {
+       "name": "Bearshark",
+       "count": 2
+      },
+      {
+       "name": "Nine Lives",
+       "count": 2
+      },
+      {
+       "name": "Spider Bomb",
+       "count": 2
+      },
+      {
+       "name": "Savannah Highmane",
+       "count": 2
+      },
+      {
+       "name": "Seeping Oozeling",
+       "count": 2
+      },
+      {
+       "name": "Gral, the Shark",
+       "count": 1
+      },
+      {
+       "name": "Nerubian Egg",
+       "count": 2
+      },
+      {
+       "name": "Serpent Egg",
+       "count": 2
+      },
+      {
+       "name": "Devilsaur Egg",
+       "count": 2
+      },
+      {
+       "name": "Piloted Shredder",
+       "count": 2
+      },
+      {
+       "name": "Twilight Summoner",
+       "count": 2
+      },
+      {
+       "name": "Carnivorous Cube",
+       "count": 2
+      },
+      {
+       "name": "Blatant Decoy",
+       "count": 2
+      },
+      {
+       "name": "Mechanical Whelp",
+       "count": 2
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 6)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Gral, the Shark": "Savannah Highmane",
+    "Desert Hare": "Fiery Bat"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 5-6 (the 30-card level-6 list; the page notes that on level 5 five random cards are missing) = tier 3. The page names chapter 2 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's list is the level 6 deck; on level 5 the original removes 5 random cards. Here the row always uses the level 6 list."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Gral, the Shark (it eats a minion of its owner's deck, which no boss row admits yet: admission from-own-deck) by Savannah Highmane and Desert Hare by Fiery Bat (both of the boss's Heroic list)."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists four Bearsharks in the level-6 deck; all four are kept (a boss deck has no copy limit)."
+    },
+    {
+     "kind": "power",
+     "note": "Maw of the Desert (0): the page marks it Auto-cast (and the client card carries AI_MUST_PLAY), so it is cast by rule, not chosen by the boss's AI (family 09's rule-cast powers): at the start of each of the boss's turns, while any minion is on either board, the minion with the lowest Health (either board; a tie by the game RNG; never a dormant minion) is destroyed. A run shrine picked goes dormant, as from any destroy effect."
+    }
+   ]
+  },
+  {
+   "id": "ulda_47_jar",
+   "name": "Totally Normal Jar",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_47h",
+   "power": "ULDA_BOSS_47p",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "cards": [
+    "ULDA_BOSS_47e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Totally_Normal_Jar",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 4)",
+     "cards": [
+      {
+       "name": "Grandmummy",
+       "count": 2
+      },
+      {
+       "name": "Mortal Coil",
+       "count": 2
+      },
+      {
+       "name": "Possessed Villager",
+       "count": 2
+      },
+      {
+       "name": "Spirit Bomb",
+       "count": 2
+      },
+      {
+       "name": "Expired Merchant",
+       "count": 1
+      },
+      {
+       "name": "Spreading Madness",
+       "count": 2
+      },
+      {
+       "name": "Eager Underling",
+       "count": 2
+      },
+      {
+       "name": "Kabal Trafficker",
+       "count": 1
+      },
+      {
+       "name": "Jar Dealer",
+       "count": 2
+      },
+      {
+       "name": "Kobold Sandtrooper",
+       "count": 2
+      },
+      {
+       "name": "Infested Goblin",
+       "count": 2
+      },
+      {
+       "name": "Desert Obelisk",
+       "count": 5
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Micro Mummy",
+       "count": 2
+      },
+      {
+       "name": "Grandmummy",
+       "count": 2
+      },
+      {
+       "name": "Possessed Villager",
+       "count": 2
+      },
+      {
+       "name": "Sanguine Reveler",
+       "count": 2
+      },
+      {
+       "name": "Despicable Dreadlord",
+       "count": 2
+      },
+      {
+       "name": "Restless Mummy",
+       "count": 2
+      },
+      {
+       "name": "Tentacle of N'Zoth",
+       "count": 1
+      },
+      {
+       "name": "Haunted Creeper",
+       "count": 2
+      },
+      {
+       "name": "Lost Spirit",
+       "count": 2
+      },
+      {
+       "name": "Nerubian Egg",
+       "count": 2
+      },
+      {
+       "name": "Serpent Egg",
+       "count": 2
+      },
+      {
+       "name": "Emperor Thaurissan",
+       "count": 1
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      },
+      {
+       "name": "Ragnaros the Firelord",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 4)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Expired Merchant": "Possessed Villager",
+    "Kobold Sandtrooper": "Leper Gnome",
+    "Desert Obelisk": "Nerubian Egg"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 3-4 (the 25-card level-4 list; on level 3 five random cards are missing) = tier 2. The page names chapter 4 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-4 list has 25 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Expired Merchant by Possessed Villager, Kobold Sandtrooper by Leper Gnome (the same Deathrattle, 2 damage) and the five Desert Obelisks by Nerubian Eggs (of the boss's Heroic list: a cheap body that pays off later)."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-4 table sums to 26 cards (five Desert Obelisks); the five Obelisks are kept."
+    },
+    {
+     "kind": "power",
+     "note": "What's in the Jar? (2) summons for the boss a copy of any minion (the board is public; never a run shrine, which no copy may duplicate), its stats set to 1/1 (ULDA_BOSS_47e); it needs a free slot."
+    }
+   ]
+  },
+  {
+   "id": "ulda_48_ilza",
+   "name": "Ilza Grimdrum",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_48h",
+   "power": "ULDA_BOSS_48p",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "flags": [
+    "passive",
+    "bothPlayers",
+    "hiddenZone"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Ilza_Grimdrum",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 4)",
+     "cards": [
+      {
+       "name": "Devastate",
+       "count": 2
+      },
+      {
+       "name": "Cruel Taskmaster",
+       "count": 2
+      },
+      {
+       "name": "Execute",
+       "count": 2
+      },
+      {
+       "name": "Frightened Flunky",
+       "count": 2
+      },
+      {
+       "name": "Bloodsworn Mercenary",
+       "count": 2
+      },
+      {
+       "name": "Fiery War Axe",
+       "count": 2
+      },
+      {
+       "name": "Mountainfire Armor",
+       "count": 2
+      },
+      {
+       "name": "Arathi Weaponsmith",
+       "count": 2
+      },
+      {
+       "name": "Brawl",
+       "count": 1
+      },
+      {
+       "name": "Injured Tol'vir",
+       "count": 2
+      },
+      {
+       "name": "Injured Blademaster",
+       "count": 1
+      },
+      {
+       "name": "Wolfrider",
+       "count": 2
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      },
+      {
+       "name": "Wasteland Scorpid",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Shield Slam",
+       "count": 1
+      },
+      {
+       "name": "Bring It On!",
+       "count": 2
+      },
+      {
+       "name": "Execute",
+       "count": 2
+      },
+      {
+       "name": "Slam",
+       "count": 2
+      },
+      {
+       "name": "Bash",
+       "count": 2
+      },
+      {
+       "name": "Shield Block",
+       "count": 2
+      },
+      {
+       "name": "Bloodhoof Brave",
+       "count": 2
+      },
+      {
+       "name": "Magnataur Alpha",
+       "count": 2
+      },
+      {
+       "name": "Brawl",
+       "count": 1
+      },
+      {
+       "name": "Festeroot Hulk",
+       "count": 2
+      },
+      {
+       "name": "Saronite Chain Gang",
+       "count": 1
+      },
+      {
+       "name": "Injured Tol'vir",
+       "count": 2
+      },
+      {
+       "name": "Injured Blademaster",
+       "count": 2
+      },
+      {
+       "name": "Hungry Ettin",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 4)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Injured Tol'vir": "Frostwolf Grunt"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 3-4 (the 25-card level-4 list; on level 3 five random cards are missing) = tier 2. The page names chapter 4 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-4 list has 25 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Injured Tol'vir by Frostwolf Grunt (as family 19)."
+    },
+    {
+     "kind": "power",
+     "note": "Arena Expert (0): the page marks it Auto-cast, so it is cast by rule (family 09's rule-cast powers): at the start of each of the boss's turns, while its board has room, a random minion of each player's deck is summoned (Duel!'s rule, DAL_731: the summon makes each public) and the boss's attacks the run player's."
+    }
+   ]
+  },
+  {
+   "id": "ulda_49_craz",
+   "name": "Craz",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_49h",
+   "power": "ULDA_BOSS_49p",
+   "tier": "4",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 7
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Craz",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 7)",
+     "cards": [
+      {
+       "name": "Dark Possession",
+       "count": 2
+      },
+      {
+       "name": "Sinister Deal",
+       "count": 2
+      },
+      {
+       "name": "EVIL Genius",
+       "count": 2
+      },
+      {
+       "name": "Expired Merchant",
+       "count": 2
+      },
+      {
+       "name": "EVIL Recruiter",
+       "count": 2
+      },
+      {
+       "name": "Sense Demons",
+       "count": 1
+      },
+      {
+       "name": "Imp-losion",
+       "count": 2
+      },
+      {
+       "name": "Pit Lord",
+       "count": 2
+      },
+      {
+       "name": "Portal Keeper",
+       "count": 2
+      },
+      {
+       "name": "Demonheart",
+       "count": 2
+      },
+      {
+       "name": "Aranasi Broodmother",
+       "count": 2
+      },
+      {
+       "name": "Ectomancy",
+       "count": 1
+      },
+      {
+       "name": "Kabal Trafficker",
+       "count": 2
+      },
+      {
+       "name": "Riftcleaver",
+       "count": 2
+      },
+      {
+       "name": "Jumbo Imp",
+       "count": 2
+      },
+      {
+       "name": "EVIL Cable Rat",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Lakkari Sacrifice",
+       "count": 1
+      },
+      {
+       "name": "Malchezaar's Imp",
+       "count": 2
+      },
+      {
+       "name": "The Soularium",
+       "count": 1
+      },
+      {
+       "name": "Clutchmother Zavas",
+       "count": 1
+      },
+      {
+       "name": "Darkshire Librarian",
+       "count": 2
+      },
+      {
+       "name": "Expired Merchant",
+       "count": 2
+      },
+      {
+       "name": "Tiny Knight of Evil",
+       "count": 2
+      },
+      {
+       "name": "High Priestess Jeklik",
+       "count": 1
+      },
+      {
+       "name": "Imp-losion",
+       "count": 1
+      },
+      {
+       "name": "Lakkari Felhound",
+       "count": 2
+      },
+      {
+       "name": "Voidcaller",
+       "count": 2
+      },
+      {
+       "name": "Blood-Queen Lana'thel",
+       "count": 1
+      },
+      {
+       "name": "Doomguard",
+       "count": 2
+      },
+      {
+       "name": "Riftcleaver",
+       "count": 1
+      },
+      {
+       "name": "Rin, the First Disciple",
+       "count": 1
+      },
+      {
+       "name": "Siegebreaker",
+       "count": 2
+      },
+      {
+       "name": "Soulwarden",
+       "count": 2
+      },
+      {
+       "name": "Mal'Ganis",
+       "count": 1
+      },
+      {
+       "name": "Voidlord",
+       "count": 2
+      },
+      {
+       "name": "Deathwing",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 7)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Sinister Deal": "Kobold Lackey",
+    "Expired Merchant": "Voidwalker",
+    "EVIL Recruiter": "Imp Gang Boss",
+    "Riftcleaver": "Doomguard"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: level 7 (a full 30-card list with no smaller lower-level version, the shape of a chapter's seventh boss, the last before its Plague Lord) = tier 4. The page names chapter 3 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Sinister Deal by Kobold Lackey, Expired Merchant by Voidwalker, EVIL Recruiter by Imp Gang Boss and Riftcleaver by Doomguard (of the boss's Heroic list; Demons for the Demon deck)."
+    },
+    {
+     "kind": "power",
+     "note": "Demon Emissary (2) summons a random scripted Demon of any class that costs (3) or less and that the run's generation filter allows for the boss; it needs a free slot."
+    }
+   ]
+  },
+  {
+   "id": "ulda_50_barkeye",
+   "name": "Ol' Barkeye",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_50h",
+   "power": "ULDA_BOSS_50p",
+   "tier": "3",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "flags": [
+    "passive"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Ol'_Barkeye_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 6)",
+     "cards": [
+      {
+       "name": "Candleshot",
+       "count": 2
+      },
+      {
+       "name": "Snipe",
+       "count": 2
+      },
+      {
+       "name": "Animal Companion",
+       "count": 1
+      },
+      {
+       "name": "Bloodscalp Strategist",
+       "count": 2
+      },
+      {
+       "name": "Deadly Shot",
+       "count": 2
+      },
+      {
+       "name": "Desert Spear",
+       "count": 2
+      },
+      {
+       "name": "Hunter's Pack",
+       "count": 2
+      },
+      {
+       "name": "Flanking Strike",
+       "count": 2
+      },
+      {
+       "name": "Hyena Alpha",
+       "count": 2
+      },
+      {
+       "name": "Marked Shot",
+       "count": 2
+      },
+      {
+       "name": "Piranha Launcher",
+       "count": 1
+      },
+      {
+       "name": "Savannah Highmane",
+       "count": 1
+      },
+      {
+       "name": "Wild Bloodstinger",
+       "count": 2
+      },
+      {
+       "name": "Gladiator's Longbow",
+       "count": 1
+      },
+      {
+       "name": "Kobold Sandtrooper",
+       "count": 2
+      },
+      {
+       "name": "Earthen Ring Farseer",
+       "count": 2
+      },
+      {
+       "name": "Lifedrinker",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Candleshot",
+       "count": 2
+      },
+      {
+       "name": "Bear Trap",
+       "count": 1
+      },
+      {
+       "name": "Cat Trick",
+       "count": 1
+      },
+      {
+       "name": "Explosive Trap",
+       "count": 2
+      },
+      {
+       "name": "Freezing Trap",
+       "count": 1
+      },
+      {
+       "name": "Pressure Plate",
+       "count": 1
+      },
+      {
+       "name": "Rat Trap",
+       "count": 1
+      },
+      {
+       "name": "Wandering Monster",
+       "count": 2
+      },
+      {
+       "name": "Animal Companion",
+       "count": 2
+      },
+      {
+       "name": "Deadly Shot",
+       "count": 2
+      },
+      {
+       "name": "Desert Spear",
+       "count": 2
+      },
+      {
+       "name": "Eaglehorn Bow",
+       "count": 2
+      },
+      {
+       "name": "Hunter's Pack",
+       "count": 2
+      },
+      {
+       "name": "Unleash the Hounds",
+       "count": 2
+      },
+      {
+       "name": "Marked Shot",
+       "count": 1
+      },
+      {
+       "name": "Lesser Emerald Spellstone",
+       "count": 2
+      },
+      {
+       "name": "To My Side!",
+       "count": 2
+      },
+      {
+       "name": "Unleash the Beast",
+       "count": 1
+      },
+      {
+       "name": "Rhok'delar",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 6)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Hunter's Pack": "Animal Companion",
+    "Kobold Sandtrooper": "Leper Gnome"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 5-6 (the 30-card level-6 list; the page notes that on level 5 five random cards are missing) = tier 3. The page names chapter 1 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's list is the level 6 deck; on level 5 the original removes 5 random cards. Here the row always uses the level 6 list."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Hunter's Pack (it can give the boss a random Hunter Secret; this row generates none) by Animal Companion and Kobold Sandtrooper by Leper Gnome (as family 19)."
+    },
+    {
+     "kind": "power",
+     "note": "Desert Warfare (passive): after the boss's hero attacks, a random scripted Hunter card the run's generation filter allows for the boss goes to its hand while it has room; Quests and Secrets are left out of the pool (the boss generates no Secret on this row)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_51_kasmut",
+   "name": "Kasmut",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_51h",
+   "power": "ULDA_BOSS_51p",
+   "tier": "2",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "flags": [
+    "passive",
+    "bothPlayers"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Kasmut",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 4)",
+     "cards": [
+      {
+       "name": "Anubisath Defender",
+       "count": 1
+      },
+      {
+       "name": "Embalming Ritual",
+       "count": 2
+      },
+      {
+       "name": "Grandmummy",
+       "count": 2
+      },
+      {
+       "name": "Psychopomp",
+       "count": 1
+      },
+      {
+       "name": "Shadow Essence",
+       "count": 2
+      },
+      {
+       "name": "Plague of Death",
+       "count": 1
+      },
+      {
+       "name": "Murmy",
+       "count": 2
+      },
+      {
+       "name": "Loot Hoarder",
+       "count": 2
+      },
+      {
+       "name": "Temple Berserker",
+       "count": 2
+      },
+      {
+       "name": "Candletaker",
+       "count": 2
+      },
+      {
+       "name": "Generous Mummy",
+       "count": 2
+      },
+      {
+       "name": "Bone Wraith",
+       "count": 2
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      },
+      {
+       "name": "Wrapped Golem",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Grandmummy",
+       "count": 2
+      },
+      {
+       "name": "Vivid Nightmare",
+       "count": 2
+      },
+      {
+       "name": "Wretched Reclaimer",
+       "count": 2
+      },
+      {
+       "name": "High Priest Amet",
+       "count": 1
+      },
+      {
+       "name": "Psychopomp",
+       "count": 2
+      },
+      {
+       "name": "Shadow Madness",
+       "count": 2
+      },
+      {
+       "name": "Mass Hysteria",
+       "count": 1
+      },
+      {
+       "name": "Onyx Bishop",
+       "count": 2
+      },
+      {
+       "name": "Candletaker",
+       "count": 2
+      },
+      {
+       "name": "Generous Mummy",
+       "count": 2
+      },
+      {
+       "name": "Bone Wraith",
+       "count": 2
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      },
+      {
+       "name": "Wrapped Golem",
+       "count": 2
+      },
+      {
+       "name": "Colossus of the Moon",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 4)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Murmy": "Micro Mummy",
+    "Generous Mummy": "Restless Mummy"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 3-4 (the 25-card level-4 list; on level 3 five random cards are missing) = tier 2. The page names chapter 3 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-4 list has 25 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Murmy by Micro Mummy and Generous Mummy by Restless Mummy (both Reborn, as family 19), so Tol'vir Necromancy keeps its Reborn minions."
+    },
+    {
+     "kind": "power",
+     "note": "Tol'vir Necromancy (passive): after a minion of either player is Reborn (the engine's Reborn return), it is restored to full Health (a heal from the boss's power: healing rules apply)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_52_bazhial",
+   "name": "Lich Baz'hial",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_52h",
+   "power": "ULDA_BOSS_52p1",
+   "tier": "4",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 7
+   },
+   "flags": [
+    "forms"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Lich_Baz'hial",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 7)",
+     "cards": [
+      {
+       "name": "Ultimate Infestation",
+       "count": 1
+      },
+      {
+       "name": "Ray of Frost",
+       "count": 2
+      },
+      {
+       "name": "Frostbolt",
+       "count": 2
+      },
+      {
+       "name": "Arcane Intellect",
+       "count": 2
+      },
+      {
+       "name": "Frost Nova",
+       "count": 2
+      },
+      {
+       "name": "Water Elemental",
+       "count": 2
+      },
+      {
+       "name": "Anomalus",
+       "count": 1
+      },
+      {
+       "name": "Sindragosa",
+       "count": 1
+      },
+      {
+       "name": "Plague of Death",
+       "count": 1
+      },
+      {
+       "name": "Shadow of Death",
+       "count": 2
+      },
+      {
+       "name": "Anub'arak",
+       "count": 1
+      },
+      {
+       "name": "Crystallizer",
+       "count": 2
+      },
+      {
+       "name": "Bloodmage Thalnos",
+       "count": 1
+      },
+      {
+       "name": "Acolyte of Pain",
+       "count": 1
+      },
+      {
+       "name": "Ancient Shade",
+       "count": 2
+      },
+      {
+       "name": "Bone Wraith",
+       "count": 2
+      },
+      {
+       "name": "Abomination",
+       "count": 2
+      },
+      {
+       "name": "Bittertide Hydra",
+       "count": 2
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Ray of Frost",
+       "count": 2
+      },
+      {
+       "name": "Frostbolt",
+       "count": 2
+      },
+      {
+       "name": "Primordial Glyph",
+       "count": 2
+      },
+      {
+       "name": "Arcane Intellect",
+       "count": 2
+      },
+      {
+       "name": "Frost Nova",
+       "count": 2
+      },
+      {
+       "name": "Fireball",
+       "count": 2
+      },
+      {
+       "name": "Blizzard",
+       "count": 2
+      },
+      {
+       "name": "Astromancer",
+       "count": 1
+      },
+      {
+       "name": "Power of Creation",
+       "count": 2
+      },
+      {
+       "name": "Tortollan Pilgrim",
+       "count": 2
+      },
+      {
+       "name": "Archbishop Benedictus",
+       "count": 1
+      },
+      {
+       "name": "Dead Man's Hand",
+       "count": 2
+      },
+      {
+       "name": "Doomsayer",
+       "count": 2
+      },
+      {
+       "name": "Khartut Defender",
+       "count": 2
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      },
+      {
+       "name": "Alexstrasza",
+       "count": 1
+      },
+      {
+       "name": "Arcane Giant",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 7)"
+   },
+   "forms": [
+    {
+     "power": "ULDA_BOSS_52p2",
+     "at": {
+      "script": true
+     },
+     "keepExcess": true
+    }
+   ],
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: level 7 (a full 30-card list with no smaller lower-level version, the shape of a chapter's seventh boss, the last before its Plague Lord) = tier 4. The page names chapter 3 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "power",
+     "note": "Lich's Phylactery (0) restores @ Health to the boss's hero, @ starting at 20 (the card's script number) and falling by 1 for every friendly minion that dies (never below 0). The page shows both powers for one fight and gives no rule; the client card's mechanic is \"Modify Hero Power\" and its successor Broken Phylactery is passive, so using it once breaks it: the boss enters form 1 (a script form that changes only the power: the hero, its Health, Armor and weapon stay) with Broken Phylactery, \"You take double damage from fatigue\" (each fatigue hit on the boss's hero is doubled; the count itself rises as usual)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_53_maru",
+   "name": "Taskmaster Maru",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_53h",
+   "power": "ULDA_BOSS_53p",
+   "tier": "2",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Taskmaster_Maru",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 4)",
+     "cards": [
+      {
+       "name": "Daring Escape",
+       "count": 2
+      },
+      {
+       "name": "Togwaggle's Scheme",
+       "count": 2
+      },
+      {
+       "name": "Cavern Shinyfinder",
+       "count": 1
+      },
+      {
+       "name": "Whirlkick Master",
+       "count": 2
+      },
+      {
+       "name": "Edwin VanCleef",
+       "count": 1
+      },
+      {
+       "name": "EVIL Miscreant",
+       "count": 2
+      },
+      {
+       "name": "Hooked Scimitar",
+       "count": 2
+      },
+      {
+       "name": "Elven Minstrel",
+       "count": 2
+      },
+      {
+       "name": "Sahket Sapper",
+       "count": 1
+      },
+      {
+       "name": "Waggle Pick",
+       "count": 2
+      },
+      {
+       "name": "Jar Dealer",
+       "count": 2
+      },
+      {
+       "name": "EVIL Cable Rat",
+       "count": 2
+      },
+      {
+       "name": "Knife Juggler",
+       "count": 2
+      },
+      {
+       "name": "Vulpera Scoundrel",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Backstab",
+       "count": 2
+      },
+      {
+       "name": "Counterfeit Coin",
+       "count": 1
+      },
+      {
+       "name": "Shadowstep",
+       "count": 2
+      },
+      {
+       "name": "Daring Escape",
+       "count": 1
+      },
+      {
+       "name": "Eviscerate",
+       "count": 2
+      },
+      {
+       "name": "Edwin VanCleef",
+       "count": 1
+      },
+      {
+       "name": "EVIL Miscreant",
+       "count": 2
+      },
+      {
+       "name": "SI:7 Agent",
+       "count": 2
+      },
+      {
+       "name": "Elven Minstrel",
+       "count": 2
+      },
+      {
+       "name": "Spirit of the Shark",
+       "count": 2
+      },
+      {
+       "name": "Waggle Pick",
+       "count": 2
+      },
+      {
+       "name": "Vilespine Slayer",
+       "count": 2
+      },
+      {
+       "name": "Heistbaron Togwaggle",
+       "count": 1
+      },
+      {
+       "name": "EVIL Cable Rat",
+       "count": 2
+      },
+      {
+       "name": "Barista Lynchen",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 4)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Sahket Sapper": "SI:7 Agent"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 3-4 (the 25-card level-4 list; on level 3 five random cards are missing) = tier 2. The page names chapter 1 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-4 list has 25 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Sahket Sapper by SI:7 Agent (of the boss's Heroic list)."
+    },
+    {
+     "kind": "deck",
+     "note": "The page gives a 25-card Normal list without a level note: the 25-card shape of levels 3-4 (tombs_tiers shape 2)."
+    },
+    {
+     "kind": "power",
+     "note": "E.V.I.L. Conscription (1) adds a random Lackey (the engine's Lackey pool: the seven Lackeys, scripted ones only, behind the run's generation filter) to the boss's hand; offered while its hand has room."
+    }
+   ]
+  },
+  {
+   "id": "ulda_54_janak",
+   "name": "Janak",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_54h",
+   "power": "ULDA_BOSS_54p",
+   "tier": "2",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "cards": [
+    "ULDA_BOSS_54e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Janak",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 4)",
+     "cards": [
+      {
+       "name": "Improve Morale",
+       "count": 2
+      },
+      {
+       "name": "Battle Rage",
+       "count": 1
+      },
+      {
+       "name": "Bloodsworn Mercenary",
+       "count": 2
+      },
+      {
+       "name": "Fierce Monkey",
+       "count": 2
+      },
+      {
+       "name": "Kobold Barbarian",
+       "count": 2
+      },
+      {
+       "name": "Livewire Lance",
+       "count": 2
+      },
+      {
+       "name": "Val'kyr Soulclaimer",
+       "count": 2
+      },
+      {
+       "name": "Axe Flinger",
+       "count": 1
+      },
+      {
+       "name": "Bloodhoof Brave",
+       "count": 1
+      },
+      {
+       "name": "Crush",
+       "count": 2
+      },
+      {
+       "name": "EVIL Cable Rat",
+       "count": 2
+      },
+      {
+       "name": "Hench-Clan Hogsteed",
+       "count": 2
+      },
+      {
+       "name": "Acolyte of Pain",
+       "count": 2
+      },
+      {
+       "name": "Sunstruck Henchman",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Warbot",
+       "count": 2
+      },
+      {
+       "name": "Rampage",
+       "count": 2
+      },
+      {
+       "name": "Warpath",
+       "count": 2
+      },
+      {
+       "name": "Bloodsworn Mercenary",
+       "count": 2
+      },
+      {
+       "name": "Frothing Berserker",
+       "count": 2
+      },
+      {
+       "name": "Axe Flinger",
+       "count": 2
+      },
+      {
+       "name": "Bloodhoof Brave",
+       "count": 2
+      },
+      {
+       "name": "Grommash Hellscream",
+       "count": 1
+      },
+      {
+       "name": "Hench-Clan Hogsteed",
+       "count": 2
+      },
+      {
+       "name": "Temple Berserker",
+       "count": 2
+      },
+      {
+       "name": "Acolyte of Pain",
+       "count": 2
+      },
+      {
+       "name": "Raging Worgen",
+       "count": 2
+      },
+      {
+       "name": "Vicious Fledgling",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 4)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Livewire Lance": "Fiery War Axe",
+    "Sunstruck Henchman": "Chillwind Yeti"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 3-4 (the 25-card level-4 list; on level 3 five random cards are missing) = tier 2. The page names chapter 3 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-4 list has 25 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Livewire Lance by Fiery War Axe and Sunstruck Henchman by Chillwind Yeti (as family 19)."
+    },
+    {
+     "kind": "power",
+     "note": "Cavalry of E.V.I.L. (1) deals 1 damage to any minion, then gives it Charge (ULDA_BOSS_54e) if it survived."
+    }
+   ]
+  },
+  {
+   "id": "ulda_55_murlocs",
+   "name": "Water-Toting Murlocs",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_55h",
+   "power": "ULDA_BOSS_55p",
+   "tier": "1",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 2
+   },
+   "flags": [
+    "bothPlayers"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Water-Toting_Murlocs",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 2)",
+     "cards": [
+      {
+       "name": "Zap!",
+       "count": null
+      },
+      {
+       "name": "Totemic Smash",
+       "count": null
+      },
+      {
+       "name": "Siltfin Spiritwalker",
+       "count": null
+      },
+      {
+       "name": "Murloc Tinyfin",
+       "count": null
+      },
+      {
+       "name": "Murloc Raider",
+       "count": null
+      },
+      {
+       "name": "Murmy",
+       "count": null
+      },
+      {
+       "name": "Fishflinger",
+       "count": null
+      },
+      {
+       "name": "Puddlestomper",
+       "count": null
+      },
+      {
+       "name": "Murloc Tastyfin",
+       "count": null
+      },
+      {
+       "name": "Corrupted Seer",
+       "count": null
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Grimscale Chum",
+       "count": null
+      },
+      {
+       "name": "Murloc Knight",
+       "count": null
+      },
+      {
+       "name": "Underbelly Angler",
+       "count": null
+      },
+      {
+       "name": "Rockpool Hunter",
+       "count": null
+      },
+      {
+       "name": "Coldlight Seer",
+       "count": null
+      },
+      {
+       "name": "Murloc Warleader",
+       "count": null
+      },
+      {
+       "name": "Nightmare Amalgam",
+       "count": null
+      },
+      {
+       "name": "Old Murk-Eye",
+       "count": null
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 2)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Murmy": "Bluegill Warrior",
+    "Fishflinger": "Murloc Tidehunter"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 1-2 (a \"10; 15\" table of possible cards: 10 cards on level 1, 15 on level 2) = tier 1. The page names chapter 2 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists the possible cards of the level 1-2 deck (10 or 15 of them, no counts). A combat tier fights with 30: each listed card once, a second copy of each, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Murmy by Bluegill Warrior (a Murloc, as family 19's Herring) and Fishflinger by Murloc Tidehunter (a 2-Cost Murloc)."
+    },
+    {
+     "kind": "deck",
+     "note": "The page's table has no \"Total cards\" column, but its shape is the \"10; 15\" table of possible cards (ten Normal, eight Heroic): levels 1-2."
+    },
+    {
+     "kind": "power",
+     "note": "Fish Food (1) restores 2 Health to every Murloc of either board (\"all Murlocs\" names no side); offered while a Murloc is on either board."
+    }
+   ]
+  },
+  {
+   "id": "ulda_56_frog",
+   "name": "Sand Puffer Frog",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_56h",
+   "power": "ULDA_BOSS_56p",
+   "tier": "1",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 2
+   },
+   "flags": [
+    "passive"
+   ],
+   "cards": [
+    "ULDA_BOSS_56e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Sand_Puffer_Frog",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 2)",
+     "cards": [
+      {
+       "name": "Sludge Slurper",
+       "count": null
+      },
+      {
+       "name": "Sandstorm Elemental",
+       "count": null
+      },
+      {
+       "name": "Feral Gibberer",
+       "count": null
+      },
+      {
+       "name": "Helpless Hatchling",
+       "count": null
+      },
+      {
+       "name": "Murmy",
+       "count": null
+      },
+      {
+       "name": "EVIL Cable Rat",
+       "count": null
+      },
+      {
+       "name": "Huge Toad",
+       "count": null
+      },
+      {
+       "name": "Jeweled Scarab",
+       "count": null
+      },
+      {
+       "name": "Quicksand Elemental",
+       "count": null
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Fiery Bat",
+       "count": null
+      },
+      {
+       "name": "Springpaw",
+       "count": null
+      },
+      {
+       "name": "Timber Wolf",
+       "count": null
+      },
+      {
+       "name": "Webspinner",
+       "count": null
+      },
+      {
+       "name": "Acherus Veteran",
+       "count": null
+      },
+      {
+       "name": "Fire Fly",
+       "count": null
+      },
+      {
+       "name": "Glacial Shard",
+       "count": null
+      },
+      {
+       "name": "Huge Toad",
+       "count": null
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 2)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Murmy": "Micro Mummy",
+    "Quicksand Elemental": "Tar Creeper"
+   },
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 1-2 (a \"10; 15\" table of possible cards: 10 cards on level 1, 15 on level 2) = tier 1. The page names chapter 1 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki lists the possible cards of the level 1-2 deck (10 or 15 of them, no counts). A combat tier fights with 30: each listed card once, a second copy of each, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "deck",
+     "note": "Listed cards the engine does not script (or does not admit for a boss) are replaced by a scripted card of the same role, named in the row's replacements (the encounters step records each one): Murmy by Micro Mummy (a 1-Cost minion for Sandy Surprise) and Quicksand Elemental by Tar Creeper (as family 19)."
+    },
+    {
+     "kind": "power",
+     "note": "Sandy Surprise (passive): after the boss plays a minion whose card costs (1), it gets Stealth (ULDA_BOSS_56e)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_57_winged_guardian",
+   "name": "Winged Guardian",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_57h",
+   "power": "ULDA_BOSS_57p",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "cards": [
+    "ULDA_BOSS_57e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Winged_Guardian_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 4)",
+     "cards": [
+      {
+       "name": "Brazen Zealot",
+       "count": 2
+      },
+      {
+       "name": "Meanstreet Marshal",
+       "count": 2
+      },
+      {
+       "name": "Micro Mummy",
+       "count": 2
+      },
+      {
+       "name": "Aldor Peacekeeper",
+       "count": 2
+      },
+      {
+       "name": "Ancestral Guardian",
+       "count": 2
+      },
+      {
+       "name": "Hammer of Wrath",
+       "count": 2
+      },
+      {
+       "name": "Murloc Knight",
+       "count": 2
+      },
+      {
+       "name": "Mechano-Egg",
+       "count": 2
+      },
+      {
+       "name": "Pharaoh's Blessing",
+       "count": 2
+      },
+      {
+       "name": "Dragon Egg",
+       "count": 1
+      },
+      {
+       "name": "Swamp Dragon Egg",
+       "count": 2
+      },
+      {
+       "name": "Serpent Egg",
+       "count": 2
+      },
+      {
+       "name": "Devilsaur Egg",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Lost in the Jungle",
+       "count": 2
+      },
+      {
+       "name": "Righteous Protector",
+       "count": 2
+      },
+      {
+       "name": "Meanstreet Marshal",
+       "count": 2
+      },
+      {
+       "name": "Rallying Blade",
+       "count": 1
+      },
+      {
+       "name": "Sunkeeper Tarim",
+       "count": 1
+      },
+      {
+       "name": "Argent Squire",
+       "count": 2
+      },
+      {
+       "name": "Dragon Egg",
+       "count": 2
+      },
+      {
+       "name": "Swamp Dragon Egg",
+       "count": 2
+      },
+      {
+       "name": "Echoing Ooze",
+       "count": 2
+      },
+      {
+       "name": "Nerubian Egg",
+       "count": 2
+      },
+      {
+       "name": "Scarab Egg",
+       "count": 2
+      },
+      {
+       "name": "Serpent Egg",
+       "count": 2
+      },
+      {
+       "name": "Devilsaur Egg",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 4)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 3-4 (the 25-card level-4 list; on level 3 five random cards are missing) = tier 2. The page names chapter 1 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-4 list has 25 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "power",
+     "note": "Titan's Beast (2) sets any minion's Attack and Health to 3 (ULDA_BOSS_57e)."
+    }
+   ]
+  },
+  {
+   "id": "ulda_59_dire_bat",
+   "name": "Dire Bat",
+   "provenance": "ULDA",
+   "family": "21",
+   "hero": "ULDA_BOSS_59h",
+   "power": "ULDA_BOSS_59p",
+   "tier": "2",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Dire_Bat",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal (level 4)",
+     "cards": [
+      {
+       "name": "Fiery Bat",
+       "count": 2
+      },
+      {
+       "name": "Stampede",
+       "count": 1
+      },
+      {
+       "name": "Webspinner",
+       "count": 2
+      },
+      {
+       "name": "Grievous Bite",
+       "count": 2
+      },
+      {
+       "name": "Hunter's Mark",
+       "count": 1
+      },
+      {
+       "name": "Carrion Grub",
+       "count": 2
+      },
+      {
+       "name": "Dire Frenzy",
+       "count": 1
+      },
+      {
+       "name": "Exploding Bloatbat",
+       "count": 2
+      },
+      {
+       "name": "Wing Blast",
+       "count": 2
+      },
+      {
+       "name": "Starving Buzzard",
+       "count": 1
+      },
+      {
+       "name": "Swamp Leech",
+       "count": 2
+      },
+      {
+       "name": "River Crocolisk",
+       "count": 2
+      },
+      {
+       "name": "Vicious Scalehide",
+       "count": 2
+      },
+      {
+       "name": "Sightless Ranger",
+       "count": 2
+      },
+      {
+       "name": "Countess Ashmore",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Springpaw",
+       "count": 2
+      },
+      {
+       "name": "Timber Wolf",
+       "count": 2
+      },
+      {
+       "name": "Crackling Razormaw",
+       "count": 2
+      },
+      {
+       "name": "Hunter's Mark",
+       "count": 2
+      },
+      {
+       "name": "Kindly Grandmother",
+       "count": 1
+      },
+      {
+       "name": "Scavenging Hyena",
+       "count": 2
+      },
+      {
+       "name": "Animal Companion",
+       "count": 2
+      },
+      {
+       "name": "Kill Command",
+       "count": 1
+      },
+      {
+       "name": "Unleash the Hounds",
+       "count": 2
+      },
+      {
+       "name": "Dire Frenzy",
+       "count": 2
+      },
+      {
+       "name": "Flanking Strike",
+       "count": 2
+      },
+      {
+       "name": "Wing Blast",
+       "count": 2
+      },
+      {
+       "name": "Tundra Rhino",
+       "count": 1
+      },
+      {
+       "name": "Soup Vendor",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal (level 4)"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "Tombs boss heroes print 10 Health (the adventure set a boss's Health by level server-side): the fight's Health is the act curve's and the tier is the boss's level in its chapter, from its wiki page's deck table: levels 3-4 (the 25-card level-4 list; on level 3 five random cards are missing) = tier 2. The page names chapter 3 as the chapter the boss is first met in (after it, any completed chapter), which does not set its level."
+    },
+    {
+     "kind": "deck",
+     "note": "The wiki's level-4 list has 25 cards. A combat tier fights with 30: the listed cards, a second copy of each non-Legendary single in table order, then the Heroic table's cards (once, then twice) until 30."
+    },
+    {
+     "kind": "power",
+     "note": "Food Chain (2) deals 2 damage to any minion; if it dies, the boss's hero is restored 5 Health."
+    }
+   ]
+  }
+ ],
+ "rejected": [
+  {
+   "id": "ULDA_BOSS_58h",
+   "name": "Jythiros of Questions",
+   "power": "ULDA_BOSS_58p",
+   "reason": "Riddle of the Sphinx (\"Guess which card the Boss will play to banish it\") is a decision of the run player on the boss's turn (the wiki: it shows the cards in the boss's hand and the card it draws that turn) whose correct guess counters the boss's card of any type (the wiki: \"it is immediately countered\"; the first encounter to counter every card type). The engine's decision loop, the bosspilot harnesses and NativeMatch answer only the current player's decisions, and the engine counters spells only (Spell.IsCountered in PlayCard.PlaySpell); a guess moved to the run player's own turn and a counter limited to spells would be an invented mechanic. The encounter is left out",
+   "lift": "phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard",
+   "cards": []
+  }
+ ]
+}

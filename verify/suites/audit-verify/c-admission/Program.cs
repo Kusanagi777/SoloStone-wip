@@ -172,6 +172,8 @@ phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && new[] 
 phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && r.Family.StartsWith("boss-tombs-", StringComparison.Ordinal)).SelectMany(r => r.Ids));
 // Phase 8 family 20: the rows of the Tombs of Terror boss powers B and of Mogu Cultist / Highkeeper Ra it scripts (DungeonRunAdmission.F20.cs; each row names its test).
 phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && (r.Family.StartsWith("boss-tombs-b-", StringComparison.Ordinal) || r.Family == "tombs-b-collectible")).SelectMany(r => r.Ids));
+// Phase 8 family 21: the rows of the Tombs of Terror bosses C powers it scripts or rejects (DungeonRunAdmission.F21.cs; each row names its test).
+phase7Ids.UnionWith(DungeonRunAdmission.Rules.Where(r => r.Ids != null && r.Family.StartsWith("boss-tombs-c-", StringComparison.Ordinal)).SelectMany(r => r.Ids));
 Check("the table lists only ledger rows (and the phase 6 F2/F3/F4/F7/F8/F9 run-treasure, run-hero, run-deck-token and treasure-data-gap rows, GILA_903 and ULDA_Brann_HP3)",
     runDeckTokenIds.SequenceEqual(new[] { "DALA_716t" }) && dataGapIds.SequenceEqual(new[] { "DALA_740" })
     && tableIds.All(id => ledgerIds.Contains(id) || runTreasureIds.Contains(id) || runHeroIds.Contains(id) || runDeckTokenIds.Contains(id) || dataGapIds.Contains(id) || id == "GILA_903" || id == "ULDA_Brann_HP3" || id == "ULDA_115" || phase7Ids.Contains(id)),
