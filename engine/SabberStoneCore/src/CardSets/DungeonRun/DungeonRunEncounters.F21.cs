@@ -97,30 +97,6 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			internal static int FatigueDamage(Controller c, int damage) =>
 				damage > 0 && c?.Hero?.HeroPower?.Card.Id == BrokenPhylactery ? DamageArithmetic.Add(damage, damage) : damage;
 
-			/// <summary>
-			/// The boss enters form <paramref name="index"/> by its power only (a "script" form of the row that names a power and no
-			/// hero: Baz'hial's Broken Phylactery): the hero, its Health, Armor, weapon and enchantments stay; the old power's
-			/// trigger and aura stop (it goes to the set-aside zone) and the form's power enters fresh, its trigger and aura started.
-			/// The form index and the change count are the model's tags (EncounterRules.FormIndex, FormChanges), so Harvest reads
-			/// them as for any form. Nothing outside an encounter match or past the last form. (Family 14's
-			/// EncounterRules.SwapPowerForm does the same; this copy keeps family 21 independent of it.)
-			/// </summary>
-			public static void PowerOnlyForm(Controller boss, int index)
-			{
-				Game game = boss.Game;
-				RunEncounter enc = game.EncounterOrNull;
-				if (enc == null || index < 0 || index >= enc.BossForms.Count || game.State == State.COMPLETE) return;
-				Card power = enc.BossForms[index].Power;
-				if (power != null)
-				{
-					EncounterRules.DeactivatePower(boss.Hero.HeroPower);
-					new ReplaceHeroPower(power).Process(game, boss, boss.Hero, null);
-				}
-				boss[EncounterRules.FormIndex] = index;
-				boss[EncounterRules.FormChanges] = boss[EncounterRules.FormChanges] + 1;
-				EncounterRules.ActivatePower(boss.Hero.HeroPower);
-			}
-
 			// A random element of the list by the game RNG (a random event when there is a choice); null for an empty list.
 			internal static T Pick<T>(Game g, IReadOnlyList<T> items) where T : class
 			{
@@ -304,14 +280,14 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			// ---------------- Lich Baz'hial (ULDA_BOSS_52h)
 			// Lich's Phylactery (0): "Restore @ Health to your Hero. Reduce by 1 for every friendly minion that dies." @ is the power's
 			// script number (20 on the card); a DEATH trigger lowers it (never below 0). Used once, it breaks: the boss enters its
-			// script form 1, Broken Phylactery (TombsC.PowerOnlyForm). Offered while the boss's hero is damaged.
+			// script form 1, Broken Phylactery (EncounterRules.SwapPowerForm, family 14's power-only form; the wave-6 merge folded family 21's copy into it). Offered while the boss's hero is damaged.
 			Add(TombsC.Phylactery, EncounterCardKind.Power, () => new CardDef(new Power
 			{
 				PowerTask = new CustomTask((g, c, s, t, stack) =>
 				{
 					int heal = TombsC.PhylacteryHeal(s as HeroPower);
 					if (heal > 0) HealingRules.Heal((IPlayable)s, new ICharacter[] { c.Hero }, heal);
-					if (g.State != State.COMPLETE && c.Hero.HeroPower == s) TombsC.PowerOnlyForm(c, 1);
+					if (g.State != State.COMPLETE && c.Hero.HeroPower == s) EncounterRules.SwapPowerForm(c, 1);
 				}),
 				Trigger = new Trigger(TriggerType.DEATH)
 				{

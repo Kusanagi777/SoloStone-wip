@@ -151,7 +151,8 @@ namespace SabberStoneCore.Actions
 		private const string TunnelTrogg = "LOE_018", TunnelTroggBuff = "LOE_018e";
 
 		/// <summary>
-		/// DALA_BOSS_54p Spell Lock: <paramref name="c"/> Overloads <paramref name="amount"/> for <paramref name="spell"/>, as a
+		/// DALA_BOSS_54p Spell Lock (and, since the wave-6 merge, family 22's ULDA_BOSS_63p Plaguebringer through
+		/// DungeonRunEncounters.TombsD.Overload): <paramref name="c"/> Overloads <paramref name="amount"/> for <paramref name="spell"/>, as a
 		/// card's own Overload does (Generic.OverloadBlock: Overload owed, the game's count, the Overload event). The engine's
 		/// Tunnel Trogg ("Whenever you Overload, gain +1 Attack per locked Mana Crystal") answers the play of a card with printed
 		/// Overload, not the Overload event, so it would never see this Overload: each Tunnel Trogg of <paramref name="c"/>'s

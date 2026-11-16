@@ -146,9 +146,12 @@ From the wave-5 integration (details in `handoff/phase8/reports/integrate-wave5.
   digest (family 18: `09B43E71F9440039`; `verify/tools/gen/p8f18/make_fixture.py` makes the edit).
 - Tunnel Trogg (LOE_018, `engine/.../CardSets/LoeCardsGen.cs`) answers the play of a card with printed Overload, not the
   Overload event, and has no trigger source (the opponent's Overload cards count too). Family 17's Spell Lock Overload has
-  no card behind it, so `EncounterRules.OverloadFor` (EncounterRules.F17.cs) buffs each Tunnel Trogg by hand; family 22
-  adds a second copy in wave 6. A comment at the shared script says so. If LOE_018 is ever rewritten to answer the
-  Overload event (TriggerType.OVERLOAD, friendly source), remove both hand-coded buffs or the Trogg gains twice.
+  no card behind it, so `EncounterRules.OverloadFor` (EncounterRules.F17.cs) buffs each Tunnel Trogg by hand; family 22's
+  Plaguebringer Overload (`DungeonRunEncounters.TombsD.Overload`) had a second copy, folded in the wave-6 merge: it calls
+  the same `EncounterRules.OverloadFor` and adds only Thunderhead's Sparks (BOT_407) for a spell without printed Overload.
+  A comment at the shared script says so. If LOE_018 is ever rewritten to answer the Overload event (TriggerType.OVERLOAD,
+  friendly source), remove that one hand-coded buff or the Trogg gains twice (and Thunderhead's hand-coded Sparks if
+  Thunderhead is rewritten the same way).
 
 From the wave-4 integration (details in `handoff/phase8/reports/integrate-wave4.md`):
 - Random generation can yield unscripted cards: the engine's random pools (`Cards.AllWild`) include unscripted cards and

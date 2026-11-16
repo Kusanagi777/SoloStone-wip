@@ -116,16 +116,13 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 			/// <summary>
 			/// ULDA_BOSS_63p Plaguebringer: the extra Overload of a spell <paramref name="c"/> played, as any Overload (Tunnel Trogg's
-			/// "whenever you Overload" counts it, and Thunderhead sees the spell as a card with Overload).
+			/// "whenever you Overload" counts it, and Thunderhead sees the spell as a card with Overload). The Overload itself and the
+			/// hand-coded Tunnel Trogg buff are family 17's EncounterRules.OverloadFor (one helper since the wave-6 merge).
 			/// </summary>
 			internal static void Overload(Controller c, IPlayable spell, int amount)
 			{
 				if (amount <= 0) return;
-				c.OverloadOwed += amount;
-				c.OverloadThisGame += amount;
-				c.Game.TriggerManager.OnOverloadTrigger(spell, amount);
-				foreach (Minion trogg in c.BoardZone.Where(m => m.Card.Id == "LOE_018" && !m.IsSilenced && Pickable(m)).ToList())
-					Generic.AddEnchantmentBlock(c.Game, Cards.FromId("LOE_018e"), trogg, trogg, amount);
+				EncounterRules.OverloadFor(c, spell, amount);
 				// Thunderhead ("After you play a card with Overload, summon two 1/1 Sparks with Rush"): a spell that Overloads only by
 				// this rule is now a card with Overload too; one with its own Overload already triggered Thunderhead itself.
 				if (!spell.Card.HasOverload)
