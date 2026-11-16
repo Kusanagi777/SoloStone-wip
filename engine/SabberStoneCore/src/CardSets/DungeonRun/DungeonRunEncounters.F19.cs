@@ -144,19 +144,6 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			/// <summary>ULDA_BOSS_05p Venomous Stinger: the minion holds the sting.</summary>
 			public static bool Stung(IPlayable p) => p?.AppliedEnchantments?.Any(e => e.Card.Id == "ULDA_BOSS_05e") == true;
 
-			/// <summary>
-			/// "Confiscated" Goods: the weapon that broke in the attack (Durability 0, its removal pending until the next death pass,
-			/// Game.ClearWeapons, which names the hero and not the weapon) is replaced by the new one as any equip replaces a weapon
-			/// (Hero.AddWeapon destroys it, its Deathrattle fires), and the pending removal is dropped so the death pass does not
-			/// take the new weapon instead.
-			/// </summary>
-			internal static void ReplaceBrokenWeapon(Game g, Controller c)
-			{
-				if (c.Hero.Weapon == null || c.Hero.Weapon.Durability > 0 || g.ClearWeapons == null) return;
-				g.ClearWeapons.RemoveAll(id => id == c.Hero.Id);
-				if (g.ClearWeapons.Count == 0) g.ClearWeapons = null;
-			}
-
 			// Sand Trap: the top SandTrapRemoves cards of the holder's deck go to its graveyard (Azari's Devour's rule).
 			internal static ISimpleTask SandTrapRemove() => new CustomTask((g, c, s, t, stack) =>
 			{
@@ -253,7 +240,6 @@ namespace SabberStoneCore.CardSets.DungeonRun
 						if (pool.Count == 0) return;
 						if (pool.Count > 1) g.OnRandomHappened(true);
 						var weapon = (Weapon)Entity.FromCard(c, pool[g.Random.Next(pool.Count)]);
-						TombsA.ReplaceBrokenWeapon(g, c);
 						new WeaponTask().Process(g, c, s, null, new TaskStack { Playables = new List<IPlayable> { weapon } });
 					}),
 				},
