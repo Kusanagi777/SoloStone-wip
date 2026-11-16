@@ -29,10 +29,11 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		// Run reads go through RunHelpers (H1: bosses defeated, ULDA_301), run writes through RunHelpers (ULDA_306's hero power
 		// for the rest of the run, ULDA_504's one-fight bonus; both kept after a won fight only). Every random choice uses the
 		// game RNG over the scripted cards of the receiving side's generation pool; every piece of match state is an entity, a
-		// tag or an enchantment, so clones and AI simulations replay it. ULDA_115 "Gnomebliterator" stays unscripted: its second
-		// half damages the Plague Lord of the act finale, which is phase 8 state (DungeonRunAdmission's row says so).
+		// tag or an enchantment, so clones and AI simulations replay it. ULDA_115 "Gnomebliterator" was left out here: its second
+		// half damages the Plague Lord, phase 8 state; phase 8 family 24 scripts it (DungeonRunEncounters.F24.cs, run state
+		// DungeonRunState.PlagueLordDamage) and admits it (DungeonRunAdmission.F24.cs).
 
-		/// <summary>The 29 family F12 ids, in the order of the family list (ULDA_115 is the one rejected id).</summary>
+		/// <summary>The 29 family F12 ids, in the order of the family list (ULDA_115, the one id phase 6 rejected, is family 24's since phase 8).</summary>
 		public static readonly IReadOnlyList<string> TombsActiveIds = new[]
 		{
 			"ULDA_001", "ULDA_004", "ULDA_006", "ULDA_008", "ULDA_012", "ULDA_034", "ULDA_035", "ULDA_035ts", "ULDA_036", "ULDA_036ts",

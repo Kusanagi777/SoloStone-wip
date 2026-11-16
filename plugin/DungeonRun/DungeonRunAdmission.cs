@@ -146,7 +146,8 @@ internal static partial class DungeonRunAdmission
     internal const string AddRule = "add a rule to DungeonRunAdmission";
     /// <summary>A run treasure's boss and generation scopes: no boss deck and no generation pool holds a run treasure.</summary>
     internal const string RunTreasureLift = "none: a run treasure; no boss deck or generation pool offers it";
-    /// <summary>ULDA_115 "Gnomebliterator" (phase 6 F12 left it rejected): its Plague Lord damage is phase 8 finale state.</summary>
+    /// <summary>ULDA_115 "Gnomebliterator" (phase 6 F12 left it rejected): its Plague Lord damage is phase 8 finale state. Since
+    /// phase 8 family 24 admits it (run-treasure-plague-lord, DungeonRunAdmission.F24.cs) no row uses this lift.</summary>
     internal const string PlagueLordLift = "phase 8 (encounters/anomalies): the Plague Lord finale encounters and the run state that carries damage to a Plague Lord into its fight";
 
     /// <summary>True when a lift names no pending work (the rejected scope is simply not used).</summary>
