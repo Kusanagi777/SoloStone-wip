@@ -18,13 +18,17 @@ using SabberStoneCore.Tasks.PlayerTasks;
 //   Q1-Q6  A run never meets a boss row of the character it plays (family 19 flag 3: the run hero DALA_Squeamlish against
 //          the Tombs boss ulda_07_squeamlish; the merge review added DALA_Chu / ulda_06_chu and DALA_George /
 //          loot_15_george_karl): a hero row's "excludeBosses" (run-v1.json) keeps those rows out of the act draw. Wave 6
-//          (families 20-24) adds DALA_Barkeye / ulda_50_barkeye (family 21 flag 6), DALA_Vessina / ulda_63_vessina (family
-//          22) and DALA_Tekahn / ulda_67_tekahn (family 24's finale row, Q7).
+//          (families 20-24) adds DALA_Barkeye / ulda_50_barkeye (family 21 flag 6) and DALA_Vessina / ulda_63_vessina (family
+//          22); DALA_Tekahn / ulda_67_tekahn (family 24's finale row) has no key, Q7 is the close-out's tripwire.
 //   E1-E3  Unstable Evolution's hand copy (LOOT_504t) never costs less than (1) (the Echo copy floor; the client prints the
 //          card with Echo since patch 23.0.3): under Millhouse Manastorm's "enemy spells cost (0)" the run player's copies
 //          looped without end against Rasil (bp.sh enc15, "stuck after 1500 actions", found by this regression).
 //   N1     No encounter note says a card "has no script yet" while an encounter deck holds it (the merge review: family 16's
 //          Gold Elemental note said so of Infuriated Banker, which family 17 scripts and the merged deck holds).
+//   O1-O3  Wave 6: Snowfury Giant (ICC_090) counts the Mana Crystals each OVERLOAD event Overloads, as OverloadThisGame does,
+//          not its source's printed Overload: under Vessina's Plaguebringer the game's cost drifted from the cost a copy of the
+//          game computes, and the boss's fair-view search chose a Giant the game could not pay for (bp.sh enc22a, "engine
+//          rejected boss task", found by the wave-6 regression).
 int failures = 0, passes = 0;
 void Check(string name, bool ok, string detail = "")
 {
@@ -251,6 +255,31 @@ Guard("N", () =>
     var wrong = pending.SelectMany(t => idPattern.Matches(t).Select(m => m.Value)).Where(inDecks.Contains).Distinct().ToList();
     Check($"N1 no encounter note says a card has no script yet while an encounter deck holds it ({notes.Count} notes, {pending.Count} of them say so)",
         notes.Count > 100 && wrong.Count == 0, string.Join(",", wrong));
+});
+
+// ============================================================ O. Snowfury Giant counts every Overload (wave 6)
+Guard("O", () =>
+{
+    const string Giant = "ICC_090", Moonfire = "CS2_008", Bolt = "EX1_238"; // Snowfury Giant (11); Moonfire (no Overload); Lightning Bolt (Overload 1)
+    var plan = Plan(bossDeck: filler);
+    plan.BossHero = C("ULDA_BOSS_63h"); plan.BossHeroPowerId = "ULDA_BOSS_63p"; // Vessina, Plaguebringer: spells (2) less, Overload (1) each
+    var g = Ready(plan);
+    Controller boss = g.Player2;
+    ToBoss(g);
+    var giant = ToHand(g, boss, Giant);
+    var moon = ToHand(g, boss, Moonfire);
+    int giant0 = giant.Cost, moonCost = moon.Cost;
+    bool cast1 = Play(g, moon, g.Player1.Hero);
+    int over1 = boss.OverloadThisGame, giant1 = giant.Cost;
+    bool cast2 = PlayNew(g, Bolt, g.Player1.Hero);
+    int over2 = boss.OverloadThisGame, giant2 = giant.Cost;
+    Check("O1 under Plaguebringer a spell without printed Overload Overloads (1), and a Snowfury Giant in hand costs (1) less for it (11 - Overloaded this game)",
+        giant0 == 11 && moonCost == 0 && cast1 && over1 == 1 && giant1 == 10, $"giant {giant0}->{giant1}, Moonfire cost {moonCost}, overloaded {over1}");
+    Check("O2 a spell with printed Overload (1) then Overloads (2): the Giant counts both, never the printed amount twice (cost = 11 - Overloaded this game)",
+        cast2 && over2 == 3 && giant2 == 8 && giant2 == 11 - over2, $"giant {giant1}->{giant2}, overloaded {over2}");
+    var fresh = ToHand(g, boss, Giant); // its cost initialised from the game's count now, as a rebuilt entity's is
+    Check("O3 a Giant that enters the hand now (its cost initialised from Overloaded this game) costs what the Giant held through the Overloads costs",
+        fresh.Cost == giant.Cost && fresh.Cost == 11 - boss.OverloadThisGame, $"held {giant.Cost} new {fresh.Cost}");
 });
 
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");
