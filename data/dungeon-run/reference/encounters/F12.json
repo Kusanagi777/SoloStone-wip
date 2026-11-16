@@ -122,9 +122,6 @@
    "deck": {
     "list": "Deck"
    },
-   "replacements": {
-    "Witchwood's Touch": "Shield Block"
-   },
    "fillers": [
     "Haunted Creeper",
     "Loot Hoarder",
@@ -135,10 +132,6 @@
     {
      "kind": "schedule",
      "note": "The wiki's Monster Hunt page lists the boss in round 6-8 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (30: tier 2), as family 10's Monster Hunt rows, and the fight's Health is the act curve's."
-    },
-    {
-     "kind": "deck",
-     "note": "Witchwood's Touch (2) (GILA_BOSS_99t2, \"Draw 2 cards. Gain 8 Armor.\") is Hagatha's boss card, scripted by family 23; until then the listed copies are Shield Block (\"Gain 5 Armor. Draw a card.\"), the nearest scripted card, and the encounters step restores them once it is scripted."
     },
     {
      "kind": "power",
@@ -1061,7 +1054,6 @@
     "list": "Deck"
    },
    "replacements": {
-    "Witchwood's Touch": "Shield Block",
     "Wrath": "Lesser Jasper Spellstone",
     "Power of the Wild": "Mark of the Lotus"
    },
@@ -1075,10 +1067,6 @@
     {
      "kind": "schedule",
      "note": "The wiki's Monster Hunt page lists the boss in round 4-5 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (40: tier 3), as family 10's Monster Hunt rows, and the fight's Health is the act curve's."
-    },
-    {
-     "kind": "deck",
-     "note": "Witchwood's Touch (2) (GILA_BOSS_99t2, \"Draw 2 cards. Gain 8 Armor.\") is Hagatha's boss card, scripted by family 23; until then the listed copies are Shield Block (\"Gain 5 Armor. Draw a card.\"), the nearest scripted card, and the encounters step restores them once it is scripted."
     },
     {
      "kind": "deck",
@@ -1515,9 +1503,6 @@
    "deck": {
     "list": "Deck"
    },
-   "replacements": {
-    "Witchwood's Touch": "Shield Block"
-   },
    "fillers": [
     "Flame Imp",
     "Voidwalker",
@@ -1528,10 +1513,6 @@
     {
      "kind": "schedule",
      "note": "The wiki's Monster Hunt page lists the boss in round 4-5 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (40: tier 3), as family 10's Monster Hunt rows, and the fight's Health is the act curve's."
-    },
-    {
-     "kind": "deck",
-     "note": "Witchwood's Touch (2) (GILA_BOSS_99t2, \"Draw 2 cards. Gain 8 Armor.\") is Hagatha's boss card, scripted by family 23; until then the listed copies are Shield Block (\"Gain 5 Armor. Draw a card.\"), the nearest scripted card, and the encounters step restores them once it is scripted."
     },
     {
      "kind": "power",

@@ -28,9 +28,8 @@ def schedule_note(rounds, printed):
             "Here the tier comes from the printed Health of its hero card (%d: tier %s), as family 10's Monster Hunt rows, and the "
             "fight's Health is the act curve's." % (rounds, printed, tier_of(printed)))
 
-TOUCH_NOTE = ("Witchwood's Touch (2) (GILA_BOSS_99t2, \"Draw 2 cards. Gain 8 Armor.\") is Hagatha's boss card, scripted by "
-              "family 23; until then the listed copies are Shield Block (\"Gain 5 Armor. Draw a card.\"), the nearest scripted "
-              "card, and the encounters step restores them once it is scripted.")
+# Witchwood's Touch (2) (GILA_BOSS_99t2) is Hagatha's boss card, scripted by family 23 (merged in wave 6): its listed copies stay
+# in the decks (the Shield Block stand-in, its replacement entries and the deck notes saying so were removed then).
 
 def short_note(listed):
     return ("The wiki lists a deck of %d cards. A combat tier fights with 30: the listed cards, a second copy of each "
@@ -44,10 +43,8 @@ BOSSES = [
                       ("Anub'arak", 1), ("Death's Bite", 1), ("Leper Gnome", 1), ("Undertaker", 2), ("Unstable Ghoul", 2), ("Flesheating Ghoul", 2),
                       ("Shallow Gravedigger", 2), ("Arfus", 1), ("Baron Rivendare", 1), ("Abomination", 2), ("Muck Hunter", 1), ("Rotten Applebaum", 1),
                       ("Skelemancer", 1), ("Sludge Belcher", 2), ("N'Zoth, the Corruptor", 1))),
-       ("replacements", O([("Witchwood's Touch", "Shield Block")])),
        ("fillers", ["Haunted Creeper", "Loot Hoarder", "Harvest Golem", "Dark Cultist"]),
-       ("notes", [("deck", TOUCH_NOTE),
-                  ("power", "From the Swamp raises one Bloated Zombie (GILA_BOSS_24t, 1/3, \"Deathrattle: Deal 1 damage to all characters.\") "
+       ("notes", [("power", "From the Swamp raises one Bloated Zombie (GILA_BOSS_24t, 1/3, \"Deathrattle: Deal 1 damage to all characters.\") "
                             "for the boss whenever a minion of the run player dies (a run shrine that dies and goes dormant counts as a death, as for "
                             "every death trigger); nothing with a full board.")])]),
     O([("id", "gila_30_gretta"), ("name", "Blood Witch Gretta"), ("n", "30"), ("printed", 30), ("rounds", "4-5"), ("archetype", "control"),
@@ -126,10 +123,9 @@ BOSSES = [
                       ("Wrath", 2), ("Wild Growth", 2), ("Swipe", 1), ("Starfall", 1), ("Nourish", 1), ("Ultimate Infestation", 1), ("Windfury", 2),
                       ("Bloodlust", 2), ("Dragon Egg", 1), ("Runic Egg", 1), ("Swamp Dragon Egg", 1), ("Nerubian Egg", 1), ("Devilsaur Egg", 1),
                       ("Eggnapper", 1), ("Windfury Harpy", 1))),
-       ("replacements", O([("Witchwood's Touch", "Shield Block"), ("Wrath", "Lesser Jasper Spellstone"), ("Power of the Wild", "Mark of the Lotus")])),
+       ("replacements", O([("Wrath", "Lesser Jasper Spellstone"), ("Power of the Wild", "Mark of the Lotus")])),
        ("fillers", ["Savage Roar", "Druid of the Claw", "Keeper of the Grove", "Living Roots"]),
-       ("notes", [("deck", TOUCH_NOTE),
-                  ("deck", "Wrath (EX1_154) and Power of the Wild (EX1_160), both Choose One, are collectible cards this engine does "
+       ("notes", [("deck", "Wrath (EX1_154) and Power of the Wild (EX1_160), both Choose One, are collectible cards this engine does "
                            "not script (their Core reprints are scripted, but the encounters step reads the client's original "
                            "printing): Lesser Jasper Spellstone and Mark of the Lotus take their slots, as in family 08's and family "
                            "10's Druid decks, and the step restores them once they are scripted."),
@@ -148,10 +144,8 @@ BOSSES = [
        ("list", cards(TOUCH, ("Rat Pack", 2), ("Infested Wolf", 2), ("Possessed Villager", 2), ("Power Overwhelming", 2), ("Spreading Madness", 2),
                       ("Void Terror", 2), ("Swamp Leech", 2), ("Haunted Creeper", 2), ("Flesheating Ghoul", 2), ("Sewer Crawler", 2), ("Mad Hatter", 2),
                       ("Bloodworm", 2), ("Moat Lurker", 2), ("Violet Wurm", 1), ("Onyxia", 1))),
-       ("replacements", O([("Witchwood's Touch", "Shield Block")])),
        ("fillers", ["Flame Imp", "Voidwalker", "Dire Wolf Alpha", "Harvest Golem"]),
-       ("notes", [("deck", TOUCH_NOTE),
-                  ("power", "Cannibalism: whenever a minion of either board dies, the minions that stood next to it in that board when it died "
+       ("notes", [("power", "Cannibalism: whenever a minion of either board dies, the minions that stood next to it in that board when it died "
                             "gain +1 Attack (Mmm, so tasty!, GILA_BOSS_67e). Minions that die together are each other's neighbours only while "
                             "both stood; a neighbour that dies in the same death pass gains nothing, and a dormant or untouchable neighbour is "
                             "skipped.")])]),

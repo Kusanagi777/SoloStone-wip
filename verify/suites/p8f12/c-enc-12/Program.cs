@@ -571,7 +571,7 @@ Guard("Rows", () =>
     Check("P1 the shipped data validates with the thirteen family 12 rows", errors.Count == 0, string.Join(" | ", errors.Take(4)));
     var rows = new (string id, string n, string name, string tier, int printed, string kind, string[] flags, bool passive)[]
     {
-        ("gila_24_groddo", "24", "Groddo the Bogwarden", "2", 30, "substituted", new[] { "passive" }, true),
+        ("gila_24_groddo", "24", "Groddo the Bogwarden", "2", 30, "authentic", new[] { "passive" }, true),
         ("gila_30_gretta", "30", "Blood Witch Gretta", "2", 30, "authentic", new[] { "passive", "bothPlayers" }, true),
         ("gila_39_forlorn_lovers", "39", "Forlorn Lovers", "4", 70, "authentic", new[] { "passive" }, true),
         ("gila_45_sthara", "45", "Cultist S'thara", "3", 40, "extended", new[] { "passive", "bothPlayers" }, true),
@@ -582,7 +582,7 @@ Guard("Rows", () =>
         ("gila_64_winslow", "64", "Winslow Tobtock", "3", 40, "authentic", new[] { "bothPlayers", "hiddenZone" }, false),
         ("gila_65_gobbles", "65", "Gobbles", "1", 10, "extended", new[] { "passive" }, true),
         ("gila_66_mute", "66", "The Mute", "2", 25, "extended", new string[0], false),
-        ("gila_67_hannigul", "67", "Ratcatcher Hannigul", "3", 40, "substituted", new[] { "passive", "bothPlayers", "position" }, true),
+        ("gila_67_hannigul", "67", "Ratcatcher Hannigul", "3", 40, "authentic", new[] { "passive", "bothPlayers", "position" }, true),
         ("gila_68_rancel", "68", "Plaguemaster Rancel", "3", 40, "authentic", new string[0], false),
     };
     Check("P2 family 12 holds exactly these thirteen rows", data.Encounters.Where(b => b.Family == "12").Select(b => b.Id).OrderBy(i => i, StringComparer.Ordinal)
@@ -628,9 +628,14 @@ Guard("Rows", () =>
         && Ids("boss-passive-public") == 4 && Ids("boss-passive-both") == 5 && Ids("boss-deck-rewrite") == 1 && Ids("boss-hidden-shuffle") == 1 && Ids("boss-minion-power") == 2 && Ids("boss-hunt-minion") == 2,
         string.Join(",", families));
     string Subs(string id) => string.Join(",", data.Boss(id).Source.Substitutions.Where(x => x.Listed != null).Select(x => x.Listed + ">" + (x.Used ?? "-") + ":" + x.Reason).Distinct().OrderBy(x => x, StringComparer.Ordinal));
-    Check("P7 the listed cards that are replaced or left out are only cards the engine does not script (or the 31st card of Shudderwock's list), each recorded",
-        Subs("gila_24_groddo") == "GILA_BOSS_99t2>EX1_606:unscripted" && Subs("gila_67_hannigul") == "GILA_BOSS_99t2>EX1_606:unscripted"
-        && Subs("gila_63_sephira") == "EX1_154>LOOT_051:unscripted,EX1_160>CFM_614:unscripted,GILA_BOSS_99t2>EX1_606:unscripted"
+    // Wave 6: family 23 scripts Witchwood's Touch (GILA_BOSS_99t2): Groddo's, Hannigul's and Sephira's listed copies stay in their
+    // decks (they were Shield Block, EX1_606, until then).
+    int InDeck(string boss, string card) => data.BossDecks[data.Boss(boss).Deck].Count(id => id == card);
+    Check("P7 the listed cards that are replaced or left out are only cards the engine does not script (or the 31st card of Shudderwock's list), each recorded; Witchwood's Touch is kept since wave 6",
+        Subs("gila_24_groddo") == "" && Subs("gila_67_hannigul") == ""
+        && InDeck("gila_24_groddo", "GILA_BOSS_99t2") == 2 && InDeck("gila_67_hannigul", "GILA_BOSS_99t2") == 2 && InDeck("gila_63_sephira", "GILA_BOSS_99t2") == 1
+        && rows.All(r => InDeck(r.id, "EX1_606") == 0)
+        && Subs("gila_63_sephira") == "EX1_154>LOOT_051:unscripted,EX1_160>CFM_614:unscripted"
         && Subs("gila_50_whisperer") == "EX1_154>LOOT_051:unscripted" && Subs("gila_47_shudderwock") == "UNG_088>-:over-size"
         && rows.Where(r => r.kind == "authentic").All(r => data.Boss(r.id).Source.Substitutions.Count == 0)
         && rows.SelectMany(r => data.Boss(r.id).Source.Substitutions).Where(x => x.Reason == "unscripted").All(x => !C(x.Listed).Implemented),

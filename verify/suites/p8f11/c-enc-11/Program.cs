@@ -682,12 +682,12 @@ Guard("Rows", () =>
         ("gila_44_sezavo", "44", "Doctor Sezavo", "1", 20, "extended", new string[0]),
         ("gila_51_garrow", "51", "Garrow, the Rancorous", "3", 40, "authentic", new string[0]),
         ("gila_52_pete", "52", "Crooked Pete", "3", 40, "authentic", new[] { "forms", "deckReplace" }),
-        ("gila_54_cragtorr", "54", "Cragtorr", "3", 40, "substituted", new string[0]),
-        ("gila_55_azalina", "55", "Azalina Soulthief", "4", 50, "substituted", new string[0]),
+        ("gila_54_cragtorr", "54", "Cragtorr", "3", 40, "authentic", new string[0]),
+        ("gila_55_azalina", "55", "Azalina Soulthief", "4", 50, "authentic", new string[0]),
         ("gila_56_face_collector", "56", "Face Collector", "4", 60, "curated", new[] { "mirrorDeck" }),
         ("gila_57_raeth", "57", "Raeth Ghostsong", "4", 60, "authentic", new string[0]),
         ("gila_58_grum", "58", "Grum", "3", 40, "substituted", new string[0]),
-        ("gila_62_gustave", "62", "Gustave, the Gutripper", "4", 50, "substituted", new string[0]),
+        ("gila_62_gustave", "62", "Gustave, the Gutripper", "4", 50, "authentic", new string[0]),
     };
     Check("P2 family 11 holds exactly these thirteen rows", data.Encounters.Where(b => b.Family == "11").Select(b => b.Id).OrderBy(i => i, StringComparer.Ordinal)
         .SequenceEqual(rows.Select(r => r.id).OrderBy(i => i, StringComparer.Ordinal)), string.Join(",", data.Encounters.Where(b => b.Family == "11").Select(b => b.Id)));
@@ -734,13 +734,18 @@ Guard("Rows", () =>
         && Sum("boss-hunt-power") == 10 && Sum("boss-hunt-own-hand") == 2 && Sum("boss-hunt-form") == 1 && Sum("boss-hunt-deck-shuffle") == 1 && Sum("boss-hunt-card-b") == 5, string.Join(",", families));
     string Subs(string id) => string.Join(",", data.Boss(id).Source.Substitutions.Where(x => x.Listed != null).Select(x => x.Listed + ">" + (x.Used ?? "-") + ":" + x.Reason).Distinct().OrderBy(x => x, StringComparer.Ordinal));
     var pete = data.Boss("gila_52_pete");
+    int In7(string boss, string card) => data.BossDecks[data.Boss(boss).Deck].Count(id => id == card);
     var formSubs = string.Join(",", data.Encounters.Where(b => b.Family == "11").SelectMany(b => b.Forms).Select(f => f.Deck));
-    Check("P7 the listed cards that are replaced are only cards the engine does not script (Witchwood's Touch, three Ogres), each recorded",
-        Subs("gila_58_grum") == "AT_088>LOOT_383:unscripted,GVG_065>CS2_197:unscripted,GVG_088>EX1_028:unscripted" && Subs("gila_54_cragtorr") == "GILA_BOSS_99t2>EX1_606:unscripted"
-        && Subs("gila_55_azalina") == "GILA_BOSS_99t2>EX1_606:unscripted" && Subs("gila_62_gustave") == "GILA_BOSS_99t2>EX1_606:unscripted"
+    // Wave 6: family 23 scripts Witchwood's Touch (GILA_BOSS_99t2), so Cragtorr's, Azalina's, Gustave's and Beastly Pete's listed
+    // copies stay in their decks (they were Shield Block, EX1_606, until then): only Grum's three Ogres are still replaced.
+    Check("P7 the listed cards that are replaced are only cards the engine does not script (three Ogres; Witchwood's Touch since wave 6 is scripted and kept), each recorded",
+        Subs("gila_58_grum") == "AT_088>LOOT_383:unscripted,GVG_065>CS2_197:unscripted,GVG_088>EX1_028:unscripted" && Subs("gila_54_cragtorr") == ""
+        && Subs("gila_55_azalina") == "" && Subs("gila_62_gustave") == ""
+        && In7("gila_54_cragtorr", "GILA_BOSS_99t2") == 2 && In7("gila_55_azalina", "GILA_BOSS_99t2") == 1 && In7("gila_62_gustave", "GILA_BOSS_99t2") == 2
         && data.Encounters.Where(b => b.Family == "11").SelectMany(b => b.Source.Substitutions).Where(x => x.Reason == "unscripted").All(x => !C(x.Listed).Implemented)
-        && data.BossDecks[pete.Forms[0].Deck].Count(id => id == "EX1_606") == 2 && formSubs == "enc-gila_52_pete-f1",
-        Subs("gila_58_grum") + " | " + Subs("gila_54_cragtorr"));
+        && data.BossDecks[pete.Forms[0].Deck].Count(id => id == "EX1_606") == 0 && data.BossDecks[pete.Forms[0].Deck].Count(id => id == "GILA_BOSS_99t2") == 2
+        && formSubs == "enc-gila_52_pete-f1",
+        Subs("gila_58_grum") + " | " + Subs("gila_54_cragtorr") + " | " + Subs("gila_55_azalina") + " | " + Subs("gila_62_gustave"));
     int In(string boss, string card) => data.BossDecks[data.Boss(boss).Deck].Count(id => id == card);
     Check("P8 the boss cards are where the wiki lists them: 4 Hacks, 2 Soul Assimilations, 4 Shallow Graves; Crooked Pete's Spore Hallucination is Hallucination (UNG_856)",
         In("gila_41_brushwood", Hack) == 4 && In("gila_55_azalina", Assimilation) == 2 && In("gila_57_raeth", Graves) == 4 && In("gila_52_pete", "UNG_856") == 1

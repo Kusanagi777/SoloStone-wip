@@ -9,8 +9,8 @@ REPO = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(V)
 READ = "2026-11-14"
 WIKI = "https://hearthstone.wiki.gg/wiki/"
 TOUCH = OD([("name", "Witchwood's Touch"), ("count", 2), ("id", "GILA_BOSS_99t2")])
-TOUCH_NOTE = ("Witchwood's Touch (GILA_BOSS_99t2, \"Draw 2 cards. Gain 8 Armor.\") is family 23's boss card; until it is scripted its "
-              "copies are Shield Block, as in family 10's rows (rerun the encounters step then).")
+# Witchwood's Touch (GILA_BOSS_99t2) is family 23's boss card, scripted since the wave-6 merge: its copies stay in the decks
+# (the Shield Block stand-in, its replacement entries and the deck notes saying so were removed then).
 
 def cards(*pairs):
     out = []
@@ -130,27 +130,25 @@ BOSSES = [
               ("Savage Roar", 2), ("Swipe", 2), ("Bite", 2), ("Branching Paths", 2), ("Savage Combatant", 2), ("Rat Pack", 3), ("Knuckles", 1),
               ("Savannah Highmane", 2), ("Haunted Creeper", 2), ("Meat Wagon", 2), ("Night Howler", 2), ("Bloodworm", 2)))])],
         forms=[OD([("hero", "GILA_BOSS_52h2"), ("power", "GILA_BOSS_52p2"), ("at", OD([("script", True)])), ("deck", OD([("list", "Beastly Pete")])), ("draw", 6)])],
-        replacements=OD([("Witchwood's Touch", "Shield Block")]), fillers=["Backstab", "Cutpurse", "SI:7 Agent"]),
+        fillers=["Backstab", "Cutpurse", "SI:7 Agent"]),
     row("54", "gila_54_cragtorr", "Cragtorr", "Cragtorr", "3", 40, "6-7", "control",
         cards(TOUCH, ("Jungle Giants", 1), ("Wild Growth", 2), ("Grove Tender", 2), ("Poison Seeds", 2), ("Nourish", 2), ("Ancient of Lore", 1),
               ("Ancient of War", 2), ("Giant Anaconda", 2), ("Ironbark Protector", 1), ("Emperor Thaurissan", 1), ("Rotten Applebaum", 1), ("Sea Giant", 2),
               ("Y'Shaarj, Rage Unbound", 1), ("Arcane Giant", 2), ("Clockwork Giant", 2), ("Mountain Giant", 2), ("Molten Giant", 2)),
-        [OD([("kind", "deck"), ("note", TOUCH_NOTE)]),
-         power("One with the Trees (2) makes every minion the boss holds cost (1) less (Assimilation, GILA_BOSS_54e). Offered only while it "
+        [power("One with the Trees (2) makes every minion the boss holds cost (1) less (Assimilation, GILA_BOSS_54e). Offered only while it "
                "holds a minion that costs (1) or more.")],
-        cards=["GILA_BOSS_54e"], replacements=OD([("Witchwood's Touch", "Shield Block")]), fillers=["Ancient of Lore", "Ironbark Protector", "Wild Growth"]),
+        cards=["GILA_BOSS_54e"], fillers=["Ancient of Lore", "Ironbark Protector", "Wild Growth"]),
     row("55", "gila_55_azalina", "Azalina Soulthief", "Azalina_Soulthief_(boss)", "4", 50, "6-8", "midrange",
         cards(OD([("name", "Witchwood's Touch"), ("count", 1), ("id", "GILA_BOSS_99t2")]), ("Soul Assimilation", 2, "GILA_BOSS_55t2"), ("Wispering Woods", 2),
               ("Dark Wispers", 2), ("Wisps of the Old Gods", 2), ("Kun the Forgotten King", 1), ("Avenge", 2), ("Competitive Spirit", 2), ("Eye for an Eye", 1),
               ("Noble Sacrifice", 1), ("Divine Favor", 2), ("Sword of Justice", 1), ("Spirit Lash", 2), ("Spirit Echo", 2), ("Knife Juggler", 2),
               ("Lost Spirit", 3), ("Defender of Argus", 2)),
-        [OD([("kind", "deck"), ("note", TOUCH_NOTE)]),
-         power("Unfinished Business (2) summons three 1/1 Wisps (GILA_BOSS_55t), as many as the board has room for. Soul Assimilation (4) "
+        [power("Unfinished Business (2) summons three 1/1 Wisps (GILA_BOSS_55t), as many as the board has room for. Soul Assimilation (4) "
                "destroys the caster's Wisps (every card the client names Wisp, the list EMERALD_DREAM Divination reads: the Wisps of this "
                "power, Wispering Woods and Wisps of the Old Gods among them), lets their deaths resolve, then takes control of one random "
                "enemy minion per Wisp destroyed (one taken while the caster's board is full is destroyed, the engine's control rule; a run "
                "shrine never changes sides).")],
-        cards=["GILA_BOSS_55t"], replacements=OD([("Witchwood's Touch", "Shield Block")]), fillers=["Knife Juggler", "Defender of Argus", "Divine Favor"]),
+        cards=["GILA_BOSS_55t"], fillers=["Knife Juggler", "Defender of Argus", "Divine Favor"]),
     row("56", "gila_56_face_collector", "Face Collector", "Face_Collector_(boss)", "4", 60, "6-7", "midrange",
         cards(("Backstab", 2), ("Deadly Poison", 2), ("SI:7 Agent", 2), ("Eviscerate", 2), ("Sap", 2), ("Fan of Knives", 2), ("Assassinate", 2), ("Sprint", 1),
               ("Defias Ringleader", 2), ("Loot Hoarder", 2), ("Harvest Golem", 2), ("Earthen Ring Farseer", 2), ("Chillwind Yeti", 2),
@@ -192,11 +190,10 @@ BOSSES = [
         cards(TOUCH, ("Addled Grizzly", 2), ("Malorne", 1), ("Bestial Wrath", 2), ("Smuggler's Crate", 2), ("Call Pet", 2), ("Trogg Beastrager", 2),
               ("Bearshark", 2), ("Kill Command", 2), ("Savannah Highmane", 2), ("Swamp King Dred", 1), ("Gahz'rilla", 1), ("King Krush", 1),
               ("River Crocolisk", 2), ("King Mukla", 1), ("Carnivorous Cube", 2), ("Mukla's Champion", 2), ("Stampeding Kodo", 1)),
-        [OD([("kind", "deck"), ("note", TOUCH_NOTE)]),
-         power("Cull the Meek (1) destroys a minion with the lowest Attack among the minions of both boards an effect can pick; a tie is "
+        [power("Cull the Meek (1) destroys a minion with the lowest Attack among the minions of both boards an effect can pick; a tie is "
                "broken by the game RNG. The wiki marks it auto-cast; here the boss's AI chooses when to pay for it, as family 08's Ixlid and "
                "family 10's Sazzmi, and it is offered only while a minion is on a board.")],
-        replacements=OD([("Witchwood's Touch", "Shield Block")]), fillers=["Kill Command", "Bearshark", "River Crocolisk"]),
+        fillers=["Kill Command", "Bearshark", "River Crocolisk"]),
 ]
 
 def main():

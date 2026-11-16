@@ -26,8 +26,8 @@ NOTE = ("Phase 8 family 11, Monster Hunt bosses B: thirteen encounters of The Wi
     "(Desecrate is readied again when it kills, EncounterRules.PowerRefresh 32646; Shallow Graves summons minions of either side that "
     "died this game, never a dead run shrine: ShrineRules.IsCorpse) and Grum (Terrify shuffles a minion into its owner's deck through "
     "the engine's MoveToDeck, Costs (4) less there; a run shrine goes dormant instead: ShrineRules.InterceptLeave) and Gustave, the "
-    "Gutripper (Cull the Meek). Decks: the wiki's tables (30 cards, Damph's and Sezavo's 20 extended to 30); Witchwood's Touch, family "
-    "23's card, is Shield Block until it is scripted, and three wrong-target Ogres are replaced, each recorded by the encounters step. "
+    "Gutripper (Cull the Meek). Decks: the wiki's tables (30 cards, Damph's and Sezavo's 20 extended to 30); Witchwood's Touch is family "
+    "23's card (scripted since the wave-6 merge), and three wrong-target Ogres are replaced, each recorded by the encounters step. "
     "GILA_BOSS_52h2 Beastly Pete is the form's portrait: a support record. A clickable power that would do nothing is not offered. Boss "
     "heroes need no script. None is rejected. Every row sits on acts-v3h and acts-v3t, which no new run follows until schedule-v1.json "
     "\"defaults\" names them (blocked_by run:default-schedule).")
