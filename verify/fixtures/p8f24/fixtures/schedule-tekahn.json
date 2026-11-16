@@ -121,6 +121,7 @@
       ],
       "finale": {"enabled": false, "fixedBosses": [], "heroRelay": false, "tavernBefore": true,
                  "id": "IV", "name": "The Heist", "bossHealth": [70], "bossMana": [3], "tavern": {"gold": 3, "offers": 4},
+                 "twist": {"pool": ["DALA_830"], "chance": 100},
                  "pending": ["dala_43_norroa", "dala_67_vargoth", "dala_69_kalec", "dala_60_khadgar"]}
     },
     "acts-v3t": {
@@ -174,7 +175,8 @@
     {"id": "ULDA_801", "kind": "twist", "provenance": "ULDA", "scope": "act", "effect": "match", "weight": 1, "status": "admitted", "incompatibleFlags": ["deckReplace", "relay"]},
     {"id": "ULDA_802", "kind": "twist", "provenance": "ULDA", "scope": "act", "effect": "match", "weight": 1, "status": "admitted"},
     {"id": "ULDA_803", "kind": "twist", "provenance": "ULDA", "scope": "act", "effect": "match", "weight": 1, "status": "admitted"},
-    {"id": "ULDA_804", "kind": "twist", "provenance": "ULDA", "scope": "act", "effect": "match", "weight": 1, "status": "admitted", "incompatibleRules": ["DALA_829", "DALA_832", "DALA_833"], "incompatibleFlags": ["boardStart"]}
+    {"id": "ULDA_804", "kind": "twist", "provenance": "ULDA", "scope": "act", "effect": "match", "weight": 1, "status": "admitted", "incompatibleRules": ["DALA_829", "DALA_832", "DALA_833"], "incompatibleFlags": ["boardStart"]},
+    {"id": "DALA_830", "kind": "twist", "provenance": "DALA", "scope": "act", "effect": "run", "weight": 1, "status": "admitted"}
   ],
   "modifiers": [
     {"id": "mod_iron_bosses", "name": "Iron Bosses", "bossHealthDelta": 5, "extraTreasureAfterMajor": true},
