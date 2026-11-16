@@ -1,0 +1,111 @@
+PASS A1 Grafted Bark costs (2); it can be aimed at any minion of either board, never a hero  (CS2_182,CS2_172)
+PASS A2 a fresh copy of the minion's card goes to the boss's hand as a 2/2 that costs (2) (Petrified); the minion itself is untouched  (CS2_182 2/2 cost 2)
+PASS A3 played, the copy stays a 2/2 for 2 Mana  (PLAY)
+PASS A4 with a full hand it is not offered
+PASS A5 a minion whose card the boss may never be given (the run's generation filter) is not a choice  (BE_014)
+PASS B1 Survival of the Fittest costs (3), has no target and is offered only while both boards hold a minion
+PASS B2 every minion attacks a random enemy minion, in play order: the Wisp, the Crocolisk and the 0-Attack Shieldbearer each attack the Yeti and die on it (3 damage); the Yeti has no enemy minion left; the heroes are never attacked  (wisp GRAVEYARD croc GRAVEYARD bearer GRAVEYARD 4 yeti PLAY 3)
+PASS B3 each attack's deaths resolve before the next, and a minion with no enemy minion left does not attack: the two Wisps die on the Ogre, which takes 2 and attacks nothing  (ogre 2)
+PASS B4 a clone carries the board after the attacks
+PASS B5 Hack costs (3): five hits of 1 on the chosen minion, each its own damage event (Armorsmith: +5 Armor)  (5 armor +5)
+PASS B6 with Spell Damage +1 each hit deals 2, and the hits stop once the minion is dead (four hits on a 7-Health Ogre)  (GRAVEYARD 8)
+PASS B7 Hack can be aimed at any minion, never a hero  (CS2_200,EX1_402,CS2_200,CS2_142)
+PASS C1 Bulldoze costs (1), has no target and is offered only with Armor and a minion on a board
+PASS C2 all the Armor is spent as one hit on a random minion: the only minion, a Yeti, takes 6 and dies
+PASS C3 with Armor but no minion on a board it is not offered
+PASS C4 the minion is random among both boards (twelve uses hit the run player's and the boss's own)  (boss,player)
+PASS D1 Grave Mistake costs (3), has no target and is offered only while a minion with a Deathrattle is on a board
+PASS D2 every minion's Deathrattle resolves twice for its own controller: the run player's Loot Hoarder draws the run player 2 cards, the boss's Harvest Golem summons 2 Damaged Golems for the boss; both stay alive  (hand +2 golems 2)
+PASS D3 a silenced minion's Deathrattle stays quiet (the Golem summons nothing more; the Hoarder still draws 2)
+PASS D4 a Deathrattle an enchantment gave resolves twice too (Murloc Infestation's: two Murlocs)  (2)
+PASS D5 the AI's view: the power is no option without a Deathrattle on a board
+PASS D6 Grave Mistake the spell costs (0) and does the same
+PASS D7 in the run player's hand it resolves the same (the run player's Hoarder draws for the run player, the boss's Golem summons for the boss)
+PASS D8 Grave Mistake the spell is in no shipped deck (the hunt's treasure)
+PASS E1 Hollow Needle costs (2) and can be aimed at any minion, never a hero
+PASS E2 1 damage to a minion that survives: no Health restored
+PASS E3 a minion the hit kills: 3 Health restored to the boss's hero  (3)
+PASS F1 Death and Taxes costs (1); the awake board shrine is a minion the run player controls
+PASS F2 one hit of 1 per minion the run player controls (three); the dormant shrine form is not counted  (3)
+PASS F3 with no minion on the run player's board it is not offered
+PASS G1 the row has one script form: Beastly Pete (GILA_BOSS_52h2) with Beast Within and his own 30-card deck, drawing 6
+PASS G2 the fight starts as Crooked Pete with Soot Up, its start-of-turn trigger started (EncounterRules.ActivatePower)
+PASS G3 Soot Up's targets are the boss's own minions that have no Stealth yet  (CS2_182)
+PASS G4 the minion has Stealth (Covered in Soot)
+PASS G5 the Stealth lasts through the run player's turn and is gone at the start of the boss's next turn
+PASS G6 above half his maximum Health nothing happens at the start of his turn  (max 30 plan 30)
+PASS G7 at half or less, at the start of his turn he becomes Beastly Pete with Beast Within: Health and maximum kept, +15 Armor  (GILA_BOSS_52h2 15/30 armor 15)
+PASS G8 his hand is set aside, Beastly Pete's list replaces his deck and he draws 6 from it (then his turn's draw); the boss's own-deck fact is recorded  (hand 7 deck 23)
+PASS G9 the boss's own-deck ledger samples Beastly Pete's list (23 cards left, every one from his list), not Crooked Pete's deck  (EX1_606x1,OG_047x2,GIL_637x1,CS2_011x2,EX1_570x2,LOOT_054x2,AT_039x2,CFM_316x3,CFM_333x1,EX1_534x1,FP1_002x1,ICC_812x2,ICC_031x2,ICC_905x1)
+PASS G10 Beast Within (1) gives the boss's minions +1 Attack for good (Beast Mode)
+PASS G11 the change happens once: the next turn starts with no second change (the old power's trigger is stopped)
+PASS G12 the harvest reports form 1 and one form change
+PASS G13 a Pete killed outright before such a turn start dies (no form change on death)
+PASS G14 with no Beast Within target (no minion of his) the power is not offered
+PASS H1 One with the Trees costs (2) and is offered only while the boss holds a minion that costs (1) or more
+PASS H2 every minion the boss holds costs (1) less (Assimilation); the spell does not  (5 4)
+PASS H3 it stacks (the Ogre costs (4))
+PASS I1 Unfinished Business costs (2) and summons three 1/1 Wisps (GILA_BOSS_55t)
+PASS I2 with room for two only two are summoned
+PASS I3 with a full board it is not offered
+PASS I4 Soul Assimilation costs (4): every Wisp of the caster (hers and the classic one) is destroyed  (CS2_172,CS2_182,CS2_120)
+PASS I5 one enemy minion per Wisp changes sides while one is left to take: the Yeti and the Crocolisk are the boss's now
+PASS I6 the run player's board shrine never changes sides
+PASS I7 one Wisp: one random enemy minion is taken
+PASS I8 with no Wisp nothing is taken
+PASS J1 A New Face costs (0); any minion is a choice that has a minion costing (2) more (a Molten Giant, Cost 20, has none)  (TRLA_154,CS2_182,CS2_231 molten pool 0)
+PASS J2 the minion becomes a random scripted minion that costs (2) more, still the run player's  (BOT_066)
+PASS J3 ten more uses on the boss's own Wisp (Cost 0): always a scripted 2-Cost minion, of several kinds  (CORE_EX1_096,OG_330,CORE_KAR_062,ULD_195,DAL_603,EX1_049,OG_338,CORE_EX1_012,EX1_616,LOOT_013)
+PASS J4 aimed at the run player's board shrine: the shrine is destroyed instead and goes dormant (the transform rule)
+PASS J5 flag mirrorDeck: the boss's deck is the run deck as this fight plays it, less what a boss may not hold (here all of it)  (10 of 10)
+PASS J6 a card the admission table keeps from a boss (a run treasure) is left out of the copy  (14 of 15 LOOTA_811 admitted 14 catalog True deck DAL_577,DAL_577,ICC_836,CS2_024,ICC_068,GVG_002,ICC_252,CS2_026,CS2_033,CFM_671,DAL_577,DAL_577,ICC_836,CS2_024,LOOTA_811)
+PASS J7 with fewer than 10 such cards (4 of 10 here) the row's own curated deck is played
+PASS J9 a Fabled bundle in the run deck is copied whole when a boss may hold all of it, else left out whole; the boss's deck passes the Fabled rules and its pilot builds  (ok admitted True TIME_619,TIME_619t,TIME_619t2)
+PASS J10 a Fabled card whose companions the copy would lack (the run deck holds it alone) is left out, the rest is copied  (ok 10/11)
+PASS J8 a real game starts from the mirror plan with the copied deck (30 cards less the opening hand)
+PASS K1 Desecrate costs (1) and has no target; its Inspire trigger is started with it
+PASS K2 1 damage to every minion of both boards; one died (the Wisp), so it is ready again; the refresh mark is cleared
+PASS K3 again: nothing dies, so it stays used (it was paid twice)
+PASS K4 the run player's board shrine dying counts (it goes dormant) and readies it again
+PASS K5 a clone carries the ready power
+PASS K6 with no minion on a board it is not offered
+PASS K7 Shallow Graves costs (9): fresh minions of the deaths of both sides this game, for the caster (a Yeti, a Raptor); never the dead run shrine, never the discarded Crocolisk  (CS2_172,CS2_182)
+PASS K8 the dead run shrine is in the graveyard and is never among the candidates
+PASS K9 with more than seven deaths it summons seven  (7)
+PASS L1 Terrify costs (4); any minion is a choice (the awake shrine too)
+PASS L2 the run player's minion goes into the run player's deck, reset as the engine's MoveToDeck resets it (its damage gone), and costs (4) less there (Terrified)  (DECK cost 2 kings True damage 0 deck 27/26 mana 4)
+PASS L3 the boss's own minion goes into the boss's own deck, costing (0) now  (deck 25 from 25)
+PASS L4 the boss's own-deck ledger knows the card it shuffled into its own deck (its sample holds the one Crocolisk among the Yetis)  (CS2_182x24,CS2_120x1)
+PASS L5 aimed at the run player's board shrine: it is destroyed instead and goes dormant, it never enters a deck
+PASS L6 a minion whose owner's deck is full is no choice
+PASS M1 Cull the Meek costs (1) and has no target
+PASS M2 the minion with the lowest Attack of both boards dies: the 0-Attack board shrine (it goes dormant), not the 1-Attack Wisp
+PASS M3 next the Wisp (1 Attack) before the Raptor (3); a dormant shrine form is not counted
+PASS M4 with no minion on a board it is not offered
+PASS M5 a tie is broken by the game RNG (twelve seeds kill different Crocolisks, always exactly one)  (x,y,z)
+PASS P1 the shipped data validates with the thirteen family 11 rows
+PASS P2 family 11 holds exactly these thirteen rows  (gila_40_splintergraft,gila_41_brushwood,gila_42_baran,gila_43_damph,gila_44_sezavo,gila_51_garrow,gila_52_pete,gila_54_cragtorr,gila_55_azalina,gila_56_face_collector,gila_57_raeth,gila_58_grum,gila_62_gustave)
+PASS P3 gila_40_splintergraft: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3 deck 30)
+PASS P3 gila_41_brushwood: a Monster Hunt row of tier 4 (printed Health 60) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags [forcedAttack]  (authentic health 30 flags forcedAttack tier 4 deck 30)
+PASS P3 gila_42_baran: a Monster Hunt row of tier 2 (printed Health 30) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 2 deck 30)
+PASS P3 gila_43_damph: a Monster Hunt row of tier 3 (printed Health 35) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags [doubleDeathrattle]  (extended health 30 flags doubleDeathrattle tier 3 deck 30)
+PASS P3 gila_44_sezavo: a Monster Hunt row of tier 1 (printed Health 20) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 1 deck 30)
+PASS P3 gila_51_garrow: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3 deck 30)
+PASS P3 gila_52_pete: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags [forms,deckReplace]  (authentic health 30 flags forms,deckReplace tier 3 deck 30)
+PASS P3 gila_54_cragtorr: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags  tier 3 deck 30)
+PASS P3 gila_55_azalina: a Monster Hunt row of tier 4 (printed Health 50) whose plan is the row's (hero, clickable power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags  tier 4 deck 30)
+PASS P3 gila_56_face_collector: a Monster Hunt row of tier 4 (printed Health 60) whose plan is the row's (hero, clickable power, a 30-card curated deck the run deck's copy replaces, the act curve's Health), flags [mirrorDeck]  (curated health 30 flags mirrorDeck tier 4 deck 10)
+PASS P3 gila_57_raeth: a Monster Hunt row of tier 4 (printed Health 60) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 4 deck 30)
+PASS P3 gila_58_grum: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags  tier 3 deck 30)
+PASS P3 gila_62_gustave: a Monster Hunt row of tier 4 (printed Health 50) whose plan is the row's (hero, clickable power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags  tier 4 deck 30)
+PASS P4 every power, boss card, token and enchantment of the family is scripted by family 11 and keeps the client's text (14 powers, 5 cards, 5 enchantments)
+PASS P5 each has its own admission row: the fourteen powers a boss's only, the five boss cards a boss's and (taken from a boss) the run player's; none is ever generated
+PASS P6 the five admission families of the family: boss-hunt-power (10), boss-hunt-own-hand (2), boss-hunt-form (1), boss-hunt-deck-shuffle (1), boss-hunt-card-b (5)  (boss-hunt-card-b,boss-hunt-deck-shuffle,boss-hunt-form,boss-hunt-own-hand,boss-hunt-power)
+PASS P7 the listed cards that are replaced are only cards the engine does not script (Witchwood's Touch, three Ogres), each recorded  (AT_088>LOOT_383:unscripted,GVG_065>CS2_197:unscripted,GVG_088>EX1_028:unscripted | GILA_BOSS_99t2>EX1_606:unscripted)
+PASS P8 the boss cards are where the wiki lists them: 4 Hacks, 2 Soul Assimilations, 4 Shallow Graves; Crooked Pete's Spore Hallucination is Hallucination (UNG_856)
+PASS P9 a family 11 power asked for the run player is refused with its row's reason
+PASS P10 the validator checks the form: a form named both script and onDeath is refused  (boss gila_52_pete form 1: names 2 of healthAtMost, onDeath and script; needs exactly one)
+PASS P11 the tier pools: one row in enc-t1, one in enc-t2, six in enc-t3, five in enc-t4
+PASS P12 the private tag PowerRefresh is the family's reserved 32646, in the private range
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 109 passed, 0 failed

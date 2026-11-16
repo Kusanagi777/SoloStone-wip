@@ -11,8 +11,8 @@ trl_200_voone      TRL  t2      floor  3 DALA_Squeamlish/heist_druid_1/CS2_017  
 trl_200_voone      TRL  t2      floor  3 DALA_Tekahn/heist_warlock_1/CS2_056            deck 16 -> boss     turns  14 decisions  23 fallbacks  0 health  34 mana+0 power  3 checks ok variant champion shrine TRLA_104 rule ULDA_803 seen 19
 trl_200_voone      TRL  t2      floor  3 TRLA_209h_Mage/rumble_mage_108/CS2_034         deck 17 -> boss     turns  10 decisions  18 fallbacks  0 health  34 mana+0 power  3 checks ok variant champion shrine TRLA_104 rule ULDA_803 seen 23
 dala_21_whirt      DALA t3      floor  8 TRLA_209h_Druid/rumble_druid_112/CS2_017       deck 33 -> player   turns  19 decisions  33 fallbacks  0 health  51 mana+0 power  9 checks ok rule ULDA_803 seen 74
-dala_21_whirt      DALA t3      floor  8 TRLA_209h_Hunter/rumble_hunter_110/DS1h_292    deck 35 -> player   turns  23 decisions  41 fallbacks  0 health  46 mana+0 power  9 checks ok rule ULDA_803 seen 70
+dala_21_whirt      DALA t3      floor  8 TRLA_209h_Hunter/rumble_hunter_110/DS1h_292    deck 34 -> player   turns  27 decisions  49 fallbacks  0 health  51 mana+0 power 12 checks ok rule ULDA_803 seen 107
 ulda_44_trap_room  ULDA t3      floor  8 TRLA_209h_Paladin/rumble_paladin_105/CS2_101   deck 32 -> player   turns  13 decisions  21 fallbacks  0 health  46 mana+1 power  4 checks ok rule ULDA_803 seen 53
 ulda_44_trap_room  ULDA t3      floor  8 TRLA_209h_Priest/rumble_priest_114/CS1h_001    deck 35 -> player   turns  19 decisions  24 fallbacks  0 health  46 mana+0 power  3 checks ok rule ULDA_803 seen 55
 encounter run: schedule acts-v3h, rule ULDA_803; power unused: -; form unreached: -
-games 16, boss wins 10, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, rule-seen 663, rule-unseen -
+games 16, boss wins 10, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, rule-seen 700, rule-unseen -

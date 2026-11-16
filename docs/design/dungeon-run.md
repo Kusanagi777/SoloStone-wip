@@ -905,6 +905,11 @@ sit in `DungeonRunAdmission.F13.cs`.
   never draws a row with a shrine variant of that class (`DungeonRun.ActBossSequence`, `excludeShrineClass`; runs without
   a board shrine draw exactly as before). Four tests that could not fail were made real (c-enc-11 B6/B7, c-enc-12 M4,
   c-enc-13 V2).
+- **A cost callback and the fair view.** `bp.sh f04-player` met a fallback decision (KeyNotFoundException): the run
+  player's TRL_313 Scorch keeps an end-of-turn cost callback (its adaptive cost), and the boss's fair view masks and
+  renumbers the run player's hidden hand, so cloning the view for a search step found no entity under the callback's
+  owner id (`TriggerManager.CloneHandlers` -> `AdaptiveCostEffect.CloneDetached`). A latent defect the rebuilt fixtures'
+  seeds reached; such a detached callback is now dropped (c-w4fix Y1-Y4; every other result unchanged).
 - **Steady Throw and Rikkar.** c-heroes-F14 T1/T2 pinned TRLA_065p as unscripted; it is now Zul'jin's scripted encounter
   power, still refused as a Rikkar power (by the admission table instead of as unscripted).
 
@@ -915,7 +920,7 @@ teammates are not admitted for a boss (their decks would be more authentic with 
 is Shield Block in families 10-12 until family 23 scripts it; then rerun the encounters step and update c-enc-10 P3/P8,
 c-enc-11 P3/P7 and c-enc-12 P3/P7.
 
-**Tests of the wave.** c-enc-11 (109 checks), c-enc-12 (105), c-enc-13 (112), c-enc-engine G7c/G7d, and the bosspilot modes
+**Tests of the wave.** c-enc-11 (109 checks), c-enc-12 (105), c-enc-13 (112), c-w4fix (4), c-enc-engine G7c/G7d, and the bosspilot modes
 enc11a / enc11b / enc11-pete / enc11-cards / enc11-shrine, enc12 / enc12-seeds / enc12-hidden and enc13a / enc13b /
 enc13-seeds, each twice identical with 0 faults, fallbacks, failed checks and swallowed leaf exceptions.
 

@@ -103,6 +103,7 @@ Each suite folder holds its `*.cs` and `*.csproj` only (no `Program.cs.pre-*` ba
 | (new in wave 4, family 11 lane) | `verify/suites/p8f11/c-enc-11` | wave 4 | Enc11.csproj Program.cs |
 | (new in wave 4, family 12 lane) | `verify/suites/p8f12/c-enc-12` | wave 4 | Enc12.csproj Program.cs |
 | (new in wave 4, family 13 lane) | `verify/suites/p8f13/c-enc-13` | wave 4 | Enc13.csproj Program.cs |
+| (new in wave 4, the integration's fix) | `verify/suites/p8w4/c-w4fix` | wave 4 | Program.cs W4Fix.csproj |
 
 ## 3. The audit hall (all G3)
 
@@ -188,6 +189,12 @@ Repository files the suites read (already in git, not copied): `data/**`, `facts
 `engine/SabberStoneCore/resources/Data/OfflinePoolCatalog.xml` (one hall harness).
 
 ## 5. Baselines (what the runners compare against; LF)
+
+Since wave 4 (2026-11-16) `runs/`, `bp/` and `hall.txt` hold the wave-4 results recorded on Linux in the cloud container
+(`runs/<name>.txt` = run 2 of each of the 58 entries, CR removed; `bp/bp-<mode>-a.txt` = every one of the 152 bosspilot
+results, each equal to its `-b`; `hall.txt` unchanged). The rows below say where the wave-3 versions of those files came
+from; those versions are in git history. `bp-port/`, `bp-w1/` and `bp-w2/` are history now: `bp.sh` reads one only for a
+mode `bp/` does not hold.
 
 | Old place (under SP) | Here (under verify/baseline) | Compared by |
 |---|---|---|

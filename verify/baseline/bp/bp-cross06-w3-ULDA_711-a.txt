@@ -6,9 +6,9 @@ loot_49_darkness   LOOT tmajor1 floor  5 PRIEST/priest_mending/CS1h_001         
 loot_34_azari      LOOT tmajor1 floor  5 ROGUE/rogue_backalley/CS2_083b                 deck 22 -> boss     turns  12 decisions  19 fallbacks  0 health  50 mana+1 power  0 checks ok rule ULDA_711 seen 123
 loot_99_togwaggle  LOOT tmajor1 floor  5 SHAMAN/shaman_stormdebt/CS2_049                deck 26 -> boss     turns  10 decisions  24 fallbacks  0 health  50 mana+1 power  2 checks ok rule ULDA_711 seen 144
 gila_26_gnomenapper GIL  t3      floor  8 WARLOCK/warlock_fiendpact/CS2_056              deck 24 -> boss     turns  12 decisions  26 fallbacks  0 health  46 mana+0 power  2 checks ok rule ULDA_711 seen 229
-gila_27_experiment_3c GIL  t4      floor 13 WARRIOR/warrior_plated/CS2_102                 deck 48 -> player   turns  13 decisions  18 fallbacks  0 health  62 mana+1 power  2 checks ok rule ULDA_711 seen 191
-gila_29_sazzmi     GIL  t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 28 -> boss     turns  16 decisions  45 fallbacks  0 health  46 mana+0 power  3 checks ok rule ULDA_711 seen 437
+gila_27_experiment_3c GIL  t4      floor 13 WARRIOR/warrior_plated/CS2_102                 deck 46 -> boss     turns  16 decisions  29 fallbacks  0 health  62 mana+1 power  3 checks ok rule ULDA_711 seen 242
+gila_29_sazzmi     GIL  t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 32 -> boss     turns  18 decisions  48 fallbacks  0 health  46 mana+1 power  2 checks ok rule ULDA_711 seen 343
 gila_33_scarecrow  GIL  t3      floor  8 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 31 -> player   turns  14 decisions  23 fallbacks  0 health  46 mana+1 power  1 checks ok rule ULDA_711 seen 244
-gila_34_havnixx    GIL  t3      floor  8 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 33 -> player   turns   7 decisions  12 fallbacks  0 health  46 mana+1 power  2 checks ok rule ULDA_711 seen 136
+gila_34_havnixx    GIL  t3      floor  8 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 37 -> player   turns   7 decisions   7 fallbacks  0 health  46 mana+0 power  1 checks ok rule ULDA_711 seen 100
 encounter run: schedule acts-v3h, rule ULDA_711; power unused: loot_54_kay; form unreached: -
-games 12, boss wins 7, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 1, form-unreached 0, rule-seen 2214, rule-unseen -
+games 12, boss wins 8, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 1, form-unreached 0, rule-seen 2135, rule-unseen -

@@ -138,6 +138,9 @@ From the wave-4 integration (details in `handoff/phase8/reports/integrate-wave4.
   the original Wrath or Power of the Wild are scripted.
 - F14's `rejected` note for TRLA_065p in curation.json ("waits unscripted") is stale (the tool ignores it); the close-out
   may delete it.
+- Not checked in the real client (Windows PC): Crooked Pete's hero swap on the native transport; Blood Red Apple now
+  makes the run player's spells cost Health too (the TRLA_113 Blood Pact path of the plugin); Hypnotize's hand-and-deck
+  moves for the human player.
 
 From the wave-3 integration:
 - The twist pools are empty, so ULDA_801-804 roll only on the fixture `verify/fixtures/p8f06/fixtures/schedule-plagues.json`.
@@ -154,27 +157,29 @@ From the wave-3 integration:
 
 ## 4. Build and test in the cloud
 
-**`verify/` is proven on Linux** (the baseline proof of 2026-11-14, then the whole wave-4 regression). The only platform
-differences are c-p7fix H1 (`·` where the Windows log has a mangled byte) and the c-enc-model F2 save lengths (Linux
-line ends); `verify/baseline` now holds Linux results (README section 6).
+**`verify/` is proven on Linux** (step 1, 2026-11-14/15: every `final.sh` stage on the unchanged wave-3 tree, hall 39 of
+39 equal, 955 tests / 8285 checks; then the whole wave-4 regression). The only platform differences are c-p7fix H1 (`·`
+where the Windows log has a mangled console byte, 2 lines), the c-enc-model F2 save lengths (13954 / 25744 on Linux,
+14306 / 26370 on Windows: LF vs CRLF, 4 lines), c-secretsearch timing lines, and the released harnesses' stderr line
+(45/46 bytes per run on Linux, 46/47 on Windows). `verify/baseline` now holds the Linux results (README section 6).
 
 Needs: .NET SDK **10.0.402** exactly (`global.json`, `rollForward: disable`), bash, coreutils, git, python 3.
 Installing the SDK is a download: ask the user first. No Hearthstone files are needed for any of this.
 
 ```bash
-bash verify/bin/build-all.sh          # engine (expect 0 warnings / 0 errors), catalog tool, 67 suites, randplay, 39 hall projects
+bash verify/bin/build-all.sh          # engine (expect 0 warnings / 0 errors), catalog tool, 71 suites, randplay, 39 hall projects
 bash verify/bin/gen.sh                # generators: encounters, catalog, ledger; all six files must come out unchanged
-bash verify/bin/final.sh runs1 enc rules06 cross06 released released-all w1 w2 rules05 cross05 runs2 same hall
+bash verify/bin/final.sh runs1 enc rules06 cross06 released released-all w1 w2 rules05 cross05 w4 runs2 same hall
 ```
 
 `final.sh` stages and `bp.sh` modes are listed in `verify/README.md` section 4, with every expected number. In short:
-54 suite entries (`runs.sh`, `same.sh`: run 1 = run 2, 0 differing lines vs `verify/baseline/runs`), the hall
-(955 tests / 8285 checks), and the bosspilot modes (`bp.sh`: each mode twice identical, 0 faults / fallbacks / failed
-checks / swallowed, 0 differing lines vs its record; the modes wave 3 did not rerun are compared with the port's
-records in `verify/baseline/bp-port`, all 0 faults except rules01 DALA_850, section 3.4). Headline numbers: c-runlayer 244, c-catalog 127, c-content 904,
-c-admission 3167, c-acts 181, c-deckops 174; selfplay digest 2CE546A18F96DCBC; randplay digest 40207800B289E504;
-released run 40/27, act 40/26. The engine DLL md5 on Windows was 07028f461d526950718e3df4c8401d8d; it may differ on
-Linux (not a failure by itself).
+58 suite entries (`runs.sh`, `same.sh`: run 1 = run 2, 0 differing lines vs `verify/baseline/runs`), the hall
+(955 tests / 8285 checks), and the bosspilot modes (`bp.sh`: 152 results, each mode twice identical, 0 faults /
+fallbacks / failed checks / swallowed, 0 differing lines vs `verify/baseline/bp`, which holds every mode since wave 4).
+Headline numbers (wave 4): c-runlayer 244, c-catalog 127, c-content 904, c-admission 3301, c-acts 181, c-deckops 174,
+c-enc-engine 124, c-enc-11 109, c-enc-12 105, c-enc-13 112, c-w4fix 4; selfplay digest 2CE546A18F96DCBC; randplay digest
+40207800B289E504 (regkeys 2363); released run 40/27, act 40/26. Engine md5 on Linux d1c13be4cb4b836b335e91c6448c9da5
+(builds are not byte-identical across platforms; not a failure by itself).
 
 Things to watch on Linux (README section 6): file-name case; fixtures compared with XmlSerializer output
 (`VerifyPaths.ReadText`); recorded hashes over Windows text (`VerifyPaths.WindowsText`, used by c-acts and c-deckops);
@@ -259,15 +264,15 @@ Details: `docs/BUILDING.md`.
 - `verify/`: the regression suites, fixtures, baselines and runners (`verify/README.md`, `verify/MANIFEST.md`):
   - `bin/`: runners (`build-all.sh`, `engine.sh`, `builds.sh`, `runs.sh`, `same.sh`, `bp.sh`, `cross05.sh`,
     `cross06.sh`, `hall.sh`, `final.sh`, `gen.sh`); `lib/`: `env.sh`, the suite registry `suites.sh`, `VerifyPaths.cs`
-  - `suites/<origin>/<name>/`: 67 suite projects + randplay; `suites/hall/`: the base harness and 38 audit harnesses
-  - `fixtures/`: inputs; `baseline/`: `runs/` (suite logs), `bp/` (wave-3 bosspilot), `bp-port/` (bosspilot modes
-    wave 3 did not rerun, recorded by the port on the wave-3 tree), `bp-w1/`, `bp-w2/` (older records), `hall.txt`
+  - `suites/<origin>/<name>/`: 71 suite projects + randplay; `suites/hall/`: the base harness and 38 audit harnesses
+  - `fixtures/`: inputs; `baseline/`: `runs/` (suite logs), `bp/` (every bosspilot mode, wave 4, Linux), `bp-port/`,
+    `bp-w1/`, `bp-w2/` (older records, history), `hall.txt`
   - `tools/`: `port_paths.py`, `gen/<family>/` fixture and harness generators
   - `.out/`: gitignored build output and logs
 - `handoff/phase8/` (reference; Windows paths of the original PC; do not run its scripts):
   - `inventory.json`: the 25 families with ids and notes, and the inventory report
   - `reports/`: `design.md` (the phase-8 design), `implement-encounter-model.md`, `map-encounters.md`, the family
-    reports, `integrate-wave1/2/3.md` (wave 3 = the current baseline), `lane-setup.md`, `lane-sync-w1/2/3.md`
+    reports, `integrate-wave1/2/3/4.md` (wave 4 = the current baseline), `lane-setup.md`, `lane-sync-w1/2/3.md`
   - `workflow-encounters-lanes.js`: the old orchestration (lane rules, waves, close-out and review prompts)
   - `LANE-GUIDE.md`, `lanes.py`, `lanes.json`, `hrun.sh`: the old lane tool and harness lock
 - `docs/design/`: `dungeon-run.md` (design record), `restoration-ledger.csv/.md`, `dungeon-run-catalog.md`.

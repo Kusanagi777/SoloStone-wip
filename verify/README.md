@@ -4,8 +4,8 @@ The headless suites, fixtures, recorded baselines and runners that verify the un
 They used to live in a session scratchpad on one Windows PC, with absolute paths; here they build and run from any
 clone, on Linux or Windows, with only the .NET SDK pinned in `global.json` (10.0.402) and bash.
 
-The current baseline is the wave-3 integration (`handoff/phase8/reports/integrate-wave3.md`, section 7). Every number a
-runner prints must equal it (section 4 below). `MANIFEST.md` maps every file here to where it came from.
+The current baseline is the wave-4 integration (`handoff/phase8/reports/integrate-wave4.md`), recorded on Linux. Every
+number a runner prints must equal it (section 4 below). `MANIFEST.md` maps every file here to where it came from.
 
 ## 1. Quick start
 
@@ -13,11 +13,11 @@ runner prints must equal it (section 4 below). `MANIFEST.md` maps every file her
 bash verify/bin/build-all.sh            # engine + catalog tool + every suite + randplay + the hall (no plugin, no client files)
 bash verify/bin/runs.sh 1 all           # every suite once (about 20 minutes); then:
 bash verify/bin/runs.sh 2 all
-bash verify/bin/same.sh                 # run 1 vs run 2, run 1 vs the wave-3 baseline: expect identical / 0 differing lines
+bash verify/bin/same.sh                 # run 1 vs run 2, run 1 vs the baseline: expect identical / 0 differing lines
 bash verify/bin/bp.sh enc09             # one bosspilot mode, twice, compared with the baseline
 bash verify/bin/hall.sh harness && bash verify/bin/hall.sh 1 38 && bash verify/bin/hall.sh same
 bash verify/bin/final.sh engine builds runs1 enc rules06 cross06 released runs2 same hall   # the wave-3 set, about 3 hours
-bash verify/bin/final.sh released-all w1 w2 rules05 cross05   # the bosspilot modes wave 3 did not rerun, about 2-3 hours more
+bash verify/bin/final.sh released-all w1 w2 rules05 cross05 w4   # the other bosspilot modes, about 3-4 hours more
 ```
 
 The runners work from any current directory. Requirements: .NET SDK 10.0.402, bash, coreutils (`timeout`, `cmp`,
@@ -42,12 +42,12 @@ verify/
   suites/<origin>/<name>/      one folder per suite: Program.cs (+ other .cs), the .csproj; <origin> = the scratchpad
                                folder it came from (audit-verify, p6f15, p7, p8f01, ...); the hall is suites/hall/<name>
   fixtures/<old path>/         inputs the suites read, at the path they had under the old scratchpad
-  baseline/runs/<name>.txt     the wave-3 log of each run entry (selfplay, selfplay-games, randplay)
-  baseline/bp/bp-<mode>-a.txt  the wave-3 bosspilot results
-  baseline/bp-port/            the bosspilot modes wave 3 did not rerun, recorded by the port on the wave-3 tree (section 4)
-  baseline/bp-w1/ bp-w2/       older records: the shrine, fixture and catalog modes (still compared: equal on the wave-3
-                               tree) and, as history only, the wave-1 and wave-2 records of the modes in bp-port (section 6)
-  baseline/hall.txt            the wave-3 hall result lines
+  baseline/runs/<name>.txt     the wave-4 log of each run entry (selfplay, selfplay-games, randplay), Linux
+  baseline/bp/bp-<mode>-a.txt  the wave-4 bosspilot results, every mode (152 files), Linux
+  baseline/bp-port/            history: the modes wave 3 did not rerun, recorded by the port on the wave-3 tree
+  baseline/bp-w1/ bp-w2/       history: the wave-1 and wave-2 records (section 6); bp.sh reads them only for a mode
+                               baseline/bp does not hold
+  baseline/hall.txt            the hall result lines (unchanged since wave 3)
   tools/port_paths.py          the mechanical part of porting a suite
   .out/                        gitignored: engine-out/, tools/, builds/, runs/, bp/, hall/, tmp/, final-*.log
 ```
@@ -92,15 +92,20 @@ from a suite folder; runners use it for paths they hand to a harness.
 8. **Never change what a test asserts**, only how it finds files. If a number moves after porting, find out why and
    fix the port. `tools/port_paths.py` does the mechanical rewrites and lists every line left to look at.
 
-## 4. The baseline (wave 3; every number must match)
+## 4. The baseline (wave 4, recorded on Linux; every number must match)
 
-Suites (`same.sh`: run 1 = run 2, 0 differing lines vs `baseline/runs`, except c-secretsearch, whose detail lines
+The baseline is the wave-4 integration (families 11, 12, 13; `handoff/phase8/reports/integrate-wave4.md`), run on Linux
+(the cloud container, .NET SDK 10.0.402) on 2026-11-15/16: every suite twice, every bosspilot mode twice, the hall.
+`baseline/runs`, `baseline/bp` and `baseline/hall.txt` hold those results; the wave-3 records they replaced are in git
+history (`bp-port`, `bp-w1` and `bp-w2` stay as older history, section 6).
+
+Suites (`same.sh`: run 1 = run 2, 0 differing lines vs `baseline/runs`, except c-secretsearch, whose timing lines
 differ between any two runs; its SUMMARY line is what must match):
 
 | Entry | Result | Entry | Result |
 |---|---|---|---|
 | c-runlayer | 244 passed, 0 failed | c-catalog | 127 passed, 0 failed |
-| c-content | 904 passed, 0 failed | c-admission | 3167 passed, 0 failed |
+| c-content | 904 passed, 0 failed | c-admission | 3301 passed, 0 failed |
 | c-acts | 181 passed, 0 failed | c-deferrals | 149 passed, 0 failed |
 | c-deckops | 174 passed, 0 failed | c-dkdh-supply | 13 passed |
 | c-dkdh-play | 5 passed | c-heroes | 347 passed |
@@ -112,83 +117,65 @@ differ between any two runs; its SUMMARY line is what must match):
 | c-shrines S1 / S2 / S3 | 107 / 157 / 158 | c-shrine-upgrades | 92 |
 | c-teammates T1 / T2 | 139 / 207 | c-companions-D | 251 |
 | c-p7fix | RESULT 40 passed | c-enc-model | RESULT 141 passed, 0 failed |
-| c-enc-engine | RESULT 122 passed, 0 failed | c-enc-secrets | 60 |
+| c-enc-engine | RESULT 124 passed, 0 failed | c-enc-secrets | 60 |
 | c-collectibles A / B / C | 115 / 108 / 102 | c-w1fix | 23 |
 | c-rules-05 | 170 | c-enc-07 | 161 |
 | c-enc-08 | 113 | c-rules-06 | 224 |
 | c-enc-09 | 166 | c-enc-10 | 116 |
 | c-w3fix | 4 | c-secretscan | faults 0 (both generations) |
 | c-secretsearch | SUMMARY checks passed 689 failed 0 | selfplay | decks 57 games 200 p1 103 p2 97 other 0 faults 0 digest 2CE546A18F96DCBC |
-| randplay | games=200 digest=40207800B289E504 (regkeys 2322) | | |
+| randplay | games=200 digest=40207800B289E504 (regkeys 2363) | c-enc-11 (wave 4) | RESULT 109 passed, 0 failed |
+| c-enc-12 (wave 4) | RESULT 105 passed, 0 failed | c-enc-13 (wave 4) | RESULT 112 passed, 0 failed |
+| c-w4fix (wave 4) | RESULT 4 passed, 0 failed | | |
+
+58 run entries (`runs.sh list`), 71 build projects (`builds.sh list`).
 
 Hall (`hall.sh same`): every harness's SUMMARY line equal to `baseline/hall.txt`, all with 0 bad and 0 failed; 955
 tests / 8285 checks in all = the base harness (8 tests, 114 checks) + the 38 audit harnesses (947 tests, 8171 checks).
+Unchanged by waves 3 and 4.
 
 Bosspilot (`bp.sh`; each mode twice identical, 0 faults / 0 fallbacks / 0 failed checks / 0 swallowed leaf exceptions,
-0 differing lines vs `baseline/bp`; stderr empty for every encounter, rules06 and cross06 mode; the released harnesses
-(run, act, fixture, catalog and the shrine modes) print one diagnostic line on stderr, "pending-choice leaves scored as
-they stand N", 46 or 47 bytes per run, byte-identical to the wave-3 and wave-1 stderr files):
+0 differing lines vs `baseline/bp`; stderr empty for every encounter, rules and cross mode; the released harnesses (run,
+act, fixture, catalog and the seven shrine modes) print one diagnostic line on stderr per run, "pending-choice leaves
+scored as they stand N", 45 or 46 bytes on Linux (46 or 47 with CRLF on Windows)). Games / boss wins:
 
-| Mode | Games | Boss wins | Mode | Games | Boss wins |
+| Mode | Result | Mode | Result | Mode | Result |
 |---|---|---|---|---|---|
-| enc09 | 22 | 14 | enc10 | 30 | 25 |
-| enc09-seeds | 22 | 17 | enc10a (`<k>` 1 and 2, then `same`) | 32 | 20 |
-| enc09-auto | 16 | 10 | enc10b (same) | 28 | 21 |
-| enc09-finals | 20 | 20 | enc10-nab | 10 | 9 |
-| enc09-rooms | 16 | 7 | enc10-cards (same) | 36 | 19 |
-| enc09-cards | 24 | 21 | enc10-shrine (same) | 37 | 32 |
-| run (released) | 40 | 27 | enc10-seeds | 30 | 24 |
-| act (released) | 40 | 26 | enc10-hagatha | 6 | 6 |
-| rules06 `<rule>`, 21 rules | 16 each (12 for ULDA_706) | | cross06 (`cross06.sh`), 21 rules x 12 bosses | 12 each (11 for ULDA_719, ULDA_804) | |
-| shrine (released) | 40 | 24 | shrineT1 | 40 | 13 |
-| shrineS2 | 40 | 23 | shrineT2 | 40 | 20 |
-| shrineS3 | 40 | 22 | shrineD | 40 | 14 |
-| shrineU | 40 | 25 | fixture (released) | 40 | 27 |
-| catalog (released) | 40 | 27 | | | |
+| enc09 | 22 / 13 | enc10 | 30 / 27 | enc11a (`<k>` 1, 2, `same`) | 28 / 16 |
+| enc09-seeds | 22 / 18 | enc10a (same) | 32 / 21 | enc11b (same) | 24 / 17 |
+| enc09-auto | 16 / 9 | enc10b (same) | 28 / 21 | enc11-pete | 6 / 2 |
+| enc09-finals | 20 / 20 | enc10-nab | 10 / 9 | enc11-cards (same; the four cards played) | 24 / 20 |
+| enc09-rooms | 16 / 7 | enc10-cards (same) | 36 / 21 | enc11-shrine (same; 9 of 9 shrine fights) | 37 / 28 |
+| enc09-cards | 24 / 23 | enc10-shrine (same) | 37 / 32 | enc12 | 26 / 15 |
+| run (released) | 40 / 27 | enc10-seeds | 30 / 25 | enc12-seeds | 26 / 19 |
+| act (released) | 40 / 26 | enc10-hagatha | 6 / 6 | enc12-hidden | 18 / 13 |
+| fixture (released) | 40 / 27 | catalog (released) | 40 / 27 | enc13a | 30 / 27 |
+| shrine | 40 / 24 | shrineS2 / S3 / U | 40 / 23, 40 / 22, 40 / 25 | enc13b | 24 / 16 |
+| shrineT1 / T2 / D | 40 / 13, 40 / 20, 40 / 14 | | | enc13-seeds | 27 / 24 |
+| enc01 (w2) | 20 / 18 | secret4 (w2) | 24 / 18 | rules01 DALA_850 / 864 / 866 (w2) | 10 / 8, 10 / 8, 10 / 10 |
+| enc07a / enc07b (w2) | 36 / 31, 36 / 32 | shrine07 (w2) | 37 / 31 | seeds07 19000 (w2) | 36 / 32 |
+| enc08 (w2) | 34 / 27 | enc08-tag (w2) | 8 / 7 | enc08-cards (w2; the four cards played) | 12 / 12 |
+| enc08-trapped (w2) | 6 / 5 | enc08-seeds (w2) | 34 / 26 | old01 (w1) | 12 / 12 |
+| secretfix (w1) | 6 / 5 | plague 95 / 110 / 195 / 199 / 210 (w1) | 2 / 2 each | finale (w1) | 8 / 8 |
+| relay (w1) | 2 / 1 | collectA (w1) | 32 / 17 | collectP 1 / 2 / 3 / 4 (w1) | 6 / 5, 6 / 6, 6 / 6, 3 / 3 |
+| enc03 a / b / c (w1) | 24 / 24, 24 / 23, 16 / 15 | enc01-f03 (w1) | 20 / 18 | icarax2 (w1) | 4 / 4 |
+| f04-boss (w1; all 23 cards played) | 40 / 39 | f04-player (w1, REQUIRE=1) | 24 / 19 | f04-icarax 0 / 110 / 210 (w1) | 4 / 4 each |
+| rules06 `<rule>`, 21 rules | 16 each (12 for ULDA_706) | cross06 (`cross06.sh`), 21 rules x 12 bosses | 12 each (11 for ULDA_719, ULDA_804) | | |
+| rules05 `<rule>`, 18 rules | 16 each (12 for DALA_831, DALA_833) | cross05 (`cross05.sh`), 18 rules x 14 bosses | 14 each (13 for DALA_852, DALA_853) | | |
 
-The seven shrine modes and the released fixture and catalog modes were last run in wave 1 (`p8w1`); `bp.sh` compares
-them with those records in `baseline/bp-w1` (0 differing lines on the wave-3 tree). Their stderr is not empty: each run prints one diagnostic line, "pending-choice
-leaves scored as they stand 1" (46 or 47 bytes per run, the same as in wave 1). `final.sh released` runs only run and
-act, as the wave-3 final.sh did; `final.sh released-all` runs fixture, catalog and the seven shrine modes.
+`final.sh` stages: engine builds runs1 enc rules06 cross06 released released-all w1 w2 rules05 cross05 w4 runs2 same hall
+(`w4` is the family 11/12/13 set). Two coverage checks print a miss on this tree, because the rebuilt fixtures move the
+seeds of their fixture rows: `bp.sh collectA` "UNPLAYED: GIL_655" (Festeroot Hulk, two copies in one fixture row of four
+games) and `bp.sh enc03-check` "NOT PLAYED by a boss: ULD_173" (Vessina, one copy in one row of eight games). Neither is a
+fault: in a longer run of the same fixture row the boss plays them (fix02_warrior, 8 games: GIL_655 x1; fix03_shaman, 16
+games: ULD_173 x2; `integrate-wave4.md` section 7), and c-collectibles-A/B test both cards directly.
 
-**The modes wave 3 did not rerun** (families 01-05, 07, 08: 74 results). The port ran each one twice on the wave-3 tree
-(export copy, 2026-11-13, through the lock): every one twice identical, 0 fallbacks, 0 failed checks, 0 swallowed leaf
-exceptions, and every one 0 faults except rules01-DALA_850 (below). Those results are the records in `baseline/bp-port`;
-`bp.sh` compares with them ("vs port record", expected 0 differing lines). Eleven of them were also run with the
-ORIGINAL wave-3 builds of the four harnesses involved (c-bosspilot-encounter, -rules05, -collect, -f04, built
-2026-11-13 11:54-11:56 against the same engine md5, reading the wave-3 tree): rules01-DALA_850, enc01, enc08-cards,
-seeds07-19000, cross-w2-DALA_829, old01, finale, collectA, collectP2, enc03a and f04-player, each byte-identical to the
-port. How far each moved from its older record is in section 6. Stderr is empty for all but rules01-DALA_850.
-
-| Mode (`bp.sh ...`, final.sh stage) | Games / boss wins | Mode | Games / boss wins |
-|---|---|---|---|
-| enc01 (w2) | 20 / 18 | old01 (w1) | 12 / 12 |
-| secret4 (w2) | 24 / 18 | secretfix (w1) | 6 / 5 |
-| rules01 DALA_850 (w2) | 10 / 7, **faults 1** | plague: 95 / 110 / 195 / 199 / 210 (w1) | 2 / 2 each |
-| rules01 DALA_864 / DALA_866 (w2) | 10 / 8, 10 / 10 | finale (w1) | 8 / 8 |
-| enc07a / enc07b (w2) | 36 / 31, 36 / 32 | relay (w1) | 2 / 1 |
-| shrine07 (w2) | 37 / 32 | collectA (w1; all 33 cards played by the boss) | 32 / 15 |
-| seeds07 19000 (w2) | 36 / 31 | collectP 1 / 2 / 3 / 4 (w1) | 6 / 5, 6 / 6, 6 / 6, 3 / 3 |
-| enc08 (w2) | 34 / 26 | enc03 a / b / c (w1; `enc03-check`: every family card played) | 24 / 24, 24 / 22, 16 / 16 |
-| enc08-tag (w2) | 8 / 8 | enc01-f03 (w1) | 20 / 18 |
-| enc08-cards (w2; the four cards played from hand) | 12 / 12 | icarax2 (w1) | 4 / 4 |
-| enc08-trapped (w2) | 6 / 5 | f04-boss (w1; all 23 cards played by the boss) | 40 / 40 |
-| enc08-seeds (w2) | 34 / 25 | f04-player (w1, REQUIRE=1) | 24 / 16 |
-| rules05 `<rule>`, 18 rules (rules05) | 16 each | f04-icarax 0 / 110 / 210 (w1) | 4 / 4 each |
-| cross05 (`cross05.sh`), 18 rules x 14 bosses (13 for DALA_852, DALA_853) | 14 each (13) | | |
-
-**rules01-DALA_850 fails on the wave-3 tree** (exit 1 both runs, the same with the original wave-3 binary): with
-Anomaly - Arcane ("All spells cost (2) less") Hagatha's game against the DALA_Squeamlish run ends in "FAULT Exception:
-stuck after 1500 actions": the boss plays Unstable Evolution (Echo) at 0 cost on Arcane Giant again and again in one
-turn. Each run also takes about 5 minutes instead of 30 s and prints "fair-hand-knowledge-limit facts=8197 packets=0;
-opponent hand reconstruction skipped" on stderr (86 bytes). In wave 2 the same game ended normally (boss won, 48
-turns). This is a game defect for the next session to fix (the engine or the encounter rules), not a port defect: the
-record keeps the faulting output so that drift stays visible, and the fix will change it (re-record then).
-
-Generators (`gen.sh`): all six generated files byte-identical; encounters "69 rows, 73 decks (43 authentic, 30 changed),
-147 adaptations, 1 rejected"; catalog "506 entries (452 offerable pool, 2 withdrawn, 52 fixed), 6508 admitted and 1
-excluded"; ledger rows 4704, implemented 2813, partial 295, missing 538, duplicate/support 1058, adapted 0.
-Engine build: 0 warnings, 0 errors (md5 07028f461d526950718e3df4c8401d8d on Windows, identical to the wave-3 build).
+Generators (`gen.sh`): all six generated files byte-identical; encounters "103 rows, 124 decks (54 authentic, 70 changed),
+278 adaptations, 1 rejected"; catalog "506 entries (452 offerable pool, 2 withdrawn, 52 fixed), 6508 admitted and 1
+excluded"; ledger rows 4760, implemented 2813, partial 386, missing 503, duplicate/support 1058, adapted 0. The family
+fixture generators (`MANIFEST.md` section 6) reproduce every committed fixture byte for byte.
+Engine build: 0 warnings, 0 errors (Linux md5 d1c13be4cb4b836b335e91c6448c9da5; builds are not byte-identical across
+platforms: the wave-3 tree gives 31d96fc6... on Linux, 07028f46... on Windows).
 
 ## 5. Running on a shared machine
 
@@ -249,9 +236,21 @@ one) before it is treated as a regression. Never change budgets or baselines to 
   - The checks those families ran still pass: all 33 family 02 cards played by the boss (collectA), every family 03 card
     played by a boss (enc03-check), every one of the 23 family 04 boss cards played (f04-boss), the four enc08 cards
     played from hand.
-- Not yet run on Linux (no Linux on the original PC): the layout, paths and line ends are written for it, but the first
-  Linux run is the proof. Things to watch there: case of file names, `VerifyPaths.ReadText` where a fixture meets
-  XmlSerializer output, any check that reads a repository file and expects CRLF or `\` in a path.
+- **Linux (proven 2026-11-14/15; the baseline is now recorded on Linux).** The step-1 proof ran every `final.sh` stage on
+  the unchanged wave-3 tree in the cloud container: every number equal to the Windows records except three platform
+  differences, none of them behaviour: c-p7fix H1 prints `·` where the Windows log has a mangled console byte (2 lines);
+  c-enc-model F2 prints the golden-save lengths 13954 / 25744 where Windows printed 14306 / 26370 (LF vs CRLF in the
+  serialized save, 4 lines); c-secretsearch timing lines. The released harnesses' stderr line is 45 or 46 bytes per run on
+  Linux, 46 or 47 on Windows (CR). The hall gave 39 of 39 SUMMARY lines equal (955 tests / 8285 checks). Engine builds
+  are not byte-identical across platforms (wave-3 tree: 31d96fc6... on Linux, 07028f46... on Windows). The wave-4
+  baseline (`baseline/runs`, `baseline/bp`, `hall.txt`) was recorded on Linux, so c-p7fix H1 and c-enc-model F2 now hold
+  the Linux text: on Windows expect those two to differ the other way (2 and 4 lines), and the released stderr one byte
+  longer per run. Nothing in `verify/` needed a port fix for Linux.
+- Wave 4 moved bosspilot lines from the wave-3 records as waves 2 and 3 did (`integrate-wave4.md` section 7 has every
+  count): new rows in the pools move the act walks and seeds of every harness that walks acts-v3h; the fixture modes
+  (enc09-cards, enc10-cards, collectA, enc03, f04-boss, f04-player, enc08-cards) move on every line because their
+  fixtures were rebuilt from the merged data; shrine runs also move because a run never meets the champion of its own
+  shrine class now. cross05 and the released/shrine modes did not move.
 
 ## 7. Porting status and the plan for the rest
 

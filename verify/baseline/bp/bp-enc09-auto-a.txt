@@ -7,12 +7,12 @@ loot_34_azari      LOOT tmajor1 floor  5 ROGUE/rogue_backalley/CS2_083b         
 loot_34_azari      LOOT tmajor1 floor  5 SHAMAN/shaman_stormdebt/CS2_049                deck 25 -> boss     turns  12 decisions  19 fallbacks  0 health  50 mana+1 power  0 checks ok auto 6
 loot_34_azari      LOOT tmajor1 floor  5 WARLOCK/warlock_fiendpact/CS2_056              deck 22 -> boss     turns  17 decisions  25 fallbacks  0 health  50 mana+1 power  0 checks ok auto 5
 loot_53_inara      LOOT t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 34 -> player   turns  20 decisions  34 fallbacks  0 health  46 mana+1 power  0 checks ok auto 1
-loot_53_inara      LOOT t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 23 -> boss     turns  34 decisions  66 fallbacks  0 health  51 mana+0 power  0 checks ok auto 3
+loot_53_inara      LOOT t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 24 -> player   turns  26 decisions  34 fallbacks  0 health  46 mana+0 power  0 checks ok auto 2
 loot_53_inara      LOOT t3      floor  8 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 29 -> boss     turns  21 decisions  37 fallbacks  0 health  46 mana+0 power  0 checks ok auto 1
 loot_53_inara      LOOT t3      floor  8 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 34 -> boss     turns  20 decisions  39 fallbacks  0 health  46 mana+0 power  0 checks ok auto 1
 loot_52_vault      LOOT t3      floor  8 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 33 -> player   turns   9 decisions   4 fallbacks  0 health  60 mana+0 power  0 checks ok auto 0
-loot_52_vault      LOOT t3      floor  8 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 34 -> player   turns  10 decisions   4 fallbacks  0 health  60 mana+0 power  0 checks ok auto 1 no-loss
+loot_52_vault      LOOT t3      floor  8 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 38 -> player   turns  10 decisions   4 fallbacks  0 health  60 mana+0 power  0 checks ok auto 1 no-loss
 loot_52_vault      LOOT t3      floor  8 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 20 -> player   turns  10 decisions   4 fallbacks  0 health  60 mana+0 power  0 checks ok auto 1 no-loss
 loot_52_vault      LOOT t3      floor  8 GILA_500h3/mh_tess_scavenger/GILA_500p2        deck 35 -> player   turns  10 decisions   4 fallbacks  0 health  60 mana+0 power  0 checks ok auto 1 no-loss
 encounter run: schedule acts-v3h; power unused: -; form unreached: -
-games 16, boss wins 10, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, no-loss 3, auto-unused 0
+games 16, boss wins 9, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, no-loss 3, auto-unused 0

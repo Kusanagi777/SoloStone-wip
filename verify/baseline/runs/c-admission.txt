@@ -1,2 +1,2 @@
-NOTE Generated lists: 426 for both sides (61 collectible, scripted, non-Secret), 311 boss-only
-3167 passed, 0 failed
+NOTE Generated lists: 461 for both sides (61 collectible, scripted, non-Secret), 311 boss-only
+3301 passed, 0 failed

@@ -1,0 +1,22 @@
+ulda_40_icarax     ULDA tmajor3 floor 15 DRUID/druid_thicket/CS2_017                    deck 32 -> boss     turns  16 decisions  39 fallbacks  0 health 300 mana+3 power  2 checks ok form 0>0 left 300 banked -
+ulda_40_icarax     ULDA tmajor3 floor 15 HUNTER/hunter_kennel/DS1h_292                  deck 28 -> boss     turns  14 decisions  41 fallbacks  0 health 300 mana+3 power  4 checks ok form 0>0 left 298 banked 298
+gila_61_hagatha    GIL  tmajor2 floor 10 MAGE/mage_rimeward/CS2_034                     deck 34 -> boss     turns  24 decisions  54 fallbacks  0 health 100 mana+2 power  0 checks ok heroes HERO_08>GILA_600h2>GILA_500h4
+gila_61_hagatha    GIL  tmajor2 floor 10 PALADIN/paladin_gleaming/CS2_101               deck 35 -> boss     turns  14 decisions  23 fallbacks  0 health 100 mana+2 power  0 checks ok heroes HERO_04>GILA_600h2
+dala_21_whirt      DALA t3      floor  8 PRIEST/priest_mending/CS1h_001                 deck 32 -> boss     turns  22 decisions  71 fallbacks  0 health  51 mana+0 power  9 checks ok
+dala_21_whirt      DALA t3      floor  8 ROGUE/rogue_backalley/CS2_083b                 deck 32 -> boss     turns  14 decisions  41 fallbacks  0 health  51 mana+0 power  7 checks ok
+trl_200_voone      TRL  t2      floor  3 SHAMAN/shaman_stormdebt/CS2_049                deck 17 -> boss     turns  12 decisions  26 fallbacks  0 health  34 mana+0 power  2 checks ok variant horn shrine TRLA_171
+trl_200_voone      TRL  t2      floor  3 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 18 -> boss     turns  12 decisions  29 fallbacks  0 health  34 mana+0 power  2 checks ok variant horn shrine TRLA_171
+trl_200_voone      TRL  t2      floor  3 DALA_Barkeye/heist_hunter_1/DS1h_292           deck 17 -> boss     turns  18 decisions  31 fallbacks  0 health  34 mana+0 power  1 checks ok variant drum shrine TRLA_170
+trl_200_voone      TRL  t2      floor  3 DALA_Squeamlish/heist_druid_1/CS2_017          deck 16 -> boss     turns  22 decisions  42 fallbacks  0 health  34 mana+0 power  3 checks ok variant drum shrine TRLA_170
+trl_200_voone      TRL  t2      floor  3 DALA_Tekahn/heist_warlock_1/CS2_056            deck 16 -> boss     turns  16 decisions  26 fallbacks  0 health  34 mana+0 power  3 checks ok variant champion shrine TRLA_104
+trl_200_voone      TRL  t2      floor  3 TRLA_209h_Mage/rumble_mage_108/CS2_034         deck 17 -> boss     turns  12 decisions  22 fallbacks  0 health  34 mana+0 power  3 checks ok variant champion shrine TRLA_104
+loot_35_brandlemar LOOT t1      floor  1 TRLA_209h_Druid/rumble_druid_112/CS2_017       deck 10 -> boss     turns  20 decisions  34 fallbacks  0 health  30 mana+0 power  3 checks ok
+loot_35_brandlemar LOOT t1      floor  1 TRLA_209h_Hunter/rumble_hunter_110/DS1h_292    deck 10 -> boss     turns  18 decisions  37 fallbacks  0 health  30 mana+0 power  6 checks ok
+loot_48_trapped_room LOOT t2      floor  3 TRLA_209h_Paladin/rumble_paladin_105/CS2_101   deck 18 -> boss     turns  27 decisions  44 fallbacks  0 health  34 mana+0 power  0 checks ok
+loot_48_trapped_room LOOT t2      floor  3 TRLA_209h_Priest/rumble_priest_114/CS1h_001    deck 18 -> boss     turns  12 decisions  25 fallbacks  0 health  34 mana+0 power  0 checks ok
+gila_25_ivan       GIL  t2      floor  3 TRLA_209h_Rogue/rumble_rogue_106/CS2_083b      deck 17 -> boss     turns  16 decisions  31 fallbacks  0 health  34 mana+0 power  3 checks ok
+gila_25_ivan       GIL  t2      floor  3 TRLA_209h_Shaman/rumble_shaman_109/CS2_049     deck 18 -> player   turns  17 decisions  26 fallbacks  0 health  34 mana+0 power  6 checks ok
+ulda_44_trap_room  ULDA t3      floor  8 TRLA_209h_Warlock/rumble_warlock_113/CS2_056   deck 34 -> boss     turns  21 decisions  43 fallbacks  0 health  46 mana+1 power  5 checks ok
+ulda_44_trap_room  ULDA t3      floor  8 TRLA_209h_Warrior/rumble_warrior_104/CS2_102   deck 35 -> player   turns  19 decisions  29 fallbacks  0 health  46 mana+0 power  5 checks ok
+encounter run: schedule acts-v3h; power unused: -; form unreached: ulda_40_icarax
+games 20, boss wins 18, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 1, watched ULD_131 x0 ULD_135 x0 ULD_138 x0 ULD_143 x0 ULD_151 x0 ULD_154 x0 ULD_158 x0 ULD_169 x0 ULD_172 x0 ULD_173 x0 ULD_177 x0 ULD_179 x0 ULD_194 x0 ULD_195 x0 ULD_205 x0 ULD_206 x1 ULD_208 x0 ULD_209 x0 ULD_212 x0 ULD_215 x0 ULD_216 x0 ULD_236 x0 ULD_239 x0 ULD_253 x0 ULD_256 x0 ULD_258 x0 ULD_262 x0 ULD_268 x0 ULD_270 x0 ULD_274 x0, most boss Secrets 5

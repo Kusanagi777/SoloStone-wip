@@ -33,7 +33,7 @@ PASS U1 the boss's fair AI plays its Tombs turn: no fallback, no swallowed excep
 PASS R1 a new Rikkar run on acts-v1 (kept for version-1 saves) gets no board shrine and no phase-7 draft; the default acts-v2 run gets its shrine  (v1 acts-v1 shrine - | v2 acts-v2 shrine TRLA_115)
 PASS R1 HasPhase7Drafts: acts-v2 yes, acts-v1 and act1 no
 PASS R1 the acts-v1 run's plan has no shrine
-PASS H1 ShrineLine: shrine and upgrades in pick order; null with no shrine  (Shrine: Gonk's Mark ú Upgrades: Pact with the Loa, Windfall)
+PASS H1 ShrineLine: shrine and upgrades in pick order; null with no shrine  (Shrine: Gonk's Mark Â· Upgrades: Pact with the Loa, Windfall)
 PASS H1 the archive entry keeps the board shrine and its upgrades in pick order, apart from the treasures  (TRLA_115 [TRLA_805,TRLA_809] treasures [])
 PASS H1 the archive's shrine upgrades survive a save round trip  (TRLA_805,TRLA_809)
 PASS H1 an archive entry with no shrine writes no ShrineUpgrades element (the body is unchanged)

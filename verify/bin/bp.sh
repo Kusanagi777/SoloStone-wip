@@ -2,8 +2,9 @@
 # verify/bin/bp.sh: the bosspilot stage (wave-3 p8w3/bp.sh). One mode per call; an encounter mode runs twice and is
 # compared without the timing column. Results: verify/.out/bp/bp-<name>-a.txt / -b.txt (logs in verify/.out/bp/logs).
 # Each result is also compared with its record, expected 0 differing lines, the first that exists of:
-#   verify/baseline/bp/bp-<name>-a.txt       "vs wave-3 baseline"   (the wave-3 main tree, p8w3)
-#   verify/baseline/bp-port/bp-<name>-a.txt  "vs port record"       (modes wave 3 did not rerun, recorded by the port on
+#   verify/baseline/bp/bp-<name>-a.txt       "vs wave-4 baseline"   (every mode, the wave-4 tree on Linux, 2026-11-16;
+#                                                                    the wave-3 records it replaced are in git history)
+#   verify/baseline/bp-port/bp-<name>-a.txt  "vs port record"       (history: modes wave 3 did not rerun, recorded by the port on
 #                                                                    the wave-3 tree, 2026-11-13; README.md section 4)
 #   verify/baseline/bp-w1/bp-<name>-a.txt    "vs wave-1 record"     (the seven shrine modes, fixture, catalog)
 #   verify/baseline/bp-w2/bp-<name>-a.txt    "vs wave-2 reference"  (history only; every wave-2 mode has a port record)
@@ -104,7 +105,7 @@ compare() { # compare <name>: a vs b, stderr, and the recorded baseline
   cmp -s "$R/bp-$name-a.txt" "$R/bp-$name-b.txt" && echo "bosspilot $name identical" || echo "bosspilot $name DIFFER"
   echo "stderr bytes: $(cat "$LOGS/$name-err-1.txt" "$LOGS/$name-err-2.txt" 2>/dev/null | wc -c | tr -d ' ')"
   if [ -f "$BASE/bp/bp-$name-a.txt" ]; then
-    echo "bosspilot $name vs wave-3 baseline: $(diff <(tr -d '\r' < "$BASE/bp/bp-$name-a.txt") "$R/bp-$name-a.txt" | grep -c '^[<>]') differing lines"
+    echo "bosspilot $name vs wave-4 baseline: $(diff <(tr -d '\r' < "$BASE/bp/bp-$name-a.txt") "$R/bp-$name-a.txt" | grep -c '^[<>]') differing lines"
   elif [ -f "$BASE/bp-port/bp-$name-a.txt" ]; then
     # a mode wave 3 did not rerun: recorded by the port on the wave-3 tree (README.md sections 4 and 6)
     echo "bosspilot $name vs port record (wave-3 tree): $(diff <(tr -d '\r' < "$BASE/bp-port/bp-$name-a.txt") "$R/bp-$name-a.txt" | grep -c '^[<>]') differing lines"

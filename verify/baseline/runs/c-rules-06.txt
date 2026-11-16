@@ -218,7 +218,7 @@ PASS W19 Plague of Murlocs excludes Aleatory
 PASS W20 Bountiful and the opening-hand modifier exclude each other
 PASS W21 the validator refuses a match effect for a rule with no script (ULDA_720) and an unknown modifier
 PASS W22 the validator checks that the client knows each card a rule creates  (JAIL_202: no client entity definition (deck druid_thicket) | CORE_CS2_009: no client entity definition (deck druid_barkbough) | CORE_EX1_154: no client entity definition (deck druid_forked))
-PASS W23 the fixture schedule (the four plagues in every twist pool, chance 100) validates and rolls each of them  (ULDA_804x228,ULDA_801x151,ULDA_803x265,ULDA_802x256)
+PASS W23 the fixture schedule (the four plagues in every twist pool, chance 100) validates and rolls each of them  (ULDA_804x225,ULDA_801x152,ULDA_803x257,ULDA_802x266)
 PASS W24 a rolled plague is never one a boss of its act excludes
 PASS W25 the rolled plague is on the fight's plan and active in the match (ULDA_804)
 PASS W26 the rule page shows each rule card's own name and text

@@ -6,9 +6,9 @@ loot_49_darkness   LOOT tmajor1 floor  5 PRIEST/priest_mending/CS1h_001         
 loot_34_azari      LOOT tmajor1 floor  5 ROGUE/rogue_backalley/CS2_083b                 deck 22 -> boss     turns  18 decisions  30 fallbacks  0 health  50 mana+1 power  0 checks ok rule ULDA_712 seen 16
 loot_99_togwaggle  LOOT tmajor1 floor  5 SHAMAN/shaman_stormdebt/CS2_049                deck 26 -> boss     turns  10 decisions  20 fallbacks  0 health  50 mana+1 power  2 checks ok rule ULDA_712 seen 4
 gila_26_gnomenapper GIL  t3      floor  8 WARLOCK/warlock_fiendpact/CS2_056              deck 24 -> boss     turns  16 decisions  32 fallbacks  0 health  46 mana+0 power  3 checks ok rule ULDA_712 seen 13
-gila_27_experiment_3c GIL  t4      floor 13 WARRIOR/warrior_plated/CS2_102                 deck 48 -> boss     turns  18 decisions  30 fallbacks  0 health  62 mana+1 power  3 checks ok rule ULDA_712 seen 14
-gila_29_sazzmi     GIL  t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 28 -> boss     turns  16 decisions  47 fallbacks  0 health  46 mana+0 power  4 checks ok rule ULDA_712 seen 9
+gila_27_experiment_3c GIL  t4      floor 13 WARRIOR/warrior_plated/CS2_102                 deck 46 -> boss     turns  24 decisions  53 fallbacks  0 health  62 mana+1 power  5 checks ok rule ULDA_712 seen 25
+gila_29_sazzmi     GIL  t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 32 -> boss     turns  24 decisions  87 fallbacks  0 health  46 mana+1 power  7 checks ok rule ULDA_712 seen 17
 gila_33_scarecrow  GIL  t3      floor  8 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 31 -> player   turns  15 decisions  29 fallbacks  0 health  46 mana+1 power  2 checks ok rule ULDA_712 seen 8
-gila_34_havnixx    GIL  t3      floor  8 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 33 -> player   turns   9 decisions  29 fallbacks  0 health  46 mana+1 power  3 checks ok rule ULDA_712 seen 3
-encounter run: schedule acts-v3h, rule ULDA_712; power unused: loot_54_kay; form unreached: -
-games 12, boss wins 9, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 1, form-unreached 0, rule-seen 104, rule-unseen loot_52_vault
+gila_34_havnixx    GIL  t3      floor  8 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 37 -> player   turns  17 decisions  17 fallbacks  0 health  46 mana+0 power  0 checks ok rule ULDA_712 seen 10
+encounter run: schedule acts-v3h, rule ULDA_712; power unused: loot_54_kay,gila_34_havnixx; form unreached: -
+games 12, boss wins 9, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 2, form-unreached 0, rule-seen 130, rule-unseen loot_52_vault

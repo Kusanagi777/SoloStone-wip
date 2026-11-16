@@ -156,7 +156,7 @@ PASS T5 the tokens are admitted for a rule only and never generated
 PASS T6 over 400 seeds the act I anomaly node offers each of the 17 admitted anomalies, never DALA_857 and never a twist
 PASS T7 an act with a shrine boss (Voone) never gets The Stench or The Carts; The Coffers and The Prisons stay possible  (DALA_829,DALA_832,ULDA_801,ULDA_802,ULDA_803,ULDA_804)
 PASS T8 an act with a deck-replacing boss (Icarax) is never offered Hallucinating; another act is  (Icarax act 3)
-PASS T9 a boss with the same rule as its power excludes the rule: Crying, Rattling, Wild Magic and Ogreish by flag, every board twist by boardStart  (DALA_850,DALA_864,DALA_866,DALA_851,DALA_854,DALA_855,DALA_858,DALA_859,DALA_860,DALA_862,DALA_863,DALA_865,DALA_867,ULDA_702,ULDA_705,ULDA_707,ULDA_708,ULDA_709,ULDA_710,ULDA_711,ULDA_712,ULDA_713,ULDA_714,ULDA_715,ULDA_720,ULDA_721,ULDA_724,ULDA_729 | )
+PASS T9 a boss with the same rule as its power excludes the rule: Crying, Rattling, Wild Magic and Ogreish by flag, every board twist by boardStart  (DALA_850,DALA_864,DALA_866,DALA_851,DALA_854,DALA_855,DALA_858,DALA_859,DALA_860,DALA_862,DALA_863,DALA_865,DALA_867,ULDA_702,ULDA_705,ULDA_706,ULDA_707,ULDA_708,ULDA_709,ULDA_710,ULDA_711,ULDA_712,ULDA_713,ULDA_714,ULDA_715,ULDA_720,ULDA_721,ULDA_724,ULDA_729 | )
 PASS T10 a run with a board shrine never gets The Stench or The Carts  (DALA_829,DALA_832,ULDA_801,ULDA_802,ULDA_803,ULDA_804)
 PASS T11 Darius Crowley (his Cannons take board slots) never gets The Carts; a Mage run may get all four twists  (DALA_829,DALA_831,DALA_832 | DALA_829,DALA_831,DALA_832,DALA_833)
 PASS T12 the board twists exclude one another, whichever row states it (The Carts active: no Coffers, no Prisons)  (DALA_831,ULDA_801,ULDA_802,ULDA_803)
@@ -164,8 +164,8 @@ PASS T12b an anomaly may share the act with a twist
 PASS T13 the validator refuses an unknown class in incompatibleClasses and an unknown flag
 PASS T14 the validator refuses DALA_857 as an admitted rule (the table rejects it and it has no script)
 PASS T15 the validator checks that the client knows each card a rule creates  (JAIL_202: no client entity definition (deck druid_thicket) | CORE_CS2_009: no client entity definition (deck druid_barkbough) | CORE_EX1_154: no client entity definition (deck druid_forked))
-PASS T16 the fixture schedule (twist pools filled, chance 100) validates and rolls each of the four twists  (DALA_829x289,DALA_832x272,DALA_833x142,DALA_831x148)
-PASS T17 a rolled twist is never one a boss of its act excludes (276 acts with a shrine boss)
+PASS T16 the fixture schedule (twist pools filled, chance 100) validates and rolls each of the four twists  (DALA_829x415,DALA_832x402,DALA_831x25,DALA_833x20)
+PASS T17 a rolled twist is never one a boss of its act excludes (769 acts with a shrine boss)
 PASS T18 the rolled twist is on the fight's plan and plays (DALA_829)
 PASS T19 the rule page shows each rule card's own name and text
 RESULT 170 passed, 0 failed

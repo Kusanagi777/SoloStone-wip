@@ -38,7 +38,7 @@ PASS D14 scripted shrine TRLA_178: its form TRLA_178t points back (tag 1132) and
 PASS D14 scripted shrine TRLA_179: its form TRLA_179t points back (tag 1132) and is a 3-turn sleeper
 PASS D14 scripted shrine TRLA_186: its form TRLA_186t points back (tag 1132) and is a 3-turn sleeper
 PASS D14 scripted shrine TRLA_187: its form TRLA_187t points back (tag 1132) and is a 3-turn sleeper
-PASS D15 admission: the scripted shrines, upgrades and teammates are admitted for the run player only
+PASS D15 admission: the scripted shrines are admitted for the run player and (phase 8) a boss, the upgrades and teammates for the run player only
 PASS D16 admission: unscripted shrines, forms, the TRLA_107 fixture, unscripted upgrades and teammates admit nothing
 PASS D17 generation never yields a shrine, a form or a teammate (the Generated scope rejects them)
 PASS N1 a new Rikkar Druid run on Gonk's Mark has the board shrine TRLA_115 (schedule acts-v2, version 2)  (TRLA_115 v2 acts-v2)
