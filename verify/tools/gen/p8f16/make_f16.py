@@ -147,8 +147,9 @@ ROWS = [
          extend=True, fillers=[], cards=["GAME_005"],
          notes=[("schedule", "Gold Elemental's pool table gives 25 cards (levels 4-5; the page places him in Chapter 1 and his hero card is "
                  "printed with 40 Health). Level 4: tier 2."),
-                ("deck", "Infuriated Banker (DALA_502, the boss card of his Heroic pool) is family 17's card and has no script yet; the "
-                 "Normal pool and its second copies fill the 30 cards before the Heroic pool is reached."),
+                ("deck", "Infuriated Banker (DALA_502, the boss card and first card of his Heroic pool) is family 17's card, scripted "
+                 "since the wave-5 merge: the Normal pool and its second copies give 28 cards, the Heroic pool's first two (Infuriated "
+                 "Banker, Flame Imp) the last two."),
                 ("power", "Made of Coins: each time his hero takes damage one Coin (GAME_005) joins his hand (a hit his Armor absorbs "
                  "counts too: the wiki's Armor page, 'damage taken while protected by Armor still counts as taking damage'); "
                  "nothing with a full hand.")]),

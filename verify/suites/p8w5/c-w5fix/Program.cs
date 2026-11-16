@@ -16,7 +16,10 @@ using SabberStoneCore.Tasks.PlayerTasks;
 //          next death pass) that is replaced before that pass took the new weapon with it (family 19 found it through
 //          Mister Chu's "Confiscated" Goods, c-enc-19 F3). Hero.AddWeapon now drops the replaced weapon's pending removal.
 //   Q1-Q6  A run never meets a boss row of the character it plays (family 19 flag 3: the run hero DALA_Squeamlish against
-//          the Tombs boss ulda_07_squeamlish): a hero row's "excludeBosses" (run-v1.json) keeps those rows out of the act draw.
+//          the Tombs boss ulda_07_squeamlish; the merge review added DALA_Chu / ulda_06_chu and DALA_George /
+//          loot_15_george_karl): a hero row's "excludeBosses" (run-v1.json) keeps those rows out of the act draw.
+//   N1     No encounter note says a card "has no script yet" while an encounter deck holds it (the merge review: family 16's
+//          Gold Elemental note said so of Infuriated Banker, which family 17 scripts and the merged deck holds).
 int failures = 0, passes = 0;
 void Check(string name, bool ok, string detail = "")
 {
@@ -137,39 +140,61 @@ Guard("W", () =>
 // ============================================================ Q. a run never meets a boss row of its own character
 Guard("Q", () =>
 {
-    const string Hero = "DALA_Squeamlish", Boss = "ulda_07_squeamlish";
+    // Every hero row whose character is also an encounter's boss, with a class row of the same class (Q5): the Heist villains
+    // Squeamlish and Mr. Chu are the Tombs bosses Squeamlish and Mister Chu; George the Fallen is the George of the Kobolds
+    // boss George and Karl (hearthstone.wiki.gg George_the_Fallen, Lore: "They later make an appearance as a boss in Dungeon Run").
+    var pairs = new[] { (Hero: "DALA_Squeamlish", Boss: "ulda_07_squeamlish", Class: "DRUID"), (Hero: "DALA_Chu", Boss: "ulda_06_chu", Class: "WARRIOR"),
+        (Hero: "DALA_George", Boss: "loot_15_george_karl", Class: "PALADIN") };
     var errors = DungeonRunValidator.Validate(data, null);
     Check("Q1 the shipped data validates", errors.Count == 0, string.Join(" | ", errors.Take(3)));
-    var row = data.Class(Hero);
-    Check("Q2 the hero row Squeamlish (the Heist villain as a run hero) excludes the Tombs boss row of the same character", row.IsHero && row.ExcludeBosses.SequenceEqual(new[] { Boss })
-        && data.Boss(Boss).IsEncounter && data.Classes.Where(c => c.Id != Hero).All(c => c.ExcludeBosses.Count == 0));
+    var excluding = data.Classes.Where(c => c.ExcludeBosses.Count > 0).Select(c => c.Id + ":" + string.Join(",", c.ExcludeBosses)).OrderBy(x => x).ToList();
+    Check("Q2 exactly the hero rows of a boss's character exclude that boss row (Squeamlish, Mr. Chu, George the Fallen), each a hero row naming one encounter row",
+        excluding.SequenceEqual(pairs.Select(p => p.Hero + ":" + p.Boss).OrderBy(x => x)) && pairs.All(p => data.Class(p.Hero).IsHero && data.Boss(p.Boss).IsEncounter),
+        string.Join(" ", excluding));
     DungeonRunData Copy() => DungeonRunData.Parse(R("dungeon-run/run-v1.json"), R("dungeon-run/pool-v1.json"), R("npc/decks-v1.json"), R("dungeon-run/catalog-v1.json"),
         R("dungeon-run/schedule-v1.json"), R("dungeon-run/tavern-v1.json"), R("dungeon-run/encounters-v1.json"));
-    var without = Copy();
-    without.Class(Hero).ExcludeBosses.Clear();
-    var runWithout = new DungeonRun(without);
-    int met = 0, metWithout = 0, metDruid = 0;
     const int Seeds = 600;
-    for (long seed = 1; seed <= Seeds; seed++)
+    foreach (var (Hero, Boss, Class) in pairs)
     {
-        var s = run.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed, schedule: "acts-v3h");
-        if (s.BossSequence.Contains(Boss)) met++;
-        var w = runWithout.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed, schedule: "acts-v3h");
-        if (w.BossSequence.Contains(Boss)) metWithout++;
-        var druid = data.Class("DRUID");
-        var d = run.NewRun(all, "DRUID", druid.Decks[0], druid.Powers[0], seed, schedule: "acts-v3h");
-        if (d.BossSequence.Contains(Boss)) metDruid++;
+        var row = data.Class(Hero);
+        var without = Copy();
+        without.Class(Hero).ExcludeBosses.Clear();
+        var runWithout = new DungeonRun(without);
+        var cls = data.Class(Class);
+        int met = 0, metWithout = 0, metClass = 0;
+        for (long seed = 1; seed <= Seeds; seed++)
+        {
+            if (run.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed, schedule: "acts-v3h").BossSequence.Contains(Boss)) met++;
+            if (runWithout.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed, schedule: "acts-v3h").BossSequence.Contains(Boss)) metWithout++;
+            if (run.NewRun(all, Class, cls.Decks[0], cls.Powers[0], seed, schedule: "acts-v3h").BossSequence.Contains(Boss)) metClass++;
+        }
+        Check($"Q3 {Seeds} {Hero} runs on acts-v3h: none meets {Boss}", met == 0, "met in " + met);
+        Check($"Q4 the same {Seeds} seeds with {Hero}'s exclusion removed: some run meets {Boss} (Q3 can fail)", metWithout > 0, "met in " + metWithout);
+        Check($"Q5 the exclusion is the hero row's only: {Seeds} {Class} class-row runs meet {Boss} in some runs", metClass > 0, "met in " + metClass);
     }
-    Check($"Q3 {Seeds} Squeamlish runs on acts-v3h: none meets Squeamlish the Tombs boss", met == 0, "met in " + met);
-    Check($"Q4 the same {Seeds} seeds with the row's exclusion removed: some run meets him (Q3 can fail)", metWithout > 0, "met in " + metWithout);
-    Check($"Q5 the exclusion is the hero row's only: {Seeds} Druid class-row runs meet him in some runs", metDruid > 0, "met in " + metDruid);
     var bogus = Copy();
-    bogus.Class(Hero).ExcludeBosses.Add("ulda_99_nobody");
+    bogus.Class("DALA_Squeamlish").ExcludeBosses.Add("ulda_99_nobody");
     var classRow = Copy();
-    classRow.Class("DRUID").ExcludeBosses.Add(Boss);
+    classRow.Class("DRUID").ExcludeBosses.Add("ulda_07_squeamlish");
     var e1 = DungeonRunValidator.Validate(bogus, null); var e2 = DungeonRunValidator.Validate(classRow, null);
     Check("Q6 the validator refuses an excluded id that is no boss row, and excludeBosses on a class row", e1.Any(e => e.Contains("excludeBosses names unknown boss ulda_99_nobody"))
         && e2.Any(e => e.Contains("only a hero row may exclude a boss row")), string.Join(" | ", e1.Concat(e2).Take(3)));
+});
+
+// ============================================================ N. encounter notes agree with the merged decks
+Guard("N", () =>
+{
+    var enc = (Dictionary<string, object>)NpcWorldJson.Parser(R("dungeon-run/encounters-v1.json"));
+    var inDecks = new HashSet<string>(((Dictionary<string, object>)enc["decks"]).Values.SelectMany(d => ((List<object>)d).Cast<string>()));
+    var idPattern = new System.Text.RegularExpressions.Regex(@"\b[A-Z][A-Za-z0-9]*_[A-Za-z0-9_]+\b");
+    var notes = new List<string>();
+    void Walk(object o) { if (o is Dictionary<string, object> d) { foreach (var kv in d) { if (kv.Key == "note" && kv.Value is string t) notes.Add(t); else Walk(kv.Value); } } else if (o is List<object> l) foreach (var x in l) Walk(x); }
+    foreach (var f in Directory.GetFiles(Path.Combine(root, "dungeon-run/reference/encounters"), "F*.json").OrderBy(f => f, StringComparer.Ordinal))
+        Walk(NpcWorldJson.Parser(File.ReadAllText(f)));
+    var pending = notes.Where(t => t.Contains("no script yet")).ToList();
+    var wrong = pending.SelectMany(t => idPattern.Matches(t).Select(m => m.Value)).Where(inDecks.Contains).Distinct().ToList();
+    Check($"N1 no encounter note says a card has no script yet while an encounter deck holds it ({notes.Count} notes, {pending.Count} of them say so)",
+        notes.Count > 100 && wrong.Count == 0, string.Join(",", wrong));
 });
 
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");

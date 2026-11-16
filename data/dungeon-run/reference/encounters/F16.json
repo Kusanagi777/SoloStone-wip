@@ -501,7 +501,7 @@
     },
     {
      "kind": "deck",
-     "note": "Infuriated Banker (DALA_502, the boss card of his Heroic pool) is family 17's card and has no script yet; the Normal pool and its second copies fill the 30 cards before the Heroic pool is reached."
+     "note": "Infuriated Banker (DALA_502, the boss card and first card of his Heroic pool) is family 17's card, scripted since the wave-5 merge: the Normal pool and its second copies give 28 cards, the Heroic pool's first two (Infuriated Banker, Flame Imp) the last two."
     },
     {
      "kind": "power",

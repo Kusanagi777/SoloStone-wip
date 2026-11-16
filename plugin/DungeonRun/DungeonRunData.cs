@@ -93,7 +93,9 @@ internal sealed class DungeonRunClass
     internal List<string> TreasureTags = new List<string>();
     /// <summary>
     /// Phase 8 wave 5: the boss rows a run of this row never meets (run-v1.json "excludeBosses"): a hero row whose character is
-    /// also an encounter's boss (the Heist villain Squeamlish, run hero DALA_Squeamlish, is the Tombs boss ulda_07_squeamlish).
+    /// also an encounter's boss: the Heist villains Squeamlish (DALA_Squeamlish, the Tombs boss ulda_07_squeamlish), Mr. Chu
+    /// (DALA_Chu, the Tombs boss ulda_06_chu "Mister Chu") and George the Fallen (DALA_George, the George of the Kobolds boss
+    /// loot_15_george_karl "George and Karl").
     /// DungeonRun.NewRun keeps them out of the act draw; empty for every other row.
     /// </summary>
     internal List<string> ExcludeBosses = new List<string>();

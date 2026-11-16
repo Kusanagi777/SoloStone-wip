@@ -691,18 +691,18 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 
 | Input | SHA-256 (first 16) |
 | --- | --- |
-| `data/dungeon-run/catalog-v1.json` | `d0114623a3417f9f` |
-| `data/dungeon-run/encounters-v1.json` | `8ee204e4f5514183` |
+| `data/dungeon-run/catalog-v1.json` | `a9a36119aaa0efb2` |
+| `data/dungeon-run/encounters-v1.json` | `df9d2b39964114a4` |
 | `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
 | `data/dungeon-run/reference/adventure-reference.csv` | `4a608dfa596733e7` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |
 | `data/dungeon-run/reference/buckets.json` | `b3015218a0ea9193` |
 | `data/dungeon-run/reference/client-tables.json` | `c7b51c98f568706a` |
-| `data/dungeon-run/run-v1.json` | `98f0a1acd73ded60` |
+| `data/dungeon-run/run-v1.json` | `747a21c854d7a5b5` |
 | `data/dungeon-run/schedule-v1.json` | `36b0c79d6a1fe287` |
 | `data/dungeon-run/tavern-v1.json` | `f69c185d773c8414` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
-| `tools/restoration-ledger/curation.json` | `13850277bd0dc23d` |
+| `tools/restoration-ledger/curation.json` | `72e920742a1b949e` |
 
 Plus the engine card data and DungeonRunContent compiled from the working tree.
