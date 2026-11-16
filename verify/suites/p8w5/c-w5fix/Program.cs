@@ -18,6 +18,9 @@ using SabberStoneCore.Tasks.PlayerTasks;
 //   Q1-Q6  A run never meets a boss row of the character it plays (family 19 flag 3: the run hero DALA_Squeamlish against
 //          the Tombs boss ulda_07_squeamlish; the merge review added DALA_Chu / ulda_06_chu and DALA_George /
 //          loot_15_george_karl): a hero row's "excludeBosses" (run-v1.json) keeps those rows out of the act draw.
+//   E1-E3  Unstable Evolution's hand copy (LOOT_504t) never costs less than (1) (the Echo copy floor; the client prints the
+//          card with Echo since patch 23.0.3): under Millhouse Manastorm's "enemy spells cost (0)" the run player's copies
+//          looped without end against Rasil (bp.sh enc15, "stuck after 1500 actions", found by this regression).
 //   N1     No encounter note says a card "has no script yet" while an encounter deck holds it (the merge review: family 16's
 //          Gold Elemental note said so of Infuriated Banker, which family 17 scripts and the merged deck holds).
 int failures = 0, passes = 0;
@@ -179,6 +182,34 @@ Guard("Q", () =>
     var e1 = DungeonRunValidator.Validate(bogus, null); var e2 = DungeonRunValidator.Validate(classRow, null);
     Check("Q6 the validator refuses an excluded id that is no boss row, and excludeBosses on a class row", e1.Any(e => e.Contains("excludeBosses names unknown boss ulda_99_nobody"))
         && e2.Any(e => e.Contains("only a hero row may exclude a boss row")), string.Join(" | ", e1.Concat(e2).Take(3)));
+});
+
+// ============================================================ E. Unstable Evolution's copy and the Echo copy floor
+Guard("E", () =>
+{
+    const string Millhouse = "NEW1_029", Evolution = "LOOT_504", Copy = "LOOT_504t", Giant = "GVG_121"; // Clockwork Giant: no minion costs (1) more
+    var g = Ready(Plan());
+    Controller p1 = g.Player1, p2 = g.Player2;
+    ToBoss(g);
+    PlayNew(g, Millhouse);
+    ToPlayer(g);
+    var giant = Board(g, p1, Giant);
+    var evolution = ToHand(g, p1, Evolution);
+    Check("E1 under Millhouse Manastorm (enemy spells cost (0) next turn) Unstable Evolution itself costs (0)", evolution.Cost == 0, evolution.Cost.ToString());
+    p1.BaseMana = 10; p1.UsedMana = 7; p1.OverloadLocked = 0; p1.OverloadOwed = 0;
+    bool played = g.Process(PlayCardTask.Any(p1, evolution, giant, -1, 0));
+    var copy = p1.HandZone.FirstOrDefault(p => p.Card.Id == Copy);
+    Check("E2 its hand copy costs (1), not (0): the Echo copy floor", played && copy != null && copy.Cost == 1, $"played {played} copy cost {copy?.Cost.ToString() ?? "none"}");
+    int casts = 0;
+    while (casts < 50)
+    {
+        var next = p1.HandZone.FirstOrDefault(p => p.Card.Id == Copy);
+        if (next == null || next.Cost > p1.RemainingMana || g.State == State.COMPLETE) break;
+        var target = p1.BoardZone.FirstOrDefault();
+        if (target == null || !g.Process(PlayCardTask.Any(p1, next, target, -1, 0))) break;
+        casts++;
+    }
+    Check("E3 with 3 Mana left the run player casts the copy three times, then the copy waits (no endless chain)", casts == 3 && p1.RemainingMana == 0, $"casts {casts} mana {p1.RemainingMana}");
 });
 
 // ============================================================ N. encounter notes agree with the merged decks

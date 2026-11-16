@@ -56,14 +56,20 @@ namespace SabberStoneCore.Actions
 		/// tooltip on hearthstone.wiki.gg/wiki/Echo) for every Echo copy (GHOSTLY: the copy an Echo or "Repeatable this turn" card
 		/// puts into the hand) in every game. Family 12 added it for The Whisperer's fight only; the wave 4 integration made it
 		/// general, after family 11 met a (0)-Cost Sound the Bells! loop under a Mage shrine without The Whisperer. The per-turn
-		/// copy limit (<see cref="EchoCopiesPerTurn"/>) stays The Whisperer's. For any other card <paramref name="amount"/> is
-		/// returned unchanged.
+		/// copy limit (<see cref="EchoCopiesPerTurn"/>) stays The Whisperer's. Unstable Evolution's copy (LOOT_504t) is no
+		/// GHOSTLY card in this engine, but the client prints the card with Echo since patch 23.0.3 (hearthstone.wiki.gg/wiki/
+		/// Unstable_Evolution: changed from "Repeatable this turn" to stop a (0)-Cost loop), so its copy has the floor too (the
+		/// wave 5 integration, after the run player's copies under Millhouse Manastorm's (0) looped without end). For any
+		/// other card <paramref name="amount"/> is returned unchanged.
 		/// </summary>
 		internal static int EchoCopyFloor(IPlayable source, int amount)
 		{
-			if (amount >= 1 || source is HeroPower || source[GameTag.GHOSTLY] != 1) return amount;
+			if (amount >= 1 || source is HeroPower || source[GameTag.GHOSTLY] != 1 && source.Card.Id != UnstableEvolutionCopy) return amount;
 			return 1;
 		}
+
+		/// <summary>LOOT_504t, the hand copy Unstable Evolution (LOOT_504) adds; see <see cref="EchoCopyFloor"/>.</summary>
+		private const string UnstableEvolutionCopy = "LOOT_504t";
 
 		/// <summary>
 		/// The minions that stood next to <paramref name="dead"/> in its board when it died, inside the engine's death pass
