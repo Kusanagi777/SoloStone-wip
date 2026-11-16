@@ -496,18 +496,36 @@ Guard("Aki", () =>
         && power[EncounterRules.PowerActive] == 1 && Cost("DALA_BOSS_39p") == 2);
     EmptyHand(boss);
     var spell = ToHand(g, boss, Moonfire);
+    // The cast comes after her turn-start draw (I6, I7), so for I2 her deck holds spells only: the card she draws is no minion.
+    EmptyDeck(boss);
+    for (int i = 0; i < 3; i++) ToDeck(boss, Moonfire);
     BossTurnWith(g, 3);
-    Check("I2 with no minion in her hand nothing is cast and no Mana is paid", Casts(boss) == 0 && boss.UsedMana == 0);
+    Check("I2 with no minion in her hand after her turn-start draw (she drew a spell) nothing is cast and no Mana is paid", Casts(boss) == 0 && boss.UsedMana == 0
+        && boss.HandZone.All(p => !(p is Minion)));
+    EmptyDeck(boss);
+    for (int i = 0; i < 6; i++) ToDeck(boss, Yeti);
     EmptyHand(boss);
     var m1 = ToHand(g, boss, Yeti); var m2 = ToHand(g, boss, Croc); var s1 = ToHand(g, boss, Moonfire);
     var theirs = ToHand(g, player, Yeti);
     BossTurnWith(g, 1);
     Check("I3 with (1) Mana nothing is cast", Casts(boss) == 0 && !Has(m1, Light));
+    var handBefore = boss.HandZone.ToList();
     BossTurnWith(g, 3);
-    var drawn = boss.HandZone.Where(p => p != m1 && p != m2 && p != s1).ToList();
+    var drawn = boss.HandZone.Where(p => !handBefore.Contains(p)).ToList();
     Check("I4 at the start of her turn with (2) Mana and minions in hand: the Mana is paid and each minion then in her hand gets Light-imbued (+1/+1)", Casts(boss) == 1 && boss.UsedMana == 2
         && Has(m1, Light) && Has(m2, Light) && ((Minion)m1).AttackDamage == 5 && ((Minion)m1).Health == 6 && ((Minion)m2).AttackDamage == 3 && !Has(s1, Light), "casts " + Casts(boss) + " used " + boss.UsedMana);
     Check("I5 the run player's hand is untouched", !Has(theirs, Light));
+    // Wave 5 integration: auto-cast powers are used after the turn-start draw (the wiki: "the boss's first action each turn",
+    // after the start-of-turn triggered effects; EncounterRules.AfterTurnStartDraw), so the card she draws that turn counts.
+    Check("I6 the minion she drew at the start of that turn is Light-imbued too (the cast comes after the turn-start draw)", drawn.Count == 1 && drawn[0] is Minion
+        && Has(drawn[0], Light) && ((Minion)drawn[0]).AttackDamage == 5, string.Join(",", drawn.Select(p => p.Card.Id + (Has(p, Light) ? "+light" : ""))));
+    EmptyHand(boss);
+    var onlySpell = ToHand(g, boss, Moonfire);
+    int before = Casts(boss);
+    BossTurnWith(g, 3);
+    var drew = boss.HandZone.Where(p => p != onlySpell).ToList();
+    Check("I7 a hand of spells only plus the minion she draws: the power is still cast, the drawn minion is Light-imbued and the spell is not", Casts(boss) == before + 1
+        && boss.UsedMana == 2 && drew.Count == 1 && drew[0] is Minion && Has(drew[0], Light) && !Has(onlySpell, Light), "casts " + (Casts(boss) - before) + " drew " + string.Join(",", drew.Select(p => p.Card.Id)));
 });
 
 // ============================================================ J  Oxana Demonslay: Immolation Aura

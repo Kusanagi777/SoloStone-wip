@@ -147,6 +147,23 @@ namespace SabberStoneCore.Actions
 			}
 		}
 
+		/// <summary>
+		/// Game.MainStart, right after the turn-start draw and before the death and aura pass: the current player's rule-cast
+		/// power (DungeonRunEncounters.AutoCast; the wiki's auto-cast is "the boss's first action each turn", after the
+		/// start-of-turn triggered effects) is used, so a card drawn this turn counts (For The Light! buffs it). Only a started
+		/// power (<see cref="PowerActive"/>) of a living hero; one dictionary lookup in every other game.
+		/// </summary>
+		internal static void AfterTurnStartDraw(Game game)
+		{
+			Controller c = game.CurrentPlayer;
+			HeroPower power = c?.Hero?.HeroPower;
+			if (power == null || power[PowerActive] == 0 || game.State == State.COMPLETE || c.Hero.ToBeDestroyed) return;
+			Tasks.ISimpleTask cast = DungeonRunEncounters.Find(power.Card.Id)?.AfterDraw;
+			if (cast == null) return;
+			game.TaskQueue.Execute(cast, c, power, null, historyTrigger: true);
+			game.ProcessTasks();
+		}
+
 		/// <summary>Stops a replaced hero power's trigger and aura (the old power sits in the set-aside zone afterwards).</summary>
 		public static void DeactivatePower(HeroPower power)
 		{
