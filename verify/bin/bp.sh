@@ -27,6 +27,7 @@
 #                        bp.sh enc11a|enc11b|enc11-cards|enc11-shrine <k>         (one run per call, k = 1 or 2; then `bp.sh same <mode>`)
 #   family 12 modes:     bp.sh enc12|enc12-seeds|enc12-hidden                     (twice per call)
 #   family 13 modes:     bp.sh enc13a|enc13b|enc13-seeds   (the nine Rumble Run champions, every shrine variant; twice per call)
+#   family 14 modes:     bp.sh enc14|enc14-seeds|enc14-flight|enc14-cards           (twice per call; enc14-cards: the fixture rows play every boss card)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -93,6 +94,8 @@ HID12=gila_39_forlorn_lovers,gila_50_whisperer,gila_64_winslow
 A13=trl_200_voone,trl_201_zentimo,trl_202_hooktusk,trl_203_thekal,trl_204_zuljin
 B13=trl_205_loti,trl_206_jeklik,trl_207_malacrass,trl_208_talanji
 CARDS13=TRLA_168,TRLA_129s
+# family 14: the boss cards played from hand (the four magical feats, "Scourgelord" Dazzik)
+CARDS14=DALA_BOSS_03t,DALA_BOSS_03t2,DALA_BOSS_03t3,DALA_BOSS_03t4,DALA_BOSS_06dk
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -248,6 +251,13 @@ enc13a) need $E; twice enc13a BOSS=$A13 GAMES=2 WATCH=$CARDS13
 enc13b) need $E; twice enc13b BOSS=$B13 GAMES=2 WATCH=$CARDS13
   echo "enc13b: fights against a Rikkar row with its own shrine (TRLA_209h_*): $(grep -c 'TRLA_209h_' "$R/bp-enc13b-a.txt")" ;;
 enc13-seeds) need $E; twice enc13-seeds FAMILY=13 GAMES=1 SEED_BASE=19000 WATCH=$CARDS13 ;;
+enc14) need $E; twice enc14 FAMILY=14 WATCH=$CARDS14 ;;
+enc14-seeds) need $E; twice enc14-seeds FAMILY=14 SEED_BASE=19000 WATCH=$CARDS14 ;;
+enc14-flight) need $E; twice enc14-flight BOSS=dala_07_belnaara GAMES=8 ;;
+enc14-cards) need $E; twice enc14-cards BOSS=fix14_dazzik,fix14_akazamzarak GAMES=6 WATCH=$CARDS14 ENCOUNTERS_JSON=$FX/p8f14/fixtures/encounters-f14.json
+  # every boss card of the family was played from hand by a boss at least once
+  unplayed=$(tail -n 1 "$R/bp-enc14-cards-a.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Za-z0-9_]+ x0( |$)" | xargs)
+  [ -z "$unplayed" ] && echo "bosspilot enc14-cards: all 5 boss cards played by the boss" || echo "bosspilot enc14-cards UNPLAYED: $unplayed" ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;
