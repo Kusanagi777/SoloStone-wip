@@ -768,6 +768,6 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | `data/dungeon-run/tavern-v1.json` | `f69c185d773c8414` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
-| `tools/restoration-ledger/curation.json` | `5c2ed96d24de72b8` |
+| `tools/restoration-ledger/curation.json` | `b674787aa8b554eb` |
 
 Plus the engine card data and DungeonRunContent compiled from the working tree.
