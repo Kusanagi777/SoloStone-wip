@@ -92,7 +92,8 @@ The wave's results are the new baseline (`verify/baseline`, recorded on Linux).
 - Admission: 870 listed ids, none in two rows.
 - 74 tracked JSON files parse with no duplicate keys. encounters-v1.json: 194 rows, 215 decks, ids unique; the reference
   F files hold the same 194 rows, no id in two files; schedule-v1.json: 44 rule rows, ids unique.
-- No duplicate switch case or dictionary key in the 47 changed .cs files. No CR and no BOM added (the four engine files
+- No duplicate switch case or dictionary key in the 48 changed .cs files (47 at stage A, then EncounterRules.F12.cs; the
+  script ran again on the final tree, ALL OK). No CR and no BOM added (the four engine files
   with a BOM already had it at e367c93).
 - gen.sh twice byte-identical after the merges, after the run-v1.json change and after the review fixes.
 
