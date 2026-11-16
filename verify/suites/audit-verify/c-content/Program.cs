@@ -76,7 +76,7 @@ foreach (var content in DungeonRunContent.All.Where(c => c.ShellId != null))
         && (content.Kind is RunContentKind.Effect || card.Cost == content.Cost || content.Kind == RunContentKind.PassivePower),
         card == null ? "missing" : $"type={card.Type} impl={card.Implemented} cost={card.Cost}/{content.Cost}");
 }
-Check("passive power registry = passive content (plus the passive encounter powers: phase 8 family 01, Trapped Room's Alarm; family 08, the three totems, the two Gutmooks, Candlebeard and the Lava-Filled Chamber; family 09, Xol's Beam Me Up! and the four rule-cast powers Dispel Ward, Devour, Doors Are Closing and Stolen Time; family 12, ten Monster Hunt passives; family 14, The Feast, Take Flight!, Flying!, Street Smarts, Backstabber and Blessing of Elune; family 15, the rule-cast Equivalent Exchange and Totemic Summons, Twin Paths, Stormswell, Assembly, Cold Water and Scroll Savvy; family 16, the two rule-cast powers Makeover and For The Light!, Made of Coins, Merry Go Round, Healing Hands and Immolation Aura)", DungeonRunCardsGen.PassiveHeroPowers.Count == DungeonRunContent.All.Count(c => c.Kind == RunContentKind.PassivePower) + DungeonRunEncounters.PassivePowers.Count()
+Check("passive power registry = passive content (plus the passive encounter powers: phase 8 family 01, Trapped Room's Alarm; family 08, the three totems, the two Gutmooks, Candlebeard and the Lava-Filled Chamber; family 09, Xol's Beam Me Up! and the four rule-cast powers Dispel Ward, Devour, Doors Are Closing and Stolen Time; family 12, ten Monster Hunt passives; family 14, The Feast, Take Flight!, Flying!, Street Smarts, Backstabber and Blessing of Elune; family 15, the rule-cast Equivalent Exchange and Totemic Summons, Twin Paths, Stormswell, Assembly, Cold Water and Scroll Savvy; family 16, the two rule-cast powers Makeover and For The Light!, Made of Coins, Merry Go Round, Healing Hands and Immolation Aura; family 17, Uncontrollable Energy, Spell Lock, Greed is Good and the four rule-cast powers Sand Breath, Raise the Alarm, Bribery and Blackmail)", DungeonRunCardsGen.PassiveHeroPowers.Count == DungeonRunContent.All.Count(c => c.Kind == RunContentKind.PassivePower) + DungeonRunEncounters.PassivePowers.Count()
     && DungeonRunEncounters.PassivePowers.SequenceEqual(new[] { "LOOTA_BOSS_48p", "LOOTA_BOSS_16p", "LOOTA_BOSS_17p", "LOOTA_BOSS_38p", "LOOTA_BOSS_19p", "LOOTA_BOSS_33p", "LOOTA_BOSS_31p", "LOOTA_BOSS_47p",
         "LOOTA_BOSS_20p", "LOOTA_BOSS_26p8", "LOOTA_BOSS_34p", "LOOTA_BOSS_52p", "LOOTA_BOSS_53p",
         // Phase 8 family 12 (registration order).
@@ -86,7 +86,9 @@ Check("passive power registry = passive content (plus the passive encounter powe
         // Phase 8 family 15 (registration order).
         "DALA_BOSS_16p", "DALA_BOSS_17p", "DALA_BOSS_18p", "DALA_BOSS_20p", "DALA_BOSS_25p", "DALA_BOSS_26p", "DALA_BOSS_28p",
         // Phase 8 family 16 (registration order).
-        "DALA_BOSS_32p", "DALA_BOSS_33p", "DALA_BOSS_34p", "DALA_BOSS_35p", "DALA_BOSS_39p", "DALA_BOSS_40p" }));
+        "DALA_BOSS_32p", "DALA_BOSS_33p", "DALA_BOSS_34p", "DALA_BOSS_35p", "DALA_BOSS_39p", "DALA_BOSS_40p",
+        // Phase 8 family 17 (registration order).
+        "DALA_BOSS_49p", "DALA_BOSS_50p", "DALA_BOSS_54p", "DALA_BOSS_55p", "DALA_BOSS_56p", "DALA_BOSS_57p", "DALA_BOSS_59p" }));
 Check("no class power treated as run passive", new[] { "CS2_017","DS1h_292","CS2_034","CS2_101","CS1h_001","CS2_083b","CS2_049","CS2_056","CS2_102","HERO_11bp","HERO_10bp" }.All(id => !HeroPower.ActivatesAtGameStart(Cards.FromId(id))));
 
 // ---------------------------------------------------------------- 2. start-state treasures

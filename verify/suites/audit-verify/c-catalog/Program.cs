@@ -717,6 +717,9 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // Phase 8 family 15: + 29 rows, all partial (14 run:boss, 15 deck cards new to the ledger); 16 rows missing -> partial (14 powers, 2 boss cards).
     // Phase 8 family 16 (Dalaran Heist bosses C): + 34 rows, all "partial" (14 run:boss rows; 20 cards of their decks that are
     // new to the ledger), and 16 rows leave "missing" for "partial" (14 boss powers, PARTY PORTAL! and the Exotic Pet).
+    // Phase 8 family 17 (Dalaran Heist bosses D): + 29 rows, all "partial" (14 run:boss rows; 15 cards of their decks that are
+    // new to the ledger), and 26 rows leave "missing" for "partial" (14 boss powers and 12 boss cards, Infuriated Banker and the
+    // Kirin Tor Guard among them).
     Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13): 4760 rows; 2813 implemented, 386 partial, 503 missing, 1058 duplicate/support, 0 intentionally adapted",
         rows.Count == 4760 && classes.GetValueOrDefault("implemented") == 2813 && classes.GetValueOrDefault("partial") == 386 && classes.GetValueOrDefault("missing") == 503
         && classes.GetValueOrDefault("duplicate/support") == 1058 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));

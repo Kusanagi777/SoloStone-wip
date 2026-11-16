@@ -30,6 +30,8 @@
 #   family 14 modes:     bp.sh enc14|enc14-seeds|enc14-flight|enc14-cards           (twice per call; enc14-cards: the fixture rows play every boss card)
 #   family 15 modes:     bp.sh enc15|enc15-seeds|enc15-rat|enc15-toys            (twice per call)
 #   family 16 modes:     bp.sh enc16|enc16-seeds|enc16-carousel|enc16-cards        (twice per call; enc16-cards: the fixture rows play every boss card and treasure)
+#   family 17 modes:     bp.sh enc17|enc17-seeds|enc17-void|enc17-cards <k>  (c-bosspilot-enc09; one run per call, k = 1 or 2; then `bp.sh same <mode>`,
+#                        and for enc17-cards `bp.sh enc17-check`: the fixture rows played every boss card)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -103,6 +105,9 @@ CARDS15=DALA_BOSS_25t
 # family 16: the boss card and the treasures newly admitted for a boss, played from hand (PARTY PORTAL!, Orb of Destruction,
 # Horn of Cenarius, Portable Forge, Quel'Delar)
 CARDS16=DALA_BOSS_38t,LOOTA_811,LOOTA_837,LOOTA_841,LOOTA_842
+# family 17: the boss cards a boss plays from hand; the rows whose power is cast by rule (c-bosspilot-enc09 reports "auto N")
+CARDS17=DALA_BOSS_48t,DALA_BOSS_51t2,DALA_503,DALA_BOSS_56t,DALA_BOSS_59t,DALA_BOSS_59t2,DALA_502
+AUTO17=dala_50_nozari,dala_55_hannigan,dala_56_wagtoggle,dala_59_goya
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -278,6 +283,20 @@ enc16-cards) need $E; twice enc16-cards BOSS=fix16_tipsi,fix16_toomba,fix16_quel
   # every watched card was played from hand by a boss at least once
   unplayed=$(tail -n 1 "$R/bp-enc16-cards-a.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Z0-9_a-z]+ x0( |$)" | xargs)
   [ -z "$unplayed" ] && echo "bosspilot enc16-cards: all 5 watched cards played by the boss" || echo "bosspilot enc16-cards UNPLAYED: $unplayed" ;;
+enc17) need $E9; once enc17 "$2" FAMILY=17 WATCH=$CARDS17 AUTO=$AUTO17 ;;
+enc17-seeds) need $E9; once enc17-seeds "$2" FAMILY=17 SEED_BASE=19000 WATCH=$CARDS17 AUTO=$AUTO17 ;;
+enc17-void) need $E9; once enc17-void "$2" BOSS=dala_48_zuramat GAMES=6 WATCH=$CARDS17 ;;
+enc17-cards) need $E9; once enc17-cards "$2" BOSS=fix17_zuramat,fix17_millificent,fix17_wagtoggle,fix17_goya,fix17_gallywix GAMES=4 WATCH=$CARDS17 ENCOUNTERS_JSON=$FX/p8f17/fixtures/encounters-f17.json ;;
+enc17-check) # after `bp.sh same enc17-cards`: every boss card of the family was played from hand by a boss at least once
+  [ -f "$R/bp-enc17-cards-a.txt" ] || { echo "bosspilot enc17-check FAIL: no $R/bp-enc17-cards-a.txt (run bp.sh enc17-cards 1 and 2, then bp.sh same enc17-cards)"; exit 1; }
+  last=$(tail -n 1 "$R/bp-enc17-cards-a.txt"); missing=""; unplayed=""
+  case "$last" in *", watched "*) ;; *) echo "bosspilot enc17-check FAIL: the last line holds no watched counts: $last"; exit 1 ;; esac
+  for id in ${CARDS17//,/ }; do
+    n=$(echo "$last" | grep -oE "(^| )$id x[0-9]+" | sed 's/.* x//' | head -n 1)
+    if [ -z "$n" ]; then missing="$missing $id"; elif [ "$n" -eq 0 ]; then unplayed="$unplayed $id"; fi
+  done
+  if [ -n "$missing$unplayed" ]; then echo "bosspilot enc17-check FAIL: missing:${missing:- none} unplayed:${unplayed:- none}"; exit 1; fi
+  echo "bosspilot enc17-cards: all $(echo ${CARDS17//,/ } | wc -w) boss cards played by the boss" ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;
