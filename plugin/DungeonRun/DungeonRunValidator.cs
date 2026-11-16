@@ -412,6 +412,11 @@ internal static class DungeonRunValidator
             }
             else if (cls.Adventure != null || cls.Signatures.Count > 0 || cls.Health != 0) Fail(where, "only a hero row may set adventure, signatures or health");
             if (cls.Health < 0) Fail(where, $"health {cls.Health} must be positive (or absent)");
+            // Wave 5: "excludeBosses" names boss rows (the same character as the hero row); only a hero row has a character. The
+            // encounter rows load with encounters-v1.json, so an id is checked when encounters are loaded.
+            foreach (string boss in cls.ExcludeBosses)
+                if (!cls.IsHero) Fail(where, $"excludeBosses {boss}: only a hero row may exclude a boss row");
+                else if (data.Bosses.Any(b => b.IsEncounter) && data.Bosses.All(b => b.Id != boss)) Fail(where, $"excludeBosses names unknown boss {boss}");
             if (runClasses.Count == 1)
             {
                 if (!IsClass(runClasses[0])) Fail(where, $"classes [{runClasses[0]}] is not a class name");

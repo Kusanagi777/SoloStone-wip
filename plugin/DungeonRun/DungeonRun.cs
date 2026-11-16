@@ -165,8 +165,9 @@ internal sealed class DungeonRun
         // Wave 4 review: a Rumble Run champion appears only "if the player has not chosen one of the <class> shrines" (the
         // champions' wiki pages): a run that will hold a board shrine never draws a boss row with a shrine variant of that class.
         string runShrine = BoardShrineFor(state);
+        // Wave 5: a run never meets a boss row of the character it plays (the hero row's "excludeBosses").
         state.BossSequence = ActBossSequence(profile, seed, acts, ledger: !typedSeed,
-            excludeShrineClass: runShrine == null ? (CardClass?)null : Cards.FromId(runShrine).Class);
+            excludeShrineClass: runShrine == null ? (CardClass?)null : Cards.FromId(runShrine).Class, excludeBosses: cls.ExcludeBosses);
         foreach (string id in starter) DungeonRunDeck.Add(state, id, DungeonRunDeck.OriginStarter);
         // Phase 8: the acts' twists are rolled now, against the bosses just drawn (none on a schedule without twist pools).
         RollTwists(state, acts);
@@ -406,11 +407,14 @@ internal sealed class DungeonRun
     /// <param name="excludeShrineClass">The class of the run's board shrine (wave 4 review): a boss row with a shrine variant of
     /// that class is never drawn (a Rumble Run champion meets only runs that did not choose its class's shrines). Null: no filter,
     /// every run without a board shrine draws exactly as before.</param>
+    /// <param name="excludeBosses">Boss rows the run's hero row excludes (wave 5: the same character, DungeonRunClass.ExcludeBosses):
+    /// never drawn, as if already used. Null or empty: every other run draws exactly as before.</param>
     internal List<string> ActBossSequence(DungeonRunProfile profile, long seed, DungeonRunSchedule schedule, bool ledger = false,
-        CardClass? excludeShrineClass = null)
+        CardClass? excludeShrineClass = null, IEnumerable<string> excludeBosses = null)
     {
         var sequence = new List<string>();
         var used = new HashSet<string>(StringComparer.Ordinal);
+        if (excludeBosses != null) used.UnionWith(excludeBosses);
         // Phase 8: how many bosses of each provenance the run holds so far (the provenance-mix draw evens them out).
         var drawn = new Dictionary<string, int>(StringComparer.Ordinal);
         // A finale's fixed bosses are never drawn by an earlier act.

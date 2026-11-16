@@ -91,6 +91,12 @@ internal sealed class DungeonRunClass
     internal int SignatureOffer = 3;
     /// <summary>Treasure-tag vocabulary this row adds to the affinity weighting of its treasure drafts.</summary>
     internal List<string> TreasureTags = new List<string>();
+    /// <summary>
+    /// Phase 8 wave 5: the boss rows a run of this row never meets (run-v1.json "excludeBosses"): a hero row whose character is
+    /// also an encounter's boss (the Heist villain Squeamlish, run hero DALA_Squeamlish, is the Tombs boss ulda_07_squeamlish).
+    /// DungeonRun.NewRun keeps them out of the act draw; empty for every other row.
+    /// </summary>
+    internal List<string> ExcludeBosses = new List<string>();
     /// <summary>A named adventure hero row (Kind "hero"): it sits beside its primary class's row in the picker.</summary>
     internal bool IsHero => Kind == KindHero;
 
@@ -522,6 +528,7 @@ internal sealed class DungeonRunData
             Signatures = NpcWorldJson.Strings(row, "signatures") ?? new List<string>(),
             SignatureOffer = NpcWorldJson.Integer(row, "signatureOffer", 3),
             TreasureTags = NpcWorldJson.Strings(row, "treasureTags") ?? new List<string>(),
+            ExcludeBosses = NpcWorldJson.Strings(row, "excludeBosses") ?? new List<string>(),
         };
         foreach (var row in NpcWorldJson.List(run, "classes").Cast<object>().Select(Obj))
         {
