@@ -29,6 +29,7 @@
 #   family 13 modes:     bp.sh enc13a|enc13b|enc13-seeds   (the nine Rumble Run champions, every shrine variant; twice per call)
 #   family 14 modes:     bp.sh enc14|enc14-seeds|enc14-flight|enc14-cards           (twice per call; enc14-cards: the fixture rows play every boss card)
 #   family 15 modes:     bp.sh enc15|enc15-seeds|enc15-rat|enc15-toys            (twice per call)
+#   family 16 modes:     bp.sh enc16|enc16-seeds|enc16-carousel|enc16-cards        (twice per call; enc16-cards: the fixture rows play every boss card and treasure)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -99,6 +100,9 @@ CARDS13=TRLA_168,TRLA_129s
 CARDS14=DALA_BOSS_03t,DALA_BOSS_03t2,DALA_BOSS_03t3,DALA_BOSS_03t4,DALA_BOSS_06dk
 # family 15 (Dalaran Heist bosses B): the boss card Jepetto's deck lists (the Underbelly Rat is summoned by A Tale of Kings)
 CARDS15=DALA_BOSS_25t
+# family 16: the boss card and the treasures newly admitted for a boss, played from hand (PARTY PORTAL!, Orb of Destruction,
+# Horn of Cenarius, Portable Forge, Quel'Delar)
+CARDS16=DALA_BOSS_38t,LOOTA_811,LOOTA_837,LOOTA_841,LOOTA_842
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -267,6 +271,13 @@ enc15-rat) # The Rat King: the Underbelly Rat's hero replacement (form changes) 
   need $E; twice enc15-rat BOSS=dala_30_rat_king GAMES=8 ;;
 enc15-toys) # Jepetto Joybuzz: Assembly on both sides and Hoard of Toys played from hand by the boss
   need $E; twice enc15-toys BOSS=dala_25_jepetto GAMES=8 WATCH=$CARDS15 ;;
+enc16) need $E; twice enc16 FAMILY=16 WATCH=$CARDS16 ;;
+enc16-seeds) need $E; twice enc16-seeds FAMILY=16 SEED_BASE=19000 WATCH=$CARDS16 ;;
+enc16-carousel) need $E; twice enc16-carousel BOSS=dala_34_carousel GAMES=8 ;;
+enc16-cards) need $E; twice enc16-cards BOSS=fix16_tipsi,fix16_toomba,fix16_quel GAMES=6 WATCH=$CARDS16 ENCOUNTERS_JSON=$FX/p8f16/fixtures/encounters-f16.json
+  # every watched card was played from hand by a boss at least once
+  unplayed=$(tail -n 1 "$R/bp-enc16-cards-a.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Z0-9_a-z]+ x0( |$)" | xargs)
+  [ -z "$unplayed" ] && echo "bosspilot enc16-cards: all 5 watched cards played by the boss" || echo "bosspilot enc16-cards UNPLAYED: $unplayed" ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;

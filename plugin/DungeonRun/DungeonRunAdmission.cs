@@ -463,7 +463,8 @@ internal static partial class DungeonRunAdmission
             Reason = "treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F2 T4-T33)",
             // Phase 8 family 09: the fourteen of these that King Togwaggle's Magic Candle finds (and A. F. Kay's deck lists) are
             // in DungeonRunAdmission.F09.cs (run-treasure-boss-find: the same legacy verdict, a boss too on catalog runs).
-            Ids = new[] { "LOOTA_811", "LOOTA_814", "LOOTA_837", "LOOTA_840", "LOOTA_841", "LOOTA_842", "LOOTA_842a" },
+            // Phase 8 family 16: the five Ol' Toomba shuffles into his deck are in DungeonRunAdmission.F16.cs (run-treasure-boss-shuffle).
+            Ids = new[] { "LOOTA_814", "LOOTA_840" },
         },
         new AdmissionRule
         {
