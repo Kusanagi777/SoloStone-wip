@@ -10,9 +10,9 @@ One ledger for the unified Dungeon Run (gap review 2026-11-10, implementation st
 | --- | ---: |
 | Reference-CSV records (original adventure ids) | 2,050 |
 | Original bucket / starter / finale-deck / loadout cards and labels not in the CSV | 1,791 |
-| Of those, original cards also in SoloStone's current pool | 1,395 |
-| SoloStone-only rows (run catalog entries and current pool cards) | 1,077 |
-| **Total rows** | **4,918** |
+| Of those, original cards also in SoloStone's current pool | 1,467 |
+| SoloStone-only rows (run catalog entries and current pool cards) | 1,151 |
+| **Total rows** | **4,992** |
 
 The reference CSV has 2,050 records and every one is a row. 22 bucket labels without a CSV record (Monster Hunt's Darius and Toki labels) were added as `label:` rows. A card that has several provenances is one row whose `adventures`, `roles`, `buckets` and `decks` columns list all of them.
 
@@ -20,12 +20,12 @@ The reference CSV has 2,050 records and every one is a row. 22 bucket labels wit
 
 | Classification | Rows | Original (non-SoloStone) rows | SoloStone rows |
 | --- | ---: | ---: | ---: |
-| implemented | 2,813 | 2,192 | 2,290 |
-| partial | 660 | 297 | 389 |
-| missing | 387 | 387 | 0 |
-| duplicate/support | 1,058 | 965 | 228 |
+| implemented | 2,814 | 2,193 | 2,363 |
+| partial | 817 | 380 | 471 |
+| missing | 302 | 302 | 0 |
+| duplicate/support | 1,059 | 966 | 228 |
 | intentionally adapted | 0 | 0 | 0 |
-| **Total** | 4,918 | 3,841 | 2,907 |
+| **Total** | 4,992 | 3,841 | 3,062 |
 
 A row with several adventures counts once in each column it belongs to, so the last two columns can overlap.
 
@@ -34,31 +34,31 @@ A row with several adventures counts once in each column it belongs to, so the l
 | Adventure | implemented | partial | missing | duplicate/support | intentionally adapted | Rows |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Dungeon Run | 940 | 70 | 49 | 133 | 0 | 1,192 |
-| Monster Hunt | 513 | 61 | 82 | 109 | 0 | 765 |
+| Monster Hunt | 513 | 71 | 72 | 109 | 0 | 765 |
 | Rumble Run | 979 | 1 | 9 | 163 | 0 | 1,152 |
 | The Dalaran Heist | 1,433 | 119 | 88 | 284 | 0 | 1,924 |
-| Tombs of Terror | 1,128 | 46 | 159 | 276 | 0 | 1,609 |
-| SoloStone | 2,290 | 389 | 0 | 228 | 0 | 2,907 |
+| Tombs of Terror | 1,129 | 119 | 84 | 277 | 0 | 1,609 |
+| SoloStone | 2,363 | 471 | 0 | 228 | 0 | 3,062 |
 
 ### Classification by role
 
 | Role | implemented | partial | missing | duplicate/support | intentionally adapted | Rows |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | bucket member | 1,713 | 0 | 0 | 0 | 0 | 1,713 |
-| card | 1,310 | 199 | 33 | 0 | 0 | 1,542 |
+| card | 1,431 | 222 | 29 | 0 | 0 | 1,682 |
 | starter | 809 | 0 | 0 | 0 | 0 | 809 |
 | bucket label | 0 | 0 | 0 | 440 | 0 | 440 |
 | enchantment | 0 | 0 | 0 | 396 | 0 | 396 |
-| boss power | 20 | 189 | 72 | 85 | 0 | 366 |
-| boss hero | 0 | 0 | 263 | 31 | 0 | 294 |
+| boss power | 20 | 259 | 2 | 85 | 0 | 366 |
+| boss hero | 0 | 0 | 262 | 32 | 0 | 294 |
+| boss | 20 | 255 | 0 | 0 | 0 | 275 |
 | finale deck | 232 | 2 | 0 | 0 | 0 | 234 |
-| treasure | 195 | 0 | 2 | 19 | 0 | 216 |
-| boss | 20 | 194 | 0 | 0 | 0 | 214 |
+| treasure | 196 | 0 | 1 | 19 | 0 | 216 |
 | boss deck | 172 | 0 | 0 | 0 | 0 | 172 |
 | bundle member | 156 | 0 | 0 | 0 | 0 | 156 |
 | hero power | 76 | 0 | 1 | 0 | 0 | 77 |
 | passive treasure | 75 | 0 | 2 | 0 | 0 | 77 |
-| boss card | 0 | 53 | 11 | 0 | 0 | 64 |
+| boss card | 0 | 62 | 2 | 0 | 0 | 64 |
 | teammate | 54 | 0 | 0 | 0 | 0 | 54 |
 | bundle | 52 | 0 | 0 | 0 | 0 | 52 |
 | hero | 26 | 0 | 0 | 12 | 0 | 38 |
@@ -71,7 +71,7 @@ A row with several adventures counts once in each column it belongs to, so the l
 | tavern | 22 | 0 | 2 | 0 | 0 | 24 |
 | support | 0 | 0 | 0 | 23 | 0 | 23 |
 | final boss | 0 | 0 | 20 | 0 | 0 | 20 |
-| portrait | 0 | 0 | 0 | 14 | 0 | 14 |
+| portrait | 0 | 0 | 0 | 15 | 0 | 15 |
 | shrine upgrade | 9 | 0 | 0 | 0 | 0 | 9 |
 | twist | 0 | 9 | 0 | 0 | 0 | 9 |
 
@@ -97,12 +97,12 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Monster Hunt | card |  |  | 22 |  |  | 22 |
 | Monster Hunt | bucket label |  |  |  | 44 |  | 44 |
 | Monster Hunt | enchantment |  |  |  | 50 |  | 50 |
-| Monster Hunt | boss power |  | 43 | 4 |  |  | 47 |
+| Monster Hunt | boss power |  | 47 |  |  |  | 47 |
 | Monster Hunt | boss hero |  |  | 47 | 4 |  | 51 |
 | Monster Hunt | treasure | 55 |  |  |  |  | 55 |
 | Monster Hunt | hero power | 3 |  | 1 |  |  | 4 |
 | Monster Hunt | passive treasure | 13 |  | 1 |  |  | 14 |
-| Monster Hunt | boss card |  | 18 | 7 |  |  | 25 |
+| Monster Hunt | boss card |  | 24 | 1 |  |  | 25 |
 | Monster Hunt | hero | 4 |  |  |  |  | 4 |
 | Monster Hunt | token |  |  |  | 10 |  | 10 |
 | Monster Hunt | support |  |  |  | 1 |  | 1 |
@@ -141,17 +141,17 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | The Dalaran Heist | support |  |  |  | 4 |  | 4 |
 | The Dalaran Heist | twist |  | 5 |  |  |  | 5 |
 | Tombs of Terror | bucket member | 983 |  |  |  |  | 983 |
-| Tombs of Terror | card | 6 | 1 | 5 |  |  | 12 |
+| Tombs of Terror | card | 6 | 5 | 1 |  |  | 12 |
 | Tombs of Terror | starter | 124 |  |  |  |  | 124 |
 | Tombs of Terror | bucket label |  |  |  | 88 |  | 88 |
 | Tombs of Terror | enchantment |  |  |  | 120 |  | 120 |
-| Tombs of Terror | boss power |  | 22 | 67 | 38 |  | 127 |
-| Tombs of Terror | boss hero |  |  | 80 | 8 |  | 88 |
+| Tombs of Terror | boss power |  | 88 | 1 | 38 |  | 127 |
+| Tombs of Terror | boss hero |  |  | 79 | 9 |  | 88 |
 | Tombs of Terror | finale deck | 232 | 2 |  |  |  | 234 |
-| Tombs of Terror | treasure | 33 |  | 2 |  |  | 35 |
+| Tombs of Terror | treasure | 34 |  | 1 |  |  | 35 |
 | Tombs of Terror | hero power | 13 |  |  |  |  | 13 |
 | Tombs of Terror | passive treasure | 17 |  |  |  |  | 17 |
-| Tombs of Terror | boss card |  |  | 3 |  |  | 3 |
+| Tombs of Terror | boss card |  | 3 |  |  |  | 3 |
 | Tombs of Terror | hero | 4 |  |  |  |  | 4 |
 | Tombs of Terror | anomaly |  | 17 |  |  |  | 17 |
 | Tombs of Terror | token |  |  |  | 5 |  | 5 |
@@ -159,15 +159,15 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Tombs of Terror | tavern | 8 |  | 2 |  |  | 10 |
 | Tombs of Terror | support |  |  |  | 17 |  | 17 |
 | Tombs of Terror | final boss |  |  | 5 |  |  | 5 |
-| Tombs of Terror | portrait |  |  |  | 8 |  | 8 |
+| Tombs of Terror | portrait |  |  |  | 9 |  | 9 |
 | Tombs of Terror | twist |  | 4 |  |  |  | 4 |
-| SoloStone | card | 1,294 | 195 |  |  |  | 1,489 |
+| SoloStone | card | 1,415 | 216 |  |  |  | 1,631 |
 | SoloStone | starter | 791 |  |  |  |  | 791 |
 | SoloStone | enchantment |  |  |  | 166 |  | 166 |
 | SoloStone | boss power | 20 |  |  |  |  | 20 |
 | SoloStone | boss hero |  |  |  | 18 |  | 18 |
-| SoloStone | treasure | 195 |  |  | 19 |  | 214 |
-| SoloStone | boss | 20 | 194 |  |  |  | 214 |
+| SoloStone | boss | 20 | 255 |  |  |  | 275 |
+| SoloStone | treasure | 196 |  |  | 19 |  | 215 |
 | SoloStone | boss deck | 172 |  |  |  |  | 172 |
 | SoloStone | bundle member | 156 |  |  |  |  | 156 |
 | SoloStone | hero power | 67 |  |  |  |  | 67 |
@@ -186,9 +186,9 @@ Empty cells are zero. A row is counted under each adventure-role pair it carries
 
 | gaps | partial rows | of which original (non-SoloStone) |
 | --- | ---: | ---: |
-| reach | 660 | 297 |
+| reach | 817 | 380 |
 
-160 partial rows are collectible cards that only need a place in the draft catalog (engine, AI and admission already pass).
+168 partial rows are collectible cards that only need a place in the draft catalog (engine, AI and admission already pass).
 
 ## Blocking capability gaps
 
@@ -199,37 +199,38 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `ai:turn-rewind` | 2 | 0 | 0 | Admission family `turn-rewind`: restarts the turn or the game, which rebuilds the controllers; bot state and plan cache must restart (admitted: none; lifted by phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6); GILA_900p, GILA_911). |
 | `ai:unused-card` | 2 | 0 | 0 |  |
 | `ai:boss-rejected-data` | 1 | 0 | 0 |  |
-| `ai:finale-state` | 1 | 0 | 0 | Admission family `finale-state`: its second half damages the Plague Lord of the act finale whenever the run fights it; the run has no Plague Lord finale and no state that carries damage to it until phase 8, and a Gnomebliterator that only dealt its first half would misstate the card (c-treasures-F12 T28) (admitted: none; lifted by phase 8 (encounters/anomalies): the Plague Lord finale encounters and the run state that carries damage to a Plague Lord into its fight; ULDA_115). |
+| `ai:boss-tombs-c-rejected` | 1 | 0 | 0 | Admission family `boss-tombs-c-rejected`: Jythiros of Questions' Riddle of the Sphinx, "Guess which card the Boss will play to banish it": the run player guesses on the boss's turn among the boss's hand and its draw, and a right guess counters the boss's card of any type. The engine's decision loop, NativeMatch and the harnesses answer only the current player's decisions, and the engine counters spells only; the encounter is left out (reference/encounters/F21.json "rejected") (admitted: none; lifted by phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard; ULDA_BOSS_58p). |
 | `ai:global-rule-rejected` | 1 | 0 | 0 | Admission family `global-rule-rejected`: Glittering ("After a player plays a card that costs (8) or more, that player adds a Treasure to their hand"): the wiki states the pool is the Dalaran Heist treasures, which are run rewards the table admits for the run player's run deck only (no boss and no generation pool may hold one: RunTreasureLift), and several of them write run state (DALA_718, DALA_719, DALA_721). A rule for both players needs each treasure admitted for a boss and as a generation result; until then the rule is rejected in schedule-v1.json and not scripted (admitted: none; lifted by phase 8 (encounters/anomalies): the Dalaran Heist active treasures admitted for a boss and as a generation result (the treasure-on-boss work of the encounter families that give a boss treasure cards: LOOTA_BOSS_99p, Ol' Toomba); DALA_857). |
+| `ai:nemesis-rejected-restart` | 1 | 0 | 0 | Admission family `nemesis-rejected-restart`: Infinite Toki's Alternate Timeline, "Start a new game, but your opponent's Health stays the same": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of her deck (data/dungeon-run/reference/encounters/F23.json "rejected") (admitted: none; lifted by phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6); GILA_BOSS_48t). |
 | `ai:start-of-game-draw` | 1 | 0 | 0 | Admission family `start-of-game-draw`: ends the fight and edits the run deck (admitted: none; lifted by phase 9 (economy): a run-owned match exit (an escape outcome and a skipped fight node) that edits the run deck (deferred there by phase 6); ULDA_111). |
 | `ai:treasure-data-gap` | 1 | 0 | 0 |  |
-| `engine:unscripted` | 124 | 0 | 0 | No engine script for the card id (CardDefs has no implemented entry). |
-| `validation:encounter-rejected` | 1 | 0 | 0 | Current DungeonRunValidator admission rule `encounter-rejected` rejects the card. |
+| `engine:unscripted` | 40 | 0 | 0 | No engine script for the card id (CardDefs has no implemented entry). |
+| `validation:encounter-rejected` | 3 | 0 | 0 | Current DungeonRunValidator admission rule `encounter-rejected` rejects the card. |
 | `validation:rule-rejected` | 1 | 0 | 0 | Current DungeonRunValidator admission rule `rule-rejected` rejects the card. |
-| `run:default-schedule` | 650 | 451 | 158 | Placed on the version-3 schedules (acts-v3h, acts-v3t), which a new run follows only once schedule-v1.json "defaults" names them (the phase-8 close-out, after the encounter families fill the pools and enable the finales). |
-| `run:adventure-cards` | 232 | 0 | 158 | Adventure-only cards (boss/treasure support cards in the original namespaces) that need an owning feature to appear. |
-| `run:encounter-roster` | 151 | 1 | 0 | Original encounters: boss heroes, powers, special cards and setups in the encounter pool. |
+| `run:default-schedule` | 808 | 586 | 168 | Placed on the version-3 schedules (acts-v3h, acts-v3t), which a new run follows only once schedule-v1.json "defaults" names them (the phase-8 close-out, after the encounter families fill the pools and enable the finales). |
+| `run:adventure-cards` | 251 | 0 | 166 | Adventure-only cards (boss/treasure support cards in the original namespaces) that need an owning feature to appear. |
+| `run:encounter-roster` | 11 | 2 | 0 | Original encounters: boss heroes, powers, special cards and setups in the encounter pool. |
 | `run:global-rules` | 10 | 8 | 0 | Anomalies and chapter twists as validated global rules on the match plan. |
-| `run:special-finales` | 7 | 2 | 2 | Special finales (Tekahn Inner Sanctum hand-off, Hagatha, Heist finale). |
-| `run:treasure-content` | 4 | 0 | 0 | Original passive and active treasures as run content entries (DungeonRunContent + run-v1.json). |
 | `run:deck-mutation` | 3 | 0 | 0 | Persistent run-deck mutation and run-scoped state ("Dungeon Deck", "this run", bosses defeated). |
+| `run:treasure-content` | 3 | 0 | 0 | Original passive and active treasures as run content entries (DungeonRunContent + run-v1.json). |
 | `run:tavern` | 2 | 0 | 0 | Bob's tavern services between fights (deck edits, recruits). |
 | `run:adventure-heroes` | 1 | 0 | 0 | The 18 adventure heroes and their special player powers. |
-| `data:original-boss-decks-absent` | 67 | 0 | 0 | Original boss decks are server-side: the client database has none, so an encounter needs a reconstructed deck. |
+| `run:special-finales` | 1 | 0 | 0 | Special finales (Tekahn Inner Sanctum hand-off, Hagatha, Heist finale). |
+| `data:original-boss-decks-absent` | 5 | 0 | 0 | Original boss decks are server-side: the client database has none, so an encounter needs a reconstructed deck. |
 
-853 rows carry at least one gap.
+864 rows carry at least one gap.
 
 ### AI support
 
 | ai_support | Rows |
 | --- | ---: |
-| ok | 2,906 |
-| not applicable | 1,058 |
-| unknown:unscripted | 115 |
-| ok:run-treasure | 112 |
+| ok | 2,974 |
+| not applicable | 1,059 |
+| ok:run-treasure | 110 |
 | ok:secret-card | 42 |
 | ok:teammate | 41 |
 | ok:run-hero-power | 31 |
+| unknown:unscripted | 30 |
 | ok:secret-from-deck | 29 |
 | ok:boss-shrine | 26 |
 | ok:global-rule-symmetric | 24 |
@@ -246,31 +247,40 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:heist-d-boss-card | 12 |
 | ok:boss-board-power | 10 |
 | ok:boss-hunt-power | 10 |
+| ok:boss-plague-card | 10 |
 | ok:boss-hunt-card | 9 |
+| ok:boss-tombs-b-board-power | 9 |
 | ok:deck-wide-change (player only; boss after phase 8 (encounters/anomalies): the first boss decks that use deck-wide rewrites (encounter families) bring the boss's own-deck ledger for deck-wide rewrites and removals) | 9 |
 | ok:public-board | 9 |
 | ok:boss-tombs-board-power | 8 |
+| ok:boss-tombs-d-board-power | 8 |
 | ok:secret-generated (player only; boss after phase 8 (encounters/anomalies): the boss and finale encounters (run:special-finales) turn the boss side's generated Secrets on) | 8 |
 | ok:shrine-upgrade (player only; boss after phase 8 (encounters/anomalies): boss shrine rosters (BossShrineLift); the run player's only until then) | 8 |
+| ok:boss-plague-power | 7 |
 | ok:heist-board-power | 7 |
 | ok:quest-hero-power | 7 |
+| ok:boss-tombs-c-board-power | 6 |
 | ok:global-rule-hidden | 6 |
 | ok:global-rule-start | 6 |
 | ok:heist-boss-card | 6 |
 | ok:heist-d-board-power | 6 |
 | ok:heist-passive | 6 |
 | ok:highlander | 6 |
+| ok:nemesis-hunt-card | 6 |
 | ok:not-started-in-deck | 6 |
 | ok:run-treasure-discover | 6 |
 | ok:boss-hidden-reveal | 5 |
 | ok:boss-hunt-card-b | 5 |
 | ok:boss-own-hand-power | 5 |
 | ok:boss-passive-both | 5 |
+| ok:boss-tombs-c-passive | 5 |
 | ok:boss-tombs-passive | 5 |
 | ok:collectible-generated | 5 |
 | ok:run-treasure-boss-shuffle | 5 |
 | ok:boss-both-players | 4 |
 | ok:boss-passive-public | 4 |
+| ok:boss-plague-passive | 4 |
+| ok:boss-tombs-b-passive | 4 |
 | ok:heist-c-passive | 4 |
 | ok:keyword-only | 4 |
 | ok:own-hand-rewrite | 4 |
@@ -279,6 +289,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:boss-auto-cast | 3 |
 | ok:boss-power-own-hand | 3 |
 | ok:boss-room | 3 |
+| ok:boss-tombs-c-own-zone-power | 3 |
 | ok:collectible-own-deck | 3 |
 | ok:deck-condition | 3 |
 | ok:generated-pool | 3 |
@@ -304,6 +315,12 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:boss-minion-power | 2 |
 | ok:boss-player-deck-insert | 2 |
 | ok:boss-run-edit | 2 |
+| ok:boss-tombs-b-hidden-hand | 2 |
+| ok:boss-tombs-b-own-hand-power | 2 |
+| ok:boss-tombs-c-rule-cast | 2 |
+| ok:boss-tombs-d-auto-cast | 2 |
+| ok:boss-tombs-d-growing-power | 2 |
+| ok:boss-tombs-d-passive | 2 |
 | ok:boss-tombs-graveyard-power | 2 |
 | ok:boss-tombs-own-hand-power | 2 |
 | ok:boss-treasure-find | 2 |
@@ -313,18 +330,21 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:heist-d-auto-cast | 2 |
 | ok:heist-d-hidden-auto-cast | 2 |
 | ok:hidden-steal | 2 |
+| ok:nemesis-board-power | 2 |
 | ok:own-deck-insert | 2 |
 | ok:own-deck-pull | 2 |
 | ok:run-hero-power-token | 2 |
 | ok:run-treasure-belief-reset | 2 |
 | ok:run-treasure-hand-escrow | 2 |
 | ok:run-treasure-match-start | 2 |
+| ok:run-treasure-nemesis-deck | 2 |
 | ok:run-treasure-paid-cost | 2 |
 | ok:run-treasure-rule | 2 |
 | ok:run-treasure-run-log | 2 |
 | blocked:boss-rejected-data (none: a data gap no phase owns; it needs a source for Commander Bolan's five quests (their requirements) and his summon list; then a script of the quests as run-player enchantments that end the fight with a no-loss win) | 1 |
-| blocked:finale-state (phase 8 (encounters/anomalies): the Plague Lord finale encounters and the run state that carries damage to a Plague Lord into its fight) | 1 |
+| blocked:boss-tombs-c-rejected (phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard) | 1 |
 | blocked:global-rule-rejected (phase 8 (encounters/anomalies): the Dalaran Heist active treasures admitted for a boss and as a generation result (the treasure-on-boss work of the encounter families that give a boss treasure cards: LOOTA_BOSS_99p, Ol' Toomba)) | 1 |
+| blocked:nemesis-rejected-restart (phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)) | 1 |
 | blocked:start-of-game-draw (phase 9 (economy): a run-owned match exit (an escape outcome and a skipped fight node) that edits the run deck (deferred there by phase 6)) | 1 |
 | blocked:treasure-data-gap (none: a data gap no phase owns; the client data does not state the hidden effects' triggers or chances) | 1 |
 | ok:boss-both-draw | 1 |
@@ -336,11 +356,20 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:boss-hidden-steal | 1 |
 | ok:boss-hunt-deck-shuffle | 1 |
 | ok:boss-hunt-form | 1 |
+| ok:boss-plague-own-deck | 1 |
 | ok:boss-setaside-store | 1 |
 | ok:boss-shrine-token | 1 |
 | ok:boss-token | 1 |
 | ok:boss-token (boss only; player after none: boss decks only; no player role offers it) | 1 |
+| ok:boss-tombs-b-forced-attack | 1 |
+| ok:boss-tombs-c-form-power | 1 |
+| ok:boss-tombs-c-hidden-steal | 1 |
 | ok:boss-tombs-card | 1 |
+| ok:boss-tombs-d-both-players | 1 |
+| ok:boss-tombs-d-card | 1 |
+| ok:boss-tombs-d-forced-attack | 1 |
+| ok:boss-tombs-d-hidden-illusion | 1 |
+| ok:boss-tombs-d-hidden-steal | 1 |
 | ok:boss-tombs-player-deck-insert | 1 |
 | ok:deck-wide-change | 1 |
 | ok:deckbuilding | 1 |
@@ -357,6 +386,8 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:hidden-deck-summon | 1 |
 | ok:hidden-hand-discover | 1 |
 | ok:hidden-reveal | 1 |
+| ok:nemesis-auto-cast | 1 |
+| ok:nemesis-passive-immune | 1 |
 | ok:opening-hand | 1 |
 | ok:own-graveyard | 1 |
 | ok:random-cast | 1 |
@@ -368,6 +399,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:run-treasure-hand-cast | 1 |
 | ok:run-treasure-hand-swap | 1 |
 | ok:run-treasure-loop | 1 |
+| ok:run-treasure-plague-lord | 1 |
 | ok:run-treasure-power-swap | 1 |
 | ok:run-treasure-random-cost | 1 |
 | ok:run-treasure-run-flag | 1 |
@@ -376,6 +408,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | ok:secret-named | 1 |
 | ok:spell-recast | 1 |
 | ok:text-only | 1 |
+| ok:tombs-b-collectible | 1 |
 | ok:wrong-target | 1 |
 
 ### Admission families
@@ -421,10 +454,10 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `run-treasure-side-shuffle` | player | treasure: only the player can hold it; every minion picks a side with the game RNG by the control rule (ControlTask), a public board change the boss's next decision reads | none: a run treasure; no boss deck or generation pool offers it |  | 1 of 1 |
 | `run-treasure-loop` | player | treasure: only the player can hold it; casts Pyroblast at random targets until a hero dies, guarded at 60 casts (DungeonRunContent.RodOfRoastingMaxCasts) | none: a run treasure; no boss deck or generation pool offers it |  | 1 of 1 |
 | `run-hero-power` | player | a named hero's power: only the run player starts with it; Scavenge discovers from the public play history of both players, Fire! fires the owner's Cannons, a public board effect the boss's next decision reads (c-treasures-F3 T4, T12) | none: a run treasure; no boss deck or generation pool offers it |  | 2 of 2 |
-| `run-treasure` | player | treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F3 T5-T22) | none: a run treasure; no boss deck or generation pool offers it |  | 13 of 13 |
+| `run-treasure` | player | treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F3 T5-T22) | none: a run treasure; no boss deck or generation pool offers it |  | 12 of 12 |
 | `run-hero-board` | player | Darius's Cannon: an untouchable board entity of the run player's (never a target, never in a deck); its shots are public damage at the enemy minions opposite it (DungeonRunContent Cannons, c-treasures-F3 T12-T14) | none: a run treasure; no boss deck or generation pool offers it |  | 1 of 1 |
 | `run-hero-power` | player | a named hero's power: only the run player starts with it; Dog Whistle summons a public 1/1 Rush Bloodhound (c-treasures-F4 T4) | none: a run treasure; no boss deck or generation pool offers it |  | 1 of 1 |
-| `run-treasure` | player | treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F4 T4-T18) | none: a run treasure; no boss deck or generation pool offers it |  | 9 of 9 |
+| `run-treasure` | player | treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F4 T4-T18) | none: a run treasure; no boss deck or generation pool offers it |  | 8 of 8 |
 | `run-treasure-hand-cast` | player | treasure: only the player can hold it; casts every spell of both hands with random modes and targets, each a public cast (a cast Secret is revealed), so the boss sees what left its hand and the player's (c-treasures-F4 T13) | none: a run treasure; no boss deck or generation pool offers it |  | 1 of 1 |
 | `run-treasure-hand-swap` | player | treasure: only the player can hold it; swaps the hands by the hand-transfer facts, so the boss knows the cards it gave (PublicHandKnowledge) and holds the player's as its own hand (c-treasures-F4 T15, T19) | none: a run treasure; no boss deck or generation pool offers it |  | 1 of 1 |
 | `run-treasure` | player | treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F5 T4-T27) | none: a run treasure; no boss deck or generation pool offers it |  | 12 of 12 |
@@ -448,7 +481,6 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `run-treasure-hand-escrow` | player | treasure: only the player can hold it; refreshes the player's Mana Crystals and holds the player's hand aside in the engine's hand escrow (HandTimelineRules') for the rest of the turn while as many cards are drawn from the player's own deck; at the turn's end the Mirage hand is shuffled back and the same hand entities return, so what the boss knew about them still holds and nothing hidden is rewritten (c-treasures-F12 T10) | none: a run treasure; no boss deck or generation pool offers it |  | 2 of 2 |
 | `run-treasure-run-state` | player | treasure: only the player can hold it; reads or writes run state through RunHelpers: Discovers and Mana Crystals per boss defeated (RunContext.BossesDefeated, a run fact shared by every clone), the boss's public hero power copied for the rest of the run (RunMatchResult.PowerOverride) and a one-fight bonus for the next fight (RunMatchResult.NextFight), both kept after a won fight only (c-treasures-F12 T21, T22, T27) | none: a run treasure; no boss deck or generation pool offers it |  | 3 of 3 |
 | `run-treasure-burn` | player | treasure: only the player can hold it; destroys half the boss's minions, discards half its hand, destroys half its deck as revealed burns (the boss's own-deck ledger reads the SHOW before each exit), then halves its Mana Crystals and deals half its hero's Health; every part is public, so the boss's own-deck sample and search see the result (c-treasures-F12 T19) | none: a run treasure; no boss deck or generation pool offers it |  | 1 of 1 |
-| `finale-state` | none | its second half damages the Plague Lord of the act finale whenever the run fights it; the run has no Plague Lord finale and no state that carries damage to it until phase 8, and a Gnomebliterator that only dealt its first half would misstate the card (c-treasures-F12 T28) | phase 8 (encounters/anomalies): the Plague Lord finale encounters and the run state that carries damage to a Plague Lord into its fight | the phase 8 Plague Lord finale encounters, and run state that carries damage dealt to a Plague Lord into its fight | 1 of 1 |
 | `run-treasure` | player | treasure: only the player can hold it; public effects the engine resolves (extra turns in the turn queue, control, transforms, random cards, Discovers, Twinspell and Scheme stages, a one-turn replay of the player's own plays with random targets), so the boss's legal moves and search see the result (c-treasures-F7 T4-T31) | none: a run treasure; no boss deck or generation pool offers it |  | 23 of 23 |
 | `run-treasure-copy` | player | treasure: only the player can hold it; each Patron summons one public copy of itself at its owner's turn end, and a copy summoned during that turn end first triggers at the next one, so the board (7) bounds it with no loop (1, 2, 4, 7 Patrons; c-treasures-F7 T9) | none: a run treasure; no boss deck or generation pool offers it |  | 1 of 1 |
 | `run-treasure-discover` | player | treasure: only the player can hold it; transforms into, or shuffles, treasures of the run's Heist treasure pool (RunContext.TreasurePool, a run fact shared by every clone); the boss's generation rejects every run treasure, so a boss that holds one draws none (c-treasures-F7 T5, T11) | none: a run treasure; no boss deck or generation pool offers it |  | 2 of 2 |
@@ -604,6 +636,39 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `boss-tombs-passive` | boss | a passive Tombs of Terror boss hero power started at match start (EncounterRules.ActivatePower) that reacts to a public event of the boss's: E.V.I.L. Promotion gives a Lackey the boss plays +N/+N, N rising with each one (ULDA_BOSS_03p; the count is the power's own public script number), "Confiscated" Goods equips a random scripted weapon after the boss's hero kills a minion by attacking it (ULDA_BOSS_06p), Unstable Weaponry deals 2 damage to a random enemy after a Mech is summoned for the boss (ULDA_BOSS_11p), Sword Dance shuffles a copy of the boss's destroyed weapon, enchantments kept, into the boss's own deck as a public shuffle (ULDA_BOSS_14p: the boss knows what joined its deck, the run player sees the card go in) and Under Wraps gives Reborn to a minion the boss plays (ULDA_BOSS_16p). The trigger is a public play, summon, attack or weapon loss, never the identity of a hidden card (c-enc-19 sections C, F, K, N, P; the enc19 bosspilot modes) | none: a boss hero power |  | 5 of 5 |
 | `boss-tombs-player-deck-insert` | boss | Sinkhole's Sand Surge, "Shuffle a Sand Trap into your opponent's deck that swallows cards when drawn": one Sand Trap enters the run player's deck as a public shuffle (the run player sees the card go in; the boss's fair view keeps that whole deck masked, the Sand Trap included, so the boss's search under-knows and never learns a hidden card); the run deck records never hold it (a match card). Offered while that deck, whose count is public, has room (c-enc-19 section H; the enc19 bosspilot modes) | none: a boss hero power |  | 1 of 1 |
 | `boss-tombs-card` | player, boss | Sand Trap (ULDA_030), "Casts When Drawn: Remove the top 2 cards of your deck": when its holder draws it, the top two cards of the holder's own deck go to the holder's graveyard, a public zone (both sides see the two removed cards; the rest of the deck stays hidden and two cards shorter), then the holder draws a card. It never reads the other side's hidden zones (c-enc-19 section H; the enc19 bosspilot modes) | none: boss decks only; no player role offers it |  | 1 of 1 |
+| `boss-tombs-b-board-power` | boss | a clickable Tombs of Terror boss hero power whose whole effect is public board and hero state the engine resolves: Titan Ritual summons two 1/1 Mogu Cultists (ULDA_BOSS_19p), Power of Wrath deals 1 damage to every damaged minion (ULDA_BOSS_22p), Beetle Stampede summons a Plated Beetle (ULDA_BOSS_25p), Gatling Wand deals 2 damage split among the enemy minions (ULDA_BOSS_26p), Pillaged Relics gives a chosen minion +1/+1, Divine Shield or Taunt at random (ULDA_BOSS_31p), Whispering Sentinel summons a 1/1 Wisp with Lifesteal (ULDA_BOSS_32p), Out of Control deals 1 damage to the center-most minions of each board (ULDA_BOSS_33p), Tomb Boomin' deals 4 damage split randomly between all characters (ULDA_BOSS_34p) and Vengeful Construct destroys a chosen minion with 2 or less Health and its neighbours (ULDA_BOSS_35p; a run shrine goes dormant as from any destroy). Every random pick uses the game RNG; a dormant run shrine is never touched. A power that would do nothing is not offered, by a condition that reads only the public boards; no hidden zone is read (c-enc-20 sections A, D, G, H, M, N, O, P, Q; the enc20 bosspilot modes) | none: a boss hero power |  | 9 of 9 |
+| `boss-tombs-b-own-hand-power` | boss | a clickable Tombs of Terror boss hero power that writes the boss's own hand, which the boss knows exactly and the run player sees as a count: Hatching Time reduces the Cost of the Beasts in the boss's hand by (1) (ULDA_BOSS_23p) and Corrupted Oasis adds two 2/2 Treants to it (ULDA_BOSS_24p). Offered while the boss holds a Beast or has room; the run player's hidden zones are neither read nor written (c-enc-20 sections E, F; the enc20 bosspilot modes) | none: a boss hero power |  | 2 of 2 |
+| `boss-tombs-b-hidden-hand` | boss | a clickable Tombs of Terror boss hero power whose text reads the run player's hand: "Retired" Treasure Hunter copies a random card of it into the boss's hand (ULDA_BOSS_27p; the boss legitimately learns that one card, which the run player sees copied) and Mighty Windstorm makes each player swap a random minion of their hand with a random minion of their board (ULDA_BOSS_28p; the run player's hand minion becomes public as it is summoned, the board minion goes back to its owner's hand in view; a run shrine is never chosen). In the boss's fair-view projection the run player's hand holds masked cards, so there each power uses only cards the boss already saw go into that hand: the search never reads the hidden hand, and the real pick is a random event it re-plans after. Offered by public counts and the boss's own hand and board only (c-enc-20 sections I, J; the enc20 bosspilot modes) | none: a boss hero power |  | 2 of 2 |
+| `boss-tombs-b-forced-attack` | boss | Kasa Softspeaker's Madness Incarnate, "Gain +1 Attack this turn and attack 3 different random enemy minions": the boss's hero gets +1 Attack this turn (ULDA_BOSS_36e), then attacks up to three different random enemy minions (no Stealth, no Immune) one after another as forced attacks, with their triggers, damage and the hero's weapon Durability; it stops when a hero dies. The game RNG picks; public board state only, offered while there is such a minion (c-enc-20 section R; the enc20 bosspilot modes) | none: a boss hero power |  | 1 of 1 |
+| `boss-tombs-b-passive` | boss | a passive Tombs of Terror boss hero power started at match start (EncounterRules.ActivatePower) that reacts to a public event: Spectral Swordsman gives the boss's hero Stealth while it has a weapon equipped (ULDA_BOSS_20p; set on an equip, cleared when the last weapon leaves), Staking A Claim gives every minion +1/+1 whenever either player plays a Discover card (ULDA_BOSS_21p), Mother of Sand summons a Dust Devil after the boss Overloads (ULDA_BOSS_29p) and Fireshaper deals 2 damage randomly split among the enemies after the boss casts a spell (ULDA_BOSS_30p). The trigger is a public play, cast, Overload or weapon change, never the identity of a hidden card (c-enc-20 sections B, C, K, L; the enc20 bosspilot modes) | none: a boss hero power |  | 4 of 4 |
+| `tombs-b-collectible` | player, boss, generated | Mogu Cultist (ULD_705), "Battlecry: If your board is full of Mogu Cultists, sacrifice them all and summon Highkeeper Ra", and Highkeeper Ra (ULD_705t), "At the end of your turn, deal 20 damage to all enemies": the Battlecry reads only its owner's board (seven Mogu Cultists are destroyed, then the 20/20 is summoned) and Ra's damage hits the public enemy characters; no hidden zone, no generation (c-enc-20 section A; the enc20 bosspilot modes) | none: admitted in every scope |  | 1 of 2 |
+| `boss-tombs-c-board-power` | boss | a clickable Tombs of Terror boss hero power whose whole effect is public board and hero state the engine resolves: What's in the Jar? summons a 1/1 copy of any minion for the boss, never of a run shrine (ULDA_BOSS_47p), Demon Emissary summons a random scripted Demon of Cost 3 or less the run's generation filter allows (ULDA_BOSS_49p), Cavalry of E.V.I.L. deals 1 damage to a minion and gives it Charge (ULDA_BOSS_54p), Fish Food restores 2 Health to every Murloc (ULDA_BOSS_55p), Titan's Beast sets a minion's Attack and Health to 3 (ULDA_BOSS_57p) and Food Chain deals 2 damage to a minion and restores 5 Health to the boss's hero if it dies (ULDA_BOSS_59p). A power that would do nothing is not offered, by a condition that reads only the public boards; no hidden zone is read (c-enc-21 sections G, I, M, N, P, R; the enc21 bosspilot modes) | none: a boss hero power |  | 6 of 6 |
+| `boss-tombs-c-own-zone-power` | boss | a clickable Tombs of Terror boss hero power that reads or writes only the boss's own hand and deck, which the boss knows exactly: Running Wild draws a random minion of the boss's own deck and adds a second copy of a Beast (ULDA_BOSS_41p), Sand Shapin' shuffles a plain copy of an enemy minion's card (the board is public; never a run shrine) into the boss's own deck as a public shuffle, marked "Summon when Drawn" (ULDA_BOSS_42p, ULDA_BOSS_42e: drawn, it is summoned and its holder draws), E.V.I.L. Conscription adds a random scripted Lackey behind the generation filter (ULDA_BOSS_53p). Offered by the public counts of the boss's hand and deck only (c-enc-21 sections A, B, L; the enc21 bosspilot modes) | none: a boss hero power |  | 3 of 3 |
+| `boss-tombs-c-hidden-steal` | boss | Jolene Knottley's Spoil the Ending, "Copy a spell in your opponent's hand. It costs (2) less": in the real game a new copy of the card of a random spell of the run player's hand goes to the boss's hand (the boss learns exactly that card, now its own); nothing links the copy to the source card, so the boss's fair view keeps the run player's hand masked, and its search, which sees that hand as stand-ins, finds no spell to copy (it under-knows, never over-knows). Offered by the public hand counts only (c-enc-21 section C; the enc21 bosspilot modes) | none: a boss hero power |  | 1 of 1 |
+| `boss-tombs-c-passive` | boss | a passive Tombs of Terror boss hero power started at match start (EncounterRules.ActivatePower) that reacts to a public event: Reliquary's Relics copies a spell the run player casts into the boss's hand (ULDA_BOSS_45p; the cast is public), Desert Warfare adds a random scripted Hunter card (no Quest, no Secret) after the boss's hero attacks (ULDA_BOSS_50p), Tol'vir Necromancy restores a minion that was Reborn to full Health (ULDA_BOSS_51p, either player's), Sandy Surprise gives Stealth to a 1-Cost minion the boss plays (ULDA_BOSS_56p) and Broken Phylactery doubles the boss's fatigue damage (ULDA_BOSS_52p2, Lich Baz'hial's form 1; Draw.PreDrawPhase). The trigger is a public cast, attack, summon, play or fatigue, never the identity of a hidden card (c-enc-21 sections D, J, K, O, H; the enc21 bosspilot modes) | none: a boss hero power |  | 5 of 5 |
+| `boss-tombs-c-rule-cast` | boss | a Tombs of Terror boss hero power the wiki marks Auto-cast, cast by rule at the start of the boss's turn (family 09's rule-cast powers; never an option of the boss's AI): Maw of the Desert destroys the minion of either board with the lowest Health (ULDA_BOSS_46p; a run shrine goes dormant) and Arena Expert summons a random minion of each player's deck and the boss's attacks the run player's (ULDA_BOSS_48p, Duel!'s rule: the summon makes each card public). The condition reads only the public boards (c-enc-21 sections E, F; the enc21 bosspilot modes) | none: a boss hero power |  | 2 of 2 |
+| `boss-tombs-c-form-power` | boss | Lich Baz'hial's Lich's Phylactery, "Restore @ Health to your Hero. Reduce by 1 for every friendly minion that dies": @ is the power's own public script number (20, lowered by each friendly minion's death); used once, it breaks: the boss enters the row's script form 1 (power only: hero, Health, Armor and weapon stay), Broken Phylactery. Every fact is public board and hero state; the form index and change count are the model's tags (c-enc-21 section H; the enc21 bosspilot modes) | none: a boss hero power |  | 1 of 1 |
+| `boss-tombs-c-rejected` | none | Jythiros of Questions' Riddle of the Sphinx, "Guess which card the Boss will play to banish it": the run player guesses on the boss's turn among the boss's hand and its draw, and a right guess counters the boss's card of any type. The engine's decision loop, NativeMatch and the harnesses answer only the current player's decisions, and the engine counters spells only; the encounter is left out (reference/encounters/F21.json "rejected") | phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard |  | 1 of 1 |
+| `boss-tombs-d-board-power` | boss | a clickable Tombs of Terror boss hero power whose whole effect is public board and hero state the engine resolves: Chain Lightning deals 1 damage to a minion and jumps to a random adjacent minion until one dies (ULDA_BOSS_61p), Masterful Djinn summons a 1/4 Servant of Siamat with a random one of Taunt, Rush, Windfury or Divine Shield (ULDA_BOSS_66p), "Upgraded" Fauna deals as much damage to an enemy minion as the boss controls Beasts (ULDA_BOSS_68p), Lord of the Sun gives the boss Spell Damage +3 this turn (ULDA_BOSS_70p; offered while the boss's own hand holds a spell), Lord of Life restores a damaged minion to full Health (ULDA_BOSS_71p), Burst of Light deals 1 damage to each enemy minion with Lifesteal (ULDA_BOSS_74p), Noble Champion deals damage to a random enemy minion equal to its Attack (ULDA_BOSS_76p) and Snapping Jaw doubles the boss's hero's Attack this turn (ULDA_BOSS_77p). A power that would do nothing is not offered, by a condition that reads only the public boards or the boss's own hand; no hidden zone is read (c-enc-22 sections B, F, G, I, J, M, O, P; the enc22 bosspilot modes) | none: a boss hero power |  | 8 of 8 |
+| `boss-tombs-d-growing-power` | boss | a clickable Tombs of Terror boss hero power whose damage is a number the power keeps in its own public script number (the @ of its text, shown by the client): Forbidden Power deals N damage to a random enemy character, N rising by 1 whenever a minion of the boss's dies, a public death (ULDA_BOSS_60p), and Hunt the Weak deals N damage to a minion, N rising by 1 after each use and back to 1 when the minion dies of it (ULDA_BOSS_75p). The boss's search reads the number from the power itself; no hidden zone is read (c-enc-22 sections A, N; the enc22 bosspilot modes) | none: a boss hero power |  | 2 of 2 |
+| `boss-tombs-d-forced-attack` | boss | Armadillobot's Mech "Pilot" (ULDA_BOSS_79p): a Mech on either board gets +2 Attack this turn and attacks a random enemy minion of its own at once (EncounterRules.ForcedAttack, Mass Hysteria's rule: its state does not matter and no attack of the turn is spent; game RNG, reported as a random event). Public board resolution only (c-enc-22 section R; the enc22 bosspilot modes) | none: a boss hero power |  | 1 of 1 |
+| `boss-tombs-d-auto-cast` | boss | a Tombs of Terror boss hero power the wiki lists as auto-cast, cast by rule at the start of the boss's turn, never an option of its AI (DungeonRunEncounters.AutoCast): Lord of Destruction curses a random enemy minion with Cursed! (ULDA_BOSS_72e: 2 damage to that minion's controller's hero at the end of each of its turns; curses stack) while the run player controls a minion (ULDA_BOSS_72p), and Massive Tentacles destroys every minion on both boards when there are 8 or more (ULDA_BOSS_78p; a run shrine goes dormant as from any destroy effect, a dormant or permanent minion neither counts nor is destroyed). Both conditions read only the public boards (c-enc-22 sections K, Q; the enc22 bosspilot modes) | none: a boss hero power |  | 2 of 2 |
+| `boss-tombs-d-passive` | boss | a passive Tombs of Terror boss hero power started at match start (EncounterRules.ActivatePower) that changes only the boss's own cards and mana: Plaguebringer makes the spells in the boss's hand cost (2) less and each spell it plays Overload (1) more, as any Overload (ULDA_BOSS_63p: a hand aura and a trigger on its own public plays), and Shockwave gives every minion on the boss's board Rush (ULDA_BOSS_73p: a board aura, ULDA_BOSS_73e). No hidden zone of the run player is read or written (c-enc-22 sections D, L; the enc22 bosspilot modes) | none: a boss hero power |  | 2 of 2 |
+| `boss-tombs-d-both-players` | boss | Isiset's Mistress of Magic (ULDA_BOSS_69p), a passive power on both players ("whenever a player casts their first spell, add a copy to their hand"): when either player plays the first spell of their game from hand, a copy of that public spell joins that player's own hand (a full hand takes none). The boss's fair view keeps the run player's copy masked like the rest of that hand (it under-knows; it never learns a hidden card) (c-enc-22 section H; the enc22 bosspilot modes) | none: a boss hero power |  | 1 of 1 |
+| `boss-tombs-d-hidden-steal` | boss | Thrud's Ogre-Sized Thief (ULDA_BOSS_65p), "Steal a card from your opponent's deck and put it into your hand": a random card of the run player's deck (game RNG) moves to the boss's hand by the deck-steal rule of TRLA_186 (DungeonRunShrines.TakeFromDeck: a deck exit and a transfer whose definition only the new owner sees; a full hand burns it). The boss learns exactly the card it took, now a card of its own hand, and nothing else: the run player's other deck cards stay unknown slots in its fair view, and a steal its search simulates takes a masked card. The run player sees a card leave its deck. Offered while that deck, whose count is public, holds a card (c-enc-22 section E; the enc22 bosspilot modes) | none: a boss hero power |  | 1 of 1 |
+| `boss-tombs-d-hidden-illusion` | boss | A Beautiful Oasis's Mirage (ULDA_BOSS_62p), "Give your opponent an illusion card. If played, they discard a random card", auto-cast by rule at the start of the boss's turn while the run player's hand holds a card and has room (both counts public): a copy of a random card of the run player's own hand joins that hand and one of the two is the illusion (game RNG; the wiki's notes; the card is marked by the private tag EncounterRules.MirageIllusion, never sent to the client, and the boss's power holds only the illusion's public hand position, kept current by an aura). Played, the illusion resolves as its card and its player discards a random card of the hand (a public discard); at the end of that player's turn it leaves the hand (both still there: the copy leaves). The copied card is a hidden card of the run player's hand and stays masked in the boss's fair view; the boss knows only which hand slot it made the illusion (c-enc-22 section C; the enc22 bosspilot modes) | none: a boss hero power |  | 1 of 1 |
+| `boss-tombs-d-card` | player, boss | Servant of Siamat (ULDA_026), the 1/4 Elemental Masterful Djinn summons, with no text of its own; its random keyword (Taunt, Rush, Windfury or Divine Shield) is the minion's own tag. Public board state on either side (c-enc-22 section F; the enc22 bosspilot modes) | none: boss decks only; no player role offers it |  | 1 of 1 |
+| `nemesis-board-power` | boss | a nemesis's clickable hero power that resolves on the public boards: Chronoacceleration gives a friendly minion Mega-Windfury and destroys it at the end of the turn (GILA_BOSS_48p with its client enchantment GILA_BOSS_48e: Power Overwhelming's end-of-turn rule), Pistol Barrage deals 2 damage to a minion and the minions next to it (GILA_BOSS_59p, Cone of Cold's adjacency, no Spell Damage). Offered by the play requirements only (a friendly or any minion), which read the exact boards; no hidden zone is read or written (c-enc-23 A1-A8, C1-C5; the enc23 bosspilot mode) | none: a boss hero power |  | 2 of 2 |
+| `nemesis-passive-immune` | boss | Glinda Crowskin's passive False Heart: her hero is Immune while she controls a minion that is not a permanent or dormant one (family 06's hero aura EncounterRules.HeroImmuneWhile, the rule of ULDA_706 No-Face for one side, re-checked at every aura update), a public board fact both sides' searches replay; started at match start by EncounterRules.ActivatePower, never offered as an option. The row carries the flag heroImmune, which keeps ULDA_706 away from her fight (c-enc-23 B1-B6; the enc23 bosspilot mode) | none: a boss hero power |  | 1 of 1 |
+| `nemesis-auto-cast` | boss | Captain Shivers' Plunder (0), "Draw a weapon from your deck", auto-cast as on the wiki (the client card is AI_MUST_PLAY): at the start of his turn, while his deck holds a weapon and his hand has room, one weapon of his own deck is drawn by the game RNG (family 09's AutoCast rule: never an option of the AI, so no choice of it depends on the deck order the search samples); the run player sees a draw. In practice it draws back Kingsbane, which his row equips at the start and whose Deathrattle shuffles it in (c-enc-23 D1-D6; the enc23 bosspilot mode) | none: a boss hero power |  | 1 of 1 |
+| `nemesis-hunt-card` | player, boss | a Monster Hunt boss deck card whose effect is public board and hero resolution or a change to its caster's own hand and deck, the same in either player's hands: Crowskin Faithful draws its controller a card and shuffles a new Faithful into that controller's deck when it dies (GILA_BOSS_49t), Crowskin Pact transforms a minion into a Faithful and takes control of it (GILA_BOSS_49t2; a run shrine picked goes dormant instead and never changes sides), Cursed Crewmember draws two cards and shuffles a copy of its caster's hand into that caster's deck (GILA_BOSS_60t: Dead Man's Hand's rule; the caster knows its own hand, the opponent sees a deck count), and Witchwood's Touch draws 1, 2 or 3 cards and gains 6, 8 or 10 Armor (GILA_BOSS_99t, 99t2, 99t3). No hidden zone of the other side is read or written (c-enc-23 B7-B12, D7-D10, E1-E9; the enc23 and enc23-cards bosspilot modes) | none: boss decks only; no player role offers it |  | 6 of 6 |
+| `run-treasure-nemesis-deck` | player | treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F3, c-treasures-F4) | none: a run treasure; no boss deck or generation pool offers it |  | 2 of 2 |
+| `nemesis-rejected-restart` | none | Infinite Toki's Alternate Timeline, "Start a new game, but your opponent's Health stays the same": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of her deck (data/dungeon-run/reference/encounters/F23.json "rejected") | phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6) |  | 1 of 1 |
+| `boss-plague-power` | boss | a clickable Plague Lord or Tekahn hero power whose whole effect is public board and hero state the engine resolves: Foreboding Fate triggers a friendly minion's Deathrattle (ULDA_BOSS_37p1, Play Dead's rule), Death's Gaze deals 1 damage to every minion and adds Untimely Demise to the boss's own hand when one dies (ULDA_BOSS_37p3), Evoke Panic makes the lowest-Health minion attack a neighbor in its own row (ULDA_BOSS_38p1; offered while a row holds two neighbors), Systematic Betrayal rotates both rows counter-clockwise as the run player sees them and gives the minions that switched sides +1/+1 (ULDA_BOSS_38p2: family 16's EncounterRules.Rotate; a run shrine keeps its place and side), Ashes Anew destroys a friendly Murloc and summons a Scaly Golem (ULDA_BOSS_39p2), Awaken the Flame turns a Sanctum Golem into an Enflamed Golem in place (ULDA_BOSS_67p1) and Curse of Flame marks an enemy minion with a public enchantment that deals 5 damage to every character at the boss's next turn if the minion lives (ULDA_BOSS_67p2). Every random pick uses the game RNG and is reported; no hidden zone is read (c-enc-24 X, K, V and T checks; the enc24 and plague24 bosspilot modes) | none: a boss hero power |  | 7 of 7 |
+| `boss-plague-passive` | boss | a passive Plague Lord or Tekahn hero power (started by EncounterRules.ActivatePower at the match start and at a form change) whose trigger or aura works on public state: Death's Embrace gives Reborn to the first minion of each player that dies in a turn (ULDA_BOSS_37p2), Murmurs of Mortality brings a random enemy minion to 1 Health after a friendly minion dies (ULDA_BOSS_38p3), Made of Murlocs keeps the boss's hero Immune and makes it lose 3 Health (not damage) after any Murloc dies, its next form entering at once (ULDA_BOSS_39p1: EncounterRules.LoseHealth), and Soul Pyre deals each player damage equal to the Cost of every card they play (ULDA_BOSS_67p3). Nothing hidden is read (c-enc-24 X, K, V and T checks; the enc24 and plague24 bosspilot modes) | none: a boss hero power |  | 4 of 4 |
+| `boss-plague-own-deck` | boss | Vesh's Mur-nado (ULDA_BOSS_39p3, "Shuffle all minions into your deck. After a Murloc dies, reduce this Cost by (1)"): every public board minion of both sides moves into the boss's own deck (MoveToDeck: a public shuffle, so the boss knows each card it gained and the run player sees them go; a run shrine goes dormant instead), and the Murlocs that died while the power was active are counted on the power (one private tag, EncounterRules.PlagueCount, that clones and the fair view carry) and lower its Cost at every aura update (c-enc-24 V checks; the plague24 bosspilot mode) | none: a boss hero power |  | 1 of 1 |
+| `boss-plague-card` | player, boss | a Plague Lord or Tekahn boss card or token whose effect is public board and hero resolution, the same in either player's hands: Untimely Demise deals 3 damage to every enemy (ULDA_BOSS_37t), Scaly Golem gives every Murloc of both boards +1/+1 when it dies (ULDA_BOSS_39m), Sanctum Golem cannot attack (ULDA_031), Enflamed Golem deals 3 damage to all minions and summons a Sanctum Golem when it dies (ULDA_032), Rakanishu makes its owner's Lackeys 4/4 for the rest of the game (ULDA_033: Dark Pharaoh Tekahn's player enchantment ULD_168e, a hand-and-board aura) and The Final Plague?! summons C'Thun, N'Zoth, Y'Shaarj and Yogg-Saron without their Battlecries (ULDA_BOSS_67t); Vesh's special cards: Mrgl Mrgl Nyah Nyah summons 3 (LOEA10_5) or 5 (LOEA10_5H) random Murlocs that died this game (Anyfin Can Happen's rule over the graveyards), Demonic Presence draws 3 and gains 10 Armor (KARA_13_12H) and Giantfin draws 2 at the end of its owner's turn (LOEA16_24H). No hidden zone of the other side is read or written (c-enc-24 X, V and T checks; the enc24 bosspilot modes) | none: boss decks only; no player role offers it |  | 10 of 10 |
+| `run-treasure-plague-lord` | player | treasure: only the player can hold it; offered on act runs of an encounter schedule only (run-v1.json "runs": "encounters"), where a Plague Lord can be met. Its spell deals 10 damage (Spell Damage applies), and as much again: to the Plague Lord at once in a Plague Lord fight, otherwise banked on the caster's controller (EncounterRules.PlagueCount; a cast by either player counts), reported by the match harvest (RunMatchEnd.GnomebliteratorDamage) and carried by the run into its next Plague Lord fight (DungeonRunState.PlagueLordDamage, spent by that fight). Nothing hidden is read (c-enc-24 G checks) | none: a run treasure; no boss deck or generation pool offers it |  | 1 of 1 |
 
 ### Validation (current DungeonRunValidator admission)
 
@@ -611,17 +676,17 @@ Client entity checks ran against the CARD table in `data/dungeon-run/reference/c
 
 | Validation | Rows |
 | --- | ---: |
-| passes (all forms) | 3,804 |
-| rejected (one rule or more) | 116 |
-| not applicable | 998 |
-| rejected: `not-scripted` | 108 |
-| rejected: `encounter-rejected` | 7 |
+| passes (all forms) | 3,984 |
+| rejected (one rule or more) | 43 |
+| not applicable | 965 |
+| rejected: `not-scripted` | 33 |
+| rejected: `encounter-rejected` | 9 |
 | rejected: `admission:unused-card` | 1 |
 | rejected: `rule-rejected` | 1 |
 | rejected: `admission:boss-rejected-data` | 1 |
 | rejected: `admission:turn-rewind` | 1 |
 | rejected: `admission:start-of-game-draw` | 1 |
-| rejected: `admission:finale-state` | 1 |
+| rejected: `admission:boss-tombs-c-rejected` | 1 |
 
 Current run data as shipped: **0 validator errors**.
 
@@ -691,18 +756,18 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 
 | Input | SHA-256 (first 16) |
 | --- | --- |
-| `data/dungeon-run/catalog-v1.json` | `a9a36119aaa0efb2` |
-| `data/dungeon-run/encounters-v1.json` | `df9d2b39964114a4` |
+| `data/dungeon-run/catalog-v1.json` | `6d68cbdbd4b5fa7f` |
+| `data/dungeon-run/encounters-v1.json` | `0bb39582990991ea` |
 | `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
 | `data/dungeon-run/reference/adventure-reference.csv` | `4a608dfa596733e7` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |
 | `data/dungeon-run/reference/buckets.json` | `b3015218a0ea9193` |
 | `data/dungeon-run/reference/client-tables.json` | `c7b51c98f568706a` |
-| `data/dungeon-run/run-v1.json` | `747a21c854d7a5b5` |
+| `data/dungeon-run/run-v1.json` | `94fa5489fe38010a` |
 | `data/dungeon-run/schedule-v1.json` | `36b0c79d6a1fe287` |
 | `data/dungeon-run/tavern-v1.json` | `f69c185d773c8414` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
-| `tools/restoration-ledger/curation.json` | `72e920742a1b949e` |
+| `tools/restoration-ledger/curation.json` | `fdd341aa58d720b7` |
 
 Plus the engine card data and DungeonRunContent compiled from the working tree.

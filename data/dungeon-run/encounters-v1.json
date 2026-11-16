@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "encountersVersion": 1,
   "generatedBy": "tools/dungeon-run-catalog (encounters); do not edit by hand",
-  "sources": { "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45", "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8", "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466", "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206", "reference/encounters/F06.json": "950c2268088073de3055ab49d444a40be440198596d0b90ef54a4a1520c644c3", "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b", "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd", "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a", "reference/encounters/F10.json": "525748f2fdb0cfa6c69d81f806c745152b5377df5c99f7a1ecfd1fe65933fe7d", "reference/encounters/F11.json": "ebc297d23557da107798a4f357e03a658bf3d2d8e0b32c289dcb2426d0b573ce", "reference/encounters/F12.json": "c5e7c46ccf62527800de536de38c875367cee2653c4a212a02430932164d93c0", "reference/encounters/F13.json": "af231d6f727a76abe7d59b79992da06d29aeee81e6c431023b1a127261b5f177", "reference/encounters/F14.json": "43ac1271cbe34f990098976871e27ba51dc803442c2a22472197bedfa5b89619", "reference/encounters/F15.json": "0aae24c5914850b47cd9c4cb558d1c47a59c6c1329ce9418646626467f1b19c7", "reference/encounters/F16.json": "cd862d1bf2097c191844e99a9f136cea69acf3d495dc061e2067b729eb793789", "reference/encounters/F17.json": "73744ccfc40c95c94b27fcd34fc873d78427d5aaec81f2670669584b834ddaec", "reference/encounters/F18.json": "7320af1249124f3dce84ce8df0e931a3d8bbab72927779bde1e152eb632c6ac5", "reference/encounters/F19.json": "1704eafd9c86b239c17e07eb7ac59c19b58e6a5de36e309b222edfd48e4d783c" },
+  "sources": { "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45", "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8", "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466", "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206", "reference/encounters/F06.json": "950c2268088073de3055ab49d444a40be440198596d0b90ef54a4a1520c644c3", "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b", "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd", "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a", "reference/encounters/F10.json": "1a60d503f8dba089d546f68fb9651f123116b8fe0db56cd278adddb970ed229d", "reference/encounters/F11.json": "ebc297d23557da107798a4f357e03a658bf3d2d8e0b32c289dcb2426d0b573ce", "reference/encounters/F12.json": "c5e7c46ccf62527800de536de38c875367cee2653c4a212a02430932164d93c0", "reference/encounters/F13.json": "af231d6f727a76abe7d59b79992da06d29aeee81e6c431023b1a127261b5f177", "reference/encounters/F14.json": "43ac1271cbe34f990098976871e27ba51dc803442c2a22472197bedfa5b89619", "reference/encounters/F15.json": "0aae24c5914850b47cd9c4cb558d1c47a59c6c1329ce9418646626467f1b19c7", "reference/encounters/F16.json": "cd862d1bf2097c191844e99a9f136cea69acf3d495dc061e2067b729eb793789", "reference/encounters/F17.json": "73744ccfc40c95c94b27fcd34fc873d78427d5aaec81f2670669584b834ddaec", "reference/encounters/F18.json": "7320af1249124f3dce84ce8df0e931a3d8bbab72927779bde1e152eb632c6ac5", "reference/encounters/F19.json": "1704eafd9c86b239c17e07eb7ac59c19b58e6a5de36e309b222edfd48e4d783c", "reference/encounters/F20.json": "8a549062ecca450bac7899944b2f134a25e9391616e62930ad6619e2ad5f4326", "reference/encounters/F21.json": "2b7cbe38de910d7aa304ff9818138b4d167bed1c6161219a695da171483357bb", "reference/encounters/F22.json": "8e25e86416663b1f9a5f36b67e4e2832e6628f6d3aefb73c8a435aa4c41c77e6", "reference/encounters/F23.json": "08dd3bf1382e8bb6a8aeceacc8a0cbeb71b65defc0482723266a23728b9f0e5f", "reference/encounters/F24.json": "4bbd47c48d857e283e16679d2f6d414d2b331330a76d88f2f139287064e5f259" },
   "decks": {
     "enc-dala_01_chomper": ["CS2_005", "CFM_614", "LOOT_218", "CS2_168", "OG_156", "CS2_120", "EX1_170", "UNG_937", "LOOT_069", "CFM_655", "CS2_119", "LOOT_131", "CS2_005", "CFM_614", "LOOT_218", "CS2_168", "OG_156", "CS2_120", "EX1_170", "UNG_937", "LOOT_069", "CFM_655", "CS2_119", "LOOT_131", "KAR_300", "AT_037", "GIL_571", "EX1_570", "TRL_119", "OG_045"],
     "enc-dala_02_awilo": ["CFM_940", "CS2_114", "CS2_105", "BOT_067", "DAL_062", "CS2_106", "CS2_188", "AT_097", "EX1_393", "CFM_654", "TRL_570", "AT_111", "LOE_086", "CFM_940", "CS2_114", "CS2_105", "BOT_067", "DAL_062", "CS2_106", "CS2_188", "AT_097", "EX1_393", "CFM_654", "TRL_570", "AT_111", "LOE_086", "DAL_769", "GIL_654", "EX1_604", "NEW1_011"],
@@ -82,16 +82,16 @@
     "enc-gila_21_rottooth": ["EX1_578", "OG_313", "OG_313", "GVG_030", "OG_048", "CS2_013", "AT_039", "ICC_419", "LOOT_258", "CS2_125", "EX1_578", "GVG_030", "OG_048", "CS2_013", "AT_039", "ICC_419", "LOOT_258", "CS2_125", "CS2_005", "ICC_079", "TRL_243", "EX1_570", "AT_042", "LOE_050", "CS2_172", "EX1_017", "CS2_120", "CS2_005", "ICC_079", "TRL_243"],
     "enc-gila_22_willie": ["CS2_072", "CFM_630", "CFM_630", "CFM_630", "OG_070", "AT_031", "EX1_131", "EX1_124", "BRM_007", "EX1_522", "AT_033", "ICC_850", "CS2_076", "CS2_080", "BRM_008", "CS2_077", "GVG_028", "EX1_010", "CFM_669", "CS2_161", "CS2_072", "OG_070", "AT_031", "EX1_131", "EX1_124", "BRM_007", "EX1_522", "AT_033", "ICC_850", "CS2_076"],
     "enc-gila_23_grubb": ["EX1_028", "EX1_607", "CS2_108", "UNG_923", "UNG_923", "EX1_391", "AT_064", "EX1_392", "CS2_104", "LOE_022", "LOE_022", "GVG_054", "CFM_631", "EX1_407", "CS2_197", "CS2_200", "LOOT_383", "CS2_200", "LOOT_383", "UNG_812", "EX1_028", "EX1_607", "CS2_108", "EX1_391", "AT_064", "EX1_392", "CS2_104", "GVG_054", "CFM_631", "EX1_407"],
-    "enc-gila_24_groddo": ["EX1_606", "EX1_606", "ICC_085", "GVG_026", "LOOT_187", "LOOT_187", "OG_072", "ICC_201", "ICC_201", "AT_036", "FP1_021", "EX1_029", "FP1_028", "FP1_028", "FP1_024", "FP1_024", "tt_004", "tt_004", "ICC_702", "ICC_702", "ICC_854", "FP1_031", "EX1_097", "EX1_097", "GIL_682", "GIL_667", "ICC_019", "FP1_012", "FP1_012", "OG_133"],
+    "enc-gila_24_groddo": ["GILA_BOSS_99t2", "GILA_BOSS_99t2", "ICC_085", "GVG_026", "LOOT_187", "LOOT_187", "OG_072", "ICC_201", "ICC_201", "AT_036", "FP1_021", "EX1_029", "FP1_028", "FP1_028", "FP1_024", "FP1_024", "tt_004", "tt_004", "ICC_702", "ICC_702", "ICC_854", "FP1_031", "EX1_097", "EX1_097", "GIL_682", "GIL_667", "ICC_019", "FP1_012", "FP1_012", "OG_133"],
     "enc-gila_25_ivan": ["AT_061", "EX1_544", "CS2_084", "DS1_184", "FP1_011", "AT_060", "KAR_004", "LOE_021", "EX1_610", "EX1_611", "CFM_026", "GIL_577", "EX1_554", "EX1_609", "LOOT_079", "NEW1_031", "NEW1_031", "KAR_006", "EX1_536", "EX1_536", "ICC_204", "EX1_537", "LOOT_080", "LOOT_080", "OG_211", "EX1_080", "CFM_653", "CFM_653", "UNG_087", "ICC_029"],
     "enc-gila_26_gnomenapper": ["GILA_BOSS_26t2", "GILA_BOSS_26t2", "GILA_BOSS_26t2", "GILA_BOSS_26t2", "EX1_608", "EX1_608", "EX1_332", "EX1_332", "EX1_332", "GVG_011", "EX1_522", "EX1_581", "EX1_581", "AT_033", "AT_033", "ICC_407", "LOOT_415", "AT_027", "CS2_104", "CS2_104", "GVG_053", "GVG_082", "EX1_029", "NEW1_019", "NEW1_029", "EX1_083", "EX1_093", "EX1_093", "EX1_085", "EX1_112"],
-    "enc-gila_27_experiment_3c": ["EX1_606", "EX1_606", "GILA_BOSS_27t", "GILA_BOSS_27t", "GILA_BOSS_27t", "CS2_013", "CS2_013", "OG_313", "EX1_164", "EX1_164", "CFM_315", "UNG_915", "EX1_531", "GVG_048", "EX1_538", "EX1_534", "AT_076", "GVG_027", "EX1_565", "UNG_201", "LOOT_344", "LOE_113", "EX1_320", "LOOT_368", "LOE_022", "EX1_509", "CFM_637", "NEW1_023", "UNG_073", "EX1_103"],
+    "enc-gila_27_experiment_3c": ["GILA_BOSS_99t2", "GILA_BOSS_99t2", "GILA_BOSS_27t", "GILA_BOSS_27t", "GILA_BOSS_27t", "CS2_013", "CS2_013", "OG_313", "EX1_164", "EX1_164", "CFM_315", "UNG_915", "EX1_531", "GVG_048", "EX1_538", "EX1_534", "AT_076", "GVG_027", "EX1_565", "UNG_201", "LOOT_344", "LOE_113", "EX1_320", "LOOT_368", "LOE_022", "EX1_509", "CFM_637", "NEW1_023", "UNG_073", "EX1_103"],
     "enc-gila_29_sazzmi": ["GILA_BOSS_29t", "GILA_BOSS_29t", "CFM_316", "CFM_316", "CFM_316", "EX1_360", "EX1_382", "GVG_011", "EX1_091", "CS1_113", "LOOT_165", "OG_241", "OG_241", "OG_241", "CFM_790", "CFM_790", "LOOT_069", "LOOT_069", "LOOT_069", "KAR_114", "EX1_360", "EX1_382", "GVG_011", "EX1_091", "CS1_113", "EX1_334", "CFM_603", "CFM_661", "EX1_085", "EX1_016"],
     "enc-gila_30_gretta": ["LOOT_231", "LOOT_231", "EX1_277", "CS2_027", "CS2_027", "UNG_020", "EX1_608", "EX1_608", "GVG_003", "GVG_003", "CS2_023", "CS2_023", "LOOT_101", "BRM_002", "BRM_002", "EX1_289", "EX1_295", "EX1_294", "EX1_594", "UNG_948", "UNG_948", "GIL_508", "CFM_120", "KAR_712", "KAR_712", "AT_111", "GIL_667", "GIL_667", "KAR_711", "KAR_711"],
     "enc-gila_31_gnarlroot": ["CS2_009", "CS2_009", "CFM_614", "CS2_013", "EX1_158", "EX1_158", "FP1_019", "FP1_019", "EX1_571", "EX1_571", "LOE_010", "UNG_831", "UNG_831", "EX1_066", "FP1_003", "UNG_808", "UNG_814", "CS1_069", "KAR_041", "OG_153", "CFM_614", "CS2_013", "LOE_010", "EX1_066", "FP1_003", "UNG_808", "UNG_814", "CS1_069", "KAR_041", "OG_153"],
     "enc-gila_32_niira": ["KAR_300", "AT_037", "OG_313", "CFM_614", "CFM_614", "CFM_614", "CFM_753", "CFM_753", "LOOT_258", "UNG_809", "UNG_809", "GIL_558", "GIL_558", "GIL_513", "GIL_513", "LOOT_152", "OG_256", "EX1_005", "AT_090", "NEW1_038", "KAR_300", "AT_037", "OG_313", "LOOT_258", "LOOT_152", "OG_256", "EX1_005", "AT_090", "UNG_075", "CFM_647"],
     "enc-gila_33_scarecrow": ["KAR_300", "KAR_300", "GIL_600", "GIL_600", "GVG_050", "GVG_050", "EX1_556", "EX1_556", "EX1_556", "GVG_027", "GVG_027", "GVG_096", "GVG_096", "GVG_006", "GVG_006", "GIL_809", "GIL_809", "GIL_809", "GVG_069", "GVG_069", "CS2_221", "CS2_221", "CS2_221", "GVG_083", "GVG_083", "GVG_105", "GVG_105", "GVG_113", "GVG_079", "GVG_114"],
-    "enc-gila_34_havnixx": ["EX1_606", "EX1_606", "CS2_003", "GVG_009", "GVG_009", "DS1_233", "DS1_233", "EX1_622", "CS2_234", "CS2_234", "AT_014", "AT_014", "EX1_339", "EX1_345", "OG_100", "OG_335", "ICC_207", "OG_094", "CS1_113", "GIL_665", "GIL_665", "EX1_596", "CS2_062", "OG_116", "EX1_313", "OG_337", "AT_085", "BRM_028", "OG_142", "EX1_572"],
+    "enc-gila_34_havnixx": ["GILA_BOSS_99t2", "GILA_BOSS_99t2", "CS2_003", "GVG_009", "GVG_009", "DS1_233", "DS1_233", "EX1_622", "CS2_234", "CS2_234", "AT_014", "AT_014", "EX1_339", "EX1_345", "OG_100", "OG_335", "ICC_207", "OG_094", "CS1_113", "GIL_665", "GIL_665", "EX1_596", "CS2_062", "OG_116", "EX1_313", "OG_337", "AT_085", "BRM_028", "OG_142", "EX1_572"],
     "enc-gila_35_chupacabran": ["GILA_BOSS_35t", "GILA_BOSS_35t", "ICC_079", "CS2_012", "CS2_012", "EX1_570", "GIL_200", "GIL_200", "GIL_113", "GIL_113", "CS2_171", "CS2_171", "OG_326", "CS2_124", "CS2_124", "LOOT_383", "UNG_812", "UNG_812", "GIL_120", "GIL_120", "ICC_079", "EX1_570", "OG_326", "LOOT_383", "GIL_558", "GIL_143", "EX1_010", "EX1_017", "CS2_172", "TRL_243"],
     "enc-gila_36_griselda": ["LOOT_231", "LOOT_231", "UNG_018", "UNG_018", "CS2_024", "CS2_024", "UNG_846", "UNG_846", "CFM_065", "UNG_021", "CS2_033", "GIL_645", "KAR_036", "UNG_809", "UNG_809", "UNG_845", "UNG_845", "GIL_819", "GIL_819", "GIL_119", "CFM_065", "UNG_021", "CS2_033", "GIL_645", "KAR_036", "GIL_119", "UNG_928", "UNG_084", "UNG_816", "UNG_847"],
     "enc-gila_37_wharrgarbl": ["GILA_BOSS_37t", "GILA_BOSS_37t", "LOE_026", "UNG_942", "UNG_201", "CFM_310", "LOE_113", "LOEA10_3", "NEW1_017", "EX1_509", "EX1_506", "UNG_073", "UNG_073", "EX1_050", "EX1_103", "EX1_103", "EX1_507", "UNG_937", "UNG_937", "OG_161", "LOE_026", "UNG_201", "CFM_310", "LOE_113", "LOEA10_3", "NEW1_017", "EX1_509", "EX1_506", "EX1_050", "EX1_507"],
@@ -105,22 +105,26 @@
     "enc-gila_45_sthara": ["ICC_212", "ICC_212", "FP1_023", "FP1_023", "OG_070", "OG_070", "OG_114", "OG_114", "GIL_543", "GIL_665", "CS2_057", "ICC_469", "EX1_315", "EX1_320", "GVG_100", "OG_338", "EX1_050", "EX1_050", "FP1_029", "FP1_029", "GIL_543", "GIL_665", "CS2_057", "ICC_469", "EX1_315", "EX1_320", "GVG_100", "CS2_065", "EX1_319", "CS2_064"],
     "enc-gila_46_vitus": ["AT_037", "AT_037", "CS2_011", "CS2_011", "LOOT_054", "LOOT_054", "GVG_041", "GVG_041", "CFM_759", "CFM_759", "CFM_759", "CS2_073", "CS2_073", "CS2_046", "CS2_046", "EX1_059", "FP1_003", "FP1_003", "EX1_007", "EX1_007", "EX1_597", "EX1_412", "EX1_412", "CFM_063", "EX1_396", "ICC_466", "ICC_466", "CFM_668", "CFM_668", "EX1_562"],
     "enc-gila_47_shudderwock": ["GVG_005", "EX1_144", "EX1_144", "NEW1_004", "NEW1_004", "LOOT_014", "ICC_407", "CFM_751", "GVG_056", "GVG_056", "LOOT_154", "EX1_011", "GIL_815", "GIL_815", "FP1_003", "EX1_082", "EX1_050", "CFM_853", "LOOT_347", "LOOT_516", "BRM_026", "GIL_125", "GIL_125", "ICC_466", "ICC_466", "GVG_069", "UNG_851", "GVG_090", "CFM_685", "UNG_848"],
+    "enc-gila_48_infinite_toki": ["GILA_907", "GILA_BOSS_99t3", "GILA_BOSS_99t3", "KAR_009", "KAR_009", "UNG_028", "UNG_020", "UNG_020", "UNG_941", "UNG_941", "EX1_608", "EX1_608", "GVG_003", "GVG_003", "EX1_287", "AT_002", "CS2_026", "EX1_295", "UNG_024", "EX1_294", "AT_007", "AT_007", "OG_090", "OG_090", "CS2_028", "CFM_760", "CFM_760", "FP1_030", "GILA_907", "EX1_287"],
+    "enc-gila_49_glinda": ["GILA_BOSS_99t3", "GILA_BOSS_99t3", "GILA_BOSS_49t", "GILA_BOSS_49t", "GILA_BOSS_49t", "GILA_BOSS_49t2", "GILA_BOSS_49t2", "FP1_023", "LOOT_014", "GIL_191", "CS2_062", "CS2_062", "GVG_045", "GVG_045", "EX1_313", "EX1_313", "EX1_309", "CFM_663", "CFM_663", "CFM_751", "CFM_751", "EX1_312", "LOOT_368", "LOOT_368", "OG_239", "FP1_009", "EX1_595", "EX1_595", "GIL_616", "GIL_616"],
     "enc-gila_50_whisperer": ["CFM_614", "LOOT_051", "GIL_607t", "NEW1_031", "EX1_617", "GVG_003", "OG_223", "GIL_145", "ICC_802", "GIL_835", "CS2_072", "OG_027", "OG_027", "CFM_696", "LOE_007", "EX1_400", "KAR_036", "FP1_003", "EX1_055", "EX1_055", "GVG_067", "GVG_067", "GIL_207", "AT_086", "GIL_680", "GVG_068", "GVG_068", "EX1_284", "FP1_030", "GVG_118"],
     "enc-gila_51_garrow": ["OG_198", "OG_198", "AT_031", "AT_031", "GIL_696", "GIL_696", "AT_033", "AT_033", "LOE_012", "LOE_012", "UNG_926", "UNG_926", "UNG_926", "UNG_926", "LOOT_154", "LOOT_154", "CFM_790", "CFM_790", "BRM_026", "BRM_026", "ICC_025", "ICC_025", "CFM_669", "CFM_669", "EX1_116", "GIL_682", "GIL_682", "LOOT_383", "LOOT_383", "EX1_577"],
     "enc-gila_52_pete": ["CS2_072", "CS2_072", "CFM_630", "EX1_145", "CS2_073", "CS2_073", "UNG_856", "KAR_069", "KAR_069", "GIL_506", "GIL_506", "AT_031", "AT_031", "EX1_131", "EX1_131", "EX1_124", "EX1_124", "EX1_129", "GIL_696", "AT_033", "EX1_613", "EX1_134", "CS2_077", "NEW1_005", "NEW1_004", "EX1_010", "ICC_468", "GVG_081", "GVG_081", "EX1_095"],
-    "enc-gila_52_pete-f1": ["EX1_606", "EX1_606", "OG_047", "OG_047", "GIL_637", "GIL_637", "CS2_011", "CS2_011", "CS2_012", "CS2_012", "EX1_570", "EX1_570", "LOOT_054", "LOOT_054", "AT_039", "AT_039", "CFM_316", "CFM_316", "CFM_316", "CFM_333", "EX1_534", "EX1_534", "FP1_002", "FP1_002", "ICC_812", "ICC_812", "ICC_031", "ICC_031", "ICC_905", "ICC_905"],
-    "enc-gila_54_cragtorr": ["EX1_606", "EX1_606", "UNG_116", "CS2_013", "CS2_013", "GVG_032", "GVG_032", "FP1_019", "FP1_019", "EX1_164", "EX1_164", "NEW1_008", "EX1_178", "EX1_178", "UNG_086", "UNG_086", "CS2_232", "BRM_028", "GIL_667", "EX1_586", "EX1_586", "OG_042", "KAR_711", "KAR_711", "GVG_121", "GVG_121", "EX1_105", "EX1_105", "EX1_620", "EX1_620"],
-    "enc-gila_55_azalina": ["EX1_606", "GILA_BOSS_55t2", "GILA_BOSS_55t2", "GIL_553", "GIL_553", "GVG_041", "GVG_041", "OG_195", "OG_195", "CFM_308", "FP1_020", "FP1_020", "AT_073", "AT_073", "EX1_132", "EX1_130", "EX1_349", "EX1_349", "EX1_366", "ICC_802", "ICC_802", "UNG_956", "UNG_956", "NEW1_019", "NEW1_019", "GIL_513", "GIL_513", "GIL_513", "EX1_093", "EX1_093"],
+    "enc-gila_52_pete-f1": ["GILA_BOSS_99t2", "GILA_BOSS_99t2", "OG_047", "OG_047", "GIL_637", "GIL_637", "CS2_011", "CS2_011", "CS2_012", "CS2_012", "EX1_570", "EX1_570", "LOOT_054", "LOOT_054", "AT_039", "AT_039", "CFM_316", "CFM_316", "CFM_316", "CFM_333", "EX1_534", "EX1_534", "FP1_002", "FP1_002", "ICC_812", "ICC_812", "ICC_031", "ICC_031", "ICC_905", "ICC_905"],
+    "enc-gila_54_cragtorr": ["GILA_BOSS_99t2", "GILA_BOSS_99t2", "UNG_116", "CS2_013", "CS2_013", "GVG_032", "GVG_032", "FP1_019", "FP1_019", "EX1_164", "EX1_164", "NEW1_008", "EX1_178", "EX1_178", "UNG_086", "UNG_086", "CS2_232", "BRM_028", "GIL_667", "EX1_586", "EX1_586", "OG_042", "KAR_711", "KAR_711", "GVG_121", "GVG_121", "EX1_105", "EX1_105", "EX1_620", "EX1_620"],
+    "enc-gila_55_azalina": ["GILA_BOSS_99t2", "GILA_BOSS_55t2", "GILA_BOSS_55t2", "GIL_553", "GIL_553", "GVG_041", "GVG_041", "OG_195", "OG_195", "CFM_308", "FP1_020", "FP1_020", "AT_073", "AT_073", "EX1_132", "EX1_130", "EX1_349", "EX1_349", "EX1_366", "ICC_802", "ICC_802", "UNG_956", "UNG_956", "NEW1_019", "NEW1_019", "GIL_513", "GIL_513", "GIL_513", "EX1_093", "EX1_093"],
     "enc-gila_56_face_collector": ["CS2_072", "CS2_072", "CS2_074", "CS2_074", "EX1_134", "EX1_134", "EX1_124", "EX1_124", "EX1_581", "EX1_581", "EX1_129", "EX1_129", "CS2_076", "CS2_076", "CS2_077", "EX1_131", "EX1_131", "EX1_096", "EX1_096", "EX1_556", "EX1_556", "CS2_117", "CS2_117", "CS2_182", "CS2_182", "CS2_179", "CS2_179", "CS2_200", "EX1_284", "EX1_284"],
     "enc-gila_57_raeth": ["GILA_BOSS_57t", "GILA_BOSS_57t", "GILA_BOSS_57t", "GILA_BOSS_57t", "BRM_017", "BRM_017", "ICC_212", "ICC_212", "LOOT_507", "LOOT_507", "UNG_831", "UNG_831", "EX1_312", "EX1_312", "EX1_007", "EX1_007", "tt_004", "tt_004", "ICC_702", "ICC_702", "EX1_595", "EX1_595", "LOOT_161", "LOOT_161", "EX1_399", "EX1_399", "EX1_110", "KAR_041", "KAR_041", "EX1_016"],
     "enc-gila_58_grum": ["EX1_028", "CFM_940", "CFM_940", "EX1_391", "EX1_391", "AT_064", "AT_064", "EX1_392", "EX1_392", "ICC_837", "ICC_837", "CS2_104", "CS2_104", "AT_069", "AT_069", "GVG_052", "GVG_052", "CS2_197", "CS2_197", "CS2_197", "CS2_200", "LOOT_383", "OG_173", "OG_173", "AT_120", "EX1_586", "KAR_711", "GVG_121", "EX1_105", "EX1_620"],
+    "enc-gila_59_godfrey": ["CS2_084", "CS2_084", "LOE_021", "EX1_610", "GIL_607t", "GIL_607t", "ICC_021", "ICC_021", "EX1_534", "EX1_534", "LOOT_520", "LOOT_520", "LOOT_522", "LOOT_522", "GVG_049", "EX1_007", "EX1_007", "AT_086", "AT_086", "OG_272", "OG_272", "UNG_087", "GIL_646", "GIL_646", "BRM_019", "BRM_019", "EX1_399", "EX1_399", "OG_318"],
+    "enc-gila_60_shivers": ["GILA_BOSS_60t", "GILA_BOSS_60t", "ICC_419", "ICC_419", "CS2_074", "CS2_074", "ICC_233", "ICC_233", "ICC_221", "CS2_233", "CS2_233", "UNG_823", "OG_267", "OG_267", "GVG_022", "GVG_022", "GVG_028", "ICC_091", "ICC_091", "EX1_066", "EX1_100", "KAR_712", "KAR_712", "NEW1_024", "FP1_030", "GVG_118", "GVG_121", "GVG_121", "ICC_221", "UNG_823"],
     "enc-gila_61_hagatha": ["GILA_BOSS_61t3", "GILA_BOSS_61t3", "GILA_BOSS_61t", "GILA_BOSS_61t", "GILA_BOSS_27t", "GILA_BOSS_27t", "GIL_800", "ICC_835", "GIL_677", "AT_052", "AT_052", "AT_054", "NEW1_010", "GIL_608", "GIL_608", "GIL_693", "GIL_693", "EX1_303", "GIL_618", "GIL_825", "GIL_681", "GIL_681", "EX1_043", "EX1_043", "GIL_620", "CFM_668", "CFM_668", "BRM_028", "CFM_060", "CFM_060", "GIL_623", "GIL_623", "OG_153", "GVG_118", "ICC_314", "EX1_563", "KAR_711", "KAR_711", "EX1_105", "EX1_105"],
-    "enc-gila_62_gustave": ["EX1_606", "EX1_606", "OG_313", "OG_313", "GVG_035", "EX1_549", "EX1_549", "CFM_334", "CFM_334", "GVG_017", "GVG_017", "CFM_338", "CFM_338", "ICC_419", "ICC_419", "EX1_539", "EX1_539", "EX1_534", "EX1_534", "UNG_919", "GVG_049", "EX1_543", "CS2_120", "CS2_120", "EX1_014", "LOOT_161", "LOOT_161", "AT_090", "AT_090", "NEW1_041"],
-    "enc-gila_63_sephira": ["EX1_606", "CS2_005", "CS2_005", "KAR_300", "KAR_300", "CFM_614", "CFM_614", "CS2_009", "CS2_009", "CFM_614", "CFM_614", "LOOT_051", "LOOT_051", "CS2_013", "CS2_013", "CS2_012", "NEW1_007", "EX1_164", "ICC_085", "CS2_039", "CS2_039", "CS2_046", "CS2_046", "BRM_022", "KAR_029", "GIL_816", "FP1_007", "UNG_083", "UNG_076", "EX1_033"],
+    "enc-gila_62_gustave": ["GILA_BOSS_99t2", "GILA_BOSS_99t2", "OG_313", "OG_313", "GVG_035", "EX1_549", "EX1_549", "CFM_334", "CFM_334", "GVG_017", "GVG_017", "CFM_338", "CFM_338", "ICC_419", "ICC_419", "EX1_539", "EX1_539", "EX1_534", "EX1_534", "UNG_919", "GVG_049", "EX1_543", "CS2_120", "CS2_120", "EX1_014", "LOOT_161", "LOOT_161", "AT_090", "AT_090", "NEW1_041"],
+    "enc-gila_63_sephira": ["GILA_BOSS_99t2", "CS2_005", "CS2_005", "KAR_300", "KAR_300", "CFM_614", "CFM_614", "CS2_009", "CS2_009", "CFM_614", "CFM_614", "LOOT_051", "LOOT_051", "CS2_013", "CS2_013", "CS2_012", "NEW1_007", "EX1_164", "ICC_085", "CS2_039", "CS2_039", "CS2_046", "CS2_046", "BRM_022", "KAR_029", "GIL_816", "FP1_007", "UNG_083", "UNG_076", "EX1_033"],
     "enc-gila_64_winslow": ["GIL_640", "GIL_640", "GIL_640", "CS2_003", "CS2_003", "EX1_622", "CS2_234", "CS2_234", "AT_014", "AT_014", "AT_014", "GIL_813", "GIL_813", "OG_100", "CFM_662", "GVG_008", "ICC_215", "CS1_113", "AT_035", "AT_035", "LOOT_026", "LOOT_026", "KAR_011", "KAR_011", "CFM_851", "EX1_085", "EX1_085", "EX1_095", "LOOT_137", "EX1_572"],
     "enc-gila_65_gobbles": ["CFM_315", "OG_179", "AT_062", "OG_045", "CFM_316", "DS1_178", "CS2_171", "CS2_172", "OG_326", "LOE_046", "EX1_083", "GIL_624", "CFM_315", "OG_179", "AT_062", "OG_045", "CFM_316", "DS1_178", "CS2_171", "CS2_172", "OG_326", "LOE_046", "GIL_624", "KAR_005", "EX1_531", "EX1_017", "CS2_120", "CS2_125", "CS2_237", "EX1_162"],
     "enc-gila_66_mute": ["EX1_621", "EX1_621", "EX1_332", "EX1_332", "CS2_235", "CS2_235", "CS2_004", "CS2_004", "KAR_013", "KAR_013", "EX1_626", "EX1_045", "EX1_045", "EX1_007", "EX1_007", "UNG_844", "UNG_844", "LOE_107", "EX1_048", "FP1_016", "EX1_626", "LOE_107", "EX1_048", "FP1_016", "CS1_130", "CS2_234", "CS2_181", "EX1_405", "EX1_341", "CS1_112"],
-    "enc-gila_67_hannigul": ["EX1_606", "EX1_606", "CFM_316", "CFM_316", "OG_216", "OG_216", "OG_241", "OG_241", "EX1_316", "EX1_316", "OG_116", "OG_116", "EX1_304", "EX1_304", "GIL_558", "GIL_558", "FP1_002", "FP1_002", "tt_004", "tt_004", "LOOT_069", "LOOT_069", "GIL_125", "GIL_125", "ICC_905", "ICC_905", "KAR_041", "KAR_041", "LOOT_153", "EX1_562"],
+    "enc-gila_67_hannigul": ["GILA_BOSS_99t2", "GILA_BOSS_99t2", "CFM_316", "CFM_316", "OG_216", "OG_216", "OG_241", "OG_241", "EX1_316", "EX1_316", "OG_116", "OG_116", "EX1_304", "EX1_304", "GIL_558", "GIL_558", "FP1_002", "FP1_002", "tt_004", "tt_004", "LOOT_069", "LOOT_069", "GIL_125", "GIL_125", "ICC_905", "ICC_905", "KAR_041", "KAR_041", "LOOT_153", "EX1_562"],
     "enc-gila_68_rancel": ["GILA_BOSS_68t", "GILA_BOSS_68t", "GILA_BOSS_68t", "ICC_054", "ICC_054", "GIL_577", "CFM_316", "CFM_316", "ICC_809", "ICC_809", "CS2_063", "UNG_831", "UNG_831", "GIL_665", "EX1_312", "OG_239", "GIL_558", "GIL_558", "CFM_790", "CFM_790", "LOOT_069", "LOOT_069", "GIL_622", "GIL_622", "ICC_905", "ICC_905", "GIL_623", "GIL_623", "LOOT_383", "LOOT_383"],
     "enc-loot_04_sturmi": ["OG_179", "OG_179", "EX1_610", "EX1_611", "BRM_013", "BRM_013", "NEW1_031", "NEW1_031", "EX1_536", "EX1_536", "OG_292", "OG_292", "EX1_539", "EX1_539", "EX1_538", "EX1_538", "OG_216", "OG_216", "OG_309", "EX1_534", "EX1_534", "LOE_046", "LOE_046", "LOE_029", "EX1_096", "EX1_096", "LOE_047", "LOE_047", "EX1_016", "OG_133"],
     "enc-loot_05_hamm": ["EX1_604", "EX1_604", "EX1_604", "EX1_604", "BRM_016", "BRM_016", "BRM_016", "BRM_016", "EX1_407", "EX1_407", "ICC_405", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "EX1_082", "GVG_099", "GVG_099", "CFM_667", "CFM_667", "CFM_667", "CFM_667", "GVG_090", "GVG_090", "GVG_090", "GVG_090", "GVG_090"],
@@ -215,10 +219,87 @@
     "enc-ulda_16_battrund": ["ULD_186", "ULD_186", "DAL_769", "DAL_769", "EX1_400", "EX1_400", "EX1_392", "EX1_392", "CS2_114", "CS2_114", "EX1_391", "EX1_391", "GVG_054", "GVG_054", "ULD_206", "ULD_206", "GVG_052", "ULD_185", "ULD_185", "CS2_125", "CS2_125", "ULD_275", "ULD_727", "ULD_194", "LOE_061", "GVG_052", "ULD_275", "ULD_727", "ULD_194", "LOE_061"],
     "enc-ulda_17_ichabod": ["OG_072", "OG_072", "LOOT_204", "LOOT_204", "EX1_278", "EX1_278", "LOOT_210", "BOT_084", "BOT_084", "BOT_286", "ICC_809", "ICC_809", "LOE_012", "TRL_514", "TRL_514", "EX1_096", "EX1_096", "GVG_098", "GVG_098", "CFM_646", "CFM_646", "ULD_250", "ULD_250", "OG_249", "OG_249", "LOOT_210", "BOT_286", "LOE_012", "CS2_072", "CFM_630"],
     "enc-ulda_18_twizzleflux": ["OG_241", "OG_241", "DAL_614", "DAL_614", "UNG_831", "LOE_007", "GIL_665", "GIL_665", "ICC_041", "DAL_606", "DAL_606", "CS2_065", "OG_113", "OG_113", "BOT_224", "BOT_224", "BRM_006", "DAL_007", "DAL_007", "EX1_029", "EX1_029", "EX1_319", "EX1_319", "ULD_250", "ULD_250", "UNG_831", "LOE_007", "ICC_041", "CS2_065", "BRM_006"],
+    "enc-ulda_19_sothis": ["DAL_727", "DAL_727", "OG_031", "OG_031", "ULD_169", "ULD_169", "ULD_256", "ICC_091", "CS2_108", "CS2_108", "ICC_281", "CS2_105", "CS2_105", "GVG_054", "ULD_206", "ULD_206", "TRL_325", "ULD_705", "ULD_705", "ULD_705", "ULD_185", "ULD_185", "CS2_179", "EX1_595", "EX1_595", "EX1_396", "EX1_396", "ULD_208", "ULD_208", "ULD_215"],
+    "enc-ulda_20_kham": ["ULD_207", "ULD_207", "GIL_545", "GIL_545", "AT_035", "AT_035", "ULD_285", "ULD_285", "CS2_233", "CS2_233", "ULD_286", "GIL_672", "GIL_672", "CS2_077", "CS2_091", "ICC_281", "ICC_281", "ULD_282", "ULD_217", "ULD_217", "GIL_513", "GIL_513", "GIL_207", "GIL_207", "LOE_110", "LOE_110", "ICC_018", "ICC_018", "ULD_215", "ULD_215"],
+    "enc-ulda_21_illidara": ["ULD_145", "ULD_145", "CFM_759", "CFM_759", "DAL_570", "EX1_130", "EX1_136", "OG_311", "OG_311", "LOE_029", "LOE_029", "ULD_728", "ULD_728", "DAL_727", "DAL_727", "GVG_061", "CS2_093", "KAR_057", "TRL_305", "TRL_305", "CS2_088", "CS2_088", "EX1_080", "ULD_309", "ULD_309", "ULD_188", "ULD_188", "ULD_209", "ULD_727", "ULD_727"],
+    "enc-ulda_22_colossus": ["ULD_143", "ULD_143", "OG_229", "EX1_400", "EX1_400", "EX1_392", "EX1_392", "ULD_195", "ULD_195", "CS2_104", "CS2_104", "OG_276", "OG_276", "ULD_720", "ULD_720", "EX1_604", "EX1_604", "ULD_206", "ULD_206", "ULD_707", "ULD_707", "ULD_253", "ULD_253", "ULD_196", "ULD_196", "ULD_290", "ULD_290", "GIL_207", "GIL_207", "ULD_721"],
+    "enc-ulda_23_skarik": ["CS2_005", "TRL_223", "EX1_570", "UNG_916", "EX1_554", "LOE_010", "ULD_174", "EX1_170", "ULD_188", "CS2_005", "TRL_223", "EX1_570", "UNG_916", "EX1_554", "LOE_010", "ULD_174", "EX1_170", "ULD_188", "DAL_354", "LOOT_258", "KAR_300", "CFM_614", "ULD_134", "CS2_011", "EX1_162", "FP1_002", "DAL_354", "LOOT_258", "KAR_300", "CFM_614"],
+    "enc-ulda_24_palm_tree": ["DAL_354", "AT_037", "AT_037", "BOT_419", "BOT_419", "OG_313", "OG_313", "ULD_134", "ULD_134", "BOT_420", "BOT_420", "EX1_166", "EX1_166", "FP1_019", "EX1_158", "EX1_158", "EX1_571", "EX1_571", "ULD_292", "ULD_292", "ULD_135", "BOT_422", "ULD_273", "CS2_232", "DAL_256", "DAL_354", "FP1_019", "ULD_135", "BOT_422", "ULD_273"],
+    "enc-ulda_25_zenda": ["BOT_054", "LOOT_051", "KAR_300", "EX1_506", "LOE_029", "LOOT_413", "ULD_188", "ULD_250", "TRL_535", "BOT_054", "LOOT_051", "KAR_300", "EX1_506", "LOE_029", "LOOT_413", "ULD_188", "ULD_250", "TRL_535", "CFM_614", "OG_048", "LOOT_056", "LOOT_048", "LOOT_309", "CS2_125", "CFM_614", "OG_048", "LOOT_056", "LOOT_048", "LOOT_309", "CS2_125"],
+    "enc-ulda_26_thudd": ["OG_086", "CS2_027", "UNG_941", "ULD_217", "DAL_060", "GVG_082", "GVG_013", "BOT_020", "GIL_646", "OG_086", "CS2_027", "UNG_941", "ULD_217", "DAL_060", "GVG_082", "GVG_013", "BOT_020", "GIL_646", "GVG_004", "BOT_906", "BOT_445", "GVG_085", "BOT_907", "GVG_006", "GVG_102", "GVG_004", "BOT_906", "BOT_445", "GVG_085", "BOT_907"],
+    "enc-ulda_27_toomba": ["KAR_069", "KAR_069", "TRL_071", "TRL_071", "ULD_328", "ULD_328", "TRL_156", "TRL_156", "EX1_613", "GIL_677", "EX1_129", "EX1_129", "AT_032", "AT_032", "DAL_416", "DAL_416", "UNG_064", "UNG_064", "TRL_127", "TRL_127", "CS2_077", "TRL_126", "CFM_637", "NEW1_016", "NEW1_016", "TRL_015", "TRL_015", "GVG_070", "GVG_070", "AT_070"],
+    "enc-ulda_28_sazin": ["GIL_836", "GIL_836", "GVG_038", "GVG_038", "BOT_093", "BOT_093", "OG_026", "LOOT_517", "LOOT_517", "EX1_259", "EX1_259", "EX1_258", "EX1_258", "EX1_246", "LOE_016", "LOE_016", "BOT_407", "BOT_407", "EX1_250", "EX1_250", "OG_209", "LOOT_358", "GVG_042", "UNG_208", "UNG_208", "NEW1_010", "UNG_928", "UNG_928", "UNG_928", "UNG_928"],
+    "enc-ulda_29_ozara": ["LOE_018", "LOE_018", "AT_053", "AT_053", "LOOT_060", "LOOT_060", "GIL_586", "GIL_586", "BOT_533", "BOT_533", "ULD_158", "ULD_158", "CS2_053", "CS2_053", "EX1_258", "EX1_258", "BOT_407", "BOT_407", "EX1_250", "EX1_250", "ULD_181", "ULD_181", "LOOT_064", "LOOT_064", "ULD_169", "ULD_169", "UNG_928", "UNG_928", "GIL_119", "GIL_119"],
+    "enc-ulda_30_ermavar": ["OG_086", "UNG_018", "LOOT_103", "UNG_027", "ULD_329", "ULD_239", "BRM_002", "LOOT_172", "CS2_032", "UNG_809", "AT_094", "CS2_121", "ULD_196", "UNG_084", "OG_086", "UNG_018", "LOOT_103", "ULD_329", "ULD_239", "BRM_002", "LOOT_172", "CS2_032", "UNG_809", "AT_094", "CS2_121", "ULD_196", "UNG_084", "CS2_027", "GVG_001", "EX1_608"],
+    "enc-ulda_31_drasar": ["BOT_246", "LOE_018", "AT_053", "TRL_352", "ULD_158", "ULD_217", "CS2_121", "GVG_067", "ULD_205", "GVG_068", "LOOT_315", "GVG_118", "BOT_246", "LOE_018", "AT_053", "TRL_352", "ULD_158", "ULD_217", "CS2_121", "GVG_067", "ULD_205", "GVG_068", "LOOT_315", "DAL_433", "OG_026", "UNG_201", "AT_052", "EX1_258", "EX1_567", "FP1_007"],
+    "enc-ulda_32_edra": ["CS2_008", "DAL_354", "OG_051", "ULD_136", "KAR_300", "DAL_733", "AT_042", "GVG_032", "EX1_166", "GIL_553", "CS2_008", "DAL_354", "OG_051", "ULD_136", "KAR_300", "DAL_733", "AT_042", "GVG_032", "EX1_166", "GIL_553", "AT_037", "ICC_051", "ULD_134", "ICC_808", "TRL_343", "CS2_232", "AT_037", "ICC_051", "ULD_134", "ICC_808"],
+    "enc-ulda_33_ruby": ["BOT_034", "BOT_059", "BOT_059", "BOT_299", "BOT_299", "GVG_051", "GVG_051", "EX1_392", "EX1_392", "DAL_759", "DAL_759", "EX1_407", "EX1_407", "BOT_218", "BOT_218", "GVG_013", "GVG_013", "GVG_006", "GVG_006", "BOT_907", "BOT_907", "GVG_084", "GVG_084", "BOT_700", "GVG_044", "GVG_044", "GVG_102", "GVG_102", "GIL_646", "GIL_646"],
+    "enc-ulda_34_dovo": ["DAL_415", "BOT_067", "GVG_082", "BOT_031", "TRL_504", "DAL_400", "EX1_082", "BOT_431", "BOT_532", "DAL_415", "BOT_067", "GVG_082", "BOT_031", "TRL_504", "DAL_400", "EX1_082", "BOT_431", "BOT_532", "TRL_321", "BOT_059", "EX1_402", "DAL_060", "EX1_604", "BRM_016", "OG_218", "GVG_099", "BRM_019", "TRL_321", "BOT_059", "EX1_402"],
+    "enc-ulda_35_ptah": ["LOE_018", "LOE_018", "AT_053", "AT_053", "UNG_202", "UNG_202", "BRM_011", "BRM_011", "EX1_565", "EX1_565", "CS2_118", "CS2_118", "EX1_258", "EX1_258", "BRM_012", "BRM_012", "EX1_250", "EX1_250", "CS2_042", "CS2_042", "ULD_181", "UNG_211", "LOOT_506", "ICC_067", "ICC_067", "ULD_275", "ULD_275", "ULD_208", "ULD_208", "GVG_118"],
+    "enc-ulda_36_kasa": ["EX1_409", "EX1_409", "CS2_091", "EX1_400", "ICC_837", "CS2_114", "CS2_114", "UNG_926", "CS2_105", "CS2_105", "BOT_042", "CS2_106", "CS2_106", "ICC_062", "ICC_062", "EX1_606", "EX1_606", "CS2_112", "GIL_558", "GIL_558", "EX1_011", "EX1_011", "CS2_117", "CS2_117", "GIL_534", "CS2_091", "EX1_400", "ICC_837", "UNG_926", "BOT_042"],
+    "enc-ulda_37_xatma": ["FP1_011", "FP1_011", "ICC_243", "ICC_243", "BOT_509", "BOT_509", "ULD_266", "ULD_266", "EX1_622", "EX1_622", "LOOT_187", "LOOT_187", "OG_335", "ULD_718", "ULD_286", "ULD_286", "FP1_028", "FP1_028", "FP1_009", "FP1_009", "ULD_250", "ULD_250", "OG_323", "OG_323", "FP1_015", "FP1_014", "EX1_016", "EX1_577", "TRL_541", "OG_335"],
+    "enc-ulda_37_xatma-f1": ["BOT_509", "BOT_509", "UNG_029", "UNG_029", "FP1_023", "FP1_023", "DAL_039", "DAL_039", "ICC_214", "ICC_214", "ULD_718", "ULD_718", "ULD_286", "ULD_286", "EX1_012", "LOOT_233", "LOOT_233", "EX1_097", "EX1_097", "FP1_015", "EX1_116", "FP1_012", "FP1_012", "FP1_014", "EX1_016", "TRL_537", "ULD_177", "GVG_114", "GVG_114", "ICC_314", "OG_133"],
+    "enc-ulda_37_xatma-f2": ["ULD_265", "ULD_265", "ULD_268", "ULD_268", "LOE_104", "LOE_104", "DAL_721", "ULD_718", "ULD_718", "ULD_286", "ULD_286", "EX1_012", "EX1_007", "EX1_007", "GIL_646", "GIL_646", "FP1_015", "FP1_014", "ULD_274", "ULD_274", "EX1_016", "GVG_110", "ULD_215", "ULD_215", "LOOT_153", "OG_133", "LOOT_153", "CS2_234", "CS2_235", "CS1_112"],
+    "enc-ulda_38_kzrath": ["EX1_334", "EX1_334", "TRL_258", "TRL_258", "EX1_128", "EX1_128", "ULD_328", "ULD_328", "BOT_565", "BOT_565", "OG_282", "OG_282", "OG_116", "OG_116", "KAR_029", "KAR_029", "CFM_790", "CFM_790", "ULD_174", "ULD_174", "OG_284", "OG_286", "OG_286", "ICC_099", "OG_321", "OG_321", "EX1_016", "OG_284", "ICC_099", "CS2_234"],
+    "enc-ulda_38_kzrath-f1": ["FP1_023", "FP1_023", "CFM_626", "CFM_626", "TRL_258", "GVG_014", "LOOT_008", "LOOT_008", "BOT_567", "OG_073", "OG_282", "OG_282", "OG_116", "OG_116", "OG_281", "OG_281", "OG_162", "OG_162", "OG_286", "OG_286", "EX1_595", "EX1_595", "EX1_043", "EX1_043", "OG_131", "OG_255", "OG_280", "TRL_258", "OG_073", "OG_255"],
+    "enc-ulda_38_kzrath-f2": ["TRL_258", "TRL_258", "LOOT_008", "EX1_129", "EX1_129", "OG_282", "OG_282", "OG_151", "OG_151", "OG_281", "OG_281", "FP1_024", "FP1_024", "OG_162", "OG_162", "OG_286", "OG_286", "OG_283", "OG_283", "OG_131", "OG_255", "OG_255", "GIL_616", "GIL_616", "OG_280", "OG_133", "OG_042", "OG_134", "LOOT_008", "CS2_234"],
+    "enc-ulda_39_vesh": ["LOEA10_5", "ULD_716", "LOE_026", "UNG_201", "UNG_201", "DAL_049", "DAL_049", "ULD_172", "ULD_172", "CFM_310", "CFM_310", "DAL_726", "ULD_181", "GVG_042", "CFM_699", "KAR_028", "KAR_028", "CFM_647", "EX1_507", "EX1_507", "UNG_937", "UNG_937", "EX1_062", "CFM_344", "OG_161", "OG_161", "LOEA10_5", "ULD_716", "LOE_026", "ULD_181"],
+    "enc-ulda_39_vesh-f1": ["KARA_13_12H", "KARA_13_12H", "LOEA10_5H", "LOEA10_5H", "UNG_942t", "UNG_942t", "UNG_942t", "AT_076", "AT_076", "LOE_026", "LOE_026", "LOOT_060", "LOOT_060", "UNG_201", "ULD_172", "ULD_172", "DAL_726", "LOE_113", "EX1_050", "EX1_050", "TRL_520", "TRL_520", "EX1_062", "EX1_062", "CFM_344", "AT_090", "AT_090", "OG_161", "OG_161", "UNG_201"],
+    "enc-ulda_39_vesh-f2": ["LOEA10_5H", "LOEA10_5H", "UNG_942t", "UNG_942t", "LOEA16_24H", "LOEA16_24H", "ULD_716", "ULD_716", "LOE_026", "LOE_026", "DAL_049", "DAL_049", "ULD_172", "ULD_172", "DAL_726", "DAL_726", "AT_054", "LOE_113", "LOE_113", "GVG_042", "EX1_050", "EX1_050", "UNG_937", "TRL_520", "EX1_062", "CFM_344", "UNG_937", "TRL_520", "CS2_168", "CS2_173"],
     "enc-ulda_40_icarax": ["EX1_392", "EX1_392", "GIL_155", "GIL_155", "ULD_720", "ULD_720", "EX1_604", "EX1_604", "LOOT_041", "LOOT_041", "GIL_113", "GIL_113", "GIL_803", "GIL_803", "ULD_206", "ULD_206", "ICC_450", "ICC_450", "ULD_707", "UNG_927", "UNG_927", "TRL_329", "EX1_414", "ICC_405", "LOOT_380", "BOT_069", "DAL_592", "DAL_592", "ULD_707"],
     "enc-ulda_40_icarax-f1": ["LOEA_01H", "LOEA_01H", "TRL_321", "TRL_321", "ULD_256", "ULD_256", "EX1_604", "EX1_604", "OG_218", "OG_218", "EX1_407", "ULD_707", "UNG_927", "UNG_927", "ULD_258", "ULD_253", "ULD_253", "UNG_933", "ULD_275", "ULD_275", "ULD_179", "ULD_179", "FP1_012", "FP1_012", "ULD_208", "ULD_208", "GIL_117", "GIL_117", "ICC_314", "OG_340"],
     "enc-ulda_40_icarax-f2": ["LOEA_01H", "LOEA_01H", "EX1_603", "EX1_603", "CS2_108", "CS2_108", "CS2_104", "CS2_104", "GIL_654", "GIL_654", "ULD_720", "ULD_720", "EX1_604", "EX1_604", "GIL_547", "ULD_707", "ULD_707", "BOT_406", "TRL_329", "EX1_414", "NEW1_038", "ICC_405", "UNG_933", "ICC_029", "ICC_029", "EX1_399", "EX1_399", "OG_300", "ULD_721", "OG_042"],
-    "enc-ulda_44_trap_room": ["ULD_273", "LOE_021", "LOE_021", "EX1_610", "EX1_610", "EX1_611", "EX1_611", "ULD_152", "ULD_152", "EX1_554", "EX1_554", "EX1_609", "EX1_609", "DAL_086", "DAL_086", "ICC_200", "ICC_200", "ICC_204", "LOOT_080", "AT_062", "AT_062", "LOOT_522", "LOOT_522", "LOE_027", "LOE_027", "DAL_573", "EX1_080", "EX1_080", "EX1_080", "EX1_080"]
+    "enc-ulda_41_alda": ["DAL_373", "NEW1_031", "DS1_184", "KAR_005", "CFM_338", "LOOT_079", "ULD_430", "GIL_828", "EX1_010", "CS2_203", "EX1_412", "DAL_373", "NEW1_031", "DS1_184", "KAR_005", "CFM_338", "LOOT_079", "ULD_430", "GIL_828", "EX1_010", "CS2_203", "EX1_412", "DS1_175", "TRL_111", "EX1_531", "LOE_020", "TRL_901", "TRL_900", "EX1_162", "TRL_405"],
+    "enc-ulda_42_rhogi": ["EX1_243", "EX1_243", "EX1_238", "EX1_238", "AT_053", "AT_053", "LOOT_060", "LOOT_060", "EX1_565", "EX1_565", "KAR_073", "KAR_073", "ULD_158", "ULD_158", "EX1_247", "ICC_081", "AT_051", "AT_051", "EX1_575", "EX1_575", "KAR_021", "KAR_021", "GIL_807", "CS2_106", "CS2_106", "EX1_247", "ICC_081", "GIL_807", "EX1_248", "UNG_938"],
+    "enc-ulda_43_jolene": ["EX1_302", "DAL_614", "DAL_614", "BOT_263", "CS2_065", "CS2_065", "OG_109", "OG_109", "ICC_041", "ICC_041", "ICC_055", "ICC_055", "DAL_606", "DAL_606", "CS2_065", "CS2_065", "ICC_407", "ICC_407", "GVG_018", "GVG_018", "BRM_006", "BRM_006", "DAL_185", "DAL_185", "BOT_433", "EX1_309", "EX1_309", "EX1_312", "DAL_400", "DAL_400"],
+    "enc-ulda_44_trap_room": ["ULD_273", "LOE_021", "LOE_021", "EX1_610", "EX1_610", "EX1_611", "EX1_611", "ULD_152", "ULD_152", "EX1_554", "EX1_554", "EX1_609", "EX1_609", "DAL_086", "DAL_086", "ICC_200", "ICC_200", "ICC_204", "LOOT_080", "AT_062", "AT_062", "LOOT_522", "LOOT_522", "LOE_027", "LOE_027", "DAL_573", "EX1_080", "EX1_080", "EX1_080", "EX1_080"],
+    "enc-ulda_45_belloc": ["ULD_145", "ULD_145", "BOT_236", "ULD_439", "ULD_439", "ULD_438", "ULD_438", "AT_074", "AT_074", "CFM_815", "ULD_207", "ULD_207", "ICC_820", "ICC_820", "CS2_094", "CS2_094", "LOE_017", "ULD_143", "UNG_015", "LOOT_216", "EX1_302", "LOE_116", "LOE_116", "DAL_614", "DAL_614", "CS2_097", "CS2_097", "EX1_590", "EX1_590", "ULD_208"],
+    "enc-ulda_46_wildtooth": ["CS2_084", "CS2_084", "OG_325", "OG_325", "ICC_419", "ICC_419", "ICC_419", "ICC_419", "LOE_020", "LOE_020", "ICC_021", "ICC_021", "TRL_347", "TRL_347", "EX1_534", "LOOT_258", "LOOT_258", "OG_151", "OG_151", "EX1_557", "ULD_174", "ULD_174", "OG_179", "OG_179", "TRL_525", "TRL_525", "OG_272", "OG_272", "UNG_010", "UNG_010"],
+    "enc-ulda_47_jar": ["ULD_266", "ULD_266", "EX1_302", "EX1_302", "OG_241", "OG_241", "BOT_222", "BOT_222", "OG_241", "OG_116", "OG_116", "DAL_563", "DAL_563", "CFM_663", "ULD_282", "ULD_282", "EX1_029", "EX1_029", "ULD_250", "ULD_250", "FP1_007", "FP1_007", "FP1_007", "FP1_007", "FP1_007", "ULD_208", "CFM_663", "ULD_208", "ULD_217", "ICC_903"],
+    "enc-ulda_48_ilza": ["TRL_321", "TRL_321", "EX1_603", "EX1_603", "CS2_108", "CS2_108", "ULD_195", "ULD_195", "ULD_720", "ULD_720", "CS2_106", "CS2_106", "ICC_062", "ICC_062", "EX1_398", "EX1_398", "EX1_407", "CS2_121", "CS2_121", "CS2_181", "CS2_124", "CS2_124", "ULD_208", "ULD_208", "ULD_194", "EX1_407", "CS2_181", "ULD_194", "EX1_410", "ICC_837"],
+    "enc-ulda_49_craz": ["GIL_543", "GIL_543", "DAL_614", "DAL_614", "DAL_606", "DAL_606", "CS2_065", "CS2_065", "BRM_006", "BRM_006", "EX1_317", "GVG_045", "GVG_045", "EX1_313", "EX1_313", "DAL_582", "DAL_582", "GVG_019", "GVG_019", "DAL_185", "DAL_185", "BOT_521", "CFM_663", "CFM_663", "EX1_310", "EX1_310", "DAL_561", "DAL_561", "DAL_400", "DAL_400"],
+    "enc-ulda_50_barkeye": ["LOOT_222", "LOOT_222", "EX1_609", "EX1_609", "NEW1_031", "TRL_349", "TRL_349", "EX1_617", "EX1_617", "ULD_430", "ULD_430", "NEW1_031", "NEW1_031", "LOOT_077", "LOOT_077", "ULD_154", "ULD_154", "DAL_371", "DAL_371", "CFM_337", "EX1_534", "ULD_212", "ULD_212", "DS1_188", "EX1_029", "EX1_029", "CS2_117", "CS2_117", "GIL_622", "GIL_622"],
+    "enc-ulda_51_kasmut": ["ULD_138", "ULD_265", "ULD_265", "ULD_266", "ULD_266", "ULD_268", "ICC_235", "ICC_235", "ULD_718", "ULD_217", "ULD_217", "EX1_096", "EX1_096", "ULD_185", "ULD_185", "ULD_205", "ULD_205", "ULD_206", "ULD_206", "ULD_275", "ULD_275", "ULD_208", "ULD_208", "ULD_215", "ULD_215", "ULD_138", "ULD_268", "ULD_718", "GIL_813", "ULD_269"],
+    "enc-ulda_52_bazhial": ["ICC_085", "DAL_577", "DAL_577", "CS2_024", "CS2_024", "CS2_023", "CS2_023", "CS2_026", "CS2_026", "CS2_033", "CS2_033", "OG_120", "ICC_838", "ULD_718", "ULD_286", "ULD_286", "AT_036", "BOT_447", "BOT_447", "EX1_012", "EX1_007", "LOE_110", "LOE_110", "ULD_275", "ULD_275", "EX1_097", "EX1_097", "UNG_087", "UNG_087", "ICC_314"],
+    "enc-ulda_53_maru": ["DAL_728", "DAL_728", "DAL_010", "DAL_010", "LOOT_033", "ULD_231", "ULD_231", "EX1_613", "DAL_415", "DAL_415", "ULD_285", "ULD_285", "LOOT_211", "LOOT_211", "EX1_134", "DAL_720", "DAL_720", "ULD_282", "ULD_282", "DAL_400", "DAL_400", "NEW1_019", "NEW1_019", "ULD_209", "ULD_209", "LOOT_033", "EX1_134", "CS2_072", "CFM_630", "EX1_144"],
+    "enc-ulda_54_janak": ["DAL_769", "DAL_769", "EX1_392", "ULD_720", "ULD_720", "LOE_022", "LOE_022", "LOOT_041", "LOOT_041", "CS2_106", "CS2_106", "ICC_408", "ICC_408", "BRM_016", "OG_218", "GVG_052", "GVG_052", "DAL_400", "DAL_400", "DAL_743", "DAL_743", "EX1_007", "EX1_007", "CS2_182", "CS2_182", "EX1_392", "BRM_016", "OG_218", "GVG_051", "CS2_104"],
+    "enc-ulda_55_murlocs": ["GIL_600", "TRL_012", "GVG_040", "LOEA10_3", "CS2_168", "CS2_173", "EX1_506", "GVG_064", "TRL_520", "OG_161", "GIL_600", "TRL_012", "GVG_040", "LOEA10_3", "CS2_168", "CS2_173", "EX1_506", "GVG_064", "TRL_520", "OG_161", "CFM_650", "AT_076", "DAL_049", "UNG_073", "EX1_103", "EX1_507", "GIL_681", "EX1_062", "CFM_650", "AT_076"],
+    "enc-ulda_56_frog": ["DAL_433", "ULD_158", "LOOT_218", "TRL_505", "ULD_217", "DAL_400", "LOE_046", "LOE_029", "UNG_928", "DAL_433", "ULD_158", "LOOT_218", "TRL_505", "ULD_217", "DAL_400", "LOE_046", "LOE_029", "UNG_928", "OG_179", "TRL_348", "DS1_175", "FP1_011", "ICC_092", "UNG_809", "UNG_205", "OG_179", "TRL_348", "DS1_175", "FP1_011", "ICC_092"],
+    "enc-ulda_57_winged_guardian": ["ULD_145", "ULD_145", "CFM_759", "CFM_759", "ULD_217", "ULD_217", "EX1_382", "EX1_382", "ULD_207", "ULD_207", "CS2_094", "CS2_094", "AT_076", "AT_076", "BOT_537", "BOT_537", "ULD_143", "ULD_143", "BRM_022", "GIL_816", "GIL_816", "ULD_174", "ULD_174", "UNG_083", "UNG_083", "BRM_022", "UNG_960", "ICC_038", "OG_222", "UNG_015"],
+    "enc-ulda_59_dire_bat": ["OG_179", "OG_179", "UNG_916", "FP1_011", "FP1_011", "UNG_910", "UNG_910", "CS2_084", "OG_325", "OG_325", "GIL_828", "ICC_021", "ICC_021", "GIL_518", "GIL_518", "CS2_237", "GIL_558", "GIL_558", "CS2_120", "CS2_120", "GIL_143", "GIL_143", "TRL_020", "TRL_020", "GIL_578", "UNG_916", "CS2_084", "GIL_828", "CS2_237", "TRL_348"],
+    "enc-ulda_60_zaraam": ["LOOT_017", "LOOT_017", "LOOT_014", "LOOT_014", "DAL_614", "DAL_614", "DAL_606", "DAL_606", "CS2_061", "CS2_061", "BRM_006", "BRM_006", "EX1_304", "EX1_304", "OG_302", "OG_302", "DAL_185", "DAL_185", "CFM_663", "LOOT_368", "LOOT_368", "OG_281", "OG_281", "CS2_121", "CS2_121", "CS1_069", "CS1_069", "EX1_564", "EX1_564", "OG_280"],
+    "enc-ulda_61_kyriss": ["ICC_838", "GVG_038", "GVG_038", "TRL_321", "TRL_321", "ICC_837", "ICC_837", "TRL_362", "TRL_362", "TRL_328", "TRL_323", "TRL_323", "EX1_007", "BRM_026", "BRM_026", "AT_017", "AT_017", "ICC_029", "ICC_029", "ICC_027", "ICC_027", "OG_271", "OG_271", "CFM_806", "AT_123", "TRL_569", "TRL_569", "UNG_848", "UNG_848", "EX1_562"],
+    "enc-ulda_62_oasis": ["ULD_134", "ULD_134", "BOT_420", "BOT_420", "EX1_025", "EX1_025", "ULD_292", "ULD_292", "ULD_273", "ULD_273", "DAL_256", "EX1_573", "LOE_020", "LOE_020", "ULD_713", "ULD_713", "GVG_049", "ULD_439", "ULD_439", "EX1_506", "EX1_506", "ULD_196", "ULD_196", "CS2_120", "CS2_120", "CS2_179", "CS2_179", "CS2_042", "CS2_042", "ULD_721"],
+    "enc-ulda_63_vessina": ["DAL_433", "DAL_433", "LOE_018", "LOE_018", "GIL_531", "GIL_531", "AT_053", "AT_053", "OG_026", "OG_026", "EX1_565", "EX1_565", "BRM_011", "BRM_011", "TRL_352", "TRL_352", "TRL_058", "TRL_058", "CFM_061", "CFM_061", "BOT_407", "TRL_351", "TRL_351", "ULD_181", "ULD_181", "LOOT_064", "LOOT_064", "GVG_042", "ICC_090", "ICC_090"],
+    "enc-ulda_65_thrud": ["EX1_182", "EX1_182", "KAR_069", "KAR_069", "ULD_328", "ULD_328", "AT_031", "AT_031", "GIL_696", "EX1_278", "EX1_278", "DAL_714", "DAL_714", "AT_033", "AT_033", "DAL_415", "DAL_415", "UNG_061", "UNG_061", "KAR_070", "KAR_070", "EX1_134", "EX1_134", "CS2_125", "CS2_125", "GIL_696", "EX1_124", "OG_330", "DAL_416", "DAL_716"],
+    "enc-ulda_66_siamat": ["CS2_022", "CS2_022", "LOOT_398", "LOOT_398", "EX1_238", "EX1_238", "GVG_038", "GVG_038", "BOT_533", "BOT_533", "ULD_158", "ULD_158", "TRL_059", "TRL_059", "BOT_411", "CS2_053", "EX1_259", "EX1_259", "EX1_258", "EX1_258", "BOT_407", "BOT_407", "CS2_046", "CS2_046", "EX1_250", "EX1_250", "GVG_042", "NEW1_010", "DAL_047", "DAL_047"],
+    "enc-ulda_67_tekahn": ["ULDA_033", "ULDA_031", "ULDA_031", "ULDA_031", "ULDA_031", "ULDA_031", "ULDA_031", "ULDA_031", "ULDA_031", "DAL_413", "DAL_413", "DAL_415", "DAL_415", "DAL_417", "DAL_433", "DAL_433", "BOT_568", "DAL_606", "DAL_606", "DAL_563", "EX1_303", "EX1_320", "EX1_320", "GIL_618", "DAL_607", "DAL_400", "DAL_400", "FP1_007", "FP1_007", "EX1_595", "EX1_595", "LOE_092", "ULDA_033", "DAL_563", "EX1_303", "CS2_065", "EX1_319", "CS2_062", "CS2_057", "CS2_064"],
+    "enc-ulda_67_tekahn-f1": ["UNG_831", "UNG_831", "ICC_041", "ICC_041", "GIL_515", "GIL_515", "GIL_825", "EX1_312", "EX1_312", "ULD_174", "ULD_174", "EX1_058", "EX1_058", "UNG_083", "UNG_083", "FP1_031", "EX1_093", "EX1_093", "UNG_900", "BOT_401", "FP1_015", "FP1_014", "ICC_098", "ICC_098", "ICC_027", "ICC_027", "GVG_105", "GVG_105", "EX1_016", "AT_128", "GVG_110", "FP1_013", "ULD_177", "GVG_114", "GIL_616", "GIL_616", "ULD_721", "OG_133", "BOT_401", "CS2_065"],
+    "enc-ulda_67_tekahn-f2": ["ULDA_BOSS_67t", "GVG_018", "GVG_018", "GIL_508", "GIL_508", "BOT_226", "BOT_226", "GIL_565", "GIL_565", "GVG_100", "GVG_100", "EX1_309", "EX1_309", "TRL_555", "TRL_555", "OG_239", "KAR_712", "KAR_712", "GIL_622", "GIL_622", "ICC_905", "ICC_905", "GIL_667", "GIL_667", "ULD_208", "ULD_208", "GIL_578", "BRM_031", "EX1_298", "ICC_314", "TRL_541", "OG_134", "KAR_711", "KAR_711", "EX1_620", "EX1_620", "ULDA_BOSS_67t", "OG_239", "CS2_065", "EX1_319"],
+    "enc-ulda_67_tekahn-relay-ULDA_Brann": ["TRL_348", "TRL_348", "GIL_580", "GIL_580", "GIL_155", "NEW1_031", "NEW1_031", "GIL_113", "GIL_113", "BOT_251", "GIL_828", "ULD_206", "ULD_206", "GIL_547", "UNG_957", "UNG_957", "DAL_378", "DAL_378", "DAL_070", "ULD_430", "ULD_429", "ULD_429", "ULD_713", "ULD_195", "ULD_195", "ULD_253", "ULD_253", "EX1_392", "EX1_606", "DS1_184"],
+    "enc-ulda_67_tekahn-relay-ULDA_Brann-2": ["EX1_607", "EX1_607", "DS1_185", "DS1_185", "OG_312", "OG_312", "BOT_033", "BOT_033", "CS2_105", "CS2_105", "AT_061", "AT_061", "EX1_604", "EX1_604", "EX1_539", "EX1_539", "EX1_538", "EX1_538", "DAL_063", "DAL_063", "DS1_178", "DS1_178", "EX1_534", "EX1_534", "GVG_049", "OG_220", "EX1_414", "OG_211", "OG_211", "EX1_543"],
+    "enc-ulda_67_tekahn-relay-ULDA_Brann-3": ["LOOT_222", "BOT_299", "BOT_299", "CS2_108", "CS2_108", "EX1_610", "EX1_610", "EX1_611", "EX1_611", "CS2_084", "CS2_084", "EX1_391", "GIL_654", "GIL_654", "EX1_606", "EX1_606", "GIL_650", "DAL_770", "DAL_770", "EX1_407", "EX1_407", "EX1_411", "UNG_919", "UNG_838", "UNG_838", "ICC_405", "DAL_059", "DAL_059", "GIL_128", "AT_072"],
+    "enc-ulda_67_tekahn-relay-ULDA_Elise": ["DAL_733", "DAL_733", "DAL_351", "DAL_355", "DAL_558", "ULD_262", "AT_011", "KAR_035", "CS1_112", "ULD_270", "ULD_270", "ULD_135", "ULD_135", "EX1_624", "EX1_350", "DAL_256", "ULD_134", "ULD_134", "ULD_268", "ULD_268", "EX1_155", "EX1_155", "ULD_265", "BOT_219", "GVG_010", "UNG_963", "DAL_351", "DAL_355", "AT_011", "KAR_035"],
+    "enc-ulda_67_tekahn-relay-ULDA_Elise-2": ["BOT_558", "BOT_558", "UNG_034", "UNG_034", "LOOT_209", "BOT_216", "TRL_131", "TRL_131", "GVG_010", "GVG_010", "OG_044", "TRL_254", "TRL_254", "OG_202", "OG_202", "CS2_012", "CS2_012", "UNG_963", "OG_094", "OG_094", "GVG_014", "EX1_164", "EX1_164", "BOT_258", "EX1_178", "EX1_178", "ULD_273", "EX1_573", "TRL_408", "TRL_408"],
+    "enc-ulda_67_tekahn-relay-ULDA_Elise-3": ["ULD_265", "BRM_017", "BRM_017", "LOOT_351", "LOOT_187", "LOOT_187", "CS2_013", "ULD_269", "LOOT_054", "LOOT_054", "ICC_213", "ICC_213", "BOT_404", "ULD_268", "ULD_268", "DAL_039", "DAL_039", "LOOT_329", "TRL_258", "TRL_258", "LOE_104", "LOE_104", "EX1_016", "LOOT_507", "GVG_035", "DAL_721", "ICC_835", "ICC_214", "ICC_214", "ICC_085"],
+    "enc-ulda_67_tekahn-relay-ULDA_Finley": ["OG_027", "GIL_678", "GIL_678", "ULD_217", "ULD_217", "DAL_710", "DAL_710", "EX1_565", "EX1_565", "EX1_575", "EX1_366", "GVG_063", "CS2_046", "CS2_046", "UNG_015", "UNG_950", "ULD_145", "ULD_145", "ULD_207", "ULD_207", "ULD_143", "ULD_158", "ULD_158", "AT_053", "CFM_313", "CFM_313", "AT_073", "EX1_354", "AT_076", "AT_076"],
+    "enc-ulda_67_tekahn-relay-ULDA_Finley-2": ["CS2_041", "EX1_363", "BOT_236", "CFM_696", "CFM_696", "UNG_011", "UNG_011", "TRL_306", "TRL_306", "DAL_568", "LOOT_088", "UNG_953", "UNG_953", "GIL_145", "CS2_039", "EX1_382", "BOT_411", "LOOT_373", "AT_074", "AT_074", "CFM_815", "TRL_085", "CS2_092", "CS2_092", "LOE_017", "TRL_351", "TRL_351", "UNG_952", "UNG_952", "LOOT_216"],
+    "enc-ulda_67_tekahn-relay-ULDA_Finley-3": ["BOT_543", "BOT_543", "EX1_241", "EX1_241", "BRM_012", "BRM_012", "OG_024", "OG_024", "CS2_097", "TRL_545", "TRL_545", "UNG_025", "UNG_025", "EX1_384", "EX1_384", "CS2_042", "CS2_042", "LOOT_500", "DAL_431", "NEW1_010", "UNG_004", "UNG_004", "EX1_354", "EX1_354", "OG_229", "EX1_383", "DAL_047", "DAL_047", "GIL_820", "CS2_097"],
+    "enc-ulda_67_tekahn-relay-ULDA_Reno": ["LOOT_231", "EX1_124", "EX1_124", "UNG_027", "EX1_278", "EX1_608", "EX1_608", "CS2_023", "CS2_023", "GIL_827", "BRM_002", "BRM_002", "EX1_137", "CS2_029", "ULD_286", "ULD_286", "LOE_003", "LOE_003", "OG_073", "EX1_559", "LOOT_204", "ULD_329", "ULD_329", "ULD_216", "ULD_239", "ULD_186", "ULD_186", "ULD_328", "ULD_328", "LOOT_231"],
+    "enc-ulda_67_tekahn-relay-ULDA_Reno-2": ["CS2_074", "CS2_074", "ICC_233", "ICC_233", "LOOT_542", "KAR_069", "LOOT_033", "UNG_018", "UNG_018", "GVG_023", "UNG_941", "UNG_941", "GVG_003", "AT_033", "AT_033", "ULD_329", "ULD_329", "EX1_613", "UNG_823", "BOT_103", "BOT_087", "GVG_005", "GVG_022", "GVG_022", "DAL_720", "OG_080", "LOOT_108", "UNG_955", "CS2_032", "CS2_077"],
+    "enc-ulda_67_tekahn-relay-ULDA_Reno-3": ["EX1_145", "EX1_145", "EX1_012", "DAL_575", "DAL_177", "DAL_177", "UNG_948", "CS2_022", "CS2_022", "LOOT_130", "LOOT_130", "OG_090", "OG_090", "OG_291", "OG_291", "CS2_028", "CS2_028", "KAR_076", "KAR_076", "CFM_623", "CFM_623", "OG_120", "DAL_578", "DAL_578", "AT_009", "DAL_609", "ULD_216", "ULD_216", "EX1_279", "EX1_279"],
+    "enc-ulda_68_wasp": ["KAR_300", "DAL_352", "ULD_134", "UNG_914", "ULD_439", "LOOT_258", "UNG_085", "UNG_803", "UNG_814", "EX1_096", "KAR_300", "DAL_352", "ULD_134", "UNG_914", "ULD_439", "LOOT_258", "UNG_085", "UNG_803", "UNG_814", "EX1_096", "OG_048", "AT_041", "ICC_023", "NEW1_019", "CS2_172", "OG_048", "AT_041", "ICC_023", "NEW1_019", "CS2_172"],
+    "enc-ulda_69_isiset": ["KAR_009", "KAR_009", "CS2_027", "DAL_577", "DAL_577", "ULD_240", "ULD_240", "BOT_101", "BOT_101", "CS2_024", "CS2_024", "EX1_179", "UNG_941", "UNG_941", "UNG_027", "GVG_003", "GVG_003", "CS2_023", "EX1_287", "ULD_329", "ULD_329", "FP1_018", "AT_002", "ICC_082", "UNG_024", "TRL_400", "EX1_275", "EX1_275", "LOE_003", "LOE_003"],
+    "enc-ulda_70_rajh": ["AT_004", "AT_004", "EX1_277", "EX1_277", "NEW1_012", "NEW1_012", "BOT_453", "BOT_453", "UNG_027", "CS2_023", "CS2_023", "GIL_147", "GIL_147", "ULD_329", "ULD_329", "ULD_239", "ULD_239", "BRM_002", "BRM_002", "OG_083", "OG_083", "BOT_254", "BOT_254", "EX1_594", "EX1_594", "TRL_313", "TRL_313", "OG_090", "LOE_003", "LOE_003"],
+    "enc-ulda_71_ammunae": ["BOT_054", "OG_051", "OG_051", "EX1_161", "EX1_161", "AT_037", "AT_037", "ULD_134", "ULD_134", "DAL_355", "DAL_355", "LOOT_054", "LOOT_054", "CS2_012", "CS2_012", "DAL_799", "DAL_799", "LOOT_329", "ULD_292", "ULD_292", "ULD_135", "ULD_135", "NEW1_008", "EX1_178", "EX1_178", "GVG_035", "CS2_232", "CS2_232", "DAL_357", "ULD_721"],
+    "enc-ulda_72_setesh": ["ULD_265", "ULD_265", "ULD_266", "ULD_266", "ICC_210", "ICC_210", "EX1_622", "EX1_622", "ICC_802", "ICC_802", "UNG_022", "UNG_022", "EX1_334", "EX1_334", "ULD_268", "ULD_268", "ICC_207", "ICC_207", "LOE_104", "LOE_104", "ULD_718", "EX1_007", "EX1_007", "LOE_061", "LOE_061", "ULD_208", "ULD_208", "TRL_537", "NEW1_030", "TRL_541"],
+    "enc-ulda_73_husam": ["LOOT_101", "NEW1_036", "NEW1_036", "CS2_108", "CS2_108", "CS2_105", "CS2_105", "DAL_759", "DAL_759", "AT_064", "AT_064", "ULD_720", "ULD_720", "EX1_604", "EX1_604", "BRM_016", "BRM_016", "EX1_407", "EX1_407", "BOT_406", "BOT_218", "BOT_218", "TRL_325", "OG_220", "LOE_009", "LOE_009", "EX1_007", "EX1_007", "LOOT_233", "LOOT_233"],
+    "enc-ulda_74_barim": ["ULD_145", "ULD_145", "CS2_004", "CS2_004", "DAL_413", "DAL_413", "ULD_266", "ULD_266", "ULD_714", "ULD_714", "ICC_212", "ICC_212", "FP1_023", "FP1_023", "LOOT_187", "LOOT_187", "AT_011", "AT_011", "ULD_268", "ULD_268", "EX1_334", "EX1_334", "DAL_039", "GVG_014", "ICC_235", "ICC_235", "LOE_006", "LOE_006", "EX1_007", "EX1_007"],
+    "enc-ulda_75_avozu": ["GVG_026", "GVG_026", "KAR_005", "KAR_005", "ULD_430", "ULD_430", "NEW1_031", "NEW1_031", "EX1_539", "EX1_539", "ICC_021", "ICC_021", "GIL_650", "OG_216", "OG_216", "EX1_534", "EX1_534", "ULD_713", "ULD_713", "DAL_378", "DAL_378", "ULD_212", "ULD_212", "DS1_188", "EX1_029", "EX1_029", "LOE_061", "LOE_061", "ULD_194", "ULD_194"],
+    "enc-ulda_76_tarkus": ["ULD_145", "ULD_145", "OG_223", "OG_223", "ICC_038", "ICC_038", "ICC_039", "ICC_039", "ULD_439", "ULD_439", "ULD_728", "ULD_728", "ULD_207", "ULD_207", "ICC_820", "ICC_820", "LOE_017", "LOE_017", "CS2_097", "CS2_097", "DAL_731", "ULD_143", "UNG_015", "AT_081", "CS2_088", "DAL_731", "ULD_143", "CS2_088", "GIL_203", "GVG_061"],
+    "enc-ulda_77_gorebite": ["TRL_243", "CS2_005", "EX1_578", "TRL_244", "LOOT_329", "GIL_558", "EX1_066", "CS2_120", "CS2_203", "GIL_601", "TRL_243", "CS2_005", "EX1_578", "TRL_244", "GIL_558", "EX1_066", "CS2_120", "CS2_203", "GIL_601", "KAR_300", "ICC_079", "EX1_570", "TRL_241", "TRL_507", "GIL_534", "EX1_028", "FP1_010", "KAR_300", "ICC_079", "EX1_570"],
+    "enc-ulda_78_octosari": ["DAL_354", "DAL_354", "CS2_005", "CS2_005", "AT_037", "AT_037", "BOT_420", "BOT_420", "ULD_134", "ULD_134", "EX1_570", "EX1_570", "FP1_019", "FP1_019", "EX1_158", "EX1_158", "EX1_571", "EX1_571", "UNG_111", "UNG_111", "DAL_256", "DAL_256", "EX1_573", "BOT_523", "BOT_523", "BRM_009", "BRM_009", "ICC_085", "EX1_586", "EX1_586"],
+    "enc-ulda_79_armadillobot": ["EX1_391", "DAL_759", "GVG_050", "CS2_106", "ULD_258", "GVG_093", "ULD_282", "DAL_400", "GVG_084", "EX1_556", "EX1_025", "EX1_391", "DAL_759", "GVG_050", "CS2_106", "GVG_093", "ULD_282", "DAL_400", "GVG_084", "EX1_556", "EX1_025", "BOT_059", "GVG_051", "AT_064", "ULD_206", "BOT_104", "GVG_006", "GVG_103", "BOT_309", "BOT_700"]
   },
   "encounters": [
     {
@@ -1591,8 +1672,6 @@
         "kind": "substituted",
         "source": { "url": "https://hearthstone.wiki.gg/wiki/Experiment_3C", "read": "2026-11-13", "list": "Deck" },
         "substitutions": [
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
           { "listed": "EX1_507", "reason": "over-size" },
           { "listed": "NEW1_027", "reason": "over-size" },
           { "listed": "KAR_095", "reason": "over-size" },
@@ -1731,12 +1810,8 @@
       "level": { "source": "printed-health", "original": 40 },
       "deck": {
         "id": "enc-gila_34_havnixx",
-        "kind": "substituted",
-        "source": { "url": "https://hearthstone.wiki.gg/wiki/Inquisitor_Hav'nixx", "read": "2026-11-13", "list": "Deck" },
-        "substitutions": [
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
-        ]
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Inquisitor_Hav'nixx", "read": "2026-11-13", "list": "Deck" }
       }
     },
     {
@@ -2005,12 +2080,8 @@
           "draw": 6,
           "deck": {
             "id": "enc-gila_52_pete-f1",
-            "kind": "substituted",
-            "source": { "url": "https://hearthstone.wiki.gg/wiki/Crooked_Pete", "read": "2026-11-14", "list": "Beastly Pete" },
-            "substitutions": [
-              { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
-              { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
-            ]
+            "kind": "authentic",
+            "source": { "url": "https://hearthstone.wiki.gg/wiki/Crooked_Pete", "read": "2026-11-14", "list": "Beastly Pete" }
           }
         }
       ]
@@ -2028,12 +2099,8 @@
       "cards": ["GILA_BOSS_54e"],
       "deck": {
         "id": "enc-gila_54_cragtorr",
-        "kind": "substituted",
-        "source": { "url": "https://hearthstone.wiki.gg/wiki/Cragtorr", "read": "2026-11-14", "list": "Deck" },
-        "substitutions": [
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
-        ]
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Cragtorr", "read": "2026-11-14", "list": "Deck" }
       }
     },
     {
@@ -2049,11 +2116,8 @@
       "cards": ["GILA_BOSS_55t"],
       "deck": {
         "id": "enc-gila_55_azalina",
-        "kind": "substituted",
-        "source": { "url": "https://hearthstone.wiki.gg/wiki/Azalina_Soulthief_(boss)", "read": "2026-11-14", "list": "Deck" },
-        "substitutions": [
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
-        ]
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Azalina_Soulthief_(boss)", "read": "2026-11-14", "list": "Deck" }
       }
     },
     {
@@ -2124,12 +2188,8 @@
       "level": { "source": "printed-health", "original": 50 },
       "deck": {
         "id": "enc-gila_62_gustave",
-        "kind": "substituted",
-        "source": { "url": "https://hearthstone.wiki.gg/wiki/Gustave,_the_Gutripper", "read": "2026-11-14", "list": "Deck" },
-        "substitutions": [
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
-        ]
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Gustave,_the_Gutripper", "read": "2026-11-14", "list": "Deck" }
       }
     },
     {
@@ -2146,12 +2206,8 @@
       "cards": ["GILA_BOSS_24t"],
       "deck": {
         "id": "enc-gila_24_groddo",
-        "kind": "substituted",
-        "source": { "url": "https://hearthstone.wiki.gg/wiki/Groddo_the_Bogwarden", "read": "2026-11-14", "list": "Deck" },
-        "substitutions": [
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
-        ]
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Groddo_the_Bogwarden", "read": "2026-11-14", "list": "Deck" }
       }
     },
     {
@@ -2291,7 +2347,6 @@
         "kind": "substituted",
         "source": { "url": "https://hearthstone.wiki.gg/wiki/Sephira_Dusktalon", "read": "2026-11-14", "list": "Deck" },
         "substitutions": [
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
           { "wiki": "Power of the Wild", "listed": "EX1_160", "used": "CFM_614", "reason": "unscripted" },
           { "wiki": "Power of the Wild", "listed": "EX1_160", "used": "CFM_614", "reason": "unscripted" },
           { "wiki": "Wrath", "listed": "EX1_154", "used": "LOOT_051", "reason": "unscripted" },
@@ -2395,12 +2450,8 @@
       "cards": ["GILA_BOSS_67e"],
       "deck": {
         "id": "enc-gila_67_hannigul",
-        "kind": "substituted",
-        "source": { "url": "https://hearthstone.wiki.gg/wiki/Ratcatcher_Hannigul", "read": "2026-11-14", "list": "Deck" },
-        "substitutions": [
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" },
-          { "wiki": "Witchwood's Touch", "listed": "GILA_BOSS_99t2", "used": "EX1_606", "reason": "unscripted" }
-        ]
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Ratcatcher_Hannigul", "read": "2026-11-14", "list": "Deck" }
       }
     },
     {
@@ -5255,6 +5306,1877 @@
           { "used": "BRM_006", "reason": "fill:second-copy" }
         ]
       }
+    },
+    {
+      "id": "ulda_19_sothis",
+      "name": "Sothis",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_19h",
+      "power": "ULDA_BOSS_19p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "cards": ["ULD_705", "ULD_705t"],
+      "deck": {
+        "id": "enc-ulda_19_sothis",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Sothis", "read": "2026-11-14", "list": "Normal (level 6)" },
+        "substitutions": [
+          { "wiki": "Conjured Mirage", "listed": "ULD_198", "used": "CS2_179", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_20_kham",
+      "name": "Kham",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_20h",
+      "power": "ULDA_BOSS_20p",
+      "tier": "3",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["passive"],
+      "deck": {
+        "id": "enc-ulda_20_kham",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Kham", "read": "2026-11-14", "list": "Normal (level 6)" },
+        "substitutions": [
+          { "wiki": "Cursed Blade", "listed": "LOE_118", "used": "CS2_091", "reason": "unscripted" },
+          { "wiki": "Murmy", "listed": "ULD_723", "used": "ULD_217", "reason": "unscripted" },
+          { "wiki": "Murmy", "listed": "ULD_723", "used": "ULD_217", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_21_illidara",
+      "name": "Illidara Sunsdawn",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_21h",
+      "power": "ULDA_BOSS_21p",
+      "tier": "4",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "flags": ["passive", "bothPlayers"],
+      "cards": ["ULDA_BOSS_21e"],
+      "deck": {
+        "id": "enc-ulda_21_illidara",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Illidara_Sunsdawn", "read": "2026-11-14", "list": "Normal (level 7)" },
+        "substitutions": [
+          { "wiki": "Hydrologist", "listed": "UNG_011", "used": "LOE_029", "reason": "admission:secret-generated" },
+          { "wiki": "Hydrologist", "listed": "UNG_011", "used": "LOE_029", "reason": "admission:secret-generated" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_22_colossus",
+      "name": "Colossus of the Sun",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_22h",
+      "power": "ULDA_BOSS_22p",
+      "tier": "4",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "flags": ["bothPlayers"],
+      "deck": {
+        "id": "enc-ulda_22_colossus",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Colossus_of_the_Sun", "read": "2026-11-14", "list": "Normal (level 7)" }
+      }
+    },
+    {
+      "id": "ulda_23_skarik",
+      "name": "Skarik",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_23h",
+      "power": "ULDA_BOSS_23p",
+      "tier": "1",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 2 },
+      "cards": ["ULDA_BOSS_23e"],
+      "deck": {
+        "id": "enc-ulda_23_skarik",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Skarik", "read": "2026-11-14", "list": "Normal (level 2)" },
+        "substitutions": [
+          { "used": "CS2_005", "reason": "fill:second-copy" },
+          { "used": "TRL_223", "reason": "fill:second-copy" },
+          { "used": "EX1_570", "reason": "fill:second-copy" },
+          { "used": "UNG_916", "reason": "fill:second-copy" },
+          { "used": "EX1_554", "reason": "fill:second-copy" },
+          { "used": "LOE_010", "reason": "fill:second-copy" },
+          { "used": "ULD_174", "reason": "fill:second-copy" },
+          { "used": "EX1_170", "reason": "fill:second-copy" },
+          { "used": "ULD_188", "reason": "fill:second-copy" },
+          { "used": "DAL_354", "reason": "fill:Heroic" },
+          { "used": "LOOT_258", "reason": "fill:Heroic" },
+          { "used": "KAR_300", "reason": "fill:Heroic" },
+          { "used": "CFM_614", "reason": "fill:Heroic" },
+          { "used": "ULD_134", "reason": "fill:Heroic" },
+          { "used": "CS2_011", "reason": "fill:Heroic" },
+          { "used": "EX1_162", "reason": "fill:Heroic" },
+          { "used": "FP1_002", "reason": "fill:Heroic" },
+          { "used": "DAL_354", "reason": "fill:Heroic" },
+          { "used": "LOOT_258", "reason": "fill:Heroic" },
+          { "used": "KAR_300", "reason": "fill:Heroic" },
+          { "used": "CFM_614", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_24_palm_tree",
+      "name": "Suspicious Palm Tree",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_24h",
+      "power": "ULDA_BOSS_24p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "cards": ["GIL_663t"],
+      "deck": {
+        "id": "enc-ulda_24_palm_tree",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Suspicious_Palm_Tree", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "wiki": "Garden Gnome", "listed": "ULD_137", "used": "EX1_166", "reason": "unscripted" },
+          { "wiki": "Garden Gnome", "listed": "ULD_137", "used": "EX1_166", "reason": "unscripted" },
+          { "used": "DAL_354", "reason": "fill:second-copy" },
+          { "used": "FP1_019", "reason": "fill:second-copy" },
+          { "used": "ULD_135", "reason": "fill:second-copy" },
+          { "used": "BOT_422", "reason": "fill:second-copy" },
+          { "used": "ULD_273", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_25_zenda",
+      "name": "Beetle Herder Zenda",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_25h",
+      "power": "ULDA_BOSS_25p",
+      "tier": "1",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 2 },
+      "cards": ["LOOT_413"],
+      "deck": {
+        "id": "enc-ulda_25_zenda",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Beetle_Herder_Zenda", "read": "2026-11-14", "list": "Normal (level 2)" },
+        "substitutions": [
+          { "wiki": "Crystal Merchant", "listed": "ULD_133", "used": "KAR_300", "reason": "unscripted" },
+          { "wiki": "Bug Collector", "listed": "ULD_712", "used": "EX1_506", "reason": "unscripted" },
+          { "used": "BOT_054", "reason": "fill:second-copy" },
+          { "used": "LOOT_051", "reason": "fill:second-copy" },
+          { "used": "KAR_300", "reason": "fill:second-copy" },
+          { "used": "EX1_506", "reason": "fill:second-copy" },
+          { "used": "LOE_029", "reason": "fill:second-copy" },
+          { "used": "LOOT_413", "reason": "fill:second-copy" },
+          { "used": "ULD_188", "reason": "fill:second-copy" },
+          { "used": "ULD_250", "reason": "fill:second-copy" },
+          { "used": "TRL_535", "reason": "fill:second-copy" },
+          { "used": "CFM_614", "reason": "fill:Heroic" },
+          { "used": "OG_048", "reason": "fill:Heroic" },
+          { "used": "LOOT_056", "reason": "fill:Heroic" },
+          { "used": "LOOT_048", "reason": "fill:Heroic" },
+          { "used": "LOOT_309", "reason": "fill:Heroic" },
+          { "used": "CS2_125", "reason": "fill:curated" },
+          { "used": "CFM_614", "reason": "fill:Heroic" },
+          { "used": "OG_048", "reason": "fill:Heroic" },
+          { "used": "LOOT_056", "reason": "fill:Heroic" },
+          { "used": "LOOT_048", "reason": "fill:Heroic" },
+          { "used": "LOOT_309", "reason": "fill:Heroic" },
+          { "used": "CS2_125", "reason": "fill:curated" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_26_thudd",
+      "name": "Thudd Lockspring",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_26h",
+      "power": "ULDA_BOSS_26p",
+      "tier": "1",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 2 },
+      "deck": {
+        "id": "enc-ulda_26_thudd",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Thudd_Lockspring", "read": "2026-11-14", "list": "Normal (level 2)" },
+        "substitutions": [
+          { "used": "OG_086", "reason": "fill:second-copy" },
+          { "used": "CS2_027", "reason": "fill:second-copy" },
+          { "used": "UNG_941", "reason": "fill:second-copy" },
+          { "used": "ULD_217", "reason": "fill:second-copy" },
+          { "used": "DAL_060", "reason": "fill:second-copy" },
+          { "used": "GVG_082", "reason": "fill:second-copy" },
+          { "used": "GVG_013", "reason": "fill:second-copy" },
+          { "used": "BOT_020", "reason": "fill:second-copy" },
+          { "used": "GIL_646", "reason": "fill:second-copy" },
+          { "used": "GVG_004", "reason": "fill:Heroic" },
+          { "used": "BOT_906", "reason": "fill:Heroic" },
+          { "used": "BOT_445", "reason": "fill:Heroic" },
+          { "used": "GVG_085", "reason": "fill:Heroic" },
+          { "used": "BOT_907", "reason": "fill:Heroic" },
+          { "used": "GVG_006", "reason": "fill:Heroic" },
+          { "used": "GVG_102", "reason": "fill:Heroic" },
+          { "used": "GVG_004", "reason": "fill:Heroic" },
+          { "used": "BOT_906", "reason": "fill:Heroic" },
+          { "used": "BOT_445", "reason": "fill:Heroic" },
+          { "used": "GVG_085", "reason": "fill:Heroic" },
+          { "used": "BOT_907", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_27_toomba",
+      "name": "Ol' Toomba",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_27h",
+      "power": "ULDA_BOSS_27p",
+      "tier": "4",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "flags": ["hiddenZone"],
+      "deck": {
+        "id": "enc-ulda_27_toomba",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Ol'_Toomba_(Tombs_of_Terror)", "read": "2026-11-14", "list": "Normal (level 7)" },
+        "substitutions": [
+          { "wiki": "Sahket Sapper", "listed": "ULD_280", "used": "UNG_064", "reason": "unscripted" },
+          { "wiki": "Sahket Sapper", "listed": "ULD_280", "used": "UNG_064", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_28_sazin",
+      "name": "Sazin",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_28h",
+      "power": "ULDA_BOSS_28p",
+      "tier": "4",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "flags": ["bothPlayers", "hiddenZone"],
+      "deck": {
+        "id": "enc-ulda_28_sazin",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Sazin", "read": "2026-11-14", "list": "Normal (level 7)" },
+        "substitutions": [
+          { "wiki": "Quicksand Elemental", "listed": "ULD_197", "used": "UNG_928", "reason": "unscripted" },
+          { "wiki": "Quicksand Elemental", "listed": "ULD_197", "used": "UNG_928", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_29_ozara",
+      "name": "Ozara",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_29h",
+      "power": "ULDA_BOSS_29p",
+      "tier": "4",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "flags": ["passive"],
+      "cards": ["EX1_243"],
+      "deck": {
+        "id": "enc-ulda_29_ozara",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Ozara", "read": "2026-11-14", "list": "Normal (level 7)" },
+        "substitutions": [
+          { "wiki": "Quicksand Elemental", "listed": "ULD_197", "used": "UNG_928", "reason": "unscripted" },
+          { "wiki": "Quicksand Elemental", "listed": "ULD_197", "used": "UNG_928", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_30_ermavar",
+      "name": "Ermavar",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_30h",
+      "power": "ULDA_BOSS_30p",
+      "tier": "2",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 3 },
+      "flags": ["passive"],
+      "deck": {
+        "id": "enc-ulda_30_ermavar",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Ermavar", "read": "2026-11-14", "list": "Normal (level 3)" },
+        "substitutions": [
+          { "wiki": "Injured Tol'vir", "listed": "ULD_271", "used": "CS2_121", "reason": "unscripted" },
+          { "used": "OG_086", "reason": "fill:second-copy" },
+          { "used": "UNG_018", "reason": "fill:second-copy" },
+          { "used": "LOOT_103", "reason": "fill:second-copy" },
+          { "used": "ULD_329", "reason": "fill:second-copy" },
+          { "used": "ULD_239", "reason": "fill:second-copy" },
+          { "used": "BRM_002", "reason": "fill:second-copy" },
+          { "used": "LOOT_172", "reason": "fill:second-copy" },
+          { "used": "CS2_032", "reason": "fill:second-copy" },
+          { "used": "UNG_809", "reason": "fill:second-copy" },
+          { "used": "AT_094", "reason": "fill:second-copy" },
+          { "used": "CS2_121", "reason": "fill:second-copy" },
+          { "used": "ULD_196", "reason": "fill:second-copy" },
+          { "used": "UNG_084", "reason": "fill:second-copy" },
+          { "used": "CS2_027", "reason": "fill:Heroic" },
+          { "used": "GVG_001", "reason": "fill:Heroic" },
+          { "used": "EX1_608", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_31_drasar",
+      "name": "Pillager Drasar",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_31h",
+      "power": "ULDA_BOSS_31p",
+      "tier": "1",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 2 },
+      "cards": ["ULDA_BOSS_31e1"],
+      "deck": {
+        "id": "enc-ulda_31_drasar",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Pillager_Drasar", "read": "2026-11-14", "list": "Normal (level 2)" },
+        "substitutions": [
+          { "wiki": "Murmy", "listed": "ULD_723", "used": "ULD_217", "reason": "unscripted" },
+          { "wiki": "Injured Tol'vir", "listed": "ULD_271", "used": "CS2_121", "reason": "unscripted" },
+          { "used": "BOT_246", "reason": "fill:second-copy" },
+          { "used": "LOE_018", "reason": "fill:second-copy" },
+          { "used": "AT_053", "reason": "fill:second-copy" },
+          { "used": "TRL_352", "reason": "fill:second-copy" },
+          { "used": "ULD_158", "reason": "fill:second-copy" },
+          { "used": "ULD_217", "reason": "fill:second-copy" },
+          { "used": "CS2_121", "reason": "fill:second-copy" },
+          { "used": "GVG_067", "reason": "fill:second-copy" },
+          { "used": "ULD_205", "reason": "fill:second-copy" },
+          { "used": "GVG_068", "reason": "fill:second-copy" },
+          { "used": "LOOT_315", "reason": "fill:second-copy" },
+          { "used": "DAL_433", "reason": "fill:Heroic" },
+          { "used": "OG_026", "reason": "fill:Heroic" },
+          { "used": "UNG_201", "reason": "fill:Heroic" },
+          { "used": "AT_052", "reason": "fill:Heroic" },
+          { "used": "EX1_258", "reason": "fill:Heroic" },
+          { "used": "EX1_567", "reason": "fill:Heroic" },
+          { "used": "FP1_007", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_32_edra",
+      "name": "Edra",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_32h",
+      "power": "ULDA_BOSS_32p",
+      "tier": "1",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 2 },
+      "cards": ["CS2_231", "DAL_568e"],
+      "deck": {
+        "id": "enc-ulda_32_edra",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Edra", "read": "2026-11-14", "list": "Normal (level 2)" },
+        "substitutions": [
+          { "wiki": "Crystal Merchant", "listed": "ULD_133", "used": "KAR_300", "reason": "unscripted" },
+          { "used": "CS2_008", "reason": "fill:second-copy" },
+          { "used": "DAL_354", "reason": "fill:second-copy" },
+          { "used": "OG_051", "reason": "fill:second-copy" },
+          { "used": "ULD_136", "reason": "fill:second-copy" },
+          { "used": "KAR_300", "reason": "fill:second-copy" },
+          { "used": "DAL_733", "reason": "fill:second-copy" },
+          { "used": "AT_042", "reason": "fill:second-copy" },
+          { "used": "GVG_032", "reason": "fill:second-copy" },
+          { "used": "EX1_166", "reason": "fill:second-copy" },
+          { "used": "GIL_553", "reason": "fill:second-copy" },
+          { "used": "AT_037", "reason": "fill:Heroic" },
+          { "used": "ICC_051", "reason": "fill:Heroic" },
+          { "used": "ULD_134", "reason": "fill:Heroic" },
+          { "used": "ICC_808", "reason": "fill:Heroic" },
+          { "used": "TRL_343", "reason": "fill:Heroic" },
+          { "used": "CS2_232", "reason": "fill:curated" },
+          { "used": "AT_037", "reason": "fill:Heroic" },
+          { "used": "ICC_051", "reason": "fill:Heroic" },
+          { "used": "ULD_134", "reason": "fill:Heroic" },
+          { "used": "ICC_808", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_33_ruby",
+      "name": "Runaway Ruby",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_33h",
+      "power": "ULDA_BOSS_33p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["bothPlayers", "position"],
+      "deck": {
+        "id": "enc-ulda_33_ruby",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Runaway_Ruby", "read": "2026-11-14", "list": "Normal (level 6)" }
+      }
+    },
+    {
+      "id": "ulda_34_dovo",
+      "name": "Dovo Fastfuse",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_34h",
+      "power": "ULDA_BOSS_34p",
+      "tier": "1",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 2 },
+      "flags": ["bothPlayers"],
+      "deck": {
+        "id": "enc-ulda_34_dovo",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Dovo_Fastfuse", "read": "2026-11-14", "list": "Normal (level 2)" },
+        "substitutions": [
+          { "used": "DAL_415", "reason": "fill:second-copy" },
+          { "used": "BOT_067", "reason": "fill:second-copy" },
+          { "used": "GVG_082", "reason": "fill:second-copy" },
+          { "used": "BOT_031", "reason": "fill:second-copy" },
+          { "used": "TRL_504", "reason": "fill:second-copy" },
+          { "used": "DAL_400", "reason": "fill:second-copy" },
+          { "used": "EX1_082", "reason": "fill:second-copy" },
+          { "used": "BOT_431", "reason": "fill:second-copy" },
+          { "used": "BOT_532", "reason": "fill:second-copy" },
+          { "used": "TRL_321", "reason": "fill:Heroic" },
+          { "used": "BOT_059", "reason": "fill:Heroic" },
+          { "used": "EX1_402", "reason": "fill:Heroic" },
+          { "used": "DAL_060", "reason": "fill:Heroic" },
+          { "used": "EX1_604", "reason": "fill:Heroic" },
+          { "used": "BRM_016", "reason": "fill:Heroic" },
+          { "used": "OG_218", "reason": "fill:Heroic" },
+          { "used": "GVG_099", "reason": "fill:Heroic" },
+          { "used": "BRM_019", "reason": "fill:Heroic" },
+          { "used": "TRL_321", "reason": "fill:Heroic" },
+          { "used": "BOT_059", "reason": "fill:Heroic" },
+          { "used": "EX1_402", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_35_ptah",
+      "name": "Earthrager Ptah",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_35h",
+      "power": "ULDA_BOSS_35p",
+      "tier": "4",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "flags": ["position"],
+      "deck": {
+        "id": "enc-ulda_35_ptah",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Earthrager_Ptah", "read": "2026-11-14", "list": "Normal (level 7)" }
+      }
+    },
+    {
+      "id": "ulda_36_kasa",
+      "name": "Kasa Softspeaker",
+      "provenance": "ULDA",
+      "family": "20",
+      "hero": "ULDA_BOSS_36h",
+      "power": "ULDA_BOSS_36p",
+      "tier": "2",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "flags": ["forcedAttack"],
+      "cards": ["ULDA_BOSS_36e"],
+      "deck": {
+        "id": "enc-ulda_36_kasa",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Kasa_Softspeaker", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "wiki": "Plague of Madness", "listed": "ULD_715", "used": "EX1_409", "reason": "unscripted" },
+          { "wiki": "Plague of Madness", "listed": "ULD_715", "used": "EX1_409", "reason": "unscripted" },
+          { "wiki": "Cursed Blade", "listed": "LOE_118", "used": "CS2_091", "reason": "unscripted" },
+          { "used": "CS2_091", "reason": "fill:second-copy" },
+          { "used": "EX1_400", "reason": "fill:second-copy" },
+          { "used": "ICC_837", "reason": "fill:second-copy" },
+          { "used": "UNG_926", "reason": "fill:second-copy" },
+          { "used": "BOT_042", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_41_alda",
+      "name": "Alda Petrik",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_41h",
+      "power": "ULDA_BOSS_41p",
+      "tier": "1",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 2 },
+      "deck": {
+        "id": "enc-ulda_41_alda",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Alda_Petrik", "read": "2026-11-14", "list": "Normal (level 2)" },
+        "substitutions": [
+          { "wiki": "Secret Plan", "listed": "BOT_402", "used": "NEW1_031", "reason": "admission:secret-generated" },
+          { "used": "DAL_373", "reason": "fill:second-copy" },
+          { "used": "NEW1_031", "reason": "fill:second-copy" },
+          { "used": "DS1_184", "reason": "fill:second-copy" },
+          { "used": "KAR_005", "reason": "fill:second-copy" },
+          { "used": "CFM_338", "reason": "fill:second-copy" },
+          { "used": "LOOT_079", "reason": "fill:second-copy" },
+          { "used": "ULD_430", "reason": "fill:second-copy" },
+          { "used": "GIL_828", "reason": "fill:second-copy" },
+          { "used": "EX1_010", "reason": "fill:second-copy" },
+          { "used": "CS2_203", "reason": "fill:second-copy" },
+          { "used": "EX1_412", "reason": "fill:second-copy" },
+          { "used": "DS1_175", "reason": "fill:Heroic" },
+          { "used": "TRL_111", "reason": "fill:Heroic" },
+          { "used": "EX1_531", "reason": "fill:Heroic" },
+          { "used": "LOE_020", "reason": "fill:Heroic" },
+          { "used": "TRL_901", "reason": "fill:Heroic" },
+          { "used": "TRL_900", "reason": "fill:Heroic" },
+          { "used": "EX1_162", "reason": "fill:Heroic" },
+          { "used": "TRL_405", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_42_rhogi",
+      "name": "Sandshaper Rhogi",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_42h",
+      "power": "ULDA_BOSS_42p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "cards": ["ULDA_BOSS_42e"],
+      "deck": {
+        "id": "enc-ulda_42_rhogi",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Sandshaper_Rhogi", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "wiki": "EVIL Totem", "listed": "ULD_276", "used": "EX1_565", "reason": "unscripted" },
+          { "wiki": "EVIL Totem", "listed": "ULD_276", "used": "EX1_565", "reason": "unscripted" },
+          { "wiki": "Livewire Lance", "listed": "ULD_708", "used": "CS2_106", "reason": "unscripted" },
+          { "wiki": "Livewire Lance", "listed": "ULD_708", "used": "CS2_106", "reason": "unscripted" },
+          { "used": "EX1_247", "reason": "fill:second-copy" },
+          { "used": "ICC_081", "reason": "fill:second-copy" },
+          { "used": "GIL_807", "reason": "fill:second-copy" },
+          { "used": "EX1_248", "reason": "fill:Heroic" },
+          { "used": "UNG_938", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_43_jolene",
+      "name": "Jolene Knottley",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_43h",
+      "power": "ULDA_BOSS_43p",
+      "tier": "4",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "flags": ["hiddenZone"],
+      "cards": ["ULDA_BOSS_43e1"],
+      "deck": {
+        "id": "enc-ulda_43_jolene",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Jolene_Knottley", "read": "2026-11-14", "list": "Normal (level 7)" },
+        "substitutions": [
+          { "wiki": "Sinister Deal", "listed": "ULD_160", "used": "DAL_614", "reason": "unscripted" },
+          { "wiki": "Sinister Deal", "listed": "ULD_160", "used": "DAL_614", "reason": "unscripted" },
+          { "wiki": "Expired Merchant", "listed": "ULD_163", "used": "CS2_065", "reason": "unscripted" },
+          { "wiki": "Expired Merchant", "listed": "ULD_163", "used": "CS2_065", "reason": "unscripted" },
+          { "wiki": "EVIL Recruiter", "listed": "ULD_162", "used": "BRM_006", "reason": "unscripted" },
+          { "wiki": "EVIL Recruiter", "listed": "ULD_162", "used": "BRM_006", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_45_belloc",
+      "name": "Belloc Brightblade",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_45h",
+      "power": "ULDA_BOSS_45p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["passive"],
+      "deck": {
+        "id": "enc-ulda_45_belloc",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Belloc_Brightblade", "read": "2026-11-14", "list": "Normal (level 6)" },
+        "substitutions": [
+          { "wiki": "Sinister Deal", "listed": "ULD_160", "used": "DAL_614", "reason": "unscripted" },
+          { "wiki": "Sinister Deal", "listed": "ULD_160", "used": "DAL_614", "reason": "unscripted" },
+          { "wiki": "Riftcleaver", "listed": "ULD_165", "used": "CS2_097", "reason": "unscripted" },
+          { "wiki": "Riftcleaver", "listed": "ULD_165", "used": "CS2_097", "reason": "unscripted" },
+          { "listed": "ULD_208", "reason": "over-size" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_46_wildtooth",
+      "name": "Wildtooth",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_46h",
+      "power": "ULDA_BOSS_46p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["passive", "bothPlayers"],
+      "deck": {
+        "id": "enc-ulda_46_wildtooth",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Wildtooth", "read": "2026-11-14", "list": "Normal (level 6)" },
+        "substitutions": [
+          { "wiki": "Gral, the Shark", "listed": "TRL_409", "used": "EX1_534", "reason": "admission:from-own-deck" },
+          { "wiki": "Desert Hare", "listed": "ULD_719", "used": "OG_179", "reason": "unscripted" },
+          { "wiki": "Desert Hare", "listed": "ULD_719", "used": "OG_179", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_47_jar",
+      "name": "Totally Normal Jar",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_47h",
+      "power": "ULDA_BOSS_47p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "cards": ["ULDA_BOSS_47e"],
+      "deck": {
+        "id": "enc-ulda_47_jar",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Totally_Normal_Jar", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "wiki": "Expired Merchant", "listed": "ULD_163", "used": "OG_241", "reason": "unscripted" },
+          { "wiki": "Kobold Sandtrooper", "listed": "ULD_184", "used": "EX1_029", "reason": "unscripted" },
+          { "wiki": "Kobold Sandtrooper", "listed": "ULD_184", "used": "EX1_029", "reason": "unscripted" },
+          { "wiki": "Desert Obelisk", "listed": "ULD_703", "used": "FP1_007", "reason": "unscripted" },
+          { "wiki": "Desert Obelisk", "listed": "ULD_703", "used": "FP1_007", "reason": "unscripted" },
+          { "wiki": "Desert Obelisk", "listed": "ULD_703", "used": "FP1_007", "reason": "unscripted" },
+          { "wiki": "Desert Obelisk", "listed": "ULD_703", "used": "FP1_007", "reason": "unscripted" },
+          { "wiki": "Desert Obelisk", "listed": "ULD_703", "used": "FP1_007", "reason": "unscripted" },
+          { "used": "CFM_663", "reason": "fill:second-copy" },
+          { "used": "ULD_208", "reason": "fill:second-copy" },
+          { "used": "ULD_217", "reason": "fill:Heroic" },
+          { "used": "ICC_903", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_48_ilza",
+      "name": "Ilza Grimdrum",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_48h",
+      "power": "ULDA_BOSS_48p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "flags": ["passive", "bothPlayers", "hiddenZone"],
+      "deck": {
+        "id": "enc-ulda_48_ilza",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Ilza_Grimdrum", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "wiki": "Injured Tol'vir", "listed": "ULD_271", "used": "CS2_121", "reason": "unscripted" },
+          { "wiki": "Injured Tol'vir", "listed": "ULD_271", "used": "CS2_121", "reason": "unscripted" },
+          { "used": "EX1_407", "reason": "fill:second-copy" },
+          { "used": "CS2_181", "reason": "fill:second-copy" },
+          { "used": "ULD_194", "reason": "fill:second-copy" },
+          { "used": "EX1_410", "reason": "fill:Heroic" },
+          { "used": "ICC_837", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_49_craz",
+      "name": "Craz",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_49h",
+      "power": "ULDA_BOSS_49p",
+      "tier": "4",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "deck": {
+        "id": "enc-ulda_49_craz",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Craz", "read": "2026-11-14", "list": "Normal (level 7)" },
+        "substitutions": [
+          { "wiki": "Sinister Deal", "listed": "ULD_160", "used": "DAL_614", "reason": "unscripted" },
+          { "wiki": "Sinister Deal", "listed": "ULD_160", "used": "DAL_614", "reason": "unscripted" },
+          { "wiki": "Expired Merchant", "listed": "ULD_163", "used": "CS2_065", "reason": "unscripted" },
+          { "wiki": "Expired Merchant", "listed": "ULD_163", "used": "CS2_065", "reason": "unscripted" },
+          { "wiki": "EVIL Recruiter", "listed": "ULD_162", "used": "BRM_006", "reason": "unscripted" },
+          { "wiki": "EVIL Recruiter", "listed": "ULD_162", "used": "BRM_006", "reason": "unscripted" },
+          { "wiki": "Riftcleaver", "listed": "ULD_165", "used": "EX1_310", "reason": "unscripted" },
+          { "wiki": "Riftcleaver", "listed": "ULD_165", "used": "EX1_310", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_50_barkeye",
+      "name": "Ol' Barkeye",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_50h",
+      "power": "ULDA_BOSS_50p",
+      "tier": "3",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["passive"],
+      "deck": {
+        "id": "enc-ulda_50_barkeye",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Ol'_Barkeye_(boss)", "read": "2026-11-14", "list": "Normal (level 6)" },
+        "substitutions": [
+          { "wiki": "Hunter's Pack", "listed": "ULD_429", "used": "NEW1_031", "reason": "admission:secret-generated" },
+          { "wiki": "Hunter's Pack", "listed": "ULD_429", "used": "NEW1_031", "reason": "admission:secret-generated" },
+          { "wiki": "Kobold Sandtrooper", "listed": "ULD_184", "used": "EX1_029", "reason": "unscripted" },
+          { "wiki": "Kobold Sandtrooper", "listed": "ULD_184", "used": "EX1_029", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_51_kasmut",
+      "name": "Kasmut",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_51h",
+      "power": "ULDA_BOSS_51p",
+      "tier": "2",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "flags": ["passive", "bothPlayers"],
+      "deck": {
+        "id": "enc-ulda_51_kasmut",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Kasmut", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "wiki": "Murmy", "listed": "ULD_723", "used": "ULD_217", "reason": "unscripted" },
+          { "wiki": "Murmy", "listed": "ULD_723", "used": "ULD_217", "reason": "unscripted" },
+          { "wiki": "Generous Mummy", "listed": "ULD_214", "used": "ULD_206", "reason": "unscripted" },
+          { "wiki": "Generous Mummy", "listed": "ULD_214", "used": "ULD_206", "reason": "unscripted" },
+          { "used": "ULD_138", "reason": "fill:second-copy" },
+          { "used": "ULD_268", "reason": "fill:second-copy" },
+          { "used": "ULD_718", "reason": "fill:second-copy" },
+          { "used": "GIL_813", "reason": "fill:Heroic" },
+          { "used": "ULD_269", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_52_bazhial",
+      "name": "Lich Baz'hial",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_52h",
+      "power": "ULDA_BOSS_52p1",
+      "tier": "4",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "flags": ["forms"],
+      "deck": {
+        "id": "enc-ulda_52_bazhial",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Lich_Baz'hial", "read": "2026-11-14", "list": "Normal (level 7)" }
+      },
+      "forms": [
+        {
+          "power": "ULDA_BOSS_52p2",
+          "at": { "script": true },
+          "keepExcess": true
+        }
+      ]
+    },
+    {
+      "id": "ulda_53_maru",
+      "name": "Taskmaster Maru",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_53h",
+      "power": "ULDA_BOSS_53p",
+      "tier": "2",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "deck": {
+        "id": "enc-ulda_53_maru",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Taskmaster_Maru", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "wiki": "Sahket Sapper", "listed": "ULD_280", "used": "EX1_134", "reason": "unscripted" },
+          { "used": "LOOT_033", "reason": "fill:second-copy" },
+          { "used": "EX1_134", "reason": "fill:second-copy" },
+          { "used": "CS2_072", "reason": "fill:Heroic" },
+          { "used": "CFM_630", "reason": "fill:Heroic" },
+          { "used": "EX1_144", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_54_janak",
+      "name": "Janak",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_54h",
+      "power": "ULDA_BOSS_54p",
+      "tier": "2",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "cards": ["ULDA_BOSS_54e"],
+      "deck": {
+        "id": "enc-ulda_54_janak",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Janak", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "wiki": "Livewire Lance", "listed": "ULD_708", "used": "CS2_106", "reason": "unscripted" },
+          { "wiki": "Livewire Lance", "listed": "ULD_708", "used": "CS2_106", "reason": "unscripted" },
+          { "wiki": "Sunstruck Henchman", "listed": "ULD_180", "used": "CS2_182", "reason": "unscripted" },
+          { "wiki": "Sunstruck Henchman", "listed": "ULD_180", "used": "CS2_182", "reason": "unscripted" },
+          { "used": "EX1_392", "reason": "fill:second-copy" },
+          { "used": "BRM_016", "reason": "fill:second-copy" },
+          { "used": "OG_218", "reason": "fill:second-copy" },
+          { "used": "GVG_051", "reason": "fill:Heroic" },
+          { "used": "CS2_104", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_55_murlocs",
+      "name": "Water-Toting Murlocs",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_55h",
+      "power": "ULDA_BOSS_55p",
+      "tier": "1",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 2 },
+      "flags": ["bothPlayers"],
+      "deck": {
+        "id": "enc-ulda_55_murlocs",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Water-Toting_Murlocs", "read": "2026-11-14", "list": "Normal (level 2)" },
+        "substitutions": [
+          { "wiki": "Murmy", "listed": "ULD_723", "used": "CS2_173", "reason": "unscripted" },
+          { "wiki": "Fishflinger", "listed": "ULD_289", "used": "EX1_506", "reason": "unscripted" },
+          { "used": "GIL_600", "reason": "fill:second-copy" },
+          { "used": "TRL_012", "reason": "fill:second-copy" },
+          { "used": "GVG_040", "reason": "fill:second-copy" },
+          { "used": "LOEA10_3", "reason": "fill:second-copy" },
+          { "used": "CS2_168", "reason": "fill:second-copy" },
+          { "used": "CS2_173", "reason": "fill:second-copy" },
+          { "used": "EX1_506", "reason": "fill:second-copy" },
+          { "used": "GVG_064", "reason": "fill:second-copy" },
+          { "used": "TRL_520", "reason": "fill:second-copy" },
+          { "used": "OG_161", "reason": "fill:second-copy" },
+          { "used": "CFM_650", "reason": "fill:Heroic" },
+          { "used": "AT_076", "reason": "fill:Heroic" },
+          { "used": "DAL_049", "reason": "fill:Heroic" },
+          { "used": "UNG_073", "reason": "fill:Heroic" },
+          { "used": "EX1_103", "reason": "fill:Heroic" },
+          { "used": "EX1_507", "reason": "fill:Heroic" },
+          { "used": "GIL_681", "reason": "fill:Heroic" },
+          { "used": "EX1_062", "reason": "fill:Heroic" },
+          { "used": "CFM_650", "reason": "fill:Heroic" },
+          { "used": "AT_076", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_56_frog",
+      "name": "Sand Puffer Frog",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_56h",
+      "power": "ULDA_BOSS_56p",
+      "tier": "1",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 2 },
+      "flags": ["passive"],
+      "cards": ["ULDA_BOSS_56e"],
+      "deck": {
+        "id": "enc-ulda_56_frog",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Sand_Puffer_Frog", "read": "2026-11-14", "list": "Normal (level 2)" },
+        "substitutions": [
+          { "wiki": "Murmy", "listed": "ULD_723", "used": "ULD_217", "reason": "unscripted" },
+          { "wiki": "Quicksand Elemental", "listed": "ULD_197", "used": "UNG_928", "reason": "unscripted" },
+          { "used": "DAL_433", "reason": "fill:second-copy" },
+          { "used": "ULD_158", "reason": "fill:second-copy" },
+          { "used": "LOOT_218", "reason": "fill:second-copy" },
+          { "used": "TRL_505", "reason": "fill:second-copy" },
+          { "used": "ULD_217", "reason": "fill:second-copy" },
+          { "used": "DAL_400", "reason": "fill:second-copy" },
+          { "used": "LOE_046", "reason": "fill:second-copy" },
+          { "used": "LOE_029", "reason": "fill:second-copy" },
+          { "used": "UNG_928", "reason": "fill:second-copy" },
+          { "used": "OG_179", "reason": "fill:Heroic" },
+          { "used": "TRL_348", "reason": "fill:Heroic" },
+          { "used": "DS1_175", "reason": "fill:Heroic" },
+          { "used": "FP1_011", "reason": "fill:Heroic" },
+          { "used": "ICC_092", "reason": "fill:Heroic" },
+          { "used": "UNG_809", "reason": "fill:Heroic" },
+          { "used": "UNG_205", "reason": "fill:Heroic" },
+          { "used": "OG_179", "reason": "fill:Heroic" },
+          { "used": "TRL_348", "reason": "fill:Heroic" },
+          { "used": "DS1_175", "reason": "fill:Heroic" },
+          { "used": "FP1_011", "reason": "fill:Heroic" },
+          { "used": "ICC_092", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_57_winged_guardian",
+      "name": "Winged Guardian",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_57h",
+      "power": "ULDA_BOSS_57p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "cards": ["ULDA_BOSS_57e"],
+      "deck": {
+        "id": "enc-ulda_57_winged_guardian",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Winged_Guardian_(boss)", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "used": "BRM_022", "reason": "fill:second-copy" },
+          { "used": "UNG_960", "reason": "fill:Heroic" },
+          { "used": "ICC_038", "reason": "fill:Heroic" },
+          { "used": "OG_222", "reason": "fill:Heroic" },
+          { "used": "UNG_015", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_59_dire_bat",
+      "name": "Dire Bat",
+      "provenance": "ULDA",
+      "family": "21",
+      "hero": "ULDA_BOSS_59h",
+      "power": "ULDA_BOSS_59p",
+      "tier": "2",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "deck": {
+        "id": "enc-ulda_59_dire_bat",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Dire_Bat", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "used": "UNG_916", "reason": "fill:second-copy" },
+          { "used": "CS2_084", "reason": "fill:second-copy" },
+          { "used": "GIL_828", "reason": "fill:second-copy" },
+          { "used": "CS2_237", "reason": "fill:second-copy" },
+          { "used": "TRL_348", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_60_zaraam",
+      "name": "Zaraam",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_60h",
+      "power": "ULDA_BOSS_60p",
+      "tier": "4",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "deck": {
+        "id": "enc-ulda_60_zaraam",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Zaraam", "read": "2026-11-14", "list": "Normal (level 7)" },
+        "substitutions": [
+          { "wiki": "Sinister Deal", "listed": "ULD_160", "used": "DAL_614", "reason": "unscripted" },
+          { "wiki": "Sinister Deal", "listed": "ULD_160", "used": "DAL_614", "reason": "unscripted" },
+          { "wiki": "EVIL Recruiter", "listed": "ULD_162", "used": "BRM_006", "reason": "unscripted" },
+          { "wiki": "EVIL Recruiter", "listed": "ULD_162", "used": "BRM_006", "reason": "unscripted" },
+          { "wiki": "Injured Tol'vir", "listed": "ULD_271", "used": "CS2_121", "reason": "unscripted" },
+          { "wiki": "Injured Tol'vir", "listed": "ULD_271", "used": "CS2_121", "reason": "unscripted" },
+          { "wiki": "Faceless Lurker", "listed": "ULD_189", "used": "CS1_069", "reason": "unscripted" },
+          { "wiki": "Faceless Lurker", "listed": "ULD_189", "used": "CS1_069", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_61_kyriss",
+      "name": "Kyriss",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_61h",
+      "power": "ULDA_BOSS_61p",
+      "tier": "4",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "deck": {
+        "id": "enc-ulda_61_kyriss",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Kyriss", "read": "2026-11-14", "list": "Normal (level 7)" }
+      }
+    },
+    {
+      "id": "ulda_62_oasis",
+      "name": "A Beautiful Oasis",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_62h",
+      "power": "ULDA_BOSS_62p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["hiddenZone"],
+      "deck": {
+        "id": "enc-ulda_62_oasis",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/A_Beautiful_Oasis", "read": "2026-11-14", "list": "Normal (level 6)" },
+        "substitutions": [
+          { "wiki": "Garden Gnome", "listed": "ULD_137", "used": "EX1_025", "reason": "unscripted" },
+          { "wiki": "Garden Gnome", "listed": "ULD_137", "used": "EX1_025", "reason": "unscripted" },
+          { "wiki": "Fishflinger", "listed": "ULD_289", "used": "EX1_506", "reason": "unscripted" },
+          { "wiki": "Fishflinger", "listed": "ULD_289", "used": "EX1_506", "reason": "unscripted" },
+          { "wiki": "Conjured Mirage", "listed": "ULD_198", "used": "CS2_179", "reason": "unscripted" },
+          { "wiki": "Conjured Mirage", "listed": "ULD_198", "used": "CS2_179", "reason": "unscripted" },
+          { "wiki": "Pit Crocolisk", "listed": "ULD_190", "used": "CS2_042", "reason": "unscripted" },
+          { "wiki": "Pit Crocolisk", "listed": "ULD_190", "used": "CS2_042", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_63_vessina",
+      "name": "Vessina",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_63h",
+      "power": "ULDA_BOSS_63p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "flags": ["passive"],
+      "deck": {
+        "id": "enc-ulda_63_vessina",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Vessina_(boss)", "read": "2026-11-14", "list": "Normal (level 6)" },
+        "substitutions": [
+          { "wiki": "EVIL Totem", "listed": "ULD_276", "used": "EX1_565", "reason": "unscripted" },
+          { "wiki": "EVIL Totem", "listed": "ULD_276", "used": "EX1_565", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_65_thrud",
+      "name": "Thrud",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_65h",
+      "power": "ULDA_BOSS_65p",
+      "tier": "2",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "flags": ["hiddenZone"],
+      "deck": {
+        "id": "enc-ulda_65_thrud",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Thrud", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "wiki": "Mischief Maker", "listed": "ULD_229", "used": "EX1_134", "reason": "unscripted" },
+          { "wiki": "Mischief Maker", "listed": "ULD_229", "used": "EX1_134", "reason": "unscripted" },
+          { "wiki": "Ogre Brute", "listed": "GVG_065", "used": "CS2_125", "reason": "unscripted" },
+          { "wiki": "Ogre Brute", "listed": "GVG_065", "used": "CS2_125", "reason": "unscripted" },
+          { "used": "GIL_696", "reason": "fill:second-copy" },
+          { "used": "EX1_124", "reason": "fill:Heroic" },
+          { "used": "OG_330", "reason": "fill:Heroic" },
+          { "used": "DAL_416", "reason": "fill:Heroic" },
+          { "used": "DAL_716", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_66_siamat",
+      "name": "Siamat",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_66h",
+      "power": "ULDA_BOSS_66p",
+      "tier": "4",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "cards": ["ULDA_026"],
+      "deck": {
+        "id": "enc-ulda_66_siamat",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Siamat_(boss)", "read": "2026-11-14", "list": "Normal (level 7)" }
+      }
+    },
+    {
+      "id": "ulda_68_wasp",
+      "name": "Weaponized Wasp",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_68h",
+      "power": "ULDA_BOSS_68p",
+      "tier": "1",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 2 },
+      "deck": {
+        "id": "enc-ulda_68_wasp",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Weaponized_Wasp_(boss)", "read": "2026-11-14", "list": "Normal (level 2)" },
+        "substitutions": [
+          { "wiki": "Spitting Camel", "listed": "ULD_182", "used": "EX1_096", "reason": "unscripted" },
+          { "used": "KAR_300", "reason": "fill:second-copy" },
+          { "used": "DAL_352", "reason": "fill:second-copy" },
+          { "used": "ULD_134", "reason": "fill:second-copy" },
+          { "used": "UNG_914", "reason": "fill:second-copy" },
+          { "used": "ULD_439", "reason": "fill:second-copy" },
+          { "used": "LOOT_258", "reason": "fill:second-copy" },
+          { "used": "UNG_085", "reason": "fill:second-copy" },
+          { "used": "UNG_803", "reason": "fill:second-copy" },
+          { "used": "UNG_814", "reason": "fill:second-copy" },
+          { "used": "EX1_096", "reason": "fill:second-copy" },
+          { "used": "OG_048", "reason": "fill:Heroic" },
+          { "used": "AT_041", "reason": "fill:Heroic" },
+          { "used": "ICC_023", "reason": "fill:Heroic" },
+          { "used": "NEW1_019", "reason": "fill:Heroic" },
+          { "used": "CS2_172", "reason": "fill:curated" },
+          { "used": "OG_048", "reason": "fill:Heroic" },
+          { "used": "AT_041", "reason": "fill:Heroic" },
+          { "used": "ICC_023", "reason": "fill:Heroic" },
+          { "used": "NEW1_019", "reason": "fill:Heroic" },
+          { "used": "CS2_172", "reason": "fill:curated" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_69_isiset",
+      "name": "Isiset",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_69h",
+      "power": "ULDA_BOSS_69p",
+      "tier": "4",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "flags": ["passive", "bothPlayers", "recast"],
+      "deck": {
+        "id": "enc-ulda_69_isiset",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Isiset_(boss)", "read": "2026-11-14", "list": "Normal (level 7)" }
+      }
+    },
+    {
+      "id": "ulda_70_rajh",
+      "name": "Rajh",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_70h",
+      "power": "ULDA_BOSS_70p",
+      "tier": "4",
+      "archetype": "tempo",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "cards": ["ULDA_BOSS_70e"],
+      "deck": {
+        "id": "enc-ulda_70_rajh",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Rajh_(boss)", "read": "2026-11-14", "list": "Normal (level 7)" }
+      }
+    },
+    {
+      "id": "ulda_71_ammunae",
+      "name": "Ammunae",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_71h",
+      "power": "ULDA_BOSS_71p",
+      "tier": "4",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "deck": {
+        "id": "enc-ulda_71_ammunae",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Ammunae_(boss)", "read": "2026-11-14", "list": "Normal (level 7)" },
+        "substitutions": [
+          { "wiki": "Wrath", "listed": "EX1_154", "used": "AT_037", "reason": "unscripted" },
+          { "wiki": "Wrath", "listed": "EX1_154", "used": "AT_037", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_72_setesh",
+      "name": "Setesh",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_72h",
+      "power": "ULDA_BOSS_72p",
+      "tier": "4",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "cards": ["ULDA_BOSS_72e"],
+      "deck": {
+        "id": "enc-ulda_72_setesh",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Setesh_(boss)", "read": "2026-11-14", "list": "Normal (level 7)" }
+      }
+    },
+    {
+      "id": "ulda_73_husam",
+      "name": "General Husam",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_73h",
+      "power": "ULDA_BOSS_73p",
+      "tier": "4",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "flags": ["passive"],
+      "cards": ["ULDA_BOSS_73e"],
+      "deck": {
+        "id": "enc-ulda_73_husam",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/General_Husam", "read": "2026-11-14", "list": "Normal (level 7)" }
+      }
+    },
+    {
+      "id": "ulda_74_barim",
+      "name": "High Prophet Barim",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_74h",
+      "power": "ULDA_BOSS_74p",
+      "tier": "3",
+      "archetype": "control",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "deck": {
+        "id": "enc-ulda_74_barim",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/High_Prophet_Barim", "read": "2026-11-14", "list": "Normal (level 6)" },
+        "substitutions": [
+          { "wiki": "Desperate Measures", "listed": "DAL_141", "used": "CS2_004", "reason": "admission:secret-generated" },
+          { "wiki": "Desperate Measures", "listed": "DAL_141", "used": "CS2_004", "reason": "admission:secret-generated" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_75_avozu",
+      "name": "Avozu",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_75h",
+      "power": "ULDA_BOSS_75p",
+      "tier": "4",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 7 },
+      "deck": {
+        "id": "enc-ulda_75_avozu",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Avozu", "read": "2026-11-14", "list": "Normal (level 7)" },
+        "substitutions": [
+          { "wiki": "Hunter's Pack", "listed": "ULD_429", "used": "NEW1_031", "reason": "admission:secret-generated" },
+          { "wiki": "Hunter's Pack", "listed": "ULD_429", "used": "NEW1_031", "reason": "admission:secret-generated" },
+          { "wiki": "Kobold Sandtrooper", "listed": "ULD_184", "used": "EX1_029", "reason": "unscripted" },
+          { "wiki": "Kobold Sandtrooper", "listed": "ULD_184", "used": "EX1_029", "reason": "unscripted" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_76_tarkus",
+      "name": "Tarkus",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_76h",
+      "power": "ULDA_BOSS_76p",
+      "tier": "2",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 4 },
+      "deck": {
+        "id": "enc-ulda_76_tarkus",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Tarkus", "read": "2026-11-14", "list": "Normal (level 4)" },
+        "substitutions": [
+          { "used": "DAL_731", "reason": "fill:second-copy" },
+          { "used": "ULD_143", "reason": "fill:second-copy" },
+          { "used": "CS2_088", "reason": "fill:second-copy" },
+          { "used": "GIL_203", "reason": "fill:Heroic" },
+          { "used": "GVG_061", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_77_gorebite",
+      "name": "Gorebite",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_77h",
+      "power": "ULDA_BOSS_77p",
+      "tier": "1",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 2 },
+      "cards": ["ULDA_BOSS_77e"],
+      "deck": {
+        "id": "enc-ulda_77_gorebite",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Gorebite", "read": "2026-11-14", "list": "Normal (level 2)" },
+        "substitutions": [
+          { "used": "TRL_243", "reason": "fill:second-copy" },
+          { "used": "CS2_005", "reason": "fill:second-copy" },
+          { "used": "EX1_578", "reason": "fill:second-copy" },
+          { "used": "TRL_244", "reason": "fill:second-copy" },
+          { "used": "GIL_558", "reason": "fill:second-copy" },
+          { "used": "EX1_066", "reason": "fill:second-copy" },
+          { "used": "CS2_120", "reason": "fill:second-copy" },
+          { "used": "CS2_203", "reason": "fill:second-copy" },
+          { "used": "GIL_601", "reason": "fill:second-copy" },
+          { "used": "KAR_300", "reason": "fill:Heroic" },
+          { "used": "ICC_079", "reason": "fill:Heroic" },
+          { "used": "EX1_570", "reason": "fill:Heroic" },
+          { "used": "TRL_241", "reason": "fill:Heroic" },
+          { "used": "TRL_507", "reason": "fill:Heroic" },
+          { "used": "GIL_534", "reason": "fill:Heroic" },
+          { "used": "EX1_028", "reason": "fill:Heroic" },
+          { "used": "FP1_010", "reason": "fill:Heroic" },
+          { "used": "KAR_300", "reason": "fill:Heroic" },
+          { "used": "ICC_079", "reason": "fill:Heroic" },
+          { "used": "EX1_570", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_78_octosari",
+      "name": "Octosari",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_78h",
+      "power": "ULDA_BOSS_78p",
+      "tier": "3",
+      "archetype": "midrange",
+      "level": { "source": "wiki-level-table", "original": 6 },
+      "deck": {
+        "id": "enc-ulda_78_octosari",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Octosari_(boss)", "read": "2026-11-14", "list": "Normal (level 6)" }
+      }
+    },
+    {
+      "id": "ulda_79_armadillobot",
+      "name": "Armadillobot",
+      "provenance": "ULDA",
+      "family": "22",
+      "hero": "ULDA_BOSS_79h",
+      "power": "ULDA_BOSS_79p",
+      "tier": "2",
+      "archetype": "aggro",
+      "level": { "source": "wiki-level-table", "original": 3 },
+      "flags": ["forcedAttack"],
+      "cards": ["ULDA_BOSS_79e"],
+      "deck": {
+        "id": "enc-ulda_79_armadillobot",
+        "kind": "extended",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Armadillobot", "read": "2026-11-14", "list": "Normal (level 3)" },
+        "substitutions": [
+          { "wiki": "Livewire Lance", "listed": "ULD_708", "used": "CS2_106", "reason": "unscripted" },
+          { "used": "EX1_391", "reason": "fill:second-copy" },
+          { "used": "DAL_759", "reason": "fill:second-copy" },
+          { "used": "GVG_050", "reason": "fill:second-copy" },
+          { "used": "CS2_106", "reason": "fill:second-copy" },
+          { "used": "GVG_093", "reason": "fill:second-copy" },
+          { "used": "ULD_282", "reason": "fill:second-copy" },
+          { "used": "DAL_400", "reason": "fill:second-copy" },
+          { "used": "GVG_084", "reason": "fill:second-copy" },
+          { "used": "EX1_556", "reason": "fill:second-copy" },
+          { "used": "EX1_025", "reason": "fill:second-copy" },
+          { "used": "BOT_059", "reason": "fill:Heroic" },
+          { "used": "GVG_051", "reason": "fill:Heroic" },
+          { "used": "AT_064", "reason": "fill:Heroic" },
+          { "used": "ULD_206", "reason": "fill:Heroic" },
+          { "used": "BOT_104", "reason": "fill:Heroic" },
+          { "used": "GVG_006", "reason": "fill:Heroic" },
+          { "used": "GVG_103", "reason": "fill:Heroic" },
+          { "used": "BOT_309", "reason": "fill:Heroic" },
+          { "used": "BOT_700", "reason": "fill:Heroic" }
+        ]
+      }
+    },
+    {
+      "id": "gila_48_infinite_toki",
+      "name": "Infinite Toki",
+      "provenance": "GIL",
+      "family": "23",
+      "hero": "GILA_BOSS_48h",
+      "power": "GILA_BOSS_48p",
+      "tier": "major2",
+      "archetype": "control",
+      "level": { "source": "printed-health", "original": 60 },
+      "healthOffset": 10,
+      "cards": ["GILA_BOSS_48e"],
+      "deck": {
+        "id": "enc-gila_48_infinite_toki",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Infinite_Toki", "read": "2026-11-14", "list": "Deck" },
+        "substitutions": [
+          { "wiki": "Enhance-a-matic", "listed": "GILA_903", "reason": "admission:secret-generated" },
+          { "wiki": "Alternate Timeline", "listed": "GILA_BOSS_48t", "reason": "unscripted" },
+          { "used": "GILA_907", "reason": "fill:second-copy" },
+          { "used": "EX1_287", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "gila_49_glinda",
+      "name": "Glinda Crowskin",
+      "provenance": "GIL",
+      "family": "23",
+      "hero": "GILA_BOSS_49h",
+      "power": "GILA_BOSS_49p",
+      "tier": "major2",
+      "archetype": "control",
+      "level": { "source": "printed-health", "original": 50 },
+      "healthOffset": 10,
+      "flags": ["passive", "heroImmune"],
+      "deck": {
+        "id": "enc-gila_49_glinda",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Glinda_Crowskin_(boss)", "read": "2026-11-14", "list": "Deck" }
+      }
+    },
+    {
+      "id": "gila_59_godfrey",
+      "name": "Lord Godfrey",
+      "provenance": "GIL",
+      "family": "23",
+      "hero": "GILA_BOSS_59h",
+      "power": "GILA_BOSS_59p",
+      "tier": "major2",
+      "archetype": "midrange",
+      "level": { "source": "printed-health", "original": 60 },
+      "healthOffset": 10,
+      "flags": ["start"],
+      "start": {
+        "bossHandAdd": ["GILA_503"]
+      },
+      "deck": {
+        "id": "enc-gila_59_godfrey",
+        "kind": "authentic",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Lord_Godfrey_(boss)", "read": "2026-11-14", "list": "Deck" }
+      }
+    },
+    {
+      "id": "gila_60_shivers",
+      "name": "Captain Shivers",
+      "provenance": "GIL",
+      "family": "23",
+      "hero": "GILA_BOSS_60h",
+      "power": "GILA_BOSS_60p",
+      "tier": "major2",
+      "archetype": "tempo",
+      "level": { "source": "printed-health", "original": 75 },
+      "healthOffset": 10,
+      "flags": ["start", "passive"],
+      "start": { "bossWeapon": "LOOT_542" },
+      "deck": {
+        "id": "enc-gila_60_shivers",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Captain_Shivers", "read": "2026-11-14", "list": "Deck" },
+        "substitutions": [
+          { "wiki": "Fel Reaver", "listed": "GVG_016", "reason": "unscripted" },
+          { "wiki": "Fel Reaver", "listed": "GVG_016", "reason": "unscripted" },
+          { "used": "ICC_221", "reason": "fill:second-copy" },
+          { "used": "UNG_823", "reason": "fill:second-copy" }
+        ]
+      }
+    },
+    {
+      "id": "ulda_37_xatma",
+      "name": "Xatma, Plague Lord of Death",
+      "provenance": "ULDA",
+      "family": "24",
+      "hero": "ULDA_BOSS_37h",
+      "power": "ULDA_BOSS_37p1",
+      "tier": "major3",
+      "archetype": "control",
+      "level": { "source": "printed-health", "original": 300 },
+      "health": 300,
+      "fixedHealth": true,
+      "flags": ["forms", "persistentDamage", "deckReplace"],
+      "cards": ["ULDA_BOSS_37t"],
+      "incompatibleModifiers": ["mod_iron_bosses", "mod_open_road"],
+      "deck": {
+        "id": "enc-ulda_37_xatma",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Xatma,_Plague_Lord_of_Death", "read": "2026-11-14", "list": "Normal phase 1" },
+        "substitutions": [
+          { "wiki": "Kobold Sandtrooper", "listed": "ULD_184", "reason": "unscripted" },
+          { "used": "OG_335", "reason": "fill:second-copy" }
+        ]
+      },
+      "forms": [
+        {
+          "hero": "ULDA_BOSS_37h2",
+          "power": "ULDA_BOSS_37p2",
+          "health": 200,
+          "at": { "healthAtMost": 200 },
+          "keepExcess": true,
+          "draw": 3,
+          "deck": {
+            "id": "enc-ulda_37_xatma-f1",
+            "kind": "authentic",
+            "source": { "url": "https://hearthstone.wiki.gg/wiki/Xatma,_Plague_Lord_of_Death", "read": "2026-11-14", "list": "Normal phase 2" }
+          }
+        },
+        {
+          "hero": "ULDA_BOSS_37h3",
+          "power": "ULDA_BOSS_37p3",
+          "health": 100,
+          "at": { "healthAtMost": 100 },
+          "keepExcess": true,
+          "draw": 3,
+          "deck": {
+            "id": "enc-ulda_37_xatma-f2",
+            "kind": "substituted",
+            "source": { "url": "https://hearthstone.wiki.gg/wiki/Xatma,_Plague_Lord_of_Death", "read": "2026-11-14", "list": "Normal phase 3" },
+            "substitutions": [
+              { "wiki": "Murmy", "listed": "ULD_723", "reason": "unscripted" },
+              { "wiki": "Murmy", "listed": "ULD_723", "reason": "unscripted" },
+              { "wiki": "Mortuary Machine", "listed": "ULD_702", "reason": "unscripted" },
+              { "wiki": "Mortuary Machine", "listed": "ULD_702", "reason": "unscripted" },
+              { "used": "LOOT_153", "reason": "fill:second-copy" },
+              { "used": "CS2_234", "reason": "fill:curated" },
+              { "used": "CS2_235", "reason": "fill:curated" },
+              { "used": "CS1_112", "reason": "fill:curated" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "ulda_38_kzrath",
+      "name": "K'zrath, Plague Lord of Madness",
+      "provenance": "ULDA",
+      "family": "24",
+      "hero": "ULDA_BOSS_38h",
+      "power": "ULDA_BOSS_38p2",
+      "tier": "major3",
+      "archetype": "tempo",
+      "level": { "source": "printed-health", "original": 300 },
+      "health": 300,
+      "fixedHealth": true,
+      "flags": ["forms", "persistentDamage", "deckReplace"],
+      "cards": ["ULDA_BOSS_38p2e1"],
+      "incompatibleModifiers": ["mod_iron_bosses", "mod_open_road"],
+      "deck": {
+        "id": "enc-ulda_38_kzrath",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/K%27zrath,_Plague_Lord_of_Madness", "read": "2026-11-14", "list": "Normal phase 1" },
+        "substitutions": [
+          { "wiki": "Surrender to Madness", "listed": "TRL_500", "reason": "admission:deck-wide-change" },
+          { "wiki": "Plague of Madness", "listed": "ULD_715", "reason": "unscripted" },
+          { "wiki": "Plague of Madness", "listed": "ULD_715", "reason": "unscripted" },
+          { "used": "OG_284", "reason": "fill:second-copy" },
+          { "used": "ICC_099", "reason": "fill:second-copy" },
+          { "used": "CS2_234", "reason": "fill:curated" }
+        ]
+      },
+      "forms": [
+        {
+          "hero": "ULDA_BOSS_38h2",
+          "power": "ULDA_BOSS_38p1",
+          "health": 200,
+          "at": { "healthAtMost": 200 },
+          "keepExcess": true,
+          "draw": 3,
+          "deck": {
+            "id": "enc-ulda_38_kzrath-f1",
+            "kind": "substituted",
+            "source": { "url": "https://hearthstone.wiki.gg/wiki/K%27zrath,_Plague_Lord_of_Madness", "read": "2026-11-14", "list": "Normal phase 2" },
+            "substitutions": [
+              { "wiki": "Surrender to Madness", "listed": "TRL_500", "reason": "admission:deck-wide-change" },
+              { "wiki": "Plague of Madness", "listed": "ULD_715", "reason": "unscripted" },
+              { "wiki": "Plague of Madness", "listed": "ULD_715", "reason": "unscripted" },
+              { "used": "TRL_258", "reason": "fill:second-copy" },
+              { "used": "OG_073", "reason": "fill:second-copy" },
+              { "used": "OG_255", "reason": "fill:second-copy" }
+            ]
+          }
+        },
+        {
+          "hero": "ULDA_BOSS_38h3",
+          "power": "ULDA_BOSS_38p3",
+          "health": 100,
+          "at": { "healthAtMost": 100 },
+          "keepExcess": true,
+          "draw": 3,
+          "deck": {
+            "id": "enc-ulda_38_kzrath-f2",
+            "kind": "substituted",
+            "source": { "url": "https://hearthstone.wiki.gg/wiki/K%27zrath,_Plague_Lord_of_Madness", "read": "2026-11-14", "list": "Normal phase 3" },
+            "substitutions": [
+              { "wiki": "Plague of Madness", "listed": "ULD_715", "reason": "unscripted" },
+              { "wiki": "Plague of Madness", "listed": "ULD_715", "reason": "unscripted" },
+              { "used": "LOOT_008", "reason": "fill:second-copy" },
+              { "used": "CS2_234", "reason": "fill:curated" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "ulda_39_vesh",
+      "name": "Vesh, Plague Lord of Murlocs",
+      "provenance": "ULDA",
+      "family": "24",
+      "hero": "ULDA_BOSS_39h",
+      "power": "ULDA_BOSS_39p1",
+      "tier": "major3",
+      "archetype": "aggro",
+      "level": { "source": "printed-health", "original": 300 },
+      "health": 300,
+      "fixedHealth": true,
+      "flags": ["forms", "persistentDamage", "deckReplace"],
+      "cards": ["ULDA_BOSS_39m", "ULDA_BOSS_39me"],
+      "incompatibleModifiers": ["mod_iron_bosses", "mod_open_road"],
+      "deck": {
+        "id": "enc-ulda_39_vesh",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Vesh,_Plague_Lord_of_Murlocs", "read": "2026-11-14", "list": "Normal phase 1" },
+        "substitutions": [
+          { "wiki": "Murmy", "listed": "ULD_723", "reason": "unscripted" },
+          { "wiki": "Murmy", "listed": "ULD_723", "reason": "unscripted" },
+          { "wiki": "Fishflinger", "listed": "ULD_289", "reason": "unscripted" },
+          { "wiki": "Fishflinger", "listed": "ULD_289", "reason": "unscripted" },
+          { "used": "LOEA10_5", "reason": "fill:second-copy" },
+          { "used": "ULD_716", "reason": "fill:second-copy" },
+          { "used": "LOE_026", "reason": "fill:second-copy" },
+          { "used": "ULD_181", "reason": "fill:second-copy" }
+        ]
+      },
+      "forms": [
+        {
+          "hero": "ULDA_BOSS_39h2",
+          "power": "ULDA_BOSS_39p2",
+          "health": 200,
+          "at": { "healthAtMost": 200 },
+          "keepExcess": true,
+          "draw": 5,
+          "deck": {
+            "id": "enc-ulda_39_vesh-f1",
+            "kind": "substituted",
+            "source": { "url": "https://hearthstone.wiki.gg/wiki/Vesh,_Plague_Lord_of_Murlocs", "read": "2026-11-14", "list": "Normal phase 2" },
+            "substitutions": [
+              { "wiki": "Fishflinger", "listed": "ULD_289", "reason": "unscripted" },
+              { "used": "UNG_201", "reason": "fill:second-copy" }
+            ]
+          }
+        },
+        {
+          "hero": "ULDA_BOSS_39h3",
+          "power": "ULDA_BOSS_39p3",
+          "health": 100,
+          "at": { "healthAtMost": 100 },
+          "keepExcess": true,
+          "draw": 5,
+          "deck": {
+            "id": "enc-ulda_39_vesh-f2",
+            "kind": "substituted",
+            "source": { "url": "https://hearthstone.wiki.gg/wiki/Vesh,_Plague_Lord_of_Murlocs", "read": "2026-11-14", "list": "Normal phase 3" },
+            "substitutions": [
+              { "wiki": "Murmy", "listed": "ULD_723", "reason": "unscripted" },
+              { "wiki": "Murmy", "listed": "ULD_723", "reason": "unscripted" },
+              { "wiki": "Fishflinger", "listed": "ULD_289", "reason": "unscripted" },
+              { "wiki": "Fishflinger", "listed": "ULD_289", "reason": "unscripted" },
+              { "used": "UNG_937", "reason": "fill:second-copy" },
+              { "used": "TRL_520", "reason": "fill:second-copy" },
+              { "used": "CS2_168", "reason": "fill:curated" },
+              { "used": "CS2_173", "reason": "fill:curated" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "ulda_67_tekahn",
+      "name": "Tekahn, Plague Lord of Flame",
+      "provenance": "ULDA",
+      "family": "24",
+      "hero": "ULDA_BOSS_67h",
+      "power": "ULDA_BOSS_67p1",
+      "tier": "finale",
+      "archetype": "control",
+      "level": { "source": "printed-health", "original": 300 },
+      "health": 300,
+      "fixedHealth": true,
+      "flags": ["forms", "deckReplace", "relay"],
+      "cards": ["ULDA_032", "ULDA_BOSS_67p2e", "ULD_168e", "ULD_168e3", "OG_280", "OG_133", "OG_042", "OG_134"],
+      "incompatibleModifiers": ["mod_iron_bosses", "mod_open_road"],
+      "deck": {
+        "id": "enc-ulda_67_tekahn",
+        "kind": "substituted",
+        "source": { "url": "https://hearthstone.wiki.gg/wiki/Tekahn,_Plague_Lord_of_Flame", "read": "2026-11-14", "list": "Normal phase 1" },
+        "substitutions": [
+          { "wiki": "EVIL Totem", "listed": "ULD_276", "reason": "unscripted" },
+          { "wiki": "EVIL Totem", "listed": "ULD_276", "reason": "unscripted" },
+          { "wiki": "Plague of Flames", "listed": "ULD_717", "reason": "unscripted" },
+          { "wiki": "Plague of Flames", "listed": "ULD_717", "reason": "unscripted" },
+          { "wiki": "Sinister Deal", "listed": "ULD_160", "reason": "unscripted" },
+          { "wiki": "Sinister Deal", "listed": "ULD_160", "reason": "unscripted" },
+          { "wiki": "EVIL Recruiter", "listed": "ULD_162", "reason": "unscripted" },
+          { "wiki": "EVIL Recruiter", "listed": "ULD_162", "reason": "unscripted" },
+          { "used": "ULDA_033", "reason": "fill:second-copy" },
+          { "used": "DAL_563", "reason": "fill:second-copy" },
+          { "used": "EX1_303", "reason": "fill:second-copy" },
+          { "used": "CS2_065", "reason": "fill:curated" },
+          { "used": "EX1_319", "reason": "fill:curated" },
+          { "used": "CS2_062", "reason": "fill:curated" },
+          { "used": "CS2_057", "reason": "fill:curated" },
+          { "used": "CS2_064", "reason": "fill:curated" }
+        ]
+      },
+      "forms": [
+        {
+          "power": "ULDA_BOSS_67p2",
+          "at": { "healthAtMost": 200 },
+          "keepExcess": true,
+          "draw": 0,
+          "deck": {
+            "id": "enc-ulda_67_tekahn-f1",
+            "kind": "substituted",
+            "source": { "url": "https://hearthstone.wiki.gg/wiki/Tekahn,_Plague_Lord_of_Flame", "read": "2026-11-14", "list": "Normal phase 2" },
+            "substitutions": [
+              { "wiki": "Plague of Flames", "listed": "ULD_717", "reason": "unscripted" },
+              { "wiki": "Plague of Flames", "listed": "ULD_717", "reason": "unscripted" },
+              { "used": "BOT_401", "reason": "fill:second-copy" },
+              { "used": "CS2_065", "reason": "fill:curated" }
+            ]
+          }
+        },
+        {
+          "power": "ULDA_BOSS_67p3",
+          "at": { "healthAtMost": 100 },
+          "keepExcess": true,
+          "draw": 0,
+          "deck": {
+            "id": "enc-ulda_67_tekahn-f2",
+            "kind": "substituted",
+            "source": { "url": "https://hearthstone.wiki.gg/wiki/Tekahn,_Plague_Lord_of_Flame", "read": "2026-11-14", "list": "Normal phase 3" },
+            "substitutions": [
+              { "wiki": "Diseased Vulture", "listed": "ULD_167", "reason": "unscripted" },
+              { "wiki": "Diseased Vulture", "listed": "ULD_167", "reason": "unscripted" },
+              { "wiki": "Anubisath Warbringer", "listed": "ULD_183", "reason": "unscripted" },
+              { "wiki": "Anubisath Warbringer", "listed": "ULD_183", "reason": "unscripted" },
+              { "used": "ULDA_BOSS_67t", "reason": "fill:second-copy" },
+              { "used": "OG_239", "reason": "fill:second-copy" },
+              { "used": "CS2_065", "reason": "fill:curated" },
+              { "used": "EX1_319", "reason": "fill:curated" }
+            ]
+          }
+        }
+      ],
+      "relay": [
+        {
+          "hero": "ULDA_Elise",
+          "power": "ULDA_Elise_HP1",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Elise",
+          "health": 50,
+          "skipFor": ["ULDA_Elise"]
+        },
+        {
+          "hero": "ULDA_Elise",
+          "power": "ULDA_Elise_HP2",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Elise-2",
+          "health": 50,
+          "skipFor": ["ULDA_Elise"]
+        },
+        {
+          "hero": "ULDA_Elise",
+          "power": "ULDA_Elise_HP3",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Elise-3",
+          "health": 50,
+          "skipFor": ["ULDA_Elise"]
+        },
+        {
+          "hero": "ULDA_Finley",
+          "power": "ULDA_Finley_HP1",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Finley",
+          "health": 50,
+          "skipFor": ["ULDA_Finley"]
+        },
+        {
+          "hero": "ULDA_Finley",
+          "power": "ULDA_Finley_HP2",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Finley-2",
+          "health": 50,
+          "skipFor": ["ULDA_Finley"]
+        },
+        {
+          "hero": "ULDA_Finley",
+          "power": "ULDA_Finley_HP3",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Finley-3",
+          "health": 50,
+          "skipFor": ["ULDA_Finley"]
+        },
+        {
+          "hero": "ULDA_Brann",
+          "power": "ULDA_Brann_HP1",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Brann",
+          "health": 50,
+          "skipFor": ["ULDA_Brann"]
+        },
+        {
+          "hero": "ULDA_Brann",
+          "power": "ULDA_Brann_HP2",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Brann-2",
+          "health": 50,
+          "skipFor": ["ULDA_Brann"]
+        },
+        {
+          "hero": "ULDA_Brann",
+          "power": "ULDA_Brann_HP3",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Brann-3",
+          "health": 50,
+          "skipFor": ["ULDA_Brann"]
+        },
+        {
+          "hero": "ULDA_Reno",
+          "power": "ULDA_Reno_HP1",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Reno",
+          "health": 50,
+          "skipFor": ["ULDA_Reno"]
+        },
+        {
+          "hero": "ULDA_Reno",
+          "power": "ULDA_Reno_HP2",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Reno-2",
+          "health": 50,
+          "skipFor": ["ULDA_Reno"]
+        },
+        {
+          "hero": "ULDA_Reno",
+          "power": "ULDA_Reno_HP3",
+          "deck": "enc-ulda_67_tekahn-relay-ULDA_Reno-3",
+          "health": 50,
+          "skipFor": ["ULDA_Reno"]
+        }
+      ]
     }
   ],
   "rejected": [
@@ -5273,6 +7195,21 @@
       "reason": "A Quest! (\"Give your opponent a Quest!\") hands the run player one of five quests (DALA_BOSS_75e1 Bear Liver Quest, 75e2 Murloc Quest, 75e3 Turtle Escort Quest, 75e4 Herbalist Quest, 75e5 Hogger Quest) whose completion ends the fight; the client data gives the five enchantments a name and no text, no requirement and no reward tags, and the wiki gives none either (its page: no deck, \"will instead summon minions from turn to turn like Tad\", \"Upon completion of any event, the reward choice is given and the battle ends\"; the quest names have no page, only rows marked Unknown in the Rise of Shadows enchantment list), nor the minions he summons. Neither the quests nor the fight can be built from a source",
       "lift": "none: a data gap no phase owns; it needs a source for the five quests' requirements and Bolan's summon list (a transcription of the original encounter), then a script of the quests as run-player enchantments that end the fight with a no-loss win (EncounterRules.EndWithNoLoss)",
       "cards": ["DALA_BOSS_75e1", "DALA_BOSS_75e2", "DALA_BOSS_75e3", "DALA_BOSS_75e4", "DALA_BOSS_75e5"]
+    },
+    {
+      "id": "ULDA_BOSS_58h",
+      "name": "Jythiros of Questions",
+      "power": "ULDA_BOSS_58p",
+      "reason": "Riddle of the Sphinx (\"Guess which card the Boss will play to banish it\") is a decision of the run player on the boss's turn (the wiki: it shows the cards in the boss's hand and the card it draws that turn) whose correct guess counters the boss's card of any type (the wiki: \"it is immediately countered\"; the first encounter to counter every card type). The engine's decision loop, the bosspilot harnesses and NativeMatch answer only the current player's decisions, and the engine counters spells only (Spell.IsCountered in PlayCard.PlaySpell); a guess moved to the run player's own turn and a counter limited to spells would be an invented mechanic. The encounter is left out",
+      "lift": "phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard",
+      "cards": []
+    },
+    {
+      "id": "GILA_BOSS_48t",
+      "name": "Alternate Timeline (Infinite Toki's boss card)",
+      "reason": "\"Start a new game, but your opponent's Health stays the same\": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of Infinite Toki's deck until then",
+      "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (the turn-rewind family with GILA_900p Temporal Loop and GILA_911 Rewind)",
+      "cards": []
     }
   ]
 }

@@ -736,9 +736,15 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // Phase 8 family 23: + 4 rows, all "partial" (the four nemeses' run:boss rows; every card of their decks was in the ledger
     // already), and 10 rows leave "missing" for "partial" (4 boss powers, Crowskin Faithful, Crowskin Pact, Cursed Crewmember and
     // the three Witchwood's Touch).
-    Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13; wave 5: families 14-19): 4918 rows; 2813 implemented, 660 partial, 387 missing, 1058 duplicate/support, 0 intentionally adapted",
-        rows.Count == 4918 && classes.GetValueOrDefault("implemented") == 2813 && classes.GetValueOrDefault("partial") == 660 && classes.GetValueOrDefault("missing") == 387
-        && classes.GetValueOrDefault("duplicate/support") == 1058 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
+    // Phase 8 family 24 (the Plague Lords and Tekahn): + 12 rows, all "partial" (4 run:boss rows; 8 cards of its decks and relay
+    // decks new to the ledger), rows leave "missing" for "partial" (its powers and boss cards), ULDA_115 "Gnomebliterator" is
+    // implemented (a Tombs treasure of encounter schedules) and ULDA_Explorers becomes a support record (a hero base form).
+    // Wave 6 merged (20-24): + 74 rows, not the families' 87: LOE_110 and DAL_614 are new in two of these families' decks and 11
+    // deck cards were new in wave 5 already; all 74 partial (61 run:boss rows, 13 cards), 83 rows leave "missing" for "partial",
+    // one for "implemented" (ULDA_115) and one for "duplicate/support" (ULDA_Explorers).
+    Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13; wave 5: families 14-19; wave 6: families 20-24): 4992 rows; 2814 implemented, 817 partial, 302 missing, 1059 duplicate/support, 0 intentionally adapted",
+        rows.Count == 4992 && classes.GetValueOrDefault("implemented") == 2814 && classes.GetValueOrDefault("partial") == 817 && classes.GetValueOrDefault("missing") == 302
+        && classes.GetValueOrDefault("duplicate/support") == 1059 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
 }
 
 static List<Dictionary<string, string>> ReadLedger(string path)
