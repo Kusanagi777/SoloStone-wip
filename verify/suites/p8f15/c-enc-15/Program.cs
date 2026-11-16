@@ -142,12 +142,16 @@ Guard("Wendy", () =>
     var fireball = ToHand(g, player, Fireball);
     var moonfire = ToHand(g, boss, Moonfire);
     Mana(boss);
+    // The power acts after the boss's turn-start draw (wave 5): her deck is set aside for this turn so the draw adds no card
+    // and both hands still hold exactly one card when it is cast (A1-A3b); the deck comes back before A4.
+    var bossDeck = boss.DeckZone.ToArray();
+    foreach (var p in bossDeck) boss.SetasideZone.Add(boss.DeckZone.Remove(p));
     EndTurn(g);
     bool passive = IsPassive(boss, "DALA_BOSS_16p");
-    Check("A1 Equivalent Exchange costs (1) and is cast by rule (a passive power, never offered): at the start of the boss's turn, with both hands holding one card, the two change sides",
-        Cost("DALA_BOSS_16p") == 1 && passive && !Offered(g) && Casts(boss) == 1 && boss.UsedMana == 1
+    Check("A1 Equivalent Exchange costs (1) and is cast by rule (a passive power, never offered): at the start of the boss's turn, after her draw (an empty deck: no card), with both hands holding one card, the two change sides",
+        Cost("DALA_BOSS_16p") == 1 && passive && !Offered(g) && Casts(boss) == 1 && boss.UsedMana == 1 && boss.HandZone.Count == 1 && player.HandZone.Count == 1
         && fireball.Controller == boss && fireball.Zone == boss.HandZone && moonfire.Controller == player && moonfire.Zone == player.HandZone,
-        "casts " + Casts(boss) + " used " + boss.UsedMana + " fireball " + fireball.Zone?.Type + "/" + fireball.Controller.PlayerId);
+        "casts " + Casts(boss) + " used " + boss.UsedMana + " hands " + boss.HandZone.Count + "/" + player.HandZone.Count + " fireball " + fireball.Zone?.Type + "/" + fireball.Controller.PlayerId);
     var transfers = g.HistoryFacts.Records.OfType<CardTransferredFact>().Where(f => f.EntityId == fireball.Id || f.EntityId == moonfire.Id).ToList();
     Check("A2 each card moves by the hand-to-hand transfer rule (a CardTransferredFact each, so the side that gave a card knows it)", transfers.Count == 2, transfers.Count.ToString());
     var (view, viewBoss, viewPlayer) = FairView(g);
@@ -158,6 +162,7 @@ Guard("Wendy", () =>
     var shown = viewPlayerD.HandZone.Where(p => !(p is Unknown)).Select(p => p.Card.Id).ToList();
     Check("A3b the run player's other hidden cards stay masked in the boss's fair view: three drawn Yetis are Unknown stand-ins, only the Moonfire the boss gave is known",
         player.HandZone.Count == 4 && viewPlayerD.HandZone.Count == 4 && viewPlayerD.HandZone.Count(p => p is Unknown) == 3 && shown.SequenceEqual(new[] { Moonfire }), string.Join(",", shown));
+    foreach (var p in bossDeck) boss.DeckZone.Add(boss.SetasideZone.Remove(p));
     ToPlayer(g);
     int casts = Casts(boss);
     EmptyHand(player); EmptyHand(boss); ToHand(g, boss, Moonfire);
