@@ -122,6 +122,13 @@ client's tag 1114, so Anomaly - Arcane cut it to (0); `DungeonRunEncounters.Repe
 game ends normally (boss win), and the record is re-recorded. The general Echo rule ("Copies can't cost less than (1)")
 now holds in every game (`EncounterRules.EchoCopyFloor`, c-enc-engine G7d).
 
+From the wave-5 integration (stage A; details in `handoff/phase8/reports/integrate-wave5.md`):
+- Tunnel Trogg (LOE_018, `engine/.../CardSets/LoeCardsGen.cs`) answers the play of a card with printed Overload, not the
+  Overload event, and has no trigger source (the opponent's Overload cards count too). Family 17's Spell Lock Overload has
+  no card behind it, so `EncounterRules.OverloadFor` (EncounterRules.F17.cs) buffs each Tunnel Trogg by hand; family 22
+  adds a second copy in wave 6. A comment at the shared script says so. If LOE_018 is ever rewritten to answer the
+  Overload event (TriggerType.OVERLOAD, friendly source), remove both hand-coded buffs or the Trogg gains twice.
+
 From the wave-4 integration (details in `handoff/phase8/reports/integrate-wave4.md`):
 - Random generation can yield unscripted cards: the engine's random pools (`Cards.AllWild`) include unscripted cards and
   the generation filter drops only ids admission rejects (Bwonsamdi's Tome, Dark Reliquary, any random generation; seen:

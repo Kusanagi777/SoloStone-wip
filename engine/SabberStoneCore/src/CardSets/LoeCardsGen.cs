@@ -491,6 +491,10 @@ namespace SabberStoneCore.CardSets
 			// RefTag:
 			// - OVERLOAD = 1
 			// --------------------------------------------------------
+			// Note (phase 8 wave 5): this trigger answers the play of a card with printed Overload (and has no TriggerSource, so
+			// the opponent's Overload cards count too), not the Overload event. An encounter Overload with no card behind it
+			// does not reach it, so EncounterRules.OverloadFor (family 17's Spell Lock) buffs each Tunnel Trogg by hand; family 22
+			// adds a second copy. If this script ever answers the Overload event, remove those hand-coded buffs (HANDOFF 3.4).
 			cards.Add("LOE_018", new CardDef(new Power
 			{
 				Trigger = new Trigger(TriggerType.PLAY_CARD)
