@@ -3001,7 +3001,7 @@
    "name": "Jythiros of Questions",
    "power": "ULDA_BOSS_58p",
    "reason": "Riddle of the Sphinx (\"Guess which card the Boss will play to banish it\") is a decision of the run player on the boss's turn (the wiki: it shows the cards in the boss's hand and the card it draws that turn) whose correct guess counters the boss's card of any type (the wiki: \"it is immediately countered\"; the first encounter to counter every card type). The engine's decision loop, the bosspilot harnesses and NativeMatch answer only the current player's decisions, and the engine counters spells only (Spell.IsCountered in PlayCard.PlaySpell); a guess moved to the run player's own turn and a counter limited to spells would be an invented mechanic. The encounter is left out",
-   "lift": "phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard",
+   "lift": "client (a Windows lane, not step 9: step 9 adds no decision of the non-current player): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard",
    "cards": []
   }
  ]

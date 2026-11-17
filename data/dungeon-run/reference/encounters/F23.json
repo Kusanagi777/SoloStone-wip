@@ -130,7 +130,7 @@
     },
     {
      "kind": "deck",
-     "note": "Alternate Timeline (GILA_BOSS_48t, \"Start a new game, but your opponent's Health stays the same.\") restarts the game: that needs a run-owned game restart (the turn-rewind family, phase 9), so the card is left out and rejected with that reason. Enhance-a-matic (GILA_903, Toki's treasure, \"Add a random spell from each class to your hand\") can yield a Secret of any class: a boss may hold such a card only on a row that turns its generated Secrets on with a closed, boss-admitted Secret pool for every class it names (eleven), which is not lifted here, so it is left out too. A major keeps its listed count: the encounters step fills the two places with second copies of the list's first singles (recorded with the deck)."
+     "note": "Alternate Timeline (GILA_BOSS_48t, \"Start a new game, but your opponent's Health stays the same.\") restarts the game: step 9 scripts it as a run-owned game restart (the restart family with GILA_911 Rewind), but the card stays out until its step-9 gate (real games) passes, and is rejected with that reason. Enhance-a-matic (GILA_903, Toki's treasure, \"Add a random spell from each class to your hand\") can yield a Secret of any class: a boss may hold such a card only on a row that turns its generated Secrets on with a closed, boss-admitted Secret pool for every class it names (eleven), which is not lifted here, so it is left out too. A major keeps its listed count: the encounters step fills the two places with second copies of the list's first singles (recorded with the deck)."
     },
     {
      "kind": "power",
@@ -512,8 +512,8 @@
    "id": "GILA_BOSS_48t",
    "name": "Alternate Timeline (Infinite Toki's boss card)",
    "power": null,
-   "reason": "\"Start a new game, but your opponent's Health stays the same\": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of Infinite Toki's deck until then",
-   "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (the turn-rewind family with GILA_900p Temporal Loop and GILA_911 Rewind)",
+   "reason": "\"Start a new game, but your opponent's Health stays the same\": a game restart inside a fight, scripted in step 9 as a run-owned restart; left out of Infinite Toki's deck until the step-9 gate shows the boss AI plays it soundly",
+   "lift": "step 9 stage-3 gate (real games): Alternate Timeline is scripted as a run-owned game restart (Actions.EncounterRules.RestartGame; DungeonRun.Outcomes.cs restages the floor under a new match seed with the run player's damage carried); it is admitted and re-added to Infinite Toki's deck (make_f23.py) once 40 fair games show 0 faults, at most 1 restart per floor and cumulative turns of at most twice the fight's turn cap, and is otherwise rejected for good (the AI cannot value a game restart)",
    "cards": []
   }
  ]

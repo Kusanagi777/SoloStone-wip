@@ -3,7 +3,7 @@
  "encountersVersion": 1,
  "generatedBy": "p8f23/make_fixture.py over tools/dungeon-run-catalog (encounters); a test fixture, never shipped",
  "sources": {
-  "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45",
+  "reference/encounters/F01.json": "518ad4a149f672c774cefcbec6110eed3ef040ae77d38ddf6a4c94576bf715ce",
   "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8",
   "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466",
   "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206",
@@ -22,9 +22,9 @@
   "reference/encounters/F18.json": "52ff7293609a74b60ab61878006a7a98adb4a0e60a97d328bd21fb032fe8a4c3",
   "reference/encounters/F19.json": "8fb3514de4def1db4b452ed7dffb7efc4e7c0bc3016494fe627a2090a31784e3",
   "reference/encounters/F20.json": "c25d1ba99c457bb1a46873e62a64d2a22b5a8dc2861107d1d73e1f14e65009f9",
-  "reference/encounters/F21.json": "2b7cbe38de910d7aa304ff9818138b4d167bed1c6161219a695da171483357bb",
+  "reference/encounters/F21.json": "b4ff964ff9c5cb096fb0222ed78ca29fb73db46e1ff2ef828772077fb4257a61",
   "reference/encounters/F22.json": "8e25e86416663b1f9a5f36b67e4e2832e6628f6d3aefb73c8a435aa4c41c77e6",
-  "reference/encounters/F23.json": "08dd3bf1382e8bb6a8aeceacc8a0cbeb71b65defc0482723266a23728b9f0e5f",
+  "reference/encounters/F23.json": "b1df4c51aee7a467228624ef29d1b751b5c354383db03feb10e4157a58675da4",
   "reference/encounters/F24.json": "4bbd47c48d857e283e16679d2f6d414d2b331330a76d88f2f139287064e5f259"
  },
  "decks": {
@@ -23719,7 +23719,7 @@
      {
       "wiki": "Alternate Timeline",
       "listed": "GILA_BOSS_48t",
-      "reason": "unscripted"
+      "reason": "admission:nemesis-rejected-restart"
      },
      {
       "used": "GILA_907",
@@ -24746,7 +24746,7 @@
    "name": "Toki, Time-Tinker (Hagatha fight hero card)",
    "power": "GILA_900p",
    "reason": "her hero power Temporal Loop restarts the turn, which needs a run-owned turn restart",
-   "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)",
+   "lift": "none: a final rejection (step 9, a SoloStone adaptation): restarting a turn needs a rewind or a full re-sync of the client's history stream and a rebuilt bot state, and NativeMatch has no client history re-sync; Toki keeps the Mage basic power (CS2_034) as a stand-in (a later Windows lane may reopen it with Game.CloneExact and a NativeMatch re-sync)",
    "cards": []
   },
   {
@@ -24768,14 +24768,14 @@
    "name": "Jythiros of Questions",
    "power": "ULDA_BOSS_58p",
    "reason": "Riddle of the Sphinx (\"Guess which card the Boss will play to banish it\") is a decision of the run player on the boss's turn (the wiki: it shows the cards in the boss's hand and the card it draws that turn) whose correct guess counters the boss's card of any type (the wiki: \"it is immediately countered\"; the first encounter to counter every card type). The engine's decision loop, the bosspilot harnesses and NativeMatch answer only the current player's decisions, and the engine counters spells only (Spell.IsCountered in PlayCard.PlaySpell); a guess moved to the run player's own turn and a counter limited to spells would be an invented mechanic. The encounter is left out",
-   "lift": "phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard",
+   "lift": "client (a Windows lane, not step 9: step 9 adds no decision of the non-current player): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard",
    "cards": []
   },
   {
    "id": "GILA_BOSS_48t",
    "name": "Alternate Timeline (Infinite Toki's boss card)",
-   "reason": "\"Start a new game, but your opponent's Health stays the same\": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of Infinite Toki's deck until then",
-   "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (the turn-rewind family with GILA_900p Temporal Loop and GILA_911 Rewind)",
+   "reason": "\"Start a new game, but your opponent's Health stays the same\": a game restart inside a fight, scripted in step 9 as a run-owned restart; left out of Infinite Toki's deck until the step-9 gate shows the boss AI plays it soundly",
+   "lift": "step 9 stage-3 gate (real games): Alternate Timeline is scripted as a run-owned game restart (Actions.EncounterRules.RestartGame; DungeonRun.Outcomes.cs restages the floor under a new match seed with the run player's damage carried); it is admitted and re-added to Infinite Toki's deck (make_f23.py) once 40 fair games show 0 faults, at most 1 restart per floor and cumulative turns of at most twice the fight's turn cap, and is otherwise rejected for good (the AI cannot value a game restart)",
    "cards": []
   }
  ]
