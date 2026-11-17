@@ -48,9 +48,12 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 		{
 			//List<IPlayable> entities = IncludeTask.GetEntities(Type, in controller, source, target, stack?.Playables);
 
-			List<Card> cards = Card == null
-				? LegacyGenerationV1.Get("Replace/" + Rarity).ToList()
+			// A run match never generates a card its generation filter blocks (step 9, generation hygiene); every other game
+			// draws from the same pool as before.
+			IReadOnlyList<Card> cards = Card == null
+				? OfflineCardPools.ForGame(game, LegacyGenerationV1.Get("Replace/" + Rarity))
 				: new List<Card> {Card};
+			if (cards.Count == 0) return TaskState.COMPLETE;
 
 			foreach (IPlayable p in IncludeTask.GetEntities(Type, in controller, source, target, stack?.Playables))
 			{

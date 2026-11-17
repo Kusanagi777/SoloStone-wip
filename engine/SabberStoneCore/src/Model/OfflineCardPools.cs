@@ -82,14 +82,55 @@ namespace SabberStoneCore.Model
         private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<IReadOnlyList<Card>, System.Collections.Concurrent.ConcurrentDictionary<string, IReadOnlyList<Card>>> WithoutListed =
             new System.Runtime.CompilerServices.ConditionalWeakTable<IReadOnlyList<Card>, System.Collections.Concurrent.ConcurrentDictionary<string, IReadOnlyList<Card>>>();
 
-        private static IReadOnlyList<Card> ForGame(Game game, IReadOnlyList<Card> pool)
+        /// <summary>
+        /// <paramref name="pool"/> less what this game's generation filter blocks for the generating controller
+        /// (<see cref="Game.BlocksGenerated"/>: a run match's Secrets rule and <see cref="Game.ExcludedGeneratedIds"/>). Step 9
+        /// (generation hygiene, D15): the engine's generation pools read from the frozen legacy inputs (LegacyGenerationV1)
+        /// and the Cards.cs pools built from them pass through here. Outside a filtered game (selfplay, randplay, every
+        /// non-run game) the same list is returned, so the random draws over it do not change; a filtered pool is cached per
+        /// pool list and filter key. Order is kept.
+        /// </summary>
+        internal static IReadOnlyList<Card> ForGame(Game game, IReadOnlyList<Card> pool)
         {
-            if (!game.FiltersGenerated) return pool;
+            if (game == null || pool == null || !game.FiltersGenerated) return pool;
             if (!game.FiltersGeneratedIds) return game.ExcludesGeneratedSecretsNow ? NoSecrets(pool) : pool;
             var byKey = WithoutListed.GetValue(pool, _ => new System.Collections.Concurrent.ConcurrentDictionary<string, IReadOnlyList<Card>>(StringComparer.Ordinal));
             return byKey.GetOrAdd(game.GeneratedFilterKey, _ =>
                 pool.Any(game.BlocksGenerated) ? Array.AsReadOnly(pool.Where(card => !game.BlocksGenerated(card)).ToArray()) : pool);
         }
+
+        // The array form of a filtered pool, kept per filtered list (itself cached), so a call site that works on arrays gets
+        // the same array back on every call.
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<IReadOnlyList<Card>, Card[]> AsArrays =
+            new System.Runtime.CompilerServices.ConditionalWeakTable<IReadOnlyList<Card>, Card[]>();
+
+        /// <summary><see cref="ForGame(Game, IReadOnlyList{Card})"/> for a call site that holds an array: the same array when nothing is filtered.</summary>
+        internal static Card[] ForGame(Game game, Card[] pool)
+        {
+            if (game == null || pool == null || !game.FiltersGenerated) return pool;
+            var filtered = ForGame(game, (IReadOnlyList<Card>)pool);
+            return ReferenceEquals(filtered, pool) ? pool : AsArrays.GetValue(filtered, list => list.ToArray());
+        }
+
+        /// <summary>
+        /// Every card id the engine's frozen legacy generation pools can yield (LegacyGenerationV1: the format, class, cost,
+        /// rarity, Beast-part, Lackey, Discover, Potion, Adapt, Un'Goro pack and past-Legendary pools; an entourage is a fixed
+        /// list of its source card and is not included). Distinct, ordinal. Public data for the run's generation exclusions (the
+        /// plugin's DungeonRunAdmission lists the unscripted ones, step 9 D15) and for checks that enumerate the pools.
+        /// </summary>
+        public static IReadOnlyList<string> LegacyGeneratedIds() => LegacyIds.Value;
+
+        /// <summary>The pool names behind <see cref="LegacyGeneratedIds"/> (entourages excluded), ordinal.</summary>
+        public static IReadOnlyList<string> LegacyPoolNames() => LegacyNames.Value;
+
+        /// <summary>The card ids of one pool of <see cref="LegacyPoolNames"/>, in pool order, duplicates kept.</summary>
+        public static IReadOnlyList<string> LegacyPool(string name) => Array.AsReadOnly(LegacyGenerationV1.Ids(name));
+
+        private static readonly Lazy<string[]> LegacyNames = new Lazy<string[]>(() => LegacyGenerationV1.Names
+            .Where(n => !n.StartsWith("Entourage/", StringComparison.Ordinal)).OrderBy(n => n, StringComparer.Ordinal).ToArray());
+
+        private static readonly Lazy<string[]> LegacyIds = new Lazy<string[]>(() => LegacyNames.Value
+            .SelectMany(LegacyGenerationV1.Ids).Distinct(StringComparer.Ordinal).OrderBy(id => id, StringComparer.Ordinal).ToArray());
 
         private static IReadOnlyList<Card> NoSecrets(IReadOnlyList<Card> pool) =>
             WithoutSecrets.GetValue(pool, list => list.Any(card => card.IsSecret) ? Array.AsReadOnly(list.Where(card => !card.IsSecret).ToArray()) : list);

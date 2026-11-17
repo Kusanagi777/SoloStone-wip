@@ -342,7 +342,9 @@ namespace SabberStoneCore.Tasks
 					else
 						rarity = Rarity.COMMON;
 
-					Card[] cards = _ungoroPackMemory[rarity];
+					// A run match never generates a card its generation filter blocks (step 9, generation hygiene).
+					Card[] cards = OfflineCardPools.ForGame(g, _ungoroPackMemory[rarity]);
+					if (cards.Length == 0) continue;
 					Card pick = cards[g.Random.Next(cards.Length)];
 					IPlayable entity = Entity.FromCard(c, pick, tags, c.HandZone);
 					entity.NativeTags.Add(GameTag.DISPLAYED_CREATOR, s.Id);
@@ -364,8 +366,9 @@ namespace SabberStoneCore.Tasks
 					string format = LegacyGenerationV1.Format(controller.Game.FormatType);
 					Util.DeepCloneableRandom rnd = controller.Game.Random;
 
-					Card[] first = LegacyGenerationV1.Get(format + "/Beasts/First").ChooseNElements(3, rnd);
-					Card[] second = LegacyGenerationV1.Get(format + "/Beasts/Second").ChooseNElements(3, rnd);
+					// A run match never offers a part its generation filter blocks (step 9, generation hygiene).
+					Card[] first = OfflineCardPools.ForGame(controller.Game, LegacyGenerationV1.Get(format + "/Beasts/First")).ChooseNElements(3, rnd);
+					Card[] second = OfflineCardPools.ForGame(controller.Game, LegacyGenerationV1.Get(format + "/Beasts/Second")).ChooseNElements(3, rnd);
 
 
 					Generic.CreateChoiceCards.Invoke(controller, p[0], null, ChoiceType.GENERAL,
@@ -500,7 +503,10 @@ namespace SabberStoneCore.Tasks
 					{
 						{GameTag.ATK, p[GameTag.ATK]},
 						{GameTag.POISONOUS, p[GameTag.POISONOUS]},
-						{GameTag.LIFESTEAL, p[GameTag.LIFESTEAL]}
+						{GameTag.LIFESTEAL, p[GameTag.LIFESTEAL]},
+						// "It keeps any enchantments": the Durability tag holds what the kept enchantments added (Captain Greenskin's
+						// +1); Durability lost is DAMAGE and is not copied (step 9; the family-19 Sword Dance rule, F19 SwordDance).
+						{GameTag.DURABILITY, p[GameTag.DURABILITY]}
 					};
 					IPlayable newWeapon = Entity.FromCard(p.Controller, p.Card, tags);
 					p.AppliedEnchantments?.ForEach(e =>
@@ -1224,7 +1230,10 @@ namespace SabberStoneCore.Tasks
 				in IPlayable target,
 				in TaskStack stack = null)
 			{
-				Card pick = PastLegendaryMinions.Choose(game.Random);
+				// A run match never generates a card its generation filter blocks (step 9, generation hygiene).
+				Card[] pool = OfflineCardPools.ForGame(game, PastLegendaryMinions);
+				if (pool.Length == 0) return TaskState.COMPLETE;
+				Card pick = pool.Choose(game.Random);
 				Entity.FromCard(in controller, in pick, null, controller.HandZone);
 				return TaskState.COMPLETE;
 			}

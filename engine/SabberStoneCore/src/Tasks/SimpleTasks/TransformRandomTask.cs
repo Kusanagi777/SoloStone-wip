@@ -37,8 +37,13 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			foreach (IPlayable p in IncludeTask.GetEntities(Type, in controller, source, target, stack?.Playables))
 				if (Cards.CostMinionCards(game.FormatType)
 						.TryGetValue(p.Card.Cost + CostChange, out List<Card> minions))
+				{
+					// A run match never transforms into a card its generation filter blocks (step 9, generation hygiene).
+					IReadOnlyList<Card> pool = OfflineCardPools.ForGame(game, minions);
+					if (pool.Count == 0) continue;
 					//Generic.TransformBlock.Invoke(p.Controller, minions.RandomElement(game.Random), p as Minion);
-					Generic.ChangeEntityBlock(controller, p, minions.RandomElement(game.Random), true);
+					Generic.ChangeEntityBlock(controller, p, pool.RandomElement(game.Random), true);
+				}
 
 			game.OnRandomHappened(true);
 

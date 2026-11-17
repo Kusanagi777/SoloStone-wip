@@ -80,7 +80,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			Game g = c.Game;
 			string format = LegacyGenerationV1.Format(g.FormatType);
 			var pool = LegacyGenerationV1.Get(format + (first ? "/Beasts/First" : "/Beasts/Second"));
-			using (g.GenerateFor(c)) return pool.Where(card => card.Implemented && !g.BlocksGenerated(card)).ToList();
+			using (g.GenerateFor(c)) return OfflineCardPools.ForGame(g, pool).Where(card => card.Implemented).ToList();
 		}
 
 		/// <summary>

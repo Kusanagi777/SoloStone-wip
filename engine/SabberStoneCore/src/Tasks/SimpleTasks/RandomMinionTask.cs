@@ -61,7 +61,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			in IPlayable target,
 			in TaskStack stack = null)
 		{
-			List<Card> cardsList = null;
+			IReadOnlyList<Card> cardsList = null;
 			if (Type != EntityType.INVALID)
 			{
 				if (Type == EntityType.TARGET && Tag == GameTag.COST)
@@ -101,6 +101,9 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 				}
 			}
 
+			// A run match never generates a card its generation filter blocks (step 9, generation hygiene); every other game
+			// draws from the same list as before.
+			cardsList = OfflineCardPools.ForGame(game, cardsList);
 			if (cardsList.Count == 0) return TaskState.STOP;
 
 			var randomMinions = new List<IPlayable>(Amount);
