@@ -412,6 +412,14 @@ public sealed class DungeonRunState
     /// </summary>
     [XmlAttribute] public int PlagueLordDamage;
     public bool ShouldSerializePlagueLordDamage() => PlagueLordDamage != 0;
+    /// <summary>
+    /// The close-out (family 25): the starting Hero Powers the run's row offered when it began (its powers whose unlock the
+    /// profile held then), space-separated in row order, for ULDA_038 Explorer Retraining ("Choose a new starting Hero Power",
+    /// a tavern option of encounter schedules: DungeonRun.RetrainPowers). Recorded by NewRun on a run of schedule stamp 3 and
+    /// above when two or more were open; null (omitted) otherwise, and on every run saved before the close-out.
+    /// </summary>
+    [XmlAttribute] public string PowerChoices;
+    public bool ShouldSerializePowerChoices() => PowerChoices != null;
 
     /// <summary>The run deck as card ids (pool cards and active-treasure shells).</summary>
     public List<string> Deck = new List<string>();

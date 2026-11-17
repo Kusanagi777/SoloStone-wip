@@ -267,7 +267,7 @@ if (shrineRun) Console.WriteLine($"shrine run: {shrineGames} games with a run sh
 if (shrineRun) Console.WriteLine($"teammates: {teammateGames} games in which the run player played a teammate; plays " + string.Join(" ", teammatePlays.Select(p => p.Key + "=" + p.Value)));
 if (shrineRun) Console.WriteLine($"shrine upgrades: forced pairs over {forced} games; {grantedDeathrattleGames} games in which a shrine holding a granted Deathrattle (TRLA_806/807/808/809) died, {windfallDeaths} of them with TRLA_809");
 if (shrineRun) Console.WriteLine($"companions: drawn at the start of the game in {companionDrawn} games; plays " + string.Join(" ", teammatePlays.Where(p => DungeonRunShrines.IsCompanion(p.Key)).Select(p => p.Key + "=" + p.Value)));
-if (actRun) Console.WriteLine("act run: " + data.Schedules.Default + " schedule, boss health from the act curve, the start-mana bonus applied (DungeonRunSetup.ApplyAfterStart), tavern purchases on the walk (deck enchantments and opening flags in the plan)");
+if (actRun) Console.WriteLine("act run: " + run.DefaultSchedule(0) + " schedule, boss health from the act curve, the start-mana bonus applied (DungeonRunSetup.ApplyAfterStart), tavern purchases on the walk (deck enchantments and opening flags in the plan)");
 if (catalogRun) Console.WriteLine("catalog run: widened priors " + string.Join(" ", priorClasses) + "; games with a player Secret in play " + playerSecretGames);
 // Phase 7 review: a beam leaf exception the search swallows is counted (SearchTelemetry) and must be 0; details on stderr.
 foreach (var kv in SearchTelemetry.Details()) Console.Error.WriteLine($"SWALLOWED {kv.Value} x {kv.Key}");

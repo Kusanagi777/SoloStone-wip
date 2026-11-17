@@ -140,7 +140,7 @@ internal sealed class DungeonRun
         DungeonRunSchedule acts = null;
         if (schedule != DungeonRunSchedules.LegacyId && (schedule != null || Data.Schedules != null))
         {
-            string id = schedule ?? DefaultSchedule(seed);
+            string id = schedule ?? DefaultSchedule(seed, cls);
             acts = Data.Schedules?.Find(id) ?? throw new ArgumentException("Unknown schedule " + id + ".");
         }
         // A generated starter (phase 6) is drawn from the run seed; a fixed one is the deck's cards.
@@ -162,6 +162,12 @@ internal sealed class DungeonRun
             // A schedule an older version released unchanged keeps that version's stamp (DungeonRunSchedule.StampVersion).
             ScheduleVersion = acts.StampVersion, Schedule = acts.Id, Node = 0,
         };
+        // The close-out: the starting powers this run could have begun with, for Explorer Retraining (ULDA_038) at a tavern.
+        if (acts.StampVersion >= 3)
+        {
+            var open = cls.Powers.Where(p => IsUnlocked(profile, cls.PowerUnlock(p))).Distinct(StringComparer.Ordinal).ToList();
+            if (open.Count >= 2) state.PowerChoices = string.Join(" ", open);
+        }
         // Wave 4 review: a Rumble Run champion appears only "if the player has not chosen one of the <class> shrines" (the
         // champions' wiki pages): a run that will hold a board shrine never draws a boss row with a shrine variant of that class.
         string runShrine = BoardShrineFor(state);
@@ -179,11 +185,31 @@ internal sealed class DungeonRun
     /// The schedule a new run with no named schedule follows (phase 8): one of schedule-v1.json "defaults", picked from the run
     /// seed on <see cref="ScheduleStream"/>, or "default" when the file lists none (every file before scheduleVersion 3).
     /// </summary>
-    internal string DefaultSchedule(long seed)
+    internal string DefaultSchedule(long seed) => DefaultSchedule(seed, null);
+
+    /// <summary>
+    /// The close-out (family 25): the default roll for a run of <paramref name="cls"/> leaves out every default schedule whose
+    /// enabled finale fixes a boss row the hero row excludes (run-v1.json "excludeBosses", the same-character rule): a finale's
+    /// fixed bosses are fought whatever the act draws exclude, so a DALA_Tekahn run never rolls acts-v3t, whose finale is
+    /// Tekahn, Plague Lord of Flame. For every other row the candidates are all the defaults and the pick is
+    /// <see cref="DefaultSchedule(long)"/>'s. The validator keeps at least one default open to every hero row. On a data set
+    /// loaded without encounters-v1.json the pick is schedule-v1.json "defaultWithoutEncounters" (acts-v2).
+    /// </summary>
+    internal string DefaultSchedule(long seed, DungeonRunClass cls)
     {
+        // A data set without the encounter file (tools and suites only) follows the schedule it followed before the close-out.
+        if (Data.EncountersVersion == 0 && Data.Schedules.DefaultWithoutEncounters != null) return Data.Schedules.DefaultWithoutEncounters;
         var defaults = Data.Schedules.Defaults;
-        return defaults.Count == 0 ? Data.Schedules.Default : defaults[StableSeed.Index(StableSeed.Derive(seed, ScheduleStream, 0), defaults.Count)];
+        if (defaults.Count == 0) return Data.Schedules.Default;
+        var open = cls == null || cls.ExcludeBosses.Count == 0 ? defaults
+            : defaults.Where(id => !FinaleExcludes(Data.Schedules.Find(id), cls)).ToList();
+        if (open.Count == 0) open = defaults;
+        return open[StableSeed.Index(StableSeed.Derive(seed, ScheduleStream, 0), open.Count)];
     }
+
+    /// <summary>Whether <paramref name="schedule"/>'s enabled finale fixes a boss row <paramref name="cls"/> excludes.</summary>
+    internal static bool FinaleExcludes(DungeonRunSchedule schedule, DungeonRunClass cls) =>
+        schedule != null && cls != null && schedule.Acts.Any(a => a.IsFinale && a.FixedBosses.Any(cls.ExcludeBosses.Contains));
 
     // ------------------------------------------------------------------ loadouts (phase 6)
 
@@ -935,6 +961,44 @@ internal sealed class DungeonRun
         if (!card.Implemented) return powerId + " is not scripted";
         var verdict = DungeonRunAdmission.Classify(card, card.Id, AdmitScope.Player, null);
         return verdict.Admitted ? null : powerId + " is not admitted for the run player (" + verdict.Family + ")";
+    }
+
+    /// <summary>
+    /// The close-out (family 25), ULDA_038 Explorer Retraining ("Choose a new starting Hero Power"): the starting powers the run
+    /// may switch to, the ones its row offered when it began (<see cref="DungeonRunState.PowerChoices"/>) other than the power
+    /// it plays now (the current power, or an earlier stage of it when a power upgrade has moved it on), in row order. Empty on
+    /// a run with no recorded choices (one of a schedule before stamp 3, or a row with one open power) and on a legacy run.
+    /// </summary>
+    internal List<string> RetrainPowers(DungeonRunState state)
+    {
+        if (state?.PowerChoices == null || !state.IsActRun) return new List<string>();
+        var current = state.PowerOverride ?? state.Power;
+        return state.PowerChoices.Split(' ').Where(p => p.Length > 0 && !PowerChain(p).Contains(current) && PowerOverrideError(p) == null)
+            .Distinct(StringComparer.Ordinal).ToList();
+    }
+
+    // A power and every later stage of its upgrades (run-v1.json powerUpgrades).
+    private List<string> PowerChain(string power)
+    {
+        var chain = new List<string>();
+        for (string p = power; p != null && !chain.Contains(p); p = Data.PowerUpgrades.TryGetValue(p, out var up) ? up.To : null) chain.Add(p);
+        return chain;
+    }
+
+    /// <summary>
+    /// Explorer Retraining's choice: <paramref name="power"/> (one of <see cref="RetrainPowers"/>) becomes the run's starting power
+    /// from the next fight on, as NewRun would have set it: <see cref="DungeonRunState.Power"/>, any override cleared, the old
+    /// power's upgrade record dropped and the new power's scheduled from this floor. False (nothing changed) for any other id.
+    /// </summary>
+    internal bool RepickPower(DungeonRunState state, string power)
+    {
+        if (power == null || !RetrainPowers(state).Contains(power)) return false;
+        state.Power = power;
+        state.PowerOverride = null;
+        state.Upgrades.RemoveAll(u => u.Slot == DungeonRunTreasure.SlotPower);
+        if (Data.PowerUpgrades.ContainsKey(power))
+            state.Upgrades.Add(new DungeonRunUpgrade { Key = power, SinceFloor = state.Floor, Slot = DungeonRunTreasure.SlotPower });
+        return true;
     }
 
     // An act run's won fight: a major counts toward MajorsCleared; the schedule's last node ends the run; otherwise the node's

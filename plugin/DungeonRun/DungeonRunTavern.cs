@@ -39,7 +39,8 @@ internal static class DungeonRunTavernNode
         tavern.Friendly = Sample(state, FriendlyCandidates(state).Select(c => c.Uid).ToList(), table.FriendlyBoard);
         tavern.Bob = Sample(state, BobPool(run, state), table.BobBoard);
         // The offers: drawn by weight without replacement among the options this deck can use now.
-        var options = table.Options.Where(o => o.Weight > 0 && o.Id != DungeonRunTavernTable.HouseSpecial && Applicable(run, state, o))
+        // The close-out: an option of encounter schedules only ("runs") is never in an older schedule's roll.
+        var options = table.Options.Where(o => o.Weight > 0 && o.Id != DungeonRunTavernTable.HouseSpecial && o.OfferedOn(state.ScheduleVersion) && Applicable(run, state, o))
             .OrderBy(o => o.Id, StringComparer.Ordinal).ToList();
         int offers = run.TavernOffers(state);
         while (tavern.Offers.Count < offers && options.Count > 0)
@@ -102,6 +103,9 @@ internal static class DungeonRunTavernNode
                 candidates = Drawn(tavern, optionId, 0, () => Sample(state, SampleCards(state, op.Sample).Select(c => c.Uid).ToList(), op.N).Select(Text).ToList(), sample.Contains);
                 break;
             }
+            case "repickPower":
+                candidates = run.RetrainPowers(state);
+                break;
             case "rerollTribe":
             {
                 var tribes = new HashSet<string>(TribeCandidates(run, state), StringComparer.Ordinal);
@@ -203,6 +207,9 @@ internal static class DungeonRunTavernNode
                 break;
             case "discountFromSample":
                 result = DungeonRunDeck.Discount(run, state, uid, op.Ench);
+                break;
+            case "repickPower":
+                result = run.RepickPower(state, candidate) ? DeckEditResult.Success() : Fail(ErrNothing, candidate + " is not a starting power this run may take");
                 break;
             case "copy":
                 result = DungeonRunDeck.Copy(run, state, uid, op.N, op.KeepMods);
@@ -325,6 +332,7 @@ internal static class DungeonRunTavernNode
             case "discoverBuff": return size + 1 <= max && DiscoverPool(run, state, op.Pool).Count > 0;
             case "rerollTribe": return TribeCandidates(run, state).Count > 0;
             case "removeBuffNeighbours": return friendly.Count > 0 && size - 1 >= min;
+            case "repickPower": return run.RetrainPowers(state).Count > 0;
             case "removeWhereCostAtMost":
             {
                 int n = state.Cards.Count(c => c.Origin != DungeonRunDeck.OriginTreasure && DungeonRunDeck.EffectiveCost(c) <= op.Amount);

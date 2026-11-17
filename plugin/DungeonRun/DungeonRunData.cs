@@ -1113,6 +1113,13 @@ internal sealed class DungeonRunSchedules
     /// empty = always <see cref="Default"/>.
     /// </summary>
     internal List<string> Defaults = new List<string>();
+    /// <summary>
+    /// The close-out ("defaultWithoutEncounters", scheduleVersion 3): the schedule a new run with no named schedule follows on a
+    /// data set loaded without encounters-v1.json (DungeonRunData.EncountersVersion 0: the tools and suites that load the
+    /// pre-phase-8 files; never the shipped mode, which embeds the encounter file). Such a data set has no encounter row, so
+    /// the encounter schedules' finales cannot be fought and their encounter pools are empty; null = <see cref="Defaults"/>.
+    /// </summary>
+    internal string DefaultWithoutEncounters;
     /// <summary>Phase 8 ("poolSets"): a named union of boss pools a combat slot or a major may draw from ("mix-1": band1 + enc-t1).</summary>
     internal Dictionary<string, List<string>> PoolSets = new Dictionary<string, List<string>>(StringComparer.Ordinal);
     /// <summary>Phase 8 ("rules"): the global rules (anomalies and twists), in file order.</summary>
@@ -1142,13 +1149,15 @@ internal sealed class DungeonRunSchedules
             // run saved on version 1 keeps its nodes (DungeonRun.ScheduleFor loads it, with no phase-7 draft).
             [2] = new Dictionary<string, string>(StringComparer.Ordinal) { ["acts-v1"] = "3293D82FA6BD48B3", ["act1"] = "3673E8AE7F914E4F", ["acts-v2"] = "8D594CBB45303A53" },
             // Phase 8: acts-v3h and acts-v3t (encounter pool sets, anomaly nodes) join; the three older schedules ship unchanged
-            // and keep their own stamps (DungeonRunSchedule.StampVersion), so a run saved on version 1 or 2 keeps its nodes. The
-            // two v3 digests are the shapes with the finales still disabled: the family that enables a finale re-pins its schedule
-            // here (nothing is released until phase 8 closes).
+            // and keep their own stamps (DungeonRunSchedule.StampVersion), so a run saved on version 1 or 2 keeps its nodes.
+            // The close-out (family 25) re-pinned the two v3 shapes once, before version 3 was released (no new run followed a
+            // v3 schedule until the same close-out made them the defaults): with the finales disabled both were
+            // FF4FEC05953AA0DE; acts-v3h's Heist finale (tavern, Norroa, Vargoth, Kalec, Khadgar: floors 16-19) gives
+            // 09B43E71F9440039 (family 18's prediction) and acts-v3t's Tekahn finale (tavern, Tekahn: floor 16) A866AD976CEBBDC8.
             [3] = new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 ["acts-v1"] = "3293D82FA6BD48B3", ["act1"] = "3673E8AE7F914E4F", ["acts-v2"] = "8D594CBB45303A53",
-                ["acts-v3h"] = "FF4FEC05953AA0DE", ["acts-v3t"] = "FF4FEC05953AA0DE",
+                ["acts-v3h"] = "09B43E71F9440039", ["acts-v3t"] = "A866AD976CEBBDC8",
             },
         };
 
@@ -1207,6 +1216,7 @@ internal sealed class DungeonRunSchedules
         if (v3)
         {
             result.Defaults = NpcWorldJson.Strings(root, "defaults") ?? new List<string>();
+            result.DefaultWithoutEncounters = NpcWorldJson.Text(root, "defaultWithoutEncounters", false);
             if (root.TryGetValue("poolSets", out object sets) && sets is IDictionary<string, object> setRows)
                 foreach (var pair in setRows)
                     result.PoolSets[pair.Key] = ((IList)pair.Value).Cast<object>().Select(v => (string)v).ToList();
@@ -1375,6 +1385,14 @@ internal sealed class DungeonRunTavernOption
     internal string Id, Op, Target, Ench, Pool, Sample, AliasOf;
     internal int Cost, Weight, N, Amount;
     internal bool KeepMods, OncePerVisit;
+    /// <summary>
+    /// The close-out (family 25): which runs may be offered it ("runs", as a treasure's: <see cref="DungeonRunTreasure.RunsAll"/>
+    /// by default, <see cref="DungeonRunTreasure.RunsEncounters"/> for an act run on a schedule of stamp 3 and above), so a
+    /// tavern of a run saved on an older schedule rolls the offers it rolled before (ULDA_038 Explorer Retraining).
+    /// </summary>
+    internal string Runs = DungeonRunTreasure.RunsAll;
+    /// <summary>Whether a tavern of a run on schedule stamp <paramref name="scheduleVersion"/> may offer it.</summary>
+    internal bool OfferedOn(int scheduleVersion) => Runs == DungeonRunTreasure.RunsAll || Runs == DungeonRunTreasure.RunsEncounters && scheduleVersion >= 3;
 }
 
 /// <summary>tavern-v1.json: board sizes, Bob's minion cost cap per act, the options and the deferred tavern cards.</summary>
@@ -1392,8 +1410,10 @@ internal sealed class DungeonRunTavernTable
     {
         "recruit", "remove", "setcost", "health", "opening", "recruitAll", "discover", "buff", "removeAllFriendly", "copy",
         "removeFromSample", "reroll", "discountFromSample", "replace", "discoverOpening", "discoverBuff", "rerollTribe",
-        "removeBuffNeighbours", "removeWhereCostAtMost",
+        "removeBuffNeighbours", "removeWhereCostAtMost", "repickPower",
     };
+    /// <summary>The "runs" values an option may name (absent: every run).</summary>
+    internal static readonly string[] KnownRuns = { DungeonRunTreasure.RunsAll, DungeonRunTreasure.RunsEncounters };
     /// <summary>The discover pools an option may name (computed at runtime from the catalog plus admission).</summary>
     internal static readonly string[] KnownPools = { "legendaryMinion", "minion", "spell", "anyClassWeapon" };
     /// <summary>The sample kinds an option may name ("spell": spells of the run deck).</summary>
@@ -1442,6 +1462,7 @@ internal sealed class DungeonRunTavernTable
                 Cost = NpcWorldJson.Integer(o, "cost", 0), Weight = NpcWorldJson.Integer(o, "weight", 0),
                 N = NpcWorldJson.Integer(o, "n", 0), Amount = NpcWorldJson.Integer(o, "amount", 0),
                 KeepMods = NpcWorldJson.Boolean(o, "keepMods"), OncePerVisit = NpcWorldJson.Boolean(o, "oncePerVisit"),
+                Runs = NpcWorldJson.Text(o, "runs", false) ?? DungeonRunTreasure.RunsAll,
             });
         if (root.TryGetValue("deferred", out object d) && d is IList deferred)
             foreach (var row in deferred.Cast<object>().Select(NpcWorldJson.Object))

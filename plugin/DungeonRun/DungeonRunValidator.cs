@@ -417,6 +417,11 @@ internal static class DungeonRunValidator
             foreach (string boss in cls.ExcludeBosses)
                 if (!cls.IsHero) Fail(where, $"excludeBosses {boss}: only a hero row may exclude a boss row");
                 else if (data.Bosses.Any(b => b.IsEncounter) && data.Bosses.All(b => b.Id != boss)) Fail(where, $"excludeBosses names unknown boss {boss}");
+            // The close-out (family 25): a finale's fixed bosses are fought whatever the act draws exclude, so the default roll
+            // leaves out a default schedule whose finale fixes an excluded row (DungeonRun.DefaultSchedule); one must stay open.
+            if (cls.IsHero && cls.ExcludeBosses.Count > 0 && data.Schedules != null && data.Schedules.Defaults.Count > 0
+                && data.Schedules.Defaults.All(id => data.Schedules.Find(id)?.Acts.Any(a => a.IsFinale && a.FixedBosses.Any(cls.ExcludeBosses.Contains)) == true))
+                Fail(where, "excludeBosses: the finale of every default schedule fixes an excluded boss row, so a new run of this row has no schedule");
             if (runClasses.Count == 1)
             {
                 if (!IsClass(runClasses[0])) Fail(where, $"classes [{runClasses[0]}] is not a class name");
@@ -1050,6 +1055,9 @@ internal static class DungeonRunValidator
             if (o.Weight < 0) Fail(id, "negative weight");
             if (o.Pool != null && !DungeonRunTavernTable.KnownPools.Contains(o.Pool)) Fail(id, $"unknown pool {o.Pool}");
             if (o.Sample != null && !DungeonRunTavernTable.KnownSamples.Contains(o.Sample)) Fail(id, $"unknown sample {o.Sample}");
+            // The close-out: "runs" as a treasure's; an alias runs where its target does, so it names none.
+            if (!DungeonRunTavernTable.KnownRuns.Contains(o.Runs)) Fail(id, $"unknown runs {o.Runs ?? "(none)"}");
+            else if (o.AliasOf != null && o.Runs != DungeonRunTreasure.RunsAll) Fail(id, "an alias names no runs of its own");
             if (o.Ench != null)
             {
                 if (!DungeonRunTavernTable.KnownEnchantments.ContainsKey(o.Ench)) Fail(id, $"ench {o.Ench} is not a known deck enchantment");
@@ -1081,6 +1089,14 @@ internal static class DungeonRunValidator
         if (schedules.Find(schedules.Default) == null) errors.Add($"schedules: default {schedules.Default ?? "(none)"} is not a schedule");
         // Phase 8 (scheduleVersion 3): the rolled defaults, the pool sets, the per-schedule stamps and the global rules.
         foreach (string id in schedules.Defaults.Where(id => schedules.Find(id) == null)) errors.Add($"schedules: defaults names unknown schedule {id}");
+        // The close-out: the schedule of a data set loaded without encounters must need none (no pool set, no finale).
+        if (schedules.DefaultWithoutEncounters != null)
+        {
+            var plain = schedules.Find(schedules.DefaultWithoutEncounters);
+            if (plain == null) errors.Add($"schedules: defaultWithoutEncounters names unknown schedule {schedules.DefaultWithoutEncounters}");
+            else if (plain.MixesProvenance || plain.StampVersion >= 3 || plain.Acts.Any(a => a.IsFinale || a.Combat.Any(c => schedules.PoolSets.ContainsKey(c.Pool))))
+                errors.Add($"schedules: defaultWithoutEncounters {plain.Id} needs the encounter file (a pool set, the provenance mix or a finale)");
+        }
         foreach (var set in schedules.PoolSets.OrderBy(p => p.Key, StringComparer.Ordinal))
         {
             if (set.Value.Count == 0) errors.Add($"pool set {set.Key}: is empty");
@@ -1205,12 +1221,14 @@ internal static class DungeonRunValidator
             foreach (string id in schedule.FinaleBosses)
             {
                 var boss = data.Bosses.FirstOrDefault(b => b.Id == id);
-                if (boss == null) Fail(where, $"finale boss {id} is not in the data");
+                // The encounter rows load with encounters-v1.json, so a finale boss is checked when encounters are loaded (as
+                // excludeBosses is); a data set without them never follows this schedule by default (defaultWithoutEncounters).
+                if (boss == null) { if (data.Bosses.Any(b => b.IsEncounter)) Fail(where, $"finale boss {id} is not in the data"); }
                 else if (boss.Tier != DungeonRunEncounterData.FinaleTier) Fail(where, $"finale boss {id} is not a finale row (tier {boss.Tier ?? "(none)"})");
                 else if (boss.Unlock != null) Fail(where, $"finale boss {id} needs an unlock");
             }
             if (schedule.FinaleBosses.Distinct().Count() != schedule.FinaleBosses.Count) Fail(where, "a finale boss is listed twice");
-            if (schedule.FinaleHeroRelay && !schedule.FinaleBosses.Any(id => data.Bosses.FirstOrDefault(b => b.Id == id)?.Relay.Count > 0))
+            if (schedule.FinaleHeroRelay && data.Bosses.Any(b => b.IsEncounter) && !schedule.FinaleBosses.Any(id => data.Bosses.FirstOrDefault(b => b.Id == id)?.Relay.Count > 0))
                 Fail(where, "heroRelay with no finale boss that lists relay heroes");
         }
         var schedules = data.Schedules;

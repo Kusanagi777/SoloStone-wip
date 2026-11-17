@@ -1,6 +1,6 @@
 {
   "tavernVersion": 1,
-  "description": "Bob's tavern (phase 5): the board sizes, Bob's minion cost cap per act, and the tavern options a tavern node may offer. Option ids and enchantment ids are the original client cards (The Dalaran Heist DALA_9xx, Tombs of Terror ULDA_6xx); gold costs and weights are SoloStone numbers (the originals are unknown), tuned in phase 9.",
+  "description": "Bob's tavern (phase 5): the board sizes, Bob's minion cost cap per act, and the tavern options a tavern node may offer. Option ids and enchantment ids are the original client cards (The Dalaran Heist DALA_9xx, Tombs of Terror ULDA_6xx, ULDA_9xx and ULDA_038); gold costs and weights are SoloStone numbers (the originals are unknown), tuned in phase 9. An option with \"runs\": \"encounters\" is offered only on a schedule of stamp 3 and above (the close-out's ULDA_038 Explorer Retraining), so a tavern of a run saved on an older schedule rolls the offers it rolled before.",
   "board": {"friendly": 4, "bob": 4, "bobMaxCostByAct": [4, 6, 8]},
   "options": [
     {"id": "DALA_901", "op": "recruit", "target": "bob", "cost": 1, "weight": 3},
@@ -15,6 +15,7 @@
     {"id": "DALA_909", "op": "removeAllFriendly", "cost": 1, "weight": 1},
     {"id": "DALA_910", "op": "copy", "n": 3, "keepMods": true, "target": "friendly", "cost": 2, "weight": 1},
     {"id": "DALA_911", "op": "removeFromSample", "sample": "spell", "n": 4, "cost": 1, "weight": 3},
+    {"id": "ULDA_911", "op": "removeFromSample", "sample": "spell", "n": 4, "cost": 1, "weight": 0, "aliasOf": "DALA_911"},
     {"id": "DALA_912", "op": "reroll", "cost": 0, "weight": 2, "oncePerVisit": true},
     {"id": "DALA_913", "op": "buff", "ench": "DALA_913e", "target": "friendly", "cost": 1, "weight": 2},
     {"id": "DALA_914", "op": "discountFromSample", "sample": "spell", "n": 4, "ench": "DALA_914e", "cost": 1, "weight": 2},
@@ -24,7 +25,8 @@
     {"id": "ULDA_604", "op": "rerollTribe", "pool": "minion", "cost": 0, "weight": 1, "oncePerVisit": true},
     {"id": "ULDA_605", "op": "recruitAll", "ench": "ULDA_605e", "cost": 2, "weight": 1},
     {"id": "ULDA_606", "op": "removeBuffNeighbours", "ench": "ULDA_606e", "target": "friendly", "cost": 1, "weight": 1},
-    {"id": "ULDA_608", "op": "removeWhereCostAtMost", "amount": 2, "cost": 1, "weight": 1}
+    {"id": "ULDA_608", "op": "removeWhereCostAtMost", "amount": 2, "cost": 1, "weight": 1},
+    {"id": "ULDA_038", "op": "repickPower", "cost": 1, "weight": 1, "runs": "encounters"}
   ],
   "deferred": [
     {"id": "ULDA_607", "reason": "Bob's Bombastic Decks were server-side; no source decks (phase 9 authoring)"}

@@ -737,7 +737,9 @@ Guard("TRL_318", () =>
     Check("TRL_318 adds a copy of the opening hand to the hand, except Malacrass himself", Hand(p).OrderBy(x => x).SequenceEqual(expected), string.Join(",", Hand(p)) + " vs " + string.Join(",", expected));
     // A run match records the opening hand even when no deck lists Malacrass (a Discover can give one later).
     var cls = data.Classes[0];
-    var s = run.NewRun(all, cls.Id, cls.Decks[0], cls.Powers[0], 4242);
+    // The close-out made the encounter schedules the defaults (a new run opens on an anomaly node); this check is about the
+    // first fight's plan, so it names acts-v2, the schedule it was written on (the same run as before).
+    var s = run.NewRun(all, cls.Id, cls.Decks[0], cls.Powers[0], 4242, schedule: "acts-v2");
     var plan = run.BuildPlan(s, all);
     var gr = Ready(plan);
     Check("TRL_318 a run match (DungeonRun.BuildPlan) records both opening hands", plan.RunContext != null && TurnQueueRules.StartingHand(gr.Player1).Length >= 3 && TurnQueueRules.StartingHand(gr.Player2).Length >= 3);

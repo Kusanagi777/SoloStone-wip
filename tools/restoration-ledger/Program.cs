@@ -290,6 +290,18 @@ namespace RestorationLedger
                 }
 
             // ------------------------------------------------------------------ 2. original buckets
+            // The close-out (family 25, curation.json "labelRecords", optional): the client's own text-less label card of a bucket
+            // buckets.json names no label id for (the 22 Monster Hunt labels of Darius Crowley and Toki, GILA_Darius_01-11 and
+            // GILA_Toki_01-11), so the bucket's label row is that record and no "label:" row duplicates it.
+            var labelRecords = new Dictionary<string, string>(StringComparer.Ordinal);
+            if (root.TryGetProperty("labelRecords", out var labelRecordRows))
+                foreach (var e in labelRecordRows.EnumerateArray())
+                {
+                    string lid2 = e.GetProperty("id").GetString(), lkey = e.GetProperty("bucket").GetString();
+                    if (!Rows.ContainsKey(lid2)) throw new InvalidDataException($"curation.json labelRecords: {lid2} is not a ledger row");
+                    if (!labelRecords.TryAdd(lkey, lid2)) throw new InvalidDataException($"curation.json labelRecords: {lkey} is listed twice");
+                }
+            var labelRecordsUsed = new HashSet<string>(StringComparer.Ordinal);
             int labelRowsAdded = 0;
             var bucketStats = new List<(string adv, string key, string labelId, string membership, List<string> members)>();
             foreach (var ad in buckets.RootElement.GetProperty("adventures").EnumerateArray())
@@ -302,7 +314,16 @@ namespace RestorationLedger
                     string labelId = b.TryGetProperty("labelCardId", out var lid) && lid.ValueKind == JsonValueKind.String ? lid.GetString() : null;
                     string membership = b.GetProperty("membership").GetString();
                     Row labelRow;
-                    if (labelId != null && Rows.ContainsKey(labelId)) labelRow = Rows[labelId];
+                    if (labelId == null && labelRecords.TryGetValue(key, out string record))
+                    {
+                        // A label record (curation.json labelRecords): the CSV row is the bucket's label, a support row.
+                        labelId = record; labelRecordsUsed.Add(key);
+                        labelRow = Rows[labelId];
+                        if (labelRow.Name != label) throw new InvalidDataException($"curation.json labelRecords: {labelId} is {labelRow.Name}, not the label {label} of {key}");
+                        labelRow.Roles.Remove("card"); labelRow.Roles.Add("bucket label");
+                        labelRow.Notes.Add("the client's label card of bucket " + key + " (curation.json labelRecords; buckets.json names no label id)");
+                    }
+                    else if (labelId != null && Rows.ContainsKey(labelId)) labelRow = Rows[labelId];
                     else
                     {
                         labelRow = Get(labelId ?? $"label:{adv}:{hero}:{label}");
@@ -333,6 +354,8 @@ namespace RestorationLedger
                     bucketStats.Add((adv, key, labelRow.Id, membership, members));
                 }
             }
+            foreach (string unused in labelRecords.Keys.Where(k => !labelRecordsUsed.Contains(k)))
+                throw new InvalidDataException($"curation.json labelRecords: no bucket {unused} without a label id");
 
             // ------------------------------------------------------------------ 3. original starter / finale decks, loadouts
             foreach (var ad in adventures.RootElement.GetProperty("adventures").EnumerateArray())
@@ -404,6 +427,20 @@ namespace RestorationLedger
                 row.SpecialFinale = true;
                 row.Notes.Add("special finale: " + f.GetProperty("note").GetString());
             }
+            // The close-out (family 25, curation.json "supportReclassifications", optional): records the client tables give a role
+            // they do not play here, made support rows of their owner with the stated reason (the three tavern keepers, which have
+            // no hero power and are no encounter; DALA_740's five token spells, which inherit its rejection).
+            if (root.TryGetProperty("supportReclassifications", out var reclassified))
+                foreach (var e in reclassified.EnumerateArray())
+                {
+                    string rid = e.GetProperty("id").GetString();
+                    if (!Rows.TryGetValue(rid, out var rrow)) throw new InvalidDataException($"curation.json supportReclassifications: {rid} is not a ledger row");
+                    foreach (var r in e.GetProperty("drop").EnumerateArray()) rrow.Roles.Remove(r.GetString());
+                    rrow.Roles.Add(e.GetProperty("role").GetString());
+                    rrow.HeroUnit = false;
+                    rrow.Notes.Add(e.GetProperty("note").GetString());
+                    MakeSupport(rrow, e.GetProperty("why").GetString(), e.GetProperty("owner").GetString());
+                }
 
             // ------------------------------------------------------------------ 4. SoloStone run content
             AddCustomContent();
@@ -495,6 +532,24 @@ namespace RestorationLedger
                 Classify(row);
                 Blockers(row, mutationPhrases);
             }
+
+            // ------------------------------------------------------------------ 9a. stated reasons of rows left unreached
+            // The close-out (family 25, curation.json "unreachedReasons" and "unreachedBlockers", optional): a scripted and admitted
+            // row that no shipped feature offers or uses names its own reason instead of the generic capability (run:encounter-roster,
+            // run:global-rules): the shipped acts' empty twist pools, a card the adventure never used, a per-boss hunt reward.
+            if (root.TryGetProperty("unreachedBlockers", out var blockerRows))
+                foreach (var bp in blockerRows.EnumerateObject()) ExtraBlockers[bp.Name] = bp.Value.GetString();
+            if (root.TryGetProperty("unreachedReasons", out var unreachedRows))
+                foreach (var e in unreachedRows.EnumerateArray())
+                {
+                    string uid = e.GetProperty("id").GetString(), blocker = e.GetProperty("blocker").GetString();
+                    if (!Rows.TryGetValue(uid, out var urow)) throw new InvalidDataException($"curation.json unreachedReasons: {uid} is not a ledger row");
+                    if (urow.Support || urow.Classification == "implemented") throw new InvalidDataException($"curation.json unreachedReasons: {uid} is {urow.Classification} now; drop its entry");
+                    if (!ExtraBlockers.ContainsKey(blocker)) throw new InvalidDataException($"curation.json unreachedReasons: {uid} names {blocker}, which unreachedBlockers does not describe");
+                    urow.BlockedBy.Remove("run:encounter-roster"); urow.BlockedBy.Remove("run:global-rules");
+                    urow.BlockedBy.Add(blocker);
+                    urow.Notes.Add(e.GetProperty("note").GetString());
+                }
 
             // ------------------------------------------------------------------ 9b. landed families (phase 6 self-check)
             // A phase-6 family that has landed (curation.json "landedFamilies") promises every id it lists: each must now behave
@@ -1072,6 +1127,9 @@ namespace RestorationLedger
             }
         }
 
+        /// <summary>Blocker keys curation.json "unreachedBlockers" describes (the close-out), for the blocker table.</summary>
+        private static readonly Dictionary<string, string> ExtraBlockers = new Dictionary<string, string>(StringComparer.Ordinal);
+
         /// <summary>A disabled hero row's generated starters, by deck id: the row that owns it.</summary>
         private static readonly Dictionary<string, string> DisabledGeneratedDecks = new Dictionary<string, string>(StringComparer.Ordinal);
 
@@ -1577,7 +1635,10 @@ namespace RestorationLedger
         /// </summary>
         private static bool Reach(Row row)
         {
-            bool player = row.Roles.Any(r => !EncounterRoles.Contains(r) && !NeutralRoles.Contains(r));
+            // The close-out: a Tombs finale deck card is the run player's in the Tekahn finale (a relay hero's deck), so the
+            // finale-deck role is reached by a reached "relay hero deck" use (family 24 records that use; acts-v3t's finale ships).
+            bool relayDeck = row.Encounter.Any(w => w.StartsWith("relay hero deck ", StringComparison.Ordinal) && !w.EndsWith(Row.Pending, StringComparison.Ordinal));
+            bool player = row.Roles.Any(r => !EncounterRoles.Contains(r) && !NeutralRoles.Contains(r) && !(r == "finale deck" && relayDeck));
             bool encounter = row.Roles.Any(EncounterRoles.Contains);
             if (!player && !encounter) return row.PlayerReached || row.EncounterReached;
             return (!player || row.PlayerReached) && (!encounter || row.EncounterReached);
@@ -1808,12 +1869,13 @@ namespace RestorationLedger
                 ["run:tavern"] = "Bob's tavern services between fights (deck edits, recruits).",
                 ["run:encounter-roster"] = "Original encounters: boss heroes, powers, special cards and setups in the encounter pool.",
                 ["run:special-finales"] = "Special finales (Tekahn Inner Sanctum hand-off, Hagatha, Heist finale).",
-                ["run:default-schedule"] = "Placed on the version-3 schedules (acts-v3h, acts-v3t), which a new run follows only once schedule-v1.json \"defaults\" names them (the phase-8 close-out, after the encounter families fill the pools and enable the finales).",
+                ["run:default-schedule"] = "Placed only on a schedule no new run follows (schedule-v1.json \"default\" and \"defaults\"); since the phase-8 close-out acts-v3h and acts-v3t are the defaults.",
                 ["run:adventure-cards"] = "Adventure-only cards (boss/treasure support cards in the original namespaces) that need an owning feature to appear.",
                 ["run:deck-mutation"] = "Persistent run-deck mutation and run-scoped state (\"Dungeon Deck\", \"this run\", bosses defeated).",
                 ["data:original-boss-decks-absent"] = "Original boss decks are server-side: the client database has none, so an encounter needs a reconstructed deck.",
                 ["ai:unclassified"] = "A Secret or deck-dependent card with no admission rule: add a rule to `plugin/DungeonRun/DungeonRunAdmission.cs`.",
             };
+            foreach (var extra in ExtraBlockers) described[extra.Key] = extra.Value;
             // ai:<family> gaps are described by the admission table itself (plugin/DungeonRun/DungeonRunAdmission.cs).
             foreach (var family in DungeonRunAdmission.Rules.GroupBy(r => r.Family))
             {
