@@ -666,7 +666,8 @@ string[] tavernEnchants = table.Options.Where(o => o.Ench != null).Select(o => o
             && Gold(s) == 10 - Cost("DALA_910"));
         tested.Add("DALA_910");
     }
-    foreach (var opt in new[] { "DALA_911", "DALA_914" })
+    // The close-out (family 25): ULDA_911 Kindle is the Tombs card of DALA_911's removeFromSample (weight 0, aliasOf DALA_911).
+    foreach (var opt in new[] { "DALA_911", "ULDA_911", "DALA_914" })
     {
         var s = Fix(opt); int n = s.Cards.Count;
         var b = Buy(s, opt);
@@ -675,9 +676,50 @@ string[] tavernEnchants = table.Options.Where(o => o.Ench != null).Select(o => o
         bool shape = cands.Count == Math.Min(4, spellsInDeck) && cands.All(x => C(DungeonRunDeck.Find(s, int.Parse(x)).Id).Type == CardType.SPELL);
         int target = int.Parse(cands[0]);
         var c = Choose(s, cands[0]);
-        bool effect = opt == "DALA_911" ? s.Cards.Count == n - 1 && DungeonRunDeck.Find(s, target) == null : DungeonRunDeck.Find(s, target).Mods.SequenceEqual(new[] { "DALA_914e" });
+        bool effect = opt != "DALA_914" ? s.Cards.Count == n - 1 && DungeonRunDeck.Find(s, target) == null : DungeonRunDeck.Find(s, target).Mods.SequenceEqual(new[] { "DALA_914e" });
         Check($"T2 {opt}: look at up to four deck spells, change the chosen one", b.Ok && shape && c.Ok && effect && Gold(s) == 10 - Cost(opt), $"{cands.Count} of {spellsInDeck} spells");
         tested.Add(opt);
+    }
+    {
+        var k = Fix("ULDA_911"); var d = Fix("DALA_911");
+        Buy(k, "ULDA_911"); Buy(d, "DALA_911");
+        Check("T2 ULDA_911 Kindle runs DALA_911's behaviour under its own id: the same four spells of the same deck, its own cost, never rolled (weight 0)",
+            k.Tavern.Pending.Option == "ULDA_911" && k.Tavern.Pending.Candidates.SequenceEqual(d.Tavern.Pending.Candidates) && table.Option("ULDA_911").Weight == 0
+            && table.Option("ULDA_911").AliasOf == "DALA_911" && Cost("ULDA_911") == 1);
+    }
+    // The close-out: ULDA_038 Explorer Retraining ("Choose a new starting Hero Power"), a tavern option of encounter schedules
+    // ("runs": "encounters"): the candidates are the starting powers the run's row offered when it began (PowerChoices, recorded
+    // by NewRun on a run of schedule stamp 3; c-enc-25 checks the recording), less the power it plays now.
+    {
+        var old = Fix("ULDA_038"); string snap = Xml(old);
+        var refusedOld = Buy(old, "ULDA_038");
+        Check("T2 ULDA_038 on a run of an older schedule (stamp 2, no recorded choices): never offered there, not applicable, Buy refused and nothing changed",
+            !table.Option("ULDA_038").OfferedOn(2) && table.Option("ULDA_038").OfferedOn(3) && old.PowerChoices == null && !refusedOld.Ok
+            && refusedOld.Error == DungeonRunTavernNode.ErrNothing && Xml(old) == snap && !DungeonRunTavernNode.Applicable(run, Fix("ULDA_038"), table.Option("ULDA_038")), refusedOld.ToString());
+        var s = Fix("ULDA_038");
+        s.PowerChoices = "CS2_034 carto_survey mage_rimebite";
+        s.PowerOverride = null;
+        bool applicable = DungeonRunTavernNode.Applicable(run, s, table.Option("ULDA_038"));
+        var b = Buy(s, "ULDA_038");
+        var cands = s.Tavern.Pending?.Candidates ?? new List<string>();
+        var c = Choose(s, "mage_rimebite");
+        Check("T2 ULDA_038 Explorer Retraining: choose one of the other starting powers the row offered; it is the run's power from now on, 1 gold",
+            applicable && b.Ok && cands.SequenceEqual(new[] { "carto_survey", "mage_rimebite" }) && c.Ok && s.Power == "mage_rimebite" && s.PowerOverride == null
+            && Gold(s) == 10 - Cost("ULDA_038") && s.Tavern.Bought.Single().Option == "ULDA_038" && s.Tavern.Pending == null
+            && run.RetrainPowers(s).SequenceEqual(new[] { "CS2_034", "carto_survey" }) && Clone(s).PowerChoices == s.PowerChoices, $"{b} / {c} / {string.Join(",", cands)}");
+        // An override from a won fight (ULDA_306 Stolen Titan Secrets) is the power it plays: retraining replaces it too.
+        var o = Fix("ULDA_038");
+        o.PowerChoices = "CS2_034 carto_survey mage_rimebite"; o.PowerOverride = "carto_survey";
+        Buy(o, "ULDA_038");
+        var oc = o.Tavern.Pending?.Candidates ?? new List<string>();
+        Choose(o, "CS2_034");
+        var one = Fix("ULDA_038"); one.PowerChoices = "CS2_034";
+        var bad = Fix("ULDA_038"); bad.PowerChoices = "CS2_034 carto_survey mage_rimebite"; Buy(bad, "ULDA_038");
+        Check("T2 ULDA_038 with an override: the overriding power is the current one, the choice clears the override; one recorded power: not applicable; a power not offered is refused",
+            oc.SequenceEqual(new[] { "CS2_034", "mage_rimebite" }) && o.Power == "CS2_034" && o.PowerOverride == null
+            && !DungeonRunTavernNode.Applicable(run, one, table.Option("ULDA_038")) && Choose(bad, "CS2_034").Error == DungeonRunTavernNode.ErrNotCandidate
+            && !run.RepickPower(bad, "CS2_034") && bad.Power == "CS2_034", string.Join(",", oc));
+        tested.Add("ULDA_038");
     }
     {
         var s = Fix("DALA_912"); var bob = s.Tavern.Bob.ToList();
@@ -739,7 +781,7 @@ string[] tavernEnchants = table.Options.Where(o => o.Ench != null).Select(o => o
         tested.Add("ULDA_608");
     }
     var active = table.Options.Where(o => o.Weight > 0 || o.AliasOf != null).Select(o => o.Id).ToList();
-    Check("T2 every active option (21, plus the alias) was exercised", active.Count == 22 && active.All(tested.Contains), string.Join(",", active.Where(o => !tested.Contains(o))));
+    Check("T2 every active option (22, plus the two aliases; the close-out added ULDA_038 and the alias ULDA_911) was exercised", active.Count == 24 && active.All(tested.Contains), string.Join(",", active.Where(o => !tested.Contains(o))));
     // Refusals at the counter.
     {
         var s = Fix("DALA_908", gold: 0);
@@ -988,7 +1030,7 @@ string[] tavernEnchants = table.Options.Where(o => o.Ench != null).Select(o => o
     // Phase 6 F1's regeneration added 2 rows (4440 -> 4442); F2 adds none; F3 adds 5 (the hero rows run:class:GILA_500h3 and
     // run:class:GILA_600h, their starters run:starter:mh_tess_scavenger and run:starter:mh_darius_militia, and the borrowed
     // Battlegrounds enchantment shell TB_BaconShopBadsongE of GILA_608).
-    Check("T5 the ledger keeps 4992 rows (phase 8 wave 6: families 20-24 + 61 run:boss rows and + 13 cards of their decks new to the ledger; phase 8 wave 5: families 14-19 + 91 run:boss rows and + 67 cards of their decks new to the ledger; phase 8 wave 4: family 11 + 13 run:boss rows and + 6 cards of their decks, family 12 + 13 run:boss rows and + 10 cards of their decks, family 13 + 8 run:boss rows of the Rumble Run champions and + 7 cards of their decks, FP1_029 new in both 12 and 13; phase 8 wave 3: + 26 run:boss rows, 11 of family 09 and 15 of family 10, and + 34 cards of their decks; phase 8 wave 2: + 35 run:boss rows, 18 of family 07 and 17 of family 08, and + 30 cards of their decks; phase 8 family 01: + 12 encounter rows and + 12 for the four Secret bosses; phase 6 F6: + the 9 Heist hero rows, their 35 starters and CORE_WON_096; F7/F8 + 5; F9 + run:starter:tombs_reno_random; F10 + 17: the 12 new starters, the 3 Random decks of the enabled dual rows and 2 rows they bring; F14 + 36: Rikkar's 9 run:class rows and 27 shrine starters)", rows.Count == 4992, rows.Count.ToString());
+    Check("T5 the ledger keeps 4970 rows (the phase-8 close-out: - 22, the Monster Hunt label cards GILA_Darius_01-11 and GILA_Toki_01-11 are their buckets' label rows instead of a label: row beside each; phase 8 wave 6: families 20-24 + 61 run:boss rows and + 13 cards of their decks new to the ledger; phase 8 wave 5: families 14-19 + 91 run:boss rows and + 67 cards of their decks new to the ledger; phase 8 wave 4: family 11 + 13 run:boss rows and + 6 cards of their decks, family 12 + 13 run:boss rows and + 10 cards of their decks, family 13 + 8 run:boss rows of the Rumble Run champions and + 7 cards of their decks, FP1_029 new in both 12 and 13; phase 8 wave 3: + 26 run:boss rows, 11 of family 09 and 15 of family 10, and + 34 cards of their decks; phase 8 wave 2: + 35 run:boss rows, 18 of family 07 and 17 of family 08, and + 30 cards of their decks; phase 8 family 01: + 12 encounter rows and + 12 for the four Secret bosses; phase 6 F6: + the 9 Heist hero rows, their 35 starters and CORE_WON_096; F7/F8 + 5; F9 + run:starter:tombs_reno_random; F10 + 17: the 12 new starters, the 3 Random decks of the enabled dual rows and 2 rows they bring; F14 + 36: Rikkar's 9 run:class rows and 27 shrine starters)", rows.Count == 4970, rows.Count.ToString());
     var tavernRows = table.Options.Where(o => o.Weight > 0 || o.AliasOf != null).Select(o => o.Id).ToList();
     var notImplemented = tavernRows.Where(id => !rows.ContainsKey(id) || rows[id][Col("classification")] != "implemented").ToList();
     Check("T5 every active tavern option row is implemented", notImplemented.Count == 0, string.Join(" ", notImplemented.Select(id => id + "=" + (rows.ContainsKey(id) ? rows[id][Col("classification")] + "/" + rows[id][Col("gaps")] : "missing"))));

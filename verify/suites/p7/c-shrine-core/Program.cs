@@ -133,8 +133,9 @@ Guard("D", () =>
     Check("D4 the shrine-upgrade pool lists TRLA_801..809", data.ShrineUpgrades.SequenceEqual(Enumerable.Range(801, 9).Select(n => "TRLA_" + n)));
     var schedules = data.Schedules;
     var v2 = schedules.Find("acts-v2");
-    Check("D5 schedule data is scheduleVersion 3 (phase 8; acts-v2 still stamps 2), default acts-v2; acts-v1 and act1 keep their released shapes",
-        schedules.ScheduleVersion == 3 && v2.StampVersion == 2 && schedules.Default == "acts-v2" && DungeonRunSchedules.ShapeDigest(schedules.Find("acts-v1")) == "3293D82FA6BD48B3"
+    // The close-out (family 25): the defaults are acts-v3h and acts-v3t; a data set without the encounter file keeps acts-v2.
+    Check("D5 schedule data is scheduleVersion 3 (phase 8; acts-v2 still stamps 2), defaults acts-v3h and acts-v3t (acts-v2 without the encounter file); acts-v1 and act1 keep their released shapes",
+        schedules.ScheduleVersion == 3 && v2.StampVersion == 2 && schedules.Default == "acts-v3h" && schedules.DefaultWithoutEncounters == "acts-v2" && DungeonRunSchedules.ShapeDigest(schedules.Find("acts-v1")) == "3293D82FA6BD48B3"
         && DungeonRunSchedules.ShapeDigest(schedules.Find("act1")) == "3673E8AE7F914E4F",
         $"v{schedules.ScheduleVersion} {schedules.Default} {DungeonRunSchedules.ShapeDigest(schedules.Find("acts-v1"))}");
     Check("D6 acts-v2's shape is pinned for version 2 (ReleasedShapes[2])",

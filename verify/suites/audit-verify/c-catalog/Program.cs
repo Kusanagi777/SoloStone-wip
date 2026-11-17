@@ -618,8 +618,9 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     Check("ledger: the 5 lifted generated-Secret draft cards are offered and admitted for the player",
         new[] { "BOT_402", "DAL_141", "GIL_116", "ICC_204", "UNG_011" }.All(id => rows.Single(r => r["card_id"] == id) is var x && x["player_availability"].StartsWith("offered:")
             && x["ai_support"].StartsWith("ok:secret-generated") && x["classification"] == "implemented"));
-    Check("ledger: DALA_BOSS_21p is Whirt's scripted power since phase 8 (no AI block left; waiting only for its schedule to be a default); ULD_429 (scripted since phase 6 F10) is implemented, offered and unblocked", rows.Single(r => r["card_id"] == "DALA_BOSS_21p") is var p21
-        && p21["blocked_by"] == "run:default-schedule" && p21["ai_support"] == "ok:secret-generated" && p21["classification"] == "partial"
+    // The close-out (family 25) made acts-v3h and acts-v3t the defaults, so the blocker run:default-schedule left every row.
+    Check("ledger: DALA_BOSS_21p is Whirt's scripted power since phase 8, implemented and unblocked since the close-out made its schedule a default; ULD_429 (scripted since phase 6 F10) is implemented, offered and unblocked", rows.Single(r => r["card_id"] == "DALA_BOSS_21p") is var p21
+        && p21["blocked_by"] == "" && p21["ai_support"] == "ok:secret-generated" && p21["classification"] == "implemented" && !rows.Any(r => r["blocked_by"].Split(';').Contains("run:default-schedule"))
         && rows.Single(r => r["card_id"] == "ULD_429") is var hp && hp["blocked_by"] == "" && hp["classification"] == "implemented" && hp["player_availability"].StartsWith("offered:"));
     Check("ledger: the dual-class row and its starter are rows of their own", rows.Any(r => r["card_id"] == "run:class:MAGE_ROGUE") && rows.Any(r => r["card_id"] == "run:starter:tombs_reno_spellslinger"));
     // Dual-class blockers: only an explorer whose pairs have no playable row (ULDA_Reno's MAGE_ROGUE ships), and a row of its
@@ -742,9 +743,15 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // Wave 6 merged (20-24): + 74 rows, not the families' 87: LOE_110 and DAL_614 are new in two of these families' decks and 11
     // deck cards were new in wave 5 already; all 74 partial (61 run:boss rows, 13 cards), 83 rows leave "missing" for "partial",
     // one for "implemented" (ULDA_115) and one for "duplicate/support" (ULDA_Explorers).
-    Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13; wave 5: families 14-19; wave 6: families 20-24): 4992 rows; 2814 implemented, 817 partial, 302 missing, 1059 duplicate/support, 0 intentionally adapted",
-        rows.Count == 4992 && classes.GetValueOrDefault("implemented") == 2814 && classes.GetValueOrDefault("partial") == 817 && classes.GetValueOrDefault("missing") == 302
-        && classes.GetValueOrDefault("duplicate/support") == 1059 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
+    // The close-out (family 25): 4992 -> 4970 rows (the 22 Monster Hunt label cards are their buckets' label rows: 22 "label:"
+    // rows go); 1066 rows become implemented (807 partial, 259 missing): 1063 that waited for their schedule to be a default
+    // (run:default-schedule, or the reach gap "schedule not a default yet"), DALA_830 (the Heist finale ships), ULDA_038 and
+    // ULDA_911 (tavern options); 30 missing -> support
+    // (the 22 labels, the three tavern keepers, DALA_740's five tokens). Left: 10 partial (the eight twists of no shipped twist
+    // pool, Damph's hunt reward, Witchwood's Touch (1)) and 13 missing, each with a stated rejection or deferral.
+    Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13; wave 5: families 14-19; wave 6: families 20-24; the close-out): 4970 rows; 3880 implemented, 10 partial, 13 missing, 1067 duplicate/support, 0 intentionally adapted",
+        rows.Count == 4970 && classes.GetValueOrDefault("implemented") == 3880 && classes.GetValueOrDefault("partial") == 10 && classes.GetValueOrDefault("missing") == 13
+        && classes.GetValueOrDefault("duplicate/support") == 1067 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
 }
 
 static List<Dictionary<string, string>> ReadLedger(string path)
