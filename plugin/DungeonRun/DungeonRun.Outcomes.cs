@@ -88,6 +88,20 @@ internal sealed partial class DungeonRun
         return sources;
     }
 
+    /// <summary>
+    /// Whether the fight against <paramref name="boss"/> could restart from <paramref name="source"/> (RecordRestart's gate, the
+    /// availability half of <see cref="RestartsFor"/>): Rewind while the run holds GILA_911; Alternate Timeline when the boss's
+    /// deck for this fight (its variant's or its own, or one of its forms' decks) holds GILA_BOSS_48t. Any other source is false.
+    /// </summary>
+    private bool RestartSourceAvailable(DungeonRunState state, DungeonRunBoss boss, string source)
+    {
+        if (source == RunMatchEnds.Rewind) return state.Treasures.Contains(RunMatchEnds.Rewind);
+        if (source != RunMatchEnds.AlternateTimeline || boss == null) return false;
+        var decks = new List<string> { CurrentVariant(state)?.Deck ?? boss.Deck };
+        decks.AddRange(boss.Forms.Select(f => f.Deck));
+        return decks.Any(d => d != null && Data.BossDecks.TryGetValue(d, out var cards) && cards.Contains(RunMatchEnds.AlternateTimeline));
+    }
+
     /// <summary>The restart sources used on the floor being fought, in order (<see cref="DungeonRunState.RestartSources"/>).</summary>
     internal static List<string> RestartSourcesOf(DungeonRunState state) =>
         (state.RestartSources ?? "").Split(',').Where(s => s.Length > 0).ToList();
@@ -169,7 +183,8 @@ internal sealed partial class DungeonRun
     /// fight's start (Battle Scars' damage from earlier fights is kept; this fight's is undone), Alternate Timeline carries the
     /// damage the run hero took in this fight (<see cref="DungeonRunState.RestartCarriedDamage"/>). A restart past its source's
     /// cap, or one that leaves the floor's games no turn of their budget, is refused: the fight is recorded as lost (a turn
-    /// limit when the budget is spent), with a note.
+    /// limit when the budget is spent), with a note; so is one from a source this fight could not use
+    /// (<see cref="RestartSourceAvailable"/>).
     /// </summary>
     private bool RecordRestart(DungeonRunState state, DungeonRunProfile profile, DungeonRunOutcome outcome, RunMatchResult result,
         RunMatchEnd end, DungeonRunMatchSummary summary, List<string> notes)
@@ -179,14 +194,18 @@ internal sealed partial class DungeonRun
         var used = RestartSourcesOf(state);
         int cap = TurnCapFor(state, boss);
         int turns = state.RestartTurns + end.Turns;
-        bool capped = used.Count(s => s == source) >= RestartsPerSource;
-        bool spent = turns >= cap * RestartTurnBudget - 1;
-        if (capped || spent)
+        // The run layer's own gate, as RecordEscape's EscapeAllowed: the source must be one this fight could use (RestartsFor's
+        // rule), so a mark a host reports from its own data never restages a fight the run has no restart for.
+        bool unavailable = !RestartSourceAvailable(state, boss, source);
+        bool capped = !unavailable && used.Count(s => s == source) >= RestartsPerSource;
+        bool spent = !unavailable && !capped && turns >= cap * RestartTurnBudget - 1;
+        if (unavailable || capped || spent)
         {
             var lost = spent ? DungeonRunOutcome.TurnLimit
                 : outcome == DungeonRunOutcome.Win || outcome == DungeonRunOutcome.Fault ? DungeonRunOutcome.Loss : outcome;
-            notes.Add("restart refused (" + source + "): " + (capped ? "its once-per-floor restart is used" : "the floor's turn budget is spent")
-                + "; recorded as " + lost);
+            string why = unavailable ? "this fight has no such restart (the run holds no Rewind, or the boss deck no Alternate Timeline)"
+                : capped ? "its once-per-floor restart is used" : "the floor's turn budget is spent";
+            notes.Add("restart refused (" + source + "): " + why + "; recorded as " + lost);
             summary.Outcome = lost;
             ClearRestart(state);
             RecordEncounterEnd(state, profile, lost, end, summary);
