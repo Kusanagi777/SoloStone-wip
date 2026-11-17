@@ -161,12 +161,14 @@ casts of the stage-B review).
     listed in `implementation.md` section 5;
   - calibration (plan stage 4; values in `handoff/phase9/values.md`) and the GILA_BOSS_48t gate (until it passes, 48t
     stays out of Toki's deck and rejected);
-  - lane S's code items: the Version-rollback helper, Resume refusing unknown deck or BossSequence ids, the "Save versions"
-    section of `dungeon-run.md`;
   - the [WIN] plugin build and in-client checks (escape screen and tavern, Rewind flow, "none" and neutralised-modifier
     text, BankedGold, the 150-turn relay cap);
-  - the close-out: three-lens review, curation notes `twists-per-act`, `plague-twists-per-act`, `health-policy`, README
-    section 4, the "Step 9" section of `dungeon-run.md`, the ULD_152 named-game recheck, the tag ranges in section 5.
+  - the close-out: three-lens review, README section 4, the ULD_152 named-game recheck, the tag ranges in section 5.
+- Done after the integration (`implementation.md` section 1, stage 1a and stage 5): lane S's code items
+  (`DungeonRunStore.Restore`, used by the runtime's rollbacks, which now restore the save's Version too; `DungeonRun.Resume`
+  refusing a run whose starter deck or boss ids the data does not know), the "Save versions" (versions 4-6, PowerChoices,
+  the step-9 attributes) and "Step 9: the economy" sections of `docs/design/dungeon-run.md`, and the curation notes
+  `twists-per-act`, `plague-twists-per-act` and `health-policy`.
 
 ### 3.4 Open issues
 
@@ -280,14 +282,18 @@ From the wave-3 integration:
   `verify/fixtures/p8f06/fixtures/schedule-plagues.json`. Step 9 fills them on acts-v4h/v4t (section 3.3).
 - `Generic.ChoiceMulligan` burns the first replacement card of a full 10-card hand; this also limits
   `start.bossOpeningHandBonus` to 5.
-- The five Dungeon Run finals won 20 of 20 as act I majors; Grubb is weak at tier 4. Hagatha is now the act II major
-  in 506 of 1000 runs; the act I major may be a Dungeon Run final.
+- The five Dungeon Run finals won 20 of 20 as act I majors; Grubb is weak at tier 4. Hagatha is one of the five Monster
+  Hunt rows of the act II major pool (with the four nemeses, beside the custom band-3 bosses act I left); both draws pick
+  a provenance first and then one of its rows uniformly, so she is the act II major in at most one run in five, not in
+  about half as this note once said (the plan's estimate is about 118 of 1000; not re-measured on the v4 defaults). The
+  act I major may be a Dungeon Run final.
 - LOOTA_BOSS_53h2 is a portrait support record.
 - LOOTA_103 and LOOTA_BOSS_52t keep the ledger blocker `run:deck-mutation`.
 - A Vault whose treasures would pass the deck maximum adds none.
-- The c-bosspilot ACT_RUN label says acts-v1 but runs acts-v2 (deferred label fix), and the other deferred items of
-  phase 8 (BOT_543 and ULD_152 partial: stale, for the step-9 close-out; Typhoon already asks
-  `ShrineRules.InterceptLeave`, since `a95b97e`).
+- The c-bosspilot ACT_RUN label says acts-v1 but runs acts-v2 (deferred label fix). The other deferred items of phase 8
+  are closed: BOT_543 Omega Mind and ULD_152 Pressure Plate are implemented in the ledger (BOT_543 in Tekahn's relay deck,
+  ULD_152 in the Trap Room and Cardish boss decks and two Brann buckets); ULD_152's named-game recheck is the user's.
+  Typhoon already asks `ShrineRules.InterceptLeave`, since `a95b97e`.
 - Never put a card-database-reading task in a static field initializer of a `DungeonRunEncounters` partial file.
 
 ## 4. Build and test in the cloud

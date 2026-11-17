@@ -18,7 +18,10 @@ What was checked (no suite or harness was run):
 - every `make_fixture.py` and every `make_fNN.py` (F11-F24; F14, F16 and F17 from the saved wiki pages) twice,
   byte-identical, with no drift on the generators step 9 did not touch;
 - the full validator with all seven data files (`DungeonRunValidator.Validate`, schedules and tavern included, through a
-  scratch loader): 0 errors, and the ShapeDigest of every shipped schedule equals its ReleasedShapes pin.
+  scratch loader): 0 errors, and the ShapeDigest of every shipped schedule equals its ReleasedShapes pin;
+- after the lane-S and close-out follow-up (on top of `cf824de`): the engine build 0 warnings, 0 errors (md5 unchanged);
+  `build-all.sh` exit 0, all 127 lines clean; `gen.sh` twice byte-identical, validators 0 errors (only the ledger's
+  curation hash moved).
 
 ## 1. Plan items
 
@@ -28,13 +31,16 @@ Done as recorded in `stage0.md` (seams, inert fields, `"version": 3` on the v3 s
 disposition table, row table). Not done (scope change): shared test code `verify/suites/p9/common/` (item 4) and the
 stage-0 check run (item 6). `c-sched-9` (the D1 F1 tripwire) is not written.
 
-### Stage 1a (lanes M and S): not done
+### Stage 1a (lanes M and S): the tests are the user's; lane S's code items done
 
 Both lanes are test and harness lanes (`c-bosspilot-run`, `bp9-before`, `LongRunWalker`, `c-longrun-9`, L4,
-`record_replay_v3.sh`): the user's under the scope change. Lane S also lists three small code items that **no lane did**:
-- the Version-rollback helper for `RecordFightOutcome` (D6; its `DungeonRunRuntime.cs` call site is [WIN]);
-- Resume refusing clearly on unknown deck or BossSequence ids;
-- `docs/design/dungeon-run.md` "Save versions" covering versions 4-6 and PowerChoices.
+`record_replay_v3.sh`): the user's under the scope change. Lane S's three code items, done after the integration:
+
+| Item | State |
+|---|---|
+| Version-rollback helper (D6) | done: `DungeonRunStore.Restore(save, snapshot)` (`DungeonRunState.cs`) puts back the profile, the run in progress and `Version` (not `LoadedVersion`, which only a successful write moves). The runtime's `Mutate` and `RecordFightOutcome` call it; `RecordFightOutcome` used to leave `Version` out. The call sites in `DungeonRunRuntime.cs` are [WIN] (not built here). |
+| Resume refuses unknown ids | done: `DungeonRun.Resume` throws an `InvalidDataException` for an unfinished run whose `StarterDeck` or a `BossSequence` id the loaded data does not know; `DungeonRun.UnknownIdsError` builds the message, naming every unknown id ("Dungeon Run save: the run names starter deck X (its row is disabled) and boss Y, unknown to the loaded data; the run is not resumed."). A version-1 run (no starter deck id) passes; a finished run is not checked. The runtime's load path already catches and logs a Resume refusal ("Dungeon Run save preparation failed"), as for the schedule refusal before it. |
+| "Save versions" in `docs/design/dungeon-run.md` | done: versions 4, 5 and 6 with their upgrades, the fields added under version 4 and 6 without a bump, `PowerChoices`, the step-9 guarded attributes, loading 1-6 and the backups, Resume's refusals and the rollback. |
 
 ### Stage 1b (derive the starting values): replaced
 
@@ -134,10 +140,20 @@ curves, and the GILA_BOSS_48t gate.
 
 ### Stage 5 (close-out): partly
 
-Done: ledger regenerated with recomputed counts; HANDOFF sections 2 and 3 updated. Not done: the three-lens review, the
-curation notes `twists-per-act`, `plague-twists-per-act` and `health-policy`, README section 4 numbers, the "Step 9: the
-economy" section of `docs/design/dungeon-run.md`, the stale ULD_152/BOT_543 note in HANDOFF 3.4 (the named-game ULD_152
-recheck is the user's), the tag ranges in HANDOFF 5.
+Done: ledger regenerated with recomputed counts; HANDOFF sections 2 and 3 updated. Done after the integration:
+- the "Step 9: the economy" section of `docs/design/dungeon-run.md` (where it applies; R0 and the slot decomposition as the
+  target, replacing F7 on the stamp-4 schedules, which F7 now says; the economy targets; the D-table as implemented; the
+  values, pointing to `values.md`);
+- the curation notes `twists-per-act`, `plague-twists-per-act` (the v4 chapter mapping, chance 100, one twist per act, an
+  excluded roll rolls none; v3 keeps its empty pools) and `health-policy` (identity offsets; the v4 healthOffset override,
+  offsetCap, the HealthBonus cap, per-fight neutralisation and Tekahn's form ratchet, all on stamp 4 only); the ledger is
+  regenerated with them;
+- HANDOFF 3.4: the stale "BOT_543 and ULD_152 partial" note is replaced (both implemented in the ledger; ULD_152's
+  named-game recheck stays the user's); Hagatha's "506 of 1000" is replaced by what the data shows (one of five Monster Hunt
+  rows of the act II major pool, picked uniformly within its provenance, so at most one run in five; the plan's estimate is
+  about 118 of 1000, not re-measured); HANDOFF 3.3's left-over list no longer names these items.
+
+Not done: the three-lens review, README section 4 numbers, the tag ranges in HANDOFF 5.
 
 ### Section E open items
 
@@ -150,8 +166,8 @@ recheck is the user's), the tag ranges in HANDOFF 5.
 | GILA_900p, GILA_900h2 | final rejection, texts reworded |
 | ULDA_607 | final rejection |
 | DALA_740 | final rejection (D16 a) |
-| ULD_152 | not rechecked (needs named games: the user's) |
-| BOT_543 | stale note not yet removed (close-out) |
+| ULD_152 | implemented in the ledger; stale "partial" note removed from HANDOFF 3.4; the named-game recheck is the user's |
+| BOT_543 | implemented in the ledger (Tekahn's relay deck); stale "partial" note removed from HANDOFF 3.4 |
 | GILA_BOSS_43t | implemented as Damph's reward; ledger partial for its boss-card role only (offered: encounter reward) |
 | Jythiros | blocker "client" |
 | ULD_616, DRG_052 | scripted |
@@ -198,7 +214,8 @@ All in `handoff/phase9/values.md` with sources; read only on stamp 4 (`DungeonRu
 - `plugin/ClientBridge.cs` `TickDungeonRun`: the turn limit uses `match.DungeonRunTurnLimit`.
 - `plugin/LocalLadder.cs` `FinishDungeonRun`: a harvest marked `Restarted` is recorded as a Fault.
 - `plugin/NativeDungeonRunUI.cs`: the modifier page shows the v4 "none" row (text in `NativeDungeonRunText.cs`).
-- `plugin/DungeonRun/DungeonRunRuntime.cs`: sets `DungeonRun.ForbiddenPairLog` to the runtime log.
+- `plugin/DungeonRun/DungeonRunRuntime.cs`: sets `DungeonRun.ForbiddenPairLog` to the runtime log; `Mutate` and
+  `RecordFightOutcome` roll back through `DungeonRunStore.Restore` (lane S; `RecordFightOutcome` now restores `Version` too).
 - Still to build in the client: the escape screen and escape tavern, the Rewind flow, the neutralised-modifier text, BankedGold
   at the tavern, the 150-turn relay cap check, and the plugin build itself (75-warning set).
 
@@ -250,9 +267,19 @@ Data and text pins:
   game-restart);
 - ULDA_607 / DALA_740 exact-text pins (c-enc-25 checks "Bombastic" and "data-gap", which still match).
 
+Lane S's code items and the stage-5 documents (after the integration):
+- `docs/design/restoration-ledger.md`: the inputs table's `curation.json` hash only (`e4fdfb1152c9cfab` -> `8f8bba3bd14d9237`;
+  the three rule-adaptation notes are not printed in the ledger); any pin of that hash or of curation.json's bytes;
+- c-enc-25 B7 reads HANDOFF 3.3 (it already moves with the twist pools: 8 idle twists -> 0); nothing else reads HANDOFF;
+- Resume's refusal moves no check that resumes a run made with the data it loads (c-runlayer, c-acts, c-upgrades,
+  c-shrine-core, c-shrine-upgrades, c-teammates-T1, c-enc-model, c-enc-25 L1). Every StarterDeck and BossSequence id in the
+  fixture saves under `verify/fixtures` (37 files) is in the shipped data; a check that resumes a save whose bosses are
+  encounter rows while loading data without `encounters-v1.json` would now get the refusal (none was found, not run);
+- a new check for D6 (the rollback restores Version) and for the Resume refusal is the user's (c-longrun-9, c-enc-model).
+
 ## 6. Follow-ups found during integration
 
-- Lane S's three code items (section 1, stage 1a).
+- Lane S's three code items (section 1, stage 1a): done after the integration.
 - D9's deckMax note has no channel (deviation 7).
 - Kobold Hermit's AT_132_SHAMANa-d choices lack race and keywords (lane G deviation; a follow-up).
 - HANDOFF 3.4 stale lines (Typhoon, Kingsbane, Lackeys, ULD_152/BOT_543) are updated in place where step 9 closed them;

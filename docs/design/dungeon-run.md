@@ -2,7 +2,7 @@
 
 > **Status**: In Design — initial specification, framework scope
 > **Author**: Kusanagi777 + Claude (game-designer / systems-designer roles)
-> **Last Updated**: 2026-11-10 (phase 3: shared draft catalog runs, dual-class rows, generated Secrets; save version 3)
+> **Last Updated**: 2026-11-17 (step 9: the economy, acts-v4h/v4t; save versions 4-6 documented)
 > **Last Verified**: 2026-11-09, against SoloStone `main` @ `0f6a476`
 > **Implements Pillar**: Deckdelve P1 "every run builds a deck you couldn't have planned", P3 "lose fast, learn fast", P4 "readable, deterministic rules"
 > **Ported from**: `dungeon-run-ccg/design/gdd/` (Deckdelve) — `run-structure.md`, `reward-draft.md`, `treasures.md`, `content.md`, `rng-event-log.md`, `meta-progression.md`
@@ -267,7 +267,7 @@ weight = round(rarityWeight × (100 + 50 × affine) / 100)
 - Slot 1 is forced to a universal treasure when one exists.
 - A held or already-offered treasure is never offered again in that run.
 
-**F7 — Difficulty targets** (tuning goal, not a rule). Floor win-rate targets are `[0.90, 0.85, 0.80, 0.70, 0.65, 0.60, 0.50, 0.40]`. That gives about 3% full-clear and a median death on floors 4–5. The MVP has 4 floors, and its targets are the first four values.
+**F7 — Difficulty targets** (tuning goal, not a rule). Floor win-rate targets are `[0.90, 0.85, 0.80, 0.70, 0.65, 0.60, 0.50, 0.40]`. That gives about 3% full-clear and a median death on floors 4–5. The MVP has 4 floors, and its targets are the first four values. On the step-9 schedules (16 and 19 fights) the run target R0 and its slot decomposition replace these values (§ Step 9: the economy).
 
 ## Edge Cases
 
@@ -444,15 +444,25 @@ The sidecar is versioned (`DungeonRunSave.Version`).
 - **Version 1** (hero select) held a hero id per run, stats per hero and the chapter unlocks.
 - **Version 2** (class, deck, power) adds `Class` and `StarterDeck` to the run, `Class` to stats rows and archive entries, `StarterDeck` and `Power` to archive entries, and `UnlockedThisRun` to the run.
 - **Version 3** (the shared draft catalog, phase 3) adds `CatalogVersion` to the run (absent = 0: a legacy run, drafting the 52 fixed bundles exactly as before), its `BucketTakes`, and each catalog bundle draft's stored `Offers` (entry, label, theme, kind, adventure tag and the three drawn cards). The upgrade from 2 changes no value: every run of an older save is a legacy run; it stamps `CatalogVersion` 0 and leaves the legacy drafts without stored offers. The first commit copies the version-2 file once to `dungeon-run.v2.xml`. A version-2 plugin refuses a version-3 file, so it can never drop the stored offers.
+- **Version 4** (the act/floor schedule, phase 4) adds the run's `ScheduleVersion` (absent = 0: a legacy-schedule run, the fixed eight floors of `run-v1.json` `rules`, byte for byte), its `Schedule` id and `Node` (an index into the schedule's flattened node list; `Floor` stays the global combat floor), `NextUid` and the card records `Cards` (authoritative for an act run; `Deck` mirrors their ids and a mismatch is refused before anything is written), `ActiveRules` (the modifiers taken), the open `Tavern` and `ModifierOffer`. A run's `ScheduleVersion` is the schedule file's `scheduleVersion` (or the schedule row's own `version`) at NewRun and never changes: it is the *schedule stamp* (1 acts-v1, 2 acts-v2 and act1, 3 acts-v3h/v3t, 4 acts-v4h/v4t), a different number from the save version. Fields added later while version 4 was current are optional and omitted at their defaults: `HealthBonus` (tavern Good Food) and `MajorsCleared` (run, stats rows and profile) in phase 5; the named `Loadout`, `PowerOverride` and `NextFight` in phase 6. The upgrade from 3 changes no value: every run of an older save is a legacy-schedule run (`ScheduleVersion` 0, no schedule, node, card records, rules, tavern or modifier offer), so its body serializes as at version 3.
+- **Version 5** (board shrines and teammates, phase 7) adds the run's `BoardShrine` (the Rumble Run shrine its starter deck names, set only on a new run of schedule stamp 2 or later) and `ShrineUpgrades` (kept apart from `Treasures`), the same two on archive entries, and the teammate and shrine-upgrade draft kinds. The upgrade from 4 is the identity: an older run has no board shrine, and its schedule never opens a teammate or shrine-upgrade draft.
+- **Version 6** (encounters, anomalies and twists, phase 8) adds the run's `HeroSwitch` (the fight-only heroes of the floor being fought, match scope) and `HeroDamage` (ULDA_720 Battle Scars), rule kinds on `ActiveRules`, the match summary's encounter facts (`Family`, `BossRemaining`, `BossForm`, `HeroesUsed`, `Rules`, `NoLoss`) and the profile's `BossDamage` (persistent boss damage per encounter: the Plague Lords). The upgrade from 5 is the identity: an older run is on schedule stamp 0, 1 or 2, which never draws an encounter, opens an anomaly node or rolls a twist. Later additions while version 6 is current, each an attribute guarded by `ShouldSerialize` (omitted at its default, so every earlier save writes the same body and no version bump is needed):
+  - `PlagueLordDamage` (family 24, ULDA_115 Gnomebliterator): damage banked for the run's next Plague Lord fight.
+  - **`PowerChoices`** (the close-out, family 25): the starting Hero Powers the run's row offered when it began (the powers whose unlock the profile held then), space-separated in row order. NewRun records it on a run of schedule stamp 3 or later when two or more were open; ULDA_038 Explorer Retraining (a tavern option) offers those other than the current power (`DungeonRun.RetrainPowers`). Null (omitted) on every other run and on every run saved before the close-out, which therefore offers no retraining.
+  - **Step 9** (plan D12; the save stays at version 6): on the run, `BankedGold` (gold banked for the next tavern: a bundle draft skipped for room, or an encounter reward with no room, D5/D9) and the match-scoped restart state of the floor being fought, `RestartIndex` (restarts so far; a restarted game's seed is `StableSeed(seed, MatchStream, floor, restartIndex)` only when it is above 0), `RestartSources` (the card ids used, for the per-source caps), `RestartCarriedDamage` (GILA_BOSS_48t: the damage the run hero carries into the restarted game) and `RestartTurns` (turns the floor's restarted games took, for the 2 x TurnCap budget); on the match summary, `Escaped` (ULDA_111 Hearthstone: `Outcome` Win with this mark, no major or kill credit, no drafts) and `Restarted` (GILA_911 Rewind, GILA_BOSS_48t: `Outcome` Fault with this mark). They follow the `NoLoss` precedent: no new enum member is written, so a version-6 reader of an older step meets only values it knows. Only a run on schedule stamp 4 can set them.
 
-Loading accepts versions 1 to 3. A newer version is refused (`InvalidDataException`), so a downgraded plugin never overwrites data it cannot read. The upgrade (`plugin/DungeonRun/DungeonRunMigration.cs`) needs the loaded data, so the runtime runs it when it first hands out the save with the rules loaded, never inside the store. Each step is caught and logged, so loading never throws on old content. Before the first commit of an upgraded file, the old file is copied once to `dungeon-run.v1.xml`.
+Loading accepts versions 1 to 6 (`DungeonRunSave.OldestVersion` to `CurrentVersion`). A newer version is refused (`InvalidDataException`), so a downgraded plugin never overwrites data it cannot read; the refusal of a version-7 file is pinned. The upgrade (`plugin/DungeonRun/DungeonRunMigration.cs`) needs the loaded data, so the runtime runs it when it first hands out the save with the rules loaded, never inside the store. Each step is caught and logged, so loading never throws on old content. Before the first commit of an upgraded file, the old file is copied once to `dungeon-run.v<N>.xml`, N the version it was loaded at (`DungeonRunStore.BackupName`).
+
+**Resume.** After the upgrade, a run left unfinished is resumed (`DungeonRun.Resume`): a run left mid-match goes back to that floor's pre-match with the same seed. A run the loaded data cannot carry is refused there, at load, with the reason, and is not resumed: an act run whose schedule stamp, schedule id, boss count or node does not fit the loaded schedules (`ScheduleFor`, `CurrentNode`), and (step 9) any run whose `StarterDeck` or a `BossSequence` id the loaded data does not know (`DungeonRun.UnknownIdsError` names them; a version-1 run, which has no starter deck id, passes; a deck of a disabled row is named as such).
+
+**Rollback.** Every change to the loaded save is applied in memory and then committed; if the change or the commit throws, the runtime rolls the save back to a copy taken before the change (`DungeonRunStore.Clone`, then `DungeonRunStore.Restore`: the profile, the run in progress and `Version`), so memory never runs ahead of the file. `Mutate` and `RecordFightOutcome` share that helper; before step 9 `RecordFightOutcome` restored the profile and run but not `Version` (D6).
 
 1. **Run in progress:** the hero id maps to a class (`legacy.heroes` in `run-v1.json`; an unknown id falls back to a class id, then to the class of the run deck's first class card, then to the first class, and is logged). If this step fails, the save stays at version 1 and the upgrade runs again on the next load; a run whose class the data does not know can still be abandoned (it is archived and adds no stats row). The deck, treasures, power or shrine, signature, bosses, drafts, cooldowns, seed, floor and phase are kept exactly; a version-1 run records no starter deck id, because none of the version-1 starters is a version-2 deck. Its offers therefore match version 1 (verified for every class hero, the Trapper, the Pilgrim and the Sellsword); a Cartographer run is now single-class (Mage) and no longer gets Rogue bundles. A power the class no longer lists is kept (an old Cartographer run on Ambush Point keeps it under Mage).
 2. **Stats:** rows merge by class (Trapper and Ranger become one Hunter row: runs and wins add, best floor is the maximum). A row of an unknown hero keeps its hero id and gets no class: it counts for class-free conditions, never for a class ladder.
 3. **Archive:** entries learn their class (none for an unknown hero); the hero id stays.
 4. **Unlocks:** each version-1 key adds the class keys that keep what it gave (`legacy.unlocks`: chapter 2 → Hunter floor 4 and 5, Paladin floor 5; chapter 3 → Warrior floor 5, Mage floor 4 and 5, Rogue floor 5; the Sellsword and Cartographer power keys → Warrior and Rogue power keys). Old keys stay; then the ladder is re-evaluated from the merged stats.
 
-The upgrade is idempotent: every step only touches rows without a class.
+The upgrade is idempotent: every step only touches rows without a class (from version 1) or sets a value an older run already reads as (from version 2 on).
 
 ## Phase 3: catalog runs (2026-11-10)
 
@@ -1219,6 +1229,79 @@ the decks of families 19-22 are replaced; when they get scripts, rerun the encou
 and the bosspilot modes enc20a / enc20b / enc20-seeds-a / enc20-seeds-b, enc21a / enc21b / enc21-seeds-a / enc21-seeds-b,
 enc22a / enc22b / enc22-seeds-a / enc22-seeds-b, enc23 / enc23-seeds / enc23-cards, enc24, plague24 95 / 110 / 195 / 210
 and tekahn24, each twice identical with 0 faults, fallbacks, failed checks and swallowed leaf exceptions.
+
+## Step 9: the economy (2026-11-17)
+
+Step 9 balances the combined reward economy on one schedule, with act-aware encounter and reward scaling, incompatible-
+modifier prevention and long-run save/resume validation. The plan is `handoff/phase9/plan.md`; what the code does, per plan
+item, is `handoff/phase9/implementation.md`. The step is **implemented and not yet measured**: every target below is a
+target, and every number the step tunes is an uncalibrated initial value (`handoff/phase9/values.md`).
+
+**Where it applies.** Two new schedules, **acts-v4h** and **acts-v4t**, at schedule stamp 4, are the defaults. They keep
+acts-v3h's node shape (ReleasedShapes[4] equals [3]) and share acts I-III (`sameActsAs`), so the economy is tuned once and
+only the finales differ (the Heist's four fights; Tekahn with the hero relay). Every step-9 value is read only through
+`DungeonRun.Tuned(state)` (an act run of stamp 4 or later): schedule, tavern and treasure keys, modifier semantics, the
+draw, encounter-row `v4` blocks, the new `runs: "v4"` treasure rows and the match-plan knobs. acts-v1, acts-v2, act1,
+acts-v3h and acts-v3t play as released, except for correctness fixes (rule exclusions, new boss flags, the board-shrine
+ordering at NewRun), which apply to every schedule with anomaly or twist nodes. The save stays at version 6 (§ Save
+versions).
+
+### The target: R0 and its slot decomposition
+
+One run-level target, **R0: a fresh-profile Victory rate of 1-3% on each schedule**. The per-slot targets below are its
+decomposition (F7's method, extended from 8 floors to 16 and 19 fights), and their product is checked against it, weighting
+the act III major by the draw's lord / non-lord share. At the point targets the plan puts the product at about 1.2% (v4h)
+and 1.4% (v4t).
+
+| Slot | Point target | Band |
+|---|---|---|
+| Act I combat, per fight (floors 1-4) | 0.92 | 0.88-0.95 |
+| Act I major | 0.70 | 0.60-0.80 |
+| Act II combat / major | 0.88 / 0.60 | 0.83-0.92 / 0.50-0.70 |
+| Act III combat / major (custom finals) | 0.84 / 0.55 | 0.78-0.89 / 0.45-0.65 |
+| Plague Lord as the act III major | mean damage per attempt at least 60; one-attempt kill 10-25% | — |
+| Heist finale | 0.80 per fight; all four in one run at least 0.35 | 0.72-0.87 per fight |
+| Tekahn finale | 0.45 | 0.35-0.55; at most 3 turn caps in 100 |
+
+Rules of the measurement (plan section 1 B): a fair AI on both sides; n of at least 200 per band (Tekahn 100); a band passes
+when its Wilson 95% interval overlaps it and the point estimate lies within it plus or minus 3 points; act I combat beats act
+III combat; every t3/t4 row and the named outliers are sampled by name, the four rooms (Vault, Tad, Lava Chamber, Trap Room;
+flag `room`) exempt as reward nodes; each origin's rate of reaching the act II major within 15 points of the pooled rate.
+The economy targets (plan section 1 A) are deterministic: a deck of at most deckMax 50, entering the finale at a median of
+34-42 cards (p95 at most 48); bundle drafts skipped for room converted to gold; at least 90 treasure-draft candidates for
+every loadout with treasure drafts; a rare share of 25-35% / 38-50% / 52-65% by act; DALA_904 at most twice a run; Heist :
+Tombs tavern offers about 64 : 36; a per-row meeting ratio of at most 2.5 within a tier pool.
+
+### Decisions
+
+| # | Decision (as implemented) |
+|---|---|
+| D1 | New ids acts-v4h / acts-v4t at stamp 4 carry all tuning; acts-v3h/v3t carry an explicit `"version": 3`, so raising the file's `scheduleVersion` to 4 does not re-stamp them. |
+| D2 | v4 keeps v3's node shape; the scaling is in tuning keys and the encounter rows' `v4` blocks, never in shared row fields (which v3 reads live). |
+| D3 | Difficulty is measured with a fair player on both sides in a new run harness, not with the old bosspilot's LocalBot (not built yet: the user's). |
+| D4 | Act-aware scaling through act keys: per-act treasure rarity, per-fight finale curves, `tavern.weightByAct`, DALA_904 Good Food `maxPerRun` 2 (`CapKnobs` caps HealthBonus at what the tavern can give). Player Health stays 30 and identity offsets stay (+10 for the Dungeon Run finals and the nemeses). Levers for an act I major wall, in order: the floor-5 curve value, a v4 tier override, `offsetCap` (last, an identity change). Curation `health-policy`. |
+| D5 | deckMax stays 50. Variant (b): full-size bundles (takes 3/2/2), but no bundle draft after a treasure-draft floor or a major in acts II-III (`bundleAfterTreasure: false`); a bundle skipped for room becomes 1 `BankedGold`, spent at the next tavern. DALA_902 Remove a Card weighs more in act III. |
+| D6 | One treasure economy: generic adventure treasures carry `"shared": true` after an audit (126 rows; hero-specific, signature and deck- or power-dependent texts stay scoped, each with a reason in the catalog curation), read only by stamp-4 runs. Draft slots: slot 1 universal, slot 2 the loadout's own origin, slot 3 weighted; per-act rarity weights derived from the audited pool's rare : common counts. |
+| D7 | Modifiers on v4: per-fight neutralisation plus a "none" choice. A row's `v4.incompatibleModifiers` zeroes, for that fight only, the knob it cannot carry (bossHealthDelta on a fixedHealth row, bossManaDelta on a row with its own start Mana); the act's other fights keep the modifier, and its out-of-fight effects (Iron Bosses' extra treasure) always apply. Every entry has a `modifierReasons` text. A v4 row without a block keeps the act-wide ban. Released schedules keep the act-wide ban. |
+| D8 | Twist pools mapped from the original chapters: act I [DALA_829, ULDA_801], act II [DALA_832, ULDA_802], act III [DALA_833, DALA_831, ULDA_803, ULDA_804]; the acts-v4h finale DALA_830. Chance 100 (each chapter's twist was always on), one twist per act, weighted; a hit with no compatible candidate rolls none. Curation `twists-per-act`, `plague-twists-per-act`. |
+| D9 | Per-boss rewards (`reward`, v4 only): GILA_BOSS_43t is Damph's reward, a deck card granted once per run after his fight; at deckMax it becomes 1 `BankedGold`. |
+| D10 | Draw `provenance-mix-v2` (stamp 4 only): provenance weight n_p^alpha / (1 + k drawn_p) in exact integer arithmetic, a ledger chance for a banked Plague Lord at the major, at most 1 Rumble Run champion per act. |
+| D11 | Tekahn on acts-v4t only: the finale's `turnCap` 150 and `formRatchet` (entering a form with a Health threshold and no Health of its own clamps his maximum Health to it), read into `RunMatchPlan.TurnCap` / `FormRatchet`; Belnaara's and Bazhial's script forms are untouched. |
+| D12 | The save stays at version 6; new fields are guarded attributes (`BankedGold`, the restart state, the summary's `Escaped` and `Restarted`). |
+| D13 | Restart (GILA_911 Rewind, a v4 treasure; the GILA_BOSS_48t path, card held back until its gate passes): `Fault` plus `Restarted`, the floor restaged, a persistent boss's damage banked as a loss does, a new match seed only when the restart index is above 0, one restart per source per floor and at most 2 x TurnCap turns per floor. A restart from a source the fight could not use is recorded as a loss. |
+| D14 | Escape (ULDA_111 Hearthstone, a v4 treasure): `Win` plus `Escaped`, with no major or kill credit and no drafts; an escape tavern opens on the node. Castable only when `EscapeAllowed` (deck above deckMin, not a finale act, not the last node); the card leaves the deck. |
+| D15 | Generation hygiene in Dungeon Run games: every legacy generation pool goes through `OfflineCardPools.ForGame`, which drops unscripted ids (unfiltered games get the same array); ULD_616 and DRG_052 are scripted, so the Lackey pool holds 7. |
+| D16 | Adaptation criterion for server-side gaps: adapt only when the client text states every effect, the missing parts are triggers or chances, the choice is recorded with its reason, and real games pass; otherwise reject for good (DALA_740: rejected; ULDA_607: rejected, no source decks). |
+| D17 | Prevention is a pure predicate (`DungeonRun.ForbiddenPairs`, order-independent) plus gates in the candidate lists (rules, twists, modifiers, treasure drafts, tavern options); BuildPlan only logs a violation and never changes a plan. |
+
+### Values
+
+Nothing step 9 tunes has been measured. Every value is the plan's stated initial guess or one derived from the data, listed
+with its source in `handoff/phase9/values.md`: the draw (alpha 0.7, k 1, ledger chance 50, 1 TRL per act), the per-act
+rarity (rare 26 / 39 / 53 of 100), `upgradeEveryFloors` 4, the act and finale curves (v3's), twist chance 100, the tavern
+weights by act and Good Food's cap, Tekahn's turnCap 150, the restart caps, and 1 banked gold per skipped draft or reward.
+Calibration (plan stage 4: fair-player measurement of the slots above, then encounter `v4` tier and `healthOffset`
+overrides and curve changes, in the D4 order) is still to do; until then R0 is a target, not a property of the defaults.
 
 ## Implementation Status (2026-11-09)
 
