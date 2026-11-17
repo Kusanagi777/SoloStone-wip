@@ -207,7 +207,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `engine:unscripted` | 11 | 0 | 0 | No engine script for the card id (CardDefs has no implemented entry). |
 | `validation:encounter-rejected` | 3 | 0 | 0 | Current DungeonRunValidator admission rule `encounter-rejected` rejects the card. |
 | `validation:rule-rejected` | 1 | 0 | 0 | Current DungeonRunValidator admission rule `rule-rejected` rejects the card. |
-| `run:twist-pools` | 8 | 8 | 0 | Chapter twists: scripted and admitted global rules, rolled at NewRun from an act's "twist" pool, but every act of the shipped schedules ships an empty pool (the close-out enabled the finales and the defaults, not the twist rolls): how often an act rolls a twist is a reward-economy and incompatible-modifier decision for phase 9. Tested end to end on the family 05 and 06 fixture schedules. |
+| `run:twist-pools` | 8 | 8 | 0 | Chapter twists: scripted and admitted global rules, rolled at NewRun from an act's "twist" pool, but acts I-III of acts-v3h and acts-v3t ship an empty pool (only the Heist finale rolls one, DALA_830 The Finale; the close-out enabled the finales and the defaults, not the act twist rolls): how often an act rolls a twist is a reward-economy and incompatible-modifier decision for phase 9. Tested end to end on the family 05 and 06 fixture schedules. |
 | `run:encounter-roster` | 6 | 0 | 0 | Original encounters: boss heroes, powers, special cards and setups in the encounter pool. |
 | `run:treasure-content` | 3 | 0 | 0 | Original passive and active treasures as run content entries (DungeonRunContent + run-v1.json). |
 | `run:adventure-cards` | 1 | 0 | 0 | Adventure-only cards (boss/treasure support cards in the original namespaces) that need an owning feature to appear. |
@@ -769,6 +769,6 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | `data/dungeon-run/tavern-v1.json` | `2b0688c5c686151c` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
-| `tools/restoration-ledger/curation.json` | `04e7a43c329d637d` |
+| `tools/restoration-ledger/curation.json` | `9e47b21a68d7e41a` |
 
 Plus the engine card data and DungeonRunContent compiled from the working tree.
