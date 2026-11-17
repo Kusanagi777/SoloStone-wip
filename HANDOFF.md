@@ -47,7 +47,8 @@ parent session's summary. No file here holds the original nine-step text verbati
 | 5 Deck changes, taverns | done | `plugin/DungeonRun/DungeonRunDeck.cs`, `DungeonRunTavern.cs`, `data/dungeon-run/tavern-v1.json` |
 | 6 Heroes, powers, treasures | done | `data/dungeon-run/run-v1.json`, `engine/SabberStoneCore/src/CardSets/DungeonRun/DungeonRun{Heist,MonsterHunt,Tombs}*.cs`, `DungeonRunActives.cs` |
 | 7 Shrines, teammates | done | `engine/.../CardSets/DungeonRun/DungeonRunShrines*.cs` (S2, S3, U, T1, T2, D) |
-| 8 Encounters | families 01-24 merged; the close-out (family 25) done on `wip/c25`, its full regression pending; open for step 9: the act I-III twist pools (section 3.3) | see below |
+| 8 Encounters | families 01-24 merged; the close-out (family 25) done on `wip/c25`, its full regression pending | see below |
+| 9 Economy, scaling, prevention | **implemented, untested** on `wip/s9` (lanes R, E, X, G merged; acts-v4h/v4t are the defaults). Testing, measurement and calibration are the user's (section 3.3) | `handoff/phase9/implementation.md`, `plan.md`, `values.md`; `plugin/DungeonRun/DungeonRun.{Rules,Economy,Outcomes}.cs` |
 
 The design record is `docs/design/dungeon-run.md` (sections "Phase 8: the encounter model" and "Wave 1/2/3/4/5/6").
 
@@ -63,8 +64,8 @@ Step 8 progress:
   Hunt decks Witchwood's Touch, folded two duplicate helpers and fixed Snowfury Giant's Overload count (found by the
   regression). Per-family reports are in `handoff/phase8/reports/`; wave 6: `integrate-wave6.md` and
   `lane-family-20/21/22/23/24-*.md`.
-- Ledger now (after the close-out): 4970 rows; implemented 3880, partial 10, missing 13, duplicate/support 1067 (wave 6:
-  4992 / 2814 / 817 / 302 / 1059).
+- Ledger now (step 9, `wip/s9`): 4970 rows; implemented 3890, partial 3, missing 10, duplicate/support 1067 (after the
+  close-out: 3880 / 10 / 13 / 1067; wave 6: 4992 / 2814 / 817 / 302 / 1059).
 - Generators now: encounters "255 rows, 296 decks (125 authentic, 171 changed), 876 adaptations, 4 rejected"; catalog
   "506 entries (452 offerable pool, 2 withdrawn, 52 fixed), 6508 admitted and 1 excluded".
 - Family 25 needed no encounter scripts: `DungeonRunEncounters.F25.cs` and `DungeonRunAdmission.F25.cs` stay empty stubs.
@@ -129,7 +130,8 @@ casts of the stage-B review).
 - Ledger 4970 rows: implemented 3880, partial 10, missing 13, duplicate/support 1067, each open row with a described
   blocker (c-enc-25 B1-B2). Reachability (c-enc-25 R): every boss row of all six provenances is met in 600 default-roll
   runs; one solostone row is behind an unlock; six rows are excluded only for their own hero row.
-- Not closed: the 8 admitted act I-III twists never roll in a new run (section 3.3, step 9).
+- Not closed by the close-out: the 8 admitted act I-III twists never rolled in a new run. Step 9 gives acts-v4h/v4t
+  chapter-mapped twist pools and makes them the defaults (section 3.3).
 
 ### 3.3 Then
 
@@ -138,18 +140,33 @@ casts of the stage-B review).
   one fix pass. The prompts are at the end of `handoff/phase8/workflow-encounters-lanes.js`. Fidelity and runs-and-state
   ran on `wip/c25` and their confirmed findings are fixed (close-out report sections 2 and 3); the regression lens is the
   full-regression queue, which has not run yet.
-- Step 9: the reward economy on one schedule; act-aware encounter and reward scaling; incompatible-modifier prevention
-  (the `incompatibleRules` / `incompatibleModifiers` hooks exist); long-run deck and save/resume validation; plus
-  ULDA_111 Hearthstone (match exit), GILA_900p Temporal Loop and GILA_911 Rewind (turn/game restart), GILA_BOSS_48t
-  Alternate Timeline; and recheck DALA_740 (Wondrous Wisdomball) and ULD_152.
-- Step 9 also owns the act I-III twist pools. Acts I-III of acts-v3h ship `"twist": {"pool": [], "chance": 0}` and
-  acts-v3t uses the same acts (`sameActsAs`), so only the Heist finale's DALA_830 ever rolls. Give those acts non-empty
-  twist pools, with a chance per act, so the 8 admitted twists DALA_829, DALA_831, DALA_832, DALA_833, ULDA_801,
-  ULDA_802, ULDA_803 and ULDA_804 can roll in a new run. Gate them with the incompatible-modifier prevention above.
-  Until then they are scripted, admitted and tested only on the fixtures (p8f05 `schedule-twists.json`, p8f06
-  `schedule-plagues.json`); the ledger keeps them partial with `run:twist-pools`. **The completion bar (section 1) is
-  not met for these 8 until step 9 does this** (c-enc-25 B7 lists every admitted twist no default schedule rolls and
-  requires this paragraph to name it).
+- **Step 9 is implemented and untested** on `wip/s9` (worktree `/home/user/wt/s9`); the record is
+  `handoff/phase9/implementation.md` (per plan item: done, not done, deviations; the uncalibrated values; the [WIN] edits;
+  the checks and pins expected to move). The user changed the scope to implementation only: **every test, measurement,
+  calibration and re-record of step 9 is the user's**, and none has run. What is in place:
+  - acts-v4h / acts-v4t (stamp 4, v3's node shape, ReleasedShapes[4] equal to v3's) are the defaults; every step-9 value
+    is read only through `DungeonRun.Tuned` (stamp 4), so acts-v1/v2/act1/v3h/v3t play as released except for the
+    correctness fixes of lane R (exclusions, new boss flags, the board-shrine ordering fix).
+  - Lane R: incompatibility prevention (`ForbiddenPairs`, rule exclusions with reasons, per-fight modifier neutralisation
+    plus "none" on v4, weighted twist pick); lane E: one treasure economy (shared treasures, slot rule, per-act rarity,
+    draw provenance-mix-v2, BankedGold, tavern weights by act, DALA_904 cap, GILA_BOSS_43t as Damph's reward); lane X:
+    ULDA_111 escape, GILA_911 Rewind and the GILA_BOSS_48t restart path, Tekahn's turnCap 150 and form ratchet on v4t;
+    lane G: generation filter in Dungeon Run games, ULD_616 and DRG_052 scripted, Kingsbane Durability.
+  - The 8 act I-III twists (DALA_829, DALA_831-833, ULDA_801-804) roll on the v4 defaults (chance 100, an uncalibrated
+    initial value); the ledger has them implemented.
+  - Final rejections: GILA_900p / GILA_900h2 (Toki keeps CS2_034), ULDA_607, DALA_740, DALA_857.
+- Left for step 9 (the user, or a later lane):
+  - the tests and harnesses of the plan (`c-rules-9`, `c-econ-9`, `c-sched-9`, `c-ends-9`, `c-gen-9`, `c-longrun-9`,
+    c-enc-25 L4, the new bosspilot harness and its modes), the full regression and every re-record, with the moves
+    listed in `implementation.md` section 5;
+  - calibration (plan stage 4; values in `handoff/phase9/values.md`) and the GILA_BOSS_48t gate (until it passes, 48t
+    stays out of Toki's deck and rejected);
+  - lane S's code items: the Version-rollback helper, Resume refusing unknown deck or BossSequence ids, the "Save versions"
+    section of `dungeon-run.md`;
+  - the [WIN] plugin build and in-client checks (escape screen and tavern, Rewind flow, "none" and neutralised-modifier
+    text, BankedGold, the 150-turn relay cap);
+  - the close-out: three-lens review, curation notes `twists-per-act`, `plague-twists-per-act`, `health-policy`, README
+    section 4, the "Step 9" section of `dungeon-run.md`, the ULD_152 named-game recheck, the tag ranges in section 5.
 
 ### 3.4 Open issues
 
@@ -159,7 +176,7 @@ game ends normally (boss win), and the record is re-recorded. The general Echo r
 now holds in every game (`EncounterRules.EchoCopyFloor`, c-enc-engine G7d).
 
 From the close-out (details in `handoff/phase8/reports/closeout-family-25.md`):
-- The 8 act I-III twists never roll in a new run: step 9 (section 3.3).
+- The 8 act I-III twists never rolled in a new run: step 9 gives them pools on the v4 defaults (section 3.3).
 - Tekahn games run long. The shipped turn cap (100 turns, `NativeMatch.DungeonRunTurnCap`) is a loss for the run. In 14
   distinct acts-v3t finale games recorded or sampled for the runs-and-state review rerun, the run won 1, the boss won 7 and
   6 ended at the cap (the tekahn24/tekahn25 records start the run player at 1 Health so the relay begins at once; the
@@ -189,9 +206,10 @@ From the wave-6 integration (details in `handoff/phase8/reports/integrate-wave6.
   from any treasure row a later family adds.
 - Jythiros of Questions (ULDA_BOSS_58h/58p) is rejected (family 21): Riddle of the Sphinx needs a decision by the
   non-current player in the decision loop, NativeMatch and the harnesses, and a Counter for every card type. Phase 9 /
-  client. GILA_BOSS_48t Alternate Timeline (family 23) goes to phase 9 with the restart family (section 3.3).
-- Captain Shivers (family 23) starts with Kingsbane: the engine's Kingsbane helper loses enchantment Durability when the
-  copy is shuffled back (the wave-5 entry below), so that gap now shows in a shipped encounter.
+  client (step 9 moved the blocker to "client"). GILA_BOSS_48t Alternate Timeline (family 23): step 9 scripts its restart;
+  the card waits for the user's gate in real games (section 3.3).
+- Captain Shivers (family 23) starts with Kingsbane: step 9 (lane G) makes the shuffled-back copy keep enchantment
+  Durability (untested).
 - Unscripted Saviors of Uldum collectibles in the decks of families 19-22 (and Hydrologist in family 20's) are replaced by
   named scripted cards; when they get scripts, rerun the encounters step (c-enc-19 S8, c-enc-21 S8 pin substitutions).
   Mogu Cultist (ULD_705) is scripted now (family 20) and so is in every random pool of implemented cards; Omega Mind's
@@ -221,10 +239,8 @@ From the wave-5 integration (details in `handoff/phase8/reports/integrate-wave5.
 - Own-deck ledger under-information (family 16 flag 7): cards shuffled in with a reveal (Tales of Fortune) and later
   burned by overdraw drop out of the boss's own-deck sample, so the boss knows fewer cards than its deck holds. Never a
   leak; exact without burns (c-enc-16 G2/G4/L5). It is in OwnDeckLedger's tentative-arrival/burn logic.
-- Kingsbane's engine helper (the weapon copy shuffled back) loses Durability added by enchantments, the gap family 19
-  fixed for Sword Dance; shared code, left alone.
-- The engine's Lackey pool (AddLackeyTask, e.g. EVIL Cable Rat) can hand out the unscripted Titanic Lackey (ULD_616) and
-  Draconic Lackey (DRG_052) with no generation filter (older than wave 5).
+- Step 9 (lane G, untested): Kingsbane's helper keeps enchantment Durability; ULD_616 and DRG_052 are scripted, so the
+  Lackey pool holds 7 cards.
 - Unscripted Saviors of Uldum collectibles in family 19's decks are replaced by named scripted cards; when they get
   scripts, rerun the encounters step (c-enc-19 S8 pins Vera's and Zafarr's substitutions).
 - Closed by the close-out: the acts-v3h finale block (twist pool DALA_830) is enabled, and ReleasedShapes pins acts-v3h's
@@ -241,9 +257,11 @@ From the wave-5 integration (details in `handoff/phase8/reports/integrate-wave5.
 From the wave-4 integration (details in `handoff/phase8/reports/integrate-wave4.md`):
 - Random generation can yield unscripted cards: the engine's random pools (`Cards.AllWild`) include unscripted cards and
   the generation filter drops only ids admission rejects (Bwonsamdi's Tome, Dark Reliquary, any random generation; seen:
-  DRG_301, DRG_246, DRG_402). The close-out left it: phase 9.
+  DRG_301, DRG_246, DRG_402). Step 9 (lane G, D15, untested) filters every legacy generation pool in Dungeon Run games
+  (`OfflineCardPools.ForGame`, `DungeonRunAdmission.UnscriptedGenerated`).
 - `plugin/NativeMatch.cs:6634` (`next.Choices.Contains(id)`) has the chained-Discover null hazard family 13 guarded in
-  `plugin/FairBotState.cs` (Griftah): fix and check it with the Windows plugin build (section 7).
+  `plugin/FairBotState.cs` (Griftah): step 9 edited the guard (`next.Choices?.Contains(id) == true`); check it with the
+  Windows plugin build (section 7).
 - The Rumble Run champions' teammate cards are not admitted for a boss and are left out of their decks (29 slots, each
   recorded); admitting teammates for a boss would make those decks more authentic. A boss's Treasure from Below can take
   a run player's teammate from the run deck (authentic for the champion's shrine; the teammates' admission rows still say
@@ -259,7 +277,7 @@ From the wave-4 integration (details in `handoff/phase8/reports/integrate-wave4.
 From the wave-3 integration:
 - The act I-III twist pools are still empty after the close-out (only the Heist finale rolls DALA_830), so DALA_829 and
   DALA_831-833 roll only on `verify/fixtures/p8f05/fixtures/schedule-twists.json` and ULDA_801-804 only on
-  `verify/fixtures/p8f06/fixtures/schedule-plagues.json`. Step 9 owns filling them (section 3.3).
+  `verify/fixtures/p8f06/fixtures/schedule-plagues.json`. Step 9 fills them on acts-v4h/v4t (section 3.3).
 - `Generic.ChoiceMulligan` burns the first replacement card of a full 10-card hand; this also limits
   `start.bossOpeningHandBonus` to 5.
 - The five Dungeon Run finals won 20 of 20 as act I majors; Grubb is weak at tier 4. Hagatha is now the act II major
@@ -268,7 +286,8 @@ From the wave-3 integration:
 - LOOTA_103 and LOOTA_BOSS_52t keep the ledger blocker `run:deck-mutation`.
 - A Vault whose treasures would pass the deck maximum adds none.
 - The c-bosspilot ACT_RUN label says acts-v1 but runs acts-v2 (deferred label fix), and the other deferred items of
-  phase 8 (Typhoon removes board minions without `ShrineRules.InterceptLeave`; BOT_543 and ULD_152 partial).
+  phase 8 (BOT_543 and ULD_152 partial: stale, for the step-9 close-out; Typhoon already asks
+  `ShrineRules.InterceptLeave`, since `a95b97e`).
 - Never put a card-database-reading task in a static field initializer of a `DungeonRunEncounters` partial file.
 
 ## 4. Build and test in the cloud
