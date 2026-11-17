@@ -166,13 +166,13 @@ def tekahn(repo):
     ])
 
 # Step 9 (lane R, D7): why each row's modifiers conflict (its released act-wide ban, incompatibleModifiers), and its v4 block,
-# which neutralises the same modifiers for its own fight only on a stamp-4 schedule (DungeonRun.NeutraliseKnobs).
+# which neutralises only the knob of each that cannot reach its own fight, on a stamp-4 schedule (DungeonRun.NeutraliseKnobs).
 IRON = ("the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never "
-        "reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its "
-        "extra treasure after a major is kept), a released one bans it for the act")
-ROAD = ("the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra "
-        "opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans "
-        "it for the act")
+        "reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the "
+        "modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act")
+ROAD = ("the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule "
+        "neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one "
+        "bans it for the act")
 
 def v4(row):
     row["modifierReasons"] = O([("mod_iron_bosses", IRON), ("mod_open_road", ROAD)])

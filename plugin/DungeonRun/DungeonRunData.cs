@@ -315,7 +315,7 @@ internal sealed class DungeonRunBossV4
     /// <summary>The row's Health offset on a stamp-4 schedule (null: the row's own), for the act-aware scaling (lane E).</summary>
     internal int? HealthOffset;
     /// <summary>
-    /// D7: the modifiers whose fight knobs this boss neutralises for its own fight on a stamp-4 schedule
+    /// D7: the modifiers whose conflicting fight knobs (the ones the row cannot carry) this boss neutralises for its own fight on a stamp-4 schedule
     /// (DungeonRun.NeutraliseKnobs), instead of the row's act-wide ban (<see cref="DungeonRunBoss.IncompatibleModifiers"/>, which
     /// only released schedules keep).
     /// </summary>

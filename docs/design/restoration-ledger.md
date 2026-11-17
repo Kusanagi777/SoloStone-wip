@@ -760,7 +760,7 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | Input | SHA-256 (first 16) |
 | --- | --- |
 | `data/dungeon-run/catalog-v1.json` | `8bad87efdb81eb09` |
-| `data/dungeon-run/encounters-v1.json` | `65656b857cec6909` |
+| `data/dungeon-run/encounters-v1.json` | `447b24b51546f927` |
 | `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
 | `data/dungeon-run/reference/adventure-reference.csv` | `4a608dfa596733e7` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |

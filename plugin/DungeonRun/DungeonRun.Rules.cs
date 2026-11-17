@@ -22,20 +22,20 @@ internal sealed partial class DungeonRun
     internal static Action<string> ForbiddenPairLog;
 
     /// <summary>
-    /// D7: removes, for the fight against <paramref name="boss"/> only, the knobs of <paramref name="modifier"/> that the boss
-    /// row's v4 "incompatibleModifiers" names (read through <see cref="Tuned"/>). Called by <see cref="KnobsFor"/> once per
-    /// active modifier, before the sum. A neutralised modifier keeps everything outside the fight (DraftOptions, TavernGold and
-    /// Iron Bosses' extra treasure read <see cref="ActiveModifiers"/> directly); its four fight knobs are 0 for this fight, so
-    /// neither its cost nor its benefit reaches a fight whose row cannot carry one of them (a fixed Health, its own start Mana).
-    /// A released schedule never reads the block (its act-wide ban stays: <see cref="ModifierCandidates"/>).
+    /// D7: for the fight against <paramref name="boss"/> only, removes the knobs of <paramref name="modifier"/> that conflict
+    /// with the boss row, when the row's v4 "incompatibleModifiers" names the modifier (read through <see cref="Tuned"/>).
+    /// Called by <see cref="KnobsFor"/> once per active modifier, before the sum. Only the knobs the row cannot carry are 0:
+    /// bossHealthDelta when the row's Health is its identity ("fixedHealth"), bossManaDelta when the row has its own start Mana
+    /// ("start.bossMana"). The modifier's other knobs (its extra opening card, its player Health) still reach the fight, and
+    /// everything outside the fight is kept (DraftOptions, TavernGold and Iron Bosses' extra treasure read
+    /// <see cref="ActiveModifiers"/> directly). A released schedule never reads the block (its act-wide ban stays:
+    /// <see cref="ModifierCandidates"/>).
     /// </summary>
     private void NeutraliseKnobs(DungeonRunState state, DungeonRunBoss boss, DungeonRunModifier modifier, DungeonRunKnobs knobs)
     {
         if (!Neutralises(state, boss, modifier.Id)) return;
-        knobs.BossHealthDelta = 0;
-        knobs.BossManaDelta = 0;
-        knobs.PlayerHealthDelta = 0;
-        knobs.OpeningHandBonus = 0;
+        if (boss.FixedHealth) knobs.BossHealthDelta = 0;
+        if (boss.Start?.BossMana != null) knobs.BossManaDelta = 0;
     }
 
     /// <summary>Whether the fight against <paramref name="boss"/> neutralises <paramref name="modifierId"/> (D7, stamp 4 and above only).</summary>
@@ -64,15 +64,27 @@ internal sealed partial class DungeonRun
     /// <summary>
     /// Step 9: a treasure the treasure drafts leave out: one an active global rule of the current act (or a run-scope one) names
     /// in "incompatibleTreasures" (ULDA_720 Battle Scars and LOOTA_800 Potion of Vitality), or one a boss still to be fought
-    /// names. False on a run with no such rule or row (every run before step 9).
+    /// names (from <see cref="NextFightFloor"/> to the end of the run: a treasure is held for every later fight, so each later
+    /// boss is checked; the boss just beaten is not). False on a run with no such rule or row (every run before step 9).
+    /// <see cref="ForbiddenPairs"/> checks the same boss x treasure pair at each fight, on the same floor numbering.
     /// </summary>
     internal bool RuleExcludesTreasure(DungeonRunState state, string treasureId)
     {
         if (!state.IsActRun || Data.Schedules == null) return false;
         if (state.ActiveRules.Any(r => r.Kind != null) && ActiveGlobalRules(state).Any(r => r.IncompatibleTreasures.Contains(treasureId))) return true;
-        for (int floor = Math.Max(1, state.Floor); floor <= state.BossSequence.Count; floor++)
+        for (int floor = NextFightFloor(state); floor <= state.BossSequence.Count; floor++)
             if (Data.Bosses.FirstOrDefault(b => b.Id == state.BossSequence[floor - 1])?.IncompatibleTreasures.Contains(treasureId) ?? false) return true;
         return false;
+    }
+
+    /// <summary>
+    /// The floor of the next fight still to be decided: the current floor, or the one after it once the current floor's fight
+    /// is won (a post-fight treasure or bundle draft, which runs before Advance moves the floor). At least 1.
+    /// </summary>
+    internal static int NextFightFloor(DungeonRunState state)
+    {
+        int floor = Math.Max(1, state.Floor);
+        return state.Matches.Any(m => m.Floor == floor && m.Outcome == DungeonRunOutcome.Win) ? floor + 1 : floor;
     }
 
     /// <summary>
@@ -123,8 +135,8 @@ internal sealed partial class DungeonRun
     /// - modifier x boss: the boss bans it act-wide (<see cref="ActWideModifierBans"/>: a released schedule, or a row with no v4 block);
     /// - rule x the run, on the act the rule is taken for: the board shrine ("noBoardShrine") and the run class ("incompatibleClasses").
     /// On the current act only (what the run holds now; the tests check every step, so each moment is seen): rule x treasure
-    /// ("incompatibleTreasures"), rule x the run deck's opening flags ("noOpeningFlags"), and the current fight's boss x
-    /// treasure (the row's "incompatibleTreasures").
+    /// ("incompatibleTreasures"), rule x the run deck's opening flags ("noOpeningFlags"), and the next fight's boss x treasure
+    /// (the row's "incompatibleTreasures"; <see cref="NextFightFloor"/>, the floor <see cref="RuleExcludesTreasure"/> starts at).
     /// </summary>
     internal List<string> ForbiddenPairs(DungeonRunState state)
     {
@@ -167,9 +179,10 @@ internal sealed partial class DungeonRun
                 foreach (string t in rule.IncompatibleTreasures.Where(t => HoldsTreasure(state, t))) lines.Add(at + rule.Id + " x treasure " + t + " (incompatibleTreasures)");
                 if (rule.NoOpeningFlags && state.Cards.Any(c => c.Opening)) lines.Add(at + rule.Id + " x an opening-flag card of the run deck (noOpeningFlags)");
             }
-            if (state.Floor >= 1 && state.Floor <= state.BossSequence.Count)
+            int next = NextFightFloor(state);
+            if (next <= state.BossSequence.Count)
             {
-                var fight = Data.Bosses.FirstOrDefault(b => b.Id == state.BossSequence[state.Floor - 1]);
+                var fight = Data.Bosses.FirstOrDefault(b => b.Id == state.BossSequence[next - 1]);
                 foreach (string t in fight?.IncompatibleTreasures.Where(t => HoldsTreasure(state, t)) ?? Enumerable.Empty<string>())
                     lines.Add(at + fight.Id + " x treasure " + t + " (the boss's incompatibleTreasures)");
             }

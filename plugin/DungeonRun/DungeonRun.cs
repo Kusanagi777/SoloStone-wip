@@ -1709,7 +1709,7 @@ internal sealed partial class DungeonRun
     /// <summary>
     /// The modifiers a modifier node may offer: every schedule modifier, ordinal id order, minus those a boss of this act lists
     /// in "incompatibleModifiers" and those already active on it. Step 9 (D7): on a stamp-4 schedule a boss row with a v4 block
-    /// bans nothing act-wide (it neutralises the modifier for its own fight: DungeonRun.NeutraliseKnobs).
+    /// bans nothing act-wide (it neutralises the conflicting knobs for its own fight: DungeonRun.NeutraliseKnobs).
     /// </summary>
     internal List<DungeonRunModifier> ModifierCandidates(DungeonRunState state)
     {

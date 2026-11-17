@@ -1165,6 +1165,10 @@ internal static class DungeonRunValidator
         return errors;
     }
 
+    // A rule states a non-empty reason for one of its exclusion entries (C7).
+    private static bool HasReason(DungeonRunGlobalRule rule, string entry) =>
+        rule.ExclusionReasons.TryGetValue(entry, out string why) && !string.IsNullOrWhiteSpace(why);
+
     /// <summary>
     /// Phase 8: the global rules (schedule-v1.json "rules"). Every id is unique and a card; its kind, scope and effect are
     /// known; an admitted rule has an admission row that admits scope Rule (a rule with no row is refused: the table states why
@@ -1214,12 +1218,27 @@ internal static class DungeonRunValidator
             var entries = rule.ExclusionEntries.ToList();
             foreach (string key in rule.ExclusionReasons.Keys.Where(k => !entries.Contains(k)).OrderBy(k => k, StringComparer.Ordinal))
                 errors.Add($"{where}: exclusionReasons names {key}, which is not one of its exclusions");
+            // (The rule-rule entries are checked below, with their other side.)
             if (schedules.ScheduleVersion >= 4)
-                foreach (string entry in entries.Distinct().Where(e => !rule.ExclusionReasons.TryGetValue(e, out string why) || string.IsNullOrWhiteSpace(why)))
+                foreach (string entry in entries.Distinct().Where(e => !rule.IncompatibleRules.Contains(e) && !HasReason(rule, e)))
                     errors.Add($"{where}: exclusion {entry} states no reason (exclusionReasons)");
         }
         foreach (var rule in schedules.Rules)
             foreach (string other in rule.IncompatibleRules.Where(o => !ids.Contains(o))) errors.Add($"rule {rule.Id}: incompatibleRules names unknown rule {other}");
+        // Step 9 (C7): a rule-rule list is symmetric (both rules list each other; a reason on either side) or declared one-way
+        // (only one rule lists the other, and its exclusionReasons says why). Both are read both ways (DungeonRun.RuleCandidates,
+        // ForbiddenPairs). From scheduleVersion 4 only, as the reasons are.
+        if (schedules.ScheduleVersion >= 4)
+            foreach (var rule in schedules.Rules.Where(r => !string.IsNullOrEmpty(r.Id)))
+                foreach (string other in rule.IncompatibleRules.Distinct().Where(ids.Contains))
+                {
+                    var back = schedules.Rule(other);
+                    bool symmetric = back != null && back.IncompatibleRules.Contains(rule.Id);
+                    if (symmetric && !HasReason(rule, other) && !HasReason(back, rule.Id))
+                        errors.Add($"rule {rule.Id}: exclusion {other} (listed on both rules) states no reason on either (exclusionReasons)");
+                    else if (!symmetric && !HasReason(rule, other))
+                        errors.Add($"rule {rule.Id}: lists {other} one-way (not listed back) with no reason declaring it (exclusionReasons)");
+                }
         foreach (var boss in data.Bosses)
             foreach (string id in boss.IncompatibleRules.Where(id => !ids.Contains(id))) errors.Add($"boss {boss.Id}: incompatibleRules names unknown rule {id}");
         return errors;

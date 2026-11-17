@@ -336,8 +336,8 @@
     }
    ],
    "modifierReasons": {
-    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
-    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act"
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act"
    },
    "v4": {
     "incompatibleModifiers": [
@@ -717,9 +717,9 @@
     }
    ],
    "modifierReasons": {
-    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
-    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act",
-    "mod_hot_start": "the row's start Mana Crystals are its own (start.bossMana replaces the act curve and the modifiers' bossManaDelta), so Hot Start's +1 boss Mana never reaches the fight and only its +10 player Health would; a stamp-4 schedule neutralises the modifier for this fight only, a released one bans it for the act"
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act",
+    "mod_hot_start": "the row's start Mana Crystals are its own (start.bossMana replaces the act curve and the modifiers' bossManaDelta), so Hot Start's +1 boss Mana never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the +10 player Health is kept), a released one bans it for the act"
    },
    "v4": {
     "incompatibleModifiers": [
