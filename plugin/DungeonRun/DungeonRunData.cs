@@ -195,9 +195,19 @@ internal sealed class DungeonRunTreasure
     /// the offers of every earlier schedule stay as released.
     /// </summary>
     internal const string RunsEncounters = "encounters";
-    /// <summary><see cref="Runs"/> lets an act run (<paramref name="actRun"/>; one of an encounter schedule: <paramref name="encounters"/>) or a legacy run offer it.</summary>
-    internal bool OfferedOn(bool actRun, bool encounters = false) =>
-        Runs == RunsAll || Runs == RunsAct && actRun || Runs == RunsLegacy && !actRun || Runs == RunsEncounters && actRun && encounters;
+    /// <summary>
+    /// Step 9: <see cref="Runs"/> "v4", an act run on a schedule of stamp 4 and above (DungeonRun.Tuned): the step-9 rows
+    /// (ULDA_111, GILA_911, GILA_BOSS_43t), so the offers of every released schedule stay as released. A schedule file below
+    /// scheduleVersion 4 refuses it (the validator).
+    /// </summary>
+    internal const string RunsV4 = "v4";
+    /// <summary>
+    /// <see cref="Runs"/> lets an act run (<paramref name="actRun"/>; one of an encounter schedule: <paramref name="encounters"/>;
+    /// its schedule stamp: <paramref name="stamp"/>, 0 when unknown) or a legacy run offer it.
+    /// </summary>
+    internal bool OfferedOn(bool actRun, bool encounters = false, int stamp = 0) =>
+        Runs == RunsAll || Runs == RunsAct && actRun || Runs == RunsLegacy && !actRun || Runs == RunsEncounters && actRun && encounters
+        || Runs == RunsV4 && actRun && stamp >= 4;
     internal const string UpgradeOnFloors = "floors", UpgradeOnActClear = "actClear", UpgradeOnBossWins = "bossWins";
     internal const string SlotDeck = "deck", SlotPower = "power", SlotPassive = "passive";
 

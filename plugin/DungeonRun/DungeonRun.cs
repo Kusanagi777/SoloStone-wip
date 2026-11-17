@@ -11,7 +11,7 @@ using SabberStoneCore.Model;
 /// engine's card database: no Unity or client types, so it is tested headlessly. Every random choice derives
 /// from the run seed through <see cref="StableSeed"/> (design F1); nothing reads a clock or System.Random.
 /// </summary>
-internal sealed class DungeonRun
+internal sealed partial class DungeonRun
 {
     // RNG stream ids (design F1)
     // BucketStep: the cards a catalog bundle offer draws from its pool entry (card k of slot s: component s * 16 + k).
@@ -628,8 +628,9 @@ internal sealed class DungeonRun
         // Phase 8: Health that is part of an encounter's identity (a Plague Lord's 300, Hagatha's 100) and a phased boss's
         // Health ignore the modifiers too (bossHealthDelta would move its form thresholds).
         if (boss.IsEncounter && boss.FixedHealth && boss.Health is int identity) return identity;
-        int health = boss.FixedHealth && boss.Health is int own ? own : act.BossHealth[node.FloorInAct - 1] + HealthOffset(boss);
-        return Math.Max(1, health + ActiveModifiers(state).Sum(m => m.BossHealthDelta));
+        var knobs = KnobsFor(state, boss);
+        int health = boss.FixedHealth && boss.Health is int own ? own : act.BossHealth[node.FloorInAct - 1] + knobs.HealthOffset;
+        return Math.Max(1, health + knobs.BossHealthDelta);
     }
 
     /// <summary>
@@ -652,16 +653,55 @@ internal sealed class DungeonRun
         var node = CurrentNode(state);
         // Phase 8: an encounter's own start Mana Crystals ("start.bossMana": Hagatha's 2) replace the act curve and the modifiers.
         var boss = CurrentBoss(state);
-        int bonus = boss.Start?.BossMana ?? CurrentAct(state).BossMana[node.FloorInAct - 1] + ActiveModifiers(state).Sum(m => m.BossManaDelta);
+        int bonus = boss.Start?.BossMana ?? CurrentAct(state).BossMana[node.FloorInAct - 1] + KnobsFor(state, boss).BossManaDelta;
         return Math.Max(0, Math.Min(bonus, boss.BossManaCap ?? DungeonRunSchedules.DefaultBossManaCap));
     }
 
     /// <summary>Extra player hero Health this floor: the run's HealthBonus plus the modifiers' playerHealthDelta (0 on a legacy run).</summary>
-    internal int PlayerHealthBonus(DungeonRunState state) =>
-        state.IsActRun ? state.HealthBonus + ActiveModifiers(state).Sum(m => m.PlayerHealthDelta) : 0;
+    internal int PlayerHealthBonus(DungeonRunState state)
+    {
+        if (!state.IsActRun) return 0;
+        var knobs = KnobsFor(state, FightBoss(state));
+        return knobs.HealthBonus + knobs.PlayerHealthDelta;
+    }
 
     /// <summary>Extra opening-hand cards this floor from the modifiers (0 on a legacy run).</summary>
-    internal int OpeningHandBonus(DungeonRunState state) => state.IsActRun ? ActiveModifiers(state).Sum(m => m.OpeningHandBonus) : 0;
+    internal int OpeningHandBonus(DungeonRunState state) => state.IsActRun ? KnobsFor(state, FightBoss(state)).OpeningHandBonus : 0;
+
+    // ------------------------------------------------------------------ step 9 seams (handoff/phase9/plan.md section 3, stage 0)
+
+    /// <summary>
+    /// Step 9: the run reads the step-9 tuning (the v4 schedule, tavern, treasure and encounter "v4" keys, modifier semantics,
+    /// the draw, the match-plan knobs) only when this is true: an act run on a schedule of stamp 4 and above. Every released
+    /// schedule (acts-v1, acts-v2, act1 at stamp 2; acts-v3h, acts-v3t at stamp 3) and every legacy run is false, so those runs
+    /// play and replay as released.
+    /// </summary>
+    internal static bool Tuned(DungeonRunState state) => state != null && state.IsActRun && state.ScheduleVersion >= 4;
+
+    /// <summary>
+    /// The modifier knobs of the current fight against <paramref name="boss"/> (null: no boss is known, e.g. a finished run):
+    /// each active modifier's deltas (<see cref="ActiveModifiers"/>, in the order they were taken) after
+    /// <see cref="NeutraliseKnobs"/> (lane R, DungeonRun.Rules.cs), summed, with the run's HealthBonus and the boss's Health
+    /// offset (<see cref="HealthOffset"/>), then <see cref="CapKnobs"/> (lane E, DungeonRun.Economy.cs). BossHealth,
+    /// BossStartManaBonus, PlayerHealthBonus and OpeningHandBonus read it. ActiveModifiers itself is unchanged (DraftOptions,
+    /// TavernGold and Iron Bosses' extra treasure read it directly).
+    /// </summary>
+    internal DungeonRunKnobs KnobsFor(DungeonRunState state, DungeonRunBoss boss)
+    {
+        var knobs = new DungeonRunKnobs { HealthBonus = state.HealthBonus, HealthOffset = boss == null ? 0 : HealthOffset(boss) };
+        foreach (var modifier in ActiveModifiers(state))
+        {
+            var own = DungeonRunKnobs.Of(modifier);
+            NeutraliseKnobs(state, boss, modifier, own);
+            knobs.Add(own);
+        }
+        CapKnobs(state, boss, knobs);
+        return knobs;
+    }
+
+    // The boss of the floor being fought, or null when the run has no such floor (KnobsFor's callers that need no boss row).
+    private DungeonRunBoss FightBoss(DungeonRunState state) =>
+        state.Floor >= 1 && state.Floor <= state.BossSequence.Count ? Data.Bosses.FirstOrDefault(b => b.Id == state.BossSequence[state.Floor - 1]) : null;
 
     /// <summary>Bundle offers per draft: 3 on a legacy run; the act's draft options plus draftOptionsDelta, 1 to 3, on an act run.</summary>
     internal int DraftOptions(DungeonRunState state)
@@ -705,7 +745,8 @@ internal sealed class DungeonRun
     internal DungeonRunBoss CurrentBoss(DungeonRunState state) => Data.Boss(state.BossSequence[state.Floor - 1]);
 
     /// <summary>The engine seed for the current floor. A restaged floor keeps it (design R11).</summary>
-    internal int MatchSeed(DungeonRunState state) => StableSeed.Derive(state.Seed, MatchStream, state.Floor) & int.MaxValue;
+    /// <remarks>Step 9: a restarted fight (lane X, <see cref="RestartMatchSeed"/>) may draw a fresh seed; null keeps this one.</remarks>
+    internal int MatchSeed(DungeonRunState state) => RestartMatchSeed(state) ?? StableSeed.Derive(state.Seed, MatchStream, state.Floor) & int.MaxValue;
 
     /// <summary>Design F3.</summary>
     internal int BossHealth(DungeonRunBoss boss) =>
@@ -795,6 +836,8 @@ internal sealed class DungeonRun
             throw new InvalidOperationException($"The run deck holds {state.Deck.Count} cards; the schedule allows {DeckMin(state)} to {DeckMax(state)}.");
         var plan = BuildBasePlan(state, cls, boss);
         if (boss.IsEncounter || state.ActiveRules.Any(r => r.Kind != null)) ApplyEncounter(state, profile, boss, plan);
+        // Step 9 (lane X, DungeonRun.Outcomes.cs): TurnCap, FormRatchet and EscapeAllowed; the plan's defaults today.
+        PlanMatchEnds(state, boss, plan);
         return plan;
     }
 
@@ -903,6 +946,9 @@ internal sealed class DungeonRun
             NoLoss = noLoss,
         };
         state.Matches.Add(summary);
+        // Step 9 (lane X, DungeonRun.Outcomes.cs): an escape (Win plus Escaped) or a restart (Fault plus Restarted) takes its own
+        // branch; false (every outcome today) goes on as below.
+        if (EscapeOrRestartBranch(state, profile, outcome, result, end, summary, notes)) return notes;
         // A fault restages the floor: nothing else changes (the hero switch of the floor is kept).
         if (outcome == DungeonRunOutcome.Fault) { state.Phase = DungeonRunPhase.PreMatch; return notes; }
         RecordEncounterEnd(state, profile, outcome, end, summary);
@@ -1018,6 +1064,8 @@ internal sealed class DungeonRun
         if (node.Index == schedule.Nodes.Count - 1) { Finish(state, profile, won: true); return; }
         // Phase 8: a finale act's fights follow one another with no treasure, reward or card draft.
         if (schedule.Acts[node.Act - 1].IsFinale) { Advance(state); return; }
+        // Step 9 (lane E, DungeonRun.Economy.cs): the boss's own reward ("reward", D9); nothing on every schedule today.
+        GrantEncounterReward(state, node);
         bool treasure = node.TreasureDraft || major && ActiveModifiers(state).Any(m => m.ExtraTreasureAfterMajor);
         // A full deck (deckMax) has no room for an active treasure's card: the draft offers passive treasures only.
         bool full = state.Deck.Count + 1 > DeckMax(state);
@@ -1127,7 +1175,7 @@ internal sealed class DungeonRun
     /// boss prior holds them (DungeonRunAdmission.CatalogSecretPrior).
     /// </summary>
     internal static bool TreasureOfferedOn(DungeonRunTreasure t, DungeonRunState state) =>
-        t.OfferedOn(state.IsActRun, state.ScheduleVersion >= 3) && DungeonRunAdmission.Classify(null, t.Id, AdmitScope.Player, null, state.IsCatalogRun).Admitted;
+        t.OfferedOn(state.IsActRun, state.ScheduleVersion >= 3, state.ScheduleVersion) && DungeonRunAdmission.Classify(null, t.Id, AdmitScope.Player, null, state.IsCatalogRun).Admitted;
 
     internal void PickTreasure(DungeonRunState state, string treasureId)
     {
@@ -1276,7 +1324,8 @@ internal sealed class DungeonRun
     {
         // An act run whose deck has no room for a pick (deckMax) skips the draft: drafts never push a deck past what its
         // matches accept (taverns refuse such adds the same way). A legacy run never reaches its limit of 40.
-        if (state.IsActRun && state.Deck.Count + DraftTakes(state) > DeckMax(state)) return false;
+        // Step 9 (lane E, DungeonRun.Economy.cs): the skipped draft may turn into banked gold (D5); nothing today.
+        if (state.IsActRun && state.Deck.Count + DraftTakes(state) > DeckMax(state)) { ConvertSkippedDraft(state); return false; }
         bool opened = state.IsCatalogRun ? OpenCatalogDraft(state, DraftOptions(state)) : OpenLegacyBundleDraft(state, DraftOptions(state));
         // An act whose picks keep fewer than three cards records it on the draft (absent on every legacy draft).
         if (opened && DraftTakes(state) < 3) state.OpenDraft.Takes = DraftTakes(state);
@@ -2106,4 +2155,32 @@ internal sealed class DungeonRunMatchIdentity
     internal IReadOnlyList<string> Deck, Classes;
     /// <summary>The fight-only heroes of the current fight, or null.</summary>
     internal DungeonRunHeroSwitch Switch;
+}
+
+/// <summary>
+/// Step 9 (stage 0): the modifier knobs one fight reads (DungeonRun.KnobsFor): the summed deltas of the act's active modifiers
+/// that a fight's plan carries, the run's HealthBonus and the boss's Health offset. Lane R neutralises one modifier's knobs for
+/// one fight (DungeonRun.NeutraliseKnobs), lane E caps the sums (DungeonRun.CapKnobs); neither changes anything yet.
+/// </summary>
+internal sealed class DungeonRunKnobs
+{
+    internal int BossHealthDelta, BossManaDelta, PlayerHealthDelta, OpeningHandBonus;
+    /// <summary>The run's permanent extra hero Health (DungeonRunState.HealthBonus: tavern Good Food, DALA_904).</summary>
+    internal int HealthBonus;
+    /// <summary>The boss's own Health offset over its band (DungeonRun.HealthOffset); 0 without a boss.</summary>
+    internal int HealthOffset;
+
+    /// <summary>One modifier's knobs (its deltas; no HealthBonus or offset).</summary>
+    internal static DungeonRunKnobs Of(DungeonRunModifier modifier) => new DungeonRunKnobs
+    {
+        BossHealthDelta = modifier.BossHealthDelta, BossManaDelta = modifier.BossManaDelta,
+        PlayerHealthDelta = modifier.PlayerHealthDelta, OpeningHandBonus = modifier.OpeningHandBonus,
+    };
+
+    /// <summary>Adds another modifier's deltas (its HealthBonus and offset are not added).</summary>
+    internal void Add(DungeonRunKnobs other)
+    {
+        BossHealthDelta += other.BossHealthDelta; BossManaDelta += other.BossManaDelta;
+        PlayerHealthDelta += other.PlayerHealthDelta; OpeningHandBonus += other.OpeningHandBonus;
+    }
 }

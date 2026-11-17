@@ -115,6 +115,16 @@ public sealed class DungeonRunMatchSummary
     /// <summary>The fight ended with no loss and no boss kill (a script ended it: Treasure Vault); omitted when false.</summary>
     [XmlAttribute] public bool NoLoss;
     public bool ShouldSerializeNoLoss() => NoLoss;
+    // ---- step 9 (still save version 6, the NoLoss pattern): each is omitted at its default, so no earlier summary changes.
+    /// <summary>
+    /// ULDA_111 Hearthstone: the fight was escaped (<see cref="Outcome"/> Win with this mark: no major credit, no kill credit,
+    /// no drafts); omitted when false.
+    /// </summary>
+    [XmlAttribute] public bool Escaped;
+    public bool ShouldSerializeEscaped() => Escaped;
+    /// <summary>GILA_911 Rewind, GILA_BOSS_48t: the fight was restarted (<see cref="Outcome"/> Fault with this mark); omitted when false.</summary>
+    [XmlAttribute] public bool Restarted;
+    public bool ShouldSerializeRestarted() => Restarted;
 }
 
 /// <summary>An active treasure card that grows: where it sits and when it was last upgraded.</summary>
@@ -420,6 +430,22 @@ public sealed class DungeonRunState
     /// </summary>
     [XmlAttribute] public string PowerChoices;
     public bool ShouldSerializePowerChoices() => PowerChoices != null;
+    // ---- step 9 (still save version 6): guarded attributes, each omitted at its default, so every earlier run writes the same body.
+    /// <summary>Gold banked for the next tavern (step 9 D5: a bundle draft skipped for room); 0 (omitted) otherwise.</summary>
+    [XmlAttribute] public int BankedGold;
+    public bool ShouldSerializeBankedGold() => BankedGold != 0;
+    /// <summary>
+    /// Step 9 D13, match scope: how many times the floor being fought was restarted (GILA_911 Rewind, GILA_BOSS_48t); 0
+    /// (omitted) before the first restart and once the floor is decided.
+    /// </summary>
+    [XmlAttribute] public int RestartIndex;
+    public bool ShouldSerializeRestartIndex() => RestartIndex != 0;
+    /// <summary>Step 9 D13, match scope: the restart sources used on the floor being fought (card ids, comma-separated, for the per-source caps); null (omitted) otherwise.</summary>
+    [XmlAttribute] public string RestartSources;
+    public bool ShouldSerializeRestartSources() => RestartSources != null;
+    /// <summary>Step 9 D13, match scope: the damage the run hero carries into the restarted game (GILA_BOSS_48t Alternate Timeline); 0 (omitted) otherwise.</summary>
+    [XmlAttribute] public int RestartCarriedDamage;
+    public bool ShouldSerializeRestartCarriedDamage() => RestartCarriedDamage != 0;
 
     /// <summary>The run deck as card ids (pool cards and active-treasure shells).</summary>
     public List<string> Deck = new List<string>();

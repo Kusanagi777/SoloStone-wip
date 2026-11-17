@@ -90,6 +90,7 @@
       "finale": {"enabled": false, "fixedBosses": [], "heroRelay": false}
     },
     "acts-v3h": {
+      "version": 3,
       "deckMin": 10, "deckMax": 50, "draw": "provenance-mix",
       "acts": [
         {"id": "I", "name": "The Delve", "floors": 5,
@@ -125,6 +126,7 @@
                  "twist": {"pool": ["DALA_830"], "chance": 100}}
     },
     "acts-v3t": {
+      "version": 3,
       "deckMin": 10, "deckMax": 50, "draw": "provenance-mix", "sameActsAs": "acts-v3h",
       "finale": {"enabled": true, "fixedBosses": ["ulda_67_tekahn"], "heroRelay": true, "tavernBefore": true,
                  "id": "IV", "name": "The Inner Sanctum", "bossHealth": [70], "bossMana": [3], "tavern": {"gold": 3, "offers": 4}}

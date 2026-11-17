@@ -123,6 +123,18 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		public bool EncounterDeck { get; set; }
 		/// <summary>The encounter's run id (DungeonRunBoss.Id), for logs and the harvest; null on a custom boss.</summary>
 		public string EncounterId { get; set; }
+
+		// ---- step 9: match ends (the defaults on every run before step 9, which then plays exactly as before; the run layer
+		// sets them only on a schedule of stamp 4 and above)
+		/// <summary>The turn at which the match ends as a turn limit (the match host and the harnesses read it); 100 by default.</summary>
+		public int TurnCap { get; set; } = 100;
+		/// <summary>
+		/// Entering a boss form that has a Health threshold and no Health of its own clamps the boss's maximum Health to the
+		/// threshold (step 9 D11, Tekahn on acts-v4t). False keeps every form change as before.
+		/// </summary>
+		public bool FormRatchet { get; set; }
+		/// <summary>ULDA_111 Hearthstone may be cast this fight (step 9 D14); false makes it unplayable.</summary>
+		public bool EscapeAllowed { get; set; }
 	}
 
 	/// <summary>One boss form (encounters-v1.json "forms"): who the boss becomes, when, and what changes with it.</summary>
@@ -227,11 +239,16 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		/// cast's Spell Damage each; a cast by either player counts, as a copied or stolen one does in the original).
 		/// </summary>
 		public int GnomebliteratorDamage { get; }
+		/// <summary>Step 9: the run player escaped the fight (ULDA_111 Hearthstone); reported as a win with this mark.</summary>
+		public bool Escaped { get; }
+		/// <summary>Step 9: the fight asked to be restarted (GILA_911 Rewind, GILA_BOSS_48t); reported as a fault with this mark.</summary>
+		public bool Restarted { get; }
 		public RunMatchEnd(int bossRemainingHealth, int bossForm, int bossFormChanges, int playerHeroDamage, IEnumerable<string> heroesUsed, bool noLoss,
-			int gnomebliteratorDamage = 0)
+			int gnomebliteratorDamage = 0, bool escaped = false, bool restarted = false)
 		{
 			BossRemainingHealth = bossRemainingHealth; BossForm = bossForm; BossFormChanges = bossFormChanges; PlayerHeroDamage = playerHeroDamage;
 			HeroesUsed = (heroesUsed ?? new string[0]).ToArray(); NoLoss = noLoss; GnomebliteratorDamage = gnomebliteratorDamage;
+			Escaped = escaped; Restarted = restarted;
 		}
 	}
 
