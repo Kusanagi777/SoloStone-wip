@@ -192,6 +192,16 @@ on the wave-6 data it plays ULD_290 x3 and the five family 02 cards, and misses 
 plays x2; the run player plays ULD_290 x2 in f04-player (`integrate-wave6.md` section 7). enc03's ULD_169, wave 5's
 other miss, is played on this tree.
 
+**The close-out (family 25, stage A; not a baseline yet).** It adds the suite `p8f25/c-enc-25` (entry 71 of `runs.sh`,
+84 build projects), the `final.sh` stage `c25` and three bosspilot modes on the SHIPPED schedules (no fixture):
+`bp.sh finale25` (acts-v3h's Heist finale, twice per call), `bp.sh tekahn25` (acts-v3t's Tekahn finale with the hero
+relay, twice per call) and `bp.sh sweep25 <a|b|c> <k>` (new runs with no named schedule, the default roll, each fought at
+a floor of its own; `DEFAULT_SWEEP` in `p8f01/c-bosspilot-encounter`, then `bp.sh same sweep25-<x>`). Until the full
+regression of the close-out re-records `baseline/`, expect the bosspilot modes that walk acts-v3h or acts-v3t through a
+tavern to differ from their wave-6 records: ULDA_038 Explorer Retraining joined the tavern draw of stamp-3 runs (every
+walk buys every offer, so a run may also change its power). The ledger is 4970 rows (implemented 3880, partial 10, missing
+13, duplicate/support 1067); `p8f18`'s and `p8f24`'s finale fixtures are the shipped schedule byte for byte.
+
 Generators (`gen.sh`): all six generated files byte-identical; encounters "255 rows, 296 decks (125 authentic, 171
 changed), 876 adaptations, 4 rejected"; catalog "506 entries (452 offerable pool, 2 withdrawn, 52 fixed), 6508 admitted
 and 1 excluded"; ledger rows 4992, implemented 2814, partial 817, missing 302, duplicate/support 1059, adapted 0. The
