@@ -672,7 +672,10 @@
    ],
    "deck": {
     "list": "Deck"
-   }
+   },
+   "flags": [
+    "charge"
+   ]
   },
   {
    "id": "loot_13_thaddock",

@@ -138,7 +138,8 @@ ROWS = [
                  "Heroic list."),
                 ("power", "Lava Belch summons a 0/3 Molten Rock (DALA_BOSS_47t): at the end of its player's turn it deals 1 damage to all "
                  "characters (both heroes and every minion, itself included).")]),
-    dict(n="48", key="zuramat", page="Zuramat_the_Obliterator_(boss)", tier="4", level=8, archetype="control", flags=["start", "bothPlayers"],
+    # Step 9 (lane R): handAdd, the start block's two Void Shifts in the run player's hand (ULDA_715 Bountiful excludes it).
+    dict(n="48", key="zuramat", page="Zuramat_the_Obliterator_(boss)", tier="4", level=8, archetype="control", flags=["start", "bothPlayers", "handAdd"],
          ids={"Void Shift": "DALA_BOSS_48t"}, cards=["DALA_BOSS_48e"],
          start=R([("playerHandAdd", ["DALA_BOSS_48t", "DALA_BOSS_48t"])]),
          notes=[("schedule", tier_note("Zuramat is \"the final boss that can be encountered in Chapter 2\" (the chapter's eighth fight).", 8, 4)),

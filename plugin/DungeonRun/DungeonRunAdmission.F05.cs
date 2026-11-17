@@ -5,9 +5,14 @@
 // fair AI pilots the boss under the rule through the run setup path). DALA_850, DALA_864 and DALA_866 are family 01's rows.
 internal static partial class DungeonRunAdmission
 {
-    /// <summary>What lifts DALA_857 Glittering: its Treasure pool is run rewards no boss and no generation pool may hold yet.</summary>
-    internal const string RuleTreasureLift = "phase 8 (encounters/anomalies): the Dalaran Heist active treasures admitted for a boss and as a generation result "
-        + "(the treasure-on-boss work of the encounter families that give a boss treasure cards: LOOTA_BOSS_99p, Ol' Toomba)";
+    /// <summary>
+    /// What lifts DALA_857 Glittering: its Treasure pool is run rewards no boss and no generation pool may hold. Step 9 (lane R)
+    /// rechecked it: the step shares treasures player-side only (plan D6) and gives no boss a treasure, so no step-9 work lifts it
+    /// and the rule stays rejected (schedule-v1.json states the same reason).
+    /// </summary>
+    internal const string RuleTreasureLift = "a boss-side treasure model (not planned; step 9 rechecked it and shares treasures player-side only): the Dalaran "
+        + "Heist active treasures admitted for a boss and as a generation result, each one's run-state writes (DALA_718, DALA_719, DALA_721) "
+        + "given a boss meaning";
     /// <summary>A token only a global rule places.</summary>
     internal const string NoneRuleToken = "none: a token a global rule places; no deck, boss or generation pool offers it";
 

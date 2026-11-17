@@ -284,6 +284,46 @@ internal sealed class DungeonRunBoss
     /// <summary>Where the deck comes from and what the encounter tool changed in it; null on a custom boss.</summary>
     internal DungeonRunDeckSource Source;
     internal bool HasFlag(string flag) => Flags.Contains(flag);
+
+    // ---- step 9 (lane R): incompatibility prevention. All empty or null on every row before step 9.
+    /// <summary>Run treasure ids (run-v1.json "treasures") never held by a run that meets this boss (DungeonRun.ForbiddenPairs).</summary>
+    internal List<string> IncompatibleTreasures = new List<string>();
+    /// <summary>
+    /// Why each modifier of <see cref="IncompatibleModifiers"/> or of the v4 block's list conflicts with the row (encounters-v1.json
+    /// "modifierReasons", modifier id to reason). Data only; the validator requires a reason for every v4 entry of a row a
+    /// schedule of stamp 4 and above can reach.
+    /// </summary>
+    internal Dictionary<string, string> ModifierReasons = new Dictionary<string, string>(StringComparer.Ordinal);
+    /// <summary>
+    /// The row's step-9 overrides (encounters-v1.json "v4"), read only through DungeonRun.Tuned: null when the row has no block,
+    /// so every run on a released schedule reads the row as before.
+    /// </summary>
+    internal DungeonRunBossV4 V4;
+}
+
+/// <summary>
+/// Step 9: an encounter row's "v4" block, parsed only (DungeonRunData is compiled alone by the catalog tool and the hall
+/// harnesses); DungeonRun reads it through DungeonRun.Tuned, so a run on a released schedule never sees it. An empty block
+/// ("v4": {}) declares the row reviewed with nothing to override.
+/// </summary>
+internal sealed class DungeonRunBossV4
+{
+    /// <summary>The keys a block may hold; any other key is refused by the validator (<see cref="UnknownKeys"/>).</summary>
+    internal static readonly string[] Keys = { "tier", "healthOffset", "incompatibleModifiers", "reward" };
+    /// <summary>The row's tier on a stamp-4 schedule (null: the row's own), for the act-aware draw (lane E).</summary>
+    internal string Tier;
+    /// <summary>The row's Health offset on a stamp-4 schedule (null: the row's own), for the act-aware scaling (lane E).</summary>
+    internal int? HealthOffset;
+    /// <summary>
+    /// D7: the modifiers whose conflicting fight knobs (the ones the row cannot carry) this boss neutralises for its own fight on a stamp-4 schedule
+    /// (DungeonRun.NeutraliseKnobs), instead of the row's act-wide ban (<see cref="DungeonRunBoss.IncompatibleModifiers"/>, which
+    /// only released schedules keep).
+    /// </summary>
+    internal List<string> IncompatibleModifiers = new List<string>();
+    /// <summary>D9: the treasure the won fight grants (lane E), or null.</summary>
+    internal string Reward;
+    /// <summary>Keys of the block outside <see cref="Keys"/> (the validator refuses them).</summary>
+    internal List<string> UnknownKeys = new List<string>();
 }
 
 /// <summary>One card a pool entry can draw (catalog-v1.json "members").</summary>
@@ -1033,6 +1073,28 @@ internal sealed class DungeonRunGlobalRule
     /// Cannons already take board slots): the run itself, beside <see cref="NoBoardShrine"/>.
     /// </summary>
     internal List<string> IncompatibleClasses = new List<string>();
+    /// <summary>
+    /// Step 9: run treasure ids it never shares an act with (ULDA_720 Battle Scars and LOOTA_800 Potion of Vitality): not offered
+    /// to a run holding one, and while it is active the treasure drafts leave them out (DungeonRun.RuleExcludesTreasure).
+    /// </summary>
+    internal List<string> IncompatibleTreasures = new List<string>();
+    /// <summary>
+    /// Step 9: never active while the run deck holds a card with an opening flag (ULDA_721 Aleatory; handoff/phase8/reports/
+    /// design.md, "runs with Opening-flag cards"): not offered to such a run, and while it is active the tavern sets no opening
+    /// flag (DungeonRun.RuleBlocksOpeningFlags).
+    /// </summary>
+    internal bool NoOpeningFlags;
+    /// <summary>
+    /// Step 9 (C7): why each exclusion entry holds ("exclusionReasons": an excluded rule, class, flag, modifier or treasure id,
+    /// or "noBoardShrine" / "noOpeningFlags", to its reason). Data only; a file of scheduleVersion 4 and above needs one per
+    /// entry (the validator). An entry of "incompatibleRules" is read both ways (DungeonRun.RuleCandidates), so its reason sits
+    /// on the rule that lists it.
+    /// </summary>
+    internal Dictionary<string, string> ExclusionReasons = new Dictionary<string, string>(StringComparer.Ordinal);
+    /// <summary>Every exclusion entry of the rule, in a fixed order (the keys <see cref="ExclusionReasons"/> may hold).</summary>
+    internal IEnumerable<string> ExclusionEntries =>
+        IncompatibleRules.Concat(IncompatibleClasses).Concat(IncompatibleFlags).Concat(IncompatibleModifiers).Concat(IncompatibleTreasures)
+            .Concat(NoBoardShrine ? new[] { "noBoardShrine" } : new string[0]).Concat(NoOpeningFlags ? new[] { "noOpeningFlags" } : new string[0]);
     internal bool Admitted => Status == StatusAdmitted;
     internal bool RunScope => Scope == ScopeRun;
 }
@@ -1244,6 +1306,9 @@ internal sealed class DungeonRunSchedules
                         IncompatibleModifiers = NpcWorldJson.Strings(r, "incompatibleModifiers") ?? new List<string>(),
                         IncompatibleClasses = NpcWorldJson.Strings(r, "incompatibleClasses") ?? new List<string>(),
                         NoBoardShrine = NpcWorldJson.Boolean(r, "noBoardShrine"),
+                        IncompatibleTreasures = NpcWorldJson.Strings(r, "incompatibleTreasures") ?? new List<string>(),
+                        NoOpeningFlags = NpcWorldJson.Boolean(r, "noOpeningFlags"),
+                        ExclusionReasons = Reasons(r, "exclusionReasons"),
                     });
         }
         var sameActs = new List<KeyValuePair<DungeonRunSchedule, string>>();
@@ -1366,6 +1431,15 @@ internal sealed class DungeonRunSchedules
                 UnknownKnobs = m.Keys.Where(k => k != "id" && k != "name" && k != "text" && !ModifierKnobs.Contains(k)).OrderBy(k => k, StringComparer.Ordinal).ToList(),
             });
         return result;
+    }
+
+    // A JSON object of id to reason (step 9: a rule's "exclusionReasons"); empty when absent.
+    private static Dictionary<string, string> Reasons(IDictionary<string, object> row, string key)
+    {
+        var reasons = new Dictionary<string, string>(StringComparer.Ordinal);
+        if (row.TryGetValue(key, out object value) && value is IDictionary<string, object> map)
+            foreach (var pair in map) reasons[pair.Key] = pair.Value as string ?? "";
+        return reasons;
     }
 
     private static int[] Ints(IDictionary<string, object> row, string key) =>
@@ -1581,8 +1655,17 @@ internal static class DungeonRunEncounterData
         "passive", "bothPlayers", "hiddenZone", "secrets", "forms", "start", "position", "shrine", "persistentDamage", "heroSwitch", "relay",
         "deckReplace", "doubleBattlecry", "doubleDeathrattle", "recast", "forcedAttack", "heroImmune", "boardStart", "damageCap", "noLoss",
         "listedDeck", "mirrorDeck",
+        // Step 9 (lane R): what a rule must not meet. attackRedirect: the boss's power redirects attacks (Tierra Blythe's
+        // Waitress); charge and windfury: the power gives its minions Charge (Candlebeard, Janak) or Windfury (Hesutu); statSwap:
+        // the power swaps or sets minion stats (Icarax); fatigue: the power changes fatigue damage (Baz'hial's Broken
+        // Phylactery); handAdd: the fight puts cards in a hand at its start (a start block's hand adds, Hagatha's hero cards);
+        // manaIdentity: the boss's start Mana Crystals are its own (a start block's bossMana); room: a room encounter, a reward
+        // node rather than a fight to balance (the Treasure Vault, Tad, the Lava-Filled Chamber, the Trap Rooms).
+        "attackRedirect", "charge", "windfury", "statSwap", "fatigue", "handAdd", "manaIdentity", "room",
     };
     internal const string PersistentDamage = "persistentDamage", HeroSwitch = "heroSwitch", Relay = "relay", FormsFlag = "forms", ShrineFlag = "shrine";
+    /// <summary>Step 9: the flags the validator ties to the row's own data (<see cref="HandAdd"/>, <see cref="ManaIdentity"/>) and the room tag.</summary>
+    internal const string HandAdd = "handAdd", ManaIdentity = "manaIdentity", Room = "room";
     /// <summary>
     /// Family 09: a combat-tier row whose deck is part of its mechanic keeps the listed count (<see cref="MinDeck"/> to
     /// <see cref="MaxDeck"/>) instead of 30 (Tad's ten minions, the Treasure Vault's unused deck).
@@ -1682,7 +1765,22 @@ internal static class DungeonRunEncounterData
             Cards = Ids(row, "cards"), IncompatibleRules = Ids(row, "incompatibleRules"),
             IncompatibleModifiers = Ids(row, "incompatibleModifiers"),
             Unlock = NpcWorldJson.Text(row, "unlock", false),
+            IncompatibleTreasures = Ids(row, "incompatibleTreasures"),
         };
+        // Step 9 (lane R): the reasons for the row's modifier lists and its "v4" block (parsed only; read through DungeonRun.Tuned).
+        if (row.TryGetValue("modifierReasons", out object reasons) && reasons is IDictionary<string, object> reasonRows)
+            foreach (var pair in reasonRows) boss.ModifierReasons[pair.Key] = pair.Value as string ?? "";
+        if (row.TryGetValue("v4", out object v4) && v4 is IDictionary<string, object> block)
+        {
+            boss.V4 = new DungeonRunBossV4
+            {
+                Tier = NpcWorldJson.Text(block, "tier", false),
+                HealthOffset = block.ContainsKey("healthOffset") ? NpcWorldJson.Integer(block, "healthOffset") : (int?)null,
+                IncompatibleModifiers = Ids(block, "incompatibleModifiers"),
+                Reward = NpcWorldJson.Text(block, "reward", false),
+            };
+            boss.V4.UnknownKeys.AddRange(block.Keys.Where(k => !DungeonRunBossV4.Keys.Contains(k)).OrderBy(k => k, StringComparer.Ordinal));
+        }
         if (row.TryGetValue("level", out object level) && level is IDictionary<string, object> lv)
         {
             boss.LevelSource = NpcWorldJson.Text(lv, "source", false);

@@ -303,6 +303,9 @@ def boss(n, slug, tier, archetype, level, page, notes, flags=(), cards=(), pool=
     r["deck"] = OD([("list", "Normal")])
     if pool: r["extend"] = ["Heroic"]
     if replacements: r["replacements"] = OD(sorted(replacements.items()))
+    # Step 9 (lane R, D7): a finale row is reviewed for the modifier knobs on a stamp-4 schedule; its Health is the finale's
+    # curve and its Mana the act's, so every knob reaches the fight and the block neutralises nothing.
+    if finale: r["v4"] = OD()
     adapt = []
     if finale: adapt.append(OD([("kind", "schedule"), ("note", FINALE % sum(c for _, c in LISTS[n]["Normal"]))]))
     else: adapt.append(OD([("kind", "deck"), ("note", pool_deck(pool) if pool else Q_DECK)]))
@@ -395,7 +398,7 @@ ROWS = [
                   "(a Health cost) is not damage, and Fatigue is the game's rule, not his source: it still hurts. The run player's sources "
                   "hurt him as usual."),
     ]),
-    boss(73, "hesutu", "2", "aggro", 3, "Hesutu_Stonewind", pool="15 or 20", cards=["DALA_BOSS_73e"], notes=[
+    boss(73, "hesutu", "2", "aggro", 3, "Hesutu_Stonewind", pool="15 or 20", flags=["windfury"], cards=["DALA_BOSS_73e"], notes=[
         ("schedule", tier_note("Hesutu Stonewind's pool table gives 15 and 20 cards (levels 2-3).", 3, 2)),
         ("power", "Earthmother's Rage (2), \"Give a friendly minion Windfury\": Earthmother's Rancor (DALA_BOSS_73e, Windfury) on a minion of "
                   "the boss."),

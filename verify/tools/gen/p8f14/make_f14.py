@@ -197,7 +197,8 @@ ROWS = [
          notes=[("schedule", "The page's note: the deck is the level-6 deck (level 5: five cards fewer). Level 6: tier 3."),
                 ("power", "Slice and Dice picks three different minions of both boards (all of them when fewer), then deals each "
                  "1 to 3 damage, each amount by the game RNG.")]),
-    dict(n="14", key="tierra", page="Tierra_Blythe", tier="2", level=3, archetype="aggro", flags=[], total="15; 20",
+    # Step 9 (lane R): attackRedirect, the Waitress's wrong-target roll (DALA_861 Ogreish excludes it).
+    dict(n="14", key="tierra", page="Tierra_Blythe", tier="2", level=3, archetype="aggro", flags=["attackRedirect"], total="15; 20",
          extend=True, fillers=[], ids={"Dark Iron Bouncer": "BRMA01_3"}, cards=["DALA_BOSS_14t"],
          notes=[("schedule", "Tierra Blythe's pool table gives 15 and 20 cards (levels 2-3). Level 3: tier 2."),
                 ("deck", "Dark Iron Bouncer (BRMA01_3, the Blackrock Mountain adventure's \"Always wins Brawls.\", the boss card of her "

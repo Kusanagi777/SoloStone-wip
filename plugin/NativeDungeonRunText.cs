@@ -121,6 +121,8 @@ internal static class NativeDungeonRunText
     // Phase 8: an anomaly node. A rule's name and text are its card's own (the client's "Anomaly - ..." card).
     internal static string AnomalyCaption(string act) => "Act " + act + " begins. Choose an anomaly for this act, or none.";
     internal const string NoAnomalyLabel = "No anomaly", NoAnomalyText = "Play this act by the usual rules.";
+    // Step 9 (D7): a modifier node on a stamp-4 schedule also offers "none".
+    internal const string NoModifierLabel = "No modifier", NoModifierText = "Play this act without a modifier.";
     internal static string RuleName(string ruleId)
     {
         try { return SabberStoneCore.Model.Cards.FromId(ruleId)?.Name ?? ruleId; } catch (System.Exception) { return ruleId; }

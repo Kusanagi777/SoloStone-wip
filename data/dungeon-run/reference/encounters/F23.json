@@ -136,7 +136,8 @@
      "kind": "power",
      "note": "Chronoacceleration (2), \"Give a friendly minion Mega-Windfury. At the end of your turn, it dies.\": the client's own enchantment Accelerated (GILA_BOSS_48e, \"Mega-Windfury. Will die at the end of this turn.\"); the minion dies at the end of the turn it was given it (Power Overwhelming's rule). The wiki's note that she rarely uses it is the AI's choice here, as for every clickable power."
     }
-   ]
+   ],
+   "v4": {}
   },
   {
    "id": "gila_49_glinda",
@@ -258,7 +259,8 @@
      "kind": "deck",
      "note": "Crowskin Pact (GILA_BOSS_49t2), \"Transform a minion into a 'Crowskin Faithful' and take control of it\": any minion; a run shrine picked is destroyed and goes dormant instead (the transform rule of Actions.Generic) and never changes sides; a Faithful taken with the caster's board full is destroyed (the engine's rule for a control change)."
     }
-   ]
+   ],
+   "v4": {}
   },
   {
    "id": "gila_59_godfrey",
@@ -280,7 +282,8 @@
     ]
    },
    "flags": [
-    "start"
+    "start",
+    "handAdd"
    ],
    "source": {
     "url": "https://hearthstone.wiki.gg/wiki/Lord_Godfrey_(boss)",
@@ -377,7 +380,8 @@
      "kind": "power",
      "note": "Pistol Barrage (1), \"Deal 2 damage to a minion and the minions next to it\": a hero power, so no Spell Damage; the three hits are one damage event (Explosive Shot's rule)."
     }
-   ]
+   ],
+   "v4": {}
   },
   {
    "id": "gila_60_shivers",
@@ -504,7 +508,8 @@
      "kind": "power",
      "note": "Plunder (0), \"Draw a weapon from your deck\", is auto-cast on the wiki (the client card carries AI_MUST_PLAY): it is used by rule, not by the AI's choice, at the start of his turn while his deck holds a weapon (a random one, by the game RNG): in practice Kingsbane after its Deathrattle. Not offered as a click (family 09's AutoCast rule)."
     }
-   ]
+   ],
+   "v4": {}
   }
  ],
  "rejected": [

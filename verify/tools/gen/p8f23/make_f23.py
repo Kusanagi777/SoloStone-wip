@@ -86,7 +86,7 @@ ROWS = [
                 "changes sides; a Faithful taken with the caster's board full is destroyed (the engine's rule for a control change)."),
          ]),
     boss("gila_59_godfrey", "Lord Godfrey", "GILA_BOSS_59h", "GILA_BOSS_59p", "midrange", 60, "Darius Crowley", "Lord_Godfrey_(boss)", godfrey_deck,
-         flags=["start"], start=O([("bossHandAdd", ["GILA_503"])]), adaptations=[
+         flags=["start", "handAdd"], start=O([("bossHandAdd", ["GILA_503"])]), adaptations=[
             ("start", "He starts the game with Hunter's Insight (GILA_503) in hand \"for a very aggressive start\" (" + WIKI + "Final_Nemesis, "
                 "Lord Godfrey's section, read " + READ + "; his own page lists the card once in its deck table and under Special cards). The "
                 "table's one copy is that card: the row's start block puts it in his hand after the mulligan and his deck holds the "
@@ -125,6 +125,11 @@ DOC = O([
         "that Lord Godfrey starts the game with Hunter's Insight (his row's start block; his deck lists the table's other 29 cards)."),
     ("bosses", ROWS), ("rejected", REJECTED),
 ])
+
+# Step 9 (lane R, D7): the nemeses are reviewed for the modifier knobs on a stamp-4 schedule. Each is an act II major on the act
+# curve plus its +10 identity offset, with the act's start Mana, so every knob reaches the fight: an empty v4 block, nothing
+# neutralised. (Lord Godfrey's handAdd flag is his start block's Hunter's Insight; ULDA_715 Bountiful excludes it.)
+for row in ROWS: row["v4"] = O()
 
 repo = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(V)
 out = os.path.join(repo, "data", "dungeon-run", "reference", "encounters", "F23.json")

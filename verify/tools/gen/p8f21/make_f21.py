@@ -229,7 +229,8 @@ B.append(boss(52, "bazhial", "Lich Baz'hial", "Lich_Baz'hial", 3, "4", "control"
     heroic=[("Ray of Frost", 2), ("Frostbolt", 2), ("Primordial Glyph", 2), ("Arcane Intellect", 2), ("Frost Nova", 2), ("Fireball", 2),
             ("Blizzard", 2), ("Astromancer", 1), ("Power of Creation", 2), ("Tortollan Pilgrim", 2), ("Archbishop Benedictus", 1),
             ("Dead Man's Hand", 2), ("Doomsayer", 2), ("Khartut Defender", 2), ("The Lich King", 1), ("Alexstrasza", 1), ("Arcane Giant", 2)],
-    flags=["forms"],
+    # Step 9 (lane R): fatigue, Broken Phylactery's doubled fatigue damage (ULDA_714 In the Face excludes it).
+    flags=["forms", "fatigue"],
     forms=[{"power": "ULDA_BOSS_52p2", "at": {"script": True}, "keepExcess": True}],
     notes=[("power", "Lich's Phylactery (0) restores @ Health to the boss's hero, @ starting at 20 (the card's script number) and falling by 1 "
                      "for every friendly minion that dies (never below 0). The page shows both powers for one fight and gives no rule; the "
@@ -256,6 +257,8 @@ B.append(boss(54, "janak", "Janak", "Janak", 3, "2", "aggro", [
     heroic=[("Warbot", 2), ("Rampage", 2), ("Warpath", 2), ("Bloodsworn Mercenary", 2), ("Frothing Berserker", 2), ("Axe Flinger", 2),
             ("Bloodhoof Brave", 2), ("Grommash Hellscream", 1), ("Hench-Clan Hogsteed", 2), ("Temple Berserker", 2), ("Acolyte of Pain", 2),
             ("Raging Worgen", 2), ("Vicious Fledgling", 2)],
+    # Step 9 (lane R): charge, Cavalry of E.V.I.L.'s Charge (ULDA_710 excludes it).
+    flags=["charge"],
     cards_=["ULDA_BOSS_54e"],
     replacements={"Livewire Lance": "Fiery War Axe", "Sunstruck Henchman": "Chillwind Yeti"},
     why="Livewire Lance by Fiery War Axe and Sunstruck Henchman by Chillwind Yeti (as family 19).",

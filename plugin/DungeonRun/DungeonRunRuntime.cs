@@ -81,6 +81,8 @@ internal static class DungeonRunRuntime
                 disabledReasons = new List<string> { "data failed to load: " + failure.GetType().Name + ": " + failure.Message };
                 rules = null;
             }
+            // Step 9 (lane R, D17): BuildPlan logs a forbidden pair the run holds; it never changes the plan.
+            DungeonRun.ForbiddenPairLog = line => Log?.Invoke("Dungeon Run forbidden pair, " + line);
             foreach (string reason in disabledReasons.Take(20)) Log?.Invoke("Dungeon Run disabled: " + reason);
             if (disabledReasons.Count > 20) Log?.Invoke("Dungeon Run disabled: ...and " + (disabledReasons.Count - 20) + " more");
             if (rules != null) Log?.Invoke("Dungeon Run ready: " + rules.Data.Classes.Count + " classes, " + rules.Data.Decks.Count + " decks, "

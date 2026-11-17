@@ -338,7 +338,17 @@
      "kind": "power",
      "note": "The wiki marks some phase powers \"Auto-cast\"; here every clickable power is the boss AI's choice (family 01's precedent for Elder Brandlemar)."
     }
-   ]
+   ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   }
   },
   {
    "id": "ulda_38_kzrath",
@@ -662,7 +672,17 @@
      "kind": "power",
      "note": "The client links the 300 form to Systematic Betrayal (ULDA_BOSS_38p2) and the 200 form to Evoke Panic (ULDA_BOSS_38p1), as the wiki's phase table does; the forms follow it. Counter-clockwise is as the run player sees the boards (family 16's EncounterRules.Rotate)."
     }
-   ]
+   ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   }
   },
   {
    "id": "ulda_39_vesh",
@@ -998,7 +1018,17 @@
      "kind": "power",
      "note": "Made of Murlocs: any Murloc of either board; the 3 Health is lost, not dealt as damage, so the Immune hero still loses it. The Heroic powers ULDA_BOSS_39px2 and 39px3 are not used (support rows)."
     }
-   ]
+   ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   }
   },
   {
    "id": "ulda_67_tekahn",
@@ -2800,7 +2830,17 @@
      "kind": "power",
      "note": "Curse of Flame's enchantment fires at the start of the boss's next turn while the cursed minion is in play, then the curse ends; Soul Pyre deals the Cost paid for the card (the engine's last known Cost in hand)."
     }
-   ]
+   ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   }
   }
  ],
  "rejected": []

@@ -32,7 +32,8 @@
       "flags": [
         "start",
         "boardStart",
-        "passive"
+        "passive",
+        "manaIdentity"
       ],
       "source": {
         "url": "https://hearthstone.wiki.gg/wiki/Brimstone_Warden",
@@ -99,7 +100,15 @@
           "kind": "power",
           "note": "The wiki marks Dispel Ward (5; \"he uses his hero power to silence the Stone Golems once he reaches 5 mana crystals\") as auto-cast, and the boss's AI cannot see its worth (a Silence of its own minions), so it is cast by rule, not by a choice of the AI: at the start of the boss's turn, when it can pay the Cost and a minion of his is not silenced yet, the Cost is paid and the power resolves. The engine never offers it as an option (it is registered with the passive powers)."
         }
-      ]
+      ],
+      "modifierReasons": {
+        "mod_hot_start": "the row's start Mana Crystals are its own (start.bossMana replaces the act curve and the modifiers' bossManaDelta), so Hot Start's +1 boss Mana never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the +10 player Health is kept), a released one bans it for the act"
+      },
+      "v4": {
+        "incompatibleModifiers": [
+          "mod_hot_start"
+        ]
+      }
     },
     {
       "id": "loot_22_tad",
@@ -125,7 +134,9 @@
         "mod_hot_start"
       ],
       "flags": [
-        "listedDeck"
+        "listedDeck",
+        "manaIdentity",
+        "room"
       ],
       "cards": [
         "LOOTA_103",
@@ -203,7 +214,19 @@
           "kind": "health",
           "note": "Identity Health: 20 at every floor (the wiki: 20, where most round 6 bosses have 50), so fixedHealth; the act curve and the modifiers' bossHealthDelta do not apply."
         }
-      ]
+      ],
+      "modifierReasons": {
+        "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+        "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act",
+        "mod_hot_start": "the row's start Mana Crystals are its own (start.bossMana replaces the act curve and the modifiers' bossManaDelta), so Hot Start's +1 boss Mana never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the +10 player Health is kept), a released one bans it for the act"
+      },
+      "v4": {
+        "incompatibleModifiers": [
+          "mod_iron_bosses",
+          "mod_open_road",
+          "mod_hot_start"
+        ]
+      }
     },
     {
       "id": "loot_50_max",
@@ -351,7 +374,9 @@
         "boardStart",
         "listedDeck",
         "noLoss",
-        "passive"
+        "passive",
+        "manaIdentity",
+        "room"
       ],
       "source": {
         "url": "https://hearthstone.wiki.gg/wiki/Treasure_Vault",
@@ -394,7 +419,19 @@
           "kind": "health",
           "note": "Identity Health: the printed 60 at every floor (the Dungeon Run page: \"has no health, deck, or hand\"), so fixedHealth. The run player can also win by destroying it; that is an ordinary win."
         }
-      ]
+      ],
+      "modifierReasons": {
+        "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+        "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act",
+        "mod_hot_start": "the row's start Mana Crystals are its own (start.bossMana replaces the act curve and the modifiers' bossManaDelta), so Hot Start's +1 boss Mana never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the +10 player Health is kept), a released one bans it for the act"
+      },
+      "v4": {
+        "incompatibleModifiers": [
+          "mod_iron_bosses",
+          "mod_open_road",
+          "mod_hot_start"
+        ]
+      }
     },
     {
       "id": "loot_53_inara",
@@ -995,7 +1032,8 @@
         ]
       },
       "flags": [
-        "start"
+        "start",
+        "handAdd"
       ],
       "cards": [
         "LOOTA_BOSS_49t"

@@ -124,7 +124,17 @@
           "kind": "power",
           "note": "Divinity is not offered when every minion of the boss has Divine Shield already (it would do nothing)."
         }
-      ]
+      ],
+      "modifierReasons": {
+        "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+        "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act"
+      },
+      "v4": {
+        "incompatibleModifiers": [
+          "mod_iron_bosses",
+          "mod_open_road"
+        ]
+      }
     },
     {
       "id": "loot_16_azun",
@@ -552,7 +562,8 @@
         "original": 6
       },
       "flags": [
-        "passive"
+        "passive",
+        "charge"
       ],
       "source": {
         "url": "https://hearthstone.wiki.gg/wiki/Candlebeard",
@@ -752,7 +763,17 @@
           "kind": "power",
           "note": "The wiki marks Sprouting Spore (2) as auto-cast. Here the boss's AI chooses when to pay for it like any hero power, and it is not offered when it would do nothing (a full board)."
         }
-      ]
+      ],
+      "modifierReasons": {
+        "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+        "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act"
+      },
+      "v4": {
+        "incompatibleModifiers": [
+          "mod_iron_bosses",
+          "mod_open_road"
+        ]
+      }
     },
     {
       "id": "loot_37_lyris",
@@ -1525,7 +1546,8 @@
       },
       "flags": [
         "passive",
-        "bothPlayers"
+        "bothPlayers",
+        "room"
       ],
       "source": {
         "url": "https://hearthstone.wiki.gg/wiki/Lava-Filled_Chamber",

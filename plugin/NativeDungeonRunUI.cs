@@ -578,6 +578,13 @@ internal static class NativeDungeonRunUI
                 result.Row(NativeDungeonRunText.ModifierIdPrefix + id, label, () => NodeAction(s => rules.PickModifier(s, captured)));
                 continue;
             }
+            // Step 9 (D7): a stamp-4 modifier offer ends with "none".
+            if (id == DungeonRunGlobalRule.None)
+            {
+                result.Lines.Add(NativeDungeonRunText.Described(NativeDungeonRunText.NoModifierLabel, NativeDungeonRunText.NoModifierText));
+                result.Row(NativeDungeonRunText.ModifierIdPrefix + id, NativeDungeonRunText.NoModifierLabel, () => NodeAction(s => rules.PickModifier(s, captured)));
+                continue;
+            }
             var m = rules.Data.Schedules.Modifier(id);
             string name = m?.Name ?? id;
             result.Lines.Add(NativeDungeonRunText.Described(name, m == null ? "" : NativeDungeonRunText.ModifierEffect(m.BossHealthDelta, m.DraftOptionsDelta,

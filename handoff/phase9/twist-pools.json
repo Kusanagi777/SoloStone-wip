@@ -1,0 +1,15 @@
+{
+ "about": "Step 9, lane R (plan D8): the twist pools of acts-v4h and acts-v4t, for the integrator to place in the schedule objects lane E creates in data/dungeon-run/schedule-v1.json. Each act block replaces that act's \"twist\" key; acts-v4t shares acts I-III with acts-v4h (\"sameActsAs\"), so they are written once. The pools are chapter-mapped from the originals (act I: Dalaran Heist chapter 1 and Tombs chapter 1, and so on; ULDA_801 stays in act I because its deckReplace and relay flags exclude every Plague Lord), one twist per act. \"chance\" is the chance of an attempt (DungeonRun.RollTwists, draw (TwistStream, act, 0)): 100, because in the originals each chapter's twist was always on (tools/restoration-ledger/curation.json, notes twists-per-act and plague-twists-per-act); a hit with no compatible candidate rolls nothing, and the pick honours each rule's weight on a stamp-4 schedule (DungeonRun.PickTwist). The chance is an uncalibrated initial value (handoff/phase9/values.md). The acts-v4h finale keeps acts-v3h's Twist - The Finale (DALA_830) at 100; the acts-v4t finale has no twist, as acts-v3t.",
+ "acts-v4h": {
+  "acts": {
+   "I": {"twist": {"pool": ["DALA_829", "ULDA_801"], "chance": 100}},
+   "II": {"twist": {"pool": ["DALA_832", "ULDA_802"], "chance": 100}},
+   "III": {"twist": {"pool": ["DALA_833", "DALA_831", "ULDA_803", "ULDA_804"], "chance": 100}}
+  },
+  "finale": {"twist": {"pool": ["DALA_830"], "chance": 100}}
+ },
+ "acts-v4t": {
+  "sameActsAs": "acts-v4h",
+  "finale": {}
+ }
+}
