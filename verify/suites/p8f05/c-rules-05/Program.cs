@@ -898,7 +898,9 @@ Guard("T", () =>
     {
         var s = V3(tr, "MAGE", 70000 + seed);
         runs++;
-        foreach (var rule in s.ActiveRules.Where(r => r.Kind == "twist"))
+        // The close-out ships the Heist finale (act IV), whose own twist DALA_830 The Finale every run holds: the fixture's
+        // filled pools are acts I-III's.
+        foreach (var rule in s.ActiveRules.Where(r => r.Kind == "twist" && !tr.ScheduleFor(s).Acts[r.Act - 1].IsFinale))
         {
             rolledIds[rule.Id] = rolledIds.TryGetValue(rule.Id, out int n) ? n + 1 : 1;
             var bosses = tr.ScheduleFor(s).Nodes.Where(n => n.Act == rule.Act && n.IsFight).Select(n => fixture.Boss(s.BossSequence[n.Floor - 1])).ToList();

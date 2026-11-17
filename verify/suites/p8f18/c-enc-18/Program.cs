@@ -505,18 +505,21 @@ Guard("Finale", () =>
     string[] fixedBosses = { "dala_43_norroa", "dala_67_vargoth", "dala_69_kalec", "dala_60_khadgar" };
     var shipped = data.Schedules.Find("acts-v3h");
     var rule = data.Schedules.Rule("DALA_830");
-    Check("R1 the shipped acts-v3h keeps its finale disabled (three acts; its four bosses pending) and DALA_830 is an admitted twist with effect run, in no shipped act's twist pool",
-        !shipped.FinaleEnabled && shipped.Acts.Count == 3 && !shipped.Acts.Any(a => a.IsFinale) && rule != null && rule.Kind == DungeonRunGlobalRule.KindTwist
+    // The close-out (family 25) ships the finale as this family built it on the fixture (which is now the shipped file).
+    Check("R1 the shipped acts-v3h ends with the Heist finale (the close-out: four acts, the four bosses fixed) and DALA_830 is an admitted twist with effect run, in the finale's twist pool only",
+        shipped.FinaleEnabled && shipped.Acts.Count == 4 && shipped.Acts[3].IsFinale && shipped.Acts[3].FixedBosses.SequenceEqual(fixedBosses) && rule != null && rule.Kind == DungeonRunGlobalRule.KindTwist
         && rule.Effect == DungeonRunGlobalRule.EffectRun && rule.Admitted && !DungeonRunGlobalRules.IsScripted("DALA_830")
-        && data.Schedules.Schedules.Values.All(x => x.Acts.All(a => !a.TwistPool.Contains("DALA_830")))
+        && data.Schedules.Schedules.Values.SelectMany(x => x.Acts.Where(a => a.TwistPool.Contains("DALA_830")).Select(a => x.Id + ":" + a.IsFinale)).OrderBy(x => x).SequenceEqual(new[] { "acts-v3h:True" })
         && DungeonRunAdmission.Classify(C("DALA_830"), "DALA_830", AdmitScope.Rule).Admitted && !DungeonRunAdmission.Classify(C("DALA_830"), "DALA_830", AdmitScope.Player).Admitted);
     var fx = Load(fixtureSchedule);
     var fxErrors = DungeonRunValidator.Validate(fx, null);
     var v3 = fx.Schedules.Find("acts-v3h");
     var finale = v3.Acts.LastOrDefault();
-    // The one error is the released-shape pin: enabling the finale changes acts-v3h's shape, which the close-out re-pins (ReleasedShapes[3]).
-    Check("R2 the fixture (the shipped schedule with the finale enabled on its four pending bosses) validates but for the released-shape pin of acts-v3h (new digest 09B43E71F9440039); acts-v3h then ends with the finale act: the four bosses in order, its twist DALA_830 at 100",
-        fxErrors.Count == 1 && fxErrors[0].StartsWith("schedule acts-v3h: its node shape changed (digest 09B43E71F9440039, scheduleVersion 3 shipped FF4FEC05953AA0DE)") && v3.Acts.Count == 4 && finale != null && finale.IsFinale && finale.FixedBosses.SequenceEqual(fixedBosses) && finale.TwistPool.SequenceEqual(new[] { "DALA_830" })
+    // Until the close-out the one error was the released-shape pin (digest 09B43E71F9440039 against FF4FEC05953AA0DE); the close-out
+    // re-pinned ReleasedShapes[3] to this shape, so the fixture (the shipped file byte for byte since then) validates cleanly.
+    Check("R2 the fixture (the shipped schedule since the close-out) validates; acts-v3h's shape is the released one, 09B43E71F9440039; it ends with the finale act: the four bosses in order, its twist DALA_830 at 100",
+        fxErrors.Count == 0 && fixtureSchedule == R("dungeon-run/schedule-v1.json") && DungeonRunSchedules.ShapeDigest(v3) == "09B43E71F9440039"
+        && DungeonRunSchedules.ReleasedShapes[3]["acts-v3h"] == "09B43E71F9440039" && v3.Acts.Count == 4 && finale != null && finale.IsFinale && finale.FixedBosses.SequenceEqual(fixedBosses) && finale.TwistPool.SequenceEqual(new[] { "DALA_830" })
         && finale.TwistChance == 100 && finale.TavernAtStart && v3.FloorCount == 19, string.Join(" | ", fxErrors.Take(3)));
     var bad = Load(fixtureSchedule.Replace("\"twist\": {\"pool\": [\"DALA_830\"], \"chance\": 100}", "\"twist\": {\"pool\": [\"DALA_850\"], \"chance\": 100}"));
     var badErrors = DungeonRunValidator.Validate(bad, null);
@@ -535,8 +538,8 @@ Guard("Finale", () =>
     Check("R4 40 new runs on the fixture: each rolls DALA_830 as the finale act's twist (chance 100) and no other twist", withTwist == 40, withTwist + " of 40");
     Check("R5 the four fixed bosses are floors 16-19 in order, and never drawn on floors 1-15", inOrder == 40 && neverEarly == 40, inOrder + "/" + neverEarly);
     var shippedRun = run.NewRun(all, data.Classes[0].Id, data.Classes[0].Decks[0], data.Classes[0].Powers[0], 7001, schedule: "acts-v3h");
-    Check("R6 a run on the shipped acts-v3h has 15 floors, no finale and no DALA_830", shippedRun.BossSequence.Count == 15 && !shippedRun.ActiveRules.Any(r => r.Id == "DALA_830")
-        && !shippedRun.BossSequence.Any(fixedBosses.Contains));
+    Check("R6 a run on the shipped acts-v3h has 19 floors, ending with the four finale bosses, and holds DALA_830 for act IV (the close-out)", shippedRun.BossSequence.Count == 19
+        && shippedRun.ActiveRules.Count(r => r.Id == "DALA_830" && r.Act == 4) == 1 && shippedRun.BossSequence.Skip(15).SequenceEqual(fixedBosses));
     // Walk a fixture run to floor 16 (the finale's first fight), as the bosspilot harness does.
     var cls0 = fx.Class("MAGE");
     var w = frun.NewRun(all, cls0.Id, cls0.Decks[0], cls0.Powers[0], 7100, schedule: "acts-v3h");
