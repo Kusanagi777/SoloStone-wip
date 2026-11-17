@@ -15,6 +15,9 @@ using System.Text.Json;
 //      (DungeonRunState.PowerChoices); its taverns may offer ULDA_038; a run of an older schedule never records or offers it
 //   D  the shipped finales: acts-v3h ends with the Heist finale, acts-v3t with Tekahn and the hero relay (the relay heroes are
 //      the Tombs explorers other than the run's own)
+//   P  the powers the client marks AI_MUST_PLAY (the wiki's Auto-cast): each is cast by rule (never an option of the boss's
+//      AI) or its row's power note states that the AI chooses instead (the close-out review: Sinkhole, Colossus, Sazin, Ruby
+//      and Marei Loom did neither)
 //   L  legacy replay: runs saved before the close-out flipped the defaults (the two version-5 golden saves and eight version-6
 //      saves of new runs on the then default acts-v2) load and replay step for step as they did on the pre-close-out tree
 //      (verify/fixtures/p8f25/replay.txt, recorded there by verify/tools/gen/p8f25/record_replay.sh)
@@ -116,10 +119,13 @@ Guard("B", () =>
     Check("B1 the rows left missing (13) or partial (10) are exactly the pinned rejections, deferrals and unreached rows",
         open.Count == expected.Count && open.All(r => expected.TryGetValue(r["card_id"], out var c) && c == r["classification"]),
         string.Join(" ", open.Where(r => !expected.ContainsKey(r["card_id"])).Select(r => r["card_id"] + "=" + r["classification"]).Take(8)) + " / " + open.Count);
-    // The blocker table of the ledger's Markdown: "| `key` | description |" rows.
-    var described = new HashSet<string>(ledgerMd.Split('\n').Where(l => l.StartsWith("| `", StringComparison.Ordinal)).Select(l => l.Substring(3, l.IndexOf('`', 3) - 3)), StringComparer.Ordinal);
+    // The blocker table of the ledger's Markdown: "| `key` | rows | only | collectible | what it needs |" rows. A key counts as
+    // described only when its "What it needs" cell is not empty (the review found three permanent rejections left blank).
+    var blockerRows = ledgerMd.Split('\n').Where(l => l.StartsWith("| `", StringComparison.Ordinal)).Select(l => l.TrimEnd().TrimEnd('|').Split('|'))
+        .Where(c => c.Length >= 6 && c.Skip(2).Take(3).All(x => int.TryParse(x.Trim().Replace(",", ""), out _))).ToList();
+    var described = new HashSet<string>(blockerRows.Where(c => string.Join("|", c.Skip(5)).Trim().Length > 0).Select(c => c[1].Trim().Trim('`')), StringComparer.Ordinal);
     var undescribed = open.SelectMany(r => r["blocked_by"].Split(';', StringSplitOptions.RemoveEmptyEntries).Where(k => !described.Contains(k)).Select(k => r["card_id"] + ":" + k)).ToList();
-    Check("B2 each of them carries a blocker, and the ledger describes every blocker it names", open.All(r => r["blocked_by"].Length > 0) && undescribed.Count == 0,
+    Check("B2 each of them carries a blocker, and the ledger's blocker table describes every blocker it names (a non-empty \"What it needs\" cell)", open.All(r => r["blocked_by"].Length > 0) && undescribed.Count == 0,
         string.Join(" ", undescribed.Take(6)));
     Check("B2 each partial row names its own reason (run:twist-pools, run:hunt-reward, data:unused-in-adventure), not a generic capability",
         open.Where(r => r["classification"] == "partial").All(r => r["blocked_by"] == "run:twist-pools" || r["blocked_by"] == "run:hunt-reward" || r["blocked_by"] == "data:unused-in-adventure"),
@@ -250,6 +256,32 @@ Guard("D", () =>
     var rplan = run.BuildPlan(renoRun, all);
     Check("D3 an explorer's own run relays the other three (Reno's row: Elise, Finley, Brann)", Heroes(rplan) == "ULDA_Elise,ULDA_Finley,ULDA_Brann" && rplan.PlayerRelay.Count == 9,
         Heroes(rplan));
+});
+
+// ============================================================ P. the wiki's Auto-cast powers
+Guard("P", () =>
+{
+    // A power whose client card carries AI_MUST_PLAY (tag 367 = 1; the wiki's Hero Power tables mark the same powers "Auto-cast")
+    // is either cast by rule (registered with the passive powers through family 09's AutoCast: never an option of the boss's
+    // AI) or its row's "power" adaptation note says the wiki's auto-cast is not followed and why. Every encounter row's power
+    // and each form's power are checked.
+    var powerNotes = curation.RootElement.GetProperty("encounterAdaptations").EnumerateArray()
+        .Where(a => a.GetProperty("kind").GetString() == "power").GroupBy(a => a.GetProperty("id").GetString())
+        .ToDictionary(g => g.Key, g => string.Join(" ", g.Select(a => a.GetProperty("note").GetString())), StringComparer.Ordinal);
+    var mustPlay = new List<(string Row, string Power)>();
+    foreach (var b in data.Encounters)
+        foreach (string power in new[] { b.Power }.Concat(b.Forms.Select(f => f.Power)).Where(x => x != null).Distinct())
+            if (SabberStoneCore.Model.Cards.FromId(power)[SabberStoneCore.Enums.GameTag.AI_MUST_PLAY] == 1) mustPlay.Add((b.Id, power));
+    bool RuleCast(string power) => SabberStoneCore.CardSets.DungeonRun.DungeonRunEncounters.PassivePowers.Contains(power);
+    bool Noted(string row) => powerNotes.TryGetValue(row, out var n) && n.IndexOf("auto-cast", StringComparison.OrdinalIgnoreCase) >= 0;
+    var silent = mustPlay.Where(x => !RuleCast(x.Power) && !Noted(x.Row)).Select(x => x.Row + ":" + x.Power).ToList();
+    Check("P1 every AI_MUST_PLAY encounter power is cast by rule or its row's power note says why the AI chooses instead (" + mustPlay.Count + " powers, "
+        + mustPlay.Count(x => RuleCast(x.Power)) + " cast by rule)", mustPlay.Count > 30 && silent.Count == 0, string.Join(" ", silent));
+    var reviewed = new[] { "ULDA_BOSS_08p", "ULDA_BOSS_22p", "ULDA_BOSS_28p", "ULDA_BOSS_33p", "DALA_BOSS_66p" };
+    Check("P2 the five the review found (Sand Surge, Power of Wrath, Mighty Windstorm, Out of Control, Next...) are cast by rule and their notes say so",
+        reviewed.All(p => mustPlay.Any(x => x.Power == p) && RuleCast(p) && SabberStoneCore.CardSets.DungeonRun.DungeonRunEncounters.Find(p).Kind == SabberStoneCore.CardSets.DungeonRun.EncounterCardKind.Passive
+            && Noted(mustPlay.First(x => x.Power == p).Row)),
+        string.Join(" ", reviewed.Where(p => !RuleCast(p) || !mustPlay.Any(x => x.Power == p && Noted(x.Row)))));
 });
 
 // ============================================================ L. legacy replay

@@ -748,7 +748,9 @@ Rules the family adds to the model:
   returns to the deck and a deck fact (`DeckRewritten`) gives the boss's own-deck ledger the exact list.
 - **Rule-cast powers** (`DungeonRunEncounters.AutoCast`): a power the wiki marks auto-cast whose worth the boss's AI cannot
   evaluate (Devour, Stolen Time, Dispel Ward, Doors Are Closing) is registered with the passive powers (never an option) and
-  cast by a turn-start trigger that pays its Cost. Other auto-cast powers remain an AI choice.
+  cast by a turn-start trigger that pays its Cost. Waves 5-6 and the close-out review cast most of the other auto-cast powers
+  by rule too; an auto-cast power that remains an AI choice says so in its row's power note (c-enc-25 P1 checks every power
+  whose client card carries AI_MUST_PLAY, the wiki's auto-cast marker).
 - **No-loss ending** (`EncounterRules.EndWithNoLoss`): the script marks the game (`NoLoss`) and the closing side's hero is
   destroyed, so the table shows the run player's win; `DungeonRun.RecordOutcome` records a harvest with the mark as a win
   with no boss kill credit whatever outcome is reported.
@@ -1008,7 +1010,8 @@ enables the block). New engine rules (`Actions/EncounterRules.F18.cs`): a player
 read from the base TIMEOUT tag: Nozdormu the Eternal's 15, Kaironomaly's 25, which NativeMatch now enforces; classic
 Nozdormu's aura neither makes nor cancels one), Steelskin's self-damage prevention (tag `SelfDamageImmune` 32653, read in
 `Character.TakeDamage`; Fatigue still hurts), and Marei Loom's left-most hand/deck swap with belief resets for both
-players (an Echo copy swapped into the deck stops being ghostly). Kirin Tor Elemental recasts its controller's spells
+players (an Echo copy swapped into the deck stops being ghostly; cast by rule at the boss's turn start, the wiki's auto-cast,
+since the close-out review). Kirin Tor Elemental recasts its controller's spells
 (RecastRules). Rejected with reasons: Commander Bolan (75h/75p: his quests have no text, requirement or reward in the
 client data), the unused Phase Spider (61t) and Cheerful Spirit (DALA_501).
 
@@ -1016,8 +1019,8 @@ client data), the unused Phase Spider (61t) and Cheerful Spirit (DALA_501).
 
 Eighteen encounters (ULDA_BOSS_01-18) and Sinkhole's Sand Trap (ULDA_030). A row's Health is the act curve's and its tier
 the boss's level in its chapter, read from its wiki deck table ("10; 15" levels 1-2 tier 1; "15; 20" and the 25-card
-level-4 lists tier 2; the 30-card level-6 lists tier 3; a full 30-card list with no lower level tier 4). Thirteen
-clickable powers and five passives (E.V.I.L. Promotion keeps its growing bonus in the power's own script number; Sword
+level-4 lists tier 2; the 30-card level-6 lists tier 3; a full 30-card list with no lower level tier 4). Twelve
+clickable powers, Sand Surge cast by rule (the wiki's auto-cast, since the close-out review) and five passives (E.V.I.L. Promotion keeps its growing bonus in the power's own script number; Sword
 Dance shuffles a copy of the boss's destroyed weapon, enchantments and their Durability kept, into its deck; Under Wraps,
 Unstable Weaponry, "Confiscated" Goods). Mummy Ritual and Belch read the public graveyards and never raise a dead run
 shrine; Venomous Stinger's destroy makes a shrine go dormant. Sand Surge puts Sand Trap into the run player's deck as a
@@ -1087,7 +1090,8 @@ The Tombs families tier by family 19's rule (`verify/tools/gen/p8f19/tombs_tiers
 #### Family 20: Tombs of Terror bosses B
 
 Eighteen encounters (ULDA_BOSS_19-36) with Sothis's Mogu Cultist (ULD_705, a Saviors of Uldum stub now scripted in
-`UldumCardsGen.cs`: seven Cultists become Highkeeper Ra, ULD_705t). Fourteen clickable powers and four passives. Spectral
+`UldumCardsGen.cs`: seven Cultists become Highkeeper Ra, ULD_705t). Eleven clickable powers, three cast by rule (Power of Wrath, Mighty Windstorm, Out of Control: the wiki's auto-cast, since the
+close-out review) and four passives. Spectral
 Swordsman gives the boss's hero Stealth while it holds a weapon; Staking A Claim gives every minion +1/+1 whenever either
 player plays a Discover card; Mother of Sand summons a Dust Devil when the boss Overloads, resolved in place; Fireshaper is
 Flamewaker's trigger. "Retired" Treasure Hunter copies a card of the run player's hand by the Copy rule (in-hand

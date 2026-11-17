@@ -15,9 +15,9 @@ using SabberStoneCore.Triggers;
 
 namespace SabberStoneCore.CardSets.DungeonRun
 {
-	// Phase 8, family 19: Tombs of Terror bosses A (ULDA_BOSS_01 to ULDA_BOSS_18) and Sinkhole's Sand Trap (ULDA_030). Thirteen
-	// clickable powers and five passive ones (E.V.I.L. Promotion, "Confiscated" Goods, Unstable Weaponry, Sword Dance, Under
-	// Wraps). The texts are the client's (facts/violet-hold-2026-09.json). A power works on public zones (the boards, the heroes,
+	// Phase 8, family 19: Tombs of Terror bosses A (ULDA_BOSS_01 to ULDA_BOSS_18) and Sinkhole's Sand Trap (ULDA_030). Twelve
+	// clickable powers, five passive ones (E.V.I.L. Promotion, "Confiscated" Goods, Unstable Weaponry, Sword Dance, Under
+	// Wraps) and one cast by rule (Sand Surge, the wiki's Auto-cast: family 09's AutoCast since the close-out review). The texts are the client's (facts/violet-hold-2026-09.json). A power works on public zones (the boards, the heroes,
 	// both graveyards) or on the boss's own hand and deck; Sand Surge puts a publicly known card into the run player's deck. A
 	// power that would do nothing is not offered, by a condition that reads only public zones or the boss's own hand (never a
 	// deck). Every random choice uses the game RNG and is reported as a random event. The only state is E.V.I.L. Promotion's
@@ -256,10 +256,11 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 			// ---------------- Sinkhole (ULDA_BOSS_08h)
 			// Sand Surge (1): "Shuffle a Sand Trap into your opponent's deck that swallows cards when drawn." A public shuffle: the run
-			// player sees it go in; the boss's fair view keeps that deck masked, Sand Trap included. Offered while that deck has room (its count is public).
-			Power("ULDA_BOSS_08p", null, () => new CustomTask((g, c, s, t, stack) =>
-				Generic.ShuffleIntoDeck(c.Opponent, s, Entity.FromCard(c.Opponent, Cards.FromId(TombsA.SandTrap)), revealGenerated: true)),
-				usable: c => !c.Opponent.DeckZone.IsFull);
+			// player sees it go in; the boss's fair view keeps that deck masked, Sand Trap included. The wiki marks it Auto-cast and the
+			// card carries AI_MUST_PLAY, so it is cast by rule (family 09's AutoCast, the close-out review): at the start of the boss's
+			// turn, after the draw, while that deck has room (its count is public) and the boss can pay (1).
+			AutoCast("ULDA_BOSS_08p", c => !c.Opponent.DeckZone.IsFull, (g, c, s, stack) =>
+				Generic.ShuffleIntoDeck(c.Opponent, s, Entity.FromCard(c.Opponent, Cards.FromId(TombsA.SandTrap)), revealGenerated: true));
 			// Sand Trap: "Casts When Drawn. Remove the top 2 cards of your deck." Each card goes from the top of its holder's deck
 			// to the holder's graveyard, a public zone (Azari's Devour), then the holder draws a card (the Casts When Drawn rule).
 			BossCard(TombsA.SandTrap, () => new CardDef(new Power

@@ -1880,9 +1880,18 @@ namespace RestorationLedger
             foreach (var family in DungeonRunAdmission.Rules.GroupBy(r => r.Family))
             {
                 var rejecting = family.Where(r => (r.Admit & AdmitScope.Both) != AdmitScope.Both && !DungeonRunAdmission.IsNoneLift(r.Lift)).ToList();
-                if (rejecting.Count == 0) continue;
-                described["ai:" + family.Key] = "Admission family `" + family.Key + "`: " + string.Join(" ", rejecting.Select(r =>
-                    $"{r.Reason} (admitted: {AdmitText(r.Admit)}; lifted by {r.Lift}{(r.Ids == null ? "" : "; " + string.Join(", ", r.Ids))})."));
+                if (rejecting.Count > 0)
+                {
+                    described["ai:" + family.Key] = "Admission family `" + family.Key + "`: " + string.Join(" ", rejecting.Select(r =>
+                        $"{r.Reason} (admitted: {AdmitText(r.Admit)}; lifted by {r.Lift}{(r.Ids == null ? "" : "; " + string.Join(", ", r.Ids))})."));
+                    continue;
+                }
+                // The close-out review: a family whose only refusing rules carry a "none:" lift is a permanent rejection (no phase
+                // owns the work); its gap is described by those rules' reasons and lifts, never left blank.
+                var permanent = family.Where(r => (r.Admit & AdmitScope.Both) != AdmitScope.Both).ToList();
+                if (permanent.Count == 0) continue;
+                described["ai:" + family.Key] = "Admission family `" + family.Key + "`, rejected for good (no phase owns a lift): " + string.Join(" ", permanent.Select(r =>
+                    $"{r.Reason} (admitted: {AdmitText(r.Admit)}; {r.Lift}{(r.Ids == null ? "" : "; " + string.Join(", ", r.Ids))})."));
             }
             var gapRows = rows.Where(r => r.BlockedBy.Count > 0).ToList();
             var gapKeys = gapRows.SelectMany(r => r.BlockedBy).Distinct().OrderBy(g => g.StartsWith("ai:") ? 0 : g.StartsWith("engine:") ? 1 : g.StartsWith("validation:") ? 2 : g.StartsWith("run:") ? 3 : 4)

@@ -71,8 +71,10 @@ internal static partial class DungeonRunAdmission
                 + "with a card in hand and in deck, a random deck card (the game RNG) takes the left-most hand slot and that hand card is "
                 + "shuffled into the deck (EncounterRules.SwapLeftmostWithDeck). Each side sees only its own new card; what the opponent "
                 + "believed about either player's hand and deck is reset (RunHelpers.BeliefReset), so the boss's fair view keeps the run "
-                + "player's hand masked and never learns the card that came to it. Offered by zone counts only (c-enc-18 section F; the "
-                + "enc18 bosspilot mode)",
+                + "player's hand masked and never learns the card that came to it. The wiki marks it Auto-cast (the card carries "
+                + "AI_MUST_PLAY; its worth lies in hidden decks the boss's AI cannot evaluate): it is cast by rule at the start of the "
+                + "boss's turn, after the draw, never an option of the boss's AI (family 09's rule-cast powers), while a player has a card "
+                + "in hand and in deck, by zone counts only (c-enc-18 section F; the enc18 bosspilot mode)",
             Ids = new[] { "DALA_BOSS_66p" },
         },
         new AdmissionRule

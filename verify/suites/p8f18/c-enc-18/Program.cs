@@ -239,46 +239,58 @@ Guard("Valdera", () =>
     Check("E5 the run player's hero is not capped: the boss's Fireball deals 6", Cast(g, Fireball, player.Hero) && player.Hero.Health == playerHealth - 6);
 });
 
-// ============================================================ F  Marei Loom: Next...
+// ============================================================ F  Marei Loom: Next... (cast by rule)
 Guard("Marei", () =>
 {
+    // The close-out review: the wiki marks Next... Auto-cast and the card carries AI_MUST_PLAY, so it is cast by rule (family 09's
+    // AutoCast) at the start of the boss's turn, after the draw, never offered as a click.
     var g = Fight("dala_66_marei", bossDeck: Croc, playerDeck: Raptor);
     Controller boss = g.Player2, player = g.Player1;
+    ToPlayer(g);
     EmptyHand(player);
     var fireball = ToHand(g, player, Fireball); ToHand(g, player, Yeti);
-    ToBoss(g);
     EmptyHand(boss);
     var moonfire = ToHand(g, boss, Moonfire); ToHand(g, boss, Yeti);
-    int ph = player.HandZone.Count, pd = player.DeckZone.Count, bh = boss.HandZone.Count, bd = boss.DeckZone.Count;
-    Check("F1 Next... costs (0) and is offered while a player has a card in hand and in deck", Cost("DALA_BOSS_66p") == 0 && Offered(g) && PowerTargets(g).Count == 0);
-    bool used = Power(g);
-    Check("F2 each left-most hand card goes into its owner's deck and a card of that deck takes the left-most slot: the boss now holds a Crocolisk first, the run player a Raptor",
+    // The boss's turn-start draw adds a Crocolisk at the right end of its hand; the left-most card stays the Moonfire.
+    int ph = player.HandZone.Count, pd = player.DeckZone.Count, bh = boss.HandZone.Count + 1, bd = boss.DeckZone.Count - 1;
+    EndTurn(g);
+    bool used = DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) == 1;
+    Check("F1 Next... costs (0) and is cast by rule (passive in the registry, never an option; the card carries AI_MUST_PLAY) while a player has a card in hand and in deck",
+        Cost("DALA_BOSS_66p") == 0 && IsPassive(boss, "DALA_BOSS_66p") && C("DALA_BOSS_66p")[(GameTag)367] == 1 && !Offered(g) && used);
+    Check("F2 at the boss's turn start each left-most hand card goes into its owner's deck and a card of that deck takes the left-most slot: the boss now holds a Crocolisk first, the run player a Raptor",
         used && moonfire.Zone == boss.DeckZone && boss.HandZone[0].Card.Id == Croc && fireball.Zone == player.DeckZone && player.HandZone[0].Card.Id == Raptor
         && player.HandZone.Count == ph && player.DeckZone.Count == pd && boss.HandZone.Count == bh && boss.DeckZone.Count == bd,
-        boss.HandZone[0].Card.Id + " / " + player.HandZone[0].Card.Id);
+        boss.HandZone[0].Card.Id + " / " + player.HandZone[0].Card.Id + " hand " + boss.HandZone.Count + "/" + bh + " deck " + boss.DeckZone.Count + "/" + bd);
     var resets = g.RunBeliefResets.Where(r => r.Zones == RunBeliefZones.HandAndDeck).Select(r => r.ControllerId).ToList();
     Check("F3 what each side believed about the other's hand and deck is reset (one belief reset per player)", resets.Contains(boss.PlayerId) && resets.Contains(player.PlayerId), string.Join(",", resets));
     var (view, viewBoss, viewPlayer) = FairView(g);
     Check("F4 the boss's fair view does not learn the run player's new card: its hand is masked there (no Raptor, no Fireball), its own new Crocolisk is exact",
         !viewPlayer.HandZone.Any(p => p.Card.Id == Raptor || p.Card.Id == Fireball) && viewPlayer.HandZone.Count == ph && viewBoss.HandZone[0].Card.Id == Croc,
         string.Join(",", viewPlayer.HandZone.Select(p => p.Card.Id)));
-    Round(g);
-    EmptyHand(boss); EmptyHand(player); EmptyDeck(player);
-    Check("F5 with no card in either hand (and the run player's deck empty) it is not offered", !Offered(g));
+    ToPlayer(g);
+    EmptyHand(boss); EmptyHand(player); EmptyDeck(player); EmptyDeck(boss);
+    int casts = DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower);
+    EndTurn(g);
+    Check("F5 with no card in either hand and both decks empty (the boss's turn-start draw finds none) it is not cast", DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) == casts && !Offered(g));
+    ToPlayer(g);
+    EmptyHand(boss);
+    for (int k = 0; k < 2; k++) Entity.FromCard(boss, C(Croc), zone: boss.DeckZone);
     var reduced = ToHand(g, boss, Fireball);
     Generic.AddEnchantmentBlock(g, C("BRM_028e"), boss.Hero, reduced);
     int costBefore = reduced.Cost;
-    Check("F6 a hand card shuffled into the deck loses its hand enchantments (Fireball back at (4))", Power(g) && reduced.Zone == boss.DeckZone && reduced.Cost == 4 && costBefore == 3,
-        costBefore + " -> " + reduced.Cost);
-    Round(g);
+    EndTurn(g);
+    Check("F6 a hand card shuffled into the deck loses its hand enchantments (Fireball back at (4))", DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) == casts + 1
+        && reduced.Zone == boss.DeckZone && reduced.Cost == 4 && costBefore == 3, costBefore + " -> " + reduced.Cost);
+    // An Echo copy lives only in the turn it was played, and the rule cast comes at the turn start, before any card of that turn:
+    // the swap rule itself (EncounterRules.SwapLeftmostWithDeck, which the cast runs) still handles one.
     EmptyHand(boss);
     var echo = ToHand(g, boss, Moonfire);
     g.GhostlyCards.Add(echo.Id);   // as PlayCard marks an Echo copy
-    bool swapped = Power(g);
+    bool swapped = EncounterRules.SwapLeftmostWithDeck(boss, boss.Hero.HeroPower);
     var (view2, viewBoss2, _) = FairView(g);
     string viewEnd = "ok";
     try { if (!view2.Process(EndTurnTask.Any(viewBoss2))) viewEnd = "refused"; } catch (Exception e) { viewEnd = e.GetType().Name + ": " + e.Message; }
-    Check("F7 an Echo copy swapped into the deck is an ordinary card there (it leaves the ghostly list): the turn ends in the boss's fair view and in the game",
+    Check("F7 an Echo copy the swap rule moves into the deck is an ordinary card there (it leaves the ghostly list): the turn ends in the boss's fair view and in the game",
         swapped && echo.Zone == boss.DeckZone && !g.GhostlyCards.Contains(echo.Id) && viewEnd == "ok" && g.Process(EndTurnTask.Any(boss)) && echo.Zone == boss.DeckZone, viewEnd);
 });
 
@@ -599,7 +611,8 @@ Guard("Rows", () =>
     };
     Check("M2 family 18 holds exactly these sixteen rows", data.Encounters.Where(b => b.Family == "18").Select(b => b.Id).OrderBy(i => i, StringComparer.Ordinal)
         .SequenceEqual(rows.Select(r => r.id).OrderBy(i => i, StringComparer.Ordinal)), string.Join(",", data.Encounters.Where(b => b.Family == "18").Select(b => b.Id)));
-    string[] passives = { "DALA_BOSS_65p", "DALA_BOSS_68p", "DALA_BOSS_72p", "DALA_BOSS_43p" };
+    // The passive powers and Marei Loom's Next..., cast by rule since the close-out review (family 09's AutoCast registers it as a passive).
+    string[] passives = { "DALA_BOSS_65p", "DALA_BOSS_66p", "DALA_BOSS_68p", "DALA_BOSS_72p", "DALA_BOSS_43p" };
     foreach (var r in rows)
     {
         var b = data.Boss(r.id);

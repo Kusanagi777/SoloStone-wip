@@ -337,23 +337,26 @@ Guard("Squeamlish", () =>
     Check("G3 untargeted", PowerTargets(g).Count == 0);
 });
 
-// ============================================================ H  Sinkhole: Sand Surge and Sand Trap
+// ============================================================ H  Sinkhole: Sand Surge (cast by rule) and Sand Trap
 Guard("Sinkhole", () =>
 {
+    // The close-out review: the wiki marks Sand Surge Auto-cast and the card carries AI_MUST_PLAY, so it is cast by rule (family
+    // 09's AutoCast) at the start of the boss's turn, after the draw, never offered as a click.
     var g = Fight("ulda_08_sinkhole", playerDeck: Croc);
     Controller boss = g.Player2, player = g.Player1;
-    ToBoss(g);
+    ToPlayer(g);
     int deck = player.DeckZone.Count, bossDeck = boss.DeckZone.Count;
-    bool used = Power(g);
-    Check("H1 Sand Surge costs (1): one Sand Trap joins the run player's deck; the boss's deck is unchanged", Cost("ULDA_BOSS_08p") == 1 && used && player.DeckZone.Count == deck + 1
-        && player.DeckZone.Count(p => p.Card.Id == SandTrap) == 1 && boss.DeckZone.Count == bossDeck && boss.UsedMana == 1);
+    EndTurn(g);
+    Check("H1 Sand Surge costs (1) and is cast by rule (passive in the registry, never an option; the card carries AI_MUST_PLAY): at the boss's turn start one Sand Trap joins the run player's deck, (1) is paid; the boss's deck loses only its draw",
+        Cost("ULDA_BOSS_08p") == 1 && PassiveStarted(g, "ULDA_BOSS_08p") && C("ULDA_BOSS_08p")[(GameTag)367] == 1 && !Offered(g) && DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) == 1
+        && player.DeckZone.Count == deck + 1 && player.DeckZone.Count(p => p.Card.Id == SandTrap) == 1 && boss.DeckZone.Count == bossDeck - 1 && boss.UsedMana == 1,
+        "casts " + DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) + " deck " + deck + "->" + player.DeckZone.Count + " boss deck " + bossDeck + "->" + boss.DeckZone.Count + " used " + boss.UsedMana);
     var (view, viewBoss, viewPlayer) = FairView(g);
     Check("H2 the boss's fair view keeps the run player's deck masked, the Sand Trap too (the boss's search never learns where it is or what else is there): as long as the real deck, no card shown",
         viewPlayer.DeckZone.Count == player.DeckZone.Count && !viewPlayer.DeckZone.Any(p => p.Card.Id == SandTrap || p.Card.Id == Croc) && player.DeckZone.Any(p => p.Card.Id == Croc),
         viewPlayer.DeckZone.Count(p => p.Card.Id == SandTrap) + " traps shown");
     Round(g);
-    Power(g);
-    Check("H3 used again: a second Sand Trap", player.DeckZone.Count(p => p.Card.Id == SandTrap) == 2);
+    Check("H3 cast again at the boss's next turn start: a second Sand Trap", player.DeckZone.Count(p => p.Card.Id == SandTrap) == 2 && DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) == 2);
     ToPlayer(g);
     var trap = player.DeckZone.First(p => p.Card.Id == SandTrap);
     int d = player.DeckZone.Count, hand = player.HandZone.Count, grave = player.GraveyardZone.Count;
@@ -377,9 +380,10 @@ Guard("Sinkhole", () =>
     Check("H6 with one card under it, that card is removed and the draw finds an empty deck (fatigue)", p3.DeckZone.Count == 0 && p3.Hero.Fatigue == 1 && p3.HandZone.Count == handBefore,
         "fatigue " + p3.Hero.Fatigue);
     var g4 = Fight("ulda_08_sinkhole");
-    ToBoss(g4);
+    ToPlayer(g4);
     while (!g4.Player1.DeckZone.IsFull) Entity.FromCard(g4.Player1, C(Yeti), zone: g4.Player1.DeckZone);
-    Check("H7 with the run player's deck full it is not offered", !Offered(g4));
+    EndTurn(g4);
+    Check("H7 with the run player's deck full it is not cast", DungeonRunEncounters.AutoCasts(g4.Player2.Hero.HeroPower) == 0 && !g4.Player1.DeckZone.Any(p => p.Card.Id == SandTrap) && !Offered(g4));
     var g5 = Fight("ulda_08_sinkhole", bossDeck: Croc);
     var b5 = g5.Player2;
     var bossTrap = Entity.FromCard(b5, C(SandTrap));
@@ -728,7 +732,8 @@ Guard("Rows", () =>
             && b.Source.Url.StartsWith("https://hearthstone.wiki.gg/wiki/") && !b.BossGeneratedSecrets && b.Forms.Count == 0 && b.Start == null && b.Pools.SequenceEqual(new[] { "enc-t" + r.tier }),
             b.Source.Kind + " health " + plan.BossHealth + " tier " + b.Tier + " level " + b.LevelSource + ":" + b.LevelOriginal + " pools " + string.Join(",", b.Pools));
     }
-    string[] passives = { "ULDA_BOSS_03p", "ULDA_BOSS_06p", "ULDA_BOSS_11p", "ULDA_BOSS_14p", "ULDA_BOSS_16p" };
+    // The five passive powers and Sand Surge, cast by rule since the close-out review (family 09's AutoCast registers it as a passive).
+    string[] passives = { "ULDA_BOSS_03p", "ULDA_BOSS_06p", "ULDA_BOSS_08p", "ULDA_BOSS_11p", "ULDA_BOSS_14p", "ULDA_BOSS_16p" };
     string[] powers = rows.Select(r => "ULDA_BOSS_" + r.n + "p").ToArray();
     string[] enchantments = { "ULDA_BOSS_01e", "ULDA_BOSS_03e", "ULDA_BOSS_05e", "ULDA_BOSS_07e", "ULDA_BOSS_12e", "ULDA_BOSS_13e", "ULDA_BOSS_15e", "ULDA_BOSS_16e", "ULDA_BOSS_17e", "ULDA_BOSS_18e" };
     var scripted = powers.Concat(new[] { SandTrap }).ToArray();
@@ -736,7 +741,7 @@ Guard("Rows", () =>
     var retexted = scripted.Concat(enchantments).Where(id => C(id).Text != factById[id].GetProperty("text").GetString()).ToList();
     Check("S4 every power, Sand Trap and every enchantment of the family is scripted by family 19 and keeps the client's text (18 powers, 1 card, 10 enchantments)", unscripted.Count == 0
         && retexted.Count == 0 && scripted.Length == 19, string.Join(",", unscripted.Concat(retexted)));
-    Check("S5 the five passive powers are the registry's passive ones (never an option), the thirteen others clickable; each power's Cost is the client's",
+    Check("S5 the five passive powers and the rule-cast Sand Surge are the registry's passive ones (never an option), the twelve others clickable; each power's Cost is the client's",
         powers.All(p => DungeonRunEncounters.PassivePowers.Contains(p) == passives.Contains(p) && DungeonRunEncounters.Find(p).Kind == (passives.Contains(p) ? EncounterCardKind.Passive : EncounterCardKind.Power)
             && C(p).Cost == (factById[p].GetProperty("tags").EnumerateArray().Where(t => t[0].GetInt32() == 48).Select(t => t[1].GetInt32()).FirstOrDefault())));
     var expectFamily = new Dictionary<string, string>

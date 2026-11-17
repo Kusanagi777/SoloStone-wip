@@ -256,20 +256,26 @@ Guard("Illidara", () =>
     Check("C5 a dormant run shrine is left out", dormant != null && !Has(dormant, "ULDA_BOSS_21e"));
 });
 
-// ============================================================ D  Colossus of the Sun: Power of Wrath
+// ============================================================ D  Colossus of the Sun: Power of Wrath (cast by rule)
 Guard("Colossus", () =>
 {
+    // The close-out review: the wiki marks Power of Wrath Auto-cast and the card carries AI_MUST_PLAY, so it is cast by rule
+    // (family 09's AutoCast) at the start of the boss's turn, after the draw, never offered as a click.
     var g = Fight("ulda_22_colossus");
     Controller boss = g.Player2, player = g.Player1;
     var theirs = Board(g, player, Yeti); var fresh = Board(g, player, Croc);
-    ToBoss(g);
+    ToPlayer(g);
+    EndTurn(g);
+    Check("D1 Power of Wrath costs (0) and is cast by rule (passive in the registry, never an option; the card carries AI_MUST_PLAY); with no damaged minion it is not cast",
+        Cost("ULDA_BOSS_22p") == 0 && FactCost("ULDA_BOSS_22p") == 0 && PassiveStarted(g, "ULDA_BOSS_22p") && C("ULDA_BOSS_22p")[(GameTag)367] == 1 && !Offered(g)
+        && DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) == 0 && theirs.Damage == 0 && fresh.Damage == 0);
     var own = Board(g, boss, Yeti); var weak = Board(g, boss, Raptor);
-    Check("D1 Power of Wrath costs (0); with no damaged minion it is not offered", Cost("ULDA_BOSS_22p") == 0 && FactCost("ULDA_BOSS_22p") == 0 && Clickable(g) && !Offered(g));
     Hit(g, theirs, 1); Hit(g, own, 2); Hit(g, weak, 1);
-    bool used = Power(g);
-    Check("D2 it deals 1 damage to every damaged minion of both boards (each once); the undamaged ones are untouched", used && theirs.Damage == 2 && own.Damage == 3 && fresh.Damage == 0
-        && weak.Zone != boss.BoardZone && PowerTargets(g).Count == 0, theirs.Damage + "/" + own.Damage + "/" + fresh.Damage);
-    Check("D3 offered again the same turn? no (once per turn)", !Offered(g));
+    Round(g);
+    Check("D2 at the boss's next turn start it deals 1 damage to every damaged minion of both boards (each once), the boss's own too; the undamaged ones are untouched",
+        DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) == 1 && theirs.Damage == 2 && own.Damage == 3 && fresh.Damage == 0 && weak.Zone != boss.BoardZone,
+        theirs.Damage + "/" + own.Damage + "/" + fresh.Damage + " casts " + DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower));
+    Check("D3 once per turn, never a click: not offered after the cast", !Offered(g) && DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) == 1);
 });
 
 // ============================================================ E  Skarik: Hatching Time
@@ -398,18 +404,20 @@ Guard("Toomba", () =>
 // ============================================================ J  Sazin: Mighty Windstorm
 Guard("Sazin", () =>
 {
-    var g = Fight("ulda_28_sazin", shrine: Shrine);
+    // The close-out review: the wiki marks Mighty Windstorm Auto-cast and the card carries AI_MUST_PLAY, so it is cast by rule
+    // (family 09's AutoCast) at the start of the boss's turn, after the draw, never offered as a click. The boss's deck is
+    // Moonfires, so its turn-start draw adds no minion to the hand the swap picks from.
+    var g = Fight("ulda_28_sazin", bossDeck: Moonfire, shrine: Shrine);
     Controller boss = g.Player2, player = g.Player1;
     var shrine = ShrineRules.Of(player).FirstOrDefault();
     var raptor = Board(g, player, Raptor);
-    EmptyHand(player);
-    var croc = (Minion)ToHand(g, player, Croc);
-    ToHand(g, player, Moonfire);
-    ToBoss(g);
+    ToPlayer(g);
     EmptyHand(boss); EmptyHand(player);
+    var croc = (Minion)Entity.FromCard(player, C(Croc));
     Generic.AddHandPhase.Invoke(player, croc); Generic.AddHandPhase.Invoke(player, Entity.FromCard(player, C(Moonfire)));
-    Check("J1 Mighty Windstorm costs (0); with no minion in the boss's hand it is still offered while the run player can swap (a board minion and a card in hand, public counts)",
-        Cost("ULDA_BOSS_28p") == 0 && FactCost("ULDA_BOSS_28p") == 0 && Offered(g) && TombsB.WindstormUsable(boss));
+    Check("J1 Mighty Windstorm costs (0) and is cast by rule (passive in the registry; the card carries AI_MUST_PLAY); with no minion in the boss's hand a cast is still due while the run player can swap (a board minion and a card in hand, public counts)",
+        Cost("ULDA_BOSS_28p") == 0 && FactCost("ULDA_BOSS_28p") == 0 && boss.Hero.HeroPower.IsPassiveHeroPower && DungeonRunEncounters.PassivePowers.Contains("ULDA_BOSS_28p")
+        && C("ULDA_BOSS_28p")[(GameTag)367] == 1 && TombsB.WindstormUsable(boss));
     var yeti = Board(g, boss, Yeti);
     Hit(g, yeti, 2);
     int yetiPos = yeti.ZonePosition;
@@ -419,23 +427,29 @@ Guard("Sazin", () =>
     Check("J2 in the boss's fair view the run player's hand minion is masked (the view swaps only a minion the boss saw go there)", TombsB.SwappableHand(viewPlayer).Count == 0
         && TombsB.SwappableHand(player).Count == 1 && viewPlayer.HandZone.Count == player.HandZone.Count);
     int hp = player.Hero.Health, bossHp = boss.Hero.Health;
-    bool used = Power(g);
-    Check("J3 each player swaps: the boss's hand minion (Elven Archer) is put onto the board in the place of its board minion (the damaged Yeti), which returns to the boss's hand as a fresh, undamaged card",
+    EndTurn(g);
+    bool used = DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) == 1 && !Offered(g);
+    Check("J3 at the boss's turn start each player swaps: the boss's hand minion (Elven Archer) is put onto the board in the place of its board minion (the damaged Yeti), which returns to the boss's hand as a fresh, undamaged card",
         used && archer.Zone == boss.BoardZone && boss.BoardZone.Count == 1 && yeti.Zone == boss.HandZone && yeti.Damage == 0 && boss.HandZone.Any(p => p.Card.Id == Moonfire),
         string.Join(",", boss.BoardZone.Select(m => m.Card.Id)) + " | " + string.Join(",", boss.HandZone.Select(p => p.Card.Id)));
     Check("J4 the put minion takes its place and its Battlecry does not run (no character is damaged)", archer.ZonePosition == yetiPos && player.Hero.Health == hp && boss.Hero.Health == bossHp
         && croc.Damage == 0 && player.BoardZone.All(m => m.Damage == 0));
     Check("J5 the run player's hand minion is on the board, the board minion in hand; the run shrine is never chosen", croc.Zone == player.BoardZone && raptor.Zone == player.HandZone
         && shrine.Zone == player.BoardZone && ShrineRules.IsAwake(shrine) && player.Hero.Health == hp && player.HandZone.Any(p => p.Card.Id == Moonfire));
-    var g2 = Fight("ulda_28_sazin", shrine: Shrine);
-    ToBoss(g2);
+    var g2 = Fight("ulda_28_sazin", bossDeck: Moonfire, shrine: Shrine);
+    ToPlayer(g2);
     EmptyHand(g2.Player2); EmptyHand(g2.Player1);
     Generic.AddHandPhase.Invoke(g2.Player1, Entity.FromCard(g2.Player1, C(Croc)));
-    Check("J6 the run player's board holds only the shrine and the boss has no minion in hand: not offered", ShrineRules.Of(g2.Player1).Count == 1 && g2.Player1.BoardZone.Count == 1 && !Offered(g2));
+    EndTurn(g2);
+    Check("J6 the run player's board holds only the shrine and the boss has no minion in hand (it drew a Moonfire): not cast", ShrineRules.Of(g2.Player1).Count == 1 && g2.Player1.BoardZone.Count == 1
+        && DungeonRunEncounters.AutoCasts(g2.Player2.Hero.HeroPower) == 0 && !Offered(g2));
     Board(g2, g2.Player2, Yeti); ToHand(g2, g2.Player2, Raptor);
-    bool used2 = Power(g2);
-    Check("J7 the boss swaps alone; the shrine stays (nothing of the run player's moves)", used2 && g2.Player1.BoardZone.Count == 1 && ShrineRules.IsAwake(g2.Player1.BoardZone[0])
-        && g2.Player1.HandZone.Count == 1 && g2.Player2.BoardZone.Count == 1 && g2.Player2.BoardZone[0].Card.Id == Raptor);
+    EndTurn(g2);
+    int playerHand = g2.Player1.HandZone.Count;
+    EndTurn(g2);
+    Check("J7 the boss swaps alone; the shrine stays (nothing of the run player's moves)", DungeonRunEncounters.AutoCasts(g2.Player2.Hero.HeroPower) == 1 && g2.Player1.BoardZone.Count == 1
+        && ShrineRules.IsAwake(g2.Player1.BoardZone[0]) && g2.Player1.HandZone.Count == playerHand && g2.Player2.BoardZone.Count == 1 && g2.Player2.BoardZone[0].Card.Id == Raptor,
+        "casts " + DungeonRunEncounters.AutoCasts(g2.Player2.Hero.HeroPower) + " board " + string.Join(",", g2.Player2.BoardZone.Select(m => m.Card.Id)));
 });
 
 // ============================================================ K  Ozara: Mother of Sand
@@ -528,28 +542,35 @@ Guard("Edra", () =>
 // ============================================================ O  Runaway Ruby: Out of Control
 Guard("Ruby", () =>
 {
+    // The close-out review: the wiki marks Out of Control Auto-cast and the card carries AI_MUST_PLAY, so it is cast by rule
+    // (family 09's AutoCast) at the start of the boss's turn, after the draw, never offered as a click.
     var g = Fight("ulda_33_ruby");
     Controller boss = g.Player2, player = g.Player1;
-    ToBoss(g);
-    Check("O1 Out of Control costs (1); with both boards empty it is not offered", Cost("ULDA_BOSS_33p") == 1 && !Offered(g));
+    ToPlayer(g);
+    EndTurn(g);
+    Check("O1 Out of Control costs (1) and is cast by rule (passive in the registry, never an option; the card carries AI_MUST_PLAY); with both boards empty it is not cast",
+        Cost("ULDA_BOSS_33p") == 1 && PassiveStarted(g, "ULDA_BOSS_33p") && C("ULDA_BOSS_33p")[(GameTag)367] == 1 && DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) == 0);
     ToPlayer(g);
     var p1 = Board(g, player, Yeti); var p2 = Board(g, player, Yeti); var p3 = Board(g, player, Yeti);
-    ToBoss(g);
     var b = Enumerable.Range(0, 4).Select(_ => Board(g, boss, Yeti)).ToList();
-    bool used = Power(g);
-    Check("O2 it deals 1 damage to the center-most minions: the middle one of the run player's three, the middle two of the boss's four", used && p1.Damage == 0 && p2.Damage == 1 && p3.Damage == 0
+    EndTurn(g);
+    bool used = DungeonRunEncounters.AutoCasts(boss.Hero.HeroPower) == 1 && boss.UsedMana == 1;
+    Check("O2 at the boss's turn start, paying (1), it deals 1 damage to the center-most minions: the middle one of the run player's three, the middle two of the boss's four", used && p1.Damage == 0 && p2.Damage == 1 && p3.Damage == 0
         && b[0].Damage == 0 && b[1].Damage == 1 && b[2].Damage == 1 && b[3].Damage == 0, string.Join("", player.BoardZone.Select(m => m.Damage)) + "|" + string.Join("", boss.BoardZone.Select(m => m.Damage)));
     var g2 = Fight("ulda_33_ruby", shrine: Shrine);
     var c2 = g2.Player1;
     Kill(g2, ShrineRules.Of(c2).First());
     var front = Board(g2, c2, Yeti, 0); var back = Board(g2, c2, Yeti);
-    ToBoss(g2);
+    ToPlayer(g2);
+    EndTurn(g2);
     var dormant = c2.BoardZone[1];
-    Check("O3 a dormant run shrine counts for the positions but takes no damage: [Yeti, dormant shrine, Yeti] has the shrine in the center, nothing is damaged there, and with nothing else it is not offered",
-        ShrineRules.IsDormantForm(dormant) && TombsB.CenterMost(c2).SequenceEqual(new[] { dormant }) && TombsB.OutOfControlTargets(g2.Player2).Count == 0 && !Offered(g2));
+    Check("O3 a dormant run shrine counts for the positions but takes no damage: [Yeti, dormant shrine, Yeti] has the shrine in the center, nothing is damaged there, and with nothing else it is not cast",
+        ShrineRules.IsDormantForm(dormant) && TombsB.CenterMost(c2).SequenceEqual(new[] { dormant }) && TombsB.OutOfControlTargets(g2.Player2).Count == 0
+        && DungeonRunEncounters.AutoCasts(g2.Player2.Hero.HeroPower) == 0 && front.Damage == 0 && back.Damage == 0);
     var lone = Board(g2, g2.Player2, Yeti);
-    Power(g2);
-    Check("O4 with one minion on the boss's board it is that one", lone.Damage == 1 && front.Damage == 0 && back.Damage == 0);
+    Round(g2);
+    Check("O4 with one minion on the boss's board it is that one (cast at the boss's next turn start)", DungeonRunEncounters.AutoCasts(g2.Player2.Hero.HeroPower) == 1 && lone.Damage == 1
+        && front.Damage == 0 && back.Damage == 0, "casts " + DungeonRunEncounters.AutoCasts(g2.Player2.Hero.HeroPower) + " lone " + lone.Damage);
 });
 
 // ============================================================ P  Dovo Fastfuse: Tomb Boomin'
@@ -694,7 +715,9 @@ Guard("Rows", () =>
             && b.Source.Url.StartsWith("https://hearthstone.wiki.gg/wiki/") && !b.BossGeneratedSecrets && b.Forms.Count == 0 && b.Start == null && b.Pools.SequenceEqual(new[] { "enc-t" + r.tier }),
             b.Source.Kind + " level " + b.LevelSource + "/" + b.LevelOriginal + " health " + plan.BossHealth + " tier " + b.Tier + " flags " + string.Join(",", b.Flags));
     }
+    // The four passive powers and the three cast by rule since the close-out review (family 09's AutoCast registers them as passives).
     string[] passives = { "ULDA_BOSS_20p", "ULDA_BOSS_21p", "ULDA_BOSS_29p", "ULDA_BOSS_30p" };
+    string[] ruleCast = { "ULDA_BOSS_22p", "ULDA_BOSS_28p", "ULDA_BOSS_33p" };
     string[] powers = rows.Select(r => "ULDA_BOSS_" + r.n + "p").ToArray();
     string[] enchantments = { "ULDA_BOSS_21e", "ULDA_BOSS_23e", "ULDA_BOSS_31e1", "ULDA_BOSS_36e" };
     var unscripted = powers.Concat(enchantments).Where(id => !C(id).Implemented || DungeonRunEncounters.Find(id)?.Family != "20").ToList();
@@ -702,13 +725,15 @@ Guard("Rows", () =>
     var retexted = powers.Concat(enchantments).Concat(new[] { Cultist, Ra }).Where(id => C(id).Text.Replace(" @spelldmg", "") != Text(id)).ToList();
     Check("S4 every power and enchantment of the family is scripted by family 20, and they, Mogu Cultist and Highkeeper Ra keep the client's text (18 powers, 4 enchantments)",
         unscripted.Count == 0 && retexted.Count == 0 && powers.Length == 18, string.Join(",", unscripted.Concat(retexted)));
-    Check("S5 the four passive powers are the registry's passive ones (never an option), the fourteen others clickable; each power's Cost is the client's",
-        powers.All(p => DungeonRunEncounters.PassivePowers.Contains(p) == passives.Contains(p) && DungeonRunEncounters.Find(p).Kind == (passives.Contains(p) ? EncounterCardKind.Passive : EncounterCardKind.Power)
+    Check("S5 the four passive powers and the three rule-cast ones are the registry's passive ones (never an option), the eleven others clickable; each power's Cost is the client's",
+        powers.All(p => DungeonRunEncounters.PassivePowers.Contains(p) == (passives.Contains(p) || ruleCast.Contains(p))
+            && DungeonRunEncounters.Find(p).Kind == (passives.Contains(p) || ruleCast.Contains(p) ? EncounterCardKind.Passive : EncounterCardKind.Power)
             && C(p).Cost == FactCost(p)));
     var expectFamily = new Dictionary<string, string>();
-    foreach (var p in new[] { "19", "22", "25", "26", "31", "32", "33", "34", "35" }) expectFamily["ULDA_BOSS_" + p + "p"] = "boss-tombs-b-board-power";
+    foreach (var p in new[] { "19", "25", "26", "31", "32", "34", "35" }) expectFamily["ULDA_BOSS_" + p + "p"] = "boss-tombs-b-board-power";
     foreach (var p in new[] { "23", "24" }) expectFamily["ULDA_BOSS_" + p + "p"] = "boss-tombs-b-own-hand-power";
-    foreach (var p in new[] { "27", "28" }) expectFamily["ULDA_BOSS_" + p + "p"] = "boss-tombs-b-hidden-hand";
+    expectFamily["ULDA_BOSS_27p"] = "boss-tombs-b-hidden-hand";
+    foreach (var p in ruleCast) expectFamily[p] = "boss-tombs-b-rule-cast";
     foreach (var p in passives) expectFamily[p] = "boss-tombs-b-passive";
     expectFamily["ULDA_BOSS_36p"] = "boss-tombs-b-forced-attack";
     var wrong = powers.Where(id =>

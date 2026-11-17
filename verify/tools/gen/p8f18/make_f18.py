@@ -359,7 +359,10 @@ ROWS = [
                   "deck both hold a card, the left-most hand card is shuffled into that player's deck (its hand enchantments are lost, "
                   "as a card returned to a deck loses them) and a random card of that deck (the game RNG, picked before the shuffle) takes "
                   "the left-most hand slot. Each player sees the card that came to the own hand; what the opponent believed about either "
-                  "player's hand and deck is reset (RunHelpers.BeliefReset), so the boss never learns the run player's new card. Offered "
+                  "player's hand and deck is reset (RunHelpers.BeliefReset), so the boss never learns the run player's new card. The wiki's "
+                  "Hero Power table marks Next... Auto-cast (Normal and Heroic) and the client card carries AI_MUST_PLAY; its worth lies in "
+                  "the hidden decks, which the boss's fair view cannot evaluate, so it is cast by rule, not by a choice of the boss's AI "
+                  "(DungeonRunEncounters.AutoCast, family 09's rule; the close-out review): at the start of the boss's turn, after the draw, "
                   "while either player has a card in hand and in deck (zone counts, public)."),
         ("deck", "Xavius, in her Heroic pool, is not a card of the client data (no card of that name in facts/violet-hold-2026-09.json): "
                  "it is left out of the extension."),

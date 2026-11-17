@@ -190,6 +190,18 @@ Guard("B32", () =>
     try { Load(encounters: encountersJson.Replace("\"id\": \"dala_21_whirt\"", "\"id\": \"tunnel_rat\"")); } catch (InvalidDataException e) { threw = e.Message.Contains("already exists"); }
     Check("B32 an encounter that reuses a custom boss id is refused by the parser", threw);
 });
+// The close-out's validator rules (review of family 25): each new or guarded error still fires. A2 holds their other side (the
+// data without the encounter file validates with no error, its finale bosses absent).
+Refused("B33 a tavern option with an unknown runs", d => d.Tavern.Options.First(o => o.Id == "ULDA_038").Runs = "bogus", "tavern ULDA_038: unknown runs bogus");
+Refused("B34 a tavern alias that names runs of its own", d => d.Tavern.Options.First(o => o.Id == "ULDA_911").Runs = DungeonRunTreasure.RunsEncounters,
+    "tavern ULDA_911: an alias names no runs of its own");
+Refused("B35 defaultWithoutEncounters naming an unknown schedule", d => d.Schedules.DefaultWithoutEncounters = "acts-v9", "defaultWithoutEncounters names unknown schedule acts-v9");
+Refused("B36 defaultWithoutEncounters naming a schedule that needs the encounter file", d => d.Schedules.DefaultWithoutEncounters = "acts-v3h",
+    "defaultWithoutEncounters acts-v3h needs the encounter file");
+Refused("B37 with the encounter file loaded, a finale boss that is not in the data", d => { }, "finale boss dala_99_nobody is not in the data",
+    schedule: Once(scheduleJson, "\"fixedBosses\": [\"dala_43_norroa\", \"dala_67_vargoth\"", "\"fixedBosses\": [\"dala_99_nobody\", \"dala_67_vargoth\""));
+Refused("B38 with the encounter file loaded, heroRelay on a finale whose bosses list no relay hero (the Heist finale)", d => d.Schedules.Find("acts-v3h").FinaleHeroRelay = true,
+    "heroRelay with no finale boss that lists relay heroes");
 
 // ============================================================ C. schedule shapes
 Guard("C", () =>
@@ -238,10 +250,28 @@ Guard("C", () =>
         && fs.ActiveRules.Count(r => r.Id == "DALA_830" && r.Kind == "twist" && r.Act == 4) == 1);
     Reach(run, fs, 16);
     Check("C12a the finale is fought after its tavern with no draft in between: floor 16 is Norroa", fs.Phase == DungeonRunPhase.PreMatch && run.CurrentBoss(fs).Id == "dala_43_norroa");
+    var heistHealth = new List<int> { run.BossHealth(fs) };
     run.BeginMatch(fs); run.RecordOutcome(fs, new DungeonRunProfile(), DungeonRunOutcome.Win);
     Check("C12 the finale's first win leads straight to its next fight", fs.Phase == DungeonRunPhase.PreMatch && fs.Floor == 17 && run.CurrentBoss(fs).Id == "dala_67_vargoth");
-    for (int k = 0; k < 3; k++) { run.BeginMatch(fs); run.RecordOutcome(fs, new DungeonRunProfile(), DungeonRunOutcome.Win); }
+    for (int k = 0; k < 3; k++) { heistHealth.Add(run.BossHealth(fs)); run.BeginMatch(fs); run.RecordOutcome(fs, new DungeonRunProfile(), DungeonRunOutcome.Win); }
     Check("C13 the finale's last win (Khadgar, floor 19) wins the run", fs.Phase == DungeonRunPhase.Victory && fs.Matches.Last().Boss == "dala_60_khadgar");
+    // The finale act's Health is per fight (act.BossHealth[FloorInAct - 1]); a finale list whose length is not the fight count
+    // becomes its last value for every fight (DungeonRunData Curve): the shipped [70] gives every fight 70, and a full curve is
+    // read fight by fight (wave 6 pinned this on a fixture finale's [70, 75] over two fights).
+    Check("C12b the shipped finale's bossHealth [70] fills all four fights: 70 on floors 16-19, Khadgar included", heistHealth.SequenceEqual(new[] { 70, 70, 70, 70 }), string.Join(",", heistHealth));
+    List<int> FinaleHealth(string curve)
+    {
+        var d = Load(Once(scheduleJson, "\"name\": \"The Heist\", \"bossHealth\": [70]", "\"name\": \"The Heist\", \"bossHealth\": " + curve));
+        var r = new DungeonRun(d);
+        var s = Reach(r, V3(r, "MAGE", 5150), 16);
+        var seen = new List<int>();
+        for (int k = 0; k < 4 && s.Phase == DungeonRunPhase.PreMatch; k++) { seen.Add(r.BossHealth(s)); r.BeginMatch(s); r.RecordOutcome(s, new DungeonRunProfile(), DungeonRunOutcome.Win); }
+        return seen;
+    }
+    var perFight = FinaleHealth("[70, 75, 80, 85]");
+    Check("C12c a finale curve [70, 75, 80, 85] is read per fight: Norroa 70, Vargoth 75, Kalec 80, Khadgar 85", perFight.SequenceEqual(new[] { 70, 75, 80, 85 }), string.Join(",", perFight));
+    var filled = FinaleHealth("[70, 75]");
+    Check("C12d a finale curve shorter than its four fights, [70, 75], becomes its last value for every fight: 75, 75, 75, 75", filled.SequenceEqual(new[] { 75, 75, 75, 75 }), string.Join(",", filled));
 });
 
 // ============================================================ D. the released sequences are byte-identical
@@ -713,9 +743,9 @@ Guard("J", () =>
             "DALA_BOSS_16p", "DALA_BOSS_17p", "DALA_BOSS_18p", "DALA_BOSS_20p", "DALA_BOSS_25p", "DALA_BOSS_26p", "DALA_BOSS_28p",
             "DALA_BOSS_32p", "DALA_BOSS_33p", "DALA_BOSS_34p", "DALA_BOSS_35p", "DALA_BOSS_39p", "DALA_BOSS_40p",
             "DALA_BOSS_49p", "DALA_BOSS_50p", "DALA_BOSS_54p", "DALA_BOSS_55p", "DALA_BOSS_56p", "DALA_BOSS_57p", "DALA_BOSS_59p",
-            "DALA_BOSS_65p", "DALA_BOSS_68p", "DALA_BOSS_72p", "DALA_BOSS_43p",
-            "ULDA_BOSS_03p", "ULDA_BOSS_06p", "ULDA_BOSS_11p", "ULDA_BOSS_14p", "ULDA_BOSS_16p",
-            "ULDA_BOSS_20p", "ULDA_BOSS_21p", "ULDA_BOSS_29p", "ULDA_BOSS_30p",
+            "DALA_BOSS_65p", "DALA_BOSS_66p", "DALA_BOSS_68p", "DALA_BOSS_72p", "DALA_BOSS_43p",
+            "ULDA_BOSS_03p", "ULDA_BOSS_06p", "ULDA_BOSS_08p", "ULDA_BOSS_11p", "ULDA_BOSS_14p", "ULDA_BOSS_16p",
+            "ULDA_BOSS_20p", "ULDA_BOSS_21p", "ULDA_BOSS_22p", "ULDA_BOSS_28p", "ULDA_BOSS_29p", "ULDA_BOSS_30p", "ULDA_BOSS_33p",
             "ULDA_BOSS_45p", "ULDA_BOSS_46p", "ULDA_BOSS_48p", "ULDA_BOSS_50p", "ULDA_BOSS_51p", "ULDA_BOSS_52p2", "ULDA_BOSS_56p",
             "ULDA_BOSS_62p", "ULDA_BOSS_63p", "ULDA_BOSS_69p", "ULDA_BOSS_72p", "ULDA_BOSS_73p", "ULDA_BOSS_78p",
             "GILA_BOSS_49p", "GILA_BOSS_60p",

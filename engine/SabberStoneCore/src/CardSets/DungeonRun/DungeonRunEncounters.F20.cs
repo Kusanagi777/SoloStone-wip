@@ -16,8 +16,9 @@ namespace SabberStoneCore.CardSets.DungeonRun
 {
 	// Phase 8, family 20: Tombs of Terror bosses B (ULDA_BOSS_19 to ULDA_BOSS_36), and Sothis's Mogu Cultist (ULD_705, a Saviors of
 	// Uldum collectible the engine had as a stub) with its Highkeeper Ra (ULD_705t); those two keep their entries in
-	// Standard/UldumCardsGen.cs, which call the rules here. Fourteen clickable powers and four passive ones (Spectral Swordsman,
-	// Staking A Claim, Mother of Sand, Fireshaper). The texts are the client's (facts/violet-hold-2026-09.json). A power works on
+	// Standard/UldumCardsGen.cs, which call the rules here. Eleven clickable powers, four passive ones (Spectral Swordsman,
+	// Staking A Claim, Mother of Sand, Fireshaper) and three cast by rule (Power of Wrath, Mighty Windstorm, Out of Control: the
+	// wiki's Auto-cast, family 09's AutoCast since the close-out review). The texts are the client's (facts/violet-hold-2026-09.json). A power works on
 	// public zones (the boards, the heroes) or on the boss's own hand; two read the run player's hand by the rule their text states
 	// ("Retired" Treasure Hunter copies a random card of it, Mighty Windstorm puts a random minion of it onto the board), and in the
 	// boss's fair-view projection that hand holds masked cards (Unknown), so there they use only cards the boss already saw go into
@@ -246,12 +247,13 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 			// ---------------- Colossus of the Sun (ULDA_BOSS_22h)
 			// Power of Wrath (0): "Deal 1 damage to all damaged minions." The damaged minions of both boards are taken first, then
-			// each takes 1. Offered while a damaged minion is on a board.
-			Power("ULDA_BOSS_22p", null, () => new CustomTask((g, c, s, t, stack) =>
+			// each takes 1. Wiki Auto-cast and AI_MUST_PLAY: cast by rule at the start of the boss's turn, after the draw, while a
+			// damaged minion is on a board (family 09's AutoCast, the close-out review).
+			AutoCast("ULDA_BOSS_22p", c => TombsB.Damaged(c).Count > 0, (g, c, s, stack) =>
 			{
 				foreach (Minion m in TombsB.Damaged(c))
 					new DamageTask(1, EntityType.TARGET).Process(g, c, s, m, stack);
-			}), usable: c => TombsB.Damaged(c).Count > 0);
+			});
 
 			// ---------------- Skarik (ULDA_BOSS_23h)
 			// Hatching Time (2): "Reduce the Cost of Beasts in your hand by (1)." (ULDA_BOSS_23e "Costs 1 less.") Offered while the
@@ -301,11 +303,13 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			// ---------------- Sazin (ULDA_BOSS_28h)
 			// Mighty Windstorm (0): "Each player swaps a minion from their hand with one on their battlefield." The boss first, then
 			// the opponent (TombsB.Windstorm: a random hand minion onto the board in a random board minion's place; no run shrine).
-			Power("ULDA_BOSS_28p", null, () => new CustomTask((g, c, s, t, stack) =>
+			// Wiki Auto-cast and AI_MUST_PLAY: cast by rule at the start of the boss's turn, after the draw, while a swap is possible
+			// (family 09's AutoCast, the close-out review).
+			AutoCast("ULDA_BOSS_28p", TombsB.WindstormUsable, (g, c, s, stack) =>
 			{
 				TombsB.Windstorm(g, c, s);
 				if (g.State != State.COMPLETE) TombsB.Windstorm(g, c.Opponent, s);
-			}), usable: TombsB.WindstormUsable);
+			});
 
 			// ---------------- Ozara (ULDA_BOSS_29h)
 			// Mother of Sand (passive): "After you Overload, summon a Dust Devil." When a card of the boss's Overloads (the Overload
@@ -358,12 +362,13 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 			// ---------------- Runaway Ruby (ULDA_BOSS_33h)
 			// Out of Control (1): "Deal 1 damage to the Center-most minions." The center-most minions of each board (TombsB.CenterMost).
-			// Offered while one of them can be damaged.
-			Power("ULDA_BOSS_33p", null, () => new CustomTask((g, c, s, t, stack) =>
+			// Wiki Auto-cast and AI_MUST_PLAY: cast by rule at the start of the boss's turn, after the draw, while one of them can be
+			// damaged and the boss can pay (1) (family 09's AutoCast, the close-out review).
+			AutoCast("ULDA_BOSS_33p", c => TombsB.OutOfControlTargets(c).Count > 0, (g, c, s, stack) =>
 			{
 				foreach (Minion m in TombsB.OutOfControlTargets(c))
 					new DamageTask(1, EntityType.TARGET).Process(g, c, s, m, stack);
-			}), usable: c => TombsB.OutOfControlTargets(c).Count > 0);
+			});
 
 			// ---------------- Dovo Fastfuse (ULDA_BOSS_34h)
 			// Tomb Boomin' (2): "Deal 4 damage split randomly between all characters." Four 1-damage hits on random characters of

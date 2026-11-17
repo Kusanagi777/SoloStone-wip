@@ -19,7 +19,8 @@ namespace SabberStoneCore.CardSets.DungeonRun
 	// Heist finale: Magistrix Norroa (Kaironomaly), Archmage Vargoth (Arcane Runes), Archmage Kalec (Dragonwrath) and Archmage
 	// Khadgar (Summon Elemental, and the Kirin Tor Elemental it summons). The texts are the client's
 	// (facts/violet-hold-2026-09.json); what a text leaves open is decided in the row's adaptation notes
-	// (reference/encounters/F18.json). A clickable power that would do nothing is not offered, by a condition that reads only
+	// (reference/encounters/F18.json). Marei Loom's Next... is cast by rule (the wiki's Auto-cast: family 09's AutoCast since the
+	// close-out review). A clickable power that would do nothing is not offered, by a condition that reads only
 	// what is exact in the boss's fair view (boards, heroes, its own hand, zone counts, its own hero power's tags). Every random
 	// choice uses the game RNG and is reported as a random event. The only state is entity tags: Bombardment's last shot on the
 	// hero power (TAG_SCRIPT_DATA_NUM_1), the run player's TIMEOUT under Kaironomaly, the hero's own Spell Damage under
@@ -167,12 +168,14 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 			// ---------------- Marei Loom (DALA_BOSS_66h)
 			// Next... (0): "Swap the left-most card in each player's hand with one in their deck." Both players, the boss first
-			// (EncounterRules.SwapLeftmostWithDeck); offered while either player has a card in hand and one in deck (zone counts).
-			Power("DALA_BOSS_66p", null, () => new CustomTask((g, c, s, t, stack) =>
+			// (EncounterRules.SwapLeftmostWithDeck). The wiki marks it Auto-cast and the card carries AI_MUST_PLAY (its worth lies in
+			// the hidden decks, which the boss's AI cannot evaluate), so it is cast by rule (family 09's AutoCast, the close-out
+			// review): at the start of the boss's turn, after the draw, while either player has a card in hand and one in deck (zone counts).
+			AutoCast("DALA_BOSS_66p", c => c.HandZone.Count > 0 && c.DeckZone.Count > 0 || c.Opponent.HandZone.Count > 0 && c.Opponent.DeckZone.Count > 0, (g, c, s, stack) =>
 			{
 				EncounterRules.SwapLeftmostWithDeck(c, s);
 				EncounterRules.SwapLeftmostWithDeck(c.Opponent, s);
-			}), usable: c => c.HandZone.Count > 0 && c.DeckZone.Count > 0 || c.Opponent.HandZone.Count > 0 && c.Opponent.DeckZone.Count > 0);
+			});
 
 			// ---------------- Lilayell Suntear (DALA_BOSS_68h)
 			// Mini Portal (passive): "After you cast a spell, summon a random 1-cost minion." Any class, behind the run's generation

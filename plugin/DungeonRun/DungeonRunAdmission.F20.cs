@@ -14,17 +14,31 @@ internal static partial class DungeonRunAdmission
         {
             Family = "boss-tombs-b-board-power", Admit = AdmitScope.Boss, Lift = NoneBossPower,
             Reason = "a clickable Tombs of Terror boss hero power whose whole effect is public board and hero state the engine resolves: "
-                + "Titan Ritual summons two 1/1 Mogu Cultists (ULDA_BOSS_19p), Power of Wrath deals 1 damage to every damaged minion "
-                + "(ULDA_BOSS_22p), Beetle Stampede summons a Plated Beetle (ULDA_BOSS_25p), Gatling Wand deals 2 damage split among "
-                + "the enemy minions (ULDA_BOSS_26p), Pillaged Relics gives a chosen minion +1/+1, Divine Shield or Taunt at random "
-                + "(ULDA_BOSS_31p), Whispering Sentinel summons a 1/1 Wisp with Lifesteal (ULDA_BOSS_32p), Out of Control deals 1 "
-                + "damage to the center-most minions of each board (ULDA_BOSS_33p), Tomb Boomin' deals 4 damage split randomly between "
-                + "all characters (ULDA_BOSS_34p) and Vengeful Construct destroys a chosen minion with 2 or less Health and its "
-                + "neighbours (ULDA_BOSS_35p; a run shrine goes dormant as from any destroy). Every random pick uses the game RNG; a "
-                + "dormant run shrine is never touched. A power that would do nothing is not offered, by a condition that reads only "
-                + "the public boards; no hidden zone is read (c-enc-20 sections A, D, G, H, M, N, O, P, Q; the enc20 bosspilot modes)",
-            Ids = new[] { "ULDA_BOSS_19p", "ULDA_BOSS_22p", "ULDA_BOSS_25p", "ULDA_BOSS_26p", "ULDA_BOSS_31p", "ULDA_BOSS_32p", "ULDA_BOSS_33p",
-                "ULDA_BOSS_34p", "ULDA_BOSS_35p" },
+                + "Titan Ritual summons two 1/1 Mogu Cultists (ULDA_BOSS_19p), Beetle Stampede summons a Plated Beetle (ULDA_BOSS_25p), "
+                + "Gatling Wand deals 2 damage split among the enemy minions (ULDA_BOSS_26p), Pillaged Relics gives a chosen minion "
+                + "+1/+1, Divine Shield or Taunt at random (ULDA_BOSS_31p), Whispering Sentinel summons a 1/1 Wisp with Lifesteal "
+                + "(ULDA_BOSS_32p), Tomb Boomin' deals 4 damage split randomly between all characters (ULDA_BOSS_34p) and Vengeful "
+                + "Construct destroys a chosen minion with 2 or less Health and its neighbours (ULDA_BOSS_35p; a run shrine goes dormant "
+                + "as from any destroy). Every random pick uses the game RNG; a dormant run shrine is never touched. A power that would "
+                + "do nothing is not offered, by a condition that reads only the public boards; no hidden zone is read (c-enc-20 "
+                + "sections A, G, H, M, N, P, Q; the enc20 bosspilot modes)",
+            Ids = new[] { "ULDA_BOSS_19p", "ULDA_BOSS_25p", "ULDA_BOSS_26p", "ULDA_BOSS_31p", "ULDA_BOSS_32p", "ULDA_BOSS_34p", "ULDA_BOSS_35p" },
+        },
+        new AdmissionRule
+        {
+            // The close-out review: the three family 20 powers the wiki marks Auto-cast (their cards carry AI_MUST_PLAY).
+            Family = "boss-tombs-b-rule-cast", Admit = AdmitScope.Boss, Lift = NoneBossPower,
+            Reason = "a Tombs of Terror boss hero power the wiki marks Auto-cast (the card carries AI_MUST_PLAY), cast by rule at the start "
+                + "of the boss's turn after the draw, never an option of the boss's AI (family 09's rule-cast powers): Power of Wrath "
+                + "deals 1 damage to every damaged minion of both boards (ULDA_BOSS_22p), Out of Control deals 1 damage to the "
+                + "center-most minions of each board (ULDA_BOSS_33p) and Mighty Windstorm makes each player swap a random minion of "
+                + "their hand with a random minion of their board (ULDA_BOSS_28p; the run player's hand minion becomes public as it is "
+                + "summoned, the board minion goes back to its owner's hand in view; a run shrine is never chosen; in the boss's "
+                + "fair-view projection the run player's hand holds masked cards, so there it uses only cards the boss already saw go "
+                + "into that hand, and the real pick is a random event the search re-plans after). Every random pick uses the game RNG; "
+                + "a dormant run shrine is never touched. The cast condition reads only the public boards, public counts and the "
+                + "boss's own hand and board (c-enc-20 sections D, J, O; the enc20 bosspilot modes)",
+            Ids = new[] { "ULDA_BOSS_22p", "ULDA_BOSS_28p", "ULDA_BOSS_33p" },
         },
         new AdmissionRule
         {
@@ -40,13 +54,11 @@ internal static partial class DungeonRunAdmission
             Family = "boss-tombs-b-hidden-hand", Admit = AdmitScope.Boss, Lift = NoneBossPower,
             Reason = "a clickable Tombs of Terror boss hero power whose text reads the run player's hand: \"Retired\" Treasure Hunter "
                 + "copies a random card of it into the boss's hand (ULDA_BOSS_27p; the boss legitimately learns that one card, which "
-                + "the run player sees copied) and Mighty Windstorm makes each player swap a random minion of their hand with a random "
-                + "minion of their board (ULDA_BOSS_28p; the run player's hand minion becomes public as it is summoned, the board minion "
-                + "goes back to its owner's hand in view; a run shrine is never chosen). In the boss's fair-view projection the run "
-                + "player's hand holds masked cards, so there each power uses only cards the boss already saw go into that hand: the "
-                + "search never reads the hidden hand, and the real pick is a random event it re-plans after. Offered by public counts "
-                + "and the boss's own hand and board only (c-enc-20 sections I, J; the enc20 bosspilot modes)",
-            Ids = new[] { "ULDA_BOSS_27p", "ULDA_BOSS_28p" },
+                + "the run player sees copied; Mighty Windstorm, which also reads it, is cast by rule: boss-tombs-b-rule-cast). In the "
+                + "boss's fair-view projection the run player's hand holds masked cards, so there the power uses only cards the boss "
+                + "already saw go into that hand: the search never reads the hidden hand, and the real pick is a random event it "
+                + "re-plans after. Offered by public counts and the boss's own hand only (c-enc-20 section I; the enc20 bosspilot modes)",
+            Ids = new[] { "ULDA_BOSS_27p" },
         },
         new AdmissionRule
         {

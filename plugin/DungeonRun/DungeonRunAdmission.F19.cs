@@ -63,8 +63,9 @@ internal static partial class DungeonRunAdmission
             Reason = "Sinkhole's Sand Surge, \"Shuffle a Sand Trap into your opponent's deck that swallows cards when drawn\": one Sand "
                 + "Trap enters the run player's deck as a public shuffle (the run player sees the card go in; the boss's fair view keeps "
                 + "that whole deck masked, the Sand Trap included, so the boss's search under-knows and never learns a hidden card); "
-                + "the run deck records never hold it (a match card). Offered while that deck, whose count is public, has room "
-                + "(c-enc-19 section H; the enc19 bosspilot modes)",
+                + "the run deck records never hold it (a match card). The wiki marks it Auto-cast (the card carries AI_MUST_PLAY): it is "
+                + "cast by rule at the start of the boss's turn, after the draw, never an option of the boss's AI (family 09's rule-cast "
+                + "powers), while that deck, whose count is public, has room (c-enc-19 section H; the enc19 bosspilot modes)",
             Ids = new[] { "ULDA_BOSS_08p" },
         },
         new AdmissionRule

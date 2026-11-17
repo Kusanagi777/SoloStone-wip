@@ -124,7 +124,10 @@ B.append(boss(22, "colossus", "Colossus of the Sun", "Colossus_of_the_Sun", 2, "
     ("Neferset Ritualist", 2), ("History Buff", 2), ("Phantom Militia", 2), ("Colossus of the Moon", 1)],
     flags=["bothPlayers"],
     notes=[("power", "Power of Wrath (0) deals 1 damage to every damaged minion on either board (the damaged minions are taken before any "
-                     "damage is dealt, so a minion it damages is not hit twice). Offered while a damaged minion is on a board.")]))
+                     "damage is dealt, so a minion it damages is not hit twice). The wiki's Hero Power table marks it Auto-cast (Normal and "
+                     "Heroic) and the client card carries AI_MUST_PLAY, so it is cast by rule, not by a choice of the boss's AI "
+                     "(DungeonRunEncounters.AutoCast, family 09's rule; the close-out review): at the start of the boss's turn, after the "
+                     "draw, while a damaged minion is on a board, the boss's own included.")]))
 B.append(boss(23, "skarik", "Skarik", "Skarik", 2, "1", "aggro", [
     "Claw", "Spirit of the Raptor", "Bite", "Stampede", "Snake Trap", "Pit Snake", "Serpent Egg", "Emperor Cobra", "Golden Scarab"],
     heroic=["Acornbearer", "Dire Mole", "Enchanted Raven", "Mark of the Lotus", "BEEEES!!!", "Savage Roar", "Dire Wolf Alpha", "Haunted Creeper"],
@@ -191,8 +194,11 @@ B.append(boss(28, "sazin", "Sazin", "Sazin", 1, "4", "control", [
                      "its place (summoned, so no Battlecry). A player with no minion in hand or none on board swaps nothing. A run shrine "
                      "is never chosen (a run shrine never leaves the board). The run player's hand minion becomes public as it is "
                      "summoned; the hidden hand is not read for anything else, and in the boss's fair-view search that hand holds only "
-                     "masked cards, so there the run player swaps only a minion the boss already saw go into that hand. Offered while the "
-                     "boss can swap (its own hand and board) or the run player has a minion on board and a card in hand (public facts).")]))
+                     "masked cards, so there the run player swaps only a minion the boss already saw go into that hand. The wiki's Hero "
+                     "Power table marks it Auto-cast and the client card carries AI_MUST_PLAY, so it is cast by rule, not by a choice of "
+                     "the boss's AI (DungeonRunEncounters.AutoCast, family 09's rule; the close-out review): at the start of the boss's "
+                     "turn, after the draw, while the boss can swap (its own hand and board) or the run player has a minion on board and a "
+                     "card in hand (public facts).")]))
 B.append(boss(29, "ozara", "Ozara", "Ozara", 2, "4", "midrange", [
     ("Tunnel Trogg", 2), ("Ancestral Knowledge", 2), ("Crushing Hand", 2), ("Earthen Might", 2), ("Menacing Nimbus", 2), ("Sandstorm Elemental", 2),
     ("Far Sight", 2), ("Unbound Elemental", 2), ("Thunderhead", 2), ("Earth Elemental", 2), ("Earthquake", 2), ("Lesser Sapphire Spellstone", 2),
@@ -241,7 +247,10 @@ B.append(boss(33, "ruby", "Runaway Ruby", "Runaway_Ruby", 2, "3", "midrange", [
     flags=["bothPlayers", "position"],
     notes=[("power", "Out of Control (1) deals 1 damage to the center-most minions of each board: on a board of an odd count the middle "
                      "minion, of an even count the two middle ones (positions are counted over every minion of that board, a dormant run "
-                     "shrine included, which takes no damage). Offered while a board holds a minion.")]))
+                     "shrine included, which takes no damage). The wiki's Hero Power table marks it Auto-cast and the client card carries "
+                     "AI_MUST_PLAY, so it is cast by rule, not by a choice of the boss's AI (DungeonRunEncounters.AutoCast, family 09's "
+                     "rule; the close-out review): at the start of the boss's turn, after the draw, when it can pay (1) and a board holds "
+                     "a minion it can damage.")]))
 B.append(boss(34, "dovo", "Dovo Fastfuse", "Dovo_Fastfuse", 3, "1", "aggro", [
     "EVIL Miscreant", "Rocket Boots", "Clockwork Gnome", "Goblin Bomb", "Booty Bay Bookie", "EVIL Cable Rat", "Mad Bomber", "Whirliglider",
     "Explodinator"],

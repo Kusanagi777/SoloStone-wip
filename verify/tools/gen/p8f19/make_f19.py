@@ -157,7 +157,10 @@ B.append(boss(8, "sinkhole", "Sinkhole", "Sinkhole", 1, "3", "control", [
     notes=[("power", "Sand Surge (1) shuffles one Sand Trap (ULDA_030, the page's special card) into the run player's deck as a public "
                      "shuffle (the run player sees it go in; the boss's fair view keeps that deck masked, the Sand Trap included). Sand Trap: Casts When Drawn, the top 2 cards of "
                      "its holder's deck go to the graveyard (public, as Azari's Devour), then the holder draws a card. It is a match "
-                     "card only: the run deck records never hold it. Offered while the run player's deck has room.")]))
+                     "card only: the run deck records never hold it. The wiki's Hero Power table marks Sand Surge Auto-cast (Normal and Heroic) "
+                     "and the client card carries AI_MUST_PLAY, so it is cast by rule, not by a choice of the boss's AI "
+                     "(DungeonRunEncounters.AutoCast, family 09's rule; the close-out review): at the start of the boss's turn, after the "
+                     "draw, when it can pay (1) and the run player's deck has room.")]))
 B.append(boss(9, "demolisher", "Demolisher 3V-11", "Demolisher_3V-11", 2, "2", "control", [
     ("Eternium Rover", 2), ("Omega Assembly", 2), ("Shield Slam", 2), ("Vicious Scraphound", 2), ("Reckless Flurry", 2),
     ("Dr. Boom's Scheme", 1), ("Siege Engine", 2), ("Gemstudded Golem", 2), ("Heavy Metal!", 2), ("Mechwarper", 2), ("Demolisher", 6)],
