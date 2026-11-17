@@ -18,6 +18,8 @@
 #     w6             the family 20-24 modes (wave 6): enc20a enc20b enc20-seeds-a enc20-seeds-b enc21a enc21b enc21-seeds-a
 #                    enc21-seeds-b enc22a enc22b enc22-seeds-a enc22-seeds-b enc23 enc23-seeds enc24 plague24 95/110/195/210
 #                    tekahn24, and enc23-cards (one run per call, then `bp.sh same`)
+#     c25            the close-out's modes on the shipped schedules: finale25 tekahn25 (twice per call), and sweep25 a, b, c
+#                    (one run per call, then `bp.sh same`)
 # Each stage writes verify/.out/final-<stage>.log (and prints it). The wave-3 set takes about 3 hours on a quiet machine
 # (cross06 and rules06 are most of it); the extra stages about 2-3 more. On a machine shared with other harness runs,
 # run stages or slices through the harness lock instead (README.md), each call under about 6 minutes.
@@ -71,6 +73,11 @@ for stage in "$@"; do
     for m in enc20a enc20b enc20-seeds-a enc20-seeds-b enc21a enc21b enc21-seeds-a enc21-seeds-b enc22a enc22b enc22-seeds-a enc22-seeds-b \
       enc23 enc23-seeds enc24 "plague24 95" "plague24 110" "plague24 195" "plague24 210" tekahn24; do bash "$B/bp.sh" $m 2>&1 | cut -c1-700 >> "$L"; done
     bash "$B/bp.sh" enc23-cards 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" enc23-cards 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same enc23-cards >> "$L" 2>&1 ;;
+  c25)
+    for m in finale25 tekahn25; do bash "$B/bp.sh" $m 2>&1 | cut -c1-700 >> "$L"; done
+    for x in a b c; do
+      bash "$B/bp.sh" sweep25 $x 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" sweep25 $x 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same sweep25-$x >> "$L" 2>&1
+    done ;;
   rules05) for r in $RULES05; do bash "$B/bp.sh" rules05 $r 2>&1 | cut -c1-330 >> "$L"; done ;;
   cross05) : > "$OUT/bp/cross05.log"; bash "$B/cross05.sh" $RULES05 > /dev/null; cat "$OUT/bp/cross05.log" >> "$L" ;;
   hall) { bash "$B/hall.sh" harness; bash "$B/hall.sh" 1 999; bash "$B/hall.sh" same; } >> "$L" 2>&1 ;;

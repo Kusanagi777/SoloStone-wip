@@ -95,9 +95,10 @@ DungeonRunState ReachFloor(DungeonRunClass cls, int floor, long seed, bool defau
     int n = data.Classes.Count;
     var s = run.NewRun(all, cls.Id, deck ?? cls.Decks[(k / n) % cls.Decks.Count], power ?? cls.Powers[((k / n) + (k / (3 * n))) % cls.Powers.Count], seed,
         schedule: defaultRoll ? null : scheduleId, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), seed).FirstOrDefault());
+    if (defaultRoll && (!s.IsActRun || s.ScheduleVersion != run.ScheduleFor(s).StampVersion || !data.Schedules.Defaults.Contains(s.Schedule)))
+        throw new Exception("not a run of a default schedule");
     var scratch = new DungeonRunProfile();
-    if (defaultRoll ? !s.IsActRun || s.ScheduleVersion != run.ScheduleFor(s).StampVersion || !data.Schedules.Defaults.Contains(s.Schedule)
-        : !s.IsActRun || s.ScheduleVersion != schedule.StampVersion) throw new Exception("not a run of " + (defaultRoll ? "a default schedule" : scheduleId));
+    if (!s.IsActRun || s.ScheduleVersion != schedule.StampVersion) throw new Exception("not a run of " + scheduleId);
     while (!(s.Floor == floor && s.Phase == DungeonRunPhase.PreMatch))
     {
         switch (s.Phase)
@@ -198,8 +199,8 @@ for (int bi = 0; bi < bosses.Count; bi++)
                 mana = plan.BossStartManaBonus;
                 var variant = run.CurrentVariant(s);
                 // A sweep also meets the custom rows the provenance mix draws: their plan is no encounter's.
-                if (defaultSweep > 0 && !boss.IsEncounter) Check(plan.EncounterId == null, "a custom row's plan names an encounter", problems);
-                else Check(plan.EncounterId == boss.Id && plan.EncounterDeck, "plan is not the encounter's", problems);
+                if (defaultSweep > 0 && !boss.IsEncounter) Check(plan.EncounterId == null && !plan.EncounterDeck, "a custom row's plan names an encounter", problems); else
+                Check(plan.EncounterId == boss.Id && plan.EncounterDeck, "plan is not the encounter's", problems);
                 Check(plan.BossGeneratedSecrets == boss.BossGeneratedSecrets, "plan boss generated Secrets", problems);
                 Check(plan.GlobalRules.SequenceEqual(forcedRule == null ? new string[0] : new[] { forcedRule }), "plan global rules", problems);
                 var pilot = DungeonRunBossPilot.Build(boss, plan, data, runClasses: run.MatchClasses(s));

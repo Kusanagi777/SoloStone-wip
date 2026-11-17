@@ -1,8 +1,9 @@
 {
   "scheduleVersion": 3,
-  "default": "acts-v2",
-  "about": "Phase 8 (scheduleVersion 3) adds acts-v3h and acts-v3t: encounter pool sets, the provenance-mix draw, anomaly nodes and the finale act. acts-v1, acts-v2 and act1 ship unchanged and keep stamp 2 (\"version\"), so a new run on them is a version-2 run. \"default\" stays acts-v2 until the encounter families have filled the pools and enabled the finales; the close-out then sets \"defaults\" to defaultsPending (a new run rolls one of them from its seed).",
-  "defaultsPending": ["acts-v3h", "acts-v3t"],
+  "default": "acts-v3h",
+  "about": "Phase 8 (scheduleVersion 3) adds acts-v3h and acts-v3t: encounter pool sets, the provenance-mix draw, anomaly nodes and the finale act. acts-v1, acts-v2 and act1 ship unchanged and keep stamp 2 (\"version\"), so a run saved on them loads and replays as before. The close-out (family 25) enabled both finales (acts-v3h: the Heist finale, acts-v3t: Tekahn with the hero relay) and made them the defaults: a new run rolls one of \"defaults\" from its seed, never one whose finale fixes a boss row its hero row excludes (DALA_Tekahn always follows acts-v3h); \"default\" names the first for tools that read one schedule. \"defaultWithoutEncounters\" is what a data set loaded without encounters-v1.json follows (tools and suites that load the pre-phase-8 files; never the shipped mode).",
+  "defaults": ["acts-v3h", "acts-v3t"],
+  "defaultWithoutEncounters": "acts-v2",
   "poolSets": {
     "mix-1": ["band1", "enc-t1"],
     "mix-2": ["band1", "enc-t2"],
@@ -121,14 +122,12 @@
       ],
       "finale": {"enabled": true, "fixedBosses": ["dala_43_norroa", "dala_67_vargoth", "dala_69_kalec", "dala_60_khadgar"], "heroRelay": false, "tavernBefore": true,
                  "id": "IV", "name": "The Heist", "bossHealth": [70], "bossMana": [3], "tavern": {"gold": 3, "offers": 4},
-                 "twist": {"pool": ["DALA_830"], "chance": 100},
-                 "pending": ["dala_43_norroa", "dala_67_vargoth", "dala_69_kalec", "dala_60_khadgar"]}
+                 "twist": {"pool": ["DALA_830"], "chance": 100}}
     },
     "acts-v3t": {
       "deckMin": 10, "deckMax": 50, "draw": "provenance-mix", "sameActsAs": "acts-v3h",
-      "finale": {"enabled": false, "fixedBosses": [], "heroRelay": false, "tavernBefore": true,
-                 "id": "IV", "name": "The Inner Sanctum", "bossHealth": [70], "bossMana": [3], "tavern": {"gold": 3, "offers": 4},
-                 "pending": ["ulda_67_tekahn"], "pendingHeroRelay": true}
+      "finale": {"enabled": true, "fixedBosses": ["ulda_67_tekahn"], "heroRelay": true, "tavernBefore": true,
+                 "id": "IV", "name": "The Inner Sanctum", "bossHealth": [70], "bossMana": [3], "tavern": {"gold": 3, "offers": 4}}
     }
   },
   "rules": [

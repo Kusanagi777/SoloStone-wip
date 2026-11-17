@@ -26,6 +26,10 @@ using SabberStoneCore.Tasks.PlayerTasks;
 //   GAMES=n           games per boss (or per variant); the first argument does the same (default 2)
 //   WATCH=id,id       counts how often the boss played each of these cards from hand and how many Secrets the boss held at most
 //                     (the final line then ends with "watched ..."; a fixture mode asserts the card under test was really played)
+//   DEFAULT_SWEEP=n   the close-out (family 25): n runs started as a new run is, with no named schedule (the default roll:
+//                     acts-v3h or acts-v3t), the hero rows in turn; run i walks its real nodes to floor 1 + 7i mod its floor
+//                     count and plays the boss its sequence drew there (no row is put on a floor); SCHEDULE and FINALE are ignored;
+//                     DEFAULT_SWEEP_FROM=i0 starts at run i0 (the seed is SEED_BASE + i, the row data.Classes[i mod count])
 // A boss with shrine variants plays its games once per variant (the seeds that roll that variant).
 // Family 02 variant (p8f02/make_bp_collect.py):
 //   PLAYER_CARDS=id,id  these cards replace the first cards of the run player's match deck (the deck size stays); the final
@@ -63,6 +67,8 @@ string forcedRule = Env("RULE");
 int carried = Env("CARRIED") is string cd ? int.Parse(cd) : 0;
 int playerHealth = Env("PLAYER_HEALTH") is string ph ? int.Parse(ph) : 0;
 bool finale = Env("FINALE") == "1";
+int defaultSweep = Env("DEFAULT_SWEEP") is string dsw ? int.Parse(dsw) : 0;
+int sweepFrom = Env("DEFAULT_SWEEP_FROM") is string dsf ? int.Parse(dsf) : 0;
 string[] watch = Env("WATCH")?.Split(',').Select(id => id.Trim()).ToArray();
 var watched = new Dictionary<string, int>(StringComparer.Ordinal); int mostSecrets = 0;
 string[] playerCards = Env("PLAYER_CARDS")?.Split(',').Select(id => id.Trim()).Where(id => id.Length > 0).ToArray();
@@ -88,12 +94,14 @@ int FloorOf(DungeonRunBoss boss)
 }
 
 int sweep = 0;
-DungeonRunState ReachFloor(DungeonRunClass cls, int floor, long seed)
+DungeonRunState ReachFloor(DungeonRunClass cls, int floor, long seed, bool defaultRoll = false, string deck = null, string power = null)
 {
     int k = sweep++;
     int n = data.Classes.Count;
-    var s = run.NewRun(all, cls.Id, cls.Decks[(k / n) % cls.Decks.Count], cls.Powers[((k / n) + (k / (3 * n))) % cls.Powers.Count], seed,
-        schedule: scheduleId, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), seed).FirstOrDefault());
+    var s = run.NewRun(all, cls.Id, deck ?? cls.Decks[(k / n) % cls.Decks.Count], power ?? cls.Powers[((k / n) + (k / (3 * n))) % cls.Powers.Count], seed,
+        schedule: defaultRoll ? null : scheduleId, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), seed).FirstOrDefault());
+    if (defaultRoll && (!s.IsActRun || s.ScheduleVersion != run.ScheduleFor(s).StampVersion || !data.Schedules.Defaults.Contains(s.Schedule)))
+        throw new Exception("not a run of a default schedule");
     var scratch = new DungeonRunProfile();
     if (!s.IsActRun || s.ScheduleVersion != schedule.StampVersion) throw new Exception("not a run of " + scheduleId);
     while (!(s.Floor == floor && s.Phase == DungeonRunPhase.PreMatch))
@@ -132,7 +140,20 @@ string Identity(DungeonRunState s) => string.Join("|", s.Class, s.StarterDeck, s
     string.Join(",", s.Cards.Select(c => c.Uid + ":" + c.Id)), string.Join(",", s.Treasures), string.Join(",", s.ActiveTreasures), s.BoardShrine ?? "-");
 
 var bosses = finale ? schedule.Acts.Where(a => a.IsFinale).SelectMany(a => a.FixedBosses).Select(data.Boss).ToList() : data.Encounters.ToList();
-if (!finale)
+// DEFAULT_SWEEP: each run is rolled first (its hero, seed, schedule and floor), so the boss list is what the sweep meets.
+var sweepRuns = new List<(DungeonRunClass Hero, string Deck, string Power, long Seed, int Floor, string Schedule, string Boss)>();
+for (int i = sweepFrom; i < sweepFrom + defaultSweep; i++)
+{
+    int n = data.Classes.Count;
+    var hero = data.Classes[i % n];
+    string deck = hero.Decks[(i / n) % hero.Decks.Count], power = hero.Powers[(i / n) % hero.Powers.Count];
+    long seed = seedBase + i;
+    var probe = run.NewRun(all, hero.Id, deck, power, seed, signatureId: run.SignatureOffer(all, run.Data.FindClass(hero.Id), seed).FirstOrDefault());
+    int floor = 1 + 7 * i % probe.BossSequence.Count;
+    sweepRuns.Add((hero, deck, power, seed, floor, probe.Schedule, probe.BossSequence[floor - 1]));
+}
+if (defaultSweep > 0) { bosses = sweepRuns.Select(r => data.Boss(r.Boss)).ToList(); gamesPerBoss = 1; }
+else if (!finale)
 {
     if (Env("BOSS") is string only) bosses = only.Split(',').Select(id => data.Boss(id.Trim())).ToList();
     if (Env("FAMILY") is string fam) bosses = bosses.Where(b => b.Family == fam).ToList();
@@ -143,22 +164,26 @@ if (!finale)
 int faults = 0, games = 0, bossWins = 0, totalFallbacks = 0, failed = 0;
 var powerUnused = new List<string>(); var formUnreached = new List<string>();
 void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(what); }
-foreach (var boss in bosses)
+for (int bi = 0; bi < bosses.Count; bi++)
 {
-    int floor = FloorOf(boss);
-    int variants = Math.Max(1, boss.Variants.Count);
+    var boss = bosses[bi];
+    var swept = defaultSweep > 0 ? sweepRuns[bi] : default;
+    int floor = defaultSweep > 0 ? swept.Floor : FloorOf(boss);
+    // A sweep fight plays the variant its run rolled (one game per run).
+    int variants = defaultSweep > 0 ? 1 : Math.Max(1, boss.Variants.Count);
     int powerUses = 0, formChangesSeen = 0; bool clickable = false;
     for (int v = 0; v < variants; v++)
     {
         int played = 0;
         for (int g = 0; played < gamesPerBoss && g < 400; g++)
         {
-            var hero = data.Classes[sweep % data.Classes.Count];
-            long seed = seedBase + data.Bosses.IndexOf(boss) * 1000 + v * 100 + g;
-            var s = ReachFloor(hero, floor, seed);
+            var hero = defaultSweep > 0 ? swept.Hero : data.Classes[sweep % data.Classes.Count];
+            long seed = defaultSweep > 0 ? swept.Seed : seedBase + data.Bosses.IndexOf(boss) * 1000 + v * 100 + g;
+            var s = defaultSweep > 0 ? ReachFloor(hero, floor, seed, true, swept.Deck, swept.Power) : ReachFloor(hero, floor, seed);
+            if (defaultSweep > 0 && (s.Schedule != swept.Schedule || s.BossSequence[floor - 1] != boss.Id)) throw new Exception("the sweep run " + bi + " rolled differently");
             s.BossSequence[floor - 1] = boss.Id;
             // The seeds that roll this variant (a boss without variants plays every seed).
-            if (boss.Variants.Count > 0 && run.CurrentVariant(s).Id != boss.Variants[v].Id) continue;
+            if (defaultSweep == 0 && boss.Variants.Count > 0 && run.CurrentVariant(s).Id != boss.Variants[v].Id) continue;
             played++;
             if (forcedRule != null)
             {
@@ -185,6 +210,8 @@ foreach (var boss in bosses)
                 health = plan.BossHealth;
                 mana = plan.BossStartManaBonus;
                 var variant = run.CurrentVariant(s);
+                // A sweep also meets the custom rows the provenance mix draws: their plan is no encounter's.
+                if (defaultSweep > 0 && !boss.IsEncounter) Check(plan.EncounterId == null && !plan.EncounterDeck, "a custom row's plan names an encounter", problems); else
                 Check(plan.EncounterId == boss.Id && plan.EncounterDeck, "plan is not the encounter's", problems);
                 Check(plan.BossGeneratedSecrets == boss.BossGeneratedSecrets, "plan boss generated Secrets", problems);
                 Check(plan.GlobalRules.SequenceEqual(forcedRule == null ? new string[0] : new[] { forcedRule }), "plan global rules", problems);
@@ -311,6 +338,7 @@ foreach (var boss in bosses)
                 if (plan.PlayerHeroCards.Count + plan.PlayerRelay.Count > 0) extra += $" heroes {string.Join(">", end.HeroesUsed)}";
                 if (variant != null) extra += $" variant {variant.Id} shrine {variant.Shrine ?? "-"}";
                 if (forcedRule != null) extra += " rule " + forcedRule;
+                if (defaultSweep > 0) extra += " schedule " + s.Schedule;
             }
             catch (Exception e) { result = "FAULT " + e.GetType().Name + ": " + e.Message.Split('\n')[0]; faults++; }
             ms = sw.ElapsedMilliseconds; games++; totalFallbacks += fallbacks;
@@ -318,12 +346,16 @@ foreach (var boss in bosses)
             Console.WriteLine($"{boss.Id,-18} {boss.Provenance,-4} t{boss.Tier,-6} floor {floor,2} {hero.Id + "/" + s.StarterDeck + "/" + s.Power,-46} deck {s.Deck.Count,2} -> {result,-8} turns {turns,3} decisions {decisions,3} fallbacks {fallbacks,2} health {health,3} mana+{mana} power {uses,2} checks {(problems.Count == 0 ? "ok" : "FAIL " + problems.Count)}{extra} {ms / 1000.0,6:F1}s");
         }
         if (played < gamesPerBoss) { Console.Error.WriteLine($"  CHECK {boss.Id}: variant {v} rolled only {played} times in 400 seeds"); failed++; }
+        if (defaultSweep > 0) break;
     }
     if (clickable && powerUses == 0) powerUnused.Add(boss.Id);
     if (boss.Forms.Count > 0 && formChangesSeen == 0 && carried == 0) formUnreached.Add(boss.Id);
 }
 foreach (var kv in SearchTelemetry.Details()) Console.Error.WriteLine($"SWALLOWED {kv.Value} x {kv.Key}");
-Console.WriteLine($"encounter run: schedule {scheduleId}{(forcedRule != null ? ", rule " + forcedRule : "")}{(carried > 0 ? ", carried " + carried : "")}{(finale ? ", finale" : "")}; power unused: {(powerUnused.Count == 0 ? "-" : string.Join(",", powerUnused))}; form unreached: {(formUnreached.Count == 0 ? "-" : string.Join(",", formUnreached))}");
+if (defaultSweep > 0)
+    Console.WriteLine($"default sweep: {defaultSweep} runs from {sweepFrom} with no named schedule, " + string.Join(", ", sweepRuns.GroupBy(r => r.Schedule).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + " " + g.Count()))
+        + "; adventures met " + string.Join(" ", bosses.GroupBy(b => b.Provenance).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + "=" + g.Count())));
+Console.WriteLine($"encounter run: schedule {(defaultSweep > 0 ? "default" : scheduleId)}{(forcedRule != null ? ", rule " + forcedRule : "")}{(carried > 0 ? ", carried " + carried : "")}{(finale ? ", finale" : "")}; power unused: {(powerUnused.Count == 0 ? "-" : string.Join(",", powerUnused))}; form unreached: {(formUnreached.Count == 0 ? "-" : string.Join(",", formUnreached))}");
 Console.WriteLine($"games {games}, boss wins {bossWins}, faults {faults}, fallbacks {totalFallbacks}, failed checks {failed}, swallowed leaf exceptions {SearchTelemetry.SwallowedLeafErrors}, power-unused {powerUnused.Count}, form-unreached {formUnreached.Count}"
     + (watch == null ? "" : ", watched " + string.Join(" ", watch.Select(id => id + " x" + (watched.TryGetValue(id, out int n) ? n : 0))) + ", most boss Secrets " + mostSecrets)
     + (watch == null || playerCards == null ? "" : ", player played " + string.Join(" ", watch.Select(id => id + " x" + (playerWatched.TryGetValue(id, out int n) ? n : 0)))));

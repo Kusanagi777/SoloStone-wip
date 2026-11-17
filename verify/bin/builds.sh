@@ -1,8 +1,8 @@
 #!/bin/bash
 # verify/bin/builds.sh: the build stage (wave-3 p8w3/builds.sh), against verify/.out/engine-out. No harness runs, no lock.
-#   builds.sh list              the 83 suite projects (the wave-3 order, then waves 4, 5 and 6)
+#   builds.sh list              the 84 suite projects (the wave-3 order, then waves 4, 5 and 6 and the close-out)
 #   builds.sh <from> <to>       build entries <from>..<to> (1-based)
-#   builds.sh all               all 83
+#   builds.sh all               all 84
 #   builds.sh pilot             the pilot set (lib/suites.sh PILOT_LIST)
 #   builds.sh only <dir>...     the named suites (paths relative to verify/suites, e.g. p8f01/c-enc-model)
 #   builds.sh randplay          randplay (not in the 83)
