@@ -1,7 +1,7 @@
 T22 DALA_Mage_HP1     heist_mage_1           boss turns 16 power-uses 8 explosives-drawn 0 decisions 35 fallbacks 0 boss hedge_witch
 T22 DALA_Mage_HP2     heist_mage_random      boss turns 10 power-uses 4 explosives-drawn 0 decisions 25 fallbacks 0 boss hedge_witch
 T22 DALA_Hunter_HP1   heist_hunter_1         boss turns 12 power-uses 5 explosives-drawn 0 decisions 23 fallbacks 0 boss hedge_witch
-T22 DALA_Hunter_HP2   heist_hunter_random    boss turns 12 power-uses 6 explosives-drawn 0 decisions 27 fallbacks 0 boss hedge_witch
+T22 DALA_Hunter_HP2   heist_hunter_random    boss turns 12 power-uses 6 explosives-drawn 0 decisions 28 fallbacks 0 boss hedge_witch
 T22 DALA_Shaman_HP1   heist_shaman_1         boss turns 12 power-uses 2 explosives-drawn 0 decisions 24 fallbacks 0 boss hedge_witch
 T22 DALA_Shaman_HP2   heist_shaman_random    boss turns 10 power-uses 5 explosives-drawn 0 decisions 18 fallbacks 0 boss hedge_witch
 T22 DALA_Priest_HP1   heist_priest_1         boss turns 12 power-uses 5 explosives-drawn 0 decisions 24 fallbacks 0 boss hedge_witch

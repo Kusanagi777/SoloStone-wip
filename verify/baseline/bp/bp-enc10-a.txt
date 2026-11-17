@@ -4,29 +4,29 @@ gila_21_rottooth   GIL  t1      floor  1 MAGE/mage_rimeward/CS2_034             
 gila_21_rottooth   GIL  t1      floor  1 PALADIN/paladin_gleaming/CS2_101               deck 10 -> boss     turns  19 decisions  40 fallbacks  0 health  30 mana+0 power  5 checks ok
 gila_22_willie     GIL  t2      floor  3 PRIEST/priest_mending/CS1h_001                 deck 17 -> boss     turns  20 decisions  47 fallbacks  0 health  34 mana+0 power  7 checks ok
 gila_22_willie     GIL  t2      floor  3 ROGUE/rogue_backalley/CS2_083b                 deck 17 -> boss     turns  14 decisions  32 fallbacks  0 health  34 mana+0 power  4 checks ok
-gila_23_grubb      GIL  t4      floor 13 SHAMAN/shaman_stormdebt/CS2_049                deck 41 -> player   turns  19 decisions  29 fallbacks  0 health  62 mana+2 power  1 checks ok
+gila_23_grubb      GIL  t4      floor 13 SHAMAN/shaman_stormdebt/CS2_049                deck 43 -> player   turns  23 decisions  34 fallbacks  0 health  62 mana+2 power  0 checks ok
 gila_23_grubb      GIL  t4      floor 13 WARLOCK/warlock_fiendpact/CS2_056              deck 26 -> player   turns  23 decisions  32 fallbacks  0 health  62 mana+1 power  0 checks ok
-gila_26_gnomenapper GIL  t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 27 -> boss     turns  22 decisions  62 fallbacks  0 health  46 mana+0 power  9 checks ok
+gila_26_gnomenapper GIL  t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 26 -> boss     turns  14 decisions  34 fallbacks  0 health  46 mana+1 power  5 checks ok
 gila_26_gnomenapper GIL  t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 29 -> boss     turns  12 decisions  25 fallbacks  0 health  46 mana+0 power  2 checks ok
-gila_27_experiment_3c GIL  t4      floor 13 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 49 -> boss     turns  22 decisions  42 fallbacks  0 health  62 mana+1 power  5 checks ok
-gila_27_experiment_3c GIL  t4      floor 13 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 43 -> boss     turns  18 decisions  27 fallbacks  0 health  62 mana+2 power  2 checks ok
-gila_29_sazzmi     GIL  t3      floor  8 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 30 -> player   turns  23 decisions  69 fallbacks  0 health  46 mana+0 power  3 checks ok
-gila_29_sazzmi     GIL  t3      floor  8 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 31 -> boss     turns  22 decisions  44 fallbacks  0 health  46 mana+0 power  2 checks ok
-gila_31_gnarlroot  GIL  t2      floor  3 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 17 -> boss     turns  16 decisions  31 fallbacks  0 health  34 mana+0 power  4 checks ok
+gila_27_experiment_3c GIL  t4      floor 13 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 49 -> boss     turns  16 decisions  23 fallbacks  0 health  62 mana+1 power  3 checks ok
+gila_27_experiment_3c GIL  t4      floor 13 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 44 -> boss     turns  20 decisions  27 fallbacks  0 health  62 mana+2 power  2 checks ok
+gila_29_sazzmi     GIL  t3      floor  8 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 34 -> boss     turns  14 decisions  43 fallbacks  0 health  46 mana+1 power  5 checks ok
+gila_29_sazzmi     GIL  t3      floor  8 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 34 -> boss     turns  20 decisions  46 fallbacks  0 health  49 mana+0 power  2 checks ok
+gila_31_gnarlroot  GIL  t2      floor  3 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 18 -> boss     turns  14 decisions  30 fallbacks  0 health  34 mana+0 power  4 checks ok
 gila_31_gnarlroot  GIL  t2      floor  3 GILA_500h3/mh_tess_scavenger/GILA_500p2        deck 17 -> boss     turns  12 decisions  31 fallbacks  0 health  34 mana+0 power  4 checks ok
 gila_32_niira      GIL  t2      floor  3 GILA_600h/mh_darius_militia/GILA_600p          deck 17 -> boss     turns   9 decisions  21 fallbacks  0 health  34 mana+0 power  3 checks ok
 gila_32_niira      GIL  t2      floor  3 GILA_400h/mh_shaw_kennel/GILA_400p             deck 17 -> player   turns  19 decisions  29 fallbacks  0 health  34 mana+0 power  2 checks ok
-gila_33_scarecrow  GIL  t3      floor  8 GILA_900h/mh_toki_workshop/CS2_034             deck 32 -> boss     turns  18 decisions  31 fallbacks  0 health  46 mana+0 power  0 checks ok
+gila_33_scarecrow  GIL  t3      floor  8 GILA_900h/mh_toki_workshop/CS2_034             deck 32 -> boss     turns  16 decisions  29 fallbacks  0 health  46 mana+1 power  0 checks ok
 gila_33_scarecrow  GIL  t3      floor  8 DALA_Rakanishu/heist_mage_1/CS2_034            deck 31 -> boss     turns  16 decisions  36 fallbacks  0 health  51 mana+0 power  0 checks ok
-gila_34_havnixx    GIL  t3      floor  8 DALA_Barkeye/heist_hunter_1/DS1h_292           deck 32 -> boss     turns  10 decisions  13 fallbacks  0 health  46 mana+1 power  2 checks ok
-gila_34_havnixx    GIL  t3      floor  8 DALA_Vessina/heist_shaman_1/CS2_049            deck 28 -> boss     turns  12 decisions  15 fallbacks  0 health  46 mana+0 power  2 checks ok
-gila_35_chupacabran GIL  t2      floor  3 DALA_Kriziki/heist_priest_1/CS1h_001           deck 17 -> player   turns  27 decisions  44 fallbacks  0 health  34 mana+0 power  2 checks ok
+gila_34_havnixx    GIL  t3      floor  8 DALA_Barkeye/heist_hunter_1/DS1h_292           deck 32 -> boss     turns  10 decisions  14 fallbacks  0 health  46 mana+1 power  2 checks ok
+gila_34_havnixx    GIL  t3      floor  8 DALA_Vessina/heist_shaman_1/CS2_049            deck 28 -> boss     turns  21 decisions  29 fallbacks  0 health  46 mana+0 power  2 checks ok
+gila_35_chupacabran GIL  t2      floor  3 DALA_Kriziki/heist_priest_1/CS1h_001           deck 17 -> player   turns  21 decisions  35 fallbacks  0 health  34 mana+0 power  1 checks ok
 gila_35_chupacabran GIL  t2      floor  3 DALA_Eudora/heist_rogue_1/CS2_083b             deck 17 -> boss     turns  12 decisions  17 fallbacks  0 health  34 mana+0 power  0 checks ok
 gila_36_griselda   GIL  t2      floor  3 DALA_Chu/heist_warrior_1/CS2_102               deck 16 -> boss     turns  21 decisions  50 fallbacks  0 health  34 mana+0 power  4 checks ok
 gila_36_griselda   GIL  t2      floor  3 DALA_Squeamlish/heist_druid_1/CS2_017          deck 17 -> boss     turns  26 decisions  55 fallbacks  0 health  34 mana+0 power  7 checks ok
 gila_37_wharrgarbl GIL  t2      floor  3 DALA_Tekahn/heist_warlock_1/CS2_056            deck 17 -> boss     turns  12 decisions  21 fallbacks  0 health  34 mana+0 power  1 checks ok
-gila_37_wharrgarbl GIL  t2      floor  3 DALA_George/heist_paladin_1/CS2_101            deck 17 -> boss     turns  16 decisions  29 fallbacks  0 health  34 mana+0 power  1 checks ok
-gila_38_cozzlewurt GIL  t1      floor  1 TRLA_209h_Mage/rumble_mage_108/CS2_034         deck 10 -> boss     turns  25 decisions  65 fallbacks  0 health  30 mana+0 power  6 checks ok
-gila_38_cozzlewurt GIL  t1      floor  1 TRLA_209h_Druid/rumble_druid_112/CS2_017       deck 10 -> boss     turns  20 decisions  51 fallbacks  0 health  30 mana+0 power  6 checks ok
-encounter run: schedule acts-v3h; power unused: gila_33_scarecrow; form unreached: -
-games 30, boss wins 25, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 1, form-unreached 0, watched GILA_BOSS_23t x0 GILA_BOSS_26t2 x5 GILA_BOSS_27t x5 GILA_BOSS_29t x2 GILA_BOSS_35t x1 GILA_BOSS_37t x0, most boss Secrets 0
+gila_37_wharrgarbl GIL  t2      floor  3 DALA_George/heist_paladin_1/CS2_101            deck 17 -> boss     turns  19 decisions  45 fallbacks  0 health  34 mana+0 power  3 checks ok
+gila_38_cozzlewurt GIL  t1      floor  1 TRLA_209h_Mage/rumble_mage_108/CS2_034         deck 10 -> boss     turns  17 decisions  47 fallbacks  0 health  30 mana+0 power  4 checks ok
+gila_38_cozzlewurt GIL  t1      floor  1 TRLA_209h_Druid/rumble_druid_112/CS2_017       deck 10 -> boss     turns  20 decisions  45 fallbacks  0 health  30 mana+0 power  7 checks ok
+encounter run: schedule acts-v3h; power unused: gila_23_grubb,gila_33_scarecrow; form unreached: -
+games 30, boss wins 26, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 2, form-unreached 0, watched GILA_BOSS_23t x0 GILA_BOSS_26t2 x3 GILA_BOSS_27t x3 GILA_BOSS_29t x0 GILA_BOSS_35t x1 GILA_BOSS_37t x2, most boss Secrets 0

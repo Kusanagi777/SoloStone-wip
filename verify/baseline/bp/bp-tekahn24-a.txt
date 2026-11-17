@@ -1,0 +1,4 @@
+ulda_67_tekahn     ULDA tfinale floor 16 DRUID/druid_thicket/CS2_017                    deck 38 -> turn-cap turns 101 decisions 241 fallbacks  0 health 300 mana+3 power 14 checks ok heroes HERO_06>ULDA_Elise>ULDA_Finley>ULDA_Brann
+ulda_67_tekahn     ULDA tfinale floor 16 HUNTER/hunter_kennel/DS1h_292                  deck 39 -> boss     turns  60 decisions 185 fallbacks  0 health 300 mana+3 power  7 checks ok heroes HERO_05>ICC_828>ULDA_Elise>ULDA_Finley>ULDA_Brann>ULDA_Reno
+encounter run: schedule acts-v3t, finale; power unused: -; form unreached: -
+games 2, boss wins 1, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched ULDA_BOSS_37t x0 LOEA10_5 x0 LOEA10_5H x0 KARA_13_12H x0 LOEA16_24H x0 UNG_942t x0 ULDA_033 x4 ULDA_031 x12 ULDA_BOSS_67t x0, most boss Secrets 0

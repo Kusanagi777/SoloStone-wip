@@ -1,0 +1,102 @@
+PASS A1 Running Wild costs (2), clickable, untargeted
+PASS A2 a Beast (River Crocolisk) drawn from the boss's deck: it and a second, new copy are in its hand  (2 in hand, deck 24)
+PASS A3 a non-Beast minion drawn: one card only, and never a spell of the deck  (CS2_182)
+PASS A4 a deck without minions: nothing is drawn
+PASS A5 with a full hand it is not offered
+PASS A6 with an empty deck it is not offered
+PASS B1 Sand Shapin' costs (3); its targets are enemy minions only, never a run shrine or a friendly minion  (CS2_120)
+PASS B2 a plain copy of the minion's card joins the boss's deck, marked Summon when Drawn (ULDA_BOSS_42e); the minion stays
+PASS B3 drawn, it is summoned for the boss (the mark is gone) and the boss draws a card in its place  (PLAY hand 1)
+PASS B4 drawn with a full board, it stays in the hand as a playable card (no extra draw)
+PASS B5 the boss's fair view counts its own deck (the public shuffle is known to it)
+PASS B6 with a full deck it is not offered
+PASS C1 Spoil the Ending costs (2); with the run player's hand empty it is not offered
+PASS C2 a copy of the spell in the run player's hand goes to the boss's hand, Spoiled: it costs (2) less (ULDA_BOSS_43e1); the original stays  (CS2_029 cost 2)
+PASS C3 the boss's fair view holds the copy (its own hand) and keeps the run player's hand masked (nothing links the copy to it)  (Unknown,Unknown)
+PASS C4 with no spell in the run player's hand it is offered (the boss cannot know) and does nothing
+PASS C5 twelve uses with two spells in that hand: both are copied (random by the game RNG), each Spoiled; the Frostbolt copy costs 0 (2 less) and the Moonfire copy 0, not less  (CS2_008=0,CS2_024=0)
+PASS C6 with the boss's hand full it is not offered
+PASS D1 Reliquary's Relics is passive: started at match start, never an option
+PASS D2 the run player casts Moonfire: a new copy goes to the boss's hand
+PASS D3 a minion the run player plays gives nothing
+PASS D4 a spell the boss casts gives nothing
+PASS D5 with the boss's hand full the copy is lost
+PASS E1 Maw of the Desert costs (0) and is cast by rule: passive in the registry (never an option), started at match start; the card carries AI_MUST_PLAY
+PASS E2 at the start of the boss's turn the minion with the lowest Health (the run player's Wisp) is destroyed; the others stay
+PASS E3 next turn it takes the boss's own River Crocolisk (3 Health) over the Yeti
+PASS E4 a tie (one River Crocolisk on each side, ten times): exactly one dies each time, and each side's at least once (game RNG)  (1,2)
+PASS E5 with no minion on either board it is not cast
+PASS E6 a run shrine, the only minion, is destroyed as a shrine is: its dormant form takes its slot
+PASS F1 Arena Expert costs (0) and is cast by rule: passive in the registry, started at match start
+PASS F2 at the start of the boss's turn a minion of each deck is summoned and the boss's attacks the run player's: the Yeti kills the River Crocolisk and keeps 2 damage  (CS2_182 dmg 2 deck 24/25)
+PASS F3 the boss's deck holds no minion: the run player's minion is summoned for its owner and nothing fights
+PASS F4 with the boss's board full it is not cast
+PASS G1 What's in the Jar? costs (2); any minion is a target, never a run shrine
+PASS G2 it summons for the boss a copy of the minion with its stats set to 1/1 (ULDA_BOSS_47e), undamaged; the original stays  (1/1)
+PASS G3 with a full board it is not offered
+PASS H1 the row's plan has two forms: the row's own (Lich's Phylactery) and the script form 1 (Broken Phylactery, no hero)
+PASS H2 Lich's Phylactery costs (0), is clickable, is started (its death count runs) and restores 20 on the card; at full Health it is not offered
+PASS H3 three friendly minions die (and one of the run player's): it now restores 17  (17)
+PASS H4 used, it restores 17 Health and breaks: the boss is in form 1 with Broken Phylactery (passive, started), the same hero, Armor and weapon  (8->25 power ULDA_BOSS_52p2)
+PASS H5 Broken Phylactery is never an option
+PASS H6 the boss takes double fatigue damage: 2, then 4 (the fatigue count itself is 1, then 2)  (2,4)
+PASS H7 the run player's fatigue is not doubled
+PASS H8 the harvest reads form 1 and one form change
+PASS H9 before it breaks the boss's fatigue is the usual 1
+PASS H10 after 22 friendly deaths it restores 0 (never below 0) and still breaks
+PASS I1 Demon Emissary costs (2); its pool is scripted Demons of any class costing (3) or less  (24)
+PASS I2 ten uses summon Demons of the pool, several kinds  (BOT_224,BRM_006,GVG_018,CFM_039,KAR_089,CORE_BT_156,CORE_EX1_319,BOT_443)
+PASS I3 with a full board it is not offered
+PASS J1 Desert Warfare is passive: started at match start, never an option
+PASS J2 after the boss's hero attacks, a random scripted Hunter card (no Quest, no Secret) goes to its hand  (BOT_039 pool 136)
+PASS J3 the run player's hero attacking gives nothing
+PASS K1 Tol'vir Necromancy is passive: started at match start, never an option
+PASS K2 the boss's Reborn minion returns (no Reborn) at full Health, not 1  (2/2)
+PASS K3 the run player's Reborn minion is restored to full too ("a minion")
+PASS K4 a damaged minion summoned with the Reborn-returned mark but not by Reborn (no creator, or a living creator of its card) keeps its damage  (2/2)
+PASS L1 E.V.I.L. Conscription costs (1); each use adds a random scripted Lackey (only Lackeys of the pool, several kinds)  (pool 5: DAL_613,DAL_614,DAL_741)
+PASS L2 with a full hand it is not offered
+PASS M1 Cavalry of E.V.I.L. costs (1); any minion is a target
+PASS M2 the boss's Yeti summoned this turn takes 1 damage and gets Charge (ULDA_BOSS_54e): it can attack the hero at once
+PASS M3 a 1-Health minion dies of it and gets nothing
+PASS M4 the run player's River Crocolisk: 1 damage and Charge
+PASS N1 Fish Food costs (1); with no Murloc on either board it is not offered
+PASS N2 it restores 2 Health to every Murloc of either board (Coldlight Seer; the run player's Murloc Warleader too); the Yeti keeps its damage  (used True 0/0/3 mana 1)
+PASS O1 Sandy Surprise is passive: started at match start, never an option
+PASS O2 a 1-Cost minion the boss plays gets Stealth (ULDA_BOSS_56e); a 2-Cost one, one summoned without play and the run player's do not
+PASS P1 Titan's Beast costs (2); any minion is a target
+PASS P2 the run player's Yeti becomes 3/3 (ULDA_BOSS_57e)  (3/3)
+PASS P3 the boss's Wisp becomes 3/3
+PASS R1 Food Chain costs (2); any minion is a target
+PASS R2 2 damage to the Yeti, which lives: no healing
+PASS R3 2 damage kills the Wisp: the boss's hero is restored 5 Health  (20->25)
+PASS S1 the shipped data validates with the seventeen family 21 rows
+PASS S2 family 21 holds exactly these seventeen rows, in this order  (ulda_41_alda,ulda_42_rhogi,ulda_43_jolene,ulda_45_belloc,ulda_46_wildtooth,ulda_47_jar,ulda_48_ilza,ulda_49_craz,ulda_50_barkeye,ulda_51_kasmut,ulda_52_bazhial,ulda_53_maru,ulda_54_janak,ulda_55_murlocs,ulda_56_frog,ulda_57_winged_guardian,ulda_59_dire_bat)
+PASS S3 ulda_41_alda: a Tombs row of tier 1 (wiki level 2, chapter 3) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended flags  health 30 tier 1 pools enc-t1)
+PASS S3 ulda_42_rhogi: a Tombs row of tier 2 (wiki level 4, chapter 2) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended flags  health 30 tier 2 pools enc-t2)
+PASS S3 ulda_43_jolene: a Tombs row of tier 4 (wiki level 7, chapter 2) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted flags hiddenZone health 30 tier 4 pools enc-t4)
+PASS S3 ulda_45_belloc: a Tombs row of tier 3 (wiki level 6, chapter 4) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted flags passive health 30 tier 3 pools enc-t3)
+PASS S3 ulda_46_wildtooth: a Tombs row of tier 3 (wiki level 6, chapter 2) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted flags passive,bothPlayers health 30 tier 3 pools enc-t3)
+PASS S3 ulda_47_jar: a Tombs row of tier 2 (wiki level 4, chapter 4) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended flags  health 30 tier 2 pools enc-t2)
+PASS S3 ulda_48_ilza: a Tombs row of tier 2 (wiki level 4, chapter 4) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended flags passive,bothPlayers,hiddenZone health 30 tier 2 pools enc-t2)
+PASS S3 ulda_49_craz: a Tombs row of tier 4 (wiki level 7, chapter 3) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted flags  health 30 tier 4 pools enc-t4)
+PASS S3 ulda_50_barkeye: a Tombs row of tier 3 (wiki level 6, chapter 1) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted flags passive health 30 tier 3 pools enc-t3)
+PASS S3 ulda_51_kasmut: a Tombs row of tier 2 (wiki level 4, chapter 3) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended flags passive,bothPlayers health 30 tier 2 pools enc-t2)
+PASS S3 ulda_52_bazhial: a Tombs row of tier 4 (wiki level 7, chapter 3) whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health, not the printed 10)  (authentic flags forms health 30 tier 4 pools enc-t4)
+PASS S3 ulda_53_maru: a Tombs row of tier 2 (wiki level 4, chapter 1) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended flags  health 30 tier 2 pools enc-t2)
+PASS S3 ulda_54_janak: a Tombs row of tier 2 (wiki level 4, chapter 3) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended flags  health 30 tier 2 pools enc-t2)
+PASS S3 ulda_55_murlocs: a Tombs row of tier 1 (wiki level 2, chapter 2) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended flags bothPlayers health 30 tier 1 pools enc-t1)
+PASS S3 ulda_56_frog: a Tombs row of tier 1 (wiki level 2, chapter 1) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended flags passive health 30 tier 1 pools enc-t1)
+PASS S3 ulda_57_winged_guardian: a Tombs row of tier 2 (wiki level 4, chapter 1) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended flags  health 30 tier 2 pools enc-t2)
+PASS S3 ulda_59_dire_bat: a Tombs row of tier 2 (wiki level 4, chapter 3) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended flags  health 30 tier 2 pools enc-t2)
+PASS S4 every power and enchantment of the family is scripted by family 21 and keeps the client's text (18 powers, 6 enchantments); Jythiros's power and the dummy are not scripted  ( | )
+PASS S5 the seven passive or rule-cast powers are the registry's passive ones (never an option), the eleven others clickable; each power's Cost is the client's
+PASS S6 each power has its own admission row of its family: a boss's only, never the run player's, never generated
+PASS S7 Jythiros of Questions is rejected: no row uses his hero, his power is admitted for no side with its lift, and the encounters file records the rejection
+PASS S8 the listed cards replaced are only cards the engine does not script (or Secret generators, or Gral, the Shark, whose deck pull no boss row admits), each with its named replacement  (ULD_160>DAL_614:unscripted,ULD_162>BRM_006:unscripted,ULD_163>CS2_065:unscripted | ULD_163>OG_241:unscripted,ULD_184>EX1_029:unscripted,ULD_703>FP1_007:unscripted)
+PASS S9 the decks keep the wiki's signature cards: Wildtooth's four Bearsharks, Baz'hial's two Shadows of Death and Ancient Shades, Kasmut's Reborn minions, the Jar's Desert Obelisks as five Nerubian Eggs  (bearshark 4 shade 2)
+PASS S10 the tier pools: three rows in enc-t1, eight in enc-t2, three in enc-t3, three in enc-t4
+PASS S11 the validator refuses a row whose power is not scripted (the Heroic Food Chain ULDA_BOSS_59px)  (ULDA_BOSS_59px: not scripted (boss ulda_59_dire_bat))
+PASS S12 the validator refuses Baz'hial's row without its form (flag forms and the forms go together)  (boss ulda_52_bazhial: flag forms and the forms must go together)
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 100 passed, 0 failed

@@ -34,7 +34,7 @@ PASS H1 Summon Protectors costs (2) and summons a 2/2 Treant with Taunt
 PASS H2 with the boss's board full it is not offered
 PASS I1 Mini Portal is passive (started at match start, never an option)
 PASS I2 after the boss casts a spell a random 1-Cost minion is summoned for it  (BOT_558:1)
-PASS I3 the pool is scripted 1-Cost minions the run's generation filter allows for the boss  (136 minions)
+PASS I3 the pool is scripted 1-Cost minions the run's generation filter allows for the boss  (137 minions)
 PASS I4 the run player's spells summon nothing
 PASS I5 with the boss's board full nothing is summoned
 PASS J1 Earthmother's Rage costs (2) and is aimed only at a minion of the boss

@@ -150,7 +150,7 @@ PASS T3 each Tomb holds a minion (public: the mouse-over card) and counts as man
 PASS T4 the held minion is a scripted card the side's generation filter allows
 PASS T5 an enemy death does not count for the run player's Tomb (it counts for the boss's)
 PASS T6 the count goes down with each friendly death and nothing is summoned before it ends
-PASS T7 at the last death the Tomb summons its minion and holds a new one  (BOT_507 then OG_216)
+PASS T7 at the last death the Tomb summons its minion and holds a new one  (BOT_507 then OG_218)
 PASS T8 the Tomb cannot be damaged or removed
 PASS T9 the turn's bound (7 summons of one Tomb): the minion waits for a death of a later turn
 PASS T10 the bound starts again at the end of a turn

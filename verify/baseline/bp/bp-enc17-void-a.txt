@@ -1,8 +1,8 @@
-dala_48_zuramat    DALA t4      floor 13 DRUID/druid_thicket/CS2_017                    deck 28 -> player   turns  33 decisions  58 fallbacks  0 health  65 mana+1 power  1 checks ok
+dala_48_zuramat    DALA t4      floor 13 DRUID/druid_thicket/CS2_017                    deck 23 -> player   turns  43 decisions  57 fallbacks  0 health  65 mana+1 power  1 checks ok
 dala_48_zuramat    DALA t4      floor 13 HUNTER/hunter_kennel/DS1h_292                  deck 50 -> boss     turns  26 decisions  48 fallbacks  0 health  62 mana+1 power  1 checks ok
 dala_48_zuramat    DALA t4      floor 13 MAGE/mage_rimeward/CS2_034                     deck 49 -> boss     turns  28 decisions  42 fallbacks  0 health  62 mana+1 power  2 checks ok
 dala_48_zuramat    DALA t4      floor 13 PALADIN/paladin_gleaming/CS2_101               deck 46 -> boss     turns  24 decisions  28 fallbacks  0 health  62 mana+1 power  0 checks ok
-dala_48_zuramat    DALA t4      floor 13 PRIEST/priest_mending/CS1h_001                 deck 38 -> player   turns  19 decisions  37 fallbacks  0 health  62 mana+1 power  0 checks ok
+dala_48_zuramat    DALA t4      floor 13 PRIEST/priest_mending/CS1h_001                 deck 42 -> player   turns  23 decisions  32 fallbacks  0 health  62 mana+1 power  0 checks ok
 dala_48_zuramat    DALA t4      floor 13 ROGUE/rogue_backalley/CS2_083b                 deck 39 -> boss     turns  36 decisions  66 fallbacks  0 health  62 mana+1 power  0 checks ok
 encounter run: schedule acts-v3h; power unused: -; form unreached: -
-games 6, boss wins 4, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, no-loss 0, watched DALA_BOSS_48t x6 DALA_BOSS_51t2 x0 DALA_503 x0 DALA_BOSS_56t x0 DALA_BOSS_59t x0 DALA_BOSS_59t2 x0 DALA_502 x0, most boss Secrets 0
+games 6, boss wins 4, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, no-loss 0, watched DALA_BOSS_48t x10 DALA_BOSS_51t2 x0 DALA_503 x0 DALA_BOSS_56t x0 DALA_BOSS_59t x0 DALA_BOSS_59t2 x0 DALA_502 x0, most boss Secrets 0

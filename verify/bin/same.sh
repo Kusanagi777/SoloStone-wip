@@ -1,6 +1,6 @@
 #!/bin/bash
 # verify/bin/same.sh: compares run 1 with run 2 (identical?) and run 1 with the recorded baseline
-# (verify/baseline/runs/<name>.txt, the wave-5 tree's second run, Linux) as differing lines. CR is ignored on both sides.
+# (verify/baseline/runs/<name>.txt, the wave-6 tree's second run, Linux) as differing lines. CR is ignored on both sides.
 #   same.sh                every entry of the run list that has logs (an entry with no run-1 log prints "not run")
 #   same.sh only <dir>...  the named entries (paths relative to verify/suites)
 # The expected wave-3 picture: every suite "1 vs 2 identical; vs baseline: 0 differing lines", except c-secretsearch,

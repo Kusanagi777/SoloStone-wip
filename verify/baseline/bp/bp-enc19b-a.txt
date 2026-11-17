@@ -11,10 +11,10 @@ ulda_14_sirinell   ULDA t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp
 ulda_15_herring    ULDA t1      floor  1 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 10 -> boss     turns  21 decisions  42 fallbacks  0 health  30 mana+0 power  3 checks ok
 ulda_15_herring    ULDA t1      floor  1 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 11 -> boss     turns  20 decisions  52 fallbacks  0 health  30 mana+0 power  0 checks ok
 ulda_16_battrund   ULDA t2      floor  3 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 17 -> player   turns  27 decisions  64 fallbacks  0 health  34 mana+0 power  0 checks ok
-ulda_16_battrund   ULDA t2      floor  3 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 18 -> boss     turns  16 decisions  33 fallbacks  0 health  34 mana+0 power  0 checks ok
-ulda_17_ichabod    ULDA t2      floor  3 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 18 -> boss     turns  20 decisions  51 fallbacks  0 health  34 mana+0 power  8 checks ok
+ulda_16_battrund   ULDA t2      floor  3 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 18 -> boss     turns  24 decisions  61 fallbacks  0 health  34 mana+0 power  0 checks ok
+ulda_17_ichabod    ULDA t2      floor  3 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 18 -> boss     turns  20 decisions  43 fallbacks  0 health  34 mana+0 power  8 checks ok
 ulda_17_ichabod    ULDA t2      floor  3 GILA_500h3/mh_tess_scavenger/GILA_500p2        deck 17 -> boss     turns  14 decisions  27 fallbacks  0 health  34 mana+0 power  2 checks ok
 ulda_18_twizzleflux ULDA t2      floor  3 GILA_600h/mh_darius_militia/GILA_600p          deck 17 -> boss     turns  29 decisions  61 fallbacks  0 health  34 mana+0 power  7 checks ok
 ulda_18_twizzleflux ULDA t2      floor  3 GILA_400h/mh_shaw_kennel/GILA_400p             deck 17 -> player   turns  25 decisions  45 fallbacks  0 health  34 mana+0 power  7 checks ok
 encounter run: schedule acts-v3h; power unused: -; form unreached: -
-games 18, boss wins 15, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched ULD_326t x0 DAL_606 x2 DAL_614 x5 DAL_739 x3, most boss Secrets 2
+games 18, boss wins 15, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched ULD_326t x0 DAL_606 x2 DAL_614 x5 DAL_739 x3, most boss Secrets 1

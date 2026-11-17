@@ -1,10 +1,10 @@
-loot_15_george_karl LOOT t3      floor  8 DRUID/druid_thicket/CS2_017                    deck 31 -> boss     turns  26 decisions  72 fallbacks  0 health  30 mana+0 power  9 checks ok
-loot_15_george_karl LOOT t3      floor  8 HUNTER/hunter_kennel/DS1h_292                  deck 31 -> boss     turns  22 decisions  50 fallbacks  0 health  30 mana+0 power  7 checks ok
+loot_15_george_karl LOOT t3      floor  8 DRUID/druid_thicket/CS2_017                    deck 31 -> boss     turns  18 decisions  46 fallbacks  0 health  30 mana+0 power  2 checks ok
+loot_15_george_karl LOOT t3      floor  8 HUNTER/hunter_kennel/DS1h_292                  deck 30 -> boss     turns  22 decisions  43 fallbacks  0 health  30 mana+0 power  6 checks ok
 loot_15_george_karl LOOT t3      floor  8 MAGE/mage_rimeward/CS2_034                     deck 25 -> boss     turns  18 decisions  48 fallbacks  0 health  30 mana+0 power  6 checks ok
-loot_15_george_karl LOOT t3      floor  8 PALADIN/paladin_gleaming/CS2_101               deck 29 -> boss     turns  22 decisions  58 fallbacks  0 health  30 mana+0 power  4 checks ok
-loot_15_george_karl LOOT t3      floor  8 PRIEST/priest_mending/CS1h_001                 deck 31 -> boss     turns  28 decisions  69 fallbacks  0 health  30 mana+0 power 10 checks ok
-loot_15_george_karl LOOT t3      floor  8 ROGUE/rogue_backalley/CS2_083b                 deck 33 -> boss     turns  14 decisions  30 fallbacks  0 health  30 mana+0 power  2 checks ok
-loot_15_george_karl LOOT t3      floor  8 SHAMAN/shaman_stormdebt/CS2_049                deck 30 -> boss     turns  14 decisions  32 fallbacks  0 health  30 mana+0 power  2 checks ok
-loot_15_george_karl LOOT t3      floor  8 WARLOCK/warlock_fiendpact/CS2_056              deck 35 -> boss     turns  20 decisions  41 fallbacks  0 health  30 mana+0 power  6 checks ok
+loot_15_george_karl LOOT t3      floor  8 PALADIN/paladin_gleaming/CS2_101               deck 29 -> boss     turns  28 decisions  75 fallbacks  0 health  30 mana+1 power  8 checks ok
+loot_15_george_karl LOOT t3      floor  8 PRIEST/priest_mending/CS1h_001                 deck 30 -> player   turns  17 decisions  28 fallbacks  0 health  30 mana+0 power  2 checks ok
+loot_15_george_karl LOOT t3      floor  8 ROGUE/rogue_backalley/CS2_083b                 deck 33 -> boss     turns  14 decisions  27 fallbacks  0 health  30 mana+0 power  1 checks ok
+loot_15_george_karl LOOT t3      floor  8 SHAMAN/shaman_stormdebt/CS2_049                deck 31 -> boss     turns  16 decisions  41 fallbacks  0 health  30 mana+1 power  6 checks ok
+loot_15_george_karl LOOT t3      floor  8 WARLOCK/warlock_fiendpact/CS2_056              deck 35 -> boss     turns  12 decisions  32 fallbacks  0 health  30 mana+1 power  2 checks ok
 encounter run: schedule acts-v3h; power unused: -; form unreached: -
-games 8, boss wins 8, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched LOOTA_BOSS_110 x13, most boss Secrets 0
+games 8, boss wins 7, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched LOOTA_BOSS_110 x12, most boss Secrets 0

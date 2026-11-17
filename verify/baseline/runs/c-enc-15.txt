@@ -40,7 +40,7 @@ PASS I2 the run player draws a minion: that player summons a 1/1 copy of it (Toy
 PASS I3 the boss's own draw of a minion gives it a 1/1 copy too  (CS2_182)
 PASS I4 a drawn spell makes no copy (the run player's first draw and one more, the boss's turn draw)
 PASS I5 with a full board the draw makes no copy and the card stays in hand
-PASS I6 Hoard of Toys (4) summons 1/1 copies of five random scripted minions  (BOT_448 1/1,CORE_EX1_014 1/1,OG_207 1/1,BOT_445 1/1,CS2_117 1/1)
+PASS I6 Hoard of Toys (4) summons 1/1 copies of five random scripted minions  (BOT_448 1/1,CORE_EX1_014 1/1,OG_209 1/1,BOT_445 1/1,CS2_117 1/1)
 PASS I7 with three slots left it summons three
 PASS J1 Cold Water is a passive power, started at match start
 PASS J2 a minion attacking a boss minion is not frozen

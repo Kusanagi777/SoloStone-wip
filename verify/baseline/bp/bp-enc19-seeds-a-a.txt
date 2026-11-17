@@ -1,5 +1,5 @@
-ulda_01_cardish    ULDA t4      floor 13 DRUID/druid_thicket/CS2_017                    deck 39 -> player   turns  13 decisions  20 fallbacks  0 health  62 mana+2 power  3 checks ok
-ulda_01_cardish    ULDA t4      floor 13 HUNTER/hunter_kennel/DS1h_292                  deck 39 -> player   turns  23 decisions  45 fallbacks  0 health  67 mana+1 power  8 checks ok
+ulda_01_cardish    ULDA t4      floor 13 DRUID/druid_thicket/CS2_017                    deck 40 -> player   turns  15 decisions  25 fallbacks  0 health  62 mana+2 power  4 checks ok
+ulda_01_cardish    ULDA t4      floor 13 HUNTER/hunter_kennel/DS1h_292                  deck 38 -> player   turns  21 decisions  46 fallbacks  0 health  67 mana+1 power  6 checks ok
 ulda_02_zafarr     ULDA t3      floor  8 MAGE/mage_rimeward/CS2_034                     deck 28 -> boss     turns  26 decisions  46 fallbacks  0 health  49 mana+0 power  4 checks ok
 ulda_02_zafarr     ULDA t3      floor  8 PALADIN/paladin_gleaming/CS2_101               deck 32 -> boss     turns  22 decisions  42 fallbacks  0 health  51 mana+0 power  4 checks ok
 ulda_03_vera       ULDA t2      floor  3 PRIEST/priest_mending/CS1h_001                 deck 16 -> boss     turns  14 decisions  36 fallbacks  0 health  34 mana+0 power  0 checks ok
@@ -9,12 +9,12 @@ ulda_04_nash       ULDA t3      floor  8 WARLOCK/warlock_fiendpact/CS2_056      
 ulda_05_glack      ULDA t2      floor  3 WARRIOR/warrior_plated/CS2_102                 deck 16 -> boss     turns  31 decisions  67 fallbacks  0 health  34 mana+0 power  4 checks ok
 ulda_05_glack      ULDA t2      floor  3 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 16 -> boss     turns  25 decisions  57 fallbacks  0 health  34 mana+0 power  1 checks ok
 ulda_06_chu        ULDA t4      floor 13 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 49 -> boss     turns  26 decisions  62 fallbacks  0 health  62 mana+1 power  0 checks ok
-ulda_06_chu        ULDA t4      floor 13 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 43 -> boss     turns  20 decisions  54 fallbacks  0 health  62 mana+2 power  0 checks ok
-ulda_07_squeamlish ULDA t4      floor 13 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 48 -> boss     turns  18 decisions  46 fallbacks  0 health  62 mana+2 power  6 checks ok
-ulda_07_squeamlish ULDA t4      floor 13 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 43 -> boss     turns  20 decisions  65 fallbacks  0 health  62 mana+1 power  7 checks ok
-ulda_08_sinkhole   ULDA t3      floor  8 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 37 -> player   turns  23 decisions  39 fallbacks  0 health  46 mana+0 power  3 checks ok
-ulda_08_sinkhole   ULDA t3      floor  8 GILA_500h3/mh_tess_scavenger/GILA_500p2        deck 36 -> boss     turns  24 decisions  61 fallbacks  0 health  46 mana+0 power  1 checks ok
+ulda_06_chu        ULDA t4      floor 13 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 46 -> boss     turns  12 decisions  38 fallbacks  0 health  62 mana+2 power  0 checks ok
+ulda_07_squeamlish ULDA t4      floor 13 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 48 -> player   turns  37 decisions  73 fallbacks  0 health  62 mana+2 power 10 checks ok
+ulda_07_squeamlish ULDA t4      floor 13 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 43 -> boss     turns  20 decisions  65 fallbacks  0 health  62 mana+1 power  6 checks ok
+ulda_08_sinkhole   ULDA t3      floor  8 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 37 -> boss     turns  24 decisions  43 fallbacks  0 health  46 mana+0 power  1 checks ok
+ulda_08_sinkhole   ULDA t3      floor  8 GILA_500h3/mh_tess_scavenger/GILA_500p2        deck 31 -> boss     turns  36 decisions  68 fallbacks  0 health  51 mana+0 power  2 checks ok
 ulda_09_demolisher ULDA t2      floor  3 GILA_600h/mh_darius_militia/GILA_600p          deck 16 -> boss     turns  20 decisions  35 fallbacks  0 health  34 mana+0 power  2 checks ok
 ulda_09_demolisher ULDA t2      floor  3 GILA_400h/mh_shaw_kennel/GILA_400p             deck 17 -> player   turns  29 decisions  51 fallbacks  0 health  34 mana+0 power  8 checks ok
 encounter run: schedule acts-v3h; power unused: -; form unreached: -
-games 18, boss wins 12, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched ULD_326t x1 DAL_606 x3 DAL_614 x1 DAL_739 x5, most boss Secrets 2
+games 18, boss wins 12, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched ULD_326t x3 DAL_606 x3 DAL_614 x4 DAL_739 x3, most boss Secrets 1

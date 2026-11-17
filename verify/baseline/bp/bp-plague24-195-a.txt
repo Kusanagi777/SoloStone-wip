@@ -1,0 +1,5 @@
+ulda_37_xatma      ULDA tmajor3 floor 15 DRUID/druid_thicket/CS2_017                    deck 48 -> boss     turns  12 decisions  31 fallbacks  0 health 200 mana+3 power  0 checks ok form 1>1 left 102 banked 102
+ulda_38_kzrath     ULDA tmajor3 floor 15 HUNTER/hunter_kennel/DS1h_292                  deck 43 -> boss     turns  30 decisions  53 fallbacks  0 health 200 mana+3 power  0 checks ok form 1>2 left 65 banked 65
+ulda_39_vesh       ULDA tmajor3 floor 15 MAGE/mage_rimeward/CS2_034                     deck 46 -> boss     turns  15 decisions  35 fallbacks  0 health 200 mana+3 power  4 checks ok form 1>2 left 97 banked 97
+encounter run: schedule acts-v3h, carried 195; power unused: ulda_38_kzrath; form unreached: -
+games 3, boss wins 3, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 1, form-unreached 0, watched ULDA_BOSS_37t x0 LOEA10_5 x0 LOEA10_5H x1 KARA_13_12H x0 LOEA16_24H x1 UNG_942t x1 ULDA_033 x0 ULDA_031 x0 ULDA_BOSS_67t x0, most boss Secrets 0

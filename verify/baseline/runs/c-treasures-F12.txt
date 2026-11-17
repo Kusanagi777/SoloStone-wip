@@ -15,7 +15,7 @@ T30 ULDA_113  boss turns 17 played 1 player-choices 1 decisions 30 fallbacks 0 b
 T30 ULDA_114  boss turns 11 played 1 player-choices 0 decisions 16 fallbacks 0 boss hedge_witch
 T30 ULDA_118  player turns 19 played 1 player-choices 2 decisions 31 fallbacks 0 boss hedge_witch
 T30 ULDA_202  boss turns 25 played 1 player-choices 1 decisions 32 fallbacks 0 boss hedge_witch
-T30 ULDA_301  player turns 17 played 1 player-choices 3 decisions 26 fallbacks 0 boss hedge_witch
+T30 ULDA_301  player turns 15 played 1 player-choices 3 decisions 20 fallbacks 0 boss hedge_witch
 T30 ULDA_306  player turns 19 played 1 player-choices 1 decisions 30 fallbacks 0 boss hedge_witch
 T30 ULDA_307  boss turns 25 played 1 player-choices 1 decisions 37 fallbacks 0 boss hedge_witch
 T30 ULDA_403  player turns 21 played 1 player-choices 1 decisions 36 fallbacks 0 boss hedge_witch

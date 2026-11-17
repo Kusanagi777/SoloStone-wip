@@ -112,7 +112,7 @@ PASS Q10 the run player's prison counts down at the start of the run player's tu
 PASS Q11 one turn later the Crocolisk is released; it entered play this turn and cannot attack yet
 PASS Q12 next turn it attacks as any minion
 PASS Q13 the shipped prisons release their minions after as many owner turns as they cost (the first turn start counts)  (7/7 3/3)
-PASS Q14 the prisoner is random (ten seeds: several different Costs)  (1,2,3,4,6,7,8)
+PASS Q14 the prisoner is random (ten seeds: several different Costs)  (1,2,3,4,5,6,7,8)
 PASS R1 nothing on the boards before the mulligan
 PASS R2 after both mulligans each player has three different Carts  (DALA_833t,DALA_833t2,DALA_833t4 | DALA_833t,DALA_833t2,DALA_833t4)
 PASS R3 both players can only have four minions: the board is full with four

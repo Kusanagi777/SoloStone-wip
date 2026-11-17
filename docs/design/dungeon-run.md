@@ -1074,6 +1074,148 @@ enc15-rat / enc15-toys, enc16 / enc16-seeds / enc16-carousel / enc16-cards, enc1
 (+ enc17-check), enc18a / enc18b / enc18-finale and enc19a / enc19b / enc19-seeds-a / enc19-seeds-b, each twice identical
 with 0 faults, fallbacks, failed checks and swallowed leaf exceptions.
 
+### Wave 6: Tombs of Terror bosses B-D, the Monster Hunt nemeses, the Plague Lords and Tekahn (families 20-24; 2026-11-16)
+
+Five families landed together: the rest of the Tombs of Terror encounters in three lanes (20: ULDA_BOSS_19-36 with Mogu
+Cultist, 21: 41-59, 22: 60-79 with Siamat's Servant), the four Final Nemesis fights of The Witchwood (23) and the three
+other Plague Lords with Tekahn and ULDA_115 (24). The shipped encounter list holds 255 rows (wave 5's 194, 18 of family 20,
+17 of family 21, 18 of family 22, 4 of family 23 and 4 of family 24) and 296 decks, 125 of them the wiki's list unchanged;
+876 adaptations and 4 rejections (Toki's hero card, Jythiros of Questions, Commander Bolan, Alternate Timeline). Everything
+stays behind acts-v3h and acts-v3t: no default changed, acts-v3t's finale (now with Tekahn pending) ships disabled.
+The Tombs families tier by family 19's rule (`verify/tools/gen/p8f19/tombs_tiers.py`, unchanged); Health is the act curve's.
+
+#### Family 20: Tombs of Terror bosses B
+
+Eighteen encounters (ULDA_BOSS_19-36) with Sothis's Mogu Cultist (ULD_705, a Saviors of Uldum stub now scripted in
+`UldumCardsGen.cs`: seven Cultists become Highkeeper Ra, ULD_705t). Fourteen clickable powers and four passives. Spectral
+Swordsman gives the boss's hero Stealth while it holds a weapon; Staking A Claim gives every minion +1/+1 whenever either
+player plays a Discover card; Mother of Sand summons a Dust Devil when the boss Overloads, resolved in place; Fireshaper is
+Flamewaker's trigger. "Retired" Treasure Hunter copies a card of the run player's hand by the Copy rule (in-hand
+enchantments kept, as Mind Vision) and Mighty Windstorm makes each player swap a hand minion with a board minion (never a
+run shrine); both read the run player's hand only as their text says, and in the boss's fair view that hand is masked, so
+the search uses only cards the boss saw go there. Out of Control hits the center-most minions of each board; Vengeful
+Construct destroys a chosen minion with 2 or less Health and its neighbours (a shrine goes dormant); Madness Incarnate makes
+the hero attack three different random enemy minions through `EncounterRules.ForcedAttack`. Decks are the wiki's Normal
+lists, brought to 30 with the Heroic lists; unscripted Uldum collectibles, and Hydrologist (which offers Secrets), are
+replaced by named scripted cards of the same role, each recorded. Mogu Cultist is a scripted 1-Cost collectible now, so it
+is in every random pool of implemented cards.
+
+#### Family 21: Tombs of Terror bosses C
+
+Seventeen encounters (ULDA_BOSS_41-59 without 44, the Trap Room, an earlier row, and 58). Jythiros of Questions (58h/58p) is
+rejected: Riddle of the Sphinx needs a decision of the run player on the boss's turn and a Counter for every card type
+(phase 9 / client), recorded in F21.json, curation E21 and the admission row `boss-tombs-c-rejected`. Lich Baz'hial swaps
+her power inside the match: Lich's Phylactery (restores 20, less 1 per friendly minion death) breaks when used into Broken
+Phylactery, the row's script form 1 that changes only the power (family 14's `EncounterRules.SwapPowerForm`, shared since
+the merge), and the boss then takes double fatigue damage (`Draw.PreDrawPhase` asks
+`DungeonRunEncounters.TombsC.FatigueDamage`; one string compare per fatigue hit in every other game). Maw of the Desert and
+Arena Expert are cast by rule after the boss's turn-start draw (the wiki's auto-cast). Spoil the Ending copies a random
+spell of the run player's hand without linking the copy to its source; the boss's fair view keeps that hand masked. Sand
+Shapin' shuffles a public copy of an enemy minion into the boss's deck, summoned when drawn. Run shrines are never copied
+(What's in the Jar?, Sand Shapin') and go dormant when destroyed (Maw). Unscripted Saviors of Uldum collectibles and Secret
+generators in the wiki lists are replaced by named scripted cards.
+
+#### Family 22: Tombs of Terror bosses D
+
+Eighteen encounters (ULDA_BOSS_60-79 without 64 and 67) and Siamat's Servant (ULDA_026). Twelve clickable powers:
+Forbidden Power and Hunt the Weak keep their growing number in the power's own script number; Chain Lightning jumps to
+random adjacent minions until one dies; Ogre-Sized Thief steals a card of the run player's deck by TRLA_186's deck-steal
+rule, so the boss learns only that card; Mech "Pilot" forces a Mech to attack (`EncounterRules.ForcedAttack`). Three
+passive powers: Plaguebringer (spells (2) cheaper, Overload (1) each; a Tunnel Trogg and Thunderhead answer that Overload,
+the Trogg through family 17's `EncounterRules.OverloadFor` since the merge), Mistress of Magic (both players' first spell
+copied) and Shockwave (Rush). Three powers the wiki lists as auto-cast are cast by rule after the boss's turn-start draw:
+Lord of Destruction (stacking Cursed!), Massive Tentacles (destroys all at 8+ minions; a run shrine goes dormant) and Mirage.
+The client data has no illusion token, so Mirage follows the wiki's notes: a copy of a random card of the run player's
+hand joins it, one of the pair is the illusion (the card carries the private tag `MirageIllusion` 32657; the boss's power
+holds only its public hand position), playing it discards a random card, and it fades at the end of that player's turn.
+Decks are the wiki's Normal lists, extended with second copies and the Heroic list; unscripted cards are replaced by named
+scripted cards.
+
+#### Family 23: the Monster Hunt nemeses and Hagatha
+
+The four Final Nemesis fights of The Witchwood join Hagatha the Witch as act II majors (pool enc-major2; Health is the act
+curve plus 10). Infinite Toki's Chronoacceleration gives a friendly minion the client enchantment Accelerated (Mega-Windfury,
+destroyed at the end of the turn). Glinda Crowskin's passive False Heart makes her hero Immune while she controls a minion
+(family 06's HeroImmuneWhile); her row's flag heroImmune keeps ULDA_706 out. Crowskin Faithful draws and shuffles a new
+Faithful into its controller's deck when it dies; Crowskin Pact transforms a minion into a Faithful and takes control of it
+(a run shrine goes dormant instead). Lord Godfrey's Pistol Barrage deals 2 to a minion and its neighbours; he starts with
+Hunter's Insight in hand (the Final Nemesis page), the wiki table's one copy, so his deck holds the other 29. Captain Shivers
+starts with Kingsbane equipped, and his Plunder is cast by rule after his turn-start draw while his deck holds a weapon and
+his hand has room. Cursed Crewmember draws two cards and shuffles a copy of its caster's hand into that caster's deck.
+Witchwood's Touch (1), (2) and (3) are scripted; (2) replaces the Shield Block stand-in in the Monster Hunt decks of
+families 10-12 (the merge did families 11 and 12). Hunter's Insight and Clockwork Assistant are admitted for a boss on
+catalog runs (`run-treasure-nemesis-deck`). Alternate Timeline (a game restart) and Enhance-a-matic (a Secret generator of
+every class) are left out of Toki's deck; the first is rejected to phase 9. Hagatha's temporary hero switching stays family
+01's run-owned `DungeonRunState.HeroSwitch`, never written into the run's hero, power or deck records. Toki's hero card stays
+rejected (Temporal Loop, phase 9). With five GIL majors Hagatha is the act II major in about a tenth of runs (118 of 1000).
+
+#### Family 24: the Plague Lords and Tekahn
+
+Xatma, K'zrath and Vesh join Icarax as major3 encounters of three hero forms (300/200/100; each phase replaces the deck with
+its wiki list and draws 3, Vesh 5); a lost fight banks the lord's Health in the profile (`BossDamage`) and the next
+random-seed run meets it in that phase. ULDA_115 "Gnomebliterator" is a Tombs treasure of encounter schedules: a cast inside
+a Plague Lord fight deals its extra 10 at once; outside one, either player's cast banks 10 plus its Spell Damage in the run
+(`DungeonRunState.PlagueLordDamage`, an append-only save field with a ShouldSerialize guard, save version unchanged), which
+the next Plague Lord fight starts with and spends. Tekahn is the acts-v3t finale row: one hero, power-only forms at 200
+(Curse of Flame) and 100 (Soul Pyre), 40-card phase decks, no persistent damage; the run player's hero fights first and then
+the explorers relay at 50 Health each, each with one of its three client finale decks and the matching hero power, drawn by
+the match's game RNG as it enters (`EncounterRules.ResolveRelay`), so the boss's fair view cannot know it. New engine rules
+(`EncounterRules.F24.cs`): LoseHealth (Health lost, not damage; forms resolve at once), Evoke Panic's forced attack inside
+one row, BringToOne; K'zrath rotates with family 16's `Rotate`. Private tag `PlagueCount` 32659 (ULDA_115 casts, Mur-nado's
+Murloc deaths, Mind Meld's Lifesteal mark). Shared card fixes: Omega Mind's Mind Meld (BOT_543e) gives the spells cast that
+turn Lifesteal and takes it back at the end of the turn; the Lackey aura ULD_168e/e3 (Rakanishu's ULDA_033 uses it); a cast
+guard in `CopyCthun` (STOP instead of an InvalidCastException when the target is not a minion).
+
+#### What the integration changed
+
+- **A run never meets a boss row of its own character (continued).** Ol' Barkeye (DALA_Barkeye) excludes the Tombs boss
+  Ol' Barkeye and Vessina (DALA_Vessina) the Tombs boss Vessina (the wiki's boss pages: "one of League of E.V.I.L.'s
+  henchmen that made debut in The Dalaran Heist"); with wave 5's three pairs that is five, each run on 600 acts-v3h seeds
+  in c-w5fix Q3-Q5 (0 meetings with the key, some without). Every hero row was checked against all 255 boss rows and the
+  custom bosses; no other pair. The Heist hero Tekahn and the Plague Lord Tekahn are the same character, but that row is a
+  finale row in no act pool and a finale's fixed bosses ignore `excludeBosses`; the merge review dropped stage A's inert
+  key, and c-w5fix Q7 now fails on purpose once a shipped finale (or a pool) can hand the row to a run: the close-out
+  decides. Infinite Toki stays eligible for the Toki hero row (the original makes her Toki's own Final Nemesis).
+- **Auto-cast after the turn-start draw, everywhere.** The family 21-23 powers registered through family 09's `AutoCast`
+  (46p Maw, 48p Arena Expert, 72p, 78p, GILA_BOSS_60p Plunder) act after the draw since the merge; c-enc-23 D3/D5 state
+  Plunder's premise (the weapon not on top of the deck) and D3b shows a weapon on top is taken by the turn's draw. Mirage
+  (ULDA_BOSS_62p), a hand-written TURN_START trigger, was missed by stage A and moved by the merge review: its cast is the
+  registered entry's `AfterDraw` (c-enc-22 C9b: a 1-Health boss with an empty deck dies of Fatigue in its draw and casts
+  nothing; with the old trigger it copied a card first).
+- **Witchwood's Touch in the decks of families 11 and 12.** `make_f11.py` and `make_f12.py` no longer replace GILA_BOSS_99t2
+  with Shield Block: Cragtorr, Azalina, Gustave, Beastly Pete's form deck, Groddo and Hannigul are authentic now, Sephira
+  keeps her Wrath and Power of the Wild substitutions. c-enc-11 / c-enc-12 P3 and P7 follow.
+- **Duplicates folded.** Family 21's `TombsC.PowerOnlyForm` was family 14's `SwapPowerForm` (removed; Broken Phylactery
+  calls the shared one). Family 22's Plaguebringer Overload calls family 17's `EncounterRules.OverloadFor` for Tunnel Troggs
+  and keeps only Thunderhead's Sparks. `EncounterRules.F16.cs` and `tombs_tiers.py` are byte-identical to wave 5's.
+- **Tag table.** 32657 (family 22, MirageIllusion) and 32659 (family 24, PlagueCount); families 19-21 and 23 took none; the
+  21 private constants in 32630-32699 are unique.
+- **Snowfury Giant counts every Overload.** The regression met a fault in `bp.sh enc22a`: against Vessina, whose
+  Plaguebringer Overloads each spell by 1 through `EncounterRules.OverloadFor`, the boss's search chose a Snowfury Giant
+  (ICC_090) at 4 with 4 mana while the game held it at 6 ("engine rejected boss task"). The Giant's adaptive cost added the
+  OVERLOAD event source's printed Overload, so an Overload not printed on its source (Plaguebringer's, Spell Lock's, Winged
+  Aberration's) was not counted and a printed one could count twice; it now adds the event's amount, which is what
+  `OverloadThisGame` (the Giant's initial count) counts. A printed Overload's event amount is the card's, so other games are
+  unchanged (c-w5fix O1-O3).
+- **A form without Health of its own.** Tekahn's two forms are power-only: the hero keeps its 300 maximum, as the client's
+  one ULDA_BOSS_67h serves all three phases, so a form threshold does not cap his Health (the Plague Lords' phase heroes
+  print 200 and 100, which do). The bosspilot harnesses' family 01 check "the boss's Health is above its form's threshold"
+  now applies to forms with their own Health only; it had failed once in `bp.sh tekahn24`, a 101-turn game in which Tekahn
+  entered Curse of Flame at 195 and healed to 219 in that form.
+- **Incompatible modifiers.** Hagatha's `incompatibleModifiers` come from her own row (fixed 100 Health, the hero switch);
+  the nemeses list none, since neither the wiki nor the client data covers SoloStone's modifiers. On a seed whose act II
+  major is a nemesis the act's modifier node may offer Hagatha's three: a step-9 input (HANDOFF 3.4).
+
+**Open after the wave.** The close-out enables acts-v3t's finale on Tekahn (with `heroRelay`) and decides what a
+DALA_Tekahn run meets there. Jythiros of Questions and Alternate Timeline go to phase 9. Captain Shivers's Kingsbane uses
+the engine's Kingsbane helper, which drops enchantment Durability (wave 5's open item). Unscripted Uldum collectibles in
+the decks of families 19-22 are replaced; when they get scripts, rerun the encounters step.
+
+**Tests of the wave.** c-enc-20 (111 checks), c-enc-21 (100), c-enc-22 (121), c-enc-23 (68), c-enc-24 (65), c-w5fix (29),
+and the bosspilot modes enc20a / enc20b / enc20-seeds-a / enc20-seeds-b, enc21a / enc21b / enc21-seeds-a / enc21-seeds-b,
+enc22a / enc22b / enc22-seeds-a / enc22-seeds-b, enc23 / enc23-seeds / enc23-cards, enc24, plague24 95 / 110 / 195 / 210
+and tekahn24, each twice identical with 0 faults, fallbacks, failed checks and swallowed leaf exceptions.
+
 ## Implementation Status (2026-11-09)
 
 All pieces are written and the plugin builds against client 37.0.2.256589 with SDK 10.0.402 (0 errors; client bindings check PASS, Mono guard PASS). Nothing has run inside the Hearthstone client yet.
