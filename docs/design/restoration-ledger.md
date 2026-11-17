@@ -767,7 +767,7 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | `data/dungeon-run/reference/buckets.json` | `b3015218a0ea9193` |
 | `data/dungeon-run/reference/client-tables.json` | `c7b51c98f568706a` |
 | `data/dungeon-run/run-v1.json` | `f932d6493d4b4091` |
-| `data/dungeon-run/schedule-v1.json` | `14ace66b60f7604e` |
+| `data/dungeon-run/schedule-v1.json` | `6abde845cc96e96c` |
 | `data/dungeon-run/tavern-v1.json` | `2b0688c5c686151c` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |

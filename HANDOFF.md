@@ -332,8 +332,12 @@ Keep from the old process:
   `DungeonRun.cs`, `DungeonRunState.cs`, `schedule-v1.json`, `curation.json`, existing suites and runners): edit only
   when the family cannot be done otherwise, minimal and local, never reformat or re-sort; list each edit.
 - **Tag reservations:** family NN owns private model tag 32635 + NN (e.g. 11 -> 32646); family 05 owns rule-state
-  tags 32660-32679 and family 06 owns 32680-32699. Taken so far: 32630-32637, 32641, 32643, 32644, 32645, 32660-32662,
-  32680. A family that needs more takes a free number in the documented range and flags it.
+  tags 32660-32679 and family 06 owns 32680-32699. Reserved ranges (every number in them is private, taken or not):
+  StartOfGameRules 32600-32602, ShrineRules 32610-32629 (`ShrineRules.IsPrivateTag`; 32610-32614 and 32620-32625 taken),
+  the encounter tag table 32630-32659 and the RuleTags 32660-32699 (`EncounterRules.RuleTagsFrom`/`RuleTagsTo`), SwapRules
+  32710-32712. Single tags taken in the encounter table: 32630-32637, 32641, 32643-32646, 32652, 32653, 32657, 32659,
+  32660-32662, 32680. Step 9 reserves 32638-32640 (free: families 03-05 took none; lane X: 32638 ULDA_111 escape, 32639
+  GILA_911 restart, 32640 spare). A family that needs more takes a free number in the documented range and flags it.
 - **Never, outside the close-out:** flip schedule defaults, enable a finale in the shipped schedule, change the acts of
   acts-v1 / acts-v2 / act1 / acts-v3h / acts-v3t or the pool sets, bump the save version, re-pin `ReleasedShapes` or
   golden sequences. Test a finale or major fight through a fixture schedule (pattern:
