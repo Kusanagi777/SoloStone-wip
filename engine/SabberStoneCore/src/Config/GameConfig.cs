@@ -175,6 +175,14 @@ namespace SabberStoneCore.Config
 		public CardSets.DungeonRun.RunEncounter Encounter { get; set; }
 
 		/// <summary>
+		/// Step 9: what a Dungeon Run fight may end with besides a win or a loss (CardSets.DungeonRun.RunMatchEnds: the ULDA_111
+		/// escape, the GILA_911 and GILA_BOSS_48t restarts, the form ratchet). Immutable, so a clone shares it; null on every
+		/// match before step 9, where every Actions.EncounterRules step-9 hook is a no-op.
+		/// </summary>
+		[field: NonSerialized]
+		public CardSets.DungeonRun.RunMatchEnds MatchEnds { get; set; }
+
+		/// <summary>
 		/// Gets or sets the format of the game.
 		/// This value influences the game rules, see <see cref="FormatType"/>
 		/// for more information.

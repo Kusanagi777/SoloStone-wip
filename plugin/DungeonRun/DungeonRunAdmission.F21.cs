@@ -1,12 +1,13 @@
 // Phase 8, family 21 (Tombs of Terror bosses C: seventeen encounters ULDA_BOSS_41-59 without 44 and 58): the admission rows of the
 // powers it scripts (a method the table concatenates: DungeonRunAdmission.BuildRules). Every power is a boss's only. The family
 // names are the family's own (boss-tombs-c-*), so family 19's boss-tombs-* counts do not move. Jythiros of Questions' Riddle of the
-// Sphinx is rejected with its lift. The tests named in the reasons are the suite c-enc-21 and the enc21 bosspilot modes.
+// Sphinx is rejected with its lift (step 9 moved its blocker from phase 9 to the client). The tests named in the reasons are the suite c-enc-21 and the enc21 bosspilot modes.
 internal static partial class DungeonRunAdmission
 {
     /// <summary>Family 21: the lift of Riddle of the Sphinx (a decision of the non-current player and a Counter for every card type).</summary>
-    internal const string RiddleLift = "phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) "
-        + "and the harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard";
+    internal const string RiddleLift = "client (a Windows lane, not step 9: step 9 adds no decision of the non-current player): a decision of the "
+        + "non-current player in the engine's decision loop, NativeMatch (the client prompt) and the harnesses, and a Counter for minion, weapon, "
+        + "hero and location plays in PlayCard";
 
     private static AdmissionRule[] RulesF21() => new[]
     {

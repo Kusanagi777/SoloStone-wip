@@ -1237,6 +1237,9 @@ public sealed class NativeMatch
     // Dungeon Run only (design R9/R10): the engine has no turn limit, so the run caps a fight at this many game turns
     // (both players' turns count, as Game.Turn does) and the boss wins. Deckdelve's TURN_CAP.
     internal const int DungeonRunTurnCap = 100;
+    // [WIN] Step 9 (lane X, D11): this fight's cap, from its plan (RunMatchPlan.TurnCap: 100 on every released schedule, 150 for
+    // a tuned relay fight, less on a restarted floor); DungeonRunTurnCap when the plan has none.
+    internal int DungeonRunTurnLimit => runPlan != null && runPlan.TurnCap > 0 ? runPlan.TurnCap : DungeonRunTurnCap;
     // Why a run fight was ended from outside the rules: "turn-limit" or "fault" (the boss AI failed). Null otherwise.
     internal string DungeonRunEnding { get; private set; }
 
@@ -6634,7 +6637,7 @@ public sealed class NativeMatch
         if (privateOffer == BotPlayerId && zone == EngineZone.SETASIDE) return true;
         if (privateOffer == HumanPlayerId && (zone == EngineZone.SETASIDE || zone == EngineZone.INVALID))
             for (var next = Game.Player1.Choice?.NextChoice; next != null; next = next.NextChoice)
-                if (next.Choices.Contains(id)) return true;
+                if (next.Choices?.Contains(id) == true) return true; // [WIN] step 9: a chained choice not dealt yet has no Choices (family 13's FairBotState guard)
         int privateHandOwner = resetEntities != null ? TagValue(tags, SabberStoneCore.Actions.ShatterRules.PrivateHandOwner)
             : Game.IdEntityDic.TryGetValue(id, out var shatter) ? shatter[SabberStoneCore.Actions.ShatterRules.PrivateHandOwner] : 0;
         if (privateHandOwner == BotPlayerId &&

@@ -446,6 +446,12 @@ public sealed class DungeonRunState
     /// <summary>Step 9 D13, match scope: the damage the run hero carries into the restarted game (GILA_BOSS_48t Alternate Timeline); 0 (omitted) otherwise.</summary>
     [XmlAttribute] public int RestartCarriedDamage;
     public bool ShouldSerializeRestartCarriedDamage() => RestartCarriedDamage != 0;
+    /// <summary>
+    /// Step 9 D13 (lane X), match scope: the game turns the restarted games of the floor being fought took (the cumulative
+    /// turn budget: a floor's games take at most twice the fight's TurnCap); 0 (omitted) otherwise.
+    /// </summary>
+    [XmlAttribute] public int RestartTurns;
+    public bool ShouldSerializeRestartTurns() => RestartTurns != 0;
 
     /// <summary>The run deck as card ids (pool cards and active-treasure shells).</summary>
     public List<string> Deck = new List<string>();

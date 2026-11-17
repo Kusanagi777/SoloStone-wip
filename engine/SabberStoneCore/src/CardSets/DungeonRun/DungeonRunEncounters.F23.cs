@@ -15,7 +15,8 @@ namespace SabberStoneCore.CardSets.DungeonRun
 	// spells. Infinite Toki (Chronoacceleration), Glinda Crowskin (False Heart; Crowskin Faithful, Crowskin Pact), Lord Godfrey
 	// (Pistol Barrage) and Captain Shivers (Plunder; Cursed Crewmember). Hagatha the Witch, the family's other major, was
 	// scripted by family 01 (DungeonRunEncounters.F01.cs: Ritual Dagger, Ominous Fog, the hunters' hero cards); Alternate
-	// Timeline (GILA_BOSS_48t, a game restart) is rejected to phase 9 and left out of Infinite Toki's deck. The texts are the
+	// Timeline (GILA_BOSS_48t, a game restart) is scripted by step 9 (lane X: the restart family, EncounterRules.S9.cs) and
+	// stays out of Infinite Toki's deck until the step-9 stage-3 gate (real games) admits it. The texts are the
 	// client's (facts/violet-hold-2026-09.json). Every power works on public zones or on the boss's own hand and deck; every
 	// random choice uses the game RNG and is reported as a random event; no new private tag.
 	public static partial class DungeonRunEncounters
@@ -80,6 +81,13 @@ namespace SabberStoneCore.CardSets.DungeonRun
 				Enchant = new Enchant(new Effect(GameTag.MEGA_WINDFURY, EffectOperator.SET, 1)),
 				Trigger = new Trigger(TriggerType.TURN_END) { EitherTurn = true, SingleTask = new DestroyTask(EntityType.TARGET) },
 			});
+			// Alternate Timeline (10): "Start a new game, but your opponent's Health stays the same." Step 9 (lane X, D13): its cast
+			// ends the fight as a restart (EncounterRules.RestartGame); the run layer restages the floor with the run player's
+			// damage carried (DungeonRunState.RestartCarriedDamage). Playable only while the match lists it (RunMatchPlan.Restarts:
+			// a tuned run, once per floor). Not in any boss deck and not admitted until the stage-3 gate passes.
+			BossCard(RunMatchEnds.AlternateTimeline,
+				() => new CardDef(new Power { PowerTask = new CustomTask((g, c, s, t, stack) => EncounterRules.RestartGame(c)) }),
+				card => card.PlayAvailabilityPredicate += (c, _) => EncounterRules.RestartAllowed(c.Game, RunMatchEnds.AlternateTimeline));
 
 			// ---------------- Glinda Crowskin (GILA_BOSS_49h, 50 Health)
 			// False Heart: "Passive Hero Power. While you control a minion, your hero is Immune." Family 06's hero aura

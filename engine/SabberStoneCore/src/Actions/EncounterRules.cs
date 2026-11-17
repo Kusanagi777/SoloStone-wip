@@ -274,11 +274,17 @@ namespace SabberStoneCore.Actions
 		/// </summary>
 		internal static void ResolveHeroForms(Game game)
 		{
+			// Step 9 (EncounterRules.S9.cs): a fight an escape or a restart ended keeps its dead heroes (no form, rat or relay
+			// takes over); after the forms and the relay, a dead run hero may restart the game (GILA_911 Rewind).
+			if (game == null || game.State == State.COMPLETE || EndedByScript(game)) return;
 			RunEncounter enc = Of(game);
-			if (enc == null || game.State == State.COMPLETE) return;
-			ResolveUnderbellyRats(game); // family 15, The Rat King: a living Underbelly Rat replaces a dead hero (EncounterRules.F15.cs)
-			if (enc.BossForms.Count > 1) ResolveBoss(game, enc);
-			if (enc.PlayerRelay.Count > 0) ResolveRelay(game, enc);
+			if (enc != null)
+			{
+				ResolveUnderbellyRats(game); // family 15, The Rat King: a living Underbelly Rat replaces a dead hero (EncounterRules.F15.cs)
+				if (enc.BossForms.Count > 1) ResolveBoss(game, enc);
+				if (enc.PlayerRelay.Count > 0) ResolveRelay(game, enc);
+			}
+			ResolveRewind(game);
 		}
 
 		private static void ResolveBoss(Game game, RunEncounter enc)
@@ -335,7 +341,8 @@ namespace SabberStoneCore.Actions
 					new ReplaceHeroPower(form.Power).Process(game, boss, old, null);
 				}
 			}
-			int max = form.Health > 0 ? form.Health : hero.BaseHealth;
+			// Step 9 D11: with the form ratchet (Tekahn on acts-v4t) a threshold form with no Health of its own caps the maximum.
+			int max = RatchetMax(game, form, form.Health > 0 ? form.Health : hero.BaseHealth);
 			bool keep = form.KeepExcess && !dead && remaining > 0 && remaining < max;
 			hero.BaseHealth = max;
 			hero.Damage = keep ? max - remaining : 0;
@@ -480,9 +487,11 @@ namespace SabberStoneCore.Actions
 			var heroes = game.IdEntityDic.Values.OfType<Hero>().Where(h => h.Controller == player
 					&& (ReferenceEquals(player.Hero, h) || h.Zone == player.SetasideZone))
 				.OrderBy(h => h.Id).Select(h => h.Card.Id).ToList();
-			bool bossDead = boss.Hero.ToBeDestroyed || boss.Hero.Health <= 0;
+			// Step 9: an escape or a restart leaves the boss alive with the Health it has (its hero leaves the table without dying).
+			bool bossDead = !EndedByScript(game) && (boss.Hero.ToBeDestroyed || boss.Hero.Health <= 0);
 			return new RunMatchEnd(bossDead ? 0 : boss.Hero.Health, boss[FormIndex], boss[FormChanges],
-				Math.Max(0, player.Hero.Damage), heroes, game[NoLoss] == 1, player[PlagueCount] + boss[PlagueCount]);
+				Math.Max(0, player.Hero.Damage), heroes, game[NoLoss] == 1, player[PlagueCount] + boss[PlagueCount],
+				escaped: game[Escape] != 0, restarted: game[Restart] != 0, restartSource: RestartSourceOf(game[Restart]), turns: game.Turn);
 		}
 	}
 }

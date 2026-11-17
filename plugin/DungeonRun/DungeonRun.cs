@@ -768,7 +768,7 @@ internal sealed partial class DungeonRun
     /// run's Floor - 1 (every earlier floor was won). No save field.
     /// </summary>
     internal static int BossesDefeated(DungeonRunState state) =>
-        state.IsActRun ? state.Matches.Count(m => m.Outcome == DungeonRunOutcome.Win && !m.NoLoss) : Math.Max(0, state.Floor - 1);
+        state.IsActRun ? state.Matches.Count(m => m.Outcome == DungeonRunOutcome.Win && !m.NoLoss && !m.Escaped) : Math.Max(0, state.Floor - 1);
 
     /// <summary>
     /// The active treasures a treasure-Discover may offer this run (RunContext.TreasurePool, design H2): every offered,
@@ -1358,7 +1358,8 @@ internal sealed partial class DungeonRun
         // Only between nodes: during the floor's treasure or bundle draft the bundle draft is still to come or open.
         if (!state.IsActRun || state.Phase != DungeonRunPhase.PreMatch && state.Phase != DungeonRunPhase.Tavern && state.Phase != DungeonRunPhase.Modifier) return 0;
         var won = state.Matches.LastOrDefault(m => m.Outcome != DungeonRunOutcome.Fault);
-        if (won == null || won.Outcome != DungeonRunOutcome.Win) return 0;
+        // Step 9: an escaped fight (ULDA_111) is no won fight and drafts nothing by rule: nothing was skipped.
+        if (won == null || won.Outcome != DungeonRunOutcome.Win || won.Escaped) return 0;
         return state.Drafts.Any(d => d.Kind == "bundle" && d.Floor == won.Floor) ? 0 : won.Floor;
     }
 

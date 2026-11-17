@@ -37,7 +37,14 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		//     the boss AI's sampled Secret worlds).
 		// (d) GILA_511 Sticky Fingers (a passive treasure): a hand aura on its own player enchantment (GILA_511e), cards that did
 		//     not start in the owner's deck cost (1) less (SelfCondition.IsNotStartInDeck: the history's frozen starting decks).
-		// ULDA_111 Hearthstone, GILA_900p Temporal Loop and GILA_911 Rewind ship no content (DungeonRunAdmission: phase 9).
+		// (e) Step 9 (lane X, handoff/phase9/plan.md D13, D14): ULDA_111 Hearthstone (an active treasure: "Start of Game: Draw
+		//     this. Escape to the Tavern and remove this from your Adventure deck.") and GILA_911 Rewind (a passive treasure: "When
+		//     your hero dies, restart the game and remove this from your Dungeon Deck."), offered on tuned runs only (run-v1.json
+		//     runs "v4"). Their match ends are Actions.EncounterRules' (EncounterRules.S9.cs): Hearthstone is playable only when
+		//     the match allows an escape (RunMatchPlan.EscapeAllowed), Rewind restarts only when the match lists it
+		//     (RunMatchPlan.Restarts); the run layer records both (plugin DungeonRun.Outcomes.cs).
+		// GILA_900p Temporal Loop ships no content: a final rejection (a SoloStone adaptation: Toki keeps the Mage basic power;
+		// NativeMatch has no client history re-sync for a restarted turn).
 
 		/// <summary>The 9 family F15 ids that ship content, in id order (ULD_003 is scripted in UldumCardsGen).</summary>
 		public static readonly IReadOnlyList<string> DeferralIds = new[]
@@ -45,11 +52,17 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			"DALA_707", "GILA_511", "ULDA_013", "ULDA_040", "ULDA_045", "ULDA_045t", "ULDA_302", "ULDA_407", "ULD_003",
 		};
 
-		/// <summary>The family F15 ids that stay rejected (no content): turn and game restart, and the match exit (phase 9).</summary>
-		public static readonly IReadOnlyList<string> DeferredToPhase9Ids = new[] { "GILA_900p", "GILA_911", "ULDA_111" };
+		/// <summary>
+		/// The family F15 ids that stay rejected (no content): GILA_900p Temporal Loop's turn restart, a final rejection (step 9).
+		/// The name is kept from phase 6, when ULDA_111 and GILA_911 were here too; step 9 scripts them (<see cref="MatchEndIds"/>).
+		/// </summary>
+		public static readonly IReadOnlyList<string> DeferredToPhase9Ids = new[] { "GILA_900p" };
+
+		/// <summary>Step 9: the family F15 ids scripted as match ends (the GILA_911 restart, the ULDA_111 escape), in id order.</summary>
+		public static readonly IReadOnlyList<string> MatchEndIds = new[] { "GILA_911", "ULDA_111" };
 
 		/// <summary>The cards that are "Start of Game: Draw this." self-drawing sources (StartOfGameRules, never in an opening hand).</summary>
-		public static readonly IReadOnlyList<string> StartOfGameDrawIds = new[] { "DALA_707", "ULDA_013", "ULDA_040", "ULDA_302", "ULDA_407" };
+		public static readonly IReadOnlyList<string> StartOfGameDrawIds = new[] { "DALA_707", "ULDA_013", "ULDA_040", "ULDA_111", "ULDA_302", "ULDA_407" };
 
 		/// <summary>ULDA_013 Zephrys's Lamp, the card Sack of Lamps fills the hand with.</summary>
 		public const string ZephrysLamp = "ULDA_013";
@@ -262,6 +275,21 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			// ---------------- (d) Sticky Fingers
 			Treasure("GILA_511", "Sticky Fingers", "<b>Passive</b>\nCards that didn't start in your deck cost (1) less.",
 				effect: "fx_GILA_511", ownShell: true);
+
+			// ---------------- (e) step 9: the match ends (EncounterRules.S9.cs)
+			// Hearthstone: a self-drawing Start of Game source; playable only while the match allows an escape (a play requirement,
+			// so the check happens when it is cast); its cast ends the fight as an escape.
+			Active(RunMatchEnds.Hearthstone, "Hearthstone",
+				"[x]<b>Start of Game:</b> Draw this.\nEscape to the Tavern and\nremove this from your\nAdventure deck.", 0,
+				() => Def(new Power { PowerTask = new CustomTask((g, c, s, t, stack) => EncounterRules.EscapeToTavern(c)) }),
+				card =>
+				{
+					DeclareSogDraw(card);
+					card.PlayAvailabilityPredicate += (c, _) => EncounterRules.EscapeAllowed(c);
+				});
+			// Rewind: no player enchantment; EncounterRules.ResolveRewind reads the match's restart list when the run hero dies.
+			Treasure(RunMatchEnds.Rewind, "Rewind",
+				"<b>Passive</b>\nWhen your hero dies, restart the game and remove this from your Dungeon Deck.", ownShell: true);
 		}
 	}
 }

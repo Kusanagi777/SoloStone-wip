@@ -709,7 +709,7 @@
    "adaptations": [
     {
      "kind": "start",
-     "note": "The original fight starts the player as Houndmaster Shaw with the other three hunters as hero cards. Here the run keeps its own hero and deck and is given the hunters' hero cards after the mulligan (Darius, Tess; not the run's own hunter). Toki's card (GILA_900h2) is left out: her power GILA_900p Temporal Loop restarts the turn (phase 9). Shaw has no hero card in the client data, so a run that is not Shaw's never becomes Shaw."
+     "note": "The original fight starts the player as Houndmaster Shaw with the other three hunters as hero cards. Here the run keeps its own hero and deck and is given the hunters' hero cards after the mulligan (Darius, Tess; not the run's own hunter). Toki's card (GILA_900h2) is left out: her power GILA_900p Temporal Loop restarts the turn, which step 9 rejects for good (NativeMatch has no client history re-sync). Shaw has no hero card in the client data, so a run that is not Shaw's never becomes Shaw."
     },
     {
      "kind": "power",
@@ -1778,7 +1778,7 @@
    "name": "Toki, Time-Tinker (Hagatha fight hero card)",
    "power": "GILA_900p",
    "reason": "her hero power Temporal Loop restarts the turn, which needs a run-owned turn restart",
-   "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)",
+   "lift": "none: a final rejection (step 9, a SoloStone adaptation): restarting a turn needs a rewind or a full re-sync of the client's history stream and a rebuilt bot state, and NativeMatch has no client history re-sync; Toki keeps the Mage basic power (CS2_034) as a stand-in (a later Windows lane may reopen it with Game.CloneExact and a NativeMatch re-sync)",
    "cards": []
   }
  ]

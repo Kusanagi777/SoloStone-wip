@@ -330,6 +330,17 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		/// <summary>The next fight starts with these bonuses (ULDA_504); a second call in one match replaces the first.</summary>
 		public static void GrantNextFight(Game game, int mana, int draws) => Result(game).NextFight = new RunNextFight(mana, draws);
 
+		/// <summary>
+		/// Step 9: the match used up the run treasure <paramref name="key"/> (its content key: ULDA_111 Hearthstone's escape,
+		/// GILA_911 Rewind's restart); the run layer removes it when it records the escape or the restart. Once per key.
+		/// </summary>
+		public static void ConsumeTreasure(Game game, string key)
+		{
+			if (game == null || key == null) return;
+			var result = Result(game);
+			if (!result.ConsumedTreasures.Contains(key)) result.Consume(key);
+		}
+
 		// ---------------------------------------------------------------- H8 belief resets
 
 		/// <summary>
