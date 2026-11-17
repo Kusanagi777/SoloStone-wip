@@ -217,6 +217,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `run:hunt-reward` | 1 | 1 | 0 | A Monster Hunt boss's own hunt reward (the treasure the adventure gave for beating that boss): SoloStone's rewards are the run's treasure drafts, so a per-boss reward belongs to the reward economy (phase 9). |
 | `run:tavern` | 1 | 0 | 0 | Bob's tavern services between fights (deck edits, recruits). |
 | `data:original-boss-decks-absent` | 2 | 0 | 0 | Original boss decks are server-side: the client database has none, so an encounter needs a reconstructed deck. |
+| `data:bombastic-decks-absent` | 1 | 0 | 0 | House Special replaces the run deck with one of Bob's Bombastic Decks, which were server-side: no client table or other source lists them, so the option stays deferred (tavern-v1.json deferred) until a source or a SoloStone authoring of the decks (phase 9). |
 | `data:unused-in-adventure` | 1 | 1 | 0 | The client data holds the card but the adventure never used it (the wiki marks it unused): scripted and admitted for completeness, listed by no encounter, deck or reward. |
 
 23 rows carry at least one gap.
@@ -764,10 +765,10 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 | `data/dungeon-run/reference/buckets.json` | `b3015218a0ea9193` |
 | `data/dungeon-run/reference/client-tables.json` | `c7b51c98f568706a` |
 | `data/dungeon-run/run-v1.json` | `f932d6493d4b4091` |
-| `data/dungeon-run/schedule-v1.json` | `0efbeca314cb229f` |
+| `data/dungeon-run/schedule-v1.json` | `14ace66b60f7604e` |
 | `data/dungeon-run/tavern-v1.json` | `2b0688c5c686151c` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
-| `tools/restoration-ledger/curation.json` | `cfe6714317f68595` |
+| `tools/restoration-ledger/curation.json` | `04e7a43c329d637d` |
 
 Plus the engine card data and DungeonRunContent compiled from the working tree.
