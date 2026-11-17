@@ -107,14 +107,17 @@ internal sealed class DungeonRun
     // Refusal texts double as the picker's and the menu's messages (DungeonRunRuntime.NewRun).
     internal const string LockedDeck = "That deck is locked.", LockedPower = "That hero power is locked.",
         OtherClassDeck = "That deck belongs to another class.", ChooseSignature = "Choose a signature treasure.",
-        NotOffered = "That signature treasure is not on offer.";
+        NotOffered = "That signature treasure is not on offer.",
+        ExcludedFinale = "That schedule's finale is this hero's own character.";
 
     /// <summary>
     /// Starts a run with a class, one of its starter decks and one of its powers (design R2). An unknown id throws
     /// <see cref="ArgumentException"/>; a locked deck or power, or a deck of another class, throws
     /// <see cref="InvalidOperationException"/>. The run deck is a copy of the starter deck.
     /// <paramref name="schedule"/> picks the act/floor schedule: null is schedule-v1.json "default" when schedules are loaded and
-    /// the legacy fixed eight floors when none are; <see cref="DungeonRunSchedules.LegacyId"/> is always the legacy floors. An
+    /// the legacy fixed eight floors when none are; <see cref="DungeonRunSchedules.LegacyId"/> is always the legacy floors. A
+    /// named schedule whose enabled finale fixes a boss row the hero row excludes (the close-out: DALA_Tekahn on acts-v3t, whose
+    /// finale is Tekahn himself) throws <see cref="InvalidOperationException"/>, as the default roll never picks it. An
     /// act run is stamped with ScheduleVersion, Schedule and its first node, never changed afterwards, and keeps its deck as
     /// card records (<see cref="DungeonRunDeck"/>).
     /// </summary>
@@ -142,6 +145,9 @@ internal sealed class DungeonRun
         {
             string id = schedule ?? DefaultSchedule(seed, cls);
             acts = Data.Schedules?.Find(id) ?? throw new ArgumentException("Unknown schedule " + id + ".");
+            // The close-out (family 25): a finale's fixed bosses ignore excludeBosses, so a run never follows a schedule whose
+            // finale is its hero row's own character (the default roll leaves such a schedule out; a named one is refused).
+            if (FinaleExcludes(acts, cls)) throw new InvalidOperationException(ExcludedFinale);
         }
         // A generated starter (phase 6) is drawn from the run seed; a fixed one is the deck's cards.
         var starter = deck.IsGenerated ? GenerateStarter(cls, deck, seed) : deck.Cards;
