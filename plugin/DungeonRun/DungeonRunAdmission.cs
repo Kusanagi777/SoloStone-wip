@@ -1074,6 +1074,7 @@ internal static partial class DungeonRunAdmission
         var boss = new SortedSet<string>(StringComparer.Ordinal);
         var ids = new SortedSet<string>(Cards.All.Where(c => c?.Id != null).Select(c => c.Id), StringComparer.Ordinal);
         ids.UnionWith(ById.Keys);
+        var unscripted = new HashSet<string>(UnscriptedGenerated(), StringComparer.Ordinal);
         foreach (string id in ids)
         {
             EngineCard card;
@@ -1082,6 +1083,9 @@ internal static partial class DungeonRunAdmission
             // A catalog run's player may generate Secrets, and the engine's Secret generation does not check Implemented
             // (Pressure Plate ULD_152 was generated for a Hunter): an unscripted Secret is never generated, by either side.
             if (catalogRun && card.IsSecret && !card.Implemented) { all.Add(id); continue; }
+            // Step 9 (generation hygiene): an engine generation pool's card that does nothing its text says is never generated,
+            // by either side, in either kind of run (UnscriptedGenerated).
+            if (unscripted.Contains(id)) { all.Add(id); continue; }
             // A catalog lift admits scripted cards only: an unscripted card (Hunter's Pack ULD_429) keeps its legacy verdict, so
             // a catalog run never generates one the legacy lists keep out (GeneratedRejects(true) holds every unscripted id of
             // GeneratedRejects(false)).
@@ -1097,6 +1101,83 @@ internal static partial class DungeonRunAdmission
         }
         return (all.ToArray(), boss.ToArray());
     }
+
+    // ------------------------------------------------------------------ step 9: generation hygiene (plan D15)
+
+    /// <summary>
+    /// Cards of the engine's generation pools that are a card's own fixed choice rather than a random result, never listed
+    /// by <see cref="UnscriptedGenerated"/>:
+    /// - Kazakus's potion bases (CFM_621t, CFM_621t14, CFM_621t15): KazakusPower writes the potion's effect from the two
+    ///   picked ingredients, so the engine's Implemented flag is off for a card that works.
+    /// - Kobold Hermit's four basic Totems (LOOT_062, the "Discover/BASIC_TOTEM" pool: AT_132_SHAMANa-d): the whole pool is
+    ///   the card's choice, and filtering it would leave one of the four. Known engine gap, recorded for a follow-up: the
+    ///   AT_132_SHAMAN copies carry neither the Totem race nor their totems' Taunt, Spell Damage or healing (CS2_050,
+    ///   CS2_051, CS2_052, NEW1_009 do); mapping the choice to the real totems changes every game with the card.
+    /// </summary>
+    internal static readonly IReadOnlyList<string> GenerationMechanismIds = new[]
+    {
+        "AT_132_SHAMANa", "AT_132_SHAMANb", "AT_132_SHAMANc", "AT_132_SHAMANd", "CFM_621t", "CFM_621t14", "CFM_621t15",
+    };
+
+    /// <summary>
+    /// Keywords the engine plays from the card's own tags with no script: a card whose whole text is these (Murmy's
+    /// "Reborn", Gyrocopter's "Rush Windfury", Wrath of Air Totem's "Spell Damage +1") works unscripted, so it is not listed
+    /// when its card carries every tag its text names. Lower-case text, markup removed.
+    /// </summary>
+    private static readonly (string Text, GameTag Tag)[] TagKeywords =
+    {
+        ("divine shield", GameTag.DIVINE_SHIELD), ("spell damage +", GameTag.SPELLPOWER), ("taunt", GameTag.TAUNT),
+        ("charge", GameTag.CHARGE), ("rush", GameTag.RUSH), ("windfury", GameTag.WINDFURY), ("stealth", GameTag.STEALTH),
+        ("poisonous", GameTag.POISONOUS), ("lifesteal", GameTag.LIFESTEAL), ("reborn", GameTag.REBORN),
+    };
+
+    /// <summary>
+    /// The card does nothing more than its tags: no text, or only <see cref="TagKeywords"/> that its card carries (a Spell
+    /// Damage keyword with its number). Never true for a hero card (a hero needs its armor, power and Battlecry scripted).
+    /// </summary>
+    internal static bool PlaysFromTags(EngineCard card)
+    {
+        if (card == null || card.Type == CardType.HERO) return false;
+        string text = System.Text.RegularExpressions.Regex.Replace((card.Text ?? "").ToLowerInvariant(), "<[^>]*>|\\[x\\]", " ")
+            .Replace('_', ' ').Replace('&', ' ');
+        foreach (var (word, tag) in TagKeywords)
+        {
+            if (!text.Contains(word)) continue;
+            if (card[tag] <= 0) return false;
+            text = word.EndsWith("+", StringComparison.Ordinal)
+                ? System.Text.RegularExpressions.Regex.Replace(text, System.Text.RegularExpressions.Regex.Escape(word) + "\\d+", " ")
+                : text.Replace(word, " ");
+        }
+        return System.Text.RegularExpressions.Regex.Replace(text, "[\\s.,]+|\\band\\b", "").Length == 0;
+    }
+
+    /// <summary>
+    /// Step 9 (generation hygiene, plan D15): the generated unscripted list. Every card the engine's generation pools can
+    /// yield (<see cref="OfflineCardPools.LegacyGeneratedIds"/>: the frozen legacy pools behind Discover, Replace, Adapt,
+    /// the Lackeys, Kazakus, Build-A-Beast, the Un'Goro pack, past Legendaries and the Cards.cs format, class and cost
+    /// pools) that does not do what its text says: no engine script (Implemented off), not a card that
+    /// <see cref="PlaysFromTags"/>, and not one of <see cref="GenerationMechanismIds"/>. Computed from the engine's card data,
+    /// not kept by hand, so a card scripted later (Titanic and Draconic Lackey, ULD_616 and DRG_052, in step 9) leaves it by
+    /// itself. The explicit admission table seeds the run's exclusions (<see cref="GeneratedRejects"/>); this list is added
+    /// to them for both kinds of run, so a run match never generates one, whoever generates (the engine filters every pool
+    /// read with Game.BlocksGenerated, OfflineCardPools.ForGame). The modern offline pools (OfflinePoolPolicy) hold scripted
+    /// cards only, and Death Knight and Demon Hunter pools are built from scripted cards. Ordinal order.
+    /// </summary>
+    internal static IReadOnlyList<string> UnscriptedGenerated() => UnscriptedGeneratedList.Value;
+
+    private static readonly Lazy<string[]> UnscriptedGeneratedList = new Lazy<string[]>(() =>
+    {
+        var mechanism = new HashSet<string>(GenerationMechanismIds, StringComparer.Ordinal);
+        var result = new List<string>();
+        foreach (string id in OfflineCardPools.LegacyGeneratedIds())
+        {
+            EngineCard card;
+            try { card = Cards.FromId(id); } catch { card = null; }
+            if (card == null || card.Implemented || mechanism.Contains(id) || PlaysFromTags(card)) continue;
+            result.Add(id);
+        }
+        return result.ToArray();
+    });
 
     /// <summary>
     /// Cards generation never yields in a run match, whoever generates (RunMatchPlan.ExcludedGenerated): every card of the

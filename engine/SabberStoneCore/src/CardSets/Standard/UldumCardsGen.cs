@@ -3448,8 +3448,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_616e", new CardDef(new Power
 			{
-				// TODO [ULD_616e] Hardened && Test: Hardened_ULD_616e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_616e")
+				// Step 9 (generation hygiene): scripted with Titanic Lackey, the seventh card of the engine's Lackey pool.
+				Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_616e")
 			}));
 
 			// ---------------------------------- ENCHANTMENT - NEUTRAL
@@ -3514,10 +3514,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_616", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_MINION_TARGET,0},{PlayReq.REQ_TARGET_IF_AVAILABLE,0},{PlayReq.REQ_FRIENDLY_TARGET,0}}, new Power
 			{
-				// TODO [ULD_616] Titanic Lackey && Test: Titanic Lackey_ULD_616
+				// Step 9 (generation hygiene): Goblin Lackey's pattern (DAL_739), with Hardened (ULD_616e: +2 Health and Taunt).
 				InfoCardId = "ULD_616e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new AddEnchantmentTask("ULD_616e", EntityType.TARGET)
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL

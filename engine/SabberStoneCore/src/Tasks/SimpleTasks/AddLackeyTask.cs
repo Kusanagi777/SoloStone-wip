@@ -35,8 +35,13 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 		{
 			game.OnRandomHappened(true);
 
+			// A run match never hands out a Lackey its generation filter blocks (step 9, generation hygiene); every other game
+			// draws from the same seven as before.
+			Card[] lackeys = OfflineCardPools.ForGame(game, Lackeys);
+			if (lackeys.Length == 0) return TaskState.COMPLETE;
+
 			for (int i = 0; i < _amount && !controller.HandZone.IsFull; i++)
-				Entity.FromCard(in controller, Lackeys.Choose(game.Random), zone: controller.HandZone);
+				Entity.FromCard(in controller, lackeys.Choose(game.Random), zone: controller.HandZone);
 
 			return TaskState.COMPLETE;
 		}
