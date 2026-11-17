@@ -144,7 +144,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			// The monster hunters' hero cards the run player is given for this fight: "Battlecry: Deal N damage to all minions and
 			// choose a Passive Treasure." The passive is chosen first, then the damage is dealt, and the hunter's own cards join the
 			// deck (Actions.EncounterRules.PlayHunterCard reads them from the match's encounter rules). Toki's card (GILA_900h2) is
-			// not scripted: her power GILA_900p Temporal Loop restarts the turn (phase 9).
+			// not scripted: her power GILA_900p Temporal Loop restarts the turn, rejected for good in step 9 (no client history re-sync).
 			PlayerHeroCard("GILA_500h4", () => new CustomTask((g, c, s, t, stack) => EncounterRules.PlayHunterCard(g, c, (IPlayable)s, 8, stack)));
 			PlayerHeroCard("GILA_600h2", () => new CustomTask((g, c, s, t, stack) => EncounterRules.PlayHunterCard(g, c, (IPlayable)s, 5, stack)));
 

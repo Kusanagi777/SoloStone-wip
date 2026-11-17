@@ -135,6 +135,48 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		public bool FormRatchet { get; set; }
 		/// <summary>ULDA_111 Hearthstone may be cast this fight (step 9 D14); false makes it unplayable.</summary>
 		public bool EscapeAllowed { get; set; }
+		/// <summary>
+		/// The restart sources this fight may still use (step 9 D13: <see cref="RunMatchEnds.Rewind"/> while the run holds it,
+		/// <see cref="RunMatchEnds.AlternateTimeline"/> in a boss deck that holds it), each at most once per floor; empty (no
+		/// restart) on every run before step 9.
+		/// </summary>
+		public IList<string> Restarts { get; set; } = new List<string>();
+	}
+
+	/// <summary>
+	/// Step 9 (lane X): what one run fight may end with besides a win or a loss, built once by
+	/// <see cref="DungeonRunSetup.Configure"/> from the plan (<see cref="Config.GameConfig.MatchEnds"/>) and never changed, so
+	/// every clone shares it; null on a plan with the step-9 defaults (every run before stamp 4). Actions.EncounterRules
+	/// (EncounterRules.S9.cs) reads it: the escape (ULDA_111), the restarts (GILA_911, GILA_BOSS_48t) and the form ratchet.
+	/// </summary>
+	public sealed class RunMatchEnds
+	{
+		/// <summary>ULDA_111 Hearthstone: "Start of Game: Draw this. Escape to the Tavern and remove this from your Adventure deck."</summary>
+		public const string Hearthstone = "ULDA_111";
+		/// <summary>GILA_911 Rewind: "Passive. When your hero dies, restart the game and remove this from your Dungeon Deck."</summary>
+		public const string Rewind = "GILA_911";
+		/// <summary>GILA_BOSS_48t Alternate Timeline (Infinite Toki): "Start a new game, but your opponent's Health stays the same."</summary>
+		public const string AlternateTimeline = "GILA_BOSS_48t";
+
+		/// <summary>The run player may cast ULDA_111 Hearthstone (<see cref="RunMatchPlan.EscapeAllowed"/>).</summary>
+		public bool EscapeAllowed { get; }
+		/// <summary>A boss form with a Health threshold and no Health of its own clamps the boss's maximum Health (<see cref="RunMatchPlan.FormRatchet"/>).</summary>
+		public bool FormRatchet { get; }
+		/// <summary>The restart sources the fight may use (<see cref="RunMatchPlan.Restarts"/>).</summary>
+		public IReadOnlyList<string> Restarts { get; }
+
+		internal RunMatchEnds(RunMatchPlan plan)
+		{
+			EscapeAllowed = plan.EscapeAllowed;
+			FormRatchet = plan.FormRatchet;
+			Restarts = (plan.Restarts ?? new List<string>()).Where(r => r != null).Distinct().ToArray();
+		}
+
+		/// <summary>The fight may use the restart <paramref name="source"/>.</summary>
+		public bool Allows(string source) => source != null && Restarts.Contains(source);
+
+		/// <summary>The plan asks for any of it (false on every plan before step 9: the config field stays null).</summary>
+		internal static bool Needed(RunMatchPlan plan) => plan.EscapeAllowed || plan.FormRatchet || (plan.Restarts?.Count ?? 0) > 0;
 	}
 
 	/// <summary>One boss form (encounters-v1.json "forms"): who the boss becomes, when, and what changes with it.</summary>
@@ -243,12 +285,20 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		public bool Escaped { get; }
 		/// <summary>Step 9: the fight asked to be restarted (GILA_911 Rewind, GILA_BOSS_48t); reported as a fault with this mark.</summary>
 		public bool Restarted { get; }
+		/// <summary>
+		/// Step 9: the card that restarted the fight (<see cref="RunMatchEnds.Rewind"/> or <see cref="RunMatchEnds.AlternateTimeline"/>);
+		/// null when <see cref="Restarted"/> is false. A restart reported with no source counts as Rewind's.
+		/// </summary>
+		public string RestartSource { get; }
+		/// <summary>Step 9: the game turns the fight took (Game.Turn at its end: both players' turns count), for the restart turn budget; 0 when unknown.</summary>
+		public int Turns { get; }
 		public RunMatchEnd(int bossRemainingHealth, int bossForm, int bossFormChanges, int playerHeroDamage, IEnumerable<string> heroesUsed, bool noLoss,
-			int gnomebliteratorDamage = 0, bool escaped = false, bool restarted = false)
+			int gnomebliteratorDamage = 0, bool escaped = false, bool restarted = false, string restartSource = null, int turns = 0)
 		{
 			BossRemainingHealth = bossRemainingHealth; BossForm = bossForm; BossFormChanges = bossFormChanges; PlayerHeroDamage = playerHeroDamage;
 			HeroesUsed = (heroesUsed ?? new string[0]).ToArray(); NoLoss = noLoss; GnomebliteratorDamage = gnomebliteratorDamage;
-			Escaped = escaped; Restarted = restarted;
+			Escaped = escaped; Restarted = restarted || restartSource != null; RestartSource = Restarted ? restartSource : null;
+			Turns = Math.Max(0, turns);
 		}
 	}
 
@@ -397,6 +447,10 @@ namespace SabberStoneCore.CardSets.DungeonRun
 				config.Player2OpeningHandBonus = Math.Max(config.Player2OpeningHandBonus, Math.Max(0, Math.Min(GameConfig.MaxOpeningHandBonus, ruleHand - 5)));
 			}
 			if (RunEncounter.Needed(plan)) config.Encounter = new RunEncounter(plan);
+			// Step 9: the escape, the restarts and the form ratchet. Nothing is set for a plan with the defaults (every run before
+			// stamp 4), so every earlier run's config is unchanged.
+			if (plan.TurnCap < 1) throw new ArgumentException("Run plan turn cap must be positive.");
+			if (RunMatchEnds.Needed(plan)) config.MatchEnds = new RunMatchEnds(plan);
 		}
 
 		/// <summary>

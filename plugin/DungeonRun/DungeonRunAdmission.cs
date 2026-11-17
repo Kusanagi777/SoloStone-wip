@@ -124,11 +124,13 @@ internal static partial class DungeonRunAdmission
     internal const string ShrineFormLift = "none: engine-made dormant forms and the boss-side test fixture; no player role, boss deck or generation pool offers them";
     internal const string RunTeammateLift = "none: a run teammate; no boss deck or generation pool offers it";
     internal const string TeammateDraftLift = "phase 7 (shrines/teammates): the T1/T2 teammate families script the teammate";
-    // Phase 6 decided these stay rejected (design section 8): restoring a turn needs a rewind or full re-sync of the client's
-    // history stream, and a restart after the hero dies must run before the defeat screen; escaping a fight needs an "escape"
-    // match outcome in the native end-game flow and an acts-v1 rule for a skipped fight node. Neither exists in phase 6.
-    internal const string TurnRestartLift = "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)";
-    internal const string MatchExitLift = "phase 9 (economy): a run-owned match exit (an escape outcome and a skipped fight node) that edits the run deck (deferred there by phase 6)";
+    // Phase 6 deferred these to phase 9 (design section 8). Step 9 (lane X) decided them: a game restart (GILA_911 Rewind, the
+    // restart family) and the escape (ULDA_111 Hearthstone) are run-owned match ends (Actions.EncounterRules.S9.cs, plugin
+    // DungeonRun.Outcomes.cs), admitted below; a turn restart (GILA_900p Temporal Loop) is rejected for good: it needs a rewind
+    // or full re-sync of the client's history stream, which NativeMatch cannot do. The constant names are kept from phase 6.
+    internal const string TurnRestartLift = "none: a final rejection (step 9, a SoloStone adaptation): restarting a turn needs a rewind or a full re-sync of the client's history stream and a rebuilt bot state, and NativeMatch has no client history re-sync; Toki keeps the Mage basic power (CS2_034) as a stand-in (a later Windows lane may reopen it with Game.CloneExact and a NativeMatch re-sync)";
+    /// <summary>Step 9: ULDA_111's former lift, now landed (its row admits the run player); kept so the name still resolves.</summary>
+    internal const string MatchExitLift = "none: landed in step 9 (lane X): ULDA_111 Hearthstone's escape is a run-owned match end (Actions.EncounterRules.S9.cs, DungeonRun.Outcomes.cs)";
     internal const string OwnTurnSecretLift = "phase 6 (heroes/powers/treasures): ReplyModel keeps the replier's own Secret live on its owner's turn";
     internal const string TreasureScriptLift = "phase 6 (heroes/powers/treasures): script the treasure's start-of-game or started-in-deck rule";
     internal const string TeammateScriptLift = "phase 7 (shrines/teammates): script the teammate's start-of-game or started-in-deck rule";
@@ -405,8 +407,13 @@ internal static partial class DungeonRunAdmission
         },
         new AdmissionRule
         {
-            Family = "start-of-game-draw", Admit = AdmitScope.None, Lift = MatchExitLift,
-            Reason = "ends the fight and edits the run deck",
+            NeverGenerated = true,
+            Family = "start-of-game-draw", Admit = AdmitScope.Player, Lift = RunTreasureLift,
+            Reason = "treasure: only the player can hold it (a tuned run's, run-v1.json runs v4); drawn at the start of the game "
+                + "(StartOfGameRules, a self-drawing source never dealt in an opening hand), so it is public to both players; playable "
+                + "only while the match allows an escape (RunMatchPlan.EscapeAllowed: the deck above deckMin, not a finale act, not the "
+                + "last node), and its cast ends the fight as an escape (Actions.EncounterRules.EscapeToTavern: the boss leaves the table "
+                + "alive, the run layer records no kill or major credit, removes the card and opens an escape tavern; step 9 D14)",
             Ids = new[] { "ULDA_111" },
         },
         new AdmissionRule
@@ -418,8 +425,19 @@ internal static partial class DungeonRunAdmission
         new AdmissionRule
         {
             Family = "turn-rewind", Admit = AdmitScope.None, Lift = TurnRestartLift,
-            Reason = "restarts the turn or the game, which rebuilds the controllers; bot state and plan cache must restart",
-            Ids = new[] { "GILA_900p", "GILA_911" },
+            Reason = "restarts the turn, which rebuilds the controllers mid-game; bot state and plan cache must restart",
+            Ids = new[] { "GILA_900p" },
+        },
+        new AdmissionRule
+        {
+            NeverGenerated = true,
+            Family = "game-restart", Admit = AdmitScope.Player, Lift = RunTreasureLift,
+            Reason = "treasure: only the player can hold it (a tuned run's, run-v1.json runs v4); a passive with no match effect of its "
+                + "own: when the run player's hero dies (not a concession, after the relay), a match that lists it (RunMatchPlan.Restarts, "
+                + "once per floor) marks the game a restart (Actions.EncounterRules.ResolveRewind) and the run layer restages the floor "
+                + "under a new match seed from the fight's start, removing the treasure (RunMatchResult.ConsumedTreasures; step 9 D13); "
+                + "the game itself ends as the loss it is, so the boss AI plays it as any other",
+            Ids = new[] { "GILA_911" },
         },
 
         // ---------------------------------------------------------------- fixed boss decks (current run data)

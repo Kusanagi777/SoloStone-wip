@@ -29,6 +29,6 @@
     {"id": "ULDA_038", "op": "repickPower", "cost": 1, "weight": 1, "runs": "encounters"}
   ],
   "deferred": [
-    {"id": "ULDA_607", "reason": "Bob's Bombastic Decks were server-side; no source decks (phase 9 authoring)"}
+    {"id": "ULDA_607", "reason": "rejected for good (step 9): Bob's Bombastic Decks were server-side and no source lists them; a Bombastic deck for each of the 15 class sets would be new content, not a one-line effect"}
   ]
 }

@@ -309,7 +309,8 @@ REJECTED = [{
               "engine's decision loop, the bosspilot harnesses and NativeMatch answer only the current player's decisions, and the engine "
               "counters spells only (Spell.IsCountered in PlayCard.PlaySpell); a guess moved to the run player's own turn and a counter "
               "limited to spells would be an invented mechanic. The encounter is left out",
-    "lift": "phase 9 (economy): a decision of the non-current player in the engine's decision loop, NativeMatch (the client prompt) and the "
+    "lift": "client (a Windows lane, not step 9: step 9 adds no decision of the non-current player): a decision of the non-current player in "
+            "the engine's decision loop, NativeMatch (the client prompt) and the "
             "harnesses, and a Counter for minion, weapon, hero and location plays in PlayCard",
     "cards": [],
 }]

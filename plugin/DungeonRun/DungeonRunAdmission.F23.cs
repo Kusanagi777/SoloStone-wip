@@ -2,9 +2,15 @@
 // the Witch, whose rows family 01 wrote): the admission rows of the cards it scripts (a method the table concatenates:
 // DungeonRunAdmission.BuildRules). The hero powers are a boss's only; the boss deck cards are listed by boss decks only and
 // are admitted in the run player's hands too, where a steal, a copy or a control change can put one. Alternate Timeline is
-// rejected (a game restart, phase 9). The tests named in the reasons are the suite c-enc-23 and the enc23 bosspilot modes.
+// rejected until its step-9 gate (a game restart, scripted by step 9 lane X). The tests named in the reasons are the suite c-enc-23 and the enc23 bosspilot modes.
 internal static partial class DungeonRunAdmission
 {
+    /// <summary>
+    /// Step 9 (lane X): GILA_BOSS_48t Alternate Timeline's lift. The restart is scripted; admitting the card and putting it back in
+    /// Infinite Toki's deck waits for the stage-3 gate (real games), which is the user's. Equal to F23.json's "rejected" lift.
+    /// </summary>
+    internal const string AlternateTimelineLift = "step 9 stage-3 gate (real games): Alternate Timeline is scripted as a run-owned game restart (Actions.EncounterRules.RestartGame; DungeonRun.Outcomes.cs restages the floor under a new match seed with the run player's damage carried); it is admitted and re-added to Infinite Toki's deck (make_f23.py) once 40 fair games show 0 faults, at most 1 restart per floor and cumulative turns of at most twice the fight's turn cap, and is otherwise rejected for good (the AI cannot value a game restart)";
+
     internal const string RunTreasureNemesisLift = "none: a run treasure; among bosses only a Monster Hunt nemesis's deck lists it";
 
     private static AdmissionRule[] RulesF23() => new[]
@@ -73,10 +79,11 @@ internal static partial class DungeonRunAdmission
         new AdmissionRule
         {
             NeverGenerated = true,
-            Family = "nemesis-rejected-restart", Admit = AdmitScope.None, Lift = TurnRestartLift,
+            Family = "nemesis-rejected-restart", Admit = AdmitScope.None, Lift = AlternateTimelineLift,
             Reason = "Infinite Toki's Alternate Timeline, \"Start a new game, but your opponent's Health stays the same\": a game restart "
-                + "inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of "
-                + "her deck (data/dungeon-run/reference/encounters/F23.json \"rejected\")",
+                + "inside a fight, scripted in step 9 as a run-owned restart (the floor restaged under a new match seed, the run player's "
+                + "damage carried); left out of her deck until the step-9 gate shows the boss AI plays it soundly "
+                + "(data/dungeon-run/reference/encounters/F23.json \"rejected\")",
             Ids = new[] { "GILA_BOSS_48t" },
         },
     };

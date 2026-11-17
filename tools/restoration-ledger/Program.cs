@@ -1098,8 +1098,12 @@ namespace RestorationLedger
         /// </summary>
         private static readonly string[] Phase6DeckEdits = { };
         private const string Phase6DeckEditsNote = "deferred: phase 6 (match-to-run deck edits / tavern upgrade); producer RunHelpers -> RunMatchResult, applied by DungeonRun.ApplyMatchResult";
-        /// <summary>The deck-edit rows phase 6 deferred to phase 9 (a turn restart, a match exit: design section 8).</summary>
-        private static readonly string[] Phase9DeckEdits = { "GILA_911", "ULDA_111" };
+        /// <summary>
+        /// The deck-edit rows phase 6 deferred to phase 9 (a turn restart, a match exit: design section 8): none. Step 9 (lane X)
+        /// landed both as run-owned match ends: GILA_911 Rewind's game restart and ULDA_111 Hearthstone's escape (both remove
+        /// themselves from the run: RunMatchResult.ConsumedTreasures, DungeonRun.Outcomes.cs).
+        /// </summary>
+        private static readonly string[] Phase9DeckEdits = { };
         private const string Phase9DeckEditsNote = "deferred: phase 9 (turn restart / match exit, decided in phase 6); the ApplyMatchEdits remove path is ready for it";
 
         /// <summary>
