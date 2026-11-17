@@ -1960,6 +1960,9 @@
     "source": "wiki-level-table",
     "original": 3
    },
+   "flags": [
+    "windfury"
+   ],
    "cards": [
     "DALA_BOSS_73e"
    ],
@@ -2514,6 +2517,7 @@
    "deck": {
     "list": "Normal"
    },
+   "v4": {},
    "adaptations": [
     {
      "kind": "schedule",
@@ -2724,6 +2728,7 @@
    "deck": {
     "list": "Normal"
    },
+   "v4": {},
    "adaptations": [
     {
      "kind": "schedule",
@@ -2959,6 +2964,7 @@
    "deck": {
     "list": "Normal"
    },
+   "v4": {},
    "adaptations": [
     {
      "kind": "schedule",
@@ -3206,6 +3212,7 @@
    "deck": {
     "list": "Normal"
    },
+   "v4": {},
    "adaptations": [
     {
      "kind": "schedule",

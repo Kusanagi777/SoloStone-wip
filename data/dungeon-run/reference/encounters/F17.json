@@ -438,7 +438,8 @@
    },
    "flags": [
     "start",
-    "bothPlayers"
+    "bothPlayers",
+    "handAdd"
    ],
    "cards": [
     "DALA_BOSS_48e"

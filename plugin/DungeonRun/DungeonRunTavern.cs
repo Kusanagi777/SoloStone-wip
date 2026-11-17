@@ -311,7 +311,8 @@ internal static class DungeonRunTavernNode
         var op = Behaviour(run, option);
         int size = state.Cards.Count, min = run.DeckMin(state), max = run.DeckMax(state);
         var friendly = LiveFriendly(state);
-        int openings = state.Cards.Count(c => c.Opening);
+        // Step 9 (lane R): no opening flag while an active rule forbids them (ULDA_721 Aleatory: DungeonRun.RuleBlocksOpeningFlags).
+        int openings = run.RuleBlocksOpeningFlags(state) ? DungeonRunDeck.MaxOpeningFlags : state.Cards.Count(c => c.Opening);
         switch (op.Op)
         {
             case "recruit": return tavern.Bob.Count > 0 && size + 1 <= max;

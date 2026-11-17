@@ -181,6 +181,10 @@ internal sealed partial class DungeonRun
         state.BossSequence = ActBossSequence(profile, seed, acts, ledger: !typedSeed,
             excludeShrineClass: runShrine == null ? (CardClass?)null : Cards.FromId(runShrine).Class, excludeBosses: cls.ExcludeBosses);
         foreach (string id in starter) DungeonRunDeck.Add(state, id, DungeonRunDeck.OriginStarter);
+        // Step 9 (lane R, the ordering fix): the board shrine is the run's before its twists are rolled and its first node is
+        // entered, so a "noBoardShrine" twist or act I anomaly is never rolled or offered to a shrine run (ApplyLoadout sets the
+        // same value again).
+        state.BoardShrine = runShrine;
         // Phase 8: the acts' twists are rolled now, against the bosses just drawn (none on a schedule without twist pools).
         RollTwists(state, acts);
         EnterNode(state);
@@ -838,6 +842,8 @@ internal sealed partial class DungeonRun
         if (boss.IsEncounter || state.ActiveRules.Any(r => r.Kind != null)) ApplyEncounter(state, profile, boss, plan);
         // Step 9 (lane X, DungeonRun.Outcomes.cs): TurnCap, FormRatchet and EscapeAllowed; the plan's defaults today.
         PlanMatchEnds(state, boss, plan);
+        // Step 9 (lane R, D17): a forbidden pair the state holds is logged (DungeonRun.ForbiddenPairLog), never acted on.
+        LogForbiddenPairs(state);
         return plan;
     }
 
@@ -1144,6 +1150,8 @@ internal sealed partial class DungeonRun
             .Where(t => t.Scope.Matches(cls.ClassSet, state.StarterDeck, state.Power) && TreasureOfferedOn(t, state))
             .Where(t => !passiveOnly || !t.Active)
             .OrderBy(t => t.Id, StringComparer.Ordinal).ToList();
+        // Step 9 (lane R): a treasure an active rule or a boss still to come excludes (ULDA_720 Battle Scars and LOOTA_800).
+        candidates.RemoveAll(t => RuleExcludesTreasure(state, t.Id));
         if (candidates.Count == 0) return false;
 
         int Weight(DungeonRunTreasure t)
@@ -1700,7 +1708,8 @@ internal sealed partial class DungeonRun
 
     /// <summary>
     /// The modifiers a modifier node may offer: every schedule modifier, ordinal id order, minus those a boss of this act lists
-    /// in "incompatibleModifiers" and those already active on it.
+    /// in "incompatibleModifiers" and those already active on it. Step 9 (D7): on a stamp-4 schedule a boss row with a v4 block
+    /// bans nothing act-wide (it neutralises the modifier for its own fight: DungeonRun.NeutraliseKnobs).
     /// </summary>
     internal List<DungeonRunModifier> ModifierCandidates(DungeonRunState state)
     {
@@ -1708,7 +1717,7 @@ internal sealed partial class DungeonRun
         var schedule = ScheduleFor(state);
         var floors = schedule.Nodes.Where(n => n.Act == node.Act && n.IsFight).Select(n => n.Floor).ToList();
         var banned = new HashSet<string>(floors.Where(f => f >= 1 && f <= state.BossSequence.Count)
-            .SelectMany(f => Data.Bosses.FirstOrDefault(b => b.Id == state.BossSequence[f - 1])?.IncompatibleModifiers ?? new List<string>()), StringComparer.Ordinal);
+            .SelectMany(f => ActWideModifierBans(state, Data.Bosses.FirstOrDefault(b => b.Id == state.BossSequence[f - 1]))), StringComparer.Ordinal);
         var taken = new HashSet<string>(state.ActiveRules.Where(r => r.Act == node.Act).Select(r => r.Id), StringComparer.Ordinal);
         // Phase 8: a modifier an active global rule excludes (ULDA_715 Bountiful and mod_open_road) is left out too.
         foreach (var rule in ActiveGlobalRules(state)) banned.UnionWith(rule.IncompatibleModifiers);
@@ -1717,7 +1726,8 @@ internal sealed partial class DungeonRun
 
     /// <summary>
     /// Opens the current modifier node: <see cref="ModifierOptions"/> modifiers drawn without replacement (StableSeed
-    /// <see cref="ModifierStream"/>, Node, draw). False when no modifier is left to offer.
+    /// <see cref="ModifierStream"/>, Node, draw). False when no modifier is left to offer. Step 9 (D7): on a stamp-4 schedule the
+    /// offer ends with "none" (<see cref="DungeonRunGlobalRule.None"/>), as an anomaly offer does, so no pick is forced.
     /// </summary>
     internal bool OpenModifier(DungeonRunState state)
     {
@@ -1730,12 +1740,16 @@ internal sealed partial class DungeonRun
             offer.Offered.Add(picked.Id);
             candidates.Remove(picked);
         }
+        if (Tuned(state)) offer.Offered.Add(DungeonRunGlobalRule.None);
         state.ModifierOffer = offer;
         state.Phase = DungeonRunPhase.Modifier;
         return true;
     }
 
-    /// <summary>Takes an offered modifier: it is active for the rest of this act. The run moves to the next node.</summary>
+    /// <summary>
+    /// Takes an offered modifier: it is active for the rest of this act (step 9: "none", offered on a stamp-4 schedule, takes
+    /// none). The run moves to the next node.
+    /// </summary>
     internal void PickModifier(DungeonRunState state, string modifierId)
     {
         var offer = state.ModifierOffer;
@@ -1756,7 +1770,8 @@ internal sealed partial class DungeonRun
             Advance(state);
             return;
         }
-        state.ActiveRules.Add(new DungeonRunRule { Id = modifierId, Act = CurrentNode(state).Act, FromNode = state.Node });
+        if (modifierId != DungeonRunGlobalRule.None)
+            state.ActiveRules.Add(new DungeonRunRule { Id = modifierId, Act = CurrentNode(state).Act, FromNode = state.Node });
         state.ModifierOffer = null;
         Advance(state);
     }
@@ -1825,8 +1840,10 @@ internal sealed partial class DungeonRun
     /// The rules of <paramref name="kind"/> that may become active on act <paramref name="actNo"/> of this run, in file order:
     /// admitted in the data and by the admission table (scope Rule), scripted when they act in a match
     /// (DungeonRunGlobalRules.IsScripted), a run-scope rule only on act 1, not active already, and compatible with the run (a
-    /// board shrine), with the rules and modifiers active on the act, and with every boss pre-rolled for it (its flags and its
-    /// incompatibleRules).
+    /// board shrine, the run class, step 9's held treasures and opening flags: <see cref="RuleBlockedByRun"/>), with the rules
+    /// and modifiers active on the act, and with every boss pre-rolled for it (its flags and its incompatibleRules). Step 9: a
+    /// run-scope rule lasts the whole run, so it is checked against the rules (the rolled twists of every act) and the bosses
+    /// of every act.
     /// </summary>
     internal List<DungeonRunGlobalRule> RuleCandidates(DungeonRunState state, DungeonRunSchedule schedule, int actNo, string kind)
     {
@@ -1834,18 +1851,32 @@ internal sealed partial class DungeonRun
         var activeRules = active.Where(r => r.Kind != null).Select(r => Data.Schedules.Rule(r.Id)).Where(r => r != null).ToList();
         var activeIds = new HashSet<string>(active.Select(r => r.Id), StringComparer.Ordinal);
         var bosses = ActBosses(state, schedule, actNo);
+        // Step 9 (lane R): what a run-scope rule is checked against (built on first use: act 1's run-scope candidates only).
+        List<DungeonRunGlobalRule> runRules = null, actRules;
+        HashSet<string> runIds = null, ids;
+        List<DungeonRunBoss> runBosses = null, actBosses;
         var result = new List<DungeonRunGlobalRule>();
         foreach (var rule in Data.Schedules.Rules.Where(r => r.Kind == kind && r.Admitted))
         {
             if (rule.RunScope && actNo != 1) continue;
-            if (activeIds.Contains(rule.Id)) continue;
+            if (rule.RunScope && runIds == null)
+            {
+                runRules = state.ActiveRules.Where(r => r.Kind != null).Select(r => Data.Schedules.Rule(r.Id)).Where(r => r != null).ToList();
+                runIds = new HashSet<string>(state.ActiveRules.Select(r => r.Id), StringComparer.Ordinal);
+                runBosses = Enumerable.Range(1, schedule.Acts.Count).SelectMany(a => ActBosses(state, schedule, a)).ToList();
+            }
+            actRules = rule.RunScope ? runRules : activeRules;
+            ids = rule.RunScope ? runIds : activeIds;
+            actBosses = rule.RunScope ? runBosses : bosses;
+            if (ids.Contains(rule.Id)) continue;
             if (rule.Effect == DungeonRunGlobalRule.EffectMatch && !DungeonRunGlobalRules.IsScripted(rule.Id)) continue;
             if (!DungeonRunAdmission.Classify(null, rule.Id, AdmitScope.Rule, null, state.IsCatalogRun).Admitted) continue;
             if (rule.NoBoardShrine && state.HasBoardShrine) continue;
             if (rule.IncompatibleClasses.Contains(state.Class)) continue;
-            if (rule.IncompatibleRules.Any(activeIds.Contains) || activeRules.Any(r => r.IncompatibleRules.Contains(rule.Id))) continue;
-            if (rule.IncompatibleModifiers.Any(activeIds.Contains)) continue;
-            if (bosses.Any(b => b.IncompatibleRules.Contains(rule.Id) || b.Flags.Any(rule.IncompatibleFlags.Contains))) continue;
+            if (RuleBlockedByRun(state, rule)) continue;
+            if (rule.IncompatibleRules.Any(ids.Contains) || actRules.Any(r => r.IncompatibleRules.Contains(rule.Id))) continue;
+            if (rule.IncompatibleModifiers.Any(ids.Contains)) continue;
+            if (actBosses.Any(b => b.IncompatibleRules.Contains(rule.Id) || b.Flags.Any(rule.IncompatibleFlags.Contains))) continue;
             result.Add(rule);
         }
         return result;
@@ -1882,7 +1913,8 @@ internal sealed partial class DungeonRun
     }
 
     // NewRun: each act with a twist pool rolls its chance (TwistStream, act, 0) and, on a hit, one compatible twist of the pool
-    // (act, 1). A rolled twist is an active rule of that act from the start (FromNode -1).
+    // (act, 1: PickTwist, by weight on a stamp-4 schedule); a hit with no compatible twist rolls nothing. A rolled twist is an
+    // active rule of that act from the start (FromNode -1).
     private void RollTwists(DungeonRunState state, DungeonRunSchedule schedule)
     {
         for (int a = 0; a < schedule.Acts.Count; a++)
@@ -1892,7 +1924,7 @@ internal sealed partial class DungeonRun
             if (StableSeed.Index(StableSeed.Derive(state.Seed, TwistStream, a + 1, 0), 100) >= act.TwistChance) continue;
             var candidates = RuleCandidates(state, schedule, a + 1, DungeonRunGlobalRule.KindTwist).Where(r => act.TwistPool.Contains(r.Id)).ToList();
             if (candidates.Count == 0) continue;
-            var twist = candidates[StableSeed.Index(StableSeed.Derive(state.Seed, TwistStream, a + 1, 1), candidates.Count)];
+            var twist = PickTwist(state, candidates, a + 1);
             state.ActiveRules.Add(new DungeonRunRule { Id = twist.Id, Act = twist.RunScope ? 0 : a + 1, FromNode = -1, Kind = DungeonRunGlobalRule.KindTwist });
         }
     }

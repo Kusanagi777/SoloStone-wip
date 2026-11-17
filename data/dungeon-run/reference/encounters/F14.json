@@ -2299,6 +2299,9 @@
     "source": "wiki-level-table",
     "original": 3
    },
+   "flags": [
+    "attackRedirect"
+   ],
    "cards": [
     "DALA_BOSS_14t"
    ],

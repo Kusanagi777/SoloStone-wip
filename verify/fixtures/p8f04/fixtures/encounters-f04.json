@@ -3,29 +3,29 @@
  "encountersVersion": 1,
  "generatedBy": "p8f04/make_fixture.py over tools/dungeon-run-catalog (encounters); a test fixture, never shipped",
  "sources": {
-  "reference/encounters/F01.json": "cf122adc3d09332736ecba7b853d05328d346034aa1d877c1c90b80b0124ff45",
+  "reference/encounters/F01.json": "90ef13ed1fe8ec65f9b52f2fb2f4d073c6d49c6a91e7cc637d2bdda8d23c9478",
   "reference/encounters/F02.json": "a6bbdee328103e3da259ea3ec2723ea856447c5075615299bbc93d9e86eccba8",
   "reference/encounters/F04.json": "f7cfbce84fe4dcda144e6ca2b355b52c1dcb5f326342d3f3a5b2f3f430685466",
   "reference/encounters/F05.json": "8c7aab5f719ff9c227c14a2ebbda2e96c5042a1cba883d95ee27e54b4e9eb206",
   "reference/encounters/F06.json": "950c2268088073de3055ab49d444a40be440198596d0b90ef54a4a1520c644c3",
-  "reference/encounters/F07.json": "07829d2df878f89e07866fa1ae9c05febe1507f67b19820e88a493abd771b99b",
-  "reference/encounters/F08.json": "207ee13f912c06da132a1b5d2e2e97a0a686222722862e5f0785c50ed528f4bd",
-  "reference/encounters/F09.json": "11825e4f38696a66f2e41867f789ac600a78acf24fb6e9aac1e991ff6d535a2a",
+  "reference/encounters/F07.json": "6f5a338d39078c95de6d1acfa4c68b95c58ba252f8e8191b347bd3c11d21ab0c",
+  "reference/encounters/F08.json": "de3188658efa3be08b79d9b5363a1901b05072205b3aee62bf71f9d4fc39f58b",
+  "reference/encounters/F09.json": "57515cce4aea85f479336f155b8a75a2e92a46bbbc7b56bc1e2fc332912e1658",
   "reference/encounters/F10.json": "1a60d503f8dba089d546f68fb9651f123116b8fe0db56cd278adddb970ed229d",
   "reference/encounters/F11.json": "02496b39588d414fe9cef588fe44a7e4cf398d75af6b2363c5fe3894060d6f5b",
   "reference/encounters/F12.json": "cb74f52139ba8deb70e4e9c782b7c20d072d75175827c1dac6333ab5d3d2a185",
   "reference/encounters/F13.json": "af231d6f727a76abe7d59b79992da06d29aeee81e6c431023b1a127261b5f177",
-  "reference/encounters/F14.json": "43ac1271cbe34f990098976871e27ba51dc803442c2a22472197bedfa5b89619",
+  "reference/encounters/F14.json": "59d35c36e60a52de1980c794f7e7c5b6727f62f7c00c3bc92b5c3280ac280f09",
   "reference/encounters/F15.json": "0aae24c5914850b47cd9c4cb558d1c47a59c6c1329ce9418646626467f1b19c7",
   "reference/encounters/F16.json": "cd862d1bf2097c191844e99a9f136cea69acf3d495dc061e2067b729eb793789",
-  "reference/encounters/F17.json": "73744ccfc40c95c94b27fcd34fc873d78427d5aaec81f2670669584b834ddaec",
-  "reference/encounters/F18.json": "52ff7293609a74b60ab61878006a7a98adb4a0e60a97d328bd21fb032fe8a4c3",
+  "reference/encounters/F17.json": "221166aaf47a8a09b18c5c83a764bf9228497d011cb5df2d767e41caeee515f3",
+  "reference/encounters/F18.json": "1db8594d48e6d93c5a7b3a4115220ae5a130e35c016dd756372f7a203183986d",
   "reference/encounters/F19.json": "8fb3514de4def1db4b452ed7dffb7efc4e7c0bc3016494fe627a2090a31784e3",
   "reference/encounters/F20.json": "c25d1ba99c457bb1a46873e62a64d2a22b5a8dc2861107d1d73e1f14e65009f9",
-  "reference/encounters/F21.json": "2b7cbe38de910d7aa304ff9818138b4d167bed1c6161219a695da171483357bb",
+  "reference/encounters/F21.json": "671f2dfef1fa8021f6ce26a98311d374bf099ecb7a5bab2e731acde8b49308a2",
   "reference/encounters/F22.json": "8e25e86416663b1f9a5f36b67e4e2832e6628f6d3aefb73c8a435aa4c41c77e6",
-  "reference/encounters/F23.json": "08dd3bf1382e8bb6a8aeceacc8a0cbeb71b65defc0482723266a23728b9f0e5f",
-  "reference/encounters/F24.json": "4bbd47c48d857e283e16679d2f6d414d2b331330a76d88f2f139287064e5f259"
+  "reference/encounters/F23.json": "4d0929c31680a81839131390f515066dbc042492e70b373478b0fd4ec692f588",
+  "reference/encounters/F24.json": "da3fb07de11adcc2c967645c162e3b3c4a4eb74cc3fa99a4c9b09a6cd6544afe"
  },
  "decks": {
   "enc-dala_01_chomper": [
@@ -9901,12 +9901,23 @@
    "flags": [
     "forms",
     "persistentDamage",
-    "deckReplace"
+    "deckReplace",
+    "statSwap"
    ],
    "incompatibleModifiers": [
     "mod_iron_bosses",
     "mod_open_road"
    ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   },
    "deck": {
     "id": "enc-ulda_40_icarax",
     "kind": "substituted",
@@ -9986,7 +9997,9 @@
    "bossManaCap": 2,
    "flags": [
     "passive",
-    "heroSwitch"
+    "heroSwitch",
+    "handAdd",
+    "manaIdentity"
    ],
    "cards": [
     "GILA_BOSS_61te"
@@ -9998,6 +10011,18 @@
    ],
    "start": {
     "bossMana": 2
+   },
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act",
+    "mod_hot_start": "the row's start Mana Crystals are its own (start.bossMana replaces the act curve and the modifiers' bossManaDelta), so Hot Start's +1 boss Mana never reaches the fight and only its +10 player Health would; a stamp-4 schedule neutralises the modifier for this fight only, a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road",
+     "mod_hot_start"
+    ]
    },
    "deck": {
     "id": "enc-gila_61_hagatha",
@@ -10346,7 +10371,8 @@
    },
    "flags": [
     "passive",
-    "secrets"
+    "secrets",
+    "room"
    ],
    "cards": [
     "LOOTA_BOSS_48t"
@@ -10402,7 +10428,8 @@
     "original": 6
    },
    "flags": [
-    "secrets"
+    "secrets",
+    "room"
    ],
    "bossGeneratedSecrets": true,
    "deck": {
@@ -10668,6 +10695,9 @@
     "source": "printed-health",
     "original": 20
    },
+   "flags": [
+    "charge"
+   ],
    "cards": [
     "LOOTA_BOSS_12e"
    ],
@@ -11228,6 +11258,16 @@
     "mod_iron_bosses",
     "mod_open_road"
    ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   },
    "deck": {
     "id": "enc-loot_15_george_karl",
     "kind": "authentic",
@@ -11370,7 +11410,8 @@
     "original": 6
    },
    "flags": [
-    "passive"
+    "passive",
+    "charge"
    ],
    "deck": {
     "id": "enc-loot_31_candlebeard",
@@ -11404,6 +11445,16 @@
     "mod_iron_bosses",
     "mod_open_road"
    ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   },
    "deck": {
     "id": "enc-loot_36_ixlid",
     "kind": "substituted",
@@ -11707,7 +11758,8 @@
    },
    "flags": [
     "passive",
-    "bothPlayers"
+    "bothPlayers",
+    "room"
    ],
    "deck": {
     "id": "enc-loot_47_lava_chamber",
@@ -11758,7 +11810,8 @@
    "flags": [
     "start",
     "boardStart",
-    "passive"
+    "passive",
+    "manaIdentity"
    ],
    "incompatibleModifiers": [
     "mod_hot_start"
@@ -11771,6 +11824,14 @@
      "LOOTA_BOSS_20t"
     ],
     "bossMana": 0
+   },
+   "modifierReasons": {
+    "mod_hot_start": "the row's start Mana Crystals are its own (start.bossMana replaces the act curve and the modifiers' bossManaDelta), so Hot Start's +1 boss Mana never reaches the fight and only its +10 player Health would; a stamp-4 schedule neutralises the modifier for this fight only, a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_hot_start"
+    ]
    },
    "deck": {
     "id": "enc-loot_20_brimstone",
@@ -11798,7 +11859,9 @@
    "health": 20,
    "fixedHealth": true,
    "flags": [
-    "listedDeck"
+    "listedDeck",
+    "manaIdentity",
+    "room"
    ],
    "cards": [
     "LOOTA_103",
@@ -11811,6 +11874,18 @@
    ],
    "start": {
     "bossMana": 0
+   },
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act",
+    "mod_hot_start": "the row's start Mana Crystals are its own (start.bossMana replaces the act curve and the modifiers' bossManaDelta), so Hot Start's +1 boss Mana never reaches the fight and only its +10 player Health would; a stamp-4 schedule neutralises the modifier for this fight only, a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road",
+     "mod_hot_start"
+    ]
    },
    "deck": {
     "id": "enc-loot_22_tad",
@@ -11879,7 +11954,9 @@
     "boardStart",
     "listedDeck",
     "noLoss",
-    "passive"
+    "passive",
+    "manaIdentity",
+    "room"
    ],
    "incompatibleModifiers": [
     "mod_iron_bosses",
@@ -11897,6 +11974,18 @@
      "LOOTA_BOSS_52t"
     ],
     "bossMana": 0
+   },
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act",
+    "mod_hot_start": "the row's start Mana Crystals are its own (start.bossMana replaces the act curve and the modifiers' bossManaDelta), so Hot Start's +1 boss Mana never reaches the fight and only its +10 player Health would; a stamp-4 schedule neutralises the modifier for this fight only, a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road",
+     "mod_hot_start"
+    ]
    },
    "deck": {
     "id": "enc-loot_52_vault",
@@ -12096,7 +12185,8 @@
    },
    "healthOffset": 10,
    "flags": [
-    "start"
+    "start",
+    "handAdd"
    ],
    "cards": [
     "LOOTA_BOSS_49t"
@@ -16638,6 +16728,9 @@
     "source": "wiki-level-table",
     "original": 3
    },
+   "flags": [
+    "attackRedirect"
+   ],
    "cards": [
     "DALA_BOSS_14t"
    ],
@@ -18334,7 +18427,8 @@
    },
    "flags": [
     "start",
-    "bothPlayers"
+    "bothPlayers",
+    "handAdd"
    ],
    "cards": [
     "DALA_BOSS_48e"
@@ -19204,6 +19298,9 @@
     "source": "wiki-level-table",
     "original": 3
    },
+   "flags": [
+    "windfury"
+   ],
    "cards": [
     "DALA_BOSS_73e"
    ],
@@ -19311,6 +19408,7 @@
    "flags": [
     "passive"
    ],
+   "v4": {},
    "deck": {
     "id": "enc-dala_43_norroa",
     "kind": "authentic",
@@ -19341,6 +19439,7 @@
     "CS2_023",
     "CFM_623"
    ],
+   "v4": {},
    "deck": {
     "id": "enc-dala_67_vargoth",
     "kind": "authentic",
@@ -19364,6 +19463,7 @@
     "source": "wiki-level-table",
     "original": 11
    },
+   "v4": {},
    "deck": {
     "id": "enc-dala_69_kalec",
     "kind": "authentic",
@@ -19393,6 +19493,7 @@
    "cards": [
     "DALA_504"
    ],
+   "v4": {},
    "deck": {
     "id": "enc-dala_60_khadgar",
     "kind": "authentic",
@@ -22483,7 +22584,8 @@
     "original": 7
    },
    "flags": [
-    "forms"
+    "forms",
+    "fatigue"
    ],
    "deck": {
     "id": "enc-ulda_52_bazhial",
@@ -22568,6 +22670,9 @@
     "source": "wiki-level-table",
     "original": 4
    },
+   "flags": [
+    "charge"
+   ],
    "cards": [
     "ULDA_BOSS_54e"
    ],
@@ -23926,6 +24031,7 @@
    "cards": [
     "GILA_BOSS_48e"
    ],
+   "v4": {},
    "deck": {
     "id": "enc-gila_48_infinite_toki",
     "kind": "substituted",
@@ -23974,6 +24080,7 @@
     "passive",
     "heroImmune"
    ],
+   "v4": {},
    "deck": {
     "id": "enc-gila_49_glinda",
     "kind": "authentic",
@@ -23999,13 +24106,15 @@
    },
    "healthOffset": 10,
    "flags": [
-    "start"
+    "start",
+    "handAdd"
    ],
    "start": {
     "bossHandAdd": [
      "GILA_503"
     ]
    },
+   "v4": {},
    "deck": {
     "id": "enc-gila_59_godfrey",
     "kind": "authentic",
@@ -24037,6 +24146,7 @@
    "start": {
     "bossWeapon": "LOOT_542"
    },
+   "v4": {},
    "deck": {
     "id": "enc-gila_60_shivers",
     "kind": "substituted",
@@ -24094,6 +24204,16 @@
     "mod_iron_bosses",
     "mod_open_road"
    ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   },
    "deck": {
     "id": "enc-ulda_37_xatma",
     "kind": "substituted",
@@ -24220,6 +24340,16 @@
     "mod_iron_bosses",
     "mod_open_road"
    ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   },
    "deck": {
     "id": "enc-ulda_38_kzrath",
     "kind": "substituted",
@@ -24376,6 +24506,16 @@
     "mod_iron_bosses",
     "mod_open_road"
    ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   },
    "deck": {
     "id": "enc-ulda_39_vesh",
     "kind": "substituted",
@@ -24547,6 +24687,16 @@
     "mod_iron_bosses",
     "mod_open_road"
    ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its extra treasure after a major is kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   },
    "deck": {
     "id": "enc-ulda_67_tekahn",
     "kind": "substituted",

@@ -740,6 +740,18 @@ internal static class DungeonRunValidator
             if (boss.HasFlag(DungeonRunEncounterData.HeroSwitch) != (boss.HeroCards.Count > 0)) Fail(where, "flag heroSwitch and the hero cards must go together");
             if (boss.HasFlag(DungeonRunEncounterData.FormsFlag) != (boss.Forms.Count > 0)) Fail(where, "flag forms and the forms must go together");
             if (boss.HasFlag(DungeonRunEncounterData.ShrineFlag) != boss.Variants.Any(v => v.Shrine != null)) Fail(where, "flag shrine and a shrine variant must go together");
+            // Step 9 (lane R): the two prevention flags that follow from the row's own data, and the row's v4 block.
+            bool addsHand = boss.Start != null && boss.Start.BossHandAdd.Count + boss.Start.PlayerHandAdd.Count > 0 || boss.HeroCards.Count > 0;
+            if (boss.HasFlag(DungeonRunEncounterData.HandAdd) != addsHand) Fail(where, "flag handAdd and a start hand add or hero cards must go together");
+            if (boss.HasFlag(DungeonRunEncounterData.ManaIdentity) != (boss.Start?.BossMana != null)) Fail(where, "flag manaIdentity and a start bossMana must go together");
+            if (data.Treasures.Count > 0)
+                foreach (string id in boss.IncompatibleTreasures.Where(id => data.FindTreasure(id) == null)) Fail(where, $"incompatibleTreasures names unknown treasure {id}");
+            if (boss.V4 != null)
+            {
+                foreach (string key in boss.V4.UnknownKeys) Fail(where, $"v4: unknown key {key}");
+                if (boss.V4.Tier != null && !DungeonRunEncounterData.Tiers.Contains(boss.V4.Tier)) Fail(where, $"v4: unknown tier {boss.V4.Tier}");
+                if (boss.V4.Reward != null && data.Treasures.Count > 0 && data.FindTreasure(boss.V4.Reward) == null) Fail(where, $"v4: reward names unknown treasure {boss.V4.Reward}");
+            }
 
             Hero(boss.HeroCard, where);
             if (boss.Power == null) Fail(where, "an encounter needs a hero power");
@@ -1140,11 +1152,14 @@ internal static class DungeonRunValidator
             if (string.IsNullOrEmpty(m.Id)) { errors.Add("modifier: an id is missing"); continue; }
             if (!ids.Add(m.Id)) errors.Add($"modifier {m.Id}: listed twice");
             if (string.IsNullOrEmpty(m.Name)) errors.Add($"modifier {m.Id}: no name");
+            // Step 9 (D7): "none" is the modifier offer's skip option on a stamp-4 schedule.
+            if (m.Id == DungeonRunGlobalRule.None) errors.Add($"modifier {m.Id}: \"none\" is the offer's skip option");
             foreach (string knob in m.UnknownKnobs) errors.Add($"modifier {m.Id}: unknown knob {knob}");
         }
         foreach (var boss in data.Bosses)
             foreach (string id in boss.IncompatibleModifiers.Where(id => schedules.Modifier(id) == null))
                 errors.Add($"boss {boss.Id}: incompatibleModifiers names unknown modifier {id}");
+        errors.AddRange(ValidateModifierReasons(data));
         foreach (var schedule in schedules.Schedules.Values.OrderBy(x => x.Id, StringComparer.Ordinal)) errors.AddRange(ValidateSchedule(schedule, data));
         return errors;
     }
@@ -1191,12 +1206,71 @@ internal static class DungeonRunValidator
             // Checked against the loaded classes (a caller that validates the rules alone loads none).
             if (data.Classes.Count > 0)
                 foreach (string c in rule.IncompatibleClasses.Where(c => data.FindClass(c) == null)) errors.Add($"{where}: incompatibleClasses names unknown class {c}");
+            // Step 9 (lane R): the treasure exclusions, against the loaded treasures (none loaded: not checked).
+            if (data.Treasures.Count > 0)
+                foreach (string t in rule.IncompatibleTreasures.Where(t => data.FindTreasure(t) == null)) errors.Add($"{where}: incompatibleTreasures names unknown treasure {t}");
+            // Step 9 (C7): a reason names an exclusion entry of the rule; from scheduleVersion 4 every entry has one.
+            var entries = rule.ExclusionEntries.ToList();
+            foreach (string key in rule.ExclusionReasons.Keys.Where(k => !entries.Contains(k)).OrderBy(k => k, StringComparer.Ordinal))
+                errors.Add($"{where}: exclusionReasons names {key}, which is not one of its exclusions");
+            if (schedules.ScheduleVersion >= 4)
+                foreach (string entry in entries.Distinct().Where(e => !rule.ExclusionReasons.TryGetValue(e, out string why) || string.IsNullOrWhiteSpace(why)))
+                    errors.Add($"{where}: exclusion {entry} states no reason (exclusionReasons)");
         }
         foreach (var rule in schedules.Rules)
             foreach (string other in rule.IncompatibleRules.Where(o => !ids.Contains(o))) errors.Add($"rule {rule.Id}: incompatibleRules names unknown rule {other}");
         foreach (var boss in data.Bosses)
             foreach (string id in boss.IncompatibleRules.Where(id => !ids.Contains(id))) errors.Add($"boss {boss.Id}: incompatibleRules names unknown rule {id}");
         return errors;
+    }
+
+    /// <summary>
+    /// Step 9 (D7, C7): a boss's v4 "incompatibleModifiers" names known modifiers; its "modifierReasons" name known modifiers of
+    /// one of its two lists; and a row a schedule of stamp 4 and above can reach (<see cref="ReachableOnTuned"/>) states a
+    /// reason for every modifier its v4 block neutralises. A data set with no stamp-4 schedule (every fixture before step 9)
+    /// reaches no row, so it needs no reason.
+    /// </summary>
+    internal static List<string> ValidateModifierReasons(DungeonRunData data)
+    {
+        var errors = new List<string>();
+        var schedules = data.Schedules;
+        var reachable = ReachableOnTuned(data);
+        foreach (var boss in data.Bosses)
+        {
+            string where = "boss " + boss.Id;
+            var v4 = boss.V4?.IncompatibleModifiers ?? new List<string>();
+            foreach (string id in v4.Where(id => schedules.Modifier(id) == null)) errors.Add($"{where}: v4 incompatibleModifiers names unknown modifier {id}");
+            foreach (string id in boss.ModifierReasons.Keys.OrderBy(k => k, StringComparer.Ordinal))
+                if (schedules.Modifier(id) == null || !boss.IncompatibleModifiers.Contains(id) && !v4.Contains(id))
+                    errors.Add($"{where}: modifierReasons names {id}, which is not one of its incompatible modifiers");
+            if (!reachable.Contains(boss.Id)) continue;
+            foreach (string id in v4.Where(id => !boss.ModifierReasons.TryGetValue(id, out string why) || string.IsNullOrWhiteSpace(why)))
+                errors.Add($"{where}: v4 neutralises {id} with no reason (modifierReasons)");
+        }
+        return errors;
+    }
+
+    /// <summary>
+    /// The boss rows a schedule of stamp 4 and above can draw (step 9): those of a pool its acts name (a pool set expanded; a row's
+    /// v4 tier counts as its pool) and its finales' fixed bosses. Empty when no schedule has stamp 4.
+    /// </summary>
+    internal static HashSet<string> ReachableOnTuned(DungeonRunData data)
+    {
+        var schedules = data.Schedules;
+        var ids = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var schedule in schedules.Schedules.Values.Where(x => x.StampVersion >= 4))
+        {
+            var pools = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var act in schedule.Acts)
+            {
+                foreach (string pool in act.Combat.Select(c => c.Pool).Concat(act.MajorPool == null ? new string[0] : new[] { act.MajorPool }))
+                    if (schedules.PoolSets.TryGetValue(pool, out var set)) pools.UnionWith(set); else pools.Add(pool);
+                ids.UnionWith(act.FixedBosses);
+            }
+            foreach (var boss in data.Bosses)
+                if (boss.Pools.Any(pools.Contains) || boss.V4?.Tier != null && pools.Contains(DungeonRunEncounterData.PoolOf(boss.V4.Tier))) ids.Add(boss.Id);
+        }
+        return ids;
     }
 
     /// <summary>

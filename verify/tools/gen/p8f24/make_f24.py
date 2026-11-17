@@ -165,6 +165,20 @@ def tekahn(repo):
         ("adaptations", adapt),
     ])
 
+# Step 9 (lane R, D7): why each row's modifiers conflict (its released act-wide ban, incompatibleModifiers), and its v4 block,
+# which neutralises the same modifiers for its own fight only on a stamp-4 schedule (DungeonRun.NeutraliseKnobs).
+IRON = ("the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never "
+        "reaches the fight; a stamp-4 schedule neutralises the modifier for this fight only (DungeonRun.NeutraliseKnobs; its "
+        "extra treasure after a major is kept), a released one bans it for the act")
+ROAD = ("the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight and only its extra "
+        "opening card would; a stamp-4 schedule neutralises the modifier for this fight only (no extra card), a released one bans "
+        "it for the act")
+
+def v4(row):
+    row["modifierReasons"] = O([("mod_iron_bosses", IRON), ("mod_open_road", ROAD)])
+    row["v4"] = O([("incompatibleModifiers", ["mod_iron_bosses", "mod_open_road"])])
+    return row
+
 def main():
     bosses = [
         lord("ulda_37_xatma", "Xatma, Plague Lord of Death", "37", "Xatma,_Plague_Lord_of_Death", XATMA,
@@ -185,6 +199,7 @@ def main():
             ["ULDA_BOSS_39m", "ULDA_BOSS_39me"]),
         tekahn(REPO),
     ]
+    bosses = [v4(b) for b in bosses]
     doc = O([
         ("schemaVersion", 1), ("family", "24"),
         ("description", "Phase 8 family 24: the Plague Lords Xatma, K'zrath and Vesh (Tombs of Terror chapter 1-3 final bosses; family 01's "
