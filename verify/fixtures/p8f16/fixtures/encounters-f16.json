@@ -12,7 +12,7 @@
   "reference/encounters/F08.json": "0cf2a6cbce554e100fc7b63c2d33cdfa70a5eaf986795980e09b5e17d3ddc373",
   "reference/encounters/F09.json": "7f990fff99efba0e22d12d3e0aabaa4274ff93d818d50b27bd27c2629d8480f3",
   "reference/encounters/F10.json": "1a60d503f8dba089d546f68fb9651f123116b8fe0db56cd278adddb970ed229d",
-  "reference/encounters/F11.json": "02496b39588d414fe9cef588fe44a7e4cf398d75af6b2363c5fe3894060d6f5b",
+  "reference/encounters/F11.json": "82466de66f45107fd0f2fc058b9f1accd75e44b86d7c816ea0bec017e47c0831",
   "reference/encounters/F12.json": "cb74f52139ba8deb70e4e9c782b7c20d072d75175827c1dac6333ab5d3d2a185",
   "reference/encounters/F13.json": "af231d6f727a76abe7d59b79992da06d29aeee81e6c431023b1a127261b5f177",
   "reference/encounters/F14.json": "59d35c36e60a52de1980c794f7e7c5b6727f62f7c00c3bc92b5c3280ac280f09",
@@ -13147,6 +13147,9 @@
    "flags": [
     "doubleDeathrattle"
    ],
+   "v4": {
+    "reward": "GILA_BOSS_43t"
+   },
    "deck": {
     "id": "enc-gila_43_damph",
     "kind": "extended",

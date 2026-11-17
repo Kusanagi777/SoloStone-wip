@@ -460,6 +460,9 @@
     "Sludge Belcher",
     "Abomination"
    ],
+   "v4": {
+    "reward": "GILA_BOSS_43t"
+   },
    "adaptations": [
     {
      "kind": "schedule",

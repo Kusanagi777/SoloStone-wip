@@ -31,7 +31,10 @@ internal static class DungeonRunTavernNode
     {
         if (run == null) throw new ArgumentNullException(nameof(run));
         if (!state.IsActRun) throw new InvalidOperationException("Only an act run has taverns.");
-        var tavern = new DungeonRunTavern { Node = state.Node, Gold = run.TavernGold(state) };
+        // Step 9 (D5): a stamp-4 run spends its banked gold (bundle drafts skipped for room, a reward with no room) here.
+        int banked = DungeonRun.Tuned(state) ? Math.Max(0, state.BankedGold) : 0;
+        state.BankedGold -= banked;
+        var tavern = new DungeonRunTavern { Node = state.Node, Gold = run.TavernGold(state) + banked };
         state.Tavern = tavern;
         state.Phase = DungeonRunPhase.Tavern;
         var table = run.Data.Tavern;
@@ -40,14 +43,15 @@ internal static class DungeonRunTavernNode
         tavern.Bob = Sample(state, BobPool(run, state), table.BobBoard);
         // The offers: drawn by weight without replacement among the options this deck can use now.
         // The close-out: an option of encounter schedules only ("runs") is never in an older schedule's roll.
-        var options = table.Options.Where(o => o.Weight > 0 && o.Id != DungeonRunTavernTable.HouseSpecial && o.OfferedOn(state.ScheduleVersion) && Applicable(run, state, o))
+        // Step 9 (D4, D5): a stamp-4 run weighs each option by its act ("weightByAct", OfferWeight); every other run by "weight".
+        var options = table.Options.Where(o => OfferWeight(run, state, o) > 0 && o.Id != DungeonRunTavernTable.HouseSpecial && o.OfferedOn(state.ScheduleVersion) && Applicable(run, state, o))
             .OrderBy(o => o.Id, StringComparer.Ordinal).ToList();
         int offers = run.TavernOffers(state);
         while (tavern.Offers.Count < offers && options.Count > 0)
         {
-            int roll = Roll(state, options.Sum(o => o.Weight));
+            int roll = Roll(state, options.Sum(o => OfferWeight(run, state, o)));
             var picked = options[options.Count - 1];
-            foreach (var o in options) { roll -= o.Weight; if (roll < 0) { picked = o; break; } }
+            foreach (var o in options) { roll -= OfferWeight(run, state, o); if (roll < 0) { picked = o; break; } }
             tavern.Offers.Add(picked.Id);
             options.Remove(picked);
         }
@@ -308,6 +312,8 @@ internal static class DungeonRunTavernNode
     internal static bool Applicable(DungeonRun run, DungeonRunState state, DungeonRunTavernOption option)
     {
         var tavern = state.Tavern;
+        // Step 9 (D4): an option a stamp-4 run has bought maxPerRun times does nothing more (DALA_904 Good Food: twice a run).
+        if (RunCapReached(state, option)) return false;
         var op = Behaviour(run, option);
         int size = state.Cards.Count, min = run.DeckMin(state), max = run.DeckMax(state);
         var friendly = LiveFriendly(state);
@@ -431,6 +437,30 @@ internal static class DungeonRunTavernNode
             return race != Race.INVALID && race != Race.BLANK && race != Race.ALL && bob.Any(c => c.IsRace(race));
         }).ToList();
     }
+
+    // ------------------------------------------------------------------ step 9 (lane E): act weights and run caps
+
+    /// <summary>
+    /// The weight an option is offered with: on a stamp-4 run (DungeonRun.Tuned) with a "weightByAct", the value of the current
+    /// act (act I, II, III; a later act, the finale, reads the last value); otherwise its "weight", as on every released run.
+    /// </summary>
+    internal static int OfferWeight(DungeonRun run, DungeonRunState state, DungeonRunTavernOption option)
+    {
+        if (!DungeonRun.Tuned(state) || option.WeightByAct.Length == 0) return option.Weight;
+        int act = run.CurrentNode(state)?.Act ?? 1;
+        return Math.Max(0, option.WeightByAct[Math.Max(1, Math.Min(act, option.WeightByAct.Length)) - 1]);
+    }
+
+    /// <summary>
+    /// How many times this run has bought the option, where the run state counts it: a "health" option (DALA_904 Good Food) by
+    /// HealthBonus / amount (the only HealthBonus writer); -1 for any other op.
+    /// </summary>
+    internal static int RunBuys(DungeonRunState state, DungeonRunTavernOption option) =>
+        option.Op == "health" && option.Amount > 0 ? Math.Max(0, state.HealthBonus) / option.Amount : -1;
+
+    /// <summary>A stamp-4 run has bought the option its "maxPerRun" times (false on every released run and for an uncapped option).</summary>
+    internal static bool RunCapReached(DungeonRunState state, DungeonRunTavernOption option) =>
+        DungeonRun.Tuned(state) && option.MaxPerRun > 0 && RunBuys(state, option) >= option.MaxPerRun;
 
     // ------------------------------------------------------------------ helpers
 

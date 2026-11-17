@@ -20,8 +20,8 @@ The reference CSV has 2,050 records and every one is a row. 0 bucket labels with
 
 | Classification | Rows | Original (non-SoloStone) rows | SoloStone rows |
 | --- | ---: | ---: | ---: |
-| implemented | 3,880 | 2,822 | 2,834 |
-| partial | 13 | 13 | 2 |
+| implemented | 3,890 | 2,832 | 2,836 |
+| partial | 3 | 3 | 0 |
 | missing | 10 | 10 | 0 |
 | duplicate/support | 1,067 | 974 | 228 |
 | intentionally adapted | 0 | 0 | 0 |
@@ -34,11 +34,11 @@ A row with several adventures counts once in each column it belongs to, so the l
 | Adventure | implemented | partial | missing | duplicate/support | intentionally adapted | Rows |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Dungeon Run | 1,059 | 0 | 0 | 133 | 0 | 1,192 |
-| Monster Hunt | 629 | 4 | 1 | 109 | 0 | 743 |
+| Monster Hunt | 630 | 3 | 1 | 109 | 0 | 743 |
 | Rumble Run | 989 | 0 | 0 | 163 | 0 | 1,152 |
-| The Dalaran Heist | 1,623 | 4 | 6 | 291 | 0 | 1,924 |
-| Tombs of Terror | 1,323 | 5 | 3 | 278 | 0 | 1,609 |
-| SoloStone | 2,834 | 2 | 0 | 228 | 0 | 3,064 |
+| The Dalaran Heist | 1,627 | 0 | 6 | 291 | 0 | 1,924 |
+| Tombs of Terror | 1,328 | 0 | 3 | 278 | 0 | 1,609 |
+| SoloStone | 2,836 | 0 | 0 | 228 | 0 | 3,064 |
 
 ### Classification by role
 
@@ -53,10 +53,10 @@ A row with several adventures counts once in each column it belongs to, so the l
 | boss hero | 257 | 0 | 2 | 32 | 0 | 291 |
 | boss | 275 | 0 | 0 | 0 | 0 | 275 |
 | finale deck | 234 | 0 | 0 | 0 | 0 | 234 |
-| treasure | 196 | 1 | 0 | 19 | 0 | 216 |
+| treasure | 197 | 0 | 0 | 19 | 0 | 216 |
 | bundle member | 156 | 0 | 0 | 0 | 0 | 156 |
 | hero power | 76 | 0 | 1 | 0 | 0 | 77 |
-| passive treasure | 75 | 1 | 1 | 0 | 0 | 77 |
+| passive treasure | 76 | 0 | 1 | 0 | 0 | 77 |
 | boss card | 60 | 3 | 1 | 0 | 0 | 64 |
 | teammate | 54 | 0 | 0 | 0 | 0 | 54 |
 | bundle | 52 | 0 | 0 | 0 | 0 | 52 |
@@ -73,7 +73,7 @@ A row with several adventures counts once in each column it belongs to, so the l
 | final boss | 20 | 0 | 0 | 0 | 0 | 20 |
 | portrait | 0 | 0 | 0 | 18 | 0 | 18 |
 | shrine upgrade | 9 | 0 | 0 | 0 | 0 | 9 |
-| twist | 1 | 8 | 0 | 0 | 0 | 9 |
+| twist | 9 | 0 | 0 | 0 | 0 | 9 |
 
 A row is counted under every role it has (a card can be a bucket member and a starter card).
 
@@ -100,7 +100,7 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Monster Hunt | boss hero | 47 |  |  | 4 |  | 51 |
 | Monster Hunt | treasure | 55 |  |  |  |  | 55 |
 | Monster Hunt | hero power | 3 |  | 1 |  |  | 4 |
-| Monster Hunt | passive treasure | 13 | 1 |  |  |  | 14 |
+| Monster Hunt | passive treasure | 14 |  |  |  |  | 14 |
 | Monster Hunt | boss card | 22 | 3 |  |  |  | 25 |
 | Monster Hunt | hero | 4 |  |  |  |  | 4 |
 | Monster Hunt | token |  |  |  | 10 |  | 10 |
@@ -140,7 +140,7 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | The Dalaran Heist | tavern | 14 |  |  |  |  | 14 |
 | The Dalaran Heist | support |  |  |  | 4 |  | 4 |
 | The Dalaran Heist | portrait |  |  |  | 2 |  | 2 |
-| The Dalaran Heist | twist | 1 | 4 |  |  |  | 5 |
+| The Dalaran Heist | twist | 5 |  |  |  |  | 5 |
 | Tombs of Terror | bucket member | 983 |  |  |  |  | 983 |
 | Tombs of Terror | starter | 124 |  |  |  |  | 124 |
 | Tombs of Terror | bucket label |  |  |  | 88 |  | 88 |
@@ -148,7 +148,7 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Tombs of Terror | boss power | 88 |  | 1 | 38 |  | 127 |
 | Tombs of Terror | boss hero | 77 |  | 1 | 10 |  | 88 |
 | Tombs of Terror | finale deck | 234 |  |  |  |  | 234 |
-| Tombs of Terror | treasure | 34 | 1 |  |  |  | 35 |
+| Tombs of Terror | treasure | 35 |  |  |  |  | 35 |
 | Tombs of Terror | hero power | 13 |  |  |  |  | 13 |
 | Tombs of Terror | passive treasure | 17 |  |  |  |  | 17 |
 | Tombs of Terror | boss card | 3 |  |  |  |  | 3 |
@@ -161,17 +161,17 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Tombs of Terror | support |  |  |  | 17 |  | 17 |
 | Tombs of Terror | final boss | 5 |  |  |  |  | 5 |
 | Tombs of Terror | portrait |  |  |  | 10 |  | 10 |
-| Tombs of Terror | twist |  | 4 |  |  |  | 4 |
+| Tombs of Terror | twist | 4 |  |  |  |  | 4 |
 | SoloStone | boss deck | 1,779 |  |  |  |  | 1,779 |
 | SoloStone | starter | 791 |  |  |  |  | 791 |
 | SoloStone | enchantment |  |  |  | 166 |  | 166 |
 | SoloStone | boss power | 20 |  |  |  |  | 20 |
 | SoloStone | boss hero |  |  |  | 18 |  | 18 |
 | SoloStone | boss | 275 |  |  |  |  | 275 |
-| SoloStone | treasure | 196 | 1 |  | 19 |  | 216 |
+| SoloStone | treasure | 197 |  |  | 19 |  | 216 |
 | SoloStone | bundle member | 156 |  |  |  |  | 156 |
 | SoloStone | hero power | 67 |  |  |  |  | 67 |
-| SoloStone | passive treasure | 74 | 1 |  |  |  | 75 |
+| SoloStone | passive treasure | 75 |  |  |  |  | 75 |
 | SoloStone | bundle | 52 |  |  |  |  | 52 |
 | SoloStone | hero |  |  |  | 11 |  | 11 |
 | SoloStone | class | 37 |  |  |  |  | 37 |
@@ -186,7 +186,7 @@ Empty cells are zero. A row is counted under each adventure-role pair it carries
 
 | gaps | partial rows | of which original (non-SoloStone) |
 | --- | ---: | ---: |
-| reach | 12 | 12 |
+| reach | 2 | 2 |
 | reach,ai,validation | 1 | 1 |
 
 0 partial rows are collectible cards that only need a place in the draft catalog (engine, AI and admission already pass).
@@ -207,20 +207,18 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `engine:unscripted` | 8 | 0 | 0 | No engine script for the card id (CardDefs has no implemented entry). |
 | `validation:encounter-rejected` | 3 | 0 | 0 | Current DungeonRunValidator admission rule `encounter-rejected` rejects the card. |
 | `validation:rule-rejected` | 1 | 0 | 0 | Current DungeonRunValidator admission rule `rule-rejected` rejects the card. |
-| `run:twist-pools` | 8 | 8 | 0 | Chapter twists: scripted and admitted global rules, rolled at NewRun from an act's "twist" pool, but acts I-III of acts-v3h and acts-v3t ship an empty pool (only the Heist finale rolls one, DALA_830 The Finale; the close-out enabled the finales and the defaults, not the act twist rolls): how often an act rolls a twist is a reward-economy and incompatible-modifier decision for phase 9. Tested end to end on the family 05 and 06 fixture schedules. |
 | `run:encounter-roster` | 6 | 0 | 0 | Original encounters: boss heroes, powers, special cards and setups in the encounter pool. |
 | `run:adventure-cards` | 1 | 0 | 0 | Adventure-only cards (boss/treasure support cards in the original namespaces) that need an owning feature to appear. |
 | `run:adventure-heroes` | 1 | 0 | 0 | The 18 adventure heroes and their special player powers. |
-| `run:deck-mutation` | 1 | 1 | 0 | Persistent run-deck mutation and run-scoped state ("Dungeon Deck", "this run", bosses defeated). |
 | `run:global-rules` | 1 | 0 | 0 | Anomalies and chapter twists as validated global rules on the match plan. |
-| `run:hunt-reward` | 1 | 1 | 0 | A Monster Hunt boss's own hunt reward (the treasure the adventure gave for beating that boss): SoloStone's rewards are the run's treasure drafts, so a per-boss reward belongs to the reward economy (phase 9). |
+| `run:hunt-reward` | 1 | 1 | 0 | A Monster Hunt boss's own hunt reward (the treasure the adventure gave for beating that boss): SoloStone's rewards are the run's treasure drafts, so a per-boss reward belongs to the reward economy (phase 9). Step 9 (D9) grants it on a schedule of stamp 4 (the encounter row's v4 "reward"); the card's boss-card role stays unreached, because no original boss deck held it. |
 | `run:tavern` | 1 | 0 | 0 | Bob's tavern services between fights (deck edits, recruits). |
 | `run:treasure-content` | 1 | 0 | 0 | Original passive and active treasures as run content entries (DungeonRunContent + run-v1.json). |
 | `data:original-boss-decks-absent` | 2 | 0 | 0 | Original boss decks are server-side: the client database has none, so an encounter needs a reconstructed deck. |
 | `data:bombastic-decks-absent` | 1 | 0 | 0 | House Special replaces the run deck with one of Bob's Bombastic Decks, which were server-side: no client table or other source lists them, so the option is rejected for good (step 9: tavern-v1.json deferred): authoring a Bombastic deck for each of the 15 class sets would be new content with no source, not a one-line effect like VIP Membership's. |
 | `data:unused-in-adventure` | 1 | 1 | 0 | The client data holds the card but the adventure never used it (the wiki marks it unused): scripted and admitted for completeness, listed by no encounter, deck or reward. |
 
-22 rows carry at least one gap.
+13 rows carry at least one gap.
 
 ### AI support
 
@@ -759,18 +757,18 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 
 | Input | SHA-256 (first 16) |
 | --- | --- |
-| `data/dungeon-run/catalog-v1.json` | `8bad87efdb81eb09` |
-| `data/dungeon-run/encounters-v1.json` | `007c4b43d9dfef86` |
+| `data/dungeon-run/catalog-v1.json` | `b6c143aff9097222` |
+| `data/dungeon-run/encounters-v1.json` | `b53222487046ed75` |
 | `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
 | `data/dungeon-run/reference/adventure-reference.csv` | `4a608dfa596733e7` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |
 | `data/dungeon-run/reference/buckets.json` | `b3015218a0ea9193` |
 | `data/dungeon-run/reference/client-tables.json` | `c7b51c98f568706a` |
-| `data/dungeon-run/run-v1.json` | `f932d6493d4b4091` |
-| `data/dungeon-run/schedule-v1.json` | `1c977696e4123859` |
-| `data/dungeon-run/tavern-v1.json` | `b4b5b1e19907827a` |
+| `data/dungeon-run/run-v1.json` | `e05f5fc25898ed5c` |
+| `data/dungeon-run/schedule-v1.json` | `77a8f0bfe067a561` |
+| `data/dungeon-run/tavern-v1.json` | `82e90c87679c8e30` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
-| `tools/restoration-ledger/curation.json` | `a219d839237a88d7` |
+| `tools/restoration-ledger/curation.json` | `e4fdfb1152c9cfab` |
 
 Plus the engine card data and DungeonRunContent compiled from the working tree.

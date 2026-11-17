@@ -32,8 +32,9 @@ internal sealed partial class DungeonRun
     private void PlanMatchEnds(DungeonRunState state, DungeonRunBoss boss, RunMatchPlan plan)
     {
         if (!Tuned(state)) return;
-        // D11: a relay fight (Tekahn on acts-v4t, the only relay row) gets 150 turns and the form ratchet.
-        if (IsRelayFight(boss)) plan.FormRatchet = true;
+        // D11: the act's "formRatchet" (acts-v4t's Tekahn finale, lane E's schedule key); a relay fight (Tekahn, the only relay
+        // row) gets the ratchet when its act states nothing.
+        plan.FormRatchet = CurrentAct(state)?.FormRatchet == true || IsRelayFight(boss);
         int cap = TurnCapFor(state, boss);
         // D13: a restarted floor's games share one budget of twice the cap.
         plan.TurnCap = state.RestartIndex > 0 ? Math.Max(1, cap * RestartTurnBudget - state.RestartTurns) : cap;
@@ -47,11 +48,16 @@ internal sealed partial class DungeonRun
     private static bool IsRelayFight(DungeonRunBoss boss) => boss != null && boss.Relay.Count > 0;
 
     /// <summary>
-    /// The turn cap of the current fight before any restart: <see cref="RelayTurnCap"/> for a tuned relay fight,
-    /// <see cref="DefaultTurnCap"/> otherwise (every fight of a run that is not tuned).
+    /// The turn cap of the current fight before any restart, on a tuned run: the act's "turnCap" (acts-v4t's Tekahn finale: 150,
+    /// lane E's schedule key) when it states one, else <see cref="RelayTurnCap"/> for a relay fight, else
+    /// <see cref="DefaultTurnCap"/>; every fight of a run that is not tuned keeps <see cref="DefaultTurnCap"/>.
     /// </summary>
-    internal int TurnCapFor(DungeonRunState state, DungeonRunBoss boss) =>
-        Tuned(state) && IsRelayFight(boss) ? RelayTurnCap : DefaultTurnCap;
+    internal int TurnCapFor(DungeonRunState state, DungeonRunBoss boss)
+    {
+        if (!Tuned(state)) return DefaultTurnCap;
+        int own = CurrentAct(state)?.TurnCap ?? 0;
+        return own > 0 ? own : IsRelayFight(boss) ? RelayTurnCap : DefaultTurnCap;
+    }
 
     /// <summary>
     /// D14: ULDA_111 Hearthstone may end the current fight as an escape: a tuned run whose deck holds the card and at least

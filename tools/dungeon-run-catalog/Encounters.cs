@@ -240,7 +240,7 @@ namespace DungeonRunCatalogTool
 
                     var row = Map(("id", id), ("name", Text(boss, "name")), ("provenance", Text(boss, "provenance")), ("family", Text(boss, "family") ?? fileFamily),
                         ("hero", Text(boss, "hero")), ("power", Text(boss, "power")), ("tier", tier), ("archetype", Text(boss, "archetype")));
-                    // Step 9 (lane R): incompatibleTreasures, modifierReasons and the "v4" override block pass through as written.
+                    // Step 9 (lanes R and E): incompatibleTreasures, modifierReasons and the "v4" override block pass through as written.
                     foreach (string key in new[] { "level", "health", "fixedHealth", "healthOffset", "bossManaCap", "unlock", "flags", "bossGeneratedSecrets", "cards", "incompatibleRules", "incompatibleModifiers", "start",
                         "incompatibleTreasures", "modifierReasons", "v4" })
                         if (boss.TryGetValue(key, out object value) && value != null) row.Add(key, value);

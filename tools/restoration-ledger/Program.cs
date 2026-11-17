@@ -989,6 +989,9 @@ namespace RestorationLedger
                         hr.Owner = boss.HeroCard;
                     }
                 }
+                // Step 9 (D9): the treasure a won fight against the row grants on a schedule of stamp 4 (its v4 "reward", read through
+                // DungeonRun.Tuned); pending while no default schedule of stamp 4 reaches the row.
+                if (boss.V4?.Reward != null) Offer(boss.V4.Reward, "encounter reward:" + boss.Id + (EncounterReachable(boss, 4) ? "" : Row.Pending));
                 foreach (var h in boss.Relay)
                 {
                     Offer(h.Hero, "relay hero:" + boss.Id + Reached(boss));
@@ -1409,8 +1412,8 @@ namespace RestorationLedger
         /// A new run can meet the encounter: a schedule a new run follows (schedule-v1.json "default" or one of "defaults") draws
         /// its pool or fixes it in its finale.
         /// </summary>
-        private static bool EncounterReachable(DungeonRunBoss boss) =>
-            schedules.Schedules.Values.Any(x => (x.Id == schedules.Default || schedules.Defaults.Contains(x.Id))
+        private static bool EncounterReachable(DungeonRunBoss boss, int minStamp = 0) =>
+            schedules.Schedules.Values.Any(x => (x.Id == schedules.Default || schedules.Defaults.Contains(x.Id)) && x.StampVersion >= minStamp
                 && x.Acts.Any(a => a.FixedBosses.Contains(boss.Id) || a.MajorPool != null && schedules.Member(boss, a.MajorPool) || a.Combat.Any(c => schedules.Member(boss, c.Pool))));
 
         /// <summary>The deck ids of an encounter: its own first, then its forms' and its shrine variants', distinct.</summary>
@@ -1885,7 +1888,7 @@ namespace RestorationLedger
                 ["run:tavern"] = "Bob's tavern services between fights (deck edits, recruits).",
                 ["run:encounter-roster"] = "Original encounters: boss heroes, powers, special cards and setups in the encounter pool.",
                 ["run:special-finales"] = "Special finales (Tekahn Inner Sanctum hand-off, Hagatha, Heist finale).",
-                ["run:default-schedule"] = "Placed only on a schedule no new run follows (schedule-v1.json \"default\" and \"defaults\"); since the phase-8 close-out acts-v3h and acts-v3t are the defaults.",
+                ["run:default-schedule"] = "Placed only on a schedule no new run follows (schedule-v1.json \"default\" and \"defaults\"); since step 9 acts-v4h and acts-v4t are the defaults (acts-v3h and acts-v3t from the phase-8 close-out to step 9).",
                 ["run:adventure-cards"] = "Adventure-only cards (boss/treasure support cards in the original namespaces) that need an owning feature to appear.",
                 ["run:deck-mutation"] = "Persistent run-deck mutation and run-scoped state (\"Dungeon Deck\", \"this run\", bosses defeated).",
                 ["data:original-boss-decks-absent"] = "Original boss decks are server-side: the client database has none, so an encounter needs a reconstructed deck.",
