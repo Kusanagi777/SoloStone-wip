@@ -41,6 +41,10 @@
 #   family 23 modes:     bp.sh enc23|enc23-seeds                                 (twice per call; FAMILY=23: the four nemeses and Hagatha)
 #                        bp.sh enc23-cards <k>                                    (one run per call, k = 1 or 2; then `bp.sh same enc23-cards`)
 #   family 24 modes:     bp.sh enc24 | plague24 <carried 95|110|195|210> | tekahn24  (twice per call; tekahn24: the fixture finale with the relay)
+#   close-out (25):      bp.sh finale25                  the SHIPPED acts-v3h Heist finale (twice per call)
+#                        bp.sh tekahn25                  the SHIPPED acts-v3t finale on Tekahn with the hero relay (twice per call)
+#                        bp.sh sweep25 <a|b|c> <k>       new runs with no named schedule (the default roll), each fought at a floor of
+#                                                        its own (DEFAULT_SWEEP; one run per call; then `bp.sh same sweep25-<a|b|c>`)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -360,6 +364,14 @@ plague24) # each lord starts with <carried> damage banked: 110 / 210 start phase
   need $E; c=${2:-95}; twice plague24-$c BOSS=$LORDS24 GAMES=1 CARRIED=$c WATCH=$CARDS24 ;;
 tekahn24) # fixture schedule: acts-v3t's finale enabled on Tekahn with the hero relay; the run hero starts at 1 Health so the explorers enter
   need $E; twice tekahn24 FINALE=1 GAMES=2 PLAYER_HEALTH=1 SCHEDULE=acts-v3t SCHEDULE_JSON=$FX/p8f24/fixtures/schedule-tekahn.json WATCH=$CARDS24 ;;
+# ---- the close-out (family 25): the shipped schedules, no fixture
+finale25) # the Heist finale as acts-v3h ships it since the close-out: Norroa, Vargoth, Kalec, Khadgar in order, floors 16-19
+  need $E; twice finale25 FINALE=1 WATCH=KARA_00_08 ;;
+tekahn25) # acts-v3t's finale as it ships: Tekahn with the hero relay; the run hero starts at 1 Health so the explorers enter
+  need $E; twice tekahn25 FINALE=1 GAMES=2 PLAYER_HEALTH=1 SCHEDULE=acts-v3t WATCH=$CARDS24 ;;
+sweep25) # the default roll: runs 0-15 (a), 16-31 (b) and 32-47 (c), the run rows in turn, each fought at floor 1 + 7i of its schedule
+  case "$2" in a) from=0 ;; b) from=16 ;; c) from=32 ;; *) echo "usage: bp.sh sweep25 <a|b|c> <k>"; exit 2 ;; esac
+  need $E; once sweep25-$2 "$3" DEFAULT_SWEEP=16 DEFAULT_SWEEP_FROM=$from SEED_BASE=25000 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;
