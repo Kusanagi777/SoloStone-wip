@@ -162,7 +162,7 @@ internal static class DungeonRunRuntime
             try { mutation(loaded); Commit(); }
             catch
             {
-                loaded.Profile = snapshot.Profile; loaded.Active = snapshot.Active; loaded.Version = snapshot.Version;
+                DungeonRunStore.Restore(loaded, snapshot);
                 throw;
             }
         }
@@ -328,7 +328,8 @@ internal static class DungeonRunRuntime
         }
         catch
         {
-            lock (Gate) { loaded.Profile = snapshot.Profile; loaded.Active = snapshot.Active; }
+            // Step 9 (D6): the version is rolled back too, through the store's helper, as Mutate does.
+            lock (Gate) DungeonRunStore.Restore(loaded, snapshot);
             throw;
         }
         EndMatch();

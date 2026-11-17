@@ -616,6 +616,19 @@ internal static class DungeonRunStore
         }
     }
 
+    /// <summary>
+    /// Rolls <paramref name="save"/> back to <paramref name="snapshot"/> (a <see cref="Clone"/> taken before a change): its
+    /// profile, run in progress and version. A change can raise the version (the first commit of an upgraded file), so a
+    /// rollback that kept it would leave memory a version ahead of the file. <see cref="DungeonRunSave.LoadedVersion"/> is not
+    /// touched: only a successful <see cref="Save"/> moves it. Used by the runtime's Mutate and RecordFightOutcome (step 9 D6).
+    /// </summary>
+    internal static void Restore(DungeonRunSave save, DungeonRunSave snapshot)
+    {
+        save.Profile = snapshot.Profile;
+        save.Active = snapshot.Active;
+        save.Version = snapshot.Version;
+    }
+
     internal static void Save(string profileDirectory, DungeonRunSave save)
     {
         // An act run's Deck mirrors its card records (DungeonRunDeck.Sync): a mismatch is refused before anything is written,

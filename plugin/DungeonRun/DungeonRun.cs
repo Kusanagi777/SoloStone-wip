@@ -928,7 +928,27 @@ internal sealed partial class DungeonRun
         // An unfinished act run must still fit the loaded schedule (ScheduleFor, CurrentNode): a run of another schedule version
         // or a damaged node is refused here, at load, with the reason, and is never rewritten.
         if (state.IsActRun && !state.Finished) CurrentNode(state);
+        // Step 9 (lane S): likewise an unfinished run whose starter deck or bosses the loaded data does not know, rather than a
+        // KeyNotFoundException at its next fight or pick.
+        string unknown = state.Finished ? null : UnknownIdsError(state);
+        if (unknown != null) throw new InvalidDataException(unknown);
         if (state.Phase == DungeonRunPhase.InMatch) state.Phase = DungeonRunPhase.PreMatch;
+    }
+
+    /// <summary>
+    /// The run's ids the loaded data does not know, as a refusal message naming them: its starter deck (a version-1 run, which
+    /// has none, passes; a deck of a disabled row is named as such) and every id of its boss sequence. Null when all are known.
+    /// </summary>
+    internal string UnknownIdsError(DungeonRunState state)
+    {
+        var parts = new List<string>();
+        if (state.StarterDeck != null && Data.FindDeck(state.StarterDeck) == null)
+            parts.Add("starter deck " + state.StarterDeck + (Data.DisabledDecks.Any(d => d.Id == state.StarterDeck) ? " (its row is disabled)" : ""));
+        var bosses = (state.BossSequence ?? new List<string>()).Where(id => id == null || Data.Bosses.All(b => b.Id != id))
+            .Select(id => id ?? "(none)").Distinct(StringComparer.Ordinal).ToList();
+        if (bosses.Count > 0) parts.Add((bosses.Count == 1 ? "boss " : "bosses ") + string.Join(", ", bosses));
+        return parts.Count == 0 ? null
+            : "Dungeon Run save: the run names " + string.Join(" and ", parts) + ", unknown to the loaded data; the run is not resumed.";
     }
 
     /// <summary>
