@@ -201,6 +201,11 @@ regression of the close-out re-records `baseline/`, expect the bosspilot modes t
 tavern to differ from their wave-6 records: ULDA_038 Explorer Retraining joined the tavern draw of stamp-3 runs (every
 walk buys every offer, so a run may also change its power). The ledger is 4970 rows (implemented 3880, partial 10, missing
 13, duplicate/support 1067); `p8f18`'s and `p8f24`'s finale fixtures are the shipped schedule byte for byte.
+The close-out review (stage B) moved five powers the wiki marks Auto-cast from AI clicks to rule casts (Sand Surge, Power
+of Wrath, Mighty Windstorm, Out of Control, Marei Loom's Next...): expect the enc18a, enc19a/b, enc20a/b and their seeds
+modes, and any mode that meets those bosses (sweep25-a meets Sinkhole), to differ from their wave-6 records for that
+reason too; their `power` column counts clicks only, so it reads 0 for a rule-cast power (c-enc-18 F, c-enc-19 H and
+c-enc-20 D, J, O count the casts).
 
 Generators (`gen.sh`): all six generated files byte-identical; encounters "255 rows, 296 decks (125 authentic, 171
 changed), 876 adaptations, 4 rejected"; catalog "506 entries (452 offerable pool, 2 withdrawn, 52 fixed), 6508 admitted

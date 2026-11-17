@@ -278,7 +278,7 @@ Guard("P", () =>
     Check("P1 every AI_MUST_PLAY encounter power is cast by rule or its row's power note says why the AI chooses instead (" + mustPlay.Count + " powers, "
         + mustPlay.Count(x => RuleCast(x.Power)) + " cast by rule)", mustPlay.Count > 30 && silent.Count == 0, string.Join(" ", silent));
     var reviewed = new[] { "ULDA_BOSS_08p", "ULDA_BOSS_22p", "ULDA_BOSS_28p", "ULDA_BOSS_33p", "DALA_BOSS_66p" };
-    Check("P2 the five the review found (Sand Surge, Power of Wrath, Mighty Windstorm, Out of Control, Next...) are cast by rule and their notes say so",
+    Check("P2 the five the close-out review moved to a rule cast (Sand Surge, Power of Wrath, Mighty Windstorm, Out of Control, Next...) are cast by rule and their notes say so",
         reviewed.All(p => mustPlay.Any(x => x.Power == p) && RuleCast(p) && SabberStoneCore.CardSets.DungeonRun.DungeonRunEncounters.Find(p).Kind == SabberStoneCore.CardSets.DungeonRun.EncounterCardKind.Passive
             && Noted(mustPlay.First(x => x.Power == p).Row)),
         string.Join(" ", reviewed.Where(p => !RuleCast(p) || !mustPlay.Any(x => x.Power == p && Noted(x.Row)))));
