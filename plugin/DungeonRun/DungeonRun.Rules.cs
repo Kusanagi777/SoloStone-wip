@@ -89,7 +89,7 @@ internal sealed partial class DungeonRun
     /// </summary>
     private DungeonRunGlobalRule PickTwist(DungeonRunState state, List<DungeonRunGlobalRule> candidates, int actNo)
     {
-        long draw = StableSeed.Derive(state.Seed, TwistStream, actNo, 1);
+        int draw = StableSeed.Derive(state.Seed, TwistStream, actNo, 1);
         if (!Tuned(state)) return candidates[StableSeed.Index(draw, candidates.Count)];
         int roll = StableSeed.Index(draw, candidates.Sum(r => Math.Max(1, r.Weight)));
         foreach (var rule in candidates)

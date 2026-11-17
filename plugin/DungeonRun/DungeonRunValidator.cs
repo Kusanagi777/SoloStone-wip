@@ -740,10 +740,11 @@ internal static class DungeonRunValidator
             if (boss.HasFlag(DungeonRunEncounterData.HeroSwitch) != (boss.HeroCards.Count > 0)) Fail(where, "flag heroSwitch and the hero cards must go together");
             if (boss.HasFlag(DungeonRunEncounterData.FormsFlag) != (boss.Forms.Count > 0)) Fail(where, "flag forms and the forms must go together");
             if (boss.HasFlag(DungeonRunEncounterData.ShrineFlag) != boss.Variants.Any(v => v.Shrine != null)) Fail(where, "flag shrine and a shrine variant must go together");
-            // Step 9 (lane R): the two prevention flags that follow from the row's own data, and the row's v4 block.
+            // Step 9 (lane R): the two prevention flags that follow from the row's own data need that data (one way only: a test
+            // fixture's row may leave a flag out), and the row's v4 block.
             bool addsHand = boss.Start != null && boss.Start.BossHandAdd.Count + boss.Start.PlayerHandAdd.Count > 0 || boss.HeroCards.Count > 0;
-            if (boss.HasFlag(DungeonRunEncounterData.HandAdd) != addsHand) Fail(where, "flag handAdd and a start hand add or hero cards must go together");
-            if (boss.HasFlag(DungeonRunEncounterData.ManaIdentity) != (boss.Start?.BossMana != null)) Fail(where, "flag manaIdentity and a start bossMana must go together");
+            if (boss.HasFlag(DungeonRunEncounterData.HandAdd) && !addsHand) Fail(where, "flag handAdd needs a start hand add or hero cards");
+            if (boss.HasFlag(DungeonRunEncounterData.ManaIdentity) && boss.Start?.BossMana == null) Fail(where, "flag manaIdentity needs a start bossMana");
             if (data.Treasures.Count > 0)
                 foreach (string id in boss.IncompatibleTreasures.Where(id => data.FindTreasure(id) == null)) Fail(where, $"incompatibleTreasures names unknown treasure {id}");
             if (boss.V4 != null)
