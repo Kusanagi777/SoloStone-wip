@@ -43,7 +43,7 @@ def row(n, rid, name, page, tier, printed, rounds, archetype, deck, adaptations,
     r["source"] = OD([("url", WIKI + page), ("read", READ)])
     r["lists"] = extra.pop("lists", None) or [OD([("label", "Deck"), ("cards", deck)])]
     r["deck"] = extra.pop("deckSpec", OD([("list", "Deck")]))
-    for key in ("forms", "replacements", "fillers"):
+    for key in ("forms", "replacements", "fillers", "v4"):
         if key in extra: r[key] = extra.pop(key)
     r["adaptations"] = [schedule(rounds, printed, tier)] + adaptations
     if extra: raise SystemExit("unknown keys " + ",".join(extra))
@@ -92,7 +92,9 @@ BOSSES = [
                "triggers them; a silenced minion's card Deathrattle stays quiet. Offered only while a minion with a Deathrattle is on a "
                "board. Grave Mistake the spell (GILA_BOSS_43t, 0 Cost) is the treasure the hunt drops after this fight and is in no deck "
                "row; it is scripted and admitted for both sides, and tested from a fixture boss's hand.")],
-        flags=["doubleDeathrattle"], fillers=["Harvest Golem", "Haunted Creeper", "Kindly Grandmother", "Sludge Belcher", "Abomination"]),
+        flags=["doubleDeathrattle"], fillers=["Harvest Golem", "Haunted Creeper", "Kindly Grandmother", "Sludge Belcher", "Abomination"],
+        # Step 9 (D9): on a stamp-4 run (acts-v4h, acts-v4t) beating Damph grants the hunt's drop, Grave Mistake the spell.
+        v4=OD([("reward", "GILA_BOSS_43t")])),
     row("44", "gila_44_sezavo", "Doctor Sezavo", "Doctor_Sezavo", "1", 20, "2-3", "aggro",
         cards(("Northshire Cleric", 2), ("Power Word: Shield", 2), ("Shadowboxer", 2), ("Mortal Coil", 2), ("Leper Gnome", 1), ("Lightwarden", 1),
               ("Voodoo Doctor", 1), ("Amani Berserker", 1), ("Loot Hoarder", 2), ("Novice Engineer", 2), ("Backstreet Leper", 1), ("Earthen Ring Farseer", 1),

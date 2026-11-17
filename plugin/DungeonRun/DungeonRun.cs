@@ -515,6 +515,8 @@ internal sealed partial class DungeonRun
     private List<string> MixedDraw(DungeonRunProfile profile, long seed, DungeonRunSchedule schedule, DungeonRunAct act, long component, string pool,
         int count, HashSet<string> used, Dictionary<string, int> drawn, DungeonRunProfile ledgerProfile, CardClass? excludeShrineClass = null)
     {
+        // Step 9 (lane E, DungeonRun.Economy.cs): the "provenance-mix-v2" draw of a stamp-4 schedule (D10).
+        if (schedule.MixesProvenanceV2) return MixedDrawV2(profile, seed, schedule, act, component, pool, count, used, drawn, ledgerProfile, excludeShrineClass);
         var picks = new List<string>();
         var candidates = PoolCandidates(profile, pool, used, excludeShrineClass);
         if (candidates.Count < count)
@@ -775,8 +777,9 @@ internal sealed partial class DungeonRun
     {
         var cls = RunClass(state);
         var ids = new List<string>();
+        // Step 9 (lane E): a stamp-4 run's shared treasures are in every loadout's scope (TreasureInScope, D6).
         foreach (var t in Data.Treasures.Where(t => t.Active && t.Offered && !t.Legacy && !t.Signature && (pool == null || t.Pool == pool)
-            && t.Scope.Matches(cls.ClassSet, state.StarterDeck, state.Power) && TreasureOfferedOn(t, state)))
+            && TreasureInScope(t, cls, state) && TreasureOfferedOn(t, state)))
         {
             if (!DungeonRunContent.TryGet(t.Id, out var content) || content.ShellId == null) continue;
             SabberStoneCore.Model.Card card;
@@ -1064,7 +1067,7 @@ internal sealed partial class DungeonRun
         if (node.Index == schedule.Nodes.Count - 1) { Finish(state, profile, won: true); return; }
         // Phase 8: a finale act's fights follow one another with no treasure, reward or card draft.
         if (schedule.Acts[node.Act - 1].IsFinale) { Advance(state); return; }
-        // Step 9 (lane E, DungeonRun.Economy.cs): the boss's own reward ("reward", D9); nothing on every schedule today.
+        // Step 9 (lane E, DungeonRun.Economy.cs): the boss's own reward (an encounter row's v4 "reward", D9) on a stamp-4 run.
         GrantEncounterReward(state, node);
         bool treasure = node.TreasureDraft || major && ActiveModifiers(state).Any(m => m.ExtraTreasureAfterMajor);
         // A full deck (deckMax) has no room for an active treasure's card: the draft offers passive treasures only.
@@ -1141,10 +1144,18 @@ internal sealed partial class DungeonRun
         classTags.UnionWith(Data.FindDeck(state.StarterDeck)?.TreasureTags ?? new List<string>());
         var candidates = Data.Treasures
             .Where(t => t.Offered && !t.Legacy && !t.Signature && !offeredBefore.Contains(t.Id) && !state.Treasures.Contains(t.Id) && !state.ActiveTreasures.Contains(t.Id))
-            .Where(t => t.Scope.Matches(cls.ClassSet, state.StarterDeck, state.Power) && TreasureOfferedOn(t, state))
+            .Where(t => TreasureInScope(t, cls, state) && TreasureOfferedOn(t, state))
             .Where(t => !passiveOnly || !t.Active)
             .OrderBy(t => t.Id, StringComparer.Ordinal).ToList();
         if (candidates.Count == 0) return false;
+        // Step 9 (lane E, DungeonRun.Economy.cs): a stamp-4 run's slots and per-act rarity weights (D6).
+        if (Tuned(state))
+        {
+            var tuned = TunedTreasureOffer(state, cls, candidates, classTags);
+            state.Drafts.Add(new DungeonRunDraft { Floor = state.Floor, Kind = "treasure", Offered = tuned.OrderBy(x => x, StringComparer.Ordinal).ToList() });
+            state.Phase = DungeonRunPhase.TreasureDraft;
+            return true;
+        }
 
         int Weight(DungeonRunTreasure t)
         {
@@ -1250,7 +1261,7 @@ internal sealed partial class DungeonRun
             if (wins > 0) up.Progress++;
             bool due = on == DungeonRunTreasure.UpgradeOnActClear ? majorWon
                 : wins > 0 ? up.Progress >= wins
-                : state.Floor - up.SinceFloor >= Rules.UpgradeEveryFloors;
+                : state.Floor - up.SinceFloor >= UpgradeEveryFloors(state);
             if (!due) continue;
             string next = NextStage(up.Key, slot);
             if (next == null) { state.Upgrades.Remove(up); continue; }
@@ -1324,7 +1335,9 @@ internal sealed partial class DungeonRun
     {
         // An act run whose deck has no room for a pick (deckMax) skips the draft: drafts never push a deck past what its
         // matches accept (taverns refuse such adds the same way). A legacy run never reaches its limit of 40.
-        // Step 9 (lane E, DungeonRun.Economy.cs): the skipped draft may turn into banked gold (D5); nothing today.
+        // Step 9 (lane E, DungeonRun.Economy.cs): a stamp-4 act with "bundleAfterTreasure": false opens no bundle after a
+        // treasure-draft floor or its major (D5 variant (b)); a draft skipped for room becomes banked gold (D5).
+        if (state.IsActRun && NoBundleAfter(state, CurrentNode(state))) return false;
         if (state.IsActRun && state.Deck.Count + DraftTakes(state) > DeckMax(state)) { ConvertSkippedDraft(state); return false; }
         bool opened = state.IsCatalogRun ? OpenCatalogDraft(state, DraftOptions(state)) : OpenLegacyBundleDraft(state, DraftOptions(state));
         // An act whose picks keep fewer than three cards records it on the draft (absent on every legacy draft).
@@ -1351,6 +1364,8 @@ internal sealed partial class DungeonRun
         if (!state.IsActRun || state.Phase != DungeonRunPhase.PreMatch && state.Phase != DungeonRunPhase.Tavern && state.Phase != DungeonRunPhase.Modifier) return 0;
         var won = state.Matches.LastOrDefault(m => m.Outcome != DungeonRunOutcome.Fault);
         if (won == null || won.Outcome != DungeonRunOutcome.Win) return 0;
+        // Step 9 (lane E): a floor that opens no bundle by design (D5 variant (b)) skipped nothing.
+        if (Tuned(state) && NoBundleAfter(state, ScheduleFor(state).FightAt(won.Floor))) return 0;
         return state.Drafts.Any(d => d.Kind == "bundle" && d.Floor == won.Floor) ? 0 : won.Floor;
     }
 

@@ -207,7 +207,8 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 | `engine:unscripted` | 11 | 0 | 0 | No engine script for the card id (CardDefs has no implemented entry). |
 | `validation:encounter-rejected` | 3 | 0 | 0 | Current DungeonRunValidator admission rule `encounter-rejected` rejects the card. |
 | `validation:rule-rejected` | 1 | 0 | 0 | Current DungeonRunValidator admission rule `rule-rejected` rejects the card. |
-| `run:twist-pools` | 8 | 8 | 0 | Chapter twists: scripted and admitted global rules, rolled at NewRun from an act's "twist" pool, but acts I-III of acts-v3h and acts-v3t ship an empty pool (only the Heist finale rolls one, DALA_830 The Finale; the close-out enabled the finales and the defaults, not the act twist rolls): how often an act rolls a twist is a reward-economy and incompatible-modifier decision for phase 9. Tested end to end on the family 05 and 06 fixture schedules. |
+| `run:default-schedule` | 8 | 0 | 0 | Placed only on a schedule no new run follows (schedule-v1.json "default" and "defaults"); since the phase-8 close-out acts-v3h and acts-v3t are the defaults. |
+| `run:twist-pools` | 8 | 0 | 0 | Chapter twists: scripted and admitted global rules, rolled at NewRun from an act's "twist" pool, but acts I-III of acts-v3h and acts-v3t ship an empty pool (only the Heist finale rolls one, DALA_830 The Finale; the close-out enabled the finales and the defaults, not the act twist rolls): how often an act rolls a twist is a reward-economy and incompatible-modifier decision for phase 9. Tested end to end on the family 05 and 06 fixture schedules. |
 | `run:encounter-roster` | 6 | 0 | 0 | Original encounters: boss heroes, powers, special cards and setups in the encounter pool. |
 | `run:treasure-content` | 3 | 0 | 0 | Original passive and active treasures as run content entries (DungeonRunContent + run-v1.json). |
 | `run:adventure-cards` | 1 | 0 | 0 | Adventure-only cards (boss/treasure support cards in the original namespaces) that need an owning feature to appear. |
@@ -759,18 +760,18 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 
 | Input | SHA-256 (first 16) |
 | --- | --- |
-| `data/dungeon-run/catalog-v1.json` | `8bad87efdb81eb09` |
-| `data/dungeon-run/encounters-v1.json` | `75fdf16ce53be73b` |
+| `data/dungeon-run/catalog-v1.json` | `47db50449ee26627` |
+| `data/dungeon-run/encounters-v1.json` | `e05494d56da84929` |
 | `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
 | `data/dungeon-run/reference/adventure-reference.csv` | `4a608dfa596733e7` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |
 | `data/dungeon-run/reference/buckets.json` | `b3015218a0ea9193` |
 | `data/dungeon-run/reference/client-tables.json` | `c7b51c98f568706a` |
-| `data/dungeon-run/run-v1.json` | `f932d6493d4b4091` |
-| `data/dungeon-run/schedule-v1.json` | `6abde845cc96e96c` |
-| `data/dungeon-run/tavern-v1.json` | `2b0688c5c686151c` |
+| `data/dungeon-run/run-v1.json` | `2e383fad36f107be` |
+| `data/dungeon-run/schedule-v1.json` | `f394bee53dbe8545` |
+| `data/dungeon-run/tavern-v1.json` | `82e90c87679c8e30` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
-| `tools/restoration-ledger/curation.json` | `4d76eeee9d3e9eb5` |
+| `tools/restoration-ledger/curation.json` | `110e3b44a6beb0e5` |
 
 Plus the engine card data and DungeonRunContent compiled from the working tree.
