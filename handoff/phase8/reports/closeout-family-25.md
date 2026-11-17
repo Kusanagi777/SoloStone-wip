@@ -287,3 +287,97 @@ tree, then runs every run entry twice in slices with `same.sh`, the close-out mo
 the bp.sh calls of every `final.sh` stage (enc, rules06, cross06, released, released-all, w1, w2, rules05, cross05, w4,
 w5, w6) and the hall (harness, 1-38 in slices, same). Expect the bosspilot records to move for the two reasons above (the
 tavern's ULDA_038 and the five rule casts); a new baseline needs those differences read first.
+
+## 3. Runs-and-state review (rerun)
+
+A rerun of the runs-and-state review (reachability per adventure, save/resume, persistent damage, hero switching, majors
+end to end) on `5effe5f` confirmed 2 findings and rejected 1. Both confirmed findings are fixed in one commit, and each has
+a check that fails without the fix. The fix changes no engine, plugin or data file: only the ledger tool, the regenerated
+ledger csv, HANDOFF.md and c-enc-25.
+
+### 3.1 Confirmed findings and their fixes
+
+**Finding R1 [medium]: 8 admitted twists are never eligible in the mode, and HANDOFF's step-9 list did not name the twist
+pools.** Acts I-III of acts-v3h ship `"twist": {"pool": [], "chance": 0}`. acts-v3t uses the same acts (`sameActsAs`),
+and `DungeonRun.RollTwists` only draws from an act's own pool when its chance is above 0. So only the Heist finale's
+DALA_830 ever rolls. DALA_829, DALA_831-833 and ULDA_801-804 are scripted, admitted and tested only on the p8f05 and p8f06
+fixtures, so the completion bar (HANDOFF section 1) is not met for them. The ledger (partial, `run:twist-pools`) and this
+report (section 1) recorded the gap. HANDOFF.md did not: wip/c25 had not edited it at all, its step-9 list left out the
+twist pools, 3.4 kept the wave-3 line naming only ULDA_801-804, and 3.2 still described the close-out as pending ("c-w5fix
+Q7 fails until then"). The review overstated one point: the gap was also in this report, not only in the ledger and
+curation.json.
+
+- Fix: HANDOFF 3.3 now gives step 9 its own entry. Step 9 must give acts I-III non-empty twist pools with a chance per act
+  for the 8 ids (named one by one), gated by incompatible-modifier prevention, and the completion bar stays open for these
+  8 until it does. HANDOFF 3.2 is rewritten as the close-out's result (ids, finales, the DALA_Tekahn rule, defaults,
+  shapes, golden sequences, ledger, reachability, what is still open). 3.4 gets a close-out group. The entries the
+  close-out closed are marked closed: the Tekahn same-character rule, the acts-v3h finale shipping disabled, F14's stale
+  TRLA_065p note (brief item 5, which stage A did in curation.json but not in HANDOFF), and BOT_543's finale. The wave-3
+  twist line now names all 8 ids and both fixtures. Section 2 (step 8 state, ledger counts, the F25 stubs) is refreshed
+  to match. That is outside 3.2-3.4, but it was stale in the same way.
+- Check: c-enc-25 **B7** computes every admitted twist that no default schedule can roll (an act with the id in its pool
+  at a chance above 0). It requires each one to be partial with `run:twist-pools` and to be named in HANDOFF section 3.3.
+  The set is pinned at 8, together with B1's partial rows. Before the HANDOFF edit, B7 fails and names all 8 ids. When
+  step 9 fills the pools, it moves this pin and B1's.
+
+**Finding R2 [low]: the ledger said ULDA_911 Kindle and ULDA_912 Recruit are offered, and recorded Hagatha's fight hero
+cards as portrait variants.** tavern-v1.json gives both aliases weight 0, and `DungeonRunTavern.Open` draws only options
+with weight above 0, so neither is ever offered under its own id. Their rows still read `offered:tavern tavern-v1.json
+removeFromSample` and `... recruit`. The ledger's own convention (`restoration-ledger.md`, player_availability: "with
+`via <id>` when a reprint ... is what is offered") was not applied. Separately, GILA_600h2 and GILA_500h4, which
+`DungeonRun.BuildPlan` plays as the run player's hero cards in the Hagatha fight, read "support: hero portrait variant",
+owned by the hunter rows GILA_600h and GILA_500h3. The stem grouping of portraits had made them variants.
+
+- Fix (`tools/restoration-ledger/Program.cs`): a weight-0 alias now writes `offered:tavern tavern-v1.json <op> via
+  <target>`, and its note says the tavern never draws it under its own id and a run is offered the target. For every
+  fight hero card of an encounter, a row the stem grouping made a portrait variant becomes "support: fight hero card of
+  the encounter gila_61_hagatha: the run player plays it as its hero in that fight (DungeonRun.BuildPlan PlayerHeroCards,
+  run-owned DungeonRunState.HeroSwitch); a form of <hunter row>", owned by the encounter's boss hero GILA_BOSS_61h.
+  Ledger regenerated: exactly these 4 rows change. Counts are unchanged (4970 / 3880 / 10 / 13 / 1067 / 0).
+- Kept as they are, on purpose:
+  - The two hero cards stay duplicate/support with engine_behavior support-only. That is what the ledger means by a
+    support row: a dependency of its owner, not a reward. Icarax's form portraits, which are also played in matches, are
+    classified the same way, and family 01 listed both kinds as `supportRecords` in curation E01.
+  - encounter_use stays `none`. The player-side use is in player_availability (`offered:fight hero card:gila_61_hagatha`),
+    as for the relay heroes.
+  - The roles column (`boss hero;portrait`) comes from the reference CSV category and feeds the role logic, so it is
+    not changed.
+  - The aliases stay implemented run-service: their behaviour runs under the target's id, and the target's text is the
+    same.
+- Checks: c-enc-25 **A8** requires each weight-0 alias (2) to read `via <target>` with the note. **A9** requires each
+  fight hero card of an encounter (2) to be owned by its boss hero, with the fight-hero-card note and no portrait-variant
+  note. On the unfixed ledger both fail, naming ULDA_911, ULDA_912, GILA_600h2 and GILA_500h4.
+
+### 3.2 Rejected finding
+
+- **"acts-v3t's Tekahn finale: the run never wins in a real game and half the games stall at the 101-turn cap."**
+  Rejected. The reviewer's extra sample (c-bosspilot-encounter FINALE=1 GAMES=4 SCHEDULE=acts-v3t SEED_BASE=31000, full
+  player Health, stderr 0) has a player win: HUNTER, 25 turns, relay HERO_05>Elise>Finley>Brann>Reno. That result goes
+  to `RecordOutcome` as a Win, and since Tekahn is the schedule's last node the run finishes as a Victory. The finding's
+  "18 games" also counted byte-identical repeat files more than once: there are 6 distinct recorded games. tekahn24 and
+  tekahn25 deliberately start the run player at 1 Health. What holds: the 100-turn cap (`NativeMatch.DungeonRunTurnCap`)
+  is a loss, and Tekahn games often run long. Across 14 distinct games the run won 1, the boss won 7 and 6 hit the cap.
+  Section 1's "tekahn25 (2, 1)" did not say that the other game was a turn cap. HANDOFF 3.4's close-out group now records
+  this as a step-9 balance input, not a fault.
+
+### 3.3 Pins moved
+
+| Suite | Before | After | Why |
+|---|---|---|---|
+| c-enc-25 | 35 | 38 | A8, A9, B7 added (on the unfixed tree: 35 passed, 3 failed, exactly the three new checks) |
+
+No other check moved, and none was weakened.
+
+### 3.4 Verification (on the fix commit's tree; engine md5 1b2083a1ebedeac028f6f852d338ffb1, unchanged)
+
+- gen.sh twice, byte-identical (md5 of all six generated files equal across both runs): encounters "255 rows, 296 decks
+  (125 authentic, 171 changed), 876 adaptations, 4 rejected"; catalog "506 entries (452 offerable pool, 2 withdrawn, 52
+  fixed), 6508 admitted and 1 excluded member references"; ledger rows 4970, implemented 3880, partial 10, missing 13,
+  duplicate/support 1067, adapted 0. Only `restoration-ledger.csv` changes (4 rows). No data file moved, so the fixture
+  generators were not rerun (none reads the ledger csv).
+- Suites, once each, all 0 failed: c-enc-25 38, c-deckops 179, c-catalog 127, c-review-F18 35 (the four ledger readers),
+  c-runlayer 244, c-acts 181, c-content 905, c-admission 4122, c-shrine-core 131, c-enc-model 153, c-enc-engine 124,
+  c-w4fix 4, c-w5fix 33.
+- No bosspilot mode was rerun: no engine, plugin or data file changed, so no game can move.
+- The full-regression queue (section 2.5) was regenerated with `mkq.py` and is byte-identical (72 commands, starting with
+  `build-all.sh`). It already runs c-enc-25 as entry 71. It has not been run.

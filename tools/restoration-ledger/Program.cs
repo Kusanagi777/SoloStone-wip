@@ -980,6 +980,14 @@ namespace RestorationLedger
                 {
                     Offer(h.Hero, "fight hero card:" + boss.Id + Reached(boss));
                     foreach (string id in h.Deck.Distinct()) Use(id, "fight hero card deck " + boss.Id + Reached(boss));
+                    // The run player plays it as its hero in that fight (DungeonRun.BuildPlan PlayerHeroCards), so it is a dependency of
+                    // the encounter, not a portrait variant of the hunter's row (the stem grouping above made it one).
+                    if (Rows.TryGetValue(h.Hero, out var hr) && hr.Support && hr.SupportWhy == "hero portrait variant")
+                    {
+                        hr.SupportWhy = $"fight hero card of the encounter {boss.Id}: the run player plays it as its hero in that fight "
+                            + $"(DungeonRun.BuildPlan PlayerHeroCards, run-owned DungeonRunState.HeroSwitch); a form of {hr.Owner}";
+                        hr.Owner = boss.HeroCard;
+                    }
                 }
                 foreach (var h in boss.Relay)
                 {
@@ -1146,9 +1154,13 @@ namespace RestorationLedger
                 bool offered = o.Weight > 0 || o.AliasOf != null && tavern.Option(o.AliasOf)?.Weight > 0;
                 if (!offered || !Rows.TryGetValue(o.Id, out var row)) continue;
                 TavernOps[o.Id] = o.Op;
-                row.Player.Add("tavern tavern-v1.json " + o.Op);
+                // A weight-0 alias (ULDA_911 Kindle, ULDA_912 Recruit) is never drawn under its own id (DungeonRunTavern.Open draws only
+                // weight above 0): what a run is offered is its target, so the row says "via <target>" as a reprint's row does.
+                bool viaAlias = o.Weight <= 0 && o.AliasOf != null;
+                row.Player.Add("tavern tavern-v1.json " + o.Op + (viaAlias ? " via " + o.AliasOf : ""));
                 row.ValidationKind = "tavern";
-                row.Notes.Add("tavern option (tavern-v1.json " + o.Op + ")" + (o.AliasOf != null ? "; aliasOf " + o.AliasOf : ""));
+                row.Notes.Add("tavern option (tavern-v1.json " + o.Op + ")" + (o.AliasOf != null ? "; aliasOf " + o.AliasOf : "")
+                    + (viaAlias ? $": weight 0, so the tavern never draws it under its own id; a run is offered {o.AliasOf}, the same op" : ""));
             }
             foreach (string ench in tavern.Options.Where(o => o.Ench != null && TavernOps.ContainsKey(o.Id)).Select(o => o.Ench).Distinct())
                 if (Rows.TryGetValue(ench, out var row))

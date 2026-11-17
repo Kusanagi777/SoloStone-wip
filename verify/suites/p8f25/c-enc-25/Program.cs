@@ -8,9 +8,11 @@ using System.Text.Json;
 // c-enc-25: the phase-8 close-out (family 25), on the shipped data (encounters-v1.json loaded, as the plugin loads it).
 //   A  the family 25 ids in the ledger: the 22 Monster Hunt label cards are their buckets' label rows, the three tavern keepers
 //      are portraits of Bob's tavern, DALA_740 stays rejected and its five tokens inherit the reason, ULDA_911 Kindle and
-//      ULDA_038 Explorer Retraining are tavern options, ULDA_607 stays deferred, ULDA_111 / GILA_900p / GILA_911 are phase 9
+//      ULDA_038 Explorer Retraining are tavern options, ULDA_607 stays deferred, ULDA_111 / GILA_900p / GILA_911 are phase 9;
+//      a weight-0 tavern alias reads "via <target>" and a fight hero card is its encounter's row (the runs-and-state rerun)
 //   B  the rejections audit: every row left missing or partial is pinned with a stated blocker the ledger describes, and every
-//      rejection the families reported is recorded (ledger, curation.json); the stale F14 TRLA_065p note is gone
+//      rejection the families reported is recorded (ledger, curation.json); the stale F14 TRLA_065p note is gone; every admitted
+//      twist no default schedule rolls is partial with run:twist-pools and HANDOFF 3.3 hands it to step 9
 //   C  Explorer Retraining on new runs: the starting powers a run of an encounter schedule could have begun with are recorded
 //      (DungeonRunState.PowerChoices); its taverns may offer ULDA_038; a run of an older schedule never records or offers it
 //   D  the shipped finales: acts-v3h ends with the Heist finale, acts-v3t with Tekahn and the hero relay (the relay heroes are
@@ -100,6 +102,21 @@ Guard("A", () =>
         && R("dungeon-run/tavern-v1.json").Contains("\"id\": \"ULDA_607\", \"reason\": \"Bob's Bombastic Decks were server-side"));
     Check("A7 ULDA_111 Hearthstone, GILA_900p Temporal Loop and GILA_911 Rewind are phase 9 (missing, each with its F15 reason)",
         new[] { "ULDA_111", "GILA_900p", "GILA_911" }.All(id => Cls(id) == "missing" && rows[id]["notes"].Contains("phase 9")));
+    // The runs-and-state review (rerun): a weight-0 alias is never drawn under its own id (DungeonRunTavern.Open keeps weight > 0),
+    // so its row must say the run is offered the alias's target ("via <id>", the ledger's reprint convention), not the card itself.
+    var aliases = data.Tavern.Options.Where(o => o.Weight <= 0 && o.AliasOf != null).ToList();
+    var badAlias = aliases.Where(o => !(rows.TryGetValue(o.Id, out var r) && r["player_availability"] == $"offered:tavern tavern-v1.json {o.Op} via {o.AliasOf}"
+        && r["notes"].Contains("never draws it under its own id"))).Select(o => o.Id + "=" + (rows.TryGetValue(o.Id, out var r2) ? r2["player_availability"] : "(no row)")).ToList();
+    Check($"A8 the {aliases.Count} weight-0 tavern aliases (ULDA_911 Kindle, ULDA_912 Recruit) are offered only as their targets: each row reads \"via <target>\" and says it is never drawn under its own id",
+        aliases.Count == 2 && badAlias.Count == 0, string.Join(" ", badAlias));
+    // ... and a fight hero card the run player plays as its hero (Hagatha's GILA_600h2 and GILA_500h4) is recorded as the encounter's
+    // card, not as a portrait variant of the hunter's row.
+    var fightCards = data.Bosses.SelectMany(b => b.HeroCards.Select(h => (Boss: b, h.Hero))).ToList();
+    var badFight = fightCards.Where(x => !(rows.TryGetValue(x.Hero, out var r) && r["owner"] == x.Boss.HeroCard
+        && r["notes"].Contains("support: fight hero card of the encounter " + x.Boss.Id) && !r["notes"].Contains("hero portrait variant")
+        && r["player_availability"].Contains("fight hero card:" + x.Boss.Id))).Select(x => x.Hero + "=" + (rows.TryGetValue(x.Hero, out var r2) ? r2["owner"] + "/" + r2["notes"] : "(no row)")).ToList();
+    Check($"A9 the {fightCards.Count} fight hero cards (Hagatha's hunters' cards) are rows of their encounter: owned by its boss hero, noted as the fight hero card the run player plays, never a portrait variant",
+        fightCards.Count == 2 && badFight.Count == 0, string.Join(" ", badFight));
 });
 
 // ============================================================ B. the rejections audit
@@ -157,6 +174,19 @@ Guard("B", () =>
     Check("B6 curation.json lands family E25 with its ids, support records and rejections", e25.ValueKind == JsonValueKind.Object
         && e25.GetProperty("ids").EnumerateArray().Select(x => x.GetString()).OrderBy(x => x).SequenceEqual(new[] { "DALA_740", "GILA_900p", "GILA_911", "ULDA_038", "ULDA_111", "ULDA_607", "ULDA_911" })
         && e25.GetProperty("supportRecords").GetArrayLength() == 30 && e25.GetProperty("rejected").EnumerateObject().Count() == 5);
+    // The runs-and-state review (rerun): an admitted twist no default schedule can roll (an act whose pool holds it at a chance
+    // above 0) is not eligible anywhere in the mode, so the completion bar is open for it. Each must be partial with run:twist-pools,
+    // and HANDOFF.md section 3.3 must hand it to step 9 by id (the close-out left that list without the act I-III twist pools).
+    // The count 8 is pinned with B1's partial rows (the set cannot come out empty by a wrong read); when step 9 fills the pools,
+    // it moves both pins with the ledger, and the per-id rule (partial, run:twist-pools, named in 3.3) stays as it is.
+    var rolled = new HashSet<string>(data.Schedules.Defaults.SelectMany(s => data.Schedules.Schedules[s].Acts.Where(a => a.TwistChance > 0).SelectMany(a => a.TwistPool)), StringComparer.Ordinal);
+    var idle = data.Schedules.Rules.Where(r => r.Kind == DungeonRunGlobalRule.KindTwist && r.Admitted && !rolled.Contains(r.Id)).Select(r => r.Id).OrderBy(x => x, StringComparer.Ordinal).ToList();
+    string handoff = File.ReadAllText(Path.Combine(repo, "HANDOFF.md"));
+    int s33 = handoff.IndexOf("\n### 3.3 ", StringComparison.Ordinal), s34 = handoff.IndexOf("\n### 3.4 ", StringComparison.Ordinal);
+    string then = s33 >= 0 && s34 > s33 ? handoff.Substring(s33, s34 - s33) : "";
+    var unowned = idle.Where(id => !(Cls(id) == "partial" && rows[id]["blocked_by"] == "run:twist-pools" && then.Contains(id))).ToList();
+    Check($"B7 the {idle.Count} admitted twists no default schedule rolls (DALA_829, 831-833, ULDA_801-804) are partial with run:twist-pools, and HANDOFF 3.3 hands each to step 9 by id",
+        idle.Count == 8 && unowned.Count == 0 && then.Contains("twist pool"), string.Join(" ", unowned) + (then.Length == 0 ? " (no section 3.3)" : ""));
     var counts = ledger.GroupBy(r => r["classification"]).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + " " + g.Count());
     Note("B ledger: " + ledger.Count + " rows; " + string.Join(", ", counts));
 });

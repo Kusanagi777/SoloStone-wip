@@ -47,7 +47,7 @@ parent session's summary. No file here holds the original nine-step text verbati
 | 5 Deck changes, taverns | done | `plugin/DungeonRun/DungeonRunDeck.cs`, `DungeonRunTavern.cs`, `data/dungeon-run/tavern-v1.json` |
 | 6 Heroes, powers, treasures | done | `data/dungeon-run/run-v1.json`, `engine/SabberStoneCore/src/CardSets/DungeonRun/DungeonRun{Heist,MonsterHunt,Tombs}*.cs`, `DungeonRunActives.cs` |
 | 7 Shrines, teammates | done | `engine/.../CardSets/DungeonRun/DungeonRunShrines*.cs` (S2, S3, U, T1, T2, D) |
-| 8 Encounters | families 01-24 merged; the close-out (family 25) is next | see below |
+| 8 Encounters | families 01-24 merged; the close-out (family 25) done on `wip/c25`, its full regression pending; open for step 9: the act I-III twist pools (section 3.3) | see below |
 
 The design record is `docs/design/dungeon-run.md` (sections "Phase 8: the encounter model" and "Wave 1/2/3/4/5/6").
 
@@ -57,16 +57,17 @@ Step 8 progress:
   `engine/SabberStoneCore/src/Actions/EncounterRules*.cs`, `engine/.../CardSets/DungeonRun/DungeonRunEncounters*.cs`,
   schedules acts-v3h / acts-v3t. Design: `handoff/phase8/reports/design.md`, `implement-encounter-model.md`.
 - Families 01-24 are merged (waves 1-6: 02/03/04, 05/07/08, 06/09/10, 11/12/13, 14-19, 20-24): step 8's families 11-24
-  are complete; the close-out (family 25, section 3.2) is next. Wave 4 also fixed DALA_850 and made the Echo copy floor
+  are complete; the close-out (family 25, section 3.2) is done on `wip/c25`. Wave 4 also fixed DALA_850 and made the Echo copy floor
   general; wave 5 moved auto-cast powers after the turn-start draw, added the same-character rule `excludeBosses` and fixed
   `Game.ClearWeapons`; wave 6 extended `excludeBosses` (Barkeye, Vessina), moved Mirage after the draw, gave the Monster
   Hunt decks Witchwood's Touch, folded two duplicate helpers and fixed Snowfury Giant's Overload count (found by the
   regression). Per-family reports are in `handoff/phase8/reports/`; wave 6: `integrate-wave6.md` and
   `lane-family-20/21/22/23/24-*.md`.
-- Ledger now: 4992 rows; implemented 2814, partial 817, missing 302, duplicate/support 1059.
+- Ledger now (after the close-out): 4970 rows; implemented 3880, partial 10, missing 13, duplicate/support 1067 (wave 6:
+  4992 / 2814 / 817 / 302 / 1059).
 - Generators now: encounters "255 rows, 296 decks (125 authentic, 171 changed), 876 adaptations, 4 rejected"; catalog
   "506 entries (452 offerable pool, 2 withdrawn, 52 fixed), 6508 admitted and 1 excluded".
-- Family 25 has empty stub files already: `DungeonRunEncounters.F25.cs` and `DungeonRunAdmission.F25.cs`.
+- Family 25 needed no encounter scripts: `DungeonRunEncounters.F25.cs` and `DungeonRunAdmission.F25.cs` stay empty stubs.
 - `verify/` is proven on Linux (the cloud container, waves 4-6): the whole regression ran there and `verify/baseline`
   holds the wave-6 Linux results (README section 6 lists the two platform differences).
 
@@ -100,31 +101,55 @@ game restart, phase 9) and Enhance-a-matic left out of Toki's deck.
 | 23 Monster Hunt nemeses + Hagatha | GILA_BOSS_48, 49, 59, 60 (h+p); 48t, 49t, 49t2, 60t; GILA_BOSS_61h, 61t, 61t3; GILA_500h4, GILA_600h2, GILA_900h2; GILA_BOSS_99t, 99t2, 99t3 | Hagatha: temporary hero switching as explicit run-owned state (match-scoped; the run's hero, power and deck restored afterwards, never written into run deck records). GILA_BOSS_48t Alternate Timeline goes to step 9 (leave it out of Toki's deck, record the rejection). When GILA_BOSS_99t2 is scripted, rerun the encounters step and update c-enc-10 P3 / P8. |
 | 24 Plague Lords + Tekahn | ULDA_BOSS_37-40 (h, h2, h3, p1-p3 each); 37t, 39m; ULDA_115; ULDA_BOSS_67h, 67p1-p3, 67t, 67d; ULDA_031, 032, 033; ULDA_Explorers; BOT_543 | Three phases at 300/200/100 with deck replacement; persistent boss damage (per-lord remaining Health outside one match, save version bump) lifts ULDA_115. Tekahn: explorer hero relay as the finale's `heroRelay` (run-owned list of remaining relay heroes and decks); BOT_543 needs a finale that offers it. Can be split between two implementers. |
 
-### 3.2 The close-out, family 25 (last, alone, on the integrated tree)
+### 3.2 The close-out, family 25 (done on `wip/c25`; its full regression is pending)
 
-Ids: GILA_Darius_01-11, GILA_Toki_01-11, DALA_740 and DALA_740ts-ts5, ULDA_607, ULDA_911, ULDA_038, ULDA_111,
-GILA_900p, GILA_911, DALA_BOSS_98h, DALA_BOSS_99h, ULDA_BOSS_99h. Mostly ledger/curation work: reclassify the 22
-Darius/Toki label cards and the three tavern keepers as support; DALA_740 stays rejected (data gap) and its tokens
-inherit the reason; ULDA_911 Kindle can be enabled; ULDA_607 stays deferred; ULDA_038 is a tavern-style power re-pick.
+Report: `handoff/phase8/reports/closeout-family-25.md` (stage A, the stage-B review, the runs-and-state review rerun).
+New suite `p8f25/c-enc-25`, `final.sh` stage `c25`, bosspilot modes `finale25`, `tekahn25`, `sweep25 a|b|c` on the
+SHIPPED schedules. The full regression is a queue file (report, last section) that has not run yet; until it re-records
+`verify/baseline`, most bosspilot records that walk acts-v3h or acts-v3t move (the tavern's ULDA_038 and the five rule
+casts of the stage-B review).
 
-It also owns everything the families were told to leave alone: enable the finales whose fixed bosses now exist (acts-v3h's
-Heist finale with DALA_830, family 18; acts-v3t's on ulda_67_tekahn with `heroRelay`, family 24, which also decides what a
-DALA_Tekahn run meets there: c-w5fix Q7 fails until then, section 3.4); flip
-the schedule defaults so encounters are reachable in new runs (ledger blocker `run:default-schedule`); re-pin
-`ReleasedShapes` for the final shapes; re-record the golden sequences (`verify/fixtures/p8f01/golden-sequences.txt`
-and the c-enc-model pins); check that every rejection the families reported is recorded with its reason; rerun the
-encounters step so decks pick up cards scripted since; then the full verification (engine and plugin build, generators
-twice byte-identical, all suites twice, hall, every bosspilot mode, a seeds sweep).
+- Ids: the 22 Darius/Toki label cards are their buckets' label rows and the three tavern keepers portrait rows of Bob's
+  tavern (support); DALA_740 stays rejected (data gap) and DALA_740ts-ts5 inherit the reason; ULDA_911 Kindle and the
+  older ULDA_912 Recruit are weight-0 aliases of DALA_911 and DALA_901 (never drawn under their own ids: the ledger reads
+  "via DALA_911" / "via DALA_901"); ULDA_038 Explorer Retraining is a tavern option of encounter schedules (`repickPower`,
+  `DungeonRunState.PowerChoices`); ULDA_607 stays deferred (`data:bombastic-decks-absent`); ULDA_111, GILA_900p and
+  GILA_911 are step 9.
+- Finales enabled: acts-v3h ends with the Heist finale (Norroa, Vargoth, Kalec, Khadgar on floors 16-19, after a tavern,
+  The Finale DALA_830 at chance 100); acts-v3t ends with ulda_67_tekahn on floor 16 with `heroRelay` (the explorers other
+  than the run's own). A DALA_Tekahn run never meets Tekahn: `run-v1.json` gives it `excludeBosses: [ulda_67_tekahn]`,
+  DefaultSchedule leaves out a default whose finale fixes an excluded row, NewRun refuses acts-v3t named for it and the
+  validator keeps one default open per hero row. c-w5fix Q7's tripwire is replaced by the real checks Q7-Q11.
+- Defaults flipped: `default` acts-v2 -> acts-v3h, `defaults` ["acts-v3h", "acts-v3t"] (a new run rolls one from its
+  seed); `defaultWithoutEncounters` "acts-v2" only for data loaded without `encounters-v1.json` (tools, older suites).
+  Ledger blocker `run:default-schedule` is gone. Saved runs keep their schedule: c-enc-25 L1 replays the two version-5
+  golden saves and eight version-6 acts-v2 saves step for step as on the wave-6 tree.
+- ReleasedShapes[3]: acts-v3h 09B43E71F9440039, acts-v3t A866AD976CEBBDC8 (both FF4FEC05953AA0DE before).
+  `golden-sequences.txt` 2700 -> 3500 lines (the 220 default lines follow the new defaults; 800 new lines).
+- Ledger 4970 rows: implemented 3880, partial 10, missing 13, duplicate/support 1067, each open row with a described
+  blocker (c-enc-25 B1-B2). Reachability (c-enc-25 R): every boss row of all six provenances is met in 600 default-roll
+  runs; one solostone row is behind an unlock; six rows are excluded only for their own hero row.
+- Not closed: the 8 admitted act I-III twists never roll in a new run (section 3.3, step 9).
 
 ### 3.3 Then
 
-- A three-lens review (fidelity: card text vs behaviour in real games; runs and state: reachability per adventure,
-  save/resume, persistent damage, hero switching, majors end to end; regression: everything twice), then one fix pass.
-  The prompts are at the end of `handoff/phase8/workflow-encounters-lanes.js`.
+- The three-lens review of the close-out (fidelity: card text vs behaviour in real games; runs and state: reachability
+  per adventure, save/resume, persistent damage, hero switching, majors end to end; regression: everything twice), then
+  one fix pass. The prompts are at the end of `handoff/phase8/workflow-encounters-lanes.js`. Fidelity and runs-and-state
+  ran on `wip/c25` and their confirmed findings are fixed (close-out report sections 2 and 3); the regression lens is the
+  full-regression queue, which has not run yet.
 - Step 9: the reward economy on one schedule; act-aware encounter and reward scaling; incompatible-modifier prevention
   (the `incompatibleRules` / `incompatibleModifiers` hooks exist); long-run deck and save/resume validation; plus
   ULDA_111 Hearthstone (match exit), GILA_900p Temporal Loop and GILA_911 Rewind (turn/game restart), GILA_BOSS_48t
   Alternate Timeline; and recheck DALA_740 (Wondrous Wisdomball) and ULD_152.
+- Step 9 also owns the act I-III twist pools. Acts I-III of acts-v3h ship `"twist": {"pool": [], "chance": 0}` and
+  acts-v3t uses the same acts (`sameActsAs`), so only the Heist finale's DALA_830 ever rolls. Give those acts non-empty
+  twist pools, with a chance per act, so the 8 admitted twists DALA_829, DALA_831, DALA_832, DALA_833, ULDA_801,
+  ULDA_802, ULDA_803 and ULDA_804 can roll in a new run. Gate them with the incompatible-modifier prevention above.
+  Until then they are scripted, admitted and tested only on the fixtures (p8f05 `schedule-twists.json`, p8f06
+  `schedule-plagues.json`); the ledger keeps them partial with `run:twist-pools`. **The completion bar (section 1) is
+  not met for these 8 until step 9 does this** (c-enc-25 B7 lists every admitted twist no default schedule rolls and
+  requires this paragraph to name it).
 
 ### 3.4 Open issues
 
@@ -132,6 +157,17 @@ Closed in wave 4: **`bp.sh rules01 DALA_850`** no longer faults. Unstable Evolut
 client's tag 1114, so Anomaly - Arcane cut it to (0); `DungeonRunEncounters.Repeatable` names it (c-enc-engine G7c), the
 game ends normally (boss win), and the record is re-recorded. The general Echo rule ("Copies can't cost less than (1)")
 now holds in every game (`EncounterRules.EchoCopyFloor`, c-enc-engine G7d).
+
+From the close-out (details in `handoff/phase8/reports/closeout-family-25.md`):
+- The 8 act I-III twists never roll in a new run: step 9 (section 3.3).
+- Tekahn games run long. The shipped turn cap (100 turns, `NativeMatch.DungeonRunTurnCap`) is a loss for the run. In 14
+  distinct acts-v3t finale games recorded or sampled for the runs-and-state review rerun, the run won 1, the boss won 7 and
+  6 ended at the cap (the tekahn24/tekahn25 records start the run player at 1 Health so the relay begins at once; the
+  review's samples use full Health). A run can win the finale (a HUNTER relay won in 25 turns), but the cap is a common
+  way to lose it. This is a step-9 balance input (act-aware scaling), not a fault.
+- The ledger records the weight-0 tavern aliases ULDA_911 Kindle and ULDA_912 Recruit as offered "via DALA_911" /
+  "via DALA_901" (the tavern never draws them under their own ids), and Hagatha's fight hero cards GILA_600h2 and
+  GILA_500h4 as support rows of her encounter (owner GILA_BOSS_61h), not as portrait variants (c-enc-25 A8, A9).
 
 From the wave-6 integration (details in `handoff/phase8/reports/integrate-wave6.md`):
 - Closed: every auto-cast power acts after the turn-start draw (families 21-23's AutoCast powers at the merge, Mirage by the
@@ -160,7 +196,7 @@ From the wave-6 integration (details in `handoff/phase8/reports/integrate-wave6.
   named scripted cards; when they get scripts, rerun the encounters step (c-enc-19 S8, c-enc-21 S8 pin substitutions).
   Mogu Cultist (ULD_705) is scripted now (family 20) and so is in every random pool of implemented cards; Omega Mind's
   Mind Meld (BOT_543e) works now (family 24): random games where they appear move (README section 6).
-- BOT_543 Omega Mind is in Tekahn's relay decks; a finale that offers it is the close-out's acts-v3t finale.
+- BOT_543 Omega Mind is in Tekahn's relay decks; the close-out enabled acts-v3t's finale, so a relay plays them.
 - Incompatible modifiers with five act II majors (family 23 flag 3), a step-9 input (incompatible-modifier prevention):
   Hagatha's `incompatibleModifiers` (mod_iron_bosses, mod_open_road, mod_hot_start) follow from her own row (fixed 100
   Health, the hero switch); the four nemeses take the act curve's Health plus 10 and neither the wiki nor the client data
@@ -168,12 +204,11 @@ From the wave-6 integration (details in `handoff/phase8/reports/integrate-wave6.
   node may now offer those three (on the family 23 lane c-enc-model J1's seed 5001 took mod_iron_bosses, Whirt 46 -> 51; on
   the merged tree the same seed's first modifier is mod_lean_supply and Whirt stays at 46, which J1 now pins). Not
   redesigned here.
-- Open for the close-out: the Heist hero Tekahn (DALA_Tekahn) and the Plague Lord Tekahn (ulda_67_tekahn, family 24's
-  finale row) are the same character. No act pool holds the row and a finale's fixed bosses are not filtered by
-  `excludeBosses`, so a key would do nothing; DALA_Tekahn has none (the merge review dropped stage A's inert key). When the
-  close-out enables acts-v3t's finale on Tekahn it decides what a DALA_Tekahn run meets there and pins it: c-w5fix Q7 fails
-  on purpose once a shipped finale (or an act pool) can hand that row to a run. Infinite Toki is not excluded for the Toki
-  hero row: the original Monster Hunt makes her Toki's own Final Nemesis.
+- Closed by the close-out: the Heist hero Tekahn (DALA_Tekahn) and the Plague Lord Tekahn (ulda_67_tekahn) are the same
+  character. DALA_Tekahn now has `excludeBosses: [ulda_67_tekahn]`; DefaultSchedule leaves out a default whose finale fixes
+  an excluded row (a DALA_Tekahn run always follows acts-v3h) and NewRun refuses acts-v3t named for it (section 3.2).
+  c-w5fix Q7-Q11 replace Q7's tripwire. Infinite Toki is not excluded for the Toki hero row: the original Monster Hunt
+  makes her Toki's own Final Nemesis.
 
 From the wave-5 integration (details in `handoff/phase8/reports/integrate-wave5.md`):
 - Closed: auto-cast powers act after the turn-start draw (`EncounterRules.AfterTurnStartDraw`); a run never meets a boss
@@ -192,8 +227,8 @@ From the wave-5 integration (details in `handoff/phase8/reports/integrate-wave5.
   Draconic Lackey (DRG_052) with no generation filter (older than wave 5).
 - Unscripted Saviors of Uldum collectibles in family 19's decks are replaced by named scripted cards; when they get
   scripts, rerun the encounters step (c-enc-19 S8 pins Vera's and Zafarr's substitutions).
-- The acts-v3h finale block carries DALA_830 as its twist pool but ships disabled; enabling it re-pins acts-v3h's shape
-  digest (family 18: `09B43E71F9440039`; `verify/tools/gen/p8f18/make_fixture.py` makes the edit).
+- Closed by the close-out: the acts-v3h finale block (twist pool DALA_830) is enabled, and ReleasedShapes pins acts-v3h's
+  digest `09B43E71F9440039` (family 18's prediction).
 - Tunnel Trogg (LOE_018, `engine/.../CardSets/LoeCardsGen.cs`) answers the play of a card with printed Overload, not the
   Overload event, and has no trigger source (the opponent's Overload cards count too). Family 17's Spell Lock Overload has
   no card behind it, so `EncounterRules.OverloadFor` (EncounterRules.F17.cs) buffs each Tunnel Trogg by hand; family 22's
@@ -206,7 +241,7 @@ From the wave-5 integration (details in `handoff/phase8/reports/integrate-wave5.
 From the wave-4 integration (details in `handoff/phase8/reports/integrate-wave4.md`):
 - Random generation can yield unscripted cards: the engine's random pools (`Cards.AllWild`) include unscripted cards and
   the generation filter drops only ids admission rejects (Bwonsamdi's Tome, Dark Reliquary, any random generation; seen:
-  DRG_301, DRG_246, DRG_402). Close-out or phase 9.
+  DRG_301, DRG_246, DRG_402). The close-out left it: phase 9.
 - `plugin/NativeMatch.cs:6634` (`next.Choices.Contains(id)`) has the chained-Discover null hazard family 13 guarded in
   `plugin/FairBotState.cs` (Griftah): fix and check it with the Windows plugin build (section 7).
 - The Rumble Run champions' teammate cards are not admitted for a boss and are left out of their decks (29 slots, each
@@ -216,14 +251,15 @@ From the wave-4 integration (details in `handoff/phase8/reports/integrate-wave4.
 - Closed in wave 6: Witchwood's Touch (GILA_BOSS_99t2) is scripted (family 23) and kept in the decks of families 10, 11
   and 12 (c-enc-10 P3, c-enc-11 P3/P7, c-enc-12 P3/P7 follow). c-enc-11/12 P7 still move when Ogre Ninja, Ogre Brute,
   Mogor's Champion, the original Wrath or Power of the Wild are scripted.
-- F14's `rejected` note for TRLA_065p in curation.json ("waits unscripted") is stale (the tool ignores it); the close-out
-  may delete it.
+- Closed by the close-out: F14's stale `rejected` note for TRLA_065p is deleted from curation.json (c-enc-25 B5).
 - Not checked in the real client (Windows PC): Crooked Pete's hero swap on the native transport; Blood Red Apple now
   makes the run player's spells cost Health too (the TRLA_113 Blood Pact path of the plugin); Hypnotize's hand-and-deck
   moves for the human player.
 
 From the wave-3 integration:
-- The twist pools are empty, so ULDA_801-804 roll only on the fixture `verify/fixtures/p8f06/fixtures/schedule-plagues.json`.
+- The act I-III twist pools are still empty after the close-out (only the Heist finale rolls DALA_830), so DALA_829 and
+  DALA_831-833 roll only on `verify/fixtures/p8f05/fixtures/schedule-twists.json` and ULDA_801-804 only on
+  `verify/fixtures/p8f06/fixtures/schedule-plagues.json`. Step 9 owns filling them (section 3.3).
 - `Generic.ChoiceMulligan` burns the first replacement card of a full 10-card hand; this also limits
   `start.bossOpeningHandBonus` to 5.
 - The five Dungeon Run finals won 20 of 20 as act I majors; Grubb is weak at tier 4. Hagatha is now the act II major
