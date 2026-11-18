@@ -51,8 +51,11 @@ void Check(string name, bool ok, string detail = "")
     Console.WriteLine((ok ? "PASS " : "FAIL ") + name + (detail.Length > 0 ? "  (" + detail + ")" : ""));
 }
 void Note(string text) => Console.WriteLine("NOTE " + text);
+// C_ENC25_ONLY=A,L4,... runs only those sections (for the break-and-run proofs; unset: every section).
+var only = Environment.GetEnvironmentVariable("C_ENC25_ONLY") is string o && o.Length > 0 ? o.Split(',') : null;
 void Guard(string name, Action body)
 {
+    if (only != null && !only.Contains(name)) return;
     try { body(); }
     catch (Exception e) { failures++; Console.WriteLine("FAIL " + name + " threw " + e.GetType().Name + ": " + e.Message.Split('\n')[0] + " @ " + (e.StackTrace ?? "").Split('\n').FirstOrDefault()?.Trim()); }
 }
@@ -476,29 +479,65 @@ Guard("L4", () =>
     string Kind(string line) => line.Split(' ')[0];
     List<string> OfferOf(string line) => Seen(line).Split(' ').ElementAtOrDefault(1)?.Split(',').ToList() ?? new List<string>();
 
+    string StateOf(string line) { int k = line.LastIndexOf(" state ", StringComparison.Ordinal); return k < 0 ? null : line.Substring(k + 7); }
+
+    // Each replay is walked as ReplayV3.Walk walks it (loaded through DungeonRunMigration.Upgrade, resumed, then the fixed policy
+    // of ReplayV3.Step), one step at a time and compared with the recording as it goes. A line that differs must be a step that
+    // did what the recording did (the same seen text) and entered an offer node whose offer moved, with the state differing by
+    // that offer alone: the recorded offer put into the current state gives exactly the recorded state digest. The moved offer
+    // must also be attributed (lifting the step-9 exclusions f62275b's exclusions.txt lacks redraws it as recorded). The
+    // recorded offer is then put back and the walk goes on, so every later line is compared too and must match the recording
+    // (or be another such offer). Any other difference, a line missing or one too many is unattributed.
     var lines = new List<string>();
-    int movedLines = 0, attributed = 0;
+    int movedLines = 0, attributed = 0, comparedLines = 0;
     var moved = new List<string>(); var unattributed = new List<string>(); var headers = new List<string>();
     for (int i = 0; i < n; i++)
     {
-        var pre = new Dictionary<int, DungeonRunSave>();
-        var cur = ReplayV3.Walk(run, files[i], (k, sv) => pre[k] = DungeonRunStore.Clone(sv));
-        lines.AddRange(cur);
         var exp = i < recorded.Count ? recorded[i] : new List<string>();
+        var save = ReplayV3.Read(files[i]);
+        save.LoadedVersion = save.Version;
+        DungeonRunMigration.Upgrade(save, run, _ => { });
+        var st = save.Active;
+        string phase = st.Phase.ToString();
+        run.Resume(st);
+        var cur = new List<string> { $"save {Path.GetFileName(files[i])} v{save.Version} schedule v{st.ScheduleVersion} {st.Schedule} {st.Class} floor {st.Floor} {phase} -> {st.Phase} state {ReplayV3.Digest(ReplayV3.Xml(save))}" };
         if (cur[0] != exp.ElementAtOrDefault(0)) headers.Add(ReplayV3.FileName(i));
-        int d = Enumerable.Range(0, Math.Max(cur.Count, exp.Count)).FirstOrDefault(k => k >= cur.Count || k >= exp.Count || cur[k] != exp[k], -1);
-        if (d < 0) continue;
-        int count = Enumerable.Range(0, Math.Max(cur.Count, exp.Count)).Count(k => k >= cur.Count || k >= exp.Count || cur[k] != exp[k]);
-        movedLines += count;
-        string at = $"{ReplayV3.FileName(i)} line {d} ({count} of {exp.Count} lines move from it)";
-        // The first moved line is a step that did the same as recorded but whose resulting state differs: the node it entered
-        // made a different offer (the next line), which a step-9 exclusion explains.
-        bool sameStep = d > 0 && d + 1 < cur.Count && d + 1 < exp.Count && Seen(cur[d]) == Seen(exp[d]) && Kind(cur[d + 1]) == Kind(exp[d + 1])
-            && Seen(cur[d + 1]) != Seen(exp[d + 1]) && pre.ContainsKey(d + 1);
-        if (!sameStep) { unattributed.Add(at + ": " + cur.ElementAtOrDefault(d) + " | recorded " + exp.ElementAtOrDefault(d)); continue; }
-        string why = Attribute(pre[d + 1].Active, Kind(cur[d + 1]), OfferOf(exp[d + 1]), out bool ok);
-        string entry = $"{at}: {Kind(exp[d + 1])} offer {string.Join(",", OfferOf(exp[d + 1]))} -> {string.Join(",", OfferOf(cur[d + 1]))}; {why}";
-        if (ok) { attributed++; moved.Add(entry); } else unattributed.Add(entry);
+        bool broken = false;
+        for (int guard = 0; guard < 800 && !st.Finished; guard++)
+        {
+            int d = cur.Count;
+            ReplayV3.Step(run, save, cur);
+            if (d < exp.Count && cur[d] == exp[d]) continue;
+            movedLines++;
+            string at = $"{ReplayV3.FileName(i)} line {d}";
+            string kind = d + 1 < exp.Count ? Kind(exp[d + 1]) : null;
+            string nowKind = st.Phase == DungeonRunPhase.Modifier && st.ModifierOffer != null ? (st.ModifierOffer.Kind == DungeonRunGlobalRule.KindAnomaly ? "anomaly" : "modifier") : null;
+            if (d >= exp.Count || Seen(cur[d]) != Seen(exp[d]) || nowKind == null || kind != nowKind)
+            {
+                unattributed.Add(at + ": " + cur[d] + " | recorded " + exp.ElementAtOrDefault(d));
+                broken = true; break;
+            }
+            var recordedOffer = OfferOf(exp[d + 1]);
+            var nowOffer = st.ModifierOffer.Offered.ToList();
+            var patched = DungeonRunStore.Clone(save);
+            patched.Active.ModifierOffer.Offered = recordedOffer.ToList();
+            bool onlyOffer = ReplayV3.Digest(ReplayV3.Xml(patched)) == StateOf(exp[d]);
+            string why = Attribute(st, kind, recordedOffer, out bool ok);
+            string entry = $"{at}: {kind} offer {string.Join(",", recordedOffer)} -> {string.Join(",", nowOffer)}; {why}"
+                + (onlyOffer ? "; with the recorded offer the state is the recorded one" : "; with the recorded offer the state still differs from the recorded one");
+            if (!ok || !onlyOffer) { unattributed.Add(entry); broken = true; break; }
+            attributed++; moved.Add(entry);
+            // f62275b's offer back in the run: the walk goes on from the recorded state.
+            st.ModifierOffer.Offered = recordedOffer.ToList();
+        }
+        if (!broken)
+        {
+            cur.Add($"end {st.Phase} floor {st.Floor} matches {st.Matches.Count} deck {st.Deck.Count} lord damage {ReplayV3.Ids((save.Profile.BossDamage ?? new List<DungeonRunBossDamage>()).Select(x => x.Boss + ":" + x.Remaining))} finished {st.Finished}");
+            int end = cur.Count - 1;
+            if (cur.Count != exp.Count || cur[end] != exp[end]) unattributed.Add($"{ReplayV3.FileName(i)}: {cur.Count} lines ({cur[end]}), recorded {exp.Count} ({exp.LastOrDefault()})");
+            comparedLines += cur.Count;
+        }
+        lines.AddRange(cur);
     }
     if (Environment.GetEnvironmentVariable("C_ENC25_REPLAY_V3") is string dump && dump.Length > 0) File.WriteAllText(dump, string.Join("\n", lines) + "\n", new UTF8Encoding(false));
     foreach (string m in moved) Note("L4 moved: " + m);
@@ -511,9 +550,9 @@ Guard("L4", () =>
         && saves.Select(x => x.Active.Class).SequenceEqual(ReplayV3.Stops.Select(x => x.Row)) && saves[5].Active.Phase == DungeonRunPhase.InMatch
         && saves[7].Active.Tavern?.Pending != null && saves[1].Active.HasBoardShrine && headers.Count == 0 && recorded.Count == n,
         headers.Count + " load lines differ: " + string.Join(" ", headers));
-    Check($"L4 each replay equals the recording, or every line it moves follows one offer that lifting the step-9 exclusions (those f62275b's exclusions.txt lacks) redraws exactly as recorded"
-        + $" ({movedLines} of {expected.Length} lines move, in {attributed} attributed and {unattributed.Count} unattributed replays)",
-        unattributed.Count == 0 && lines.Count(l => l.StartsWith("save ", StringComparison.Ordinal)) == n, string.Join(" | ", unattributed));
+    Check($"L4 each replay equals the recording line for line, except steps whose state differs only by a moved offer that lifting the step-9 exclusions (those f62275b's exclusions.txt lacks)"
+        + $" redraws exactly as recorded; with that offer put back the walk goes on as recorded ({comparedLines} of {expected.Length} lines walked, {movedLines} moved: {attributed} attributed offers, {unattributed.Count} unattributed)",
+        unattributed.Count == 0 && comparedLines == expected.Length && lines.Count(l => l.StartsWith("save ", StringComparison.Ordinal)) == n, string.Join(" | ", unattributed));
     string shrine = recorded[1].FirstOrDefault(l => l.StartsWith("anomaly ", StringComparison.Ordinal));
     Check("L4 a stored offer is never redrawn: the shrine run's act I anomaly offer (" + Seen(shrine ?? "(none)") + "), made before the ordering fix, replays as recorded",
         shrine != null && lines.Contains(shrine) && OfferOf(shrine).Any(id => data.Schedules.Rule(id)?.NoBoardShrine == true));
