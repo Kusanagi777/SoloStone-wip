@@ -26,6 +26,7 @@ using SabberStoneCore.CardSets.DungeonRun;
 //      always passes NativeMatch's run-fight limits.
 //   C  invariants of the same walks: no forbidden pair (DungeonRun.ForbiddenPairs, criterion C1) at any step; the step-9 match
 //      ends stay off the released schedules (no escape, restart, Rewind or Hearthstone on acts-v3h/v3t).
+// C_LONGRUN9_STRIDE=n (a development aid, never set by the runners) walks only every n-th loadout and row, so W1 fails by design.
 static object FromJson(JsonElement e)
 {
     switch (e.ValueKind)
@@ -66,6 +67,8 @@ string reloadDir = VerifyPaths.Out("tmp/longrun9/reload"), crashDir = VerifyPath
 foreach (string d in new[] { reloadDir, crashDir }) { if (Directory.Exists(d)) Directory.Delete(d, true); Directory.CreateDirectory(d); }
 
 string[] schedules = { "acts-v3h", "acts-v3t", "acts-v4h", "acts-v4t" };
+int stride = int.TryParse(Environment.GetEnvironmentVariable("C_LONGRUN9_STRIDE"), out int st) && st > 1 ? st : 1;
+if (stride > 1) Note("C_LONGRUN9_STRIDE " + stride + ": a partial run set");
 var loadouts = data.Classes.SelectMany(c => c.Decks.Select(deck => (Row: c, Deck: deck))).ToList();
 var tenRows = data.Classes.Where(c => c.Adventure == "MonsterHunt" || c.Adventure == "Heist" || c.Adventure == "Rumble").ToList();
 
@@ -163,13 +166,13 @@ Guard("W", () =>
     {
         var t = tallies[schedule];
         int si = Array.IndexOf(schedules, schedule);
-        for (int li = 0; li < loadouts.Count; li++)
+        for (int li = 0; li < loadouts.Count; li += stride)
         {
             var (row, deck) = loadouts[li];
             DungeonRunProfile pa = All(), pb = All();
             for (int k = 0; k < 2; k++) WalkPair(t, schedule, row, deck, 9000000 + 1000000L * si + 10 * li + k, k == 0, ref pa, ref pb);
         }
-        for (int ri = 0; ri < tenRows.Count; ri++)
+        for (int ri = 0; ri < tenRows.Count; ri += stride)
         {
             var row = tenRows[ri];
             DungeonRunProfile pa = All(), pb = All();
