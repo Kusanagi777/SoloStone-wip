@@ -99,6 +99,20 @@ namespace SabberStoneCore.Auras
 		/// <summary>This aura is applied to the entity <paramref name="entityId"/> now (Actions.OverkillRules reads granted Overkill).</summary>
 		internal bool AppliesTo(int entityId) => AppliedEntityIdCollection != null && AppliedEntityIdCollection.Contains(entityId);
 
+		/// <summary>
+		/// Drops every applied id no longer registered in <see cref="Game.IdEntityDic"/>, without touching effects: the entity is
+		/// gone. Only a fair view retires ids (Game.RemoveDetachedAuraTargetsForFairView). Returns how many were dropped.
+		/// </summary>
+		internal int ForgetUnregisteredTargets()
+		{
+			if (AppliedEntityIdCollection == null || AppliedEntityIdCollection.Count == 0) return 0;
+			EntityList registered = Game.IdEntityDic;
+			int[] retired = AppliedEntityIdCollection.Where(id => !registered.ContainsKey(id)).ToArray();
+			for (int i = 0; i < retired.Length; i++)
+				AppliedEntityIdCollection.Remove(retired[i]);
+			return retired.Length;
+		}
+
 		public Aura(AuraType type, params IEffect[] effects)
 		{
 			Type = type;

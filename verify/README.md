@@ -212,8 +212,10 @@ c-enc-20 D, J, O count the casts).
 three step-9 bosspilot harnesses `p9/c-bosspilot-pairs9`, `c-bosspilot-ends9` and `c-bosspilot-run`). c-rules-9 fails T2
 and K1 by design until calibration (two act III twists roll in about 10% of runs, below 15%; `mod_hot_start` is a no-op on
 the floor-15 majors); c-longrun-9's `TIME` line is left out of `same.sh`'s comparison. The `final.sh` stage `p9` runs the
-non-calibration modes: `bp.sh pairs9 1-25` (chunk 23 exits 3: three boss-AI fallbacks in case 1722, a pre-step-9 engine
-defect, tests.md), `bp.sh ends9 <part>` and `bp.sh treasure9`. The calibration modes (`slots9`, `outliers9`, `finale9`,
+non-calibration modes: `bp.sh pairs9 1-25` (chunk 23's three case-1722 fallbacks are fixed, tests.md section 2; every chunk
+expects 0), `bp.sh ends9 <part>` and `bp.sh treasure9`. c-secretsearch gains case 12 KalecgosHiddenHand (SUMMARY 689 ->
+692 / 0); its CatalogPlayerSecrets lines (6 games, generated player Secrets 60 -> 52) already differ from wave 6 on the step-9
+tree before that fix. The calibration modes (`slots9`, `outliers9`, `finale9`,
 `tekahn9`, `longrun9`) and the 48t gate (`gate48t`, `uld152`) run as queues.
 
 Generators (`gen.sh`): all six generated files byte-identical; encounters "255 rows, 296 decks (125 authentic, 171

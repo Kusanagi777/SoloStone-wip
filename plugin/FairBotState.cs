@@ -1206,6 +1206,9 @@ public sealed class FairBotState
             if (!kept.Contains(actor.Id) && actor.Controller.SetasideZone.Contains(actor)) actor.Controller.SetasideZone.Remove(actor);
             game.IdEntityDic.Remove(actor.Id);
         }
+        // Before any id is reissued: an aura still applied to a retired id (the opponent's Kalecgos on its hidden hand) would
+        // look it up on removal (KeyNotFoundException) or strip its effect from the slot reissued under that id.
+        game.RemoveDetachedAuraTargetsForFairView();
         // EntityList.Remove deliberately leaves its count unchanged; repair the clone's registry before reuse.
         entityCount.SetValue(game.IdEntityDic, visible.Length);
         int next = visible.Select(c => c.Id).DefaultIfEmpty(3).Max() + 1;

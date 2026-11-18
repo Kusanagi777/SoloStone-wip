@@ -41,12 +41,22 @@ In step-9 code:
 
 No other step-9 defect was found by any lane. Defects in the lanes' own tests, found by the review and fixed (section 4).
 
-Found and NOT fixed (pre-step-9, not step-9 code):
-- **Engine: SwitchingAura.RemoveInternal throws KeyNotFoundException** (`engine/SabberStoneCore/src/Auras/SwitchingAura.cs`
-  line 123, `idDict[id]` for an entity no longer in `IdEntityDic`), inside the boss AI's search simulation
-  (FairBotState.Apply -> EndTurnTask -> MainEnd -> AuraUpdate). The search falls back (3 FALLBACK lines at turn 20). Seen in
-  pairs9 chunk 23 case 1722 (dala_07_belnaara, MAGE, seed 9901722) with or without the case's rule, so chunk 23 exits 3. Not
-  fixed here: an engine change moves every simulation-dependent record; noted in the pairs9 harness header and README.
+Found after the lanes and fixed (pre-step-9, not step-9 code):
+- **Fair view: an aura kept the retired ids of a hidden hand** (seen as SwitchingAura.RemoveInternal throwing
+  KeyNotFoundException, `idDict[id]` for an id no longer in `IdEntityDic`, inside the boss AI's search simulation
+  FairBotState.Apply -> EndTurnTask -> MainEnd -> AuraUpdate; 3 FALLBACK lines at turn 20 of pairs9 chunk 23 case 1722,
+  dala_07_belnaara, MAGE, seed 9901722, with or without the case's rule). Cause: the player's Kalecgos (DAL_609, a
+  SwitchingAura on its own hand) was applied to the hand card id 89; the boss's view masks that hand and
+  `CanonicalizePrivateActors` retires every hidden id and reissues the slots (89 -> 34), but the aura's applied set kept 89.
+  The engine never retires ids itself, so the engine was not at fault. Skipping absent ids in RemoveInternal would be wrong:
+  freed ids are reissued, so a stale id can also point at another hidden card and the aura's removal would strip that card's
+  effects without any error. Fix: `Game.RemoveDetachedAuraTargetsForFairView` (engine, `Model/Game.FairView.cs`, beside
+  RemoveDetachedTriggersForFairView; `Aura.ForgetUnregisteredTargets`, MultiAura children included) drops applied ids
+  whose entity is no longer registered, and CanonicalizePrivateActors calls it after retiring the hidden ids and before
+  reissuing any. Test: c-secretsearch case 12 KalecgosHiddenHand (before the fix: 72 applied ids on reissued non-hand cards,
+  check failed; after: 0, 3/0). Records: pairs9 chunk 23 exits 0 (only case 1722's line moves: fallbacks 3 -> 0, turns 34 ->
+  35; the other 80 games are identical to the unfixed tree); selfplay 2CE546A18F96DCBC and randplay 22043E377F1097F3 unchanged;
+  c-secretsearch 689 -> 692 (the new case; every other line identical to the unfixed tree).
 
 ## 3. Pins moved (lane pins; every one listed in implementation.md section 5)
 
@@ -86,8 +96,7 @@ Every lane's work was reviewed and each finding verified; the verifier's verdict
 1. pairs9 false "forbidden pair" failures (high): the walk to the fight floor drafted LOOTA_800 before ULDA_720 was injected
    (cases 1712, 1713, 1726, 1730). Fixed: Reach() skips the treasures the case rules' `incompatibleTreasures` name. Chunk 23
    cases 1710-1730: failed checks 4 -> 0, twice identical.
-2. Chunk 23 case 1722 fallbacks (medium): the engine defect in section 2, left open; the harness header and README state
-   it as the known exception.
+2. Chunk 23 case 1722 fallbacks (medium): the fair-view defect in section 2, fixed after the review (chunk 23 exits 0).
 3. C1's run-scope half untested (medium): new F15 on a data copy (ULDA_729 given `incompatibleFlags` charge, a charge boss
    on act III): act I's gate leaves it out, offers it without that boss, ForbiddenPairs reports it once on act 3. Shown
    failing with RuleCandidates' run-scope branch reverted to the act's own lists.
@@ -177,7 +186,7 @@ All on this tree (`wip/t-int`), each harness call through the harness lock; logs
   the record of the ab48ab1 base harness build.
 - Everything else (the other 67 run entries, every bosspilot stage, pairs9's other chunks, ends9's other parts,
   treasure9, the hall) is the full regression in `all.q`. Expected there: the bosspilot records and the run entries that
-  pins listed as moved differ from `verify/baseline` (wave 6) with 0 failures; pairs9 chunk 23 exits 3 (case 1722);
+  pins listed as moved differ from `verify/baseline` (wave 6) with 0 failures; pairs9 chunk 23 exits 0 (case 1722 fixed);
   every other new mode 0 faults, 0 fallbacks, 0 failed checks, run 1 = run 2.
 
 ## 6. Left open
