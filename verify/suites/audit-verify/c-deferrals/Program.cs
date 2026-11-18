@@ -166,9 +166,12 @@ var mule = data.FindTreasure("ULDA_019");
 var heistScope = data.FindTreasure("DALA_716");
 
 // ---------------------------------------------------------------- T1 content
-Check("T1 9 F15 ids with content (ULD_003 in UldumCardsGen), 5 Start of Game draws, 3 phase-9 ids, in id order",
-    f15.Length == 9 && f15.SequenceEqual(f15.OrderBy(x => x, StringComparer.Ordinal)) && sog.Length == 5 && sog.All(f15.Contains)
-    && phase9.SequenceEqual(new[] { "GILA_900p", "GILA_911", "ULDA_111" }));
+// Step 9 (lane X) scripted ULDA_111 and GILA_911 as match ends (DungeonRunDeferrals.MatchEndIds): GILA_900p is the one id left,
+// and ULDA_111 Hearthstone is a sixth Start of Game draw (a match end, not one of the nine F15 content ids).
+Check("T1 9 F15 ids with content (ULD_003 in UldumCardsGen), 6 Start of Game draws (5 of them F15's, ULDA_111 step 9's), 1 phase-9 id and step 9's 2 match ends, in id order",
+    f15.Length == 9 && f15.SequenceEqual(f15.OrderBy(x => x, StringComparer.Ordinal)) && sog.Length == 6 && sog.Count(f15.Contains) == 5
+    && sog.Where(id => !f15.Contains(id)).SequenceEqual(new[] { "ULDA_111" })
+    && phase9.SequenceEqual(new[] { "GILA_900p" }) && DungeonRunContent.MatchEndIds.SequenceEqual(new[] { "GILA_911", "ULDA_111" }));
 var kinds = new Dictionary<string, RunContentKind>
 {
     ["DALA_707"] = RunContentKind.ActiveTreasure, ["ULDA_013"] = RunContentKind.ActiveTreasure, ["ULDA_040"] = RunContentKind.ActiveTreasure,
@@ -599,15 +602,26 @@ string TrackingTrace(long seed)
     Check("T11 GILA_511: a deck card drawn later keeps its Cost", drawnLater.Cost == drawnLater.Card.Cost);
 }
 
-// ---------------------------------------------------------------- T12 the three that stay rejected (phase 9)
+// ---------------------------------------------------------------- T12 the three phase 9 ids: one final rejection, two match ends (step 9)
 foreach (string id in phase9)
 {
     var rule = DungeonRunAdmission.RuleFor(id);
     var v = DungeonRunAdmission.Classify(C(id), id, AdmitScope.Player, null, catalogRun: true);
-    string lift = id == "ULDA_111" ? DungeonRunAdmission.MatchExitLift : DungeonRunAdmission.TurnRestartLift;
-    Check($"T12 {id}: unscripted, no content, no treasure row and no power row; its admission row admits no scope, lifted by phase 9",
+    string lift = DungeonRunAdmission.TurnRestartLift;
+    // Step 9 made GILA_900p's lift a final rejection ("none: a final rejection (step 9, ...)"); before, "phase 9 (economy)".
+    Check($"T12 {id}: unscripted, no content, no treasure row and no power row; its admission row admits no scope, a final rejection (step 9)",
         !C(id).Implemented && !DungeonRunContent.TryGet(id, out _) && data.FindTreasure(id) == null && !data.Classes.Any(c => c.Powers.Contains(id))
-        && rule != null && rule.Admit == AdmitScope.None && !v.AdmittedSome && rule.Lift == lift && lift.StartsWith("phase 9"), rule?.Family + " " + rule?.Lift);
+        && rule != null && rule.Admit == AdmitScope.None && !v.AdmittedSome && rule.Lift == lift && lift.StartsWith("none: a final rejection (step 9"), rule?.Family + " " + rule?.Lift);
+}
+foreach (string id in DungeonRunContent.MatchEndIds)
+{
+    var rule = DungeonRunAdmission.RuleFor(id);
+    var v = DungeonRunAdmission.Classify(C(id), id, AdmitScope.Player, null, catalogRun: true);
+    var t = data.FindTreasure(id);
+    Check($"T12 {id}: scripted with content and a tuned run's treasure row (runs v4); admitted for the run player only, never generated (step 9)",
+        C(id).Implemented && DungeonRunContent.TryGet(id, out _) && t != null && t.Runs == DungeonRunTreasure.RunsV4
+        && rule != null && rule.Admit == AdmitScope.Player && rule.NeverGenerated && v.Admitted && rule.Lift == DungeonRunAdmission.RunTreasureLift,
+        rule?.Family + " " + rule?.Admit + " " + t?.Runs);
 }
 Check("T12 Toki (GILA_900h) keeps the Mage basic power as the stand-in for Temporal Loop", data.Class("GILA_900h").Powers.SequenceEqual(new[] { "CS2_034" }));
 

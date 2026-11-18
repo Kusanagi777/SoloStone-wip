@@ -115,8 +115,10 @@ foreach (var fx in effectShells)
 }
 Check("T1 tokens: Dog Whistle and Bubba list the Bloodhound",
     DungeonRunContent.Get("GILA_400p").Tokens.SequenceEqual(new[] { Hound }) && DungeonRunContent.Get("GILA_410").Tokens.SequenceEqual(new[] { Hound }));
-Check("T1 Temporal Loop (GILA_900p) and Rewind (GILA_911) stay unscripted: they are F15's, rejected until phase 9",
-    !C("GILA_900p").Implemented && !C("GILA_911").Implemented && !DungeonRunContent.TryGet("GILA_900p", out _) && !DungeonRunContent.TryGet("GILA_911", out _));
+// Both were F15's, rejected until phase 9. Step 9 (lane X, D13) scripted Rewind (GILA_911) as a run-owned restart with content;
+// Temporal Loop (GILA_900p) stays unscripted, a final rejection.
+Check("T1 Temporal Loop (GILA_900p) stays unscripted (a final rejection, step 9); Rewind (GILA_911) is scripted with content (step 9's restart)",
+    !C("GILA_900p").Implemented && C("GILA_911").Implemented && !DungeonRunContent.TryGet("GILA_900p", out _) && DungeonRunContent.TryGet("GILA_911", out _));
 
 // ---------------------------------------------------------------- T2 data, validator, admission
 var transport = new Dictionary<string, string>
@@ -204,10 +206,12 @@ var transport = new Dictionary<string, string>
         string.Join(",", genClasses));
     Check("T2 the boss's Secret prior for a Rogue catalog run still holds GILA_509's Hunter Secrets (Tess)",
         DungeonRunAdmission.SecretGeneratorClasses(data, new[] { "ROGUE" }, _ => false).Contains("HUNTER"));
-    foreach (string id in new[] { "GILA_900p", "GILA_911" })
     {
-        var v = DungeonRunAdmission.Classify(C(id), id, AdmitScope.Player, null, catalogRun: true);
-        Check($"T2 {id}: still rejected (turn-rewind, lifted by phase 9)", v.Subject && !v.AdmittedSome && v.Family == "turn-rewind" && v.Lift.StartsWith("phase 9"));
+        var v = DungeonRunAdmission.Classify(C("GILA_900p"), "GILA_900p", AdmitScope.Player, null, catalogRun: true);
+        Check("T2 GILA_900p: still rejected (turn-rewind, a final rejection in step 9)", v.Subject && !v.AdmittedSome && v.Family == "turn-rewind" && v.Lift.StartsWith("none: a final rejection (step 9"));
+        var r = DungeonRunAdmission.Classify(C("GILA_911"), "GILA_911", AdmitScope.Player, null, catalogRun: true);
+        var rb = DungeonRunAdmission.Classify(C("GILA_911"), "GILA_911", AdmitScope.Boss, null, catalogRun: true);
+        Check("T2 GILA_911: admitted for the run player only (game-restart, step 9)", r.Subject && r.Admitted && !rb.AdmittedSome && r.Family == "game-restart");
     }
     string badPower = runJson.Replace("\"powers\": [\"CS2_034\"], \"decks\": [\"mh_toki_workshop\"]", "\"powers\": [\"GILA_900p\"], \"decks\": [\"mh_toki_workshop\"]");
     var ePower = DungeonRunValidator.Validate(DungeonRunData.Parse(badPower, poolJson, npcJson, catalogJson, scheduleJson, tavernJson), null);

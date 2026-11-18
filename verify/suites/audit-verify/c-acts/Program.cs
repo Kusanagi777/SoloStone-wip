@@ -100,11 +100,13 @@ string TempDir() { string d = Path.Combine(tmpRoot, "t" + System.Diagnostics.Pro
         && acts.Acts.Select(a => a.TavernGold).SequenceEqual(new[] { 2, 2, 3 }) && acts.Acts.Select(a => a.TavernOffers).SequenceEqual(new[] { 3, 4, 4 }));
     // Phase 7 adds acts-v2 (acts-v1 plus the teammate and shrine-upgrade draft flags) as the default, at scheduleVersion 2.
     // The close-out (family 25) made acts-v3h and acts-v3t the defaults; this data set is loaded without encounters-v1.json, so a
-    // new run on it follows "defaultWithoutEncounters", acts-v2 (the phase-7 default, still stamped 2).
-    Check("A1 defaults acts-v3h and acts-v3t (the close-out; acts-v2 for a data set without the encounter file, as this one: phase 7's default, file version 3, acts-v2 still stamps 2), 4 modifiers, finale disabled; act1 has one act",
-        data.Schedules.Default == "acts-v3h" && data.Schedules.Defaults.SequenceEqual(new[] { "acts-v3h", "acts-v3t" }) && data.Schedules.DefaultWithoutEncounters == "acts-v2"
-        && new DungeonRun(data).DefaultSchedule(1) == "acts-v2" && data.Schedules.Find("acts-v2").StampVersion == 2
-        && data.Schedules.ScheduleVersion == 3 && acts.StampVersion == 2 && data.Schedules.Modifiers.Count == 4 && !acts.FinaleEnabled
+    // new run on it follows "defaultWithoutEncounters", acts-v2 (the phase-7 default, still stamped 2). Step 9 (wave 9b) made
+    // acts-v4h and acts-v4t (stamp 4) the defaults and the file version 4; acts-v3h and acts-v3t stay, stamped 3.
+    Check("A1 defaults acts-v4h and acts-v4t (step 9; acts-v2 for a data set without the encounter file, as this one: phase 7's default, file version 4, acts-v2 still stamps 2, acts-v3h 3), 4 modifiers, finale disabled; act1 has one act",
+        data.Schedules.Default == "acts-v4h" && data.Schedules.Defaults.SequenceEqual(new[] { "acts-v4h", "acts-v4t" }) && data.Schedules.DefaultWithoutEncounters == "acts-v2"
+        && new DungeonRun(data).DefaultSchedule(1) == "acts-v2" && data.Schedules.Find("acts-v2").StampVersion == 2 && data.Schedules.Find("acts-v3h").StampVersion == 3
+        && data.Schedules.Find("acts-v4h").StampVersion == 4 && data.Schedules.Find("acts-v4t").StampVersion == 4
+        && data.Schedules.ScheduleVersion == 4 && acts.StampVersion == 2 && data.Schedules.Modifiers.Count == 4 && !acts.FinaleEnabled
         && data.Schedules.Find("act1").Acts.Count == 1 && data.Schedules.Find("act1").Nodes.Count(n => n.IsFight) == 5);
     Check("A1 boss pools default from band/final; provenance solostone; no fixedHealth in the shipped rows",
         data.Bosses.All(b => b.Pools.SequenceEqual(new[] { b.Final ? "final" : "band" + b.Band }) && b.Provenance == "solostone" && !b.FixedHealth && b.BossManaCap == null));
@@ -142,7 +144,7 @@ string TempDir() { string d = Path.Combine(tmpRoot, "t" + System.Diagnostics.Pro
     Check("A2 a modifier knob outside the whitelist (bossDeck) is refused", knob.Any(e => e == "modifier mod_iron_bosses: unknown knob bossDeck"), string.Join(" | ", knob));
     var twice = Mutated(scheduleJson.Replace("\"id\": \"mod_lean_supply\"", "\"id\": \"mod_iron_bosses\""));
     Check("A2 a duplicate modifier id is refused", twice.Any(e => e == "modifier mod_iron_bosses: listed twice"), string.Join(" | ", twice));
-    var defaultBad = Mutated(scheduleJson.Replace("\"default\": \"acts-v3h\"", "\"default\": \"acts-v9\""));
+    var defaultBad = Mutated(First(scheduleJson, "\"default\": \"acts-v4h\"", "\"default\": \"acts-v9\""));
     Check("A2 a default that is no schedule is refused", defaultBad.Any(e => e.Contains("default acts-v9 is not a schedule")), string.Join(" | ", defaultBad));
     var finale = Mutated(First(scheduleJson, "\"finale\": {\"enabled\": false", "\"finale\": {\"enabled\": true"));
     Check("A2 an enabled finale is refused until phase 8", finale.Any(e => e.Contains("the finale is enabled")), string.Join(" | ", finale));
@@ -920,9 +922,10 @@ string LongRuns(out List<string> problems, out int victories)
     var a = NewAct(run, fresh, 0, 808);
     Step(run, a, fresh, 808);
     // Phase 8: version 3 is the loaded one (2 and 1 load as older released versions); a run of a future version (4) is the one refused.
-    var v2 = new DungeonRunState { ScheduleVersion = 4, Schedule = a.Schedule, Node = a.Node, Floor = a.Floor, BossSequence = new List<string>(a.BossSequence), Phase = a.Phase };
-    Throws<InvalidDataException>("R2 a run saved on another schedule version is refused (ScheduleFor)", () => run.ScheduleFor(v2), "schedule version 4");
-    Throws<InvalidDataException>("R2 ... and at load (Resume)", () => run.Resume(v2), "schedule version 4");
+    // Step 9: version 4 is the loaded one, so the future version is 5.
+    var v2 = new DungeonRunState { ScheduleVersion = 5, Schedule = a.Schedule, Node = a.Node, Floor = a.Floor, BossSequence = new List<string>(a.BossSequence), Phase = a.Phase };
+    Throws<InvalidDataException>("R2 a run saved on another schedule version is refused (ScheduleFor)", () => run.ScheduleFor(v2), "schedule version 5");
+    Throws<InvalidDataException>("R2 ... and at load (Resume)", () => run.Resume(v2), "schedule version 5");
     var shortSeq = new DungeonRunState { ScheduleVersion = 2, Schedule = a.Schedule, Node = a.Node, Floor = a.Floor, BossSequence = a.BossSequence.Take(14).ToList(), Phase = a.Phase };
     Throws<InvalidDataException>("R2 a boss sequence shorter than the schedule's floors is refused", () => run.CurrentNode(shortSeq), "14 bosses");
     var moved = new DungeonRunState { ScheduleVersion = 2, Schedule = a.Schedule, Node = a.Node + 1, Floor = a.Floor, BossSequence = new List<string>(a.BossSequence), Phase = DungeonRunPhase.PreMatch };
@@ -939,10 +942,11 @@ string LongRuns(out List<string> problems, out int victories)
     var movedErrs = MutatedErrors(tavernMoved);
     // Phase 7: acts-v2 (version 2) has act I's tavern too, and every released version's shapes stay pinned (a saved run of an
     // older version still loads), so a version bump no longer frees acts-v1 and act1: only a new schedule may differ.
-    Check("R3 moving act I's tavern without a version bump is refused (acts-v1, act1, acts-v2 and, since phase 8, acts-v3h and acts-v3t)", movedErrs.Count(e => e.Contains("node shape changed")) == 5, string.Join(" | ", movedErrs));
-    var bumped = MutatedErrors(tavernMoved.Replace("\"scheduleVersion\": 3", "\"scheduleVersion\": 4"));
-    Check("R3 the same edit with scheduleVersion 4 still refuses the schedules released earlier (all five stay pinned)",
-        bumped.Count(e => e.Contains("node shape changed")) == 5, string.Join(" | ", bumped));
+    // Step 9 adds acts-v4h and acts-v4t (version 4, act I's tavern too): seven schedules refuse the edit.
+    Check("R3 moving act I's tavern without a version bump is refused (acts-v1, act1, acts-v2, since phase 8 acts-v3h and acts-v3t, since step 9 acts-v4h and acts-v4t)", movedErrs.Count(e => e.Contains("node shape changed")) == 7, string.Join(" | ", movedErrs));
+    var bumped = MutatedErrors(First(tavernMoved, "\"scheduleVersion\": 4", "\"scheduleVersion\": 5"));
+    Check("R3 the same edit with scheduleVersion 5 still refuses the schedules released earlier (all seven stay pinned)",
+        bumped.Count(e => e.Contains("node shape changed")) == 7, string.Join(" | ", bumped));
     var tuned = MutatedErrors(First(scheduleJson, "\"bossHealth\": [30, 32, 34, 36, 40]", "\"bossHealth\": [31, 33, 35, 37, 41]"));
     Check("R3 a tuning edit (Health curve) keeps the shape", !tuned.Any(e => e.Contains("node shape")), string.Join(" | ", tuned));
     var dropped = MutatedErrors(scheduleJson.Replace("\"default\": \"acts-v2\"", "\"default\": \"act1\"").Replace("\"acts-v1\": {", "\"acts-vX\": {"));
