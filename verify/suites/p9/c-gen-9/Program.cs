@@ -86,6 +86,7 @@ bool Unscripted(Card card) => card != null && !card.Implemented && !mechanismIds
 var unscriptedAll = new HashSet<string>(Cards.All.Where(Unscripted).Select(c => c.Id), StringComparer.Ordinal);
 var legacyIds = OfflineCardPools.LegacyGeneratedIds();
 var legacyNames = OfflineCardPools.LegacyPoolNames();
+var legacySet = new HashSet<string>(legacyIds, StringComparer.Ordinal);
 
 // ------------------------------------------------------------------ run games
 // A run on the given schedule at its first pre-match (modifiers declined or the first taken), with the boss under test on that floor.
@@ -511,7 +512,7 @@ Guard("G", () =>
     var generatedAll = new SortedDictionary<string, int>(StringComparer.Ordinal);
     var unscriptedMade = new SortedDictionary<string, int>(StringComparer.Ordinal);
     var notImplementedMade = new SortedSet<string>(StringComparer.Ordinal);
-    int games = 0, faults = 0, generatedEntities = 0, ended = 0; var faultLines = new List<string>();
+    int games = 0, faults = 0, generatedEntities = 0, ended = 0; var faultLines = new List<string>(); var gameLines = new System.Text.StringBuilder();
     var types = new HashSet<CardType> { CardType.MINION, CardType.SPELL, CardType.WEAPON, CardType.HERO, CardType.LOCATION };
     for (int i = 0; i < n; i++)
     {
@@ -519,7 +520,10 @@ Guard("G", () =>
         string boss = bosses[(i * 13 + 5) % bosses.Count];
         try
         {
-            var st = At(lo.Row, lo.Deck, 9000 + i, boss, schedule: i % 2 == 0 ? "acts-v4h" : "acts-v4t");
+            // Every other game on acts-v4t; a loadout whose hero is acts-v4t's own finale character (FinaleExcludes) plays acts-v4h.
+            DungeonRunState st;
+            try { st = At(lo.Row, lo.Deck, 9000 + i, boss, schedule: i % 2 == 0 ? "acts-v4h" : "acts-v4t"); }
+            catch (InvalidOperationException e) when (i % 2 == 1 && e.Message.Contains("finale")) { st = At(lo.Row, lo.Deck, 9000 + i, boss, schedule: "acts-v4h"); }
             // A deck of the run's own cards: the starter deck plus two bundles the class is offered (a run in its second act).
             var plan = run.BuildPlan(st, all);
             var bundles = data.Bundles.Where(b => b.Cards.Count > 0 && (b.Class == "NEUTRAL" || lo.Row.ClassSet.Contains(b.Class))).ToList();
@@ -539,7 +543,9 @@ Guard("G", () =>
                     if (!known.Add((e.Id, e.Card.Id)) || !record) continue;
                     generatedEntities++;
                     generatedAll[e.Card.Id] = generatedAll.TryGetValue(e.Card.Id, out int v) ? v + 1 : 1;
-                    if (unscriptedAll.Contains(e.Card.Id)) unscriptedMade[e.Card.Id + " (" + boss + ", game " + i + ")"] = 1;
+                    // A hero card counts only when a generation pool holds it: an encounter's form heroes (George and Karl, Xatma's
+                    // second form) are the fight's own heroes, swapped in by its rules, not generated.
+                    if (unscriptedAll.Contains(e.Card.Id) && (e.Card.Type != CardType.HERO || legacySet.Contains(e.Card.Id))) unscriptedMade[e.Card.Id + " (" + boss + ", game " + i + ")"] = 1;
                     if (!e.Card.Implemented) notImplementedMade.Add(e.Card.Id);
                 }
             }
@@ -560,11 +566,16 @@ Guard("G", () =>
             }
             games++;
             if (g.State == State.COMPLETE) ended++;
+            gameLines.Append(i).Append(' ').Append(lo.Row.Id).Append(' ').Append(lo.Deck).Append(' ').Append(boss).Append(' ').Append(st.Schedule).Append(" -> ")
+                .Append(g.Player1.PlayState).Append(" t").Append(g.Turn).Append(" hp ").Append(g.Player1.Hero.Health).Append('/').Append(g.Player2.Hero.Health)
+                .Append(" acts ").Append(actions).Append(" made ").Append(known.Count).Append('\n');
         }
         catch (Exception e) { faults++; if (faultLines.Count < 5) faultLines.Add(i + " " + boss + " " + e.GetType().Name + ": " + e.Message.Split('\n')[0]); }
     }
     Note("G: " + games + " games (" + ended + " ended), " + generatedEntities + " cards made during play, " + generatedAll.Count + " distinct; with no script: " + Few(notImplementedMade, 40));
     foreach (var f in faultLines) Note("G fault " + f);
+    Note("G games digest " + Hash(new[] { gameLines.ToString() }) + ", made-card digest " + Hash(generatedAll.Select(kv => kv.Key + "=" + kv.Value)));
+    File.WriteAllText(VerifyPaths.Out("tmp/c-gen-9-games.txt"), gameLines.ToString());
     Check("G1 " + n + " seeded run games are played (v4 defaults, every loadout in turn, encounter bosses), no fault", games == n && faults == 0, games + " games, " + faults + " faults");
     Check("G2 the games make many cards during play (the check below has something to see)", generatedEntities >= 15 * n && generatedAll.Count >= 300, generatedEntities + " / " + generatedAll.Count);
     Check("G3 0 unscripted cards are generated in the " + n + " games", unscriptedMade.Count == 0, Few(unscriptedMade.Keys, 20));
