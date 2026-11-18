@@ -116,6 +116,14 @@ Each suite folder holds its `*.cs` and `*.csproj` only (no `Program.cs.pre-*` ba
 | (new in wave 6, family 22 lane) | `verify/suites/p8f22/c-enc-22` | wave 6 | Enc22.csproj Program.cs |
 | (new in wave 6, family 23 lane) | `verify/suites/p8f23/c-enc-23` | wave 6 | Enc23.csproj Program.cs |
 | (new in wave 6, family 24 lane) | `verify/suites/p8f24/c-enc-24` | wave 6 | Enc24.csproj Program.cs |
+| (new in step 9, test lane econ) | `verify/suites/p9/c-sched-9` | step 9 | Sched9.csproj Program.cs Dump9.cs (F1 tripwire against `fixtures/p9/sched9-f62275b.txt`, recorded by `tools/gen/p9/record_sched9.sh`) |
+| (new in step 9, test lane econ) | `verify/suites/p9/c-econ-9` | step 9 | Econ9.csproj Program.cs (plan 1 A on the run layer) |
+| (new in step 9, test lane rules) | `verify/suites/p9/c-rules-9` | step 9 | Rules9.csproj Program.cs (plan 1 C: C1-C5, C7; fixture `fixtures/p9/schedule-twists9.json`) |
+| (new in step 9, test lane rules) | `verify/suites/p9/c-bosspilot-pairs9` | step 9 | BossPilot.csproj Program.cs (C6, `bp.sh pairs9 <chunk> <k>`) |
+| (new in step 9, test lane ends) | `verify/suites/p9/c-ends-9` | step 9 | Ends9.csproj Program.cs (lane X: escapes, restarts, ratchet, D3, save fields and checks) |
+| (new in step 9, test lane ends) | `verify/suites/p9/c-bosspilot-ends9` | step 9 | BossPilot.csproj Program.cs (`bp.sh ends9 <escape|refuse|rewind|toki|tekahn> <k>`) |
+| (new in step 9, test lane gen) | `verify/suites/p9/c-gen-9` | step 9 | Gen9.csproj Program.cs (lane G: generation hygiene) |
+| (new in step 9, test lane long) | `verify/suites/p9/c-longrun-9` | step 9 | LongRun9.csproj Program.cs, links `p9/common/PickPolicy.cs` and `LongRunWalker.cs` (D1, D2, D4, C1 long walks) |
 | (new in step 9, lane M) | `verify/suites/p9/c-bosspilot-run` | step 9 | BossPilotRun.csproj Program.cs RunPilot.cs PlayGame.cs (the encounter harness's game loop, copied: the four generators patch that loop by its text, so it stays inline in `p8f01/c-bosspilot-encounter`); built by `builds.sh only p9/c-bosspilot-run`, run by `bp.sh slots9`, `outliers9`, `finale9`, `tekahn9`, `longrun9`, `treasure9`, `gate48t`, `uld152` |
 
 ## 3. The audit hall (all G3)
