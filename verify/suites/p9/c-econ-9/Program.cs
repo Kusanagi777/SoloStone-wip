@@ -341,16 +341,26 @@ Guard("C", () =>
         var cls = run.RunClass(s);
         return data.Treasures.Count(t => t.Offered && !t.Legacy && !t.Signature && DungeonRun.TreasureInScope(t, cls, s) && DungeonRun.TreasureOfferedOn(t, s));
     }
-    var rows = new List<(string Origin, string Row, string Deck, int V3, int V4)>();
+    // The released candidates: scope match only (no "shared" widening).
+    int Scoped(DungeonRunState s)
+    {
+        var cls = run.RunClass(s);
+        return data.Treasures.Count(t => t.Offered && !t.Legacy && !t.Signature && t.Scope.Matches(cls.ClassSet, s.StarterDeck, s.Power) && DungeonRun.TreasureOfferedOn(t, s));
+    }
+    var rows = new List<(string Origin, string Row, string Deck, int V3, int V4, int V3Scoped)>();
     foreach (var (row, deck) in loadouts)
-        rows.Add((Origin(row), row.Id, deck, Candidates(New(row, deck, 31337, "acts-v3h")), Candidates(New(row, deck, 31337, "acts-v4h"))));
+    {
+        var v3 = New(row, deck, 31337, "acts-v3h");
+        rows.Add((Origin(row), row.Id, deck, Candidates(v3), Candidates(New(row, deck, 31337, "acts-v4h")), Scoped(v3)));
+    }
     foreach (var g in rows.GroupBy(r => r.Origin).OrderBy(g => g.Key, StringComparer.Ordinal))
         Note($"A4 {g.Key} ({g.Count()} loadouts): candidates acts-v3h {g.Min(r => r.V3)}-{g.Max(r => r.V3)}, stamp 4 {g.Min(r => r.V4)}-{g.Max(r => r.V4)}");
     var low = rows.Where(r => r.V4 < 90).ToList();
     Check($"C1 A4: every loadout drafts from at least 90 treasure candidates on stamp 4 (min {rows.Min(r => r.V4)}, max {rows.Max(r => r.V4)}; acts-v3h today {rows.Min(r => r.V3)}-{rows.Max(r => r.V3)})",
         rows.Count == 116 && low.Count == 0, string.Join(" ", low.Take(6).Select(r => r.Row + "/" + r.Deck + "=" + r.V4)));
-    Check("C2 A4: on acts-v3h the candidates are the released scoped ones (no loadout gains a shared treasure there): stamp 4 never offers fewer",
-        rows.All(r => r.V4 >= r.V3) && rows.Any(r => r.V4 > r.V3));
+    var widened = rows.Where(r => r.V3 != r.V3Scoped).ToList();
+    Check("C2 A4: on acts-v3h every loadout's candidates are the released scoped ones (no shared treasure widens a released run), and stamp 4 never offers fewer",
+        widened.Count == 0 && rows.All(r => r.V4 >= r.V3) && rows.Any(r => r.V4 > r.V3), string.Join(" ", widened.Take(6).Select(r => r.Row + "/" + r.Deck + "=" + r.V3 + " vs scoped " + r.V3Scoped)));
 });
 
 // ============================================================ G. A8: charm_seedling's growth
