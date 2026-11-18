@@ -380,6 +380,7 @@ Guard("E", () =>
             isCustom = !data.Boss(seq[at]).IsEncounter && data.Boss(seq[at]).Pools.Contains(customPool);
         return (isEncounter || isCustom) && (ofEncounter == ofCustom || isEncounter == (ofEncounter < ofCustom));
     }
+    var provenanceRuns = new Dictionary<string, int>(StringComparer.Ordinal);
     for (long seed = 1; seed <= 1000; seed++)
     {
         var seq = run.ActBossSequence(all, seed * 31 + 5, v3);
@@ -391,6 +392,7 @@ Guard("E", () =>
         if (vo >= 0) { withVoone++; voone &= vo >= 2 && vo <= 6 && vo != 4; }             // mix-2 (floors 3-4) or mix-3 (floors 6-7)
         if (seq.Any(id => data.Boss(id).Provenance == "TRL")) withRumble++;                // family 13: nine Rumble Run rows over the four tiers
         if (seq.Any(id => data.Boss(id).Provenance == "DALA")) withHeist++;            // family 14: Whirt is no longer the only Heist row
+        foreach (string p in seq.Take(15).Select(id => data.Boss(id).Provenance).Distinct()) provenanceRuns[p] = provenanceRuns.GetValueOrDefault(p) + 1;
         // Family 09: the act I major is a custom band-3 boss or one of the five Dungeon Run final bosses (enc-major1).
         // Family 24: the act III major is one of the four Plague Lords (all ULDA) or a custom final.
         majors &= MajorByMix(seq, 9, "gila_61_hagatha", "band3", "enc-major2") && lords.Any(l => MajorByMix(seq, 14, l, "final")) && (data.Boss(seq[4]).Pools.Contains("band3") || data.Boss(seq[4]).Pools.Contains("enc-major1"));
@@ -403,9 +405,12 @@ Guard("E", () =>
     Check("E2 an encounter lands only on floors whose pool set holds its tier", whirtActs && voone, $"whirt in {withWhirt}, voone in {withVoone}");
     // Family 13 put eight more Rumble Run rows into the four tiers: every run still meets a Rumble Run row, Voone in some runs only.
     // Families 14-18 put more Heist rows into the tiers: every run meets a Heist row, Whirt in some runs only.
+    // Step 9 restores the check's wave-3 strength at the provenance level (it asked for the only Heist and Rumble rows in every run):
+    // every one of the 1000 runs meets, in its 15 drawn bosses, a row of each of the five adventures and a custom boss.
     Check("E3 the least-used provenance is drawn first: every run meets a Heist row (Whirt and, since wave 5, the Heist families' rows) and a Rumble Run row (Voone and family 13's champions), and each major is of the provenance the run holds fewer bosses of (act II: Hagatha, since family 23 a Monster Hunt nemesis, or a custom band3 boss; act III: since family 24 a Plague Lord, each of the four in some seeds, or a custom final)",
-        withHeist == 1000 && withWhirt > 0 && withRumble == 1000 && withVoone > 0 && majors && hagatha > 0 && nemesis > 0 && lordHits.Values.All(n => n > 0),
-        $"heist in {withHeist}, whirt in {withWhirt}, a Rumble Run row in {withRumble}, voone in {withVoone}, Hagatha the act II major in {hagatha}, a nemesis in {nemesis}, the act III major: {string.Join(" ", lordHits.Select(p => p.Key + " " + p.Value))}");
+        withHeist == 1000 && withWhirt > 0 && withRumble == 1000 && withVoone > 0 && majors && hagatha > 0 && nemesis > 0 && lordHits.Values.All(n => n > 0)
+        && provenanceRuns.OrderBy(p => p.Key, StringComparer.Ordinal).Select(p => p.Key + " " + p.Value).SequenceEqual(new[] { "DALA 1000", "GIL 1000", "LOOT 1000", "TRL 1000", "ULDA 1000", "solostone 1000" }),
+        $"heist in {withHeist}, whirt in {withWhirt}, a Rumble Run row in {withRumble}, voone in {withVoone}, Hagatha the act II major in {hagatha}, a nemesis in {nemesis}, the act III major: {string.Join(" ", lordHits.Select(p => p.Key + " " + p.Value))}; runs per provenance: {string.Join(" ", provenanceRuns.OrderBy(p => p.Key, StringComparer.Ordinal).Select(p => p.Key + " " + p.Value))}");
     // Persistent damage steers the act III major on a run that reads the ledger: a second lord (a fixture clone) with banked damage is taken first.
     var d2 = Load(encounters: encountersJson);
     var clone = d2.Boss("ulda_40_icarax");
@@ -523,8 +528,23 @@ Guard("G", () =>
     while (g10Seed < 4400 && (!withVoone.BossSequence.Contains("trl_200_voone") || ShrineFreeAct(withVoone) == 0)) withVoone = V3(r, "MAGE", ++g10Seed);
     int vooneAct = (withVoone.BossSequence.IndexOf("trl_200_voone") / 5) + 1, freeAct = ShrineFreeAct(withVoone);
     var sch = r.ScheduleFor(withVoone);
+    // Wave 4 replaced the fixed seed 4001 by this search; step 9 restores the strength by holding the rule on every seed of the
+    // range, not one: each act with a shrine row leaves DALA_850 out and each shrine-free act offers it (both kinds met).
+    int g10Shrine = 0, g10Free = 0; var g10Bad = new List<string>();
+    for (long gs = 4001; gs <= 4100; gs++)
+    {
+        var st = V3(r, "MAGE", gs); var stSch = r.ScheduleFor(st);
+        for (int a = 1; a <= 3; a++)
+        {
+            bool shrineAct = st.BossSequence.Skip((a - 1) * 5).Take(5).Any(id => d.Boss(id).HasFlag("shrine"));
+            bool offered = r.RuleCandidates(st, stSch, a, "anomaly").Any(x => x.Id == "DALA_850");
+            if (shrineAct) g10Shrine++; else g10Free++;
+            if (shrineAct == offered) g10Bad.Add(gs + ":" + a);
+        }
+    }
     Check("G10 a rule a boss flag excludes is left out of that boss's act only", freeAct > 0 && !r.RuleCandidates(withVoone, sch, vooneAct, "anomaly").Any(x => x.Id == "DALA_850")
-        && r.RuleCandidates(withVoone, sch, freeAct, "anomaly").Any(x => x.Id == "DALA_850"), "seed " + g10Seed + " voone act " + vooneAct + " shrine-free act " + freeAct);
+        && r.RuleCandidates(withVoone, sch, freeAct, "anomaly").Any(x => x.Id == "DALA_850") && g10Bad.Count == 0 && g10Shrine > 0 && g10Free > 0,
+        "seed " + g10Seed + " voone act " + vooneAct + " shrine-free act " + freeAct + "; seeds 4001-4100: " + g10Shrine + " shrine acts, " + g10Free + " shrine-free, wrong " + string.Join(",", g10Bad.Take(5)));
     var shrineDeck = d.Decks.First(x => x.Shrine != null && d.FindClass(x.Class) != null);
     var shrineRun = r.NewRun(All(d), shrineDeck.Class, shrineDeck.Id, d.Class(shrineDeck.Class).Powers[0], 4002, schedule: "acts-v3h");
     Check("G11 a board-shrine run on acts-v3h keeps its shrine and is never offered a rule that excludes shrine runs", shrineRun.BoardShrine == shrineDeck.Shrine
