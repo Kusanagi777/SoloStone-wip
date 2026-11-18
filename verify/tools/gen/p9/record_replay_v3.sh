@@ -1,12 +1,13 @@
 #!/bin/bash
-# verify/tools/gen/p9/record_replay_v3.sh <scratch folder> [<output folder>]: records c-enc-25 section L4's fixtures (step 9,
-# handoff/phase9/plan.md D5) on the tree before step 9. Exports commit BASE (default f62275b, the close-out tip: acts-v3h and
-# acts-v3t as released, before any step-9 change) with `git archive` into <scratch folder>/tree-<BASE> (an export, not a
-# worktree), builds that tree's engine there unless its engine/ equals this checkout's (then this checkout's
+# verify/tools/gen/p9/record_replay_v3.sh <scratch folder> [<output folder>]: records c-enc-25 section L4's fixtures
+# (step 9, handoff/phase9/plan.md D5) on the tree before step 9. Exports commit BASE (default f62275b, the close-out tip:
+# acts-v3h and acts-v3t as released, before any step-9 change) with `git archive` into <scratch folder>/tree-<BASE> (an
+# export, not a worktree), builds that tree's engine there unless its engine/ equals this checkout's (then this checkout's
 # verify/.out/engine-out is copied), builds the recorder from Record9.cs and the suite's frozen
-# verify/suites/p8f25/c-enc-25/ReplayV3.cs against the export's own plugin sources, and runs it on the export's data: it writes
-# the eight saves v3-<n>-<stop>.xml, replay.txt and exclusions.txt (the export's exclusion data) into <output folder> (default verify/fixtures/p9/replay-v3 of THIS checkout;
-# never p8f25). Run it through the harness lock. Deterministic: a second run writes the same bytes.
+# verify/suites/p8f25/c-enc-25/ReplayV3.cs against the export's own plugin sources, and runs it on the export's data. It
+# writes the eight saves v3-<n>-<stop>.xml, replay.txt and exclusions.txt (the export's exclusion data) into <output
+# folder> (default verify/fixtures/p9/replay-v3 of THIS checkout; never p8f25). Run it through the harness lock.
+# Deterministic: a second run writes the same bytes.
 set -e
 HERE="$(cd "$(dirname "$0")" && pwd)"; V="$(cd "$HERE/../../.." && pwd)"; REPO="$(dirname "$V")"
 BASE=${BASE:-f62275b}
