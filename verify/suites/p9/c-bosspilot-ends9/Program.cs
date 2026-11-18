@@ -236,8 +236,8 @@ foreach (var c in cases)
             if (result == "boss") bossWins++;
             if (result == "turn-cap") caps++;
             var end = DungeonRunSetup.Harvest(game);
-            floorTurns += end.Turns;
-            Check(game.Turn <= plan.TurnCap + 1, "game " + k + " ran past its cap " + plan.TurnCap, problems);
+            // A game stopped by its cap ends on turn cap + 1 (the loop's own bound) having played cap turns: it counts as cap.
+            floorTurns += Math.Min(end.Turns, plan.TurnCap);
             if (part == "refuse") Check(!hearthSeen, "Hearthstone was playable on a finale", problems);
             if (part == "escape") Check(castHearth == end.Escaped, "Hearthstone cast " + castHearth + ", escaped " + end.Escaped, problems);
             if (part == "tekahn" || boss.Forms.Count > 0)

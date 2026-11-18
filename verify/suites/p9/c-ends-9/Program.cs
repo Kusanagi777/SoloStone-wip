@@ -484,8 +484,9 @@ Guard("R", () =>
         && gy[EncounterRules.Restart] == EncounterRules.RestartRewind && endY.Restarted && endY.HeroesUsed.Count == relayPlan.PlayerRelay.Select(h => h.Hero.Id).Distinct().Count() + 1,
         $"relay first {relayFirst}, relay {relayPlan.PlayerRelay.Count}, state {gy.State}, mark {gy[EncounterRules.Restart]}, heroes {string.Join(">", endY.HeroesUsed)}");
     Fight(relay, All(), DungeonRunOutcome.Loss, endY, gy.RunResult);
-    Check("R21 the relay fight's restart carries nothing (the run hero was not the one that died) and restages the finale", relay.RestartIndex == 1
-        && relay.RestartCarriedDamage == 0 && relay.Phase == DungeonRunPhase.PreMatch && !relay.Treasures.Contains(Rewind));
+    // (No carried-damage claim: a Rewind restart never carries damage, relay or not; R13 checks that.)
+    Check("R21 the relay fight's Rewind restart restages the finale and uses Rewind up", relay.RestartIndex == 1
+        && relay.Phase == DungeonRunPhase.PreMatch && !relay.Treasures.Contains(Rewind));
 });
 Guard("R", () =>
 {
@@ -566,16 +567,16 @@ Guard("K", () =>
         var boss = g.Player2.Hero;
         Hurt(g, boss, 190);
         int form = g.Player2[EncounterRules.FormIndex], max = boss.BaseHealth, health = boss.Health;
-        boss.Damage = Math.Max(0, boss.Damage - 60); // a heal of 60
+        boss.TakeHeal(boss, 60); g.DeathProcessingAndAuraUpdate(); // an engine heal of 60 (HealingRules.Heal)
         int maxAfterHeal = boss.Health;
         Hurt(g, boss, 90);
         return (form, max, health, maxAfterHeal, boss.Health, boss.BaseHealth);
     }
     var on = Phases("acts-v4t");
     var off = Phases("acts-v3t");
-    Check("K1 FormRatchet (acts-v4t): Tekahn at 190 enters form 1 with his maximum clamped to 200, a heal of 60 stops at 200; at 90 form 2 clamps to 100",
+    Check("K1 FormRatchet (acts-v4t): Tekahn at 190 enters form 1 with his maximum clamped to 200, an engine heal of 60 stops at 200; at 90 form 2 clamps to 100",
         on.Form == 1 && on.Max == 200 && on.Health == 190 && on.MaxAfterHeal == 200 && on.Max2 == 100 && on.Health2 == 90, on.ToString());
-    Check("K2 without it (acts-v3t) the same blows keep his 300 maximum (the released behaviour): the heal goes to 250", off.Form == 1 && off.Max == 300 && off.Health == 190
+    Check("K2 without it (acts-v3t) the same blows keep his 300 maximum (the released behaviour): the engine heal goes to 250", off.Form == 1 && off.Max == 300 && off.Health == 190
         && off.MaxAfterHeal == 250 && off.Max2 == 300, off.ToString());
 });
 
@@ -665,9 +666,12 @@ Guard("S", () =>
     save.Version = DungeonRunSave.CurrentVersion;
     save.Profile.Unlocked.Add("unlock_from_a_failed_change");
     save.Active.Floor += 1;
+    // LoadedVersion (XmlIgnore, the version the file was read at) is set apart from the snapshot's, so a Restore that copied it
+    // back would show.
+    save.LoadedVersion = 4;
     DungeonRunStore.Restore(save, snapshot);
-    Check("S1 DungeonRunStore.Restore puts back Version (6 -> 5), the profile and the run, and leaves LoadedVersion alone", save.Version == 5 && save.LoadedVersion == 5
-        && !save.Profile.Unlocked.Contains("unlock_from_a_failed_change") && Xml(save) == before, "Version " + save.Version);
+    Check("S1 DungeonRunStore.Restore puts back Version (6 -> 5), the profile and the run, and leaves LoadedVersion alone (4, the snapshot's 5)", save.Version == 5 && save.LoadedVersion == 4
+        && !save.Profile.Unlocked.Contains("unlock_from_a_failed_change") && Xml(save) == before, "Version " + save.Version + " LoadedVersion " + save.LoadedVersion);
     var nullRun = new DungeonRunSave { Version = 4, Profile = All(), Active = null };
     var nullSnap = DungeonRunStore.Clone(nullRun);
     nullRun.Version = 6; nullRun.Active = At("acts-v4h", Combat, null, 9702);
