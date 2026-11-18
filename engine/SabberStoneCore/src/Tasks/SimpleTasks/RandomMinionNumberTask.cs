@@ -32,18 +32,21 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			in IPlayable target,
 			in TaskStack stack = null)
 		{
-			List<Card> cardsList;
+			IReadOnlyList<Card> cardsList;
 			if (Tag == GameTag.COST)
 			{
-				Cards.CostMinionCards(game.FormatType).TryGetValue(stack.Number, out cardsList);
-				if (cardsList == null)
+				Cards.CostMinionCards(game.FormatType).TryGetValue(stack.Number, out List<Card> costCards);
+				// A run match never generates a card its generation filter blocks (step 9, generation hygiene).
+				cardsList = OfflineCardPools.ForGame(game, costCards);
+				if (cardsList == null || cardsList.Count == 0)
 					return TaskState.STOP;
 			}
 			else
 			{
 				IEnumerable<Card> cards = game.FormatType == FormatType.FT_STANDARD ? Cards.AllStandard : Cards.AllWild;
 				int num = stack.Number;
-				cardsList = cards.Where(p => p.Type == CardType.MINION && p[Tag] == num).ToList();
+				Game self = game;
+				cardsList = cards.Where(p => p.Type == CardType.MINION && p[Tag] == num && !(self.FiltersGenerated && self.BlocksGenerated(p))).ToList();
 				if (!cardsList.Any())
 					return TaskState.STOP;
 			}

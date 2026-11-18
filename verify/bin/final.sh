@@ -9,14 +9,25 @@
 #     w2             the family 01/07/08 modes: enc01 secret4 rules01 enc07a enc07b shrine07 seeds07 19000 enc08
 #                    enc08-tag enc08-cards enc08-trapped enc08-seeds
 #     rules05        the 18 family 05 rules        cross05   the 18 rules on the 07/08 bosses (cross05.sh)
+#     w4             the family 11/12/13 modes (wave 4): enc11-pete enc12 enc12-seeds enc12-hidden enc13a enc13b enc13-seeds,
+#                    and enc11a enc11b enc11-cards enc11-shrine (one run per call, then `bp.sh same`)
+#     w5             the family 14-19 modes (wave 5): enc14 enc14-seeds enc14-flight enc14-cards enc15 enc15-seeds enc15-rat
+#                    enc15-toys enc16 enc16-seeds enc16-carousel enc16-cards enc19a enc19b enc19-seeds-a enc19-seeds-b, and
+#                    enc17 enc17-seeds enc17-void enc17-cards enc18a enc18b enc18-finale (one run per call, then `bp.sh same`),
+#                    then enc17-check
+#     w6             the family 20-24 modes (wave 6): enc20a enc20b enc20-seeds-a enc20-seeds-b enc21a enc21b enc21-seeds-a
+#                    enc21-seeds-b enc22a enc22b enc22-seeds-a enc22-seeds-b enc23 enc23-seeds enc24 plague24 95/110/195/210
+#                    tekahn24, and enc23-cards (one run per call, then `bp.sh same`)
+#     c25            the close-out's modes on the shipped schedules: finale25 tekahn25 (twice per call), and sweep25 a, b, c
+#                    (one run per call, then `bp.sh same`)
 # Each stage writes verify/.out/final-<stage>.log (and prints it). The wave-3 set takes about 3 hours on a quiet machine
-# (cross06 and rules06 are most of it); the five extra stages about 2 more. On a machine shared with other harness runs,
+# (cross06 and rules06 are most of it); the extra stages about 2-3 more. On a machine shared with other harness runs,
 # run stages or slices through the harness lock instead (README.md), each call under about 6 minutes.
 . "$(dirname "$0")/../lib/env.sh"
 B="$VERIFY/bin"
 RULES05="DALA_829 DALA_831 DALA_832 DALA_833 DALA_851 DALA_852 DALA_853 DALA_854 DALA_855 DALA_856 DALA_858 DALA_859 DALA_860 DALA_861 DALA_862 DALA_863 DALA_865 DALA_867"
 RULES="ULDA_702 ULDA_705 ULDA_706 ULDA_707 ULDA_708 ULDA_709 ULDA_710 ULDA_711 ULDA_712 ULDA_713 ULDA_714 ULDA_715 ULDA_719 ULDA_720 ULDA_721 ULDA_724 ULDA_729 ULDA_801 ULDA_802 ULDA_803 ULDA_804"
-[ $# -gt 0 ] || { sed -n 2,16p "$0"; exit 2; }
+[ $# -gt 0 ] || { sed -n '2,/^[^#]/{/^#/p}' "$0"; exit 2; }
 for stage in "$@"; do
   L="$OUT/final-$stage.log"; : > "$L"
   case $stage in
@@ -45,6 +56,27 @@ for stage in "$@"; do
   w2)
     for m in enc01 secret4 rules01 enc07a enc07b shrine07 "seeds07 19000" enc08 enc08-tag enc08-cards enc08-trapped enc08-seeds; do
       bash "$B/bp.sh" $m 2>&1 | cut -c1-700 >> "$L"
+    done ;;
+  w4)
+    for m in enc11-pete enc12 enc12-seeds enc12-hidden enc13a enc13b enc13-seeds; do bash "$B/bp.sh" $m 2>&1 | cut -c1-700 >> "$L"; done
+    for m in enc11a enc11b enc11-cards enc11-shrine; do
+      bash "$B/bp.sh" $m 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" $m 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same $m >> "$L" 2>&1
+    done ;;
+  w5)
+    for m in enc14 enc14-seeds enc14-flight enc14-cards enc15 enc15-seeds enc15-rat enc15-toys enc16 enc16-seeds enc16-carousel enc16-cards \
+      enc19a enc19b enc19-seeds-a enc19-seeds-b; do bash "$B/bp.sh" $m 2>&1 | cut -c1-700 >> "$L"; done
+    for m in enc17 enc17-seeds enc17-void enc17-cards enc18a enc18b enc18-finale; do
+      bash "$B/bp.sh" $m 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" $m 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same $m >> "$L" 2>&1
+    done
+    bash "$B/bp.sh" enc17-check >> "$L" 2>&1 ;;
+  w6)
+    for m in enc20a enc20b enc20-seeds-a enc20-seeds-b enc21a enc21b enc21-seeds-a enc21-seeds-b enc22a enc22b enc22-seeds-a enc22-seeds-b \
+      enc23 enc23-seeds enc24 "plague24 95" "plague24 110" "plague24 195" "plague24 210" tekahn24; do bash "$B/bp.sh" $m 2>&1 | cut -c1-700 >> "$L"; done
+    bash "$B/bp.sh" enc23-cards 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" enc23-cards 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same enc23-cards >> "$L" 2>&1 ;;
+  c25)
+    for m in finale25 tekahn25; do bash "$B/bp.sh" $m 2>&1 | cut -c1-700 >> "$L"; done
+    for x in a b c; do
+      bash "$B/bp.sh" sweep25 $x 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" sweep25 $x 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same sweep25-$x >> "$L" 2>&1
     done ;;
   rules05) for r in $RULES05; do bash "$B/bp.sh" rules05 $r 2>&1 | cut -c1-330 >> "$L"; done ;;
   cross05) : > "$OUT/bp/cross05.log"; bash "$B/cross05.sh" $RULES05 > /dev/null; cat "$OUT/bp/cross05.log" >> "$L" ;;

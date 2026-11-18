@@ -821,8 +821,9 @@ public sealed class FairBotState
                 Mask(copy, actor.Controller, actor);
 #if ENGINE_SOURCE
         var projectedChooser = copy.Player1.PlayerId == owner ? copy.Player1 : copy.Player2;
+        // A chained choice not yet dealt (Griftah's second Discover: DiscoverTask repeat) has no Choices: no entity to mask.
         for (var next = projectedChooser.Choice?.NextChoice; next != null; next = next.NextChoice)
-            foreach (int id in next.Choices.Where(id => !offered.Contains(id)))
+            foreach (int id in (next.Choices ?? new List<int>()).Where(id => !offered.Contains(id)))
                 Mask(copy, copy.IdEntityDic[id].Controller, copy.IdEntityDic[id]);
         // The owner cannot know the designation either; both viewpoints use anonymous pair records.
         foreach (var entry in copy.IdEntityDic.Values.Where(e => !(e is EngineUnknown)
@@ -1185,6 +1186,7 @@ public sealed class FairBotState
         foreach (var player in new[] { game.Player1, game.Player2 })
             for (var choice = player.Choice?.NextChoice; choice != null; choice = choice.NextChoice)
             {
+                if (choice.Choices == null) continue;   // a chained choice not yet dealt (Griftah's second Discover) holds no entity
                 queuedChoices.Add(choice);
                 kept.UnionWith(choice.Choices);
             }

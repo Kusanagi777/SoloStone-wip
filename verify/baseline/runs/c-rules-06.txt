@@ -150,7 +150,7 @@ PASS T3 each Tomb holds a minion (public: the mouse-over card) and counts as man
 PASS T4 the held minion is a scripted card the side's generation filter allows
 PASS T5 an enemy death does not count for the run player's Tomb (it counts for the boss's)
 PASS T6 the count goes down with each friendly death and nothing is summoned before it ends
-PASS T7 at the last death the Tomb summons its minion and holds a new one  (BOT_507 then OG_216)
+PASS T7 at the last death the Tomb summons its minion and holds a new one  (BOT_507 then OG_218)
 PASS T8 the Tomb cannot be damaged or removed
 PASS T9 the turn's bound (7 summons of one Tomb): the minion waits for a death of a later turn
 PASS T10 the bound starts again at the end of a turn
@@ -210,7 +210,7 @@ PASS W11b an act of bosses without flags may be offered all 17
 PASS W12 an act with a shrine boss (Voone) is never offered No-Face; the others stay possible
 PASS W13 an act with a deck-replacing boss (Icarax) is never offered Aleatory and never gets Plague of Murlocs
 PASS W14 a boss that plays Secrets from its deck (Ivan) or a hero-switch fight (Hagatha) excludes Aleatory
-PASS W15 boss flags exclude the rule that would clash: heroImmune No-Face, damageCap In the Face, boardStart Marin's Return and Plague of Death, relay Aleatory and Plague of Murlocs  (DALA_850,DALA_864,DALA_866,DALA_851,DALA_852,DALA_853,DALA_854,DALA_855,DALA_856,DALA_858,DALA_859,DALA_860,DALA_861,DALA_862,DALA_865,DALA_867,ULDA_702,ULDA_705,ULDA_707,ULDA_708,ULDA_709,ULDA_710,ULDA_711,ULDA_712,ULDA_713,ULDA_715,ULDA_720,ULDA_724,ULDA_729 | ULDA_802,ULDA_803)
+PASS W15 boss flags exclude the rule that would clash: heroImmune No-Face, damageCap In the Face, boardStart Marin's Return and Plague of Death, relay Aleatory and Plague of Murlocs  (DALA_850,DALA_864,DALA_866,DALA_851,DALA_853,DALA_854,DALA_855,DALA_856,DALA_858,DALA_859,DALA_860,DALA_861,DALA_862,DALA_865,DALA_867,ULDA_702,ULDA_705,ULDA_707,ULDA_708,ULDA_709,ULDA_710,ULDA_711,ULDA_712,ULDA_713,ULDA_715,ULDA_720,ULDA_724,ULDA_729 | ULDA_802,ULDA_803,DALA_830)
 PASS W16 a run with a board shrine is never offered No-Face
 PASS W17 The Stench (a twist) excludes Angelic Presence
 PASS W18 the board-start rules exclude one another: Plague of Death active, no Marin's Return and no Heist board twist
@@ -218,7 +218,7 @@ PASS W19 Plague of Murlocs excludes Aleatory
 PASS W20 Bountiful and the opening-hand modifier exclude each other
 PASS W21 the validator refuses a match effect for a rule with no script (ULDA_720) and an unknown modifier
 PASS W22 the validator checks that the client knows each card a rule creates  (JAIL_202: no client entity definition (deck druid_thicket) | CORE_CS2_009: no client entity definition (deck druid_barkbough) | CORE_EX1_154: no client entity definition (deck druid_forked))
-PASS W23 the fixture schedule (the four plagues in every twist pool, chance 100) validates and rolls each of them  (ULDA_804x228,ULDA_801x151,ULDA_803x265,ULDA_802x256)
+PASS W23 the fixture schedule (the four plagues in every twist pool, chance 100) validates and rolls each of them  (ULDA_804x208,ULDA_801x190,ULDA_803x251,ULDA_802x251)
 PASS W24 a rolled plague is never one a boss of its act excludes
 PASS W25 the rolled plague is on the fight's plan and active in the match (ULDA_804)
 PASS W26 the rule page shows each rule card's own name and text

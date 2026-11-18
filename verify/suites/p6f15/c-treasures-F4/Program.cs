@@ -166,7 +166,7 @@ var transport = new Dictionary<string, string>
     var families = new Dictionary<string, string>
     {
         ["GILA_400p"] = "run-hero-power", [Hound] = "run-treasure", ["GILA_401"] = "run-treasure", ["GILA_403"] = "run-treasure", ["GILA_410"] = "run-treasure",
-        ["GILA_412"] = "run-treasure", ["GILA_413"] = "run-treasure", ["GILA_904"] = "run-treasure", ["GILA_907"] = "run-treasure", ["GILA_910"] = "run-treasure",
+        ["GILA_412"] = "run-treasure", ["GILA_413"] = "run-treasure", ["GILA_904"] = "run-treasure", ["GILA_910"] = "run-treasure",
         ["GILA_901"] = "run-treasure-hand-cast", ["GILA_906"] = "run-treasure-hand-swap",
     };
     foreach (var pair in families)
@@ -177,6 +177,17 @@ var transport = new Dictionary<string, string>
         Check($"T2 admission {id}: the {pair.Value} row admits the player (catalog run), never the boss",
             p.Subject && p.Admitted && !b.Admitted && DungeonRunAdmission.RuleFor(id)?.Family == pair.Value, p.Family + " " + p.Admit);
         Check($"T2 admission {id}: the boss's generation never yields it", DungeonRunAdmission.GeneratedRejectsBoss(true).Contains(id));
+    }
+    // Phase 8 family 23: GILA_907 Clockwork Assistant is in Infinite Toki's nemesis deck, so its row (run-treasure-nemesis-deck)
+    // admits a boss on a catalog run too; it left the families map above and is checked here as strictly.
+    {
+        var p = DungeonRunAdmission.Classify(C("GILA_907"), "GILA_907", AdmitScope.Player, null, catalogRun: true);
+        var b = DungeonRunAdmission.Classify(C("GILA_907"), "GILA_907", AdmitScope.Boss, null, catalogRun: true);
+        Check("T2 admission GILA_907: the run-treasure-nemesis-deck row (phase 8 family 23) admits the player on legacy and catalog runs, a boss on a catalog run only (Infinite Toki's deck)",
+            p.Subject && p.Admitted && DungeonRunAdmission.Classify(C("GILA_907"), "GILA_907", AdmitScope.Player).Admitted && b.Admitted
+            && !DungeonRunAdmission.Classify(C("GILA_907"), "GILA_907", AdmitScope.Boss).Admitted && DungeonRunAdmission.RuleFor("GILA_907")?.Family == "run-treasure-nemesis-deck",
+            p.Family + " " + p.Admit + " / boss " + b.Admit);
+        Check("T2 admission GILA_907: the boss's generation never yields it", DungeonRunAdmission.GeneratedRejectsBoss(true).Contains("GILA_907"));
     }
     Check("T2 admission GILA_411: the from-own-deck row (the bot knows its own deck; a player card here)",
         DungeonRunAdmission.RuleFor("GILA_411").Family == "from-own-deck" && DungeonRunAdmission.Classify(C("GILA_411"), "GILA_411", AdmitScope.Player, null, catalogRun: true).Admitted);

@@ -403,7 +403,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 					choiceAction = ChoiceAction.HAND;
 					Card[][] cardSets =
 					{
-                            LegacyGenerationV1.Get("Discover/ARTIFACT").ToArray()
+                            OfflineCardPools.ForGame(game, LegacyGenerationV1.Get("Discover/ARTIFACT")).ToArray()
 					};
 					return cardSets;
 				}
@@ -412,7 +412,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 					choiceAction = ChoiceAction.CAST;
 					Card[][] cardSets =
 					{
-                            LegacyGenerationV1.Get("Discover/ELEMENTAL_INVOCATION").ToArray()
+                            OfflineCardPools.ForGame(game, LegacyGenerationV1.Get("Discover/ELEMENTAL_INVOCATION")).ToArray()
 					};
 					return cardSets;
 				}
@@ -512,7 +512,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 					choiceAction = ChoiceAction.SUMMON;
 					Card[][] cardSets =
 					{
-                            LegacyGenerationV1.Get("Discover/BASIC_TOTEM").ToArray()
+                            OfflineCardPools.ForGame(game, LegacyGenerationV1.Get("Discover/BASIC_TOTEM")).ToArray()
 					};
 					return cardSets;
 				}
@@ -572,7 +572,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 					choiceAction = ChoiceAction.CAST;
 					Card[][] cardSets =
 					{
-                            LegacyGenerationV1.Get("Discover/BRANCHING_PATHS").ToArray()
+                            OfflineCardPools.ForGame(game, LegacyGenerationV1.Get("Discover/BRANCHING_PATHS")).ToArray()
 					};
 					return cardSets;
 				}
@@ -593,7 +593,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 					choiceAction = ChoiceAction.HAND;
 					Card[][] cardSets =
 					{
-                            LegacyGenerationV1.Get("Discover/HEISTBARON_TOGWAGGLE").ToArray()
+                            OfflineCardPools.ForGame(game, LegacyGenerationV1.Get("Discover/HEISTBARON_TOGWAGGLE")).ToArray()
 					};
 					return cardSets;
 				}

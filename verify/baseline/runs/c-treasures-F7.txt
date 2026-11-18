@@ -1,7 +1,7 @@
 T33 DALA_700   DALA_Rakanishu   player turns 11 played-turn 1 power-uses 0 decisions 13 fallbacks 0 boss-dala [] mine [DALA_700] boss mire_brute
 T33 DALA_701   DALA_Eudora      player turns 27 played-turn 3 power-uses 0 decisions 50 fallbacks 0 boss-dala [] mine [DALA_708,DALA_709] boss mire_brute
 T33 DALA_702   DALA_Chu         boss turns 16 played-turn 3 power-uses 0 decisions 30 fallbacks 0 boss-dala [] mine [DALA_702] boss mire_brute
-T33 DALA_703   DALA_Chu         boss turns 15 played-turn 1 power-uses 0 decisions 23 fallbacks 0 boss-dala [] mine [DALA_703] boss mire_brute
+T33 DALA_703   DALA_Chu         boss turns 14 played-turn 1 power-uses 0 decisions 22 fallbacks 0 boss-dala [] mine [DALA_703] boss mire_brute
 T33 DALA_704   DALA_Squeamlish  player turns 9 played-turn 1 power-uses 0 decisions 9 fallbacks 0 boss-dala [] mine [DALA_704] boss mire_brute
 T33 DALA_705   DALA_Chu         player turns 7 played-turn 1 power-uses 0 decisions 8 fallbacks 0 boss-dala [] mine [DALA_705] boss mire_brute
 T33 DALA_706   DALA_Tekahn      boss turns 12 played-turn 1 power-uses 0 decisions 14 fallbacks 0 boss-dala [] mine [DALA_706] boss mire_brute

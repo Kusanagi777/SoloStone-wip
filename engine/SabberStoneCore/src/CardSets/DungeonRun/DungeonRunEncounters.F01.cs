@@ -26,9 +26,13 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 		/// <summary>
 		/// A card that can be played again and again in one turn: the Echo keyword, or "Repeatable this turn" (tag 1114:
-		/// Unstable Evolution). A global cost cut never brings one below (1).
+		/// Unstable Evolution). A global cost cut never brings one below (1). The copy Unstable Evolution puts into the hand
+		/// (LOOT_504t) prints the same text but lacks tag 1114 in the client data, so it is named here: without it Anomaly -
+		/// Arcane cut the copy to (0) and the boss repeated it without end (bp.sh rules01 DALA_850).
 		/// </summary>
-		public static bool Repeatable(IPlayable p) => p.IsEcho || p.Card[(GameTag)1114] != 0;
+		public static bool Repeatable(IPlayable p) => p.IsEcho || p.Card[(GameTag)1114] != 0 || p.Card.Id == UnstableEvolutionCopy;
+
+		private const string UnstableEvolutionCopy = "LOOT_504t";
 
 		private const string Counterspell = "EX1_287";
 
@@ -140,7 +144,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			// The monster hunters' hero cards the run player is given for this fight: "Battlecry: Deal N damage to all minions and
 			// choose a Passive Treasure." The passive is chosen first, then the damage is dealt, and the hunter's own cards join the
 			// deck (Actions.EncounterRules.PlayHunterCard reads them from the match's encounter rules). Toki's card (GILA_900h2) is
-			// not scripted: her power GILA_900p Temporal Loop restarts the turn (phase 9).
+			// not scripted: her power GILA_900p Temporal Loop restarts the turn, rejected for good in step 9 (no client history re-sync).
 			PlayerHeroCard("GILA_500h4", () => new CustomTask((g, c, s, t, stack) => EncounterRules.PlayHunterCard(g, c, (IPlayable)s, 8, stack)));
 			PlayerHeroCard("GILA_600h2", () => new CustomTask((g, c, s, t, stack) => EncounterRules.PlayHunterCard(g, c, (IPlayable)s, 5, stack)));
 

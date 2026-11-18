@@ -36,7 +36,9 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 
 		internal static void CreateCostChoices(Controller c, IEntity source)
 		{
-			Generic.CreateChoiceCards(c, source, null, ChoiceType.GENERAL, ChoiceAction.KAZAKUS, PotionCards[0], null);
+			// A run match never offers a card its generation filter blocks (step 9, generation hygiene; the run's lists never hold
+			// Kazakus's own potion and ingredient cards); every other game offers the same cards as before.
+			Generic.CreateChoiceCards(c, source, null, ChoiceType.GENERAL, ChoiceAction.KAZAKUS, OfflineCardPools.ForGame(c.Game, PotionCards[0]), null);
 		}
 
 		internal static void Action(in Game g, in Controller c, in List<int> stack)
@@ -59,7 +61,7 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 
 		private static void CreateSecondChoices(in Controller c, int cost)
 		{
-			Card[] cards = GetCostCards(cost);
+			Card[] cards = OfflineCardPools.ForGame(c.Game, GetCostCards(cost));
 
 			cards = cards.ChooseNElements(3, c.Game.Random);
 
@@ -68,7 +70,17 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 
 		private static void CreateThirdChoices(in Controller c, in Card secondCard)
 		{
-			Card[] cards = GetCostCards(secondCard.Cost);
+			Card[] pool = GetCostCards(secondCard.Cost);
+			Card[] cards = OfflineCardPools.ForGame(c.Game, pool);
+			if (!ReferenceEquals(cards, pool))
+			{
+				// A filtered run pool may hold fewer than four: three distinct others, or as many as there are.
+				Card secondPick = secondCard;
+				Card[] others = cards.Where(card => card != secondPick).ToArray();
+				Card[] filteredResults = others.ChooseNElements(3, c.Game.Random);
+				CreateChoices(in c, in filteredResults);
+				return;
+			}
 
 			Card[] results = new Card[3];
 			#region Choose 3 random cards from not previously chosen ones

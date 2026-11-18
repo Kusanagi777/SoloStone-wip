@@ -91,6 +91,14 @@ internal sealed class DungeonRunClass
     internal int SignatureOffer = 3;
     /// <summary>Treasure-tag vocabulary this row adds to the affinity weighting of its treasure drafts.</summary>
     internal List<string> TreasureTags = new List<string>();
+    /// <summary>
+    /// Phase 8 wave 5: the boss rows a run of this row never meets (run-v1.json "excludeBosses"): a hero row whose character is
+    /// also an encounter's boss: the Heist villains Squeamlish (DALA_Squeamlish, the Tombs boss ulda_07_squeamlish), Mr. Chu
+    /// (DALA_Chu, the Tombs boss ulda_06_chu "Mister Chu") and George the Fallen (DALA_George, the George of the Kobolds boss
+    /// loot_15_george_karl "George and Karl").
+    /// DungeonRun.NewRun keeps them out of the act draw; empty for every other row.
+    /// </summary>
+    internal List<string> ExcludeBosses = new List<string>();
     /// <summary>A named adventure hero row (Kind "hero"): it sits beside its primary class's row in the picker.</summary>
     internal bool IsHero => Kind == KindHero;
 
@@ -181,8 +189,38 @@ internal sealed class DungeonRunTreasure
     /// </summary>
     internal string Runs = RunsAll;
     internal const string RunsAll = "all", RunsAct = "act", RunsLegacy = "legacy";
-    /// <summary><see cref="Runs"/> lets an act run (<paramref name="actRun"/>) or a legacy run offer it.</summary>
-    internal bool OfferedOn(bool actRun) => Runs == RunsAll || Runs == RunsAct && actRun || Runs == RunsLegacy && !actRun;
+    /// <summary>
+    /// Phase 8 family 24: <see cref="Runs"/> "encounters", an act run on a schedule that meets the imported encounters
+    /// (schedule stamp 3 and above: ULDA_115 "Gnomebliterator" banks damage for a Plague Lord, which only those runs meet), so
+    /// the offers of every earlier schedule stay as released.
+    /// </summary>
+    internal const string RunsEncounters = "encounters";
+    /// <summary>
+    /// Step 9: <see cref="Runs"/> "v4", an act run on a schedule of stamp 4 and above (DungeonRun.Tuned): the step-9 rows
+    /// (ULDA_111, GILA_911, GILA_BOSS_43t), so the offers of every released schedule stay as released. A schedule file below
+    /// scheduleVersion 4 refuses it (the validator).
+    /// </summary>
+    internal const string RunsV4 = "v4";
+    /// <summary>
+    /// <see cref="Runs"/> lets an act run (<paramref name="actRun"/>; one of an encounter schedule: <paramref name="encounters"/>;
+    /// its schedule stamp: <paramref name="stamp"/>, 0 when unknown) or a legacy run offer it.
+    /// </summary>
+    internal bool OfferedOn(bool actRun, bool encounters = false, int stamp = 0) =>
+        Runs == RunsAll || Runs == RunsAct && actRun || Runs == RunsLegacy && !actRun || Runs == RunsEncounters && actRun && encounters
+        || Runs == RunsV4 && actRun && stamp >= 4;
+    /// <summary>
+    /// Step 9 (D6, run-v1.json "shared"): a generic adventure treasure that the treasure audit found free of any hero, deck or
+    /// power assumption. Only a run of a schedule of stamp 4 and above (DungeonRun.Tuned) reads it: there its <see cref="Scope"/>
+    /// no longer limits who is offered it (DungeonRun.TreasureInScope), so every loadout drafts from one treasure economy. Every
+    /// released schedule keeps the scoped offers.
+    /// </summary>
+    internal bool Shared;
+    /// <summary>
+    /// Step 9 (D9, run-v1.json "reward"): a boss's own reward (GILA_BOSS_43t, Damph's hunt drop), never offered in a draft and
+    /// granted only through an encounter row's v4 "reward" (DungeonRun.GrantEncounterReward). Its card is the scripted card itself
+    /// (no run content entry); the grant adds it to the run deck as a treasure card.
+    /// </summary>
+    internal bool Reward;
     internal const string UpgradeOnFloors = "floors", UpgradeOnActClear = "actClear", UpgradeOnBossWins = "bossWins";
     internal const string SlotDeck = "deck", SlotPower = "power", SlotPassive = "passive";
 
@@ -259,6 +297,46 @@ internal sealed class DungeonRunBoss
     /// <summary>Where the deck comes from and what the encounter tool changed in it; null on a custom boss.</summary>
     internal DungeonRunDeckSource Source;
     internal bool HasFlag(string flag) => Flags.Contains(flag);
+
+    // ---- step 9 (lane R): incompatibility prevention. All empty or null on every row before step 9.
+    /// <summary>Run treasure ids (run-v1.json "treasures") never held by a run that meets this boss (DungeonRun.ForbiddenPairs).</summary>
+    internal List<string> IncompatibleTreasures = new List<string>();
+    /// <summary>
+    /// Why each modifier of <see cref="IncompatibleModifiers"/> or of the v4 block's list conflicts with the row (encounters-v1.json
+    /// "modifierReasons", modifier id to reason). Data only; the validator requires a reason for every v4 entry of a row a
+    /// schedule of stamp 4 and above can reach.
+    /// </summary>
+    internal Dictionary<string, string> ModifierReasons = new Dictionary<string, string>(StringComparer.Ordinal);
+    /// <summary>
+    /// The row's step-9 overrides (encounters-v1.json "v4"), read only through DungeonRun.Tuned: null when the row has no block,
+    /// so every run on a released schedule reads the row as before.
+    /// </summary>
+    internal DungeonRunBossV4 V4;
+}
+
+/// <summary>
+/// Step 9: an encounter row's "v4" block, parsed only (DungeonRunData is compiled alone by the catalog tool and the hall
+/// harnesses); DungeonRun reads it through DungeonRun.Tuned, so a run on a released schedule never sees it. An empty block
+/// ("v4": {}) declares the row reviewed with nothing to override.
+/// </summary>
+internal sealed class DungeonRunBossV4
+{
+    /// <summary>The keys a block may hold; any other key is refused by the validator (<see cref="UnknownKeys"/>).</summary>
+    internal static readonly string[] Keys = { "tier", "healthOffset", "incompatibleModifiers", "reward" };
+    /// <summary>The row's tier on a stamp-4 run (D4 lever 2), or null to keep its own; its pool is DungeonRunEncounterData.PoolOf(Tier).</summary>
+    internal string Tier;
+    /// <summary>The row's Health offset on a stamp-4 schedule (null: the row's own), for the act-aware scaling (lane E).</summary>
+    internal int? HealthOffset;
+    /// <summary>
+    /// D7: the modifiers whose conflicting fight knobs (the ones the row cannot carry) this boss neutralises for its own fight on a stamp-4 schedule
+    /// (DungeonRun.NeutraliseKnobs), instead of the row's act-wide ban (<see cref="DungeonRunBoss.IncompatibleModifiers"/>, which
+    /// only released schedules keep).
+    /// </summary>
+    internal List<string> IncompatibleModifiers = new List<string>();
+    /// <summary>D9: the run-v1.json reward treasure (a "reward" row) a won fight against the row grants (lane E), or null.</summary>
+    internal string Reward;
+    /// <summary>Keys of the block outside <see cref="Keys"/> (the validator refuses them).</summary>
+    internal List<string> UnknownKeys = new List<string>();
 }
 
 /// <summary>One card a pool entry can draw (catalog-v1.json "members").</summary>
@@ -522,6 +600,7 @@ internal sealed class DungeonRunData
             Signatures = NpcWorldJson.Strings(row, "signatures") ?? new List<string>(),
             SignatureOffer = NpcWorldJson.Integer(row, "signatureOffer", 3),
             TreasureTags = NpcWorldJson.Strings(row, "treasureTags") ?? new List<string>(),
+            ExcludeBosses = NpcWorldJson.Strings(row, "excludeBosses") ?? new List<string>(),
         };
         foreach (var row in NpcWorldJson.List(run, "classes").Cast<object>().Select(Obj))
         {
@@ -572,6 +651,8 @@ internal sealed class DungeonRunData
                 UpgradeSlot = NpcWorldJson.Text(row, "upgradeSlot", false) ?? DungeonRunTreasure.SlotDeck,
                 Pool = NpcWorldJson.Text(row, "pool", false),
                 Runs = NpcWorldJson.Text(row, "runs", false) ?? DungeonRunTreasure.RunsAll,
+                Shared = NpcWorldJson.Boolean(row, "shared"),
+                Reward = NpcWorldJson.Boolean(row, "reward"),
             });
         if (run.TryGetValue("powerUpgrades", out object powerUpgrades) && powerUpgrades is IList powerUpgradeRows)
             foreach (var row in powerUpgradeRows.Cast<object>().Select(Obj))
@@ -979,6 +1060,22 @@ internal sealed class DungeonRunAct
     /// <summary>The run player's relay heroes enter in the finale's fights (finale "heroRelay").</summary>
     internal bool HeroRelay;
     internal bool IsFinale => FixedBosses.Count > 0;
+
+    // ---- step 9 (schedule stamp 4 only: the validator refuses them on an older stamp; DungeonRun reads them through Tuned)
+    /// <summary>
+    /// D4/D6 (act "treasureRarity": {"rare": r, "common": c}): the treasure draft's rarity weights in this act; 0 and 0 (absent)
+    /// keep the released 30 rare : 70 common.
+    /// </summary>
+    internal int TreasureRareWeight, TreasureCommonWeight;
+    /// <summary>
+    /// D5 variant (b) (act "bundleAfterTreasure": false): no bundle draft after a won fight that opened a treasure draft node
+    /// (a treasureAfter or passiveAtStart floor) or after the act's major. Default true: a bundle after every won fight.
+    /// </summary>
+    internal bool BundleAfterTreasure = true;
+    /// <summary>D11 (finale "turnCap"): the turn cap of the act's fights (RunMatchPlan.TurnCap, lane X); 0 keeps the default.</summary>
+    internal int TurnCap;
+    /// <summary>D11 (finale "formRatchet"): the act's fights set RunMatchPlan.FormRatchet (lane X).</summary>
+    internal bool FormRatchet;
 }
 
 /// <summary>
@@ -1007,6 +1104,28 @@ internal sealed class DungeonRunGlobalRule
     /// Cannons already take board slots): the run itself, beside <see cref="NoBoardShrine"/>.
     /// </summary>
     internal List<string> IncompatibleClasses = new List<string>();
+    /// <summary>
+    /// Step 9: run treasure ids it never shares an act with (ULDA_720 Battle Scars and LOOTA_800 Potion of Vitality): not offered
+    /// to a run holding one, and while it is active the treasure drafts leave them out (DungeonRun.RuleExcludesTreasure).
+    /// </summary>
+    internal List<string> IncompatibleTreasures = new List<string>();
+    /// <summary>
+    /// Step 9: never active while the run deck holds a card with an opening flag (ULDA_721 Aleatory; handoff/phase8/reports/
+    /// design.md, "runs with Opening-flag cards"): not offered to such a run, and while it is active the tavern sets no opening
+    /// flag (DungeonRun.RuleBlocksOpeningFlags).
+    /// </summary>
+    internal bool NoOpeningFlags;
+    /// <summary>
+    /// Step 9 (C7): why each exclusion entry holds ("exclusionReasons": an excluded rule, class, flag, modifier or treasure id,
+    /// or "noBoardShrine" / "noOpeningFlags", to its reason). Data only; a file of scheduleVersion 4 and above needs one per
+    /// entry (the validator). An entry of "incompatibleRules" is read both ways (DungeonRun.RuleCandidates), so its reason sits
+    /// on the rule that lists it.
+    /// </summary>
+    internal Dictionary<string, string> ExclusionReasons = new Dictionary<string, string>(StringComparer.Ordinal);
+    /// <summary>Every exclusion entry of the rule, in a fixed order (the keys <see cref="ExclusionReasons"/> may hold).</summary>
+    internal IEnumerable<string> ExclusionEntries =>
+        IncompatibleRules.Concat(IncompatibleClasses).Concat(IncompatibleFlags).Concat(IncompatibleModifiers).Concat(IncompatibleTreasures)
+            .Concat(NoBoardShrine ? new[] { "noBoardShrine" } : new string[0]).Concat(NoOpeningFlags ? new[] { "noOpeningFlags" } : new string[0]);
     internal bool Admitted => Status == StatusAdmitted;
     internal bool RunScope => Scope == ScopeRun;
 }
@@ -1039,7 +1158,24 @@ internal sealed class DungeonRunSchedule
     /// <summary>How an act's bosses are drawn: null (the released draw: one shuffle per slot) or <see cref="DrawProvenanceMix"/>.</summary>
     internal string Draw;
     internal const string DrawProvenanceMix = "provenance-mix";
-    internal bool MixesProvenance => Draw == DrawProvenanceMix;
+    /// <summary>
+    /// Step 9 (D10): the provenance-mix draw whose provenance pick is weighted (n_p^alpha / (1 + k drawn_p)) instead of "fewest
+    /// drawn first", with a ledger chance on the majors and a per-act Rumble champion cap (<see cref="DrawAlphaPermille"/> and
+    /// the rest). Schedule stamp 4 and above only (the validator).
+    /// </summary>
+    internal const string DrawProvenanceMixV2 = "provenance-mix-v2";
+    internal bool MixesProvenance => Draw == DrawProvenanceMix || Draw == DrawProvenanceMixV2;
+    internal bool MixesProvenanceV2 => Draw == DrawProvenanceMixV2;
+
+    // ---- step 9 (schedule stamp 4 only: the validator refuses them on an older stamp; DungeonRun reads them through Tuned)
+    /// <summary>D10 ("drawTuning"): alpha in permille, k in permille, the major's ledger chance in percent, the TRL cap per act (0: none).</summary>
+    internal int DrawAlphaPermille = 700, DrawPenaltyPermille = 1000, LedgerMajorChance = 50, MaxTrlPerAct = 1;
+    /// <summary>A8 ("upgradeEveryFloors"): the floors between a growing treasure's stages; 0 keeps rules.upgradeEveryFloors.</summary>
+    internal int UpgradeEveryFloors;
+    /// <summary>D4 lever 3 ("offsetCap"): the most Health offset a boss of this schedule keeps; null for no cap.</summary>
+    internal int? OffsetCap;
+    /// <summary>The step-9 keys the schedule's row (or one of its acts) named, for the validator's stamp check.</summary>
+    internal List<string> V4Keys = new List<string>();
     private List<DungeonRunNode> nodes;
 
     /// <summary>The flattened node list (see <see cref="Flatten"/>), built once.</summary>
@@ -1097,6 +1233,13 @@ internal sealed class DungeonRunSchedules
     /// empty = always <see cref="Default"/>.
     /// </summary>
     internal List<string> Defaults = new List<string>();
+    /// <summary>
+    /// The close-out ("defaultWithoutEncounters", scheduleVersion 3): the schedule a new run with no named schedule follows on a
+    /// data set loaded without encounters-v1.json (DungeonRunData.EncountersVersion 0: the tools and suites that load the
+    /// pre-phase-8 files; never the shipped mode, which embeds the encounter file). Such a data set has no encounter row, so
+    /// the encounter schedules' finales cannot be fought and their encounter pools are empty; null = <see cref="Defaults"/>.
+    /// </summary>
+    internal string DefaultWithoutEncounters;
     /// <summary>Phase 8 ("poolSets"): a named union of boss pools a combat slot or a major may draw from ("mix-1": band1 + enc-t1).</summary>
     internal Dictionary<string, List<string>> PoolSets = new Dictionary<string, List<string>>(StringComparer.Ordinal);
     /// <summary>Phase 8 ("rules"): the global rules (anomalies and twists), in file order.</summary>
@@ -1109,6 +1252,20 @@ internal sealed class DungeonRunSchedules
     /// </summary>
     internal bool Member(DungeonRunBoss boss, string pool) =>
         pool != null && PoolSets.TryGetValue(pool, out var set) ? set.Any(p => InPool(boss, p)) : InPool(boss, pool);
+
+    /// <summary>
+    /// Step 9: <see cref="Member"/> as a run of schedule stamp 4 sees it: an encounter row's v4 "tier" (DungeonRunBossV4.Tier),
+    /// when its block names one, moves it to that tier's pool. Only the "provenance-mix-v2" draw (stamp 4 and above) reads it.
+    /// </summary>
+    internal bool MemberTuned(DungeonRunBoss boss, string pool) =>
+        pool != null && PoolSets.TryGetValue(pool, out var set) ? set.Any(p => InPoolTuned(boss, p)) : InPoolTuned(boss, pool);
+
+    /// <summary>The pools an encounter row is drawn from on a stamp-4 run: its v4 tier's pool when it names one, else its own.</summary>
+    internal static IReadOnlyList<string> TunedPools(DungeonRunBoss boss) =>
+        boss.IsEncounter && boss.V4?.Tier != null ? new[] { DungeonRunEncounterData.PoolOf(boss.V4.Tier) } : (IReadOnlyList<string>)boss.Pools;
+
+    private static bool InPoolTuned(DungeonRunBoss boss, string pool) =>
+        pool == LeftoverPool ? InPool(boss, pool) : TunedPools(boss).Contains(pool);
 
     /// <summary>
     /// The node shape (<see cref="ShapeDigest"/>) of every schedule each released scheduleVersion shipped. A saved act run keeps
@@ -1126,13 +1283,23 @@ internal sealed class DungeonRunSchedules
             // run saved on version 1 keeps its nodes (DungeonRun.ScheduleFor loads it, with no phase-7 draft).
             [2] = new Dictionary<string, string>(StringComparer.Ordinal) { ["acts-v1"] = "3293D82FA6BD48B3", ["act1"] = "3673E8AE7F914E4F", ["acts-v2"] = "8D594CBB45303A53" },
             // Phase 8: acts-v3h and acts-v3t (encounter pool sets, anomaly nodes) join; the three older schedules ship unchanged
-            // and keep their own stamps (DungeonRunSchedule.StampVersion), so a run saved on version 1 or 2 keeps its nodes. The
-            // two v3 digests are the shapes with the finales still disabled: the family that enables a finale re-pins its schedule
-            // here (nothing is released until phase 8 closes).
+            // and keep their own stamps (DungeonRunSchedule.StampVersion), so a run saved on version 1 or 2 keeps its nodes.
+            // The close-out (family 25) re-pinned the two v3 shapes once, before version 3 was released (no new run followed a
+            // v3 schedule until the same close-out made them the defaults): with the finales disabled both were
+            // FF4FEC05953AA0DE; acts-v3h's Heist finale (tavern, Norroa, Vargoth, Kalec, Khadgar: floors 16-19) gives
+            // 09B43E71F9440039 (family 18's prediction) and acts-v3t's Tekahn finale (tavern, Tekahn: floor 16) A866AD976CEBBDC8.
             [3] = new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 ["acts-v1"] = "3293D82FA6BD48B3", ["act1"] = "3673E8AE7F914E4F", ["acts-v2"] = "8D594CBB45303A53",
-                ["acts-v3h"] = "FF4FEC05953AA0DE", ["acts-v3t"] = "FF4FEC05953AA0DE",
+                ["acts-v3h"] = "09B43E71F9440039", ["acts-v3t"] = "A866AD976CEBBDC8",
+            },
+            // Step 9 (D1, D2): acts-v4h and acts-v4t at stamp 4 keep v3's node shape (the scaling is in tuning keys and the
+            // encounter "v4" blocks), so their digests equal acts-v3h's and acts-v3t's; every older schedule ships unchanged.
+            [4] = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["acts-v1"] = "3293D82FA6BD48B3", ["act1"] = "3673E8AE7F914E4F", ["acts-v2"] = "8D594CBB45303A53",
+                ["acts-v3h"] = "09B43E71F9440039", ["acts-v3t"] = "A866AD976CEBBDC8",
+                ["acts-v4h"] = "09B43E71F9440039", ["acts-v4t"] = "A866AD976CEBBDC8",
             },
         };
 
@@ -1191,6 +1358,7 @@ internal sealed class DungeonRunSchedules
         if (v3)
         {
             result.Defaults = NpcWorldJson.Strings(root, "defaults") ?? new List<string>();
+            result.DefaultWithoutEncounters = NpcWorldJson.Text(root, "defaultWithoutEncounters", false);
             if (root.TryGetValue("poolSets", out object sets) && sets is IDictionary<string, object> setRows)
                 foreach (var pair in setRows)
                     result.PoolSets[pair.Key] = ((IList)pair.Value).Cast<object>().Select(v => (string)v).ToList();
@@ -1208,6 +1376,9 @@ internal sealed class DungeonRunSchedules
                         IncompatibleModifiers = NpcWorldJson.Strings(r, "incompatibleModifiers") ?? new List<string>(),
                         IncompatibleClasses = NpcWorldJson.Strings(r, "incompatibleClasses") ?? new List<string>(),
                         NoBoardShrine = NpcWorldJson.Boolean(r, "noBoardShrine"),
+                        IncompatibleTreasures = NpcWorldJson.Strings(r, "incompatibleTreasures") ?? new List<string>(),
+                        NoOpeningFlags = NpcWorldJson.Boolean(r, "noOpeningFlags"),
+                        ExclusionReasons = Reasons(r, "exclusionReasons"),
                     });
         }
         var sameActs = new List<KeyValuePair<DungeonRunSchedule, string>>();
@@ -1224,6 +1395,8 @@ internal sealed class DungeonRunSchedules
                 StampVersion = v3 ? NpcWorldJson.Integer(row, "version", result.ScheduleVersion) : result.ScheduleVersion,
                 Draw = v3 ? NpcWorldJson.Text(row, "draw", false) : null,
             };
+            // Step 9: the stamp-4 schedule keys (read from a version-3 file on; the validator refuses them below stamp 4).
+            if (v3) ParseV4Schedule(schedule, row);
             // Phase 8: "sameActsAs" shares another schedule's acts (acts-v3t plays acts-v3h's three acts before its own finale).
             // (Read whatever the file's version: a schedule that shares acts lists none of its own.)
             string same = NpcWorldJson.Text(row, "sameActsAs", false);
@@ -1267,6 +1440,7 @@ internal sealed class DungeonRunSchedules
                     act.TavernGold = NpcWorldJson.Integer(tavern, "gold", 0);
                     act.TavernOffers = NpcWorldJson.Integer(tavern, "offers", 0);
                 }
+                if (v3) ParseV4Act(schedule, act, a);
                 schedule.Acts.Add(act);
             }
             IDictionary<string, object> finaleRow = null;
@@ -1307,6 +1481,16 @@ internal sealed class DungeonRunSchedules
                 act.TavernGold = NpcWorldJson.Integer(tavern, "gold", 0);
                 act.TavernOffers = NpcWorldJson.Integer(tavern, "offers", 0);
             }
+            // Family 18: the finale's own twist (acts-v3h: DALA_830 The Finale, the rule the four fixed fights are), rolled at NewRun
+            // like an act's twist.
+            if (finale.TryGetValue("twist", out object ftw) && ftw is IDictionary<string, object> finaleTwist)
+            {
+                act.TwistPool = NpcWorldJson.Strings(finaleTwist, "pool") ?? new List<string>();
+                act.TwistChance = NpcWorldJson.Integer(finaleTwist, "chance", 0);
+            }
+            // Step 9 (D11, schedule side): the finale's turn cap and form ratchet (stamp 4 only; lane X reads them).
+            if (finale.ContainsKey("turnCap")) { act.TurnCap = NpcWorldJson.Integer(finale, "turnCap"); pair.Key.V4Keys.Add("finale.turnCap"); }
+            if (finale.ContainsKey("formRatchet")) { act.FormRatchet = NpcWorldJson.Boolean(finale, "formRatchet"); pair.Key.V4Keys.Add("finale.formRatchet"); }
             pair.Key.Acts.Add(act);
         }
         foreach (var m in NpcWorldJson.List(root, "modifiers").Cast<object>().Select(NpcWorldJson.Object))
@@ -1325,10 +1509,47 @@ internal sealed class DungeonRunSchedules
         return result;
     }
 
+    // A JSON object of id to reason (step 9: a rule's "exclusionReasons"); empty when absent.
+    private static Dictionary<string, string> Reasons(IDictionary<string, object> row, string key)
+    {
+        var reasons = new Dictionary<string, string>(StringComparer.Ordinal);
+        if (row.TryGetValue(key, out object value) && value is IDictionary<string, object> map)
+            foreach (var pair in map) reasons[pair.Key] = pair.Value as string ?? "";
+        return reasons;
+    }
+
     private static int[] Ints(IDictionary<string, object> row, string key) =>
         row.TryGetValue(key, out object v) && v is IList list
             ? list.Cast<object>().Select(x => Convert.ToInt32(x, System.Globalization.CultureInfo.InvariantCulture)).ToArray()
             : new int[0];
+
+    // Step 9: a schedule row's stamp-4 keys ("drawTuning", "upgradeEveryFloors", "offsetCap"); each present key is recorded in
+    // V4Keys, so the validator refuses it on a schedule stamped below 4.
+    private static void ParseV4Schedule(DungeonRunSchedule schedule, IDictionary<string, object> row)
+    {
+        if (row.TryGetValue("drawTuning", out object dt) && dt is IDictionary<string, object> tuning)
+        {
+            schedule.V4Keys.Add("drawTuning");
+            schedule.DrawAlphaPermille = NpcWorldJson.Integer(tuning, "alphaPermille", schedule.DrawAlphaPermille);
+            schedule.DrawPenaltyPermille = NpcWorldJson.Integer(tuning, "drawnPenaltyPermille", schedule.DrawPenaltyPermille);
+            schedule.LedgerMajorChance = NpcWorldJson.Integer(tuning, "ledgerMajorChance", schedule.LedgerMajorChance);
+            schedule.MaxTrlPerAct = NpcWorldJson.Integer(tuning, "maxTrlPerAct", schedule.MaxTrlPerAct);
+        }
+        if (row.ContainsKey("upgradeEveryFloors")) { schedule.V4Keys.Add("upgradeEveryFloors"); schedule.UpgradeEveryFloors = NpcWorldJson.Integer(row, "upgradeEveryFloors"); }
+        if (row.ContainsKey("offsetCap")) { schedule.V4Keys.Add("offsetCap"); schedule.OffsetCap = NpcWorldJson.Integer(row, "offsetCap"); }
+    }
+
+    // Step 9: an act's stamp-4 keys ("treasureRarity", "bundleAfterTreasure"), recorded on the schedule's V4Keys.
+    private static void ParseV4Act(DungeonRunSchedule schedule, DungeonRunAct act, IDictionary<string, object> row)
+    {
+        if (row.TryGetValue("treasureRarity", out object tr) && tr is IDictionary<string, object> rarity)
+        {
+            schedule.V4Keys.Add("treasureRarity");
+            act.TreasureRareWeight = NpcWorldJson.Integer(rarity, "rare", 0);
+            act.TreasureCommonWeight = NpcWorldJson.Integer(rarity, "common", 0);
+        }
+        if (row.ContainsKey("bundleAfterTreasure")) { schedule.V4Keys.Add("bundleAfterTreasure"); act.BundleAfterTreasure = NpcWorldJson.Boolean(row, "bundleAfterTreasure", true); }
+    }
 }
 
 // ---------------------------------------------------------------------- Bob's tavern (phase 5: tavern-v1.json)
@@ -1352,6 +1573,24 @@ internal sealed class DungeonRunTavernOption
     internal string Id, Op, Target, Ench, Pool, Sample, AliasOf;
     internal int Cost, Weight, N, Amount;
     internal bool KeepMods, OncePerVisit;
+    /// <summary>
+    /// The close-out (family 25): which runs may be offered it ("runs", as a treasure's: <see cref="DungeonRunTreasure.RunsAll"/>
+    /// by default, <see cref="DungeonRunTreasure.RunsEncounters"/> for an act run on a schedule of stamp 3 and above), so a
+    /// tavern of a run saved on an older schedule rolls the offers it rolled before (ULDA_038 Explorer Retraining).
+    /// </summary>
+    internal string Runs = DungeonRunTreasure.RunsAll;
+    /// <summary>
+    /// Step 9 (D4/D5, "weightByAct"): the option's weight in act I, II, III (a later act, the finale, reads the last value), read
+    /// instead of <see cref="Weight"/> on a run of schedule stamp 4 and above (DungeonRunTavernNode.OfferWeight); empty: Weight.
+    /// </summary>
+    internal int[] WeightByAct = new int[0];
+    /// <summary>
+    /// Step 9 (D4, "maxPerRun"): on a stamp-4 run, the most times one run may buy it (0: no cap). Only an op whose purchases the
+    /// run state counts may name it: "health" (DungeonRunState.HealthBonus / amount; DALA_904 Good Food).
+    /// </summary>
+    internal int MaxPerRun;
+    /// <summary>Whether a tavern of a run on schedule stamp <paramref name="scheduleVersion"/> may offer it.</summary>
+    internal bool OfferedOn(int scheduleVersion) => Runs == DungeonRunTreasure.RunsAll || Runs == DungeonRunTreasure.RunsEncounters && scheduleVersion >= 3;
 }
 
 /// <summary>tavern-v1.json: board sizes, Bob's minion cost cap per act, the options and the deferred tavern cards.</summary>
@@ -1369,8 +1608,10 @@ internal sealed class DungeonRunTavernTable
     {
         "recruit", "remove", "setcost", "health", "opening", "recruitAll", "discover", "buff", "removeAllFriendly", "copy",
         "removeFromSample", "reroll", "discountFromSample", "replace", "discoverOpening", "discoverBuff", "rerollTribe",
-        "removeBuffNeighbours", "removeWhereCostAtMost",
+        "removeBuffNeighbours", "removeWhereCostAtMost", "repickPower",
     };
+    /// <summary>The "runs" values an option may name (absent: every run).</summary>
+    internal static readonly string[] KnownRuns = { DungeonRunTreasure.RunsAll, DungeonRunTreasure.RunsEncounters };
     /// <summary>The discover pools an option may name (computed at runtime from the catalog plus admission).</summary>
     internal static readonly string[] KnownPools = { "legendaryMinion", "minion", "spell", "anyClassWeapon" };
     /// <summary>The sample kinds an option may name ("spell": spells of the run deck).</summary>
@@ -1419,6 +1660,10 @@ internal sealed class DungeonRunTavernTable
                 Cost = NpcWorldJson.Integer(o, "cost", 0), Weight = NpcWorldJson.Integer(o, "weight", 0),
                 N = NpcWorldJson.Integer(o, "n", 0), Amount = NpcWorldJson.Integer(o, "amount", 0),
                 KeepMods = NpcWorldJson.Boolean(o, "keepMods"), OncePerVisit = NpcWorldJson.Boolean(o, "oncePerVisit"),
+                Runs = NpcWorldJson.Text(o, "runs", false) ?? DungeonRunTreasure.RunsAll,
+                WeightByAct = o.TryGetValue("weightByAct", out object wba) && wba is IList weights
+                    ? weights.Cast<object>().Select(x => Convert.ToInt32(x, System.Globalization.CultureInfo.InvariantCulture)).ToArray() : new int[0],
+                MaxPerRun = NpcWorldJson.Integer(o, "maxPerRun", 0),
             });
         if (root.TryGetValue("deferred", out object d) && d is IList deferred)
             foreach (var row in deferred.Cast<object>().Select(NpcWorldJson.Object))
@@ -1526,14 +1771,28 @@ internal static class DungeonRunEncounterData
     {
         "passive", "bothPlayers", "hiddenZone", "secrets", "forms", "start", "position", "shrine", "persistentDamage", "heroSwitch", "relay",
         "deckReplace", "doubleBattlecry", "doubleDeathrattle", "recast", "forcedAttack", "heroImmune", "boardStart", "damageCap", "noLoss",
-        "listedDeck",
+        "listedDeck", "mirrorDeck",
+        // Step 9 (lane R): what a rule must not meet. attackRedirect: the boss's power redirects attacks (Tierra Blythe's
+        // Waitress); charge and windfury: the power gives its minions Charge (Candlebeard, Janak) or Windfury (Hesutu); statSwap:
+        // the power swaps or sets minion stats (Icarax); fatigue: the power changes fatigue damage (Baz'hial's Broken
+        // Phylactery); handAdd: the fight puts cards in a hand at its start (a start block's hand adds, Hagatha's hero cards);
+        // manaIdentity: the boss's start Mana Crystals are its own (a start block's bossMana); room: a room encounter, a reward
+        // node rather than a fight to balance (the Treasure Vault, Tad, the Lava-Filled Chamber, the Trap Rooms).
+        "attackRedirect", "charge", "windfury", "statSwap", "fatigue", "handAdd", "manaIdentity", "room",
     };
     internal const string PersistentDamage = "persistentDamage", HeroSwitch = "heroSwitch", Relay = "relay", FormsFlag = "forms", ShrineFlag = "shrine";
+    /// <summary>Step 9: the flags the validator ties to the row's own data (<see cref="HandAdd"/>, <see cref="ManaIdentity"/>) and the room tag.</summary>
+    internal const string HandAdd = "handAdd", ManaIdentity = "manaIdentity", Room = "room";
     /// <summary>
     /// Family 09: a combat-tier row whose deck is part of its mechanic keeps the listed count (<see cref="MinDeck"/> to
     /// <see cref="MaxDeck"/>) instead of 30 (Tad's ten minions, the Treasure Vault's unused deck).
     /// </summary>
     internal const string ListedDeck = "listedDeck";
+    /// <summary>
+    /// Family 11: the boss plays a copy of the run player's deck as the fight plays it (Face Collector, "This boss plays a deck
+    /// identical to the player's"), less the cards a boss may not hold; the row's own deck is the fallback (DungeonRun.ApplyEncounter).
+    /// </summary>
+    internal const string MirrorDeck = "mirrorDeck";
 
     /// <summary>The row's decks hold exactly 30 cards: a combat tier without the flag <see cref="ListedDeck"/>.</summary>
     internal static bool ThirtyCardDeck(string tier, IEnumerable<string> flags) => IsCombatTier(tier) && (flags == null || !flags.Contains(ListedDeck));
@@ -1623,7 +1882,23 @@ internal static class DungeonRunEncounterData
             Cards = Ids(row, "cards"), IncompatibleRules = Ids(row, "incompatibleRules"),
             IncompatibleModifiers = Ids(row, "incompatibleModifiers"),
             Unlock = NpcWorldJson.Text(row, "unlock", false),
+            IncompatibleTreasures = Ids(row, "incompatibleTreasures"),
         };
+        // Step 9: the reasons for the row's modifier lists (lane R) and its "v4" block (tier, healthOffset and reward: lane E;
+        // incompatibleModifiers: lane R), parsed only and read through DungeonRun.Tuned.
+        if (row.TryGetValue("modifierReasons", out object reasons) && reasons is IDictionary<string, object> reasonRows)
+            foreach (var pair in reasonRows) boss.ModifierReasons[pair.Key] = pair.Value as string ?? "";
+        if (row.TryGetValue("v4", out object v4) && v4 is IDictionary<string, object> block)
+        {
+            boss.V4 = new DungeonRunBossV4
+            {
+                Tier = NpcWorldJson.Text(block, "tier", false),
+                HealthOffset = block.ContainsKey("healthOffset") ? NpcWorldJson.Integer(block, "healthOffset") : (int?)null,
+                IncompatibleModifiers = Ids(block, "incompatibleModifiers"),
+                Reward = NpcWorldJson.Text(block, "reward", false),
+            };
+            boss.V4.UnknownKeys.AddRange(block.Keys.Where(k => !DungeonRunBossV4.Keys.Contains(k)).OrderBy(k => k, StringComparer.Ordinal));
+        }
         if (row.TryGetValue("level", out object level) && level is IDictionary<string, object> lv)
         {
             boss.LevelSource = NpcWorldJson.Text(lv, "source", false);

@@ -305,6 +305,8 @@ namespace SabberStoneCore.EffectSystem
         /// <summary>Exact ChooseNElements consumption, including rejection draws. Like BuildABeast,
         /// this helper does not introduce a RandomHappened notification.</summary>
         public T[] SampleDistinct<T>(IReadOnlyList<T> pool, int count) => pool.ChooseNElements(count, _game.Random);
+        /// <summary><paramref name="pool"/> less what this game's generation filter blocks (OfflineCardPools.ForGame); the same list outside a run match.</summary>
+        internal IReadOnlyList<Card> Generatable(IReadOnlyList<Card> pool) => OfflineCardPools.ForGame(_game, pool);
 
     }
 }

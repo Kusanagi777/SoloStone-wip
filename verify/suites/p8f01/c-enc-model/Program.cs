@@ -42,6 +42,13 @@ string root = VerifyPaths.Data;
 string golden = args.Length > 0 ? args[0] : VerifyPaths.Fixture("p8f01");
 string R(string f) => File.ReadAllText(Path.Combine(root, f));
 string scheduleJson = R("dungeon-run/schedule-v1.json"), encountersJson = R("dungeon-run/encounters-v1.json");
+// A fixture edit of the shipped text: the old text must occur exactly once (the close-out's edits fail loudly when the data moves).
+string Once(string text, string oldText, string newText)
+{
+    int at = text.IndexOf(oldText, StringComparison.Ordinal);
+    if (at < 0 || text.IndexOf(oldText, at + 1, StringComparison.Ordinal) >= 0) throw new InvalidOperationException("fixture edit: not exactly one \"" + oldText + "\"");
+    return text.Replace(oldText, newText);
+}
 DungeonRunData Load(string schedule = null, string encounters = null, bool withEncounters = true) => DungeonRunData.Parse(R("dungeon-run/run-v1.json"),
     R("dungeon-run/pool-v1.json"), R("npc/decks-v1.json"), R("dungeon-run/catalog-v1.json"), schedule ?? scheduleJson, R("dungeon-run/tavern-v1.json"),
     withEncounters ? encounters ?? encountersJson : null);
@@ -104,9 +111,9 @@ Guard("A", () =>
         string.Join(" | ", oldErrors.Take(3)));
     Check("A3 the encounters follow the custom bosses, whose order is unchanged", data.Bosses.Take(20).Select(b => b.Id).SequenceEqual(old.Bosses.Select(b => b.Id))
         && data.Bosses.Skip(20).All(b => b.IsEncounter) && data.Bosses.Take(20).All(b => !b.IsEncounter && b.Tier == null));
-    Check("A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)", data.Encounters.Take(8).Select(b => b.Id).SequenceEqual(new[] { "ulda_40_icarax", "gila_61_hagatha", "dala_21_whirt", "trl_200_voone",
+    Check("A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; wave 4: family 11's thirteen, family 12's thirteen and family 13's eight Rumble Run champions beside Voone; wave 5: family 14's fifteen, family 15's fourteen, family 16's fourteen, family 17's fourteen, family 18's sixteen, family 19's eighteen; wave 6: family 20's eighteen, family 21's seventeen, family 22's eighteen, family 23's four nemeses, family 24's three Plague Lords and Tekahn; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)", data.Encounters.Take(8).Select(b => b.Id).SequenceEqual(new[] { "ulda_40_icarax", "gila_61_hagatha", "dala_21_whirt", "trl_200_voone",
         "loot_35_brandlemar", "loot_48_trapped_room", "gila_25_ivan", "ulda_44_trap_room" }) && data.Encounters.Skip(8).All(b => b.Family != "01")
-        && string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())) == "01:5,07:18,08:17,09:11,10:15,13:1,23:1,24:1",
+        && string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())) == "01:5,07:18,08:17,09:11,10:15,11:13,12:13,13:9,14:15,15:14,16:14,17:14,18:16,19:18,20:18,21:17,22:18,23:5,24:5",
         string.Join(",", data.Encounters.GroupBy(b => b.Family).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + ":" + g.Count())));
     var icarax = data.Boss("ulda_40_icarax"); var hagatha = data.Boss("gila_61_hagatha"); var whirt = data.Boss("dala_21_whirt"); var voone = data.Boss("trl_200_voone");
     Check("A5 Icarax: 300 fixed Health, two more forms at 200 and 100 with their own heroes, powers and decks", icarax.Health == 300 && icarax.FixedHealth && icarax.Forms.Count == 2
@@ -120,8 +127,14 @@ Guard("A", () =>
         && voone.Variants.All(v => data.BossDecks[v.Deck].Count == 30) && voone.HasFlag("shrine"));
     Check("A9 every deck states its kind and source; a deck is authentic exactly when nothing was substituted and it is not a curated one (family 09: the Treasure Vault, which has no deck on the wiki)",
         data.Encounters.All(b => b.Source != null && b.Source.Url != null && b.Source.Read != null && (b.Source.Kind == "authentic") == (b.Source.Substitutions.Count == 0 && b.Source.Kind != "curated")));
-    Check("A10 the rejected list names Toki's hero card with its reason and lift", data.RejectedEncounters.Count == 1 && data.RejectedEncounters[0].Id == "GILA_900h2"
-        && data.RejectedEncounters[0].Reason.Length > 0 && data.RejectedEncounters[0].Lift.StartsWith("phase 9"));
+    // Family 18 rejects Commander Bolan (his five quests have no source: a data gap), the second rejected encounter; family 21
+    // rejects Jythiros of Questions (Riddle of the Sphinx: a decision of the run player on the boss's turn), the third; family 23 rejects
+    // Infinite Toki's Alternate Timeline (GILA_BOSS_48t, a game restart), the fourth.
+    Check("A10 the rejected list names Toki's hero card with its reason and lift, then (family 18) Commander Bolan's with his data gap, then (family 21) Jythiros of Questions and (family 23) Alternate Timeline with their phase 9 lifts", data.RejectedEncounters.Count == 4 && data.RejectedEncounters[0].Id == "GILA_900h2"
+        && data.RejectedEncounters[0].Reason.Length > 0 && data.RejectedEncounters[0].Lift.StartsWith("phase 9")
+        && data.RejectedEncounters[1].Id == "DALA_BOSS_75h" && data.RejectedEncounters[1].Reason.Length > 0 && data.RejectedEncounters[1].Lift.StartsWith("none: a data gap")
+        && data.RejectedEncounters[2].Id == "ULDA_BOSS_58h" && data.RejectedEncounters[2].Reason.Length > 0 && data.RejectedEncounters[2].Lift.StartsWith("phase 9")
+        && data.RejectedEncounters[3].Id == "GILA_BOSS_48t" && data.RejectedEncounters[3].Reason.Length > 0 && data.RejectedEncounters[3].Lift.StartsWith("phase 9"));
     Check("A11 PoolOf maps tiers to pools", DungeonRunEncounterData.PoolOf("1") == "enc-t1" && DungeonRunEncounterData.PoolOf("major2") == "enc-major2" && DungeonRunEncounterData.PoolOf("finale") == "finale");
 });
 
@@ -148,7 +161,8 @@ Refused("B8 persistentDamage with no Health of its own", d => { var b = d.Boss("
 Refused("B9 form thresholds that do not fall", d => d.Boss("ulda_40_icarax").Forms[1].HealthAtMost = 250, "does not fall below");
 Refused("B10 a form with two entry conditions", d => d.Boss("ulda_40_icarax").Forms[0].OnDeath = true, "needs exactly one");
 Refused("B11 flag forms without forms", d => d.Boss("dala_21_whirt").Flags.Add("forms"), "flag forms and the forms");
-Refused("B12 a shrine variant the table does not admit for a boss", d => d.Boss("trl_200_voone").Variants[0].Shrine = "TRLA_115", "admission board-shrine");
+// Phase 8 family 13 admitted every board shrine for a boss: the TRLA_107 fixture (scripted, admitted for no side) stands for a shrine the table refuses.
+Refused("B12 a shrine variant the table does not admit for a boss", d => d.Boss("trl_200_voone").Variants[0].Shrine = "TRLA_107", "admission board-shrine-form");
 Refused("B13 an unscripted shrine", d => d.Boss("trl_200_voone").Variants[0].Shrine = "TRLA_200h", "not a scripted board shrine");
 Refused("B14 a hero card that is not scripted as one", d => d.Boss("gila_61_hagatha").HeroCards[0].Hero = "GILA_900h2", "not scripted as a fight-only hero card");
 Refused("B15 a hero card passive that is no passive treasure", d => d.Boss("gila_61_hagatha").HeroCards[0].Passives[0] = "CS2_029", "is not a passive treasure");
@@ -165,9 +179,9 @@ Refused("B25 a rule's unknown boss flag", d => d.Schedules.Rules[0].Incompatible
 Refused("B26 a boss's unknown incompatible rule", d => d.Boss("dala_21_whirt").IncompatibleRules.Add("DALA_999"), "incompatibleRules names unknown rule");
 Refused("B27 a pool set that nests a pool set", d => d.Schedules.PoolSets["mix-1"].Add("mix-2"), "sets do not nest");
 Refused("B28 an unknown default", d => d.Schedules.Defaults.Add("acts-v9"), "defaults names unknown schedule");
+// The close-out ships acts-v3h's finale enabled (Norroa, Vargoth, Kalec, Khadgar): its first fixed boss is swapped for a combat row.
 Refused("B29 an enabled finale naming a boss that is no finale row", d => { }, "is not a finale row",
-    schedule: scheduleJson.Replace("\"finale\": {\"enabled\": false, \"fixedBosses\": [], \"heroRelay\": false, \"tavernBefore\": true,\n                 \"id\": \"IV\", \"name\": \"The Heist\"",
-        "\"finale\": {\"enabled\": true, \"fixedBosses\": [\"dala_21_whirt\"], \"heroRelay\": false, \"tavernBefore\": true,\n                 \"id\": \"IV\", \"name\": \"The Heist\""));
+    schedule: Once(scheduleJson, "\"fixedBosses\": [\"dala_43_norroa\", \"dala_67_vargoth\"", "\"fixedBosses\": [\"dala_21_whirt\", \"dala_67_vargoth\""));
 Refused("B30 a version-3 schedule stamped 2", d => d.Schedules.Find("acts-v3h").StampVersion = 2, "never released it");
 Refused("B31 a twist pool naming an anomaly", d => { var a = d.Schedules.Find("acts-v3h").Acts[0]; a.TwistPool.Add("DALA_866"); a.TwistChance = 50; }, "which is not a twist rule");
 Guard("B32", () =>
@@ -176,12 +190,27 @@ Guard("B32", () =>
     try { Load(encounters: encountersJson.Replace("\"id\": \"dala_21_whirt\"", "\"id\": \"tunnel_rat\"")); } catch (InvalidDataException e) { threw = e.Message.Contains("already exists"); }
     Check("B32 an encounter that reuses a custom boss id is refused by the parser", threw);
 });
+// The close-out's validator rules (review of family 25): each new or guarded error still fires. A2 holds their other side (the
+// data without the encounter file validates with no error, its finale bosses absent).
+Refused("B33 a tavern option with an unknown runs", d => d.Tavern.Options.First(o => o.Id == "ULDA_038").Runs = "bogus", "tavern ULDA_038: unknown runs bogus");
+Refused("B34 a tavern alias that names runs of its own", d => d.Tavern.Options.First(o => o.Id == "ULDA_911").Runs = DungeonRunTreasure.RunsEncounters,
+    "tavern ULDA_911: an alias names no runs of its own");
+Refused("B35 defaultWithoutEncounters naming an unknown schedule", d => d.Schedules.DefaultWithoutEncounters = "acts-v9", "defaultWithoutEncounters names unknown schedule acts-v9");
+Refused("B36 defaultWithoutEncounters naming a schedule that needs the encounter file", d => d.Schedules.DefaultWithoutEncounters = "acts-v3h",
+    "defaultWithoutEncounters acts-v3h needs the encounter file");
+Refused("B37 with the encounter file loaded, a finale boss that is not in the data", d => { }, "finale boss dala_99_nobody is not in the data",
+    schedule: Once(scheduleJson, "\"fixedBosses\": [\"dala_43_norroa\", \"dala_67_vargoth\"", "\"fixedBosses\": [\"dala_99_nobody\", \"dala_67_vargoth\""));
+Refused("B38 with the encounter file loaded, heroRelay on a finale whose bosses list no relay hero (the Heist finale)", d => d.Schedules.Find("acts-v3h").FinaleHeroRelay = true,
+    "heroRelay with no finale boss that lists relay heroes");
 
 // ============================================================ C. schedule shapes
 Guard("C", () =>
 {
     var sch = data.Schedules;
-    Check("C1 scheduleVersion 3; the default is still acts-v2 and no defaults are rolled yet", sch.ScheduleVersion == 3 && sch.Default == "acts-v2" && sch.Defaults.Count == 0);
+    // The close-out (family 25) flipped the defaults: a new run rolls acts-v3h or acts-v3t; a data set loaded without the
+    // encounter file (the pre-phase-8 suites and tools) keeps acts-v2.
+    Check("C1 scheduleVersion 3; the defaults are acts-v3h and acts-v3t (default acts-v3h), acts-v2 for a data set without the encounter file",
+        sch.ScheduleVersion == 3 && sch.Default == "acts-v3h" && sch.Defaults.SequenceEqual(new[] { "acts-v3h", "acts-v3t" }) && sch.DefaultWithoutEncounters == "acts-v2");
     foreach (var pair in DungeonRunSchedules.ReleasedShapes[2])
         Check("C2 " + pair.Key + " keeps its version-2 shape", DungeonRunSchedules.ShapeDigest(sch.Find(pair.Key)) == pair.Value, DungeonRunSchedules.ShapeDigest(sch.Find(pair.Key)));
     foreach (string id in new[] { "acts-v3h", "acts-v3t" })
@@ -189,35 +218,60 @@ Guard("C", () =>
     Check("C4 the three older schedules are stamped 2, the two new ones 3", new[] { "acts-v1", "acts-v2", "act1" }.All(id => sch.Find(id).StampVersion == 2)
         && sch.Find("acts-v3h").StampVersion == 3 && sch.Find("acts-v3t").StampVersion == 3);
     var v3 = sch.Find("acts-v3h");
-    Check("C5 acts-v3h: 15 floors, an anomaly node opening each act, the provenance mix", v3.FloorCount == 15 && v3.MixesProvenance
+    Check("C5 acts-v3h: three acts of 15 floors and the Heist finale (19 floors), an anomaly node opening each of the three acts, the provenance mix",
+        v3.FloorCount == 19 && v3.Acts.Count == 4 && v3.Acts.Take(3).Sum(a => a.Floors) == 15 && v3.MixesProvenance
         && v3.Nodes.Count(n => n.Kind == DungeonRunNodeKind.Anomaly) == 3 && v3.Nodes[0].Kind == DungeonRunNodeKind.Anomaly && v3.Nodes[0].Floor == 1,
         DungeonRunSchedules.Shape(v3));
-    Check("C6 acts-v3t shares acts-v3h's acts", sch.Find("acts-v3t").Acts.SequenceEqual(v3.Acts) && DungeonRunSchedules.Shape(sch.Find("acts-v3t")) == DungeonRunSchedules.Shape(v3));
+    var v3t = sch.Find("acts-v3t");
+    string ActsShape(DungeonRunSchedule x) => string.Join(" ", x.Nodes.Where(n => n.Act <= 3).Select(n => n.Kind + "" + n.Act + "." + n.FloorInAct + "@" + n.Floor + (n.TreasureDraft ? "t" : "")));
+    Check("C6 acts-v3t shares acts-v3h's three acts and nodes; its finale is Tekahn with the hero relay (16 floors)", v3t.Acts.Take(3).SequenceEqual(v3.Acts.Take(3))
+        && ActsShape(v3t) == ActsShape(v3) && v3t.Acts.Count == 4 && v3t.Acts[3].IsFinale && v3t.Acts[3].FixedBosses.SequenceEqual(new[] { "ulda_67_tekahn" })
+        && v3t.FinaleHeroRelay && v3t.FloorCount == 16, DungeonRunSchedules.Shape(v3t));
     Check("C7 the older schedules have no anomaly node, pool set or mix", new[] { "acts-v1", "acts-v2", "act1" }.All(id => !sch.Find(id).MixesProvenance
         && sch.Find(id).Nodes.All(n => n.Kind != DungeonRunNodeKind.Anomaly) && sch.Find(id).Acts.All(a => a.Combat.All(c => !sch.PoolSets.ContainsKey(c.Pool)))));
     Check("C8 pool sets resolve as unions (mix-4 = band2 + enc-t3; leftover inside a set keeps its meaning)",
         sch.Member(data.Boss("dala_21_whirt"), "mix-4") && sch.Member(data.Boss("golemancer"), "mix-4") && !sch.Member(data.Boss("tunnel_rat"), "mix-4")
         && sch.Member(data.Boss("tunnel_rat"), "mix-5") && !sch.Member(data.Boss("devouring_maw"), "mix-5") && sch.Member(data.Boss("ulda_40_icarax"), "major-3")
         && sch.Member(data.Boss("devouring_maw"), "major-3"));
-    // A finale enabled by fixture data becomes one synthesized last act.
-    var fx = Load(scheduleJson.Replace("\"finale\": {\"enabled\": false, \"fixedBosses\": [], \"heroRelay\": false, \"tavernBefore\": true,\n                 \"id\": \"IV\", \"name\": \"The Heist\", \"bossHealth\": [70], \"bossMana\": [3]",
-        "\"finale\": {\"enabled\": true, \"fixedBosses\": [\"dala_21_whirt\", \"trl_200_voone\"], \"heroRelay\": false, \"tavernBefore\": true,\n                 \"id\": \"IV\", \"name\": \"The Heist\", \"bossHealth\": [70, 75], \"bossMana\": [3, 3]"));
-    var fh = fx.Schedules.Find("acts-v3h");
-    Check("C9 an enabled finale is a fourth act: its bosses in order, a tavern first, no anomaly, 17 floors", fh.Acts.Count == 4 && fh.Acts[3].IsFinale && fh.FloorCount == 17
-        && fh.Acts[3].FixedBosses.SequenceEqual(new[] { "dala_21_whirt", "trl_200_voone" }) && fh.Nodes.Count(n => n.Act == 4) == 3
-        && fh.Nodes.First(n => n.Act == 4).Kind == DungeonRunNodeKind.Tavern && fh.Nodes.Last().Kind == DungeonRunNodeKind.Major && fh.Nodes.Last().Floor == 17);
-    Check("C10 the enabled finale changes acts-v3h's shape only (acts-v3t shares the three acts, not the finale)",
-        DungeonRunSchedules.ShapeDigest(fh) != DungeonRunSchedules.ReleasedShapes[3]["acts-v3h"] && fx.Schedules.Find("acts-v3t").Acts.Count == 3
-        && DungeonRunSchedules.ShapeDigest(fx.Schedules.Find("acts-v3t")) == DungeonRunSchedules.ReleasedShapes[3]["acts-v3t"]);
-    var fr = new DungeonRun(fx);
-    var fs = V3(fr, "MAGE", 5150);
-    Check("C11 a run on it pre-rolls 17 bosses ending with the fixed two, and fights them after a tavern with no draft in between", fs.BossSequence.Count == 17
-        && fs.BossSequence.Skip(15).SequenceEqual(new[] { "dala_21_whirt", "trl_200_voone" }) && fs.BossSequence.Take(15).All(id => id != "dala_21_whirt" && id != "trl_200_voone"));
-    Reach(fr, fs, 16);
-    fr.BeginMatch(fs); fr.RecordOutcome(fs, new DungeonRunProfile(), DungeonRunOutcome.Win);
-    Check("C12 the finale's first win leads straight to its next fight", fs.Phase == DungeonRunPhase.PreMatch && fs.Floor == 17 && fr.CurrentBoss(fs).Id == "trl_200_voone" && fr.BossHealth(fs) == 75);
-    fr.BeginMatch(fs); fr.RecordOutcome(fs, new DungeonRunProfile(), DungeonRunOutcome.Win);
-    Check("C13 the finale's last win wins the run", fs.Phase == DungeonRunPhase.Victory);
+    // The close-out: the shipped finales are synthesized last acts (the wave-1 checks used a fixture finale of two stand-in rows).
+    var heist = new[] { "dala_43_norroa", "dala_67_vargoth", "dala_69_kalec", "dala_60_khadgar" };
+    Check("C9 the shipped Heist finale is a fourth act: Norroa, Vargoth, Kalec, Khadgar in order, a tavern first, no anomaly, floors 16-19",
+        v3.Acts[3].IsFinale && v3.Acts[3].FixedBosses.SequenceEqual(heist) && v3.Nodes.Count(n => n.Act == 4) == 5 && v3.Nodes.First(n => n.Act == 4).Kind == DungeonRunNodeKind.Tavern
+        && v3.Nodes.Where(n => n.Act == 4).All(n => n.Kind != DungeonRunNodeKind.Anomaly) && v3.Nodes.Last().Kind == DungeonRunNodeKind.Major && v3.Nodes.Last().Floor == 19
+        && v3.Acts[3].TwistPool.SequenceEqual(new[] { "DALA_830" }) && v3.Acts[3].TwistChance == 100 && !v3.FinaleHeroRelay);
+    var disabled = Load(Once(Once(scheduleJson, "\"finale\": {\"enabled\": true, \"fixedBosses\": [\"dala_43_norroa\", \"dala_67_vargoth\", \"dala_69_kalec\", \"dala_60_khadgar\"]",
+        "\"finale\": {\"enabled\": false, \"fixedBosses\": []"), "\"finale\": {\"enabled\": true, \"fixedBosses\": [\"ulda_67_tekahn\"], \"heroRelay\": true", "\"finale\": {\"enabled\": false, \"fixedBosses\": [], \"heroRelay\": false"));
+    Check("C10 the finales are the only shape change: with both disabled the two schedules are the pre-close-out shape FF4FEC05953AA0DE, the same act nodes",
+        DungeonRunSchedules.ShapeDigest(disabled.Schedules.Find("acts-v3h")) == "FF4FEC05953AA0DE" && DungeonRunSchedules.ShapeDigest(disabled.Schedules.Find("acts-v3t")) == "FF4FEC05953AA0DE"
+        && ActsShape(disabled.Schedules.Find("acts-v3h")) == ActsShape(v3) && DungeonRunSchedules.ShapeDigest(v3) != DungeonRunSchedules.ShapeDigest(v3t));
+    var fs = V3(run, "MAGE", 5150);
+    Check("C11 a run on acts-v3h pre-rolls 19 bosses ending with the fixed four, none of them earlier, and rolls The Finale for act IV", fs.BossSequence.Count == 19
+        && fs.BossSequence.Skip(15).SequenceEqual(heist) && fs.BossSequence.Take(15).All(id => !heist.Contains(id))
+        && fs.ActiveRules.Count(r => r.Id == "DALA_830" && r.Kind == "twist" && r.Act == 4) == 1);
+    Reach(run, fs, 16);
+    Check("C12a the finale is fought after its tavern with no draft in between: floor 16 is Norroa", fs.Phase == DungeonRunPhase.PreMatch && run.CurrentBoss(fs).Id == "dala_43_norroa");
+    var heistHealth = new List<int> { run.BossHealth(fs) };
+    run.BeginMatch(fs); run.RecordOutcome(fs, new DungeonRunProfile(), DungeonRunOutcome.Win);
+    Check("C12 the finale's first win leads straight to its next fight", fs.Phase == DungeonRunPhase.PreMatch && fs.Floor == 17 && run.CurrentBoss(fs).Id == "dala_67_vargoth");
+    for (int k = 0; k < 3; k++) { heistHealth.Add(run.BossHealth(fs)); run.BeginMatch(fs); run.RecordOutcome(fs, new DungeonRunProfile(), DungeonRunOutcome.Win); }
+    Check("C13 the finale's last win (Khadgar, floor 19) wins the run", fs.Phase == DungeonRunPhase.Victory && fs.Matches.Last().Boss == "dala_60_khadgar");
+    // The finale act's Health is per fight (act.BossHealth[FloorInAct - 1]); a finale list whose length is not the fight count
+    // becomes its last value for every fight (DungeonRunData Curve): the shipped [70] gives every fight 70, and a full curve is
+    // read fight by fight (wave 6 pinned this on a fixture finale's [70, 75] over two fights).
+    Check("C12b the shipped finale's bossHealth [70] fills all four fights: 70 on floors 16-19, Khadgar included", heistHealth.SequenceEqual(new[] { 70, 70, 70, 70 }), string.Join(",", heistHealth));
+    List<int> FinaleHealth(string curve)
+    {
+        var d = Load(Once(scheduleJson, "\"name\": \"The Heist\", \"bossHealth\": [70]", "\"name\": \"The Heist\", \"bossHealth\": " + curve));
+        var r = new DungeonRun(d);
+        var s = Reach(r, V3(r, "MAGE", 5150), 16);
+        var seen = new List<int>();
+        for (int k = 0; k < 4 && s.Phase == DungeonRunPhase.PreMatch; k++) { seen.Add(r.BossHealth(s)); r.BeginMatch(s); r.RecordOutcome(s, new DungeonRunProfile(), DungeonRunOutcome.Win); }
+        return seen;
+    }
+    var perFight = FinaleHealth("[70, 75, 80, 85]");
+    Check("C12c a finale curve [70, 75, 80, 85] is read per fight: Norroa 70, Vargoth 75, Kalec 80, Khadgar 85", perFight.SequenceEqual(new[] { 70, 75, 80, 85 }), string.Join(",", perFight));
+    var filled = FinaleHealth("[70, 75]");
+    Check("C12d a finale curve shorter than its four fights, [70, 75], becomes its last value for every fight: 75, 75, 75, 75", filled.SequenceEqual(new[] { 75, 75, 75, 75 }), string.Join(",", filled));
 });
 
 // ============================================================ D. the released sequences are byte-identical
@@ -240,47 +294,90 @@ Guard("D", () =>
                 var st = run.NewRun(all, cls.Id, cls.Decks[0], cls.Powers[0], seed * 104729 + 7, schedule: id);
                 lines.Add($"newrun {id ?? "(default)"} {cls.Id} {seed} v{st.ScheduleVersion} {st.Schedule ?? "-"} node {st.Node} floor {st.Floor} {st.Phase} rules {st.ActiveRules.Count} shrine {st.BoardShrine ?? "-"} | {string.Join(",", st.BossSequence)}");
             }
+    // The close-out (family 25): the final shapes. acts-v3h and acts-v3t (their finales enabled) for the same 200 seeds and
+    // both unlock states, appended after the pre-phase-8 recording.
+    foreach (var (name, profile) in new[] { ("none", none), ("all", all) })
+        for (long seed = 1; seed <= 200; seed++)
+        {
+            long s = seed * 7919 + 13;
+            foreach (string id in new[] { "acts-v3h", "acts-v3t" })
+                lines.Add($"{id} {name} {s} {string.Join(",", run.ActBossSequence(profile, s, data.Schedules.Find(id)))}");
+        }
+    if (Environment.GetEnvironmentVariable("C_ENC_MODEL_RECORD") is string record && record.Length > 0)
+        File.WriteAllText(record, string.Join("\n", lines) + "\n", new System.Text.UTF8Encoding(false));
     var expected = File.ReadAllLines(Path.Combine(golden, "golden-sequences.txt"));
     int differ = Enumerable.Range(0, Math.Max(lines.Count, expected.Length)).Count(i => i >= lines.Count || i >= expected.Length || lines[i] != expected[i]);
-    Check("D1 legacy, acts-v1, acts-v2 and act1 boss sequences for 200 seeds x 2 unlock states and 1100 new runs match the pre-phase-8 recording (2700 lines)",
-        differ == 0 && expected.Length == 2700, differ + " lines differ of " + expected.Length);
-    Check("D2 a new run with no named schedule is still an acts-v2 run stamped 2", run.NewRun(all, "MAGE", data.Class("MAGE").Decks[0], data.Class("MAGE").Powers[0], 99).Schedule == "acts-v2"
-        && run.NewRun(all, "MAGE", data.Class("MAGE").Decks[0], data.Class("MAGE").Powers[0], 99).ScheduleVersion == 2);
+    // Re-recorded by the close-out (3500 lines): the 220 "(default)" new runs follow acts-v3h or acts-v3t since the defaults
+    // flip, and the 800 acts-v3h / acts-v3t sequences are new; the other 2480 lines are the pre-phase-8 recording (D1a).
+    Check("D1 legacy, acts-v1, acts-v2, act1, acts-v3h and acts-v3t boss sequences for 200 seeds x 2 unlock states and 1100 new runs match the close-out's recording (3500 lines)",
+        differ == 0 && expected.Length == 3500, differ + " lines differ of " + expected.Length);
+    string Digest(IEnumerable<string> ls)
+    {
+        using var sha = System.Security.Cryptography.SHA256.Create();
+        return Convert.ToHexString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(string.Join("\n", ls) + "\n"))).Substring(0, 16);
+    }
+    var legacyLines = lines.Take(2700).Where(l => !l.StartsWith("newrun (default) ", StringComparison.Ordinal)).ToList();
+    Check("D1a the 2480 legacy, acts-v1, acts-v2 and act1 lines are byte for byte the pre-phase-8 recording (its digest without the default lines)",
+        legacyLines.Count == 2480 && Digest(legacyLines) == "F7CEE3DAF30CDC47", Digest(legacyLines));
+    // Before the flip a new run with no named schedule was an acts-v2 run: those 220 lines, as recorded, are the acts-v2 new runs
+    // of the same seeds under the default's label. A run saved then is an acts-v2 run stamped 2 and replays as one (ScheduleFor).
+    var v2AsDefault = lines.Take(2700).Where(l => l.StartsWith("newrun acts-v2 ", StringComparison.Ordinal)).Select(l => "newrun (default) " + l.Substring("newrun acts-v2 ".Length)).ToList();
+    Check("D1b the pre-flip default new runs (220 lines, digest of the pre-phase-8 recording) are exactly today's acts-v2 new runs", v2AsDefault.Count == 220 && Digest(v2AsDefault) == "ED4B7E96C3AA304A",
+        Digest(v2AsDefault));
+    var d2 = Enumerable.Range(1, 200).Select(i => run.NewRun(all, "MAGE", data.Class("MAGE").Decks[0], data.Class("MAGE").Powers[0], i)).ToList();
+    var plainData = Load(withEncounters: false);
+    var plain = new DungeonRun(plainData).NewRun(All(plainData), "MAGE", plainData.Class("MAGE").Decks[0], plainData.Class("MAGE").Powers[0], 99);
+    Check("D2 a new run with no named schedule rolls acts-v3h or acts-v3t, stamped 3 (both in 200 seeds); on the data without the encounter file it is an acts-v2 run stamped 2",
+        d2.All(x => (x.Schedule == "acts-v3h" || x.Schedule == "acts-v3t") && x.ScheduleVersion == 3) && d2.Any(x => x.Schedule == "acts-v3h") && d2.Any(x => x.Schedule == "acts-v3t")
+        && plain.Schedule == "acts-v2" && plain.ScheduleVersion == 2, d2.Count(x => x.Schedule == "acts-v3h") + " acts-v3h; plain " + plain.Schedule);
 });
 
 // ============================================================ E. the provenance-mix draw
 Guard("E", () =>
 {
     var v3 = data.Schedules.Find("acts-v3h");
-    bool distinct = true, known = true, deterministic = true, whirtActs = true, majors = true, voone = true; int withWhirt = 0, withVoone = 0, hagatha = 0, icarax = 0;
+    bool distinct = true, known = true, deterministic = true, whirtActs = true, majors = true, voone = true; int withWhirt = 0, withVoone = 0, withRumble = 0, hagatha = 0, icarax = 0, withHeist = 0, nemesis = 0;
     // A major slot follows the mix as every slot does: it takes the provenance the run holds fewer bosses of so far (the
     // encounter major or a custom boss; a tie is the slot's seeded order). Family 10 put Monster Hunt rows into the combat
     // tiers, so Hagatha is no longer the act II major of every run (she was while no other GIL row could be drawn before her).
-    bool MajorByMix(List<string> seq, int at, string encounter, string customPool)
+    var lords = new[] { "ulda_40_icarax", "ulda_37_xatma", "ulda_38_kzrath", "ulda_39_vesh" };
+    var lordHits = lords.ToDictionary(l => l, l => 0);
+    // Family 23: the act II major pool holds Hagatha and the four Monster Hunt nemeses (all GIL), so any enc-major2 row counts as
+    // the encounter major there (encounterPool).
+    bool MajorByMix(List<string> seq, int at, string encounter, string customPool, string encounterPool = null)
     {
         string provenance = data.Boss(encounter).Provenance;
         int ofEncounter = seq.Take(at).Count(id => data.Boss(id).Provenance == provenance), ofCustom = seq.Take(at).Count(id => !data.Boss(id).IsEncounter);
-        bool isEncounter = seq[at] == encounter, isCustom = !data.Boss(seq[at]).IsEncounter && data.Boss(seq[at]).Pools.Contains(customPool);
+        bool isEncounter = seq[at] == encounter || encounterPool != null && data.Boss(seq[at]).IsEncounter && data.Boss(seq[at]).Pools.Contains(encounterPool) && data.Boss(seq[at]).Provenance == provenance,
+            isCustom = !data.Boss(seq[at]).IsEncounter && data.Boss(seq[at]).Pools.Contains(customPool);
         return (isEncounter || isCustom) && (ofEncounter == ofCustom || isEncounter == (ofEncounter < ofCustom));
     }
     for (long seed = 1; seed <= 1000; seed++)
     {
         var seq = run.ActBossSequence(all, seed * 31 + 5, v3);
-        distinct &= seq.Count == 15 && seq.Distinct().Count() == 15;
+        distinct &= seq.Count == 19 && seq.Distinct().Count() == 19 && seq.Skip(15).SequenceEqual(new[] { "dala_43_norroa", "dala_67_vargoth", "dala_69_kalec", "dala_60_khadgar" });
         known &= seq.All(id => data.Bosses.Any(b => b.Id == id));
         deterministic &= seq.SequenceEqual(run.ActBossSequence(all, seed * 31 + 5, v3));
         int w = seq.IndexOf("dala_21_whirt"), vo = seq.IndexOf("trl_200_voone");
         if (w >= 0) { withWhirt++; whirtActs &= w >= 7 && w <= 11 && w != 9; }          // mix-4 (floors 8-9) or mix-5 (floors 11-12)
         if (vo >= 0) { withVoone++; voone &= vo >= 2 && vo <= 6 && vo != 4; }             // mix-2 (floors 3-4) or mix-3 (floors 6-7)
+        if (seq.Any(id => data.Boss(id).Provenance == "TRL")) withRumble++;                // family 13: nine Rumble Run rows over the four tiers
+        if (seq.Any(id => data.Boss(id).Provenance == "DALA")) withHeist++;            // family 14: Whirt is no longer the only Heist row
         // Family 09: the act I major is a custom band-3 boss or one of the five Dungeon Run final bosses (enc-major1).
-        majors &= MajorByMix(seq, 9, "gila_61_hagatha", "band3") && MajorByMix(seq, 14, "ulda_40_icarax", "final") && (data.Boss(seq[4]).Pools.Contains("band3") || data.Boss(seq[4]).Pools.Contains("enc-major1"));
+        // Family 24: the act III major is one of the four Plague Lords (all ULDA) or a custom final.
+        majors &= MajorByMix(seq, 9, "gila_61_hagatha", "band3", "enc-major2") && lords.Any(l => MajorByMix(seq, 14, l, "final")) && (data.Boss(seq[4]).Pools.Contains("band3") || data.Boss(seq[4]).Pools.Contains("enc-major1"));
         if (seq[9] == "gila_61_hagatha") hagatha++;
-        if (seq[14] == "ulda_40_icarax") icarax++;
+        if (data.Boss(seq[9]).IsEncounter && seq[9] != "gila_61_hagatha") nemesis++;
+        if (lords.Contains(seq[14])) { icarax++; lordHits[seq[14]]++; }
     }
-    Check("E1 1000 seeds: 15 distinct known bosses each, and the same seed gives the same sequence", distinct && known && deterministic);
+    // The close-out: acts-v3h's finale is enabled, so each sequence is the 15 drawn bosses and the four finale bosses.
+    Check("E1 1000 seeds: 19 distinct known bosses each (15 drawn, then the Heist finale's four), and the same seed gives the same sequence", distinct && known && deterministic);
     Check("E2 an encounter lands only on floors whose pool set holds its tier", whirtActs && voone, $"whirt in {withWhirt}, voone in {withVoone}");
-    Check("E3 the least-used provenance is drawn first: every run meets Whirt and Voone (the only Heist and Rumble rows), and each major is of the provenance the run holds fewer bosses of (act II: Hagatha or a custom band3 boss; act III: Icarax or a custom final)",
-        withWhirt == 1000 && withVoone == 1000 && majors && hagatha > 0 && icarax > 0, $"whirt in {withWhirt}, voone in {withVoone}, Hagatha the act II major in {hagatha}, Icarax the act III major in {icarax}");
+    // Family 13 put eight more Rumble Run rows into the four tiers: every run still meets a Rumble Run row, Voone in some runs only.
+    // Families 14-18 put more Heist rows into the tiers: every run meets a Heist row, Whirt in some runs only.
+    Check("E3 the least-used provenance is drawn first: every run meets a Heist row (Whirt and, since wave 5, the Heist families' rows) and a Rumble Run row (Voone and family 13's champions), and each major is of the provenance the run holds fewer bosses of (act II: Hagatha, since family 23 a Monster Hunt nemesis, or a custom band3 boss; act III: since family 24 a Plague Lord, each of the four in some seeds, or a custom final)",
+        withHeist == 1000 && withWhirt > 0 && withRumble == 1000 && withVoone > 0 && majors && hagatha > 0 && nemesis > 0 && lordHits.Values.All(n => n > 0),
+        $"heist in {withHeist}, whirt in {withWhirt}, a Rumble Run row in {withRumble}, voone in {withVoone}, Hagatha the act II major in {hagatha}, a nemesis in {nemesis}, the act III major: {string.Join(" ", lordHits.Select(p => p.Key + " " + p.Value))}");
     // Persistent damage steers the act III major on a run that reads the ledger: a second lord (a fixture clone) with banked damage is taken first.
     var d2 = Load(encounters: encountersJson);
     var clone = d2.Boss("ulda_40_icarax");
@@ -294,14 +391,15 @@ Guard("E", () =>
         if (r2.ActBossSequence(banked, seed, d2.Schedules.Find("acts-v3h"), ledger: true)[14] == "ulda_zz_fixture") bankedFirst++;
         if (r2.ActBossSequence(banked, seed, d2.Schedules.Find("acts-v3h"), ledger: false)[14] == "ulda_zz_fixture") freshFixture++;
     }
-    Check("E4 a ledger run's act III major is the lord with banked damage; a run that does not read the ledger draws it from the seed", bankedFirst == 200 && freshFixture > 40 && freshFixture < 160, $"banked {bankedFirst}, no-ledger {freshFixture}");
+    // Family 24: five major3 candidates now (four lords and the fixture), so the fixture is a seeded fifth of the lord picks.
+    Check("E4 a ledger run's act III major is the lord with banked damage; a run that does not read the ledger draws it from the seed", bankedFirst == 200 && freshFixture > 10 && freshFixture < 100, $"banked {bankedFirst}, no-ledger {freshFixture}");
     var typed = r2.NewRun(banked, "MAGE", d2.Class("MAGE").Decks[0], d2.Class("MAGE").Powers[0], 12, typedSeed: true, schedule: "acts-v3h");
     var random = r2.NewRun(banked, "MAGE", d2.Class("MAGE").Decks[0], d2.Class("MAGE").Powers[0], 12, schedule: "acts-v3h");
     Check("E5 NewRun reads the ledger on a random seed only", random.BossSequence[14] == "ulda_zz_fixture" && typed.BossSequence.SequenceEqual(r2.ActBossSequence(banked, 12, d2.Schedules.Find("acts-v3h"))));
     Check("E6 a run on acts-v3h is stamped 3; ScheduleFor loads a stamped-2 run under the version-3 file", random.ScheduleVersion == 3
         && run.ScheduleFor(run.NewRun(all, "MAGE", data.Class("MAGE").Decks[0], data.Class("MAGE").Powers[0], 3, schedule: "acts-v1")).Id == "acts-v1");
-    // The rolled default: a fixture with "defaults".
-    var d3 = Load(scheduleJson.Replace("\"defaultsPending\"", "\"defaults\""));
+    // The rolled default: the shipped "defaults" (the close-out; until then a fixture renamed "defaultsPending").
+    var d3 = Load();
     var r3 = new DungeonRun(d3);
     var picked = Enumerable.Range(1, 200).Select(i => r3.NewRun(All(d3), "MAGE", d3.Class("MAGE").Decks[0], d3.Class("MAGE").Powers[0], i).Schedule).ToList();
     Check("E7 with \"defaults\" a new run rolls its schedule from the seed (both appear, the same seed the same one)", picked.Contains("acts-v3h") && picked.Contains("acts-v3t")
@@ -361,8 +459,10 @@ Guard("G", () =>
         && DungeonRunStore.Clone(new DungeonRunSave { Active = s }).Active.ModifierOffer.Offered.SequenceEqual(s.ModifierOffer.Offered));
     string taken = s.ModifierOffer.Offered[0];
     run.PickModifier(s, taken);
-    Check("G3 taking a rule makes it an active anomaly of act I and moves on to floor 1", s.Phase == DungeonRunPhase.PreMatch && s.Floor == 1 && s.ModifierOffer == null
-        && s.ActiveRules.Count == 1 && s.ActiveRules[0].Id == taken && s.ActiveRules[0].Kind == "anomaly" && s.ActiveRules[0].Act == 1 && run.RuleActive(s, taken));
+    // The close-out: every acts-v3h run also holds the Heist finale's twist, The Finale (DALA_830, act IV, rolled at NewRun).
+    var actRules = s.ActiveRules.Where(x => !(x.Id == "DALA_830" && x.Act == 4)).ToList();
+    Check("G3 taking a rule makes it an active anomaly of act I and moves on to floor 1 (beside the finale's The Finale, act IV)", s.Phase == DungeonRunPhase.PreMatch && s.Floor == 1 && s.ModifierOffer == null
+        && s.ActiveRules.Count == 2 && actRules.Count == 1 && actRules[0].Id == taken && actRules[0].Kind == "anomaly" && actRules[0].Act == 1 && run.RuleActive(s, taken));
     // Floor 1 draws from mix-1 (band 1 and tier-1 encounters): the check is about a custom boss, so one is put there.
     s.BossSequence[s.Floor - 1] = data.Bosses.First(b => !b.IsEncounter && b.Band == 1 && b.Unlock == null).Id;
     var plan = run.BuildPlan(s, all);
@@ -371,7 +471,8 @@ Guard("G", () =>
         && NativeDungeonRunText.RuleName(taken).StartsWith("Anomaly - ") && NativeDungeonRunText.RuleText(taken).Length > 0);
     var skip = V3(run, "MAGE", 2025);
     run.PickModifier(skip, "none");
-    Check("G6 \"none\" takes no rule", skip.ActiveRules.Count == 0 && skip.Phase == DungeonRunPhase.PreMatch && run.BuildPlan(skip, all).GlobalRules.Count == 0);
+    Check("G6 \"none\" takes no rule (only the finale's The Finale is held, a run-effect twist of act IV)", skip.ActiveRules.Count == 1 && skip.ActiveRules[0].Id == "DALA_830" && skip.ActiveRules[0].Act == 4
+        && skip.Phase == DungeonRunPhase.PreMatch && run.BuildPlan(skip, all).GlobalRules.Count == 0);
     bool refused = false;
     try { run.PickModifier(V3(run, "MAGE", 2026), "DALA_857"); } catch (InvalidOperationException) { refused = true; }
     Check("G7 a rule that is not on offer is refused", refused);
@@ -386,11 +487,15 @@ Guard("G", () =>
     d.Schedules.Rule("DALA_864").NoBoardShrine = true;
     d.Schedules.Rule("DALA_866").IncompatibleRules.Add("DALA_864");
     var r = new DungeonRun(d);
-    var withVoone = V3(r, "MAGE", 4001);
-    int vooneAct = (withVoone.BossSequence.IndexOf("trl_200_voone") / 5) + 1;
+    // Family 13: the nine Rumble Run rows carry the shrine flag, so the run is the first from seed 4001 that meets Voone and has an act with no shrine row.
+    int ShrineFreeAct(DungeonRunState st) => Enumerable.Range(1, 3).FirstOrDefault(a => st.BossSequence.Skip((a - 1) * 5).Take(5).All(id => !d.Boss(id).HasFlag("shrine")));
+    long g10Seed = 4001;
+    var withVoone = V3(r, "MAGE", g10Seed);
+    while (g10Seed < 4400 && (!withVoone.BossSequence.Contains("trl_200_voone") || ShrineFreeAct(withVoone) == 0)) withVoone = V3(r, "MAGE", ++g10Seed);
+    int vooneAct = (withVoone.BossSequence.IndexOf("trl_200_voone") / 5) + 1, freeAct = ShrineFreeAct(withVoone);
     var sch = r.ScheduleFor(withVoone);
-    Check("G10 a rule a boss flag excludes is left out of that boss's act only", !r.RuleCandidates(withVoone, sch, vooneAct, "anomaly").Any(x => x.Id == "DALA_850")
-        && r.RuleCandidates(withVoone, sch, 3, "anomaly").Any(x => x.Id == "DALA_850"), "voone act " + vooneAct);
+    Check("G10 a rule a boss flag excludes is left out of that boss's act only", freeAct > 0 && !r.RuleCandidates(withVoone, sch, vooneAct, "anomaly").Any(x => x.Id == "DALA_850")
+        && r.RuleCandidates(withVoone, sch, freeAct, "anomaly").Any(x => x.Id == "DALA_850"), "seed " + g10Seed + " voone act " + vooneAct + " shrine-free act " + freeAct);
     var shrineDeck = d.Decks.First(x => x.Shrine != null && d.FindClass(x.Class) != null);
     var shrineRun = r.NewRun(All(d), shrineDeck.Class, shrineDeck.Id, d.Class(shrineDeck.Class).Powers[0], 4002, schedule: "acts-v3h");
     Check("G11 a board-shrine run on acts-v3h keeps its shrine and is never offered a rule that excludes shrine runs", shrineRun.BoardShrine == shrineDeck.Shrine
@@ -404,15 +509,15 @@ Guard("G", () =>
     // Twists: a fixture pool with chance 100 rolls one per act at NewRun.
     var dt = Load();
     foreach (var rule in dt.Schedules.Rules) rule.Kind = "twist";
-    foreach (var act in dt.Schedules.Find("acts-v3h").Acts) { act.TwistPool = new List<string> { "DALA_850", "DALA_864", "DALA_866" }; act.TwistChance = 100; }
+    foreach (var act in dt.Schedules.Find("acts-v3h").Acts.Where(a => !a.IsFinale)) { act.TwistPool = new List<string> { "DALA_850", "DALA_864", "DALA_866" }; act.TwistChance = 100; }
     var rt = new DungeonRun(dt);
     var tw = V3(rt, "MAGE", 6001);
     Check("G14 a twist is rolled for each act at NewRun (kind twist, from no node), and with no anomaly rule left the anomaly nodes are passed",
-        tw.ActiveRules.Count == 3 && tw.ActiveRules.All(x => x.Kind == "twist" && x.FromNode == -1) && tw.ActiveRules.Select(x => x.Act).SequenceEqual(new[] { 1, 2, 3 })
+        tw.ActiveRules.Count == 4 && tw.ActiveRules.All(x => x.Kind == "twist" && x.FromNode == -1) && tw.ActiveRules.Select(x => x.Act).SequenceEqual(new[] { 1, 2, 3, 4 }) && tw.ActiveRules[3].Id == "DALA_830"
         && tw.Phase == DungeonRunPhase.PreMatch && tw.Floor == 1 && rt.BuildPlan(tw, All(dt)).GlobalRules.Single() == tw.ActiveRules[0].Id);
     Check("G15 the same seed rolls the same twists", V3(rt, "MAGE", 6001).ActiveRules.Select(x => x.Id).SequenceEqual(tw.ActiveRules.Select(x => x.Id)));
-    foreach (var act in dt.Schedules.Find("acts-v3h").Acts) act.TwistChance = 1;
-    int rolled = Enumerable.Range(1, 300).Sum(i => V3(rt, "MAGE", 7000 + i).ActiveRules.Count);
+    foreach (var act in dt.Schedules.Find("acts-v3h").Acts.Where(a => !a.IsFinale)) act.TwistChance = 1;
+    int rolled = Enumerable.Range(1, 300).Sum(i => V3(rt, "MAGE", 7000 + i).ActiveRules.Count(x => x.Act <= 3));
     Check("G16 the chance is rolled per act (1 percent: about 9 twists in 300 runs of 3 acts)", rolled > 0 && rolled < 40, rolled + " twists");
 });
 
@@ -526,15 +631,17 @@ Guard("I", () =>
     Check("I9 a plan built without a profile reads no ledger", noProfile.BossFormStart == 0 && noProfile.BossCarriedDamage == 0);
     run.BeginMatch(s4);
     run.RecordOutcome(s4, profile, DungeonRunOutcome.Win, null, new RunMatchEnd(0, 2, 0, 12, new[] { "HERO_01" }, false));
-    Check("I10 a win clears the record and wins the run (the act III major)", profile.DamageOf("ulda_40_icarax") == null && s4.Phase == DungeonRunPhase.Victory && s4.Matches.Last().BossRemaining == 0);
+    // The close-out: the act III major is no longer the last fight; the Heist finale follows it.
+    Check("I10 a win clears the record and the run goes on to its finale (the act III major)", profile.DamageOf("ulda_40_icarax") == null && !s4.Finished
+        && s4.Phase != DungeonRunPhase.Victory && s4.MajorsCleared >= 1 && s4.Matches.Last().BossRemaining == 0, s4.Phase.ToString());
     var gnome = At(run, "MAGE", 3007, "ulda_40_icarax", 15);
-    gnome.ActiveTreasures.Add("ULDA_115");
+    gnome.PlagueLordDamage = 10; // family 24: one ULDA_115 cast banked in the run (DungeonRunState.PlagueLordDamage)
     var gplan = run.BuildPlan(gnome, All());
     var gplan2 = run.BuildPlan(gnome, new DungeonRunProfile { BossDamage = { new DungeonRunBossDamage { Boss = "ulda_40_icarax", Remaining = 205, Attempts = 1 } } });
-    Check("I11 ULDA_115 adds 10 damage to the Plague Lord's start (and can tip it into its next phase)", gplan.BossCarriedDamage == 10 && gplan.BossFormStart == 0
+    Check("I11 a banked ULDA_115 cast adds 10 damage to the Plague Lord's start (and can tip it into its next phase)", gplan.BossCarriedDamage == 10 && gplan.BossFormStart == 0
         && gplan2.BossFormStart == 1 && gplan2.BossHealth == 200 && gplan2.BossCarriedDamage == 5);
     var whirt = At(run, "MAGE", 3008, "dala_21_whirt", 8);
-    whirt.ActiveTreasures.Add("ULDA_115");
+    whirt.PlagueLordDamage = 10;
     var wp = All();
     run.BeginMatch(whirt);
     var wplan = run.BuildPlan(At(run, "MAGE", 3008, "dala_21_whirt", 8), wp);
@@ -555,7 +662,7 @@ Guard("I", () =>
     scars.ModifierOffer.Offered[0] = "ULDA_720";
     r.PickModifier(scars, "ULDA_720");
     var splan = r.BuildPlan(scars, All(d));
-    Check("I14 Battle Scars: a run-scope rule (act 0), 100 Health, no match rule in the plan", scars.ActiveRules[0].Act == 0 && splan.PlayerHeroHealth == 100 && splan.PlayerCarriedDamage == 0 && splan.GlobalRules.Count == 0);
+    Check("I14 Battle Scars: a run-scope rule (act 0), 100 Health, no match rule in the plan", scars.ActiveRules.Single(x => x.Id == "ULDA_720").Act == 0 && splan.PlayerHeroHealth == 100 && splan.PlayerCarriedDamage == 0 && splan.GlobalRules.Count == 0);
     r.BeginMatch(scars);
     r.RecordOutcome(scars, All(d), DungeonRunOutcome.Win, null, new RunMatchEnd(0, 0, 0, 37, new[] { "HERO_08" }, false));
     Check("I15 a won fight keeps the run hero's damage", scars.HeroDamage == 37);
@@ -571,8 +678,13 @@ Guard("J", () =>
 {
     var s = At(run, "MAGE", 5001, "dala_21_whirt", 8);
     var plan = run.BuildPlan(s, all);
-    Check("J1 Whirt's plan: the boss's generated Secrets on, the act curve's Health, no forms, no shrine", plan.BossGeneratedSecrets && plan.BossHealth == 46 && plan.BossForms == null && plan.BossShrine == null
-        && plan.EncounterId == "dala_21_whirt" && plan.BossHeroPowerId == "DALA_BOSS_21p");
+    // Family 23: this seed's act II major is now Glinda Crowskin, who (unlike Hagatha) leaves Hagatha's three modifiers in the
+    // act's offer; the walk takes the first offer. On the family 23 lane that was mod_iron_bosses (46 + 5 = 51); on the wave-6
+    // tree (the Tombs rows of families 20-22 and the lords of family 24 move the walk) it is mod_lean_supply, which changes no
+    // boss Health: Whirt's Health is the act curve's 46.
+    Check("J1 Whirt's plan: the boss's generated Secrets on, the act curve's Health (46; the act's modifier, Lean Supply, changes no boss Health), no forms, no shrine", plan.BossGeneratedSecrets && plan.BossHealth == 46
+        && s.ActiveRules.Select(x => x.Id).SequenceEqual(new[] { "DALA_830", "mod_lean_supply" }) && plan.BossForms == null && plan.BossShrine == null
+        && plan.EncounterId == "dala_21_whirt" && plan.BossHeroPowerId == "DALA_BOSS_21p", "health " + plan.BossHealth + " rules " + string.Join(",", s.ActiveRules.Select(x => x.Id)) + " seq " + string.Join(",", s.BossSequence));
     var cfg = new GameConfig { RandomSeed = 5, Shuffle = true, SkipMulligan = false, History = false, Logging = false, FormatType = FormatType.FT_WILD };
     DungeonRunSetup.Configure(cfg, plan);
     Check("J2 Configure turns the boss side's generated Secrets on for it and leaves the encounter config unset", !cfg.Player2ExcludeGeneratedSecrets && !cfg.Player1ExcludeGeneratedSecrets && cfg.Encounter == null);
@@ -607,9 +719,10 @@ Guard("J", () =>
     var p21 = DungeonRunAdmission.Classify(null, "DALA_BOSS_21p", AdmitScope.Boss, null, catalogRun: true);
     var p21legacy = DungeonRunAdmission.Classify(null, "DALA_BOSS_21p", AdmitScope.Boss, null);
     Check("J8 DALA_BOSS_21p: admitted for a boss on a catalog run with the generated-Secrets need, rejected on a legacy run", p21.Admitted && p21.Rule.BossNeeds == DungeonRunAdmission.BossNeedsGeneratedSecrets && !p21legacy.Admitted);
-    Check("J9 the three Warrior shrines are admitted for the run player and for a boss; the other shrines for the run player only",
-        new[] { "TRLA_104", "TRLA_170", "TRLA_171" }.All(id => DungeonRunAdmission.Classify(null, id, AdmitScope.Boss, null, catalogRun: true).Admitted && DungeonRunAdmission.Classify(null, id, AdmitScope.Player, null, catalogRun: true).Admitted)
-        && !DungeonRunAdmission.Classify(null, "TRLA_115", AdmitScope.Boss, null, catalogRun: true).Admitted && DungeonRunAdmission.Classify(null, "TRLA_115", AdmitScope.Player, null, catalogRun: true).Admitted);
+    // Family 13 admitted the other 24 shrines for a boss (the Rumble Run champions' variants); the TRLA_107 fixture stays admitted for no side.
+    Check("J9 the three Warrior shrines (family 01) and the other 24 (family 13) are admitted for the run player and for a boss; the TRLA_107 fixture for neither",
+        ShrineRules.Scripted.Where(id => id != DungeonRunShrines.FixtureShrine).All(id => DungeonRunAdmission.Classify(null, id, AdmitScope.Boss, null, catalogRun: true).Admitted && DungeonRunAdmission.Classify(null, id, AdmitScope.Player, null, catalogRun: true).Admitted)
+        && ShrineRules.Scripted.Count == 28 && !DungeonRunAdmission.Classify(null, "TRLA_107", AdmitScope.Boss, null, catalogRun: true).Admitted && !DungeonRunAdmission.Classify(null, "TRLA_107", AdmitScope.Player, null, catalogRun: true).Admitted);
     Check("J10 the three anomalies are admitted as rules only and never generated", new[] { "DALA_850", "DALA_864", "DALA_866" }.All(id => DungeonRunAdmission.Classify(null, id, AdmitScope.Rule).Admitted
         && !DungeonRunAdmission.Classify(null, id, AdmitScope.Player).Admitted && !DungeonRunAdmission.Classify(null, id, AdmitScope.Boss).Admitted && DungeonRunAdmission.GeneratedRejects(true).Contains(id)));
     Check("J11 the hunters' hero cards are the run player's only; Toki's is rejected with the phase-9 lift", DungeonRunAdmission.Classify(null, "GILA_500h4", AdmitScope.Player).Admitted
@@ -624,7 +737,19 @@ Guard("J", () =>
         && DungeonRunEncounters.All.Where(e => e.Kind == EncounterCardKind.Rule && e.Family == "01").Select(e => e.Id).OrderBy(id => id, StringComparer.Ordinal).SequenceEqual(new[] { "DALA_850", "DALA_864", "DALA_866" })
         && DungeonRunGlobalRules.Scripted.SequenceEqual(DungeonRunGlobalRules.Scripted.OrderBy(id => id, StringComparer.Ordinal)) && DungeonRunGlobalRules.EffectOf("DALA_866") == "DALA_866e"
         && DungeonRunEncounters.PassivePowers.SequenceEqual(new[] { "LOOTA_BOSS_48p", "LOOTA_BOSS_16p", "LOOTA_BOSS_17p", "LOOTA_BOSS_38p", "LOOTA_BOSS_19p", "LOOTA_BOSS_33p", "LOOTA_BOSS_31p", "LOOTA_BOSS_47p",
-            "LOOTA_BOSS_20p", "LOOTA_BOSS_26p8", "LOOTA_BOSS_34p", "LOOTA_BOSS_52p", "LOOTA_BOSS_53p" })); // Trapped Room's Alarm, the first passive registered here; then family 08's seven and family 09's five
+            "LOOTA_BOSS_20p", "LOOTA_BOSS_26p8", "LOOTA_BOSS_34p", "LOOTA_BOSS_52p", "LOOTA_BOSS_53p",
+            "GILA_BOSS_24p", "GILA_BOSS_30p", "GILA_BOSS_39p", "GILA_BOSS_45p", "GILA_BOSS_46p", "GILA_BOSS_47p", "GILA_BOSS_50p", "GILA_BOSS_63p", "GILA_BOSS_65p", "GILA_BOSS_67p",
+            "DALA_BOSS_02p", "DALA_BOSS_07p", "DALA_BOSS_07p2", "DALA_BOSS_10p", "DALA_BOSS_11p", "DALA_BOSS_15p",
+            "DALA_BOSS_16p", "DALA_BOSS_17p", "DALA_BOSS_18p", "DALA_BOSS_20p", "DALA_BOSS_25p", "DALA_BOSS_26p", "DALA_BOSS_28p",
+            "DALA_BOSS_32p", "DALA_BOSS_33p", "DALA_BOSS_34p", "DALA_BOSS_35p", "DALA_BOSS_39p", "DALA_BOSS_40p",
+            "DALA_BOSS_49p", "DALA_BOSS_50p", "DALA_BOSS_54p", "DALA_BOSS_55p", "DALA_BOSS_56p", "DALA_BOSS_57p", "DALA_BOSS_59p",
+            "DALA_BOSS_65p", "DALA_BOSS_66p", "DALA_BOSS_68p", "DALA_BOSS_72p", "DALA_BOSS_43p",
+            "ULDA_BOSS_03p", "ULDA_BOSS_06p", "ULDA_BOSS_08p", "ULDA_BOSS_11p", "ULDA_BOSS_14p", "ULDA_BOSS_16p",
+            "ULDA_BOSS_20p", "ULDA_BOSS_21p", "ULDA_BOSS_22p", "ULDA_BOSS_28p", "ULDA_BOSS_29p", "ULDA_BOSS_30p", "ULDA_BOSS_33p",
+            "ULDA_BOSS_45p", "ULDA_BOSS_46p", "ULDA_BOSS_48p", "ULDA_BOSS_50p", "ULDA_BOSS_51p", "ULDA_BOSS_52p2", "ULDA_BOSS_56p",
+            "ULDA_BOSS_62p", "ULDA_BOSS_63p", "ULDA_BOSS_69p", "ULDA_BOSS_72p", "ULDA_BOSS_73p", "ULDA_BOSS_78p",
+            "GILA_BOSS_49p", "GILA_BOSS_60p",
+            "ULDA_BOSS_37p2", "ULDA_BOSS_38p3", "ULDA_BOSS_39p1", "ULDA_BOSS_67p3" })); // Trapped Room's Alarm, the first passive registered here; then family 08's seven, family 09's five, family 12's ten, family 14's six, family 15's seven, family 16's six, family 17's seven, family 18's four, family 19's five, family 20's four, family 21's seven, family 22's six, family 23's two and family 24's four
     Check("J14 every scripted encounter card is implemented in the card database", DungeonRunEncounters.All.All(e => Cards.FromId(e.Id).Implemented), string.Join(",", DungeonRunEncounters.All.Where(e => !Cards.FromId(e.Id).Implemented).Select(e => e.Id)));
 });
 

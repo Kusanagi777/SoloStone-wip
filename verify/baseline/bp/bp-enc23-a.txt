@@ -1,0 +1,12 @@
+gila_61_hagatha    GIL  tmajor2 floor 10 DRUID/druid_thicket/CS2_017                    deck 35 -> boss     turns  20 decisions  51 fallbacks  0 health 100 mana+2 power  0 checks ok heroes HERO_06>GILA_600h2>GILA_500h4
+gila_61_hagatha    GIL  tmajor2 floor 10 HUNTER/hunter_kennel/DS1h_292                  deck 35 -> boss     turns  18 decisions  28 fallbacks  0 health 100 mana+2 power  0 checks ok heroes HERO_05>GILA_600h2>GILA_500h4
+gila_48_infinite_toki GIL  tmajor2 floor 10 MAGE/mage_rimeward/CS2_034                     deck 32 -> boss     turns  18 decisions  53 fallbacks  0 health  68 mana+2 power  3 checks ok
+gila_48_infinite_toki GIL  tmajor2 floor 10 PALADIN/paladin_gleaming/CS2_101               deck 30 -> boss     turns  10 decisions  27 fallbacks  0 health  65 mana+2 power  1 checks ok
+gila_49_glinda     GIL  tmajor2 floor 10 PRIEST/priest_mending/CS1h_001                 deck 25 -> boss     turns  12 decisions  24 fallbacks  0 health  68 mana+2 power  0 checks ok
+gila_49_glinda     GIL  tmajor2 floor 10 ROGUE/rogue_backalley/CS2_083b                 deck 38 -> boss     turns  10 decisions  26 fallbacks  0 health  65 mana+3 power  0 checks ok
+gila_59_godfrey    GIL  tmajor2 floor 10 SHAMAN/shaman_stormdebt/CS2_049                deck 40 -> boss     turns   8 decisions  21 fallbacks  0 health  70 mana+2 power  3 checks ok
+gila_59_godfrey    GIL  tmajor2 floor 10 WARLOCK/warlock_fiendpact/CS2_056              deck 35 -> boss     turns   8 decisions  27 fallbacks  0 health  65 mana+3 power  3 checks ok
+gila_60_shivers    GIL  tmajor2 floor 10 WARRIOR/warrior_plated/CS2_102                 deck 30 -> boss     turns  16 decisions  44 fallbacks  0 health  68 mana+2 power  0 checks ok
+gila_60_shivers    GIL  tmajor2 floor 10 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 24 -> boss     turns  12 decisions  24 fallbacks  0 health  65 mana+2 power  0 checks ok
+encounter run: schedule acts-v3h; power unused: -; form unreached: -
+games 10, boss wins 10, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched GILA_BOSS_49t x4 GILA_BOSS_49t2 x0 GILA_BOSS_60t x2 GILA_BOSS_99t x0 GILA_BOSS_99t2 x0 GILA_BOSS_99t3 x6 GILA_503 x2 GILA_907 x2 GILA_BOSS_61t x0 GILA_BOSS_61t3 x1, most boss Secrets 4

@@ -3916,9 +3916,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("DRG_052", new CardDef(new Power
 			{
-				// TODO [DRG_052] Draconic Lackey && Test: Draconic Lackey_DRG_052
-				//PowerTask = null,
-				//Trigger = null,
+				// Step 9 (generation hygiene): Ethereal Lackey's pattern (DAL_741), Discovering a Dragon as KAR_062 does.
+				PowerTask = new DiscoverTask(DiscoverType.DRAGON)
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL

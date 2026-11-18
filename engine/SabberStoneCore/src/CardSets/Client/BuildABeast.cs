@@ -67,8 +67,9 @@ namespace SabberStoneCore.CardSets.Client
         {
             // Pools follow this game's format; LegacyGenerationV1 memoizes them by name.
             string format = LegacyGenerationV1.Format(ctx.Format);
-            var first = ctx.SampleDistinct(LegacyGenerationV1.Get(format + "/Beasts/First"), 3);
-            var second = ctx.SampleDistinct(LegacyGenerationV1.Get(format + "/Beasts/Second"), 3);
+            // A run match never offers a part its generation filter blocks (step 9, generation hygiene).
+            var first = ctx.SampleDistinct(ctx.Generatable(LegacyGenerationV1.Get(format + "/Beasts/First")), 3);
+            var second = ctx.SampleDistinct(ctx.Generatable(LegacyGenerationV1.Get(format + "/Beasts/Second")), 3);
             ctx.Discover(first, ChoiceAction.BUILDABEAST);
             ctx.Discover(second, ChoiceAction.BUILDABEAST);
             // ChoicePick retains the clone/composition/creator/AddHandPhase path for both answers.

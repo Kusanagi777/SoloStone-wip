@@ -1,0 +1,119 @@
+PASS A1 Chomp costs (2), is clickable and can be aimed at any minion, never a hero  (CS2_231,CS2_182,CS2_120)
+PASS A2 it deals 1 damage and its Lifesteal (the power card's own) heals the boss's hero by the damage dealt  (health 25>26)
+PASS A3 a 1-Health minion dies to it; Lifesteal heals 1  (health 27)
+PASS B1 The Feast is a passive power, never offered, started at match start
+PASS B2 the run player's spell does not heal the boss  (20>19)
+PASS B3 after the boss casts a spell its hero is restored 3 Health  (19>22)
+PASS B4 a heal never passes the maximum Health
+PASS C1 Prestidigitation costs (1): one magical feat joins the boss's hand  (DALA_BOSS_03t)
+PASS C2 25 uses: all four feats, nothing else  (DALA_BOSS_03t,DALA_BOSS_03t4,DALA_BOSS_03t2,DALA_BOSS_03t3)
+PASS C3 with a full hand it is not offered
+PASS C4 Reductomara costs (1): every spell of both hands costs (1) less (Reductomara'd); minions keep their Cost  (3/3/4)
+PASS C5 and every spell of both decks (Fireball 3, Arcane Intellect 2), never a minion
+PASS C6 each owner's deck is recorded as rewritten (its own-deck ledger restarts from its list)
+PASS C7 an Echo spell goes from (2) to (1), and a second Reductomara leaves it at (1) (it could repeat without end at (0)) while Fireball goes to (2)  (1/2)
+PASS C8 Bunnifitronus costs (1); with only the run player's awake shrine on the boards it picks the shrine, which goes dormant
+PASS C9 the shrine was destroyed instead of transformed and its dormant form holds its place
+PASS C10 sixteen casts on a Yeti and a Crocolisk: each turns exactly one of them into a critter, the dormant shrine never; Frog, Sheep and Squirrel on both sides  (16 EX1_tk28,hexfrog,CS2_tk1 sides 3)
+PASS C11 Presto Legendaro costs (1): each player gets one scripted collectible Legendary minion, eight times, of several kinds  (BOT_433,CORE_CFM_670,OG_131,BOT_424,CORE_OG_044,TRL_318,DAL_736,EX1_190,OG_133,CFM_808,FP1_015,LOE_092,FP1_031,CORE_CFM_781,AT_063t,GVG_028)
+PASS C12 Yoggers Poggers costs (1): three Scrolls of Wonder in each deck, each owner's deck recorded with them
+PASS C13 a Scroll of Wonder drawn casts itself (Casts When Drawn): it is not kept in hand and leaves the deck  (hand 6>6 deck 0)
+PASS C14 a feat the run player holds works from that side too: its Reductomara cuts both players' spells
+PASS D1 Open Wormhole costs (2): a minion of each deck is summoned and the boss's attacks the other (Yeti 4/5 kills Raptor 3/2, takes 3)  (CS2_182 dmg 3)
+PASS D2 with the run player's deck empty only the boss's minion arrives and nothing fights; the power is offered anyway (it never reads a deck)
+PASS D3 with no minion in the boss's deck only the run player's arrives (Duel!'s rule)
+PASS D4 before it is used, the power is offered in the game and in the boss's fair view alike, where the run player's deck holds no known minion  (real True view True)
+PASS E1 Mana Echoes costs (2) and is not offered before any spell was played this game, in the game and in the boss's fair view
+PASS E2 after the run player played Fireball it is offered (also in the boss's fair view) and casts a new Fireball: 6 damage to a random target  (dealt 6)
+PASS E3 the echo is no play: the play history is unchanged
+PASS E4 a Secret still in the boss's Secret zone is not echoed: its own Counterspell in play joins no echo list
+PASS E5 targets are chosen randomly: twelve echoes hit both heroes  (boss,player)
+PASS E6 the boss played Ice Barrier, which is in its Secret zone: no echo is possible (the power is not offered, in the game or the fair view)
+PASS E7 once that Ice Barrier left play it is echoed: the power is offered (also in the fair view) and a new Ice Barrier enters the boss's Secret zone  (EX1_289)
+PASS E8 with a full Secret zone (five Secrets) no Secret is echoed, not even Effigy, which left play  (zone 5 echoes )
+PASS E9 with room again Effigy (played by the boss, out of play) is the one echo; Ice Barrier, whose echo is in play, is not  (AT_002)
+PASS E10 a Secret the run player played (Explosive Trap) is never an echo for the boss
+PASS F1 "Armor Up" costs (2) and gains 2 Armor
+PASS F2 the row's start block shuffled one "Scourgelord" Dazzik into his deck
+PASS F3 played (8), it becomes the boss's hero with Bladestorm, equips a 4/3 Shadowmourne and gains 10 Armor; the Health left carries over  (DALA_BOSS_06dk ICC_834h ICC_834w armor 10 health 25>25)
+PASS F4 Bladestorm deals 1 damage to all minions
+PASS G1 Take Flight! is a passive power, started, with 15 on its counter; the row has one power-only script form (Flying!)
+PASS G2 10 damage: the counter shows 5, no flight yet
+PASS G3 a hit the Armor absorbs is not counted (Health lost only)
+PASS G4 the 15th point of damage: she takes flight: power Flying! (passive, 2 on its counter, started), hero Immune, the same hero entity with its Health; form 1  (DALA_BOSS_07p2 immune True health 14 form 1)
+PASS G5 while flying she takes no damage
+PASS G6 at the start of her turn the counter falls to 1; still Immune
+PASS G7 the run player's turn does not count
+PASS G8 at the start of her second turn she lands: Immune ends, Take Flight! returns with a fresh 15 (form 0, a second form change), the same hero, Health kept  (DALA_BOSS_07p count 15 active 1 immune False/False same True health 14>14 form 0 changes 2)
+PASS G9 she can take flight again (healed to full, then 15 damage); the harvest reads the form and the three changes  (DALA_BOSS_07p2 count 2 immune True form 1 changes 3 health 15 landed 0 trig False)
+PASS G10 the boss's fair view holds the same form, power, counter and Immune
+PASS G11 a hit that kills her does not take her into flight: she dies
+PASS H1 Apple Toss costs (2): it hits the lowest Health enemy (a 1-Health Wisp), which dies, so it repeats on the other Wisp, then on the Crocolisk (3 Health), which survives: it stops  (croc 1)
+PASS H2 a Divine Shield takes the hit: the target lives, the power stops
+PASS H3 the hero is an enemy too: Wisp (1) first, then the hero (2 Health), which survives the 1 damage
+PASS H4 a tie (the hero and a Crocolisk at 3) is broken by the game RNG: twelve uses hit each of them  (8/4)
+PASS H5 a hero it kills ends the game
+PASS I1 Repeat History costs (2) and is not offered while no friendly minion died this turn
+PASS I2 an enemy minion's death does not count
+PASS I3 a friendly Yeti died this turn: it is offered (in the fair view too) and summons a new Yeti at full Health
+PASS I4 the next turn it is not offered
+PASS I5 with two that died it summons one of them at random (eight uses: both seen)  (CS2_120,CS2_172)
+PASS I6 a run shrine's corpse is never summoned again (the power is not offered for it)  (corpse True)
+PASS J1 Street Smarts is a passive power, started
+PASS J2 the boss plays The Coin: it draws a card  (deck 25>24)
+PASS J3 Counterfeit Coin draws too; another card does not  (deck 24>23)
+PASS J4 the run player's Coin draws nobody a card
+PASS K1 Backstabber is a passive power, started
+PASS K2 a Stealthed minion summoned for the run player gains +1 Attack (Backstabby); a minion without Stealth does not
+PASS K3 a Stealthed minion the boss plays gains it too (Stranglethorn Tiger 6/5)
+PASS K4 a minion that loses Stealth keeps the Attack it was given
+PASS L1 Forbidden Love costs (3): one random minion of each board is destroyed (the run player's only minion is its shrine, which goes dormant)
+PASS L2 a board with no minion an effect can pick (only the dormant form) loses nothing; the boss's loses one
+PASS L3 with no minion on either board (the dormant form is not one) it is not offered
+PASS L4 with two enemy minions exactly one dies, picked at random (ten uses: both)  (croc,raptor)
+PASS L5 one minion on the boss's own board is enough to offer it
+PASS M1 Slice and Dice costs (2) and is not offered with no minion on a board
+PASS M2 five minions: each use hits exactly three different ones for 1 to 3 each (twelve uses: 1, 2 and 3 seen, both boards)  (1,3,2)
+PASS M3 with fewer minions each is hit once
+PASS M4 a hero is never hit
+PASS N1 Order Up! costs (2) and summons a 2/2 Kind Waitress; with a full board it is not offered
+PASS N1b full board
+PASS N2 forty attacks on the Waitress: about half go to someone else of her side (her hero or the Yeti, both seen)  (20/13/7)
+PASS N3 an attack on another of her side's characters is never redirected
+PASS N4 a silenced Waitress has no such rule: every attack lands on her  (12)
+PASS O1 Blessing of Elune is a passive power, started: both players' healing is doubled (ALL_HEALING_DOUBLE on both controllers)
+PASS O2 the run player's Flash Heal restores 10  (10>20)
+PASS O3 the boss's Flash Heal restores 10  (10>20)
+PASS O4 with Auchenai Soulpriest the boss's Flash Heal deals the doubled amount: 10 damage  (20>10)
+PASS O5 (shrine) the run player's Bwonsamdi's Covenant is on its board
+PASS O6 against Bwonsamdi's Covenant the boss's own Flash Heal damages its hero for the doubled amount (10)  (25>15)
+PASS P1 the shipped data validates with the fifteen family 14 rows
+PASS P2 family 14 holds exactly these fifteen rows  (dala_01_chomper,dala_02_awilo,dala_03_akazamzarak,dala_04_kaye,dala_05_bonepaw,dala_06_dazzik,dala_07_belnaara,dala_08_applebough,dala_09_oshi,dala_10_mo,dala_11_noz,dala_12_cravitz,dala_13_albin,dala_14_tierra,dala_15_nici)
+PASS P3 dala_01_chomper: a Dalaran Heist row of tier 1 (level 1) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 1 level 1)
+PASS P3 dala_02_awilo: a Dalaran Heist row of tier 2 (level 3) whose plan is the row's (hero, passive power, a 30-card extended deck, the act curve's Health), flags [passive]  (extended health 30 flags passive tier 2 level 3)
+PASS P3 dala_03_akazamzarak: a Dalaran Heist row of tier 1 (level 1) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags [bothPlayers,hiddenZone]  (extended health 30 flags bothPlayers,hiddenZone tier 1 level 1)
+PASS P3 dala_04_kaye: a Dalaran Heist row of tier 2 (level 4) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags [bothPlayers,hiddenZone]  (extended health 30 flags bothPlayers,hiddenZone tier 2 level 4)
+PASS P3 dala_05_bonepaw: a Dalaran Heist row of tier 2 (level 4) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags [bothPlayers,recast]  (extended health 30 flags bothPlayers,recast tier 2 level 4)
+PASS P3 dala_06_dazzik: a Dalaran Heist row of tier 2 (level 4) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags [start]  (extended health 30 flags start tier 2 level 4)
+PASS P3 dala_07_belnaara: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, passive power, a 30-card substituted deck, the act curve's Health), flags [passive,forms,heroImmune]  (substituted health 30 flags passive,forms,heroImmune tier 3 level 6)
+PASS P3 dala_08_applebough: a Dalaran Heist row of tier 2 (level 3) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2 level 3)
+PASS P3 dala_09_oshi: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3 level 6)
+PASS P3 dala_10_mo: a Dalaran Heist row of tier 2 (level 4) whose plan is the row's (hero, passive power, a 30-card extended deck, the act curve's Health), flags [passive]  (extended health 30 flags passive tier 2 level 4)
+PASS P3 dala_11_noz: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, passive power, a 30-card substituted deck, the act curve's Health), flags [passive,bothPlayers]  (substituted health 30 flags passive,bothPlayers tier 3 level 6)
+PASS P3 dala_12_cravitz: a Dalaran Heist row of tier 2 (level 4) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags [bothPlayers]  (extended health 30 flags bothPlayers tier 2 level 4)
+PASS P3 dala_13_albin: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3 level 6)
+PASS P3 dala_14_tierra: a Dalaran Heist row of tier 2 (level 3) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2 level 3)
+PASS P3 dala_15_nici: a Dalaran Heist row of tier 2 (level 3) whose plan is the row's (hero, passive power, a 30-card extended deck, the act curve's Health), flags [passive,bothPlayers]  (extended health 30 flags passive,bothPlayers tier 2 level 3)
+PASS P4 every power, boss card and enchantment of the family is scripted by family 14 and keeps the client's text (16 powers, 6 cards, 3 enchantments)
+PASS P4b the fifteen boss heroes need no script (portraits: their text is the encounter description); the hero card "Scourgelord" Dazzik is scripted
+PASS P5 each has its own admission row: the sixteen powers a boss's only, the six boss cards a boss's and (taken from a boss) the run player's; none is ever generated
+PASS P6 the six admission families of the family: heist-board-power (7), heist-own-hand-power (1), heist-hidden-deck-power (1), heist-recast-power (1), heist-passive (6), heist-boss-card (6)  (heist-board-power,heist-boss-card,heist-hidden-deck-power,heist-own-hand-power,heist-passive,heist-recast-power)
+PASS P7 the one start block: Dazzik's deck add (one "Scourgelord" Dazzik); no other family 14 row has one
+PASS P8 the listed cards that are replaced or left out are only cards the engine does not script or a boss deck does not admit, each recorded  (EX1_160>CFM_614:unscripted | GVG_016>GVG_020:unscripted,GVG_077>GVG_105:unscripted | KAR_037>-:admission:unclassified | GVG_088>EX1_028:unscripted,GVG_112>CS2_200:unscripted | BRMA01_3>-:unscripted)
+PASS P9 the quantity lists are the wiki's: Oshi and Albin unchanged (Prophet Velen x1, Kingsbane x1), Belnaara's King Krush x1; Mo's deck holds Counterfeit Coins; Noz's Stranglethorn Tigers
+PASS P10 a family 14 power asked for the run player is refused with its row's reason
+PASS P11 the validator checks a form's power: an unknown one is refused  (DALA_BOSS_07x: not in the card data (boss dala_07_belnaara form 1))
+PASS P12 the tier pools: two rows in enc-t1, nine in enc-t2, four in enc-t3
+PASS P13 the extra cards each row names (the feats, the Scroll, the enchantments, the Waitress) are its 'cards'
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 117 passed, 0 failed

@@ -1,26 +1,26 @@
 PASS A1 the six data files validate together
 PASS A2 the data without the encounter file validates and holds the 20 custom bosses only
 PASS A3 the encounters follow the custom bosses, whose order is unchanged
-PASS A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)  (01:5,07:18,08:17,09:11,10:15,13:1,23:1,24:1)
+PASS A4 family 01's eight encounters come first, in their order: one per mechanism and the four Secret bosses; later families append their rows (wave 2: family 07's eighteen and family 08's seventeen; wave 3: family 09's eleven and family 10's fifteen; wave 4: family 11's thirteen, family 12's thirteen and family 13's eight Rumble Run champions beside Voone; wave 5: family 14's fifteen, family 15's fourteen, family 16's fourteen, family 17's fourteen, family 18's sixteen, family 19's eighteen; wave 6: family 20's eighteen, family 21's seventeen, family 22's eighteen, family 23's four nemeses, family 24's three Plague Lords and Tekahn; the eight are filed under their mechanism's family: five 01, one each 13, 23, 24)  (01:5,07:18,08:17,09:11,10:15,11:13,12:13,13:9,14:15,15:14,16:14,17:14,18:16,19:18,20:18,21:17,22:18,23:5,24:5)
 PASS A5 Icarax: 300 fixed Health, two more forms at 200 and 100 with their own heroes, powers and decks
 PASS A6 Hagatha: 100 fixed Health, 2 start Mana Crystals, a 40-card deck, two hero cards with 12 cards and 3 passives each
 PASS A7 Whirt: tier 3, 30 cards, the boss's generated Secrets on
 PASS A8 Voone: tier 2, three shrine variants (the Warrior shrines), each a 30-card deck
 PASS A9 every deck states its kind and source; a deck is authentic exactly when nothing was substituted and it is not a curated one (family 09: the Treasure Vault, which has no deck on the wiki)
-PASS A10 the rejected list names Toki's hero card with its reason and lift
+PASS A10 the rejected list names Toki's hero card with its reason and lift, then (family 18) Commander Bolan's with his data gap, then (family 21) Jythiros of Questions and (family 23) Alternate Timeline with their phase 9 lifts
 PASS A11 PoolOf maps tiers to pools
 PASS B1 an unknown tier  (1 errors; first: boss dala_21_whirt: unknown tier 9)
 PASS B2 an unknown flag  (1 errors; first: boss dala_21_whirt: unknown flag sparkly)
 PASS B3 a combat-tier deck that is not 30 cards  (1 errors; first: boss dala_21_whirt: deck enc-dala_21_whirt has 29 cards, expected 30)
 PASS B4 a major's deck under 10 cards  (1 errors; first: boss gila_61_hagatha: deck enc-gila_61_hagatha has 5 cards, expected 10 to 60)
-PASS B5 an unscripted deck card  (1 errors; first: GILA_BOSS_48t: not scripted (boss dala_21_whirt))
+PASS B5 an unscripted deck card  (2 errors; first: GILA_BOSS_48t: not scripted (boss dala_21_whirt))
 PASS B6 a card that needs the boss's generated Secrets on a row that keeps them off  (1 errors; first: DALA_BOSS_21p: generates a Secret for the boss, but the row keeps the boss side's generated Secrets off: it would do nothing (boss dala_21_whirt; set bossGeneratedSecrets))
 PASS B7 bossGeneratedSecrets with no card that generates one  (1 errors; first: boss trl_200_voone: bossGeneratedSecrets with no card that generates a Secret for the boss)
 PASS B8 persistentDamage with no Health of its own  (1 errors; first: boss ulda_40_icarax: persistentDamage needs the boss's own health)
 PASS B9 form thresholds that do not fall  (2 errors; first: boss ulda_40_icarax form 2: healthAtMost 250 does not fall below 200)
 PASS B10 a form with two entry conditions  (1 errors; first: boss ulda_40_icarax form 1: names 2 of healthAtMost, onDeath and script; needs exactly one)
 PASS B11 flag forms without forms  (1 errors; first: boss dala_21_whirt: flag forms and the forms must go together)
-PASS B12 a shrine variant the table does not admit for a boss  (1 errors; first: TRLA_115: admission board-shrine: the run player's board shrine: placed at Start of Game by ShrineRules, sent dormant (the slot it left) when it dies or would be transformed, bounced or shuffled, revived at full Health after three owner's turns; the boss sees a public minion and its search reproduces dormancy and revival through the engine projection (c-shrine-core S1-S12); its effects are public engine resolution: Armor-equal Attack (TRLA_104), Dragon cost cuts (TRLA_170), aura-granted Overkill (TRLA_162, TRLA_171: OverkillRules), a random keyword on summoned Beasts (TRLA_163), and TRLA_110's Hunter Secrets put into play by the run player (a board-shrine run is a catalog run, whose player may generate Secrets; the boss's Secret prior holds every Hunter Secret that generation can yield, GeneratedSecretPool) (c-shrines-S1); Spell Damage from the spells in hand (TRLA_108), a free Hero Power refreshed by a kill (TRLA_128), a Frostfire per freeze the run player causes (TRLA_129), Divine Shield after surviving damage (TRLA_105), 5 damage to the boss's hero after the run player's hero takes damage (TRLA_137, recursion-guarded), a copy of a spell cast on a friendly minion cast on the shrine (TRLA_138: RecastRules), Deathrattles two extra times (TRLA_114), a random Priest spell after each spell (TRLA_146: the run's generation filter), any healing of the boss's characters damages them, the boss's own heals, Lifesteal and restore passives included (TRLA_147) (c-shrines-S2, c-p7fix); Stealth on the run player's other minions and a +2 Attack Deathrattle when it goes dormant (TRLA_106), each spell cast again on the same target (TRLA_187: RecastRules, never recursive), the Overload amount as Attack for the run player's minions (TRLA_109), Battlecries two extra times (TRLA_154: EXTRA_BATTLECRIES_ADDITIONAL, BattlecryRules), spells (2) cheaper (TRLA_155), spells paid with Health (TRLA_113: SPELLS_COST_HEALTH), a random Demon per discard through the run's generation filter (TRLA_178), damage to the run player's hero on their own turn dealt to the boss's hero instead (TRLA_179); the boss sees each result as a public board, hand-count or Health change (c-shrines-S3); lifted by phase 8 (encounters/anomalies): boss shrine rosters (BossShrineLift); the run player's only until then (boss trl_200_voone variant horn shrine))
+PASS B12 a shrine variant the table does not admit for a boss  (1 errors; first: TRLA_107: admission board-shrine-form: a shrine's dormant form (made by ShrineRules when its shrine dies, never a card) or the TRLA_107 Tribal Shrine fixture (a scripted enemy shrine that tests place on the boss side; boss shrine rosters are phase 8): never offered, dealt or generated; lifted by none: engine-made dormant forms and the boss-side test fixture; no player role, boss deck or generation pool offers them (boss trl_200_voone variant horn shrine))
 PASS B13 an unscripted shrine  (1 errors; first: boss trl_200_voone variant horn: shrine TRLA_200h is not a scripted board shrine)
 PASS B14 a hero card that is not scripted as one  (3 errors; first: GILA_900h2: not scripted as a fight-only hero card (boss gila_61_hagatha hero card GILA_900h2))
 PASS B15 a hero card passive that is no passive treasure  (1 errors; first: CS2_029: is not a passive treasure (boss gila_61_hagatha hero card GILA_600h2))
@@ -60,24 +60,24 @@ PASS C13 the finale's last win wins the run
 PASS D1 legacy, acts-v1, acts-v2 and act1 boss sequences for 200 seeds x 2 unlock states and 1100 new runs match the pre-phase-8 recording (2700 lines)  (0 lines differ of 2700)
 PASS D2 a new run with no named schedule is still an acts-v2 run stamped 2
 PASS E1 1000 seeds: 15 distinct known bosses each, and the same seed gives the same sequence
-PASS E2 an encounter lands only on floors whose pool set holds its tier  (whirt in 1000, voone in 1000)
-PASS E3 the least-used provenance is drawn first: every run meets Whirt and Voone (the only Heist and Rumble rows), and each major is of the provenance the run holds fewer bosses of (act II: Hagatha or a custom band3 boss; act III: Icarax or a custom final)  (whirt in 1000, voone in 1000, Hagatha the act II major in 506, Icarax the act III major in 1000)
-PASS E4 a ledger run's act III major is the lord with banked damage; a run that does not read the ledger draws it from the seed  (banked 200, no-ledger 96)
+PASS E2 an encounter lands only on floors whose pool set holds its tier  (whirt in 28, voone in 368)
+PASS E3 the least-used provenance is drawn first: every run meets a Heist row (Whirt and, since wave 5, the Heist families' rows) and a Rumble Run row (Voone and family 13's champions), and each major is of the provenance the run holds fewer bosses of (act II: Hagatha, since family 23 a Monster Hunt nemesis, or a custom band3 boss; act III: since family 24 a Plague Lord, each of the four in some seeds, or a custom final)  (heist in 1000, whirt in 28, a Rumble Run row in 1000, voone in 368, Hagatha the act II major in 118, a nemesis in 449, the act III major: ulda_40_icarax 129 ulda_37_xatma 130 ulda_38_kzrath 127 ulda_39_vesh 124)
+PASS E4 a ledger run's act III major is the lord with banked damage; a run that does not read the ledger draws it from the seed  (banked 200, no-ledger 16)
 PASS E5 NewRun reads the ledger on a random seed only
 PASS E6 a run on acts-v3h is stamped 3; ScheduleFor loads a stamped-2 run under the version-3 file
 PASS E7 with "defaults" a new run rolls its schedule from the seed (both appear, the same seed the same one)  (98 v3h)
 PASS F1 the save version is 6
-PASS F2 golden-save-legacy-v5.xml: upgraded to 6 with a body byte-identical to the version-5 file  (lengths 14306 / 14306)
+PASS F2 golden-save-legacy-v5.xml: upgraded to 6 with a body byte-identical to the version-5 file  (lengths 13954 / 13954)
 PASS F3 golden-save-legacy-v5.xml: upgrading again changes nothing
 PASS F4 golden-save-legacy-v5.xml: the run keeps its schedule version, has no hero switch, no hero damage and no rule kind; the profile no boss damage
 PASS F5 golden-save-legacy-v5.xml: it resumes under the version-3 schedules and can never meet an encounter or an anomaly node
-PASS F2 golden-save-acts-v5.xml: upgraded to 6 with a body byte-identical to the version-5 file  (lengths 26370 / 26370)
+PASS F2 golden-save-acts-v5.xml: upgraded to 6 with a body byte-identical to the version-5 file  (lengths 25744 / 25744)
 PASS F3 golden-save-acts-v5.xml: upgrading again changes nothing
 PASS F4 golden-save-acts-v5.xml: the run keeps its schedule version, has no hero switch, no hero damage and no rule kind; the profile no boss damage
 PASS F5 golden-save-acts-v5.xml: it resumes under the version-3 schedules and can never meet an encounter or an anomaly node
 PASS F6 a version-6 save round-trips every new field
 PASS F7 the new fields are written only when set
-PASS G1 a run on acts-v3h opens at its act I anomaly node: two rolled rules and "none"  (DALA_860,DALA_856,none)
+PASS G1 a run on acts-v3h opens at its act I anomaly node: two rolled rules and "none"  (DALA_866,DALA_853,none)
 PASS G2 the same seed rolls the same offer; a clone of the save keeps it (no redraw)
 PASS G3 taking a rule makes it an active anomaly of act I and moves on to floor 1
 PASS G4 a custom boss's plan carries the rule and nothing else of an encounter
@@ -86,7 +86,7 @@ PASS G6 "none" takes no rule
 PASS G7 a rule that is not on offer is refused
 PASS G8 the rule ends with its act: act II's fights carry only what act II took
 PASS G9 a rule taken at each node: act II's node comes before its modifier node and its offer leaves nothing active out
-PASS G10 a rule a boss flag excludes is left out of that boss's act only  (voone act 1)
+PASS G10 a rule a boss flag excludes is left out of that boss's act only  (seed 4002 voone act 2 shrine-free act 1)
 PASS G11 a board-shrine run on acts-v3h keeps its shrine and is never offered a rule that excludes shrine runs
 PASS G12 rule against rule is checked both ways, and an active rule is not offered again
 PASS G13 a run-scope rule is offered at act I only
@@ -118,14 +118,14 @@ PASS I7 at 95 it starts in phase 3 (100 Health form, 5 damage, the phase-3 power
 PASS I8 a typed-seed run neither reads nor writes the ledger
 PASS I9 a plan built without a profile reads no ledger
 PASS I10 a win clears the record and wins the run (the act III major)
-PASS I11 ULDA_115 adds 10 damage to the Plague Lord's start (and can tip it into its next phase)
+PASS I11 a banked ULDA_115 cast adds 10 damage to the Plague Lord's start (and can tip it into its next phase)
 PASS I12 a boss without persistent damage carries none and banks none
 PASS I13 a fight a script ended with no loss counts as won with no boss kill credit
 PASS I14 Battle Scars: a run-scope rule (act 0), 100 Health, no match rule in the plan
 PASS I15 a won fight keeps the run hero's damage
 PASS I16 the next fight starts with it, and it lasts the whole run
 PASS I17 a fight finished as another hero does not rewrite the run hero's damage
-PASS J1 Whirt's plan: the boss's generated Secrets on, the act curve's Health, no forms, no shrine
+PASS J1 Whirt's plan: the boss's generated Secrets on, the act curve's Health (46; the act's modifier, Lean Supply, changes no boss Health), no forms, no shrine  (health 46 rules mod_lean_supply seq gila_21_rottooth,dala_32_kizi,mire_brute,ulda_76_tarkus,loot_26_xol,trl_203_thekal,ulda_51_kasmut,dala_21_whirt,loot_15_george_karl,gila_49_glinda,trl_204_zuljin,dala_47_lavanthor,trl_208_talanji,clockwork_tyrant,ulda_38_kzrath)
 PASS J2 Configure turns the boss side's generated Secrets on for it and leaves the encounter config unset
 PASS J3 a custom boss on acts-v3h: generated Secrets off for the boss, no encounter fields
 PASS J4 Voone's variant comes from the seed and the floor: all three occur, each with its shrine and its deck, and a restage keeps it  (drum,champion,horn)
@@ -133,7 +133,7 @@ PASS J5 an encounter's Health offset is its own (no band lookup); Hagatha's 2 Ma
 PASS J6 DungeonRunBossPilot.Build derives a deck plan for a 40-card and for a 10-card boss deck
 PASS J7 the Secret prior of a switched fight covers the hunters' classes
 PASS J8 DALA_BOSS_21p: admitted for a boss on a catalog run with the generated-Secrets need, rejected on a legacy run
-PASS J9 the three Warrior shrines are admitted for the run player and for a boss; the other shrines for the run player only
+PASS J9 the three Warrior shrines (family 01) and the other 24 (family 13) are admitted for the run player and for a boss; the TRLA_107 fixture for neither
 PASS J10 the three anomalies are admitted as rules only and never generated
 PASS J11 the hunters' hero cards are the run player's only; Toki's is rejected with the phase-9 lift
 PASS J12 a Mage boss's generated-Secret pool is closed: scripted, boss-admitted Mage Secrets only  (14 secrets)

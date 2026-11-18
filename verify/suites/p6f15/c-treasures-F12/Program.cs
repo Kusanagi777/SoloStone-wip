@@ -157,7 +157,10 @@ var mule = data.FindTreasure("ULDA_019");
             t != null && t.Active && t.Offered && !t.Signature && !t.Legacy && t.Pool == "Tombs" && t.Runs == DungeonRunTreasure.RunsAct && t.Rarity == "rare"
             && t.Scope.Decks.SequenceEqual(mule.Scope.Decks) && t.Scope.Classes.Count == 0 && t.Scope.Powers.Count == 0 && t.UpgradesTo == null && t.Tags.Count > 0);
     }
-    Check("T2 no Twinspell copy, token or ULDA_115 has a treasure row", ids.Concat(new[] { "ULDA_008t", "ULDA_036t" }).Where(id => !rows.Contains(id)).All(id => data.FindTreasure(id) == null));
+    // Phase 8 family 24 gave ULDA_115 its row: an act-run treasure of the encounter schedules only (runs "encounters").
+    Check("T2 no Twinspell copy or token has a treasure row; ULDA_115's row (phase 8 family 24) is offered on encounter schedules only",
+        ids.Concat(new[] { "ULDA_008t", "ULDA_036t" }).Where(id => !rows.Contains(id) && id != "ULDA_115").All(id => data.FindTreasure(id) == null)
+        && data.FindTreasure("ULDA_115")?.Runs == DungeonRunTreasure.RunsEncounters);
 }
 var families = new Dictionary<string, string>
 {
@@ -776,13 +779,13 @@ void Kill(Game g, Minion m) { m.Destroy(); g.DeathProcessingAndAuraUpdate(); }
     Check("T27 once that fight is recorded the bonus is spent (for the next boss only)", s.NextFight == null);
 }
 
-// ---------------------------------------------------------------- T28 ULDA_115 stays rejected (phase 8)
+// ---------------------------------------------------------------- T28 ULDA_115 (rejected here until phase 8; lifted by phase 8 family 24, c-enc-24 G)
 {
     var rule = DungeonRunAdmission.RuleFor("ULDA_115");
     var v = DungeonRunAdmission.Classify(C("ULDA_115"), "ULDA_115", AdmitScope.Player, null, catalogRun: true);
-    Check("T28 ULDA_115 Gnomebliterator: unscripted, no content and no treasure row; its admission row (finale-state) admits no scope and names phase 8",
-        !C("ULDA_115").Implemented && !DungeonRunContent.TryGet("ULDA_115", out _) && data.FindTreasure("ULDA_115") == null && rule?.Family == "finale-state"
-        && rule.Admit == AdmitScope.None && !v.Admitted && rule.Lift.StartsWith("phase 8") && rule.Reason.Contains("Plague Lord"));
+    Check("T28 ULDA_115 Gnomebliterator, lifted by phase 8 family 24: scripted with its content, a treasure row, admitted for the player only (run-treasure-plague-lord)",
+        C("ULDA_115").Implemented && DungeonRunContent.TryGet("ULDA_115", out _) && data.FindTreasure("ULDA_115") != null && rule?.Family == "run-treasure-plague-lord"
+        && rule.Admit == AdmitScope.Player && v.Admitted && rule.Reason.Contains("Plague Lord"));
 }
 
 // ---------------------------------------------------------------- T29 determinism: the same seed, the same random results

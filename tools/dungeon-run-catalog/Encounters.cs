@@ -240,7 +240,9 @@ namespace DungeonRunCatalogTool
 
                     var row = Map(("id", id), ("name", Text(boss, "name")), ("provenance", Text(boss, "provenance")), ("family", Text(boss, "family") ?? fileFamily),
                         ("hero", Text(boss, "hero")), ("power", Text(boss, "power")), ("tier", tier), ("archetype", Text(boss, "archetype")));
-                    foreach (string key in new[] { "level", "health", "fixedHealth", "healthOffset", "bossManaCap", "unlock", "flags", "bossGeneratedSecrets", "cards", "incompatibleRules", "incompatibleModifiers", "start" })
+                    // Step 9 (lanes R and E): incompatibleTreasures, modifierReasons and the "v4" override block pass through as written.
+                    foreach (string key in new[] { "level", "health", "fixedHealth", "healthOffset", "bossManaCap", "unlock", "flags", "bossGeneratedSecrets", "cards", "incompatibleRules", "incompatibleModifiers", "start",
+                        "incompatibleTreasures", "modifierReasons", "v4" })
                         if (boss.TryGetValue(key, out object value) && value != null) row.Add(key, value);
                     var variants = Rows(boss, "variants").ToList();
                     // A row with shrine variants has no deck of its own: its "deck" is the variant deck its list names.
@@ -287,9 +289,13 @@ namespace DungeonRunCatalogTool
                     }
                     if (heroCards.Count > 0) row.Add("heroCards", heroCards);
                     var relay = new List<object>();
+                    var relayEntries = new Dictionary<string, int>(StringComparer.Ordinal);
                     foreach (var h in Rows(boss, "relay"))
                     {
-                        string hero = Text(h, "hero"), deckId = "enc-" + id + "-relay-" + hero;
+                        // Family 24: a hero listed more than once (a Tombs explorer with its three finale decks) numbers its later decks.
+                        string hero = Text(h, "hero");
+                        int entry = relayEntries[hero] = (relayEntries.TryGetValue(hero, out int seenEntries) ? seenEntries : 0) + 1;
+                        string deckId = "enc-" + id + "-relay-" + hero + (entry > 1 ? "-" + entry : "");
                         Deck(deckId, Obj(h["deck"]), 0, AdmitScope.Player, where + " relay " + hero);
                         relay.Add(Map(("hero", hero), ("power", Text(h, "power")), ("deck", deckId), ("health", h.TryGetValue("health", out object hp) ? hp : null), ("skipFor", Strings(h, "skipFor"))));
                     }

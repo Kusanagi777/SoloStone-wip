@@ -2246,9 +2246,13 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_168e", new CardDef(new Power
 			{
-				// TODO [ULD_168e] Lackey Empowerment && Test: Lackey Empowerment_ULD_168e
+				// Phase 8 family 24 (ULDA_033 Rakanishu, the same text): a player enchantment whose aura makes every Lackey in the
+				// owner's hand and on its board 4/4 (Crystal Core's UNG_067t1e pattern). ULD_168 itself is still unscripted.
 				InfoCardId = "ULD_168e2",
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_168e")
+				Aura = new Aura(AuraType.HAND_AND_BOARD, "ULD_168e3")
+				{
+					Condition = new SelfCondition(p => p is Minion && p.Card[GameTag.MARK_OF_EVIL] == 1)
+				}
 			}));
 
 			// ---------------------------------- ENCHANTMENT - WARLOCK
@@ -2274,8 +2278,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_168e3", new CardDef(new Power
 			{
-				// TODO [ULD_168e3] Lackey Empowerment && Test: Lackey Empowerment_ULD_168e3
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_168e3")
+				// Phase 8 family 24: "4/4." (ULD_168e's aura; Crystal Core's UNG_067t1e2 rule)
+				Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_168e3")
 			}));
 
 			// --------------------------------------- MINION - WARLOCK
@@ -3166,9 +3170,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_705", new CardDef(new Power
 			{
-				// TODO [ULD_705] Mogu Cultist && Test: Mogu Cultist_ULD_705
-				//PowerTask = null,
-				//Trigger = null,
+				// Phase 8 family 20 (Sothis's Titan Ritual summons it): with a full board of Mogu Cultists they are destroyed and
+				// Highkeeper Ra is summoned (DungeonRunEncounters.TombsB.MoguCultistBattlecry).
+				PowerTask = CardSets.DungeonRun.DungeonRunEncounters.TombsB.MoguCultistBattlecry
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -3444,8 +3448,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_616e", new CardDef(new Power
 			{
-				// TODO [ULD_616e] Hardened && Test: Hardened_ULD_616e
-				//Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_616e")
+				// Step 9 (generation hygiene): scripted with Titanic Lackey, the seventh card of the engine's Lackey pool.
+				Enchant = Enchants.Enchants.GetAutoEnchantFromText("ULD_616e")
 			}));
 
 			// ---------------------------------- ENCHANTMENT - NEUTRAL
@@ -3510,10 +3514,9 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_616", new CardDef(new Dictionary<PlayReq, int>() {{PlayReq.REQ_MINION_TARGET,0},{PlayReq.REQ_TARGET_IF_AVAILABLE,0},{PlayReq.REQ_FRIENDLY_TARGET,0}}, new Power
 			{
-				// TODO [ULD_616] Titanic Lackey && Test: Titanic Lackey_ULD_616
+				// Step 9 (generation hygiene): Goblin Lackey's pattern (DAL_739), with Hardened (ULD_616e: +2 Health and Taunt).
 				InfoCardId = "ULD_616e",
-				//PowerTask = null,
-				//Trigger = null,
+				PowerTask = new AddEnchantmentTask("ULD_616e", EntityType.TARGET)
 			}));
 
 			// --------------------------------------- MINION - NEUTRAL
@@ -3527,9 +3530,8 @@ namespace SabberStoneCore.CardSets.Standard
 			// --------------------------------------------------------
 			cards.Add("ULD_705t", new CardDef(new Power
 			{
-				// TODO [ULD_705t] Highkeeper Ra && Test: Highkeeper Ra_ULD_705t
-				//PowerTask = null,
-				//Trigger = null,
+				// Phase 8 family 20: 20 damage to every enemy at the end of its owner's turn (DungeonRunEncounters.TombsB.HighkeeperRaTrigger).
+				Trigger = CardSets.DungeonRun.DungeonRunEncounters.TombsB.HighkeeperRaTrigger
 			}));
 
 			// ---------------------------------------- SPELL - NEUTRAL

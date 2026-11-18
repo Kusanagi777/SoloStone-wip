@@ -479,7 +479,8 @@ internal static class ClientBridge
     {
         if (match == null || !match.IsDungeonRun || match.Game == null || match.Game.State == SabberStoneCore.Enums.State.COMPLETE
             || match.DungeonRunEnding != null || match.Game.Step == SabberStoneCore.Enums.Step.BEGIN_MULLIGAN) return;
-        string reason = npcFailed ? "fault" : match.Game.Turn > NativeMatch.DungeonRunTurnCap ? "turn-limit" : null;
+        // [WIN] Step 9 (lane X): the cap is the fight's own (RunMatchPlan.TurnCap through NativeMatch.DungeonRunTurnLimit).
+        string reason = npcFailed ? "fault" : match.Game.Turn > match.DungeonRunTurnLimit ? "turn-limit" : null;
         if (reason == null) return;
         try { match.EndDungeonRunFight(reason); log.LogInfo("DUNGEON_RUN_FIGHT_ENDED reason=" + reason + " turn=" + match.Game.Turn); }
         catch (Exception error) { log.LogError("DUNGEON_RUN_END_FAILED reason=" + reason + ": " + error); }

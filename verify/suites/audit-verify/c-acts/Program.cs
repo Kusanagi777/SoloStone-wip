@@ -99,8 +99,12 @@ string TempDir() { string d = Path.Combine(tmpRoot, "t" + System.Diagnostics.Pro
         acts.DeckMin == 10 && acts.DeckMax == 50 && acts.Acts.Select(a => a.DraftTakes).SequenceEqual(new[] { 3, 2, 2 })
         && acts.Acts.Select(a => a.TavernGold).SequenceEqual(new[] { 2, 2, 3 }) && acts.Acts.Select(a => a.TavernOffers).SequenceEqual(new[] { 3, 4, 4 }));
     // Phase 7 adds acts-v2 (acts-v1 plus the teammate and shrine-upgrade draft flags) as the default, at scheduleVersion 2.
-    Check("A1 default schedule acts-v2 (phase 7; phase 8: file version 3, acts-v2 still stamps 2), 4 modifiers, finale disabled; act1 has one act",
-        data.Schedules.Default == "acts-v2" && data.Schedules.ScheduleVersion == 3 && acts.StampVersion == 2 && data.Schedules.Modifiers.Count == 4 && !acts.FinaleEnabled
+    // The close-out (family 25) made acts-v3h and acts-v3t the defaults; this data set is loaded without encounters-v1.json, so a
+    // new run on it follows "defaultWithoutEncounters", acts-v2 (the phase-7 default, still stamped 2).
+    Check("A1 defaults acts-v3h and acts-v3t (the close-out; acts-v2 for a data set without the encounter file, as this one: phase 7's default, file version 3, acts-v2 still stamps 2), 4 modifiers, finale disabled; act1 has one act",
+        data.Schedules.Default == "acts-v3h" && data.Schedules.Defaults.SequenceEqual(new[] { "acts-v3h", "acts-v3t" }) && data.Schedules.DefaultWithoutEncounters == "acts-v2"
+        && new DungeonRun(data).DefaultSchedule(1) == "acts-v2" && data.Schedules.Find("acts-v2").StampVersion == 2
+        && data.Schedules.ScheduleVersion == 3 && acts.StampVersion == 2 && data.Schedules.Modifiers.Count == 4 && !acts.FinaleEnabled
         && data.Schedules.Find("act1").Acts.Count == 1 && data.Schedules.Find("act1").Nodes.Count(n => n.IsFight) == 5);
     Check("A1 boss pools default from band/final; provenance solostone; no fixedHealth in the shipped rows",
         data.Bosses.All(b => b.Pools.SequenceEqual(new[] { b.Final ? "final" : "band" + b.Band }) && b.Provenance == "solostone" && !b.FixedHealth && b.BossManaCap == null));
@@ -138,7 +142,7 @@ string TempDir() { string d = Path.Combine(tmpRoot, "t" + System.Diagnostics.Pro
     Check("A2 a modifier knob outside the whitelist (bossDeck) is refused", knob.Any(e => e == "modifier mod_iron_bosses: unknown knob bossDeck"), string.Join(" | ", knob));
     var twice = Mutated(scheduleJson.Replace("\"id\": \"mod_lean_supply\"", "\"id\": \"mod_iron_bosses\""));
     Check("A2 a duplicate modifier id is refused", twice.Any(e => e == "modifier mod_iron_bosses: listed twice"), string.Join(" | ", twice));
-    var defaultBad = Mutated(scheduleJson.Replace("\"default\": \"acts-v2\"", "\"default\": \"acts-v9\""));
+    var defaultBad = Mutated(scheduleJson.Replace("\"default\": \"acts-v3h\"", "\"default\": \"acts-v9\""));
     Check("A2 a default that is no schedule is refused", defaultBad.Any(e => e.Contains("default acts-v9 is not a schedule")), string.Join(" | ", defaultBad));
     var finale = Mutated(First(scheduleJson, "\"finale\": {\"enabled\": false", "\"finale\": {\"enabled\": true"));
     Check("A2 an enabled finale is refused until phase 8", finale.Any(e => e.Contains("the finale is enabled")), string.Join(" | ", finale));

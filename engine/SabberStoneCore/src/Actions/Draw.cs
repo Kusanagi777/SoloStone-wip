@@ -138,7 +138,9 @@ namespace SabberStoneCore.Actions
                 controller.Game.PowerHistory.Add(PowerHistoryBuilder.BlockStart(BlockType.FATIGUE, controller.Hero.Id, "", -1, 0));
             // Advance on the draw attempt, including prevented or redirected damage.
             controller.Hero.Fatigue = fatigueDamage;
-            using (controller.Game.Facts.Fatigue()) DamageCharFunc(controller.Hero, controller.Hero, fatigueDamage, false);
+            // Phase 8 family 21: Lich Baz'hial's Broken Phylactery doubles its owner's fatigue damage (the count above is unchanged).
+            using (controller.Game.Facts.Fatigue())
+                DamageCharFunc(controller.Hero, controller.Hero, CardSets.DungeonRun.DungeonRunEncounters.TombsC.FatigueDamage(controller, fatigueDamage), false);
             if (controller.Game.History) controller.Game.PowerHistory.Add(PowerHistoryBuilder.BlockEnd());
             return false;
         }

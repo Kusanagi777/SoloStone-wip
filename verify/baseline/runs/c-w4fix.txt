@@ -1,0 +1,5 @@
+PASS Y1 the boss's turn: the run player's Scorch in hand (printed 4) holds an adaptive cost effect with an end-of-turn callback  (1 True)
+PASS Y2 in the boss's fair view the run player's hand is masked and the view holds no entity under Scorch's id  (masked 2 of 2, id 70 in view False)
+PASS Y3 the boss's fair state applies its end of turn (a search step clones the view; no exception)
+PASS Y4 in the real game and its clone Scorch keeps its adaptive cost callback  (1 1)
+RESULT 4 passed, 0 failed

@@ -135,6 +135,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 	{
 		private readonly List<RunEdit> _edits = new List<RunEdit>();
 		private readonly List<KeyValuePair<int, string>> _slotLogs = new List<KeyValuePair<int, string>>();
+		private readonly List<string> _consumed = new List<string>();
 
 		/// <summary>Run deck changes, in the order the match made them.</summary>
 		public IReadOnlyList<RunEdit> Edits => _edits;
@@ -144,7 +145,12 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		public string PowerOverride { get; internal set; }
 		/// <summary>A one-fight bonus for the next fight (ULDA_504); null when none.</summary>
 		public RunNextFight NextFight { get; internal set; }
-		public bool IsEmpty => _edits.Count == 0 && _slotLogs.Count == 0 && PowerOverride == null && NextFight == null;
+		/// <summary>
+		/// Step 9: treasures the match used up (GILA_911 Rewind), as their content keys, in order; the run layer removes them
+		/// when it applies the outcome (a restart applies them too). Empty on every match before step 9.
+		/// </summary>
+		public IReadOnlyList<string> ConsumedTreasures => _consumed;
+		public bool IsEmpty => _edits.Count == 0 && _slotLogs.Count == 0 && PowerOverride == null && NextFight == null && _consumed.Count == 0;
 
 		internal void Add(RunEdit edit) => _edits.Add(edit ?? throw new ArgumentNullException(nameof(edit)));
 		internal void AddLog(int slot, string line)
@@ -153,11 +159,14 @@ namespace SabberStoneCore.CardSets.DungeonRun
 			_slotLogs.Add(new KeyValuePair<int, string>(slot, line ?? throw new ArgumentNullException(nameof(line))));
 		}
 
+		internal void Consume(string treasure) => _consumed.Add(treasure ?? throw new ArgumentNullException(nameof(treasure)));
+
 		internal RunMatchResult Clone()
 		{
 			var copy = new RunMatchResult { PowerOverride = PowerOverride, NextFight = NextFight };
 			copy._edits.AddRange(_edits);
 			copy._slotLogs.AddRange(_slotLogs);
+			copy._consumed.AddRange(_consumed);
 			return copy;
 		}
 	}
@@ -320,6 +329,17 @@ namespace SabberStoneCore.CardSets.DungeonRun
 
 		/// <summary>The next fight starts with these bonuses (ULDA_504); a second call in one match replaces the first.</summary>
 		public static void GrantNextFight(Game game, int mana, int draws) => Result(game).NextFight = new RunNextFight(mana, draws);
+
+		/// <summary>
+		/// Step 9: the match used up the run treasure <paramref name="key"/> (its content key: ULDA_111 Hearthstone's escape,
+		/// GILA_911 Rewind's restart); the run layer removes it when it records the escape or the restart. Once per key.
+		/// </summary>
+		public static void ConsumeTreasure(Game game, string key)
+		{
+			if (game == null || key == null) return;
+			var result = Result(game);
+			if (!result.ConsumedTreasures.Contains(key)) result.Consume(key);
+		}
 
 		// ---------------------------------------------------------------- H8 belief resets
 

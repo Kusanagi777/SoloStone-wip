@@ -288,8 +288,9 @@ namespace SabberStoneCore.Auras
 
 		// A played card may retain RemoveAtEnd after its aura has left Game.Auras.
 		// Copy that callback's state without activating a cost effect on the played card.
+		// Null when the game holds no entity under the owner's id (a fair view's masked hand; TriggerManager.CloneHandlers drops it).
 		internal AdaptiveCostEffect CloneDetached(Game game)
-			=> new AdaptiveCostEffect(this, game.IdEntityDic[_owner.Id]) { _cachedValue = _cachedValue };
+			=> game.IdEntityDic.TryGetValue(_owner.Id, out IPlayable owner) ? new AdaptiveCostEffect(this, owner) { _cachedValue = _cachedValue } : null;
 
 		public override string ToString()
 		{

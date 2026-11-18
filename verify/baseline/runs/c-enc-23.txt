@@ -1,0 +1,70 @@
+PASS A1 Infinite Toki's plan: her hero, the clickable Chronoacceleration (2), the act curve's Health plus 10 (not the printed 60)  (GILA_BOSS_48h/GILA_BOSS_48p 40hp plan 40)
+PASS A2 with no minion of her own it is not offered; with one, its only target is her minion (never the run player's)
+PASS A3 used on a minion that attacked already this turn: it gains Accelerated (Mega-Windfury), costs 2 Mana and may attack again
+PASS A4 it attacks four times in all that turn (Mega-Windfury), not a fifth  (4 attacks, hero 14)
+PASS A5 at the end of her turn the minion dies; the run player's minion is untouched
+PASS A6 on a minion played this turn (no Charge) it gives nothing usable and the minion dies at the end of the turn
+PASS A7 the power resolves in the boss's fair view (the boards are public): the minion gains Accelerated there  (ok)
+PASS A8 her deck: the wiki's 30 without Alternate Timeline (rejected, phase 9) and Enhance-a-matic (a Secret generator not lifted for a boss), filled back to 30 by second copies; two Witchwood's Touch (3)  (GILA_903>-:admission:secret-generated,GILA_BOSS_48t>-:unscripted,->GILA_907:fill:second-copy,->EX1_287:fill:second-copy)
+PASS A9 Alternate Timeline is rejected with its reason and lift (a run-owned game restart, phase 9): the encounter file's rejection and an admission row that admits no scope
+PASS B1 False Heart is passive: started at match start, never offered
+PASS B2 with no minion of hers her hero is not Immune: Moonfire hits it
+PASS B3 with a minion of hers her hero is Immune: Fireball does nothing to it
+PASS B4 when her last minion dies she loses it at the aura update
+PASS B5 the aura is live in the boss's fair view too (a public board fact)
+PASS B6 a minion of the run player's does not make Glinda Immune
+PASS B7 Crowskin Faithful is a 3-Mana 6/3 with the client's text
+PASS B8 when it dies its controller draws a card and a new Faithful is shuffled into that deck
+PASS B9 Crowskin Pact (5) transforms an enemy minion into a Faithful and takes control of it
+PASS B10 on one of her own minions: it becomes a Faithful where it stood, still hers
+PASS B11 with her board full the transformed minion is destroyed by the control rule (it is never on two boards)
+PASS B12 aimed at the run player's board shrine: the shrine is destroyed instead of transformed and goes dormant; it never changes sides, no Faithful appears
+PASS B13 the row carries the flag heroImmune, which keeps Anomaly ULDA_706 No-Face out of her fight
+PASS C1 Pistol Barrage costs (1) and may target any minion
+PASS C2 2 damage to the minion and the minions next to it, none further; a hero power, so the boss's Spell Damage +1 adds nothing  (2,2,2,0)
+PASS C3 at the edge of the board it hits the minion and its one neighbour  (4,4,2,0)
+PASS C4 Hunter's Insight played by the boss (Lord Godfrey's deck card): the cards in its own hand cost (3) less
+PASS C6 Lord Godfrey starts the game with Hunter's Insight in hand (one copy, after the mulligan); his deck holds the wiki table's other 29 cards, none a Hunter's Insight  (hand GIL_646,EX1_399,GIL_607t,GIL_607t,GAME_005,GILA_503 deck 29)
+PASS C5 Hunter's Insight and Clockwork Assistant: admitted for a boss on a catalog run (a nemesis deck lists them), the run player's only on a legacy run
+PASS D1 Captain Shivers starts with Kingsbane equipped (the row's start block); the run player has no weapon
+PASS D2 Plunder is cast by rule: never offered as an option, its trigger started at match start
+PASS D3 at the start of his turn with a weapon in his deck (under the top card), the turn's draw takes another card and Plunder draws the weapon (one use)
+PASS D4 with no weapon left in the deck it is not cast
+PASS D5 Kingsbane's Deathrattle shuffles it into his deck (under the top card) and Plunder draws it back at his next turn start, after the turn's draw
+PASS D6 with his hand full it is not cast
+PASS D3b after the draw: a weapon on top of his deck is the turn's draw, and Plunder, cast after it, finds no weapon and is not cast  (top True casts 0/0)
+PASS D7 Cursed Crewmember (2 Mana 2/1 Pirate): draws 2 cards, then a copy of each card in its caster's hand is shuffled into that deck  (hand CS2_029,CS2_172,CS2_182,CS2_182 deck 27 added CS2_029,CS2_172)
+PASS D8 cast by the run player: its copies join the run player's deck; the boss's fair view of that deck does not name them  (view copies 0)
+PASS D9 his deck: the wiki's 30 less the unscripted Fel Reaver (twice), filled by second copies; two Cursed Crewmembers; no weapon listed (Kingsbane starts equipped)  (GVG_016>-:unscripted,GVG_016>-:unscripted,->ICC_221:fill:second-copy,->UNG_823:fill:second-copy)
+PASS E1 GILA_BOSS_99t Witchwood's Touch costs (2): draws 1 and gains 6 Armor, its client text
+PASS E2 GILA_BOSS_99t cast by the run player (taken from a boss): the same for its caster
+PASS E1 GILA_BOSS_99t2 Witchwood's Touch costs (2): draws 2 and gains 8 Armor, its client text
+PASS E2 GILA_BOSS_99t2 cast by the run player (taken from a boss): the same for its caster
+PASS E1 GILA_BOSS_99t3 Witchwood's Touch costs (2): draws 3 and gains 10 Armor, its client text
+PASS E2 GILA_BOSS_99t3 cast by the run player (taken from a boss): the same for its caster
+PASS E3 where the wiki lists them: two (3) in Glinda's and Infinite Toki's decks; two (2) in Inquisitor Hav'nixx's and Experiment 3C's (family 10, now the card itself, no Shield Block); (1) in none
+PASS E4 Clockwork Assistant played by the boss (Infinite Toki's deck card): +1/+1 for each spell she cast this game (2, then 3)  (3/3 then 4/4)
+PASS G1 Hagatha is family 23's act II major (family 01 scripted her): the passive Bewitch, 100 fixed Health, 2 starting Mana Crystals, the wiki's 40 cards unchanged
+PASS G2 a Mage run is given Darius's and Tess's hero cards with their 12 wiki cards and three passives each; Toki's card (GILA_900h2, Temporal Loop) is not given
+PASS G3 BeginMatch records the switch as run-owned state of this floor (hunters, two options), the run's own records untouched
+PASS G4 Tess's card played in the real fight: hero and power change for this match, a passive is chosen, 8 damage to all minions, her 12 wiki cards join the deck  (18 vs 6)
+PASS G5 Ritual Dagger (Lifesteal) gains +1 Durability after Hagatha casts a spell
+PASS G6 Ominous Fog corrupts the enemy minions only; they are destroyed at the start of Hagatha's next turn
+PASS G7 after the fight the switch is gone; the run's class, hero, power, deck and cards are what they were (Tess's cards never joined the run deck); the summary names the heroes  (HERO_08,GILA_500h4)
+PASS G8 a win as a switched hero: the switch is cleared and the run's class, power and deck are its own
+PASS H1 the shipped data validates with the family 23 rows
+PASS H2 family 23 holds the four nemeses and Hagatha, all act II majors  (gila_61_hagatha,gila_48_infinite_toki,gila_49_glinda,gila_59_godfrey,gila_60_shivers)
+PASS H3 gila_48_infinite_toki: a Monster Hunt major of printed Health 60 whose plan is the row's (hero, power, a 30-card substituted deck, the curve's Health plus 10), flags []  (substituted flags  offset 10)
+PASS H3 gila_49_glinda: a Monster Hunt major of printed Health 50 whose plan is the row's (hero, power, a 30-card authentic deck, the curve's Health plus 10), flags [heroImmune,passive]  (authentic flags passive,heroImmune offset 10)
+PASS H3 gila_59_godfrey: a Monster Hunt major of printed Health 60 whose plan is the row's (hero, power, a 29-card authentic deck, the curve's Health plus 10), flags [start]  (authentic flags start offset 10)
+PASS H3 gila_60_shivers: a Monster Hunt major of printed Health 75 whose plan is the row's (hero, power, a 30-card substituted deck, the curve's Health plus 10), flags [passive,start]  (substituted flags start,passive offset 10)
+PASS H4 every power, boss card and enchantment of the family is scripted by family 23 and keeps the client's text (4 powers, 6 cards, 1 enchantment)
+PASS H5 each has its own admission row: the four powers a boss's only, the six boss cards a boss's and (taken from a boss) the run player's; none is ever generated
+PASS H6 the admission families: nemesis-board-power (Chronoacceleration, Pistol Barrage), nemesis-passive-immune, nemesis-auto-cast, nemesis-hunt-card (6)  (nemesis-auto-cast,nemesis-board-power,nemesis-hunt-card,nemesis-passive-immune)
+PASS H7 a family 23 power asked for the run player is refused with its row's lift
+PASS H8 Enhance-a-matic stays the run player's (a Secret generator of every class; not lifted for a boss), so Infinite Toki's deck leaves it out
+PASS H9 the validator checks a start block's weapon: a minion as Shivers' start weapon is refused  (CS2_182: is MINION, not a weapon (boss gila_60_shivers))
+PASS H10 the validator refuses Alternate Timeline in a boss deck (not scripted, not admitted)  (GILA_BOSS_48t: not scripted (boss gila_48_infinite_toki) | GILA_BOSS_48t: admission nemesis-rejected-restart: Infinite Toki's Alternate Timeline, "Start a new game, but your opponent's Health stays the same": a game restart inside a fight needs a run-owned restart that rebuilds the match, the client history and the bot state; left out of her deck (data/dungeon-run/reference/encounters/F23.json "rejected"); lifted by phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6) (boss gila_48_infinite_toki))
+PASS H11 a nemesis fight gives no fight-only heroes: no switch, the run's own classes
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 68 passed, 0 failed

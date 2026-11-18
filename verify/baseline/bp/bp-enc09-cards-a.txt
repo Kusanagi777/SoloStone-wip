@@ -1,26 +1,26 @@
-fix09_treasures    LOOT t2      floor  3 DRUID/druid_thicket/CS2_017                    deck 17 -> boss     turns  10 decisions  25 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_treasures    LOOT t2      floor  3 HUNTER/hunter_kennel/DS1h_292                  deck 16 -> boss     turns   4 decisions  11 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_treasures    LOOT t2      floor  3 MAGE/mage_rimeward/CS2_034                     deck 16 -> boss     turns  14 decisions  31 fallbacks  0 health  34 mana+0 power  1 checks ok
-fix09_treasures    LOOT t2      floor  3 PALADIN/paladin_gleaming/CS2_101               deck 17 -> boss     turns   4 decisions  10 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_treasures    LOOT t2      floor  3 PRIEST/priest_mending/CS1h_001                 deck 17 -> boss     turns   8 decisions  15 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_treasures    LOOT t2      floor  3 ROGUE/rogue_backalley/CS2_083b                 deck 16 -> boss     turns  12 decisions  30 fallbacks  0 health  34 mana+0 power  1 checks ok
-fix09_beams        LOOT t2      floor  3 SHAMAN/shaman_stormdebt/CS2_049                deck 17 -> boss     turns  16 decisions  36 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_beams        LOOT t2      floor  3 WARLOCK/warlock_fiendpact/CS2_056              deck 16 -> boss     turns  16 decisions  28 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_beams        LOOT t2      floor  3 WARRIOR/warrior_plated/CS2_102                 deck 17 -> boss     turns  14 decisions  36 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_beams        LOOT t2      floor  3 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 17 -> boss     turns  17 decisions  27 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_beams        LOOT t2      floor  3 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 17 -> boss     turns  18 decisions  34 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_beams        LOOT t2      floor  3 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 17 -> boss     turns  14 decisions  25 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_chests       LOOT t2      floor  3 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 18 -> boss     turns  10 decisions  20 fallbacks  0 health  34 mana+0 power  4 checks ok
-fix09_chests       LOOT t2      floor  3 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 18 -> boss     turns  10 decisions  19 fallbacks  0 health  34 mana+0 power  5 checks ok
-fix09_chests       LOOT t2      floor  3 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 18 -> boss     turns  16 decisions  32 fallbacks  0 health  34 mana+0 power  8 checks ok
-fix09_chests       LOOT t2      floor  3 GILA_500h3/mh_tess_scavenger/GILA_500p2        deck 17 -> boss     turns  14 decisions  26 fallbacks  0 health  34 mana+0 power  6 checks ok
-fix09_chests       LOOT t2      floor  3 GILA_600h/mh_darius_militia/GILA_600p          deck 17 -> boss     turns  11 decisions  18 fallbacks  0 health  34 mana+0 power  5 checks ok
-fix09_chests       LOOT t2      floor  3 GILA_400h/mh_shaw_kennel/GILA_400p             deck 17 -> boss     turns  12 decisions  25 fallbacks  0 health  34 mana+0 power  5 checks ok
-fix09_medivh       LOOT t2      floor  3 GILA_900h/mh_toki_workshop/CS2_034             deck 17 -> player   turns  13 decisions  18 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_medivh       LOOT t2      floor  3 DALA_Rakanishu/heist_mage_1/CS2_034            deck 17 -> player   turns  22 decisions  37 fallbacks  0 health  34 mana+0 power  0 checks ok auto 1
-fix09_medivh       LOOT t2      floor  3 DALA_Barkeye/heist_hunter_1/DS1h_292           deck 17 -> boss     turns  27 decisions  47 fallbacks  0 health  34 mana+0 power  0 checks ok auto 2
-fix09_medivh       LOOT t2      floor  3 DALA_Vessina/heist_shaman_1/CS2_049            deck 17 -> player   turns  24 decisions  41 fallbacks  0 health  34 mana+0 power  0 checks ok auto 1
-fix09_medivh       LOOT t2      floor  3 DALA_Kriziki/heist_priest_1/CS1h_001           deck 17 -> boss     turns  16 decisions  29 fallbacks  0 health  34 mana+0 power  0 checks ok
-fix09_medivh       LOOT t2      floor  3 DALA_Eudora/heist_rogue_1/CS2_083b             deck 17 -> boss     turns  14 decisions  28 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_treasures    LOOT t2      floor  3 DRUID/druid_thicket/CS2_017                    deck 16 -> boss     turns  10 decisions  19 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_treasures    LOOT t2      floor  3 HUNTER/hunter_kennel/DS1h_292                  deck 17 -> boss     turns  14 decisions  44 fallbacks  0 health  34 mana+0 power  4 checks ok
+fix09_treasures    LOOT t2      floor  3 MAGE/mage_rimeward/CS2_034                     deck 16 -> boss     turns  23 decisions  80 fallbacks  0 health  34 mana+0 power  5 checks ok
+fix09_treasures    LOOT t2      floor  3 PALADIN/paladin_gleaming/CS2_101               deck 16 -> boss     turns   8 decisions  15 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_treasures    LOOT t2      floor  3 PRIEST/priest_mending/CS1h_001                 deck 16 -> boss     turns  18 decisions  51 fallbacks  0 health  34 mana+0 power  4 checks ok
+fix09_treasures    LOOT t2      floor  3 ROGUE/rogue_backalley/CS2_083b                 deck 17 -> boss     turns  12 decisions  29 fallbacks  0 health  34 mana+0 power  1 checks ok
+fix09_beams        LOOT t2      floor  3 SHAMAN/shaman_stormdebt/CS2_049                deck 17 -> boss     turns  20 decisions  48 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_beams        LOOT t2      floor  3 WARLOCK/warlock_fiendpact/CS2_056              deck 16 -> boss     turns  21 decisions  38 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_beams        LOOT t2      floor  3 WARRIOR/warrior_plated/CS2_102                 deck 17 -> boss     turns  18 decisions  48 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_beams        LOOT t2      floor  3 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 16 -> boss     turns  35 decisions  42 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_beams        LOOT t2      floor  3 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 16 -> boss     turns  24 decisions  31 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_beams        LOOT t2      floor  3 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 18 -> boss     turns  14 decisions  28 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_chests       LOOT t2      floor  3 PALADIN_SHAMAN/tombs_finley_murloc_crusade/ULDA_Finley_HP1 deck 18 -> boss     turns  12 decisions  25 fallbacks  0 health  34 mana+0 power  6 checks ok
+fix09_chests       LOOT t2      floor  3 DRUID_PRIEST/tombs_elise_healing_help/ULDA_Elise_HP1 deck 17 -> boss     turns  14 decisions  35 fallbacks  0 health  34 mana+0 power  7 checks ok
+fix09_chests       LOOT t2      floor  3 HUNTER_WARRIOR/tombs_brann_taming_dinos/ULDA_Brann_HP1 deck 17 -> boss     turns  10 decisions  22 fallbacks  0 health  34 mana+0 power  5 checks ok
+fix09_chests       LOOT t2      floor  3 GILA_500h3/mh_tess_scavenger/GILA_500p2        deck 17 -> boss     turns  14 decisions  28 fallbacks  0 health  34 mana+0 power  6 checks ok
+fix09_chests       LOOT t2      floor  3 GILA_600h/mh_darius_militia/GILA_600p          deck 16 -> boss     turns  12 decisions  23 fallbacks  0 health  34 mana+0 power  5 checks ok
+fix09_chests       LOOT t2      floor  3 GILA_400h/mh_shaw_kennel/GILA_400p             deck 16 -> boss     turns  12 decisions  21 fallbacks  0 health  34 mana+0 power  5 checks ok
+fix09_medivh       LOOT t2      floor  3 GILA_900h/mh_toki_workshop/CS2_034             deck 17 -> boss     turns  16 decisions  30 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_medivh       LOOT t2      floor  3 DALA_Rakanishu/heist_mage_1/CS2_034            deck 17 -> player   turns  21 decisions  26 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_medivh       LOOT t2      floor  3 DALA_Barkeye/heist_hunter_1/DS1h_292           deck 17 -> boss     turns  16 decisions  26 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_medivh       LOOT t2      floor  3 DALA_Vessina/heist_shaman_1/CS2_049            deck 17 -> player   turns  29 decisions  38 fallbacks  0 health  34 mana+0 power  0 checks ok auto 2
+fix09_medivh       LOOT t2      floor  3 DALA_Kriziki/heist_priest_1/CS1h_001           deck 17 -> boss     turns  12 decisions  20 fallbacks  0 health  34 mana+0 power  0 checks ok
+fix09_medivh       LOOT t2      floor  3 DALA_Eudora/heist_rogue_1/CS2_083b             deck 17 -> boss     turns   8 decisions  14 fallbacks  0 health  34 mana+0 power  0 checks ok
 encounter run: schedule acts-v3h; power unused: -; form unreached: -
-games 24, boss wins 21, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, no-loss 0, watched LOOTA_806 x1 LOOTA_812 x2 LOOTA_816 x1 LOOTA_819 x1 LOOTA_821 x1 LOOTA_823 x1 LOOTA_826 x2 LOOTA_827 x3 LOOTA_835 x1 LOOTA_836 x2 LOOTA_838 x1 LOOTA_839 x0 LOOTA_842b x3 LOOTA_843 x0 LOOTA_847 x0 LOOT_998k x3 LOOTA_BOSS_26p2 x2 LOOTA_BOSS_26p3 x4 LOOTA_BOSS_26p4 x14 LOOTA_BOSS_26p5 x6 LOOTA_BOSS_26p6 x4 LOOTA_BOSS_26p7 x6 KARA_00_05 x4 KARA_00_07 x8 KARA_00_08 x11 BRMA12_8t x21 LOOTA_BOSS_20t x11, most boss Secrets 0
+games 24, boss wins 22, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, no-loss 0, watched LOOTA_806 x3 LOOTA_812 x3 LOOTA_816 x5 LOOTA_819 x5 LOOTA_821 x2 LOOTA_823 x3 LOOTA_826 x3 LOOTA_827 x4 LOOTA_835 x1 LOOTA_836 x3 LOOTA_838 x1 LOOTA_839 x1 LOOTA_842b x3 LOOTA_843 x4 LOOTA_847 x3 LOOT_998k x3 LOOTA_BOSS_26p2 x2 LOOTA_BOSS_26p3 x6 LOOTA_BOSS_26p4 x16 LOOTA_BOSS_26p5 x8 LOOTA_BOSS_26p6 x9 LOOTA_BOSS_26p7 x9 KARA_00_05 x3 KARA_00_07 x9 KARA_00_08 x7 BRMA12_8t x14 LOOTA_BOSS_20t x10, most boss Secrets 0

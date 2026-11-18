@@ -269,7 +269,8 @@ namespace SabberStoneCore.Actions
                     if (rule.SetCost.HasValue) amount = rule.SetCost.Value;
                     if (rule.OnlyTemporary) amount = Math.Max(0, amount - rule.Reduction);
                 }
-            return amount;
+            // An Echo copy never costs less than (1) (the client's Echo rule; phase 8 family 12, in every game since wave 4).
+            return EncounterRules.EchoCopyFloor(source, amount);
         }
 
         internal static int AfterExternalCostAuras(Playable source, int amount)

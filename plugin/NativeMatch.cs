@@ -1237,6 +1237,9 @@ public sealed class NativeMatch
     // Dungeon Run only (design R9/R10): the engine has no turn limit, so the run caps a fight at this many game turns
     // (both players' turns count, as Game.Turn does) and the boss wins. Deckdelve's TURN_CAP.
     internal const int DungeonRunTurnCap = 100;
+    // [WIN] Step 9 (lane X, D11): this fight's cap, from its plan (RunMatchPlan.TurnCap: 100 on every released schedule, 150 for
+    // a tuned relay fight, less on a restarted floor); DungeonRunTurnCap when the plan has none.
+    internal int DungeonRunTurnLimit => runPlan != null && runPlan.TurnCap > 0 ? runPlan.TurnCap : DungeonRunTurnCap;
     // Why a run fight was ended from outside the rules: "turn-limit" or "fault" (the boss AI failed). Null otherwise.
     internal string DungeonRunEnding { get; private set; }
 
@@ -1300,7 +1303,10 @@ public sealed class NativeMatch
     private Random timeoutRandom;
     private readonly HashSet<int> expiredHumanOptions = new HashSet<int>();
     private readonly HashSet<int> expiredHumanChoices = new HashSet<int>();
-    private int HumanTurnSeconds => Game.CurrentPlayer[GameTag.TIMEOUT] == 15 ? 15 : Game.Turn <= 2 ? 45 : 75;
+    // A short turn timer (Nozdormu the Eternal's 15 seconds; family 18: Magistrix Norroa's Kaironomaly, 25): the current
+    // player's TIMEOUT tag when an effect set it short (SabberStoneCore.Actions.EncounterRules.ShortTurnSeconds), else 0.
+    private int ShortTurn => SabberStoneCore.Actions.EncounterRules.ShortTurnSeconds(Game.CurrentPlayer);
+    private int HumanTurnSeconds => ShortTurn > 0 ? ShortTurn : Game.Turn <= 2 ? 45 : 75;
     private long TimerNow => TurnTimerClock?.Invoke() ?? MonotonicMilliseconds;
 
     private void NoteHumanTimerAction()
@@ -1403,7 +1409,7 @@ public sealed class NativeMatch
         humanTimeoutTag = Game.Player1[GameTag.TIMEOUT];
         turnDeadline = Game.CurrentPlayer == Game.Player1 && PlayerTurnTimerEnabled
             ? now + (humanShortFuse ? 7 : HumanTurnSeconds) * 1000L
-            : Game.CurrentPlayer[GameTag.TIMEOUT] == 15 ? now + 15000
+            : ShortTurn > 0 ? now + ShortTurn * 1000L
             : Game.CurrentPlayer == Game.Player2 ? now + 75000 : long.MaxValue;
         if (Game.CurrentPlayer == Game.Player1 && PlayerTurnTimerEnabled)
         {
@@ -1428,7 +1434,7 @@ public sealed class NativeMatch
         if (Game == null || Game.State == State.COMPLETE) { HideNpcRope(); return; }
         if (Game.Step != Step.MAIN_ACTION) return;
         bool npcTurn = Game.CurrentPlayer == Game.Player2;
-        bool shortened = Game.CurrentPlayer[GameTag.TIMEOUT] == 15;
+        bool shortened = ShortTurn > 0;
         if (!npcTurn && !PlayerTurnTimerEnabled) HideNpcRope();
         if (!npcTurn && !shortened && !PlayerTurnTimerEnabled) return;
         // Wait only at the start (animation slush). Once armed, animations/menus/choices cannot pause the human clock.
@@ -6631,7 +6637,7 @@ public sealed class NativeMatch
         if (privateOffer == BotPlayerId && zone == EngineZone.SETASIDE) return true;
         if (privateOffer == HumanPlayerId && (zone == EngineZone.SETASIDE || zone == EngineZone.INVALID))
             for (var next = Game.Player1.Choice?.NextChoice; next != null; next = next.NextChoice)
-                if (next.Choices.Contains(id)) return true;
+                if (next.Choices?.Contains(id) == true) return true; // [WIN] step 9: a chained choice not dealt yet has no Choices (family 13's FairBotState guard)
         int privateHandOwner = resetEntities != null ? TagValue(tags, SabberStoneCore.Actions.ShatterRules.PrivateHandOwner)
             : Game.IdEntityDic.TryGetValue(id, out var shatter) ? shatter[SabberStoneCore.Actions.ShatterRules.PrivateHandOwner] : 0;
         if (privateHandOwner == BotPlayerId &&

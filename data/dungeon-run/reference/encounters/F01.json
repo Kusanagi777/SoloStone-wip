@@ -22,7 +22,8 @@
    "flags": [
     "forms",
     "persistentDamage",
-    "deckReplace"
+    "deckReplace",
+    "statSwap"
    ],
    "incompatibleModifiers": [
     "mod_iron_bosses",
@@ -333,7 +334,17 @@
      "kind": "power",
      "note": "Commanding Scream uses Commanding Shout's rule and enchantment (NEW1_036e2/NEW1_036e), so the shown enchantment is Commanding Shout's, not ULDA_BOSS_40p1e1."
     }
-   ]
+   ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road"
+    ]
+   }
   },
   {
    "id": "gila_61_hagatha",
@@ -353,7 +364,9 @@
    "bossManaCap": 2,
    "flags": [
     "passive",
-    "heroSwitch"
+    "heroSwitch",
+    "handAdd",
+    "manaIdentity"
    ],
    "incompatibleModifiers": [
     "mod_iron_bosses",
@@ -696,13 +709,25 @@
    "adaptations": [
     {
      "kind": "start",
-     "note": "The original fight starts the player as Houndmaster Shaw with the other three hunters as hero cards. Here the run keeps its own hero and deck and is given the hunters' hero cards after the mulligan (Darius, Tess; not the run's own hunter). Toki's card (GILA_900h2) is left out: her power GILA_900p Temporal Loop restarts the turn (phase 9). Shaw has no hero card in the client data, so a run that is not Shaw's never becomes Shaw."
+     "note": "The original fight starts the player as Houndmaster Shaw with the other three hunters as hero cards. Here the run keeps its own hero and deck and is given the hunters' hero cards after the mulligan (Darius, Tess; not the run's own hunter). Toki's card (GILA_900h2) is left out: her power GILA_900p Temporal Loop restarts the turn, which step 9 rejects for good (NativeMatch has no client history re-sync). Shaw has no hero card in the client data, so a run that is not Shaw's never becomes Shaw."
     },
     {
      "kind": "power",
      "note": "A hunter's passive is chosen by the hero card's Battlecry (a Discover among the hunter's three passives), then the damage is dealt, as the wiki states; the starting hero chooses no passive (the run has its own treasures)."
     }
-   ]
+   ],
+   "modifierReasons": {
+    "mod_iron_bosses": "the row's Health is its identity (fixedHealth: DungeonRun.BossHealth ignores bossHealthDelta), so Iron Bosses' +5 never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the modifier's other knobs and its extra treasure after a major are kept), a released one bans it for the act",
+    "mod_open_road": "the row's Health is its identity (fixedHealth), so Open Road's +3 boss Health never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the extra opening card is kept), a released one bans it for the act",
+    "mod_hot_start": "the row's start Mana Crystals are its own (start.bossMana replaces the act curve and the modifiers' bossManaDelta), so Hot Start's +1 boss Mana never reaches the fight; a stamp-4 schedule neutralises that knob for this fight only (DungeonRun.NeutraliseKnobs; the +10 player Health is kept), a released one bans it for the act"
+   },
+   "v4": {
+    "incompatibleModifiers": [
+     "mod_iron_bosses",
+     "mod_open_road",
+     "mod_hot_start"
+    ]
+   }
   },
   {
    "id": "dala_21_whirt",
@@ -1247,7 +1272,8 @@
    },
    "flags": [
     "passive",
-    "secrets"
+    "secrets",
+    "room"
    ],
    "cards": [
     "LOOTA_BOSS_48t"
@@ -1539,7 +1565,8 @@
     "original": 6
    },
    "flags": [
-    "secrets"
+    "secrets",
+    "room"
    ],
    "bossGeneratedSecrets": true,
    "source": {
@@ -1751,7 +1778,7 @@
    "name": "Toki, Time-Tinker (Hagatha fight hero card)",
    "power": "GILA_900p",
    "reason": "her hero power Temporal Loop restarts the turn, which needs a run-owned turn restart",
-   "lift": "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)",
+   "lift": "none: a final rejection (step 9, a SoloStone adaptation): restarting a turn needs a rewind or a full re-sync of the client's history stream and a rebuilt bot state, and NativeMatch has no client history re-sync; Toki keeps the Mage basic power (CS2_034) as a stand-in (a later Windows lane may reopen it with Game.CloneExact and a NativeMatch re-sync)",
    "cards": []
   }
  ]

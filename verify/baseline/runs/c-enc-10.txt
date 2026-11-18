@@ -86,7 +86,7 @@ PASS N5 Murloc Infestation costs (3): the caster's minions gain "Deathrattle: Su
 PASS N6 a minion with it dies: one random scripted Murloc is summoned for its controller, with no such Deathrattle of its own  (CFM_699)
 PASS N7 twelve more deaths: every summoned minion is a scripted Murloc, of more than one kind  (CORE_EX1_507,LOE_076,CFM_650,CORE_ULD_723,OG_161,DAL_077,DAL_433,EX1_062,GVG_040)
 PASS O1 Call of the Raven costs (1): one random 1-Cost minion is added to the boss's hand  (BOT_558)
-PASS O2 sixteen more uses: always a scripted collectible 1-Cost minion, of several kinds  (CORE_EX1_509,OG_151,BOT_558,CORE_UNG_809,TRL_505,DAL_077,EDR_469,CORE_EX1_010,EX1_508,LOE_018,AT_097,GVG_013,UNG_085)
+PASS O2 sixteen more uses: always a scripted collectible 1-Cost minion, of several kinds  (CORE_EX1_509,OG_158,BOT_558,CORE_UNG_809,TRL_506,DAL_077,EDR_469,CORE_EX1_011,EX1_508,LOE_076,EX1_509,CORE_GIL_558,AT_097,GVG_013,UNG_085)
 PASS O3 with a full hand it is not offered
 PASS P1 the shipped data validates with the fifteen family 10 rows
 PASS P2 family 10 holds exactly these fifteen rows  (gila_20_mangy_wolf,gila_21_rottooth,gila_22_willie,gila_23_grubb,gila_26_gnomenapper,gila_27_experiment_3c,gila_29_sazzmi,gila_31_gnarlroot,gila_32_niira,gila_33_scarecrow,gila_34_havnixx,gila_35_chupacabran,gila_36_griselda,gila_37_wharrgarbl,gila_38_cozzlewurt)
@@ -100,7 +100,7 @@ PASS P3 gila_29_sazzmi: a Monster Hunt row of tier 3 (printed Health 35) whose p
 PASS P3 gila_31_gnarlroot: a Monster Hunt row of tier 2 (printed Health 30) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
 PASS P3 gila_32_niira: a Monster Hunt row of tier 2 (printed Health 25) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
 PASS P3 gila_33_scarecrow: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags [start]  (authentic health 30 flags start tier 3)
-PASS P3 gila_34_havnixx: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags  tier 3)
+PASS P3 gila_34_havnixx: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3)
 PASS P3 gila_35_chupacabran: a Monster Hunt row of tier 2 (printed Health 30) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
 PASS P3 gila_36_griselda: a Monster Hunt row of tier 2 (printed Health 30) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
 PASS P3 gila_37_wharrgarbl: a Monster Hunt row of tier 2 (printed Health 30) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)

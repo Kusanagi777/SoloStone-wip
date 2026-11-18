@@ -1,0 +1,123 @@
+PASS A1 Forbidden Power costs (4), is clickable and untargeted; its number (the @) starts at 1; its trigger is started
+PASS A2 with no enemy minion it hits the run player's hero for 1  (30->29)
+PASS A3 two minions of the boss's die: the number is 3; a dying minion of the run player's adds nothing  (3)
+PASS A4 used again: 3 damage to one random enemy character (the hero or the Yeti), the number stays 3  (hero 29->26 yeti 0)
+PASS A5 the random enemy is the hero in some games and the minion in others
+PASS B1 Chain Lightning costs (4) and targets any minion, never a hero
+PASS B2 on the middle of three 4/5s it hits 1 at a time, each jump to a neighbour of the last hit, until one dies (5 hits on it); the boss's own minion is never hit  (1,0,1,0,1,2,1,0,1)
+PASS B3 used on a minion with no neighbour: one hit, it survives
+PASS B4 a 1-Health target dies of the first hit: the chain ends there
+PASS B5 a Divine Shield takes the first hit and the chain jumps on  (EX1_008,CS2_120,EX1_008)
+PASS B6 a dormant run shrine beside the target is no neighbour: one hit on the Yeti, the shrine untouched  (1)
+PASS C1 Mirage costs (0), is rule-cast (never an option; started at match start); not cast yet
+PASS C2 at the start of the boss's turn it is cast: a copy of a card of the run player's hand joins that hand, and one of the two is the illusion  (hand 4->5)
+PASS C3 the boss's fair view: the run player's hand (the copy too) stays unknown cards, one more of them  (5)
+PASS C3b the boss's power holds the illusion's hand position, not an entity id; in the boss's fair view Illusion() is the masked slot at that position (no twin known)  (slot 5 power 5 view 5)
+PASS C3c a card leaving the hand moves the position with the illusion (aura update); the new fair view's illusion is the masked slot at the new position  (5->4 power 4)
+PASS C3d in the view the masked illusion slot leaves at the end of the run player's turn and the boss's next turn start copies nothing; no exception  (ok hand 5->4)
+PASS C4 the run player plays the illusion: it resolves as its card (a River Crocolisk on the board) and a random card of the hand is discarded  (hand 5->3)
+PASS C5 the pair is resolved: the twin, if not discarded, is an ordinary card that stays at the end of the turn (every card kept; the next cast adds one)
+PASS C6 the twin played: no discard
+PASS C7 at the end of the run player's turn the illusion leaves the hand (set aside, not discarded); the boss's next turn start casts a new one  (hand 6->5)
+PASS C8 neither card played: the copy leaves, every original card stays, nothing is discarded; the illusion is the copy in some games and the original in others
+PASS C9 not cast while the run player's hand is full or empty
+PASS C9b Mirage acts after the turn-start draw: a 1-Health boss with an empty deck dies of Fatigue in its draw and casts nothing (no copy, no use)  (state COMPLETE uses 0 hand 4->4)
+PASS C10 the run player's own fair view holds its hand's cards (known to their owner)
+PASS D1 Plaguebringer is passive: started at match start, never an option
+PASS D2 the spells in the boss's hand cost (2) less (Fireball 4 -> 2, Moonfire 0 stays 0); its minions do not  (2 0 4)
+PASS D3 the boss plays Fireball (no Overload of its own): it is Overloaded by (1), and Tunnel Trogg gains +1 Attack  (owed 1 trogg 2)
+PASS D4 Lightning Bolt (Overload 1): 1 + 1 more; Tunnel Trogg counts both  (owed 3 trogg 4)
+PASS D5 next turn the boss's Overload locks 3 crystals; the run player's spells cost what they cost and never Overload
+PASS D6 the run player's Fireball Overloads nothing
+PASS D7 Thunderhead sees a spell that Overloads only by Plaguebringer as a card with Overload (Moonfire: two Sparks); Lightning Bolt, with its own Overload, two more (not four)  (2 4)
+PASS E1 Ogre-Sized Thief costs (3), untargeted: one card of the run player's deck is now the boss's, in its hand  (1 deck 26->25)
+PASS E2 the boss's fair view: it knows exactly the card it took (a card of its own hand)
+PASS E3 the run player's other deck cards stay unknown slots in the boss's view (count = the deck's)  (25 25)
+PASS E4 the run player's fair view: the stolen card is a hidden card of the boss's hand  (7 62:Unknown:,63:Unknown:,64:Unknown:,65:Unknown:,66:Unknown:,67:Unknown:,68:Unknown: stolen 29)
+PASS E5 the boss's search may use the power in its view: it takes a masked card (the view's hand + 1, the view's run player deck - 1), no exception  (ok hand 8->9 deck 24->23)
+PASS E6 the boss plays the stolen card (a minion of its board now)
+PASS E7 with the boss's hand full the stolen card is burned (out of the run player's deck all the same)
+PASS E8 the run player's deck empty: not offered
+PASS F1 Masterful Djinn costs (2): a 1/4 Servant of Siamat (ULDA_026, an Elemental) with exactly one of Taunt, Rush, Windfury, Divine Shield  (TAUNT)
+PASS F2 over several games every one of the four keywords comes up  (DIVINE_SHIELD,RUSH,TAUNT,WINDFURY)
+PASS F3 Silence removes the servant's keyword (its own)
+PASS F4 with a full board it is not offered
+PASS F5 Servant of Siamat is scripted (a token without text) and keeps the client's stats
+PASS G1 "Upgraded" Fauna costs (2) and is not offered while the boss controls no Beast (the run player's Beast does not count)
+PASS G2 with Beasts it targets enemy minions only
+PASS G3 three Beasts: one hit of 3 damage  (3)
+PASS H1 Mistress of Magic is passive: started at match start, never an option
+PASS H2 the run player's first spell (Moonfire): a copy joins the run player's hand  (4->5)
+PASS H3 the second spell: no copy
+PASS H4 the boss's own first spell: a copy joins the boss's hand
+PASS H5 the boss's fair view keeps the run player's copy masked (it under-knows)  (34:Unknown,35:Unknown,36:Unknown,37:Unknown,39:Unknown copy 70)
+PASS H6 a hand with room for one: the copy takes it (9 left + the copy = the hand before); with a full hand none
+PASS I1 Lord of the Sun costs (1) and is not offered while the boss holds no spell
+PASS I2 with a spell in hand it is used: the boss has Spell Damage +3 (ULDA_BOSS_70e on its hero)  (3)
+PASS I3 Moonfire deals 4  (30->26)
+PASS I4 next turn the Spell Damage is gone
+PASS J1 Lord of Life costs (2) and is not offered while no minion is damaged
+PASS J2 any damaged minion is a target (either side), never a hero
+PASS J3 its Health is restored to full
+PASS K1 Lord of Destruction costs (0) and is rule-cast (never an option; started at match start)
+PASS K2 not cast while the run player controls no minion
+PASS K3 the next boss turn start curses the run player's minion (ULDA_BOSS_72e), never the boss's
+PASS K4 at the end of the run player's turn its hero takes 2  (30->28)
+PASS K5 the boss's turn end does not hurt the run player; a second curse is stacked on the only enemy minion at its turn start
+PASS K6 two curses: 4 damage at the end of the run player's turn  (28->24)
+PASS K7 Silence removes the curses: no damage at the end of that turn (the boss's next turn start curses it anew)  (curses 1 hp 24->24 silenced True zone PLAY)
+PASS L1 Shockwave is passive: started at match start, never an option
+PASS L2 the run player's minions get no Rush
+PASS L3 a minion the boss plays has Rush (ULDA_BOSS_73e): it can attack a minion at once, not the hero  (2)
+PASS M1 Burst of Light costs (3), has Lifesteal and is not offered while the run player controls no minion
+PASS M2 1 damage to each enemy minion (the Wisp dies), none to the boss's; the boss's hero is healed by the 3 damage dealt  (20->23)
+PASS N1 Hunt the Weak costs (2); its number starts at 1
+PASS N2 1 damage to the Yeti; the number becomes 2
+PASS N3 then 2 damage; the number becomes 3
+PASS N4 it kills a minion: all bonus damage is lost (the number is 1 again)
+PASS O1 Noble Champion costs (4) and is not offered while the run player controls no minion
+PASS O2 a random enemy minion takes damage equal to its own Attack (the Yeti 4, the Crocolisk 2)  (yeti 4 croc 0)
+PASS P1 Snapping Jaw costs (2) and is not offered while the boss's hero has no Attack
+PASS P2 with a 3-Attack weapon it doubles the hero's Attack this turn (+3, ULDA_BOSS_77e)  (6)
+PASS P3 next turn the hero's Attack is the weapon's again  (3 False weapon 3)
+PASS Q1 Massive Tentacles costs (0) and is rule-cast (never an option; started at match start)
+PASS Q2 seven minions on the battlefield (the run player's awake shrine counts): not cast
+PASS Q3 eight: at the start of the boss's turn every minion is destroyed; the run shrine goes dormant, not removed  (boss 0 player 1)
+PASS Q4 the dormant shrine does not count: seven minions and the dormant shrine, not cast  (1)
+PASS R1 Mech "Pilot" costs (1) and is not offered while there is no Mech... but the run player's Mech is one
+PASS R2 it targets Mechs only, on either board
+PASS R3 the Golem gets +2 Attack this turn (ULDA_BOSS_79e) and attacks a random enemy minion at once (4 damage), no attack of its turn spent  (croc GRAVEYARD mech 0 golem 2)
+PASS R4 next turn the Golem's Attack is its own again
+PASS R5 with no enemy minion it only gets the Attack (no attack on the hero)
+PASS R6 on the run player's Mech: it attacks a minion of the boss's  (yeti 4)
+PASS S1 the shipped data validates with the eighteen family 22 rows
+PASS S2 family 22 holds exactly these eighteen rows, in this order  (ulda_60_zaraam,ulda_61_kyriss,ulda_62_oasis,ulda_63_vessina,ulda_65_thrud,ulda_66_siamat,ulda_68_wasp,ulda_69_isiset,ulda_70_rajh,ulda_71_ammunae,ulda_72_setesh,ulda_73_husam,ulda_74_barim,ulda_75_avozu,ulda_76_tarkus,ulda_77_gorebite,ulda_78_octosari,ulda_79_armadillobot)
+PASS S3 ulda_60_zaraam: a Tombs row of tier 4 (wiki level 7, chapter 3) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted health 30 tier 4 flags  pools enc-t4)
+PASS S3 ulda_61_kyriss: a Tombs row of tier 4 (wiki level 7, chapter 4) whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health, not the printed 10)  (authentic health 30 tier 4 flags  pools enc-t4)
+PASS S3 ulda_62_oasis: a Tombs row of tier 3 (wiki level 6, chapter 2) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 30); flags hiddenZone  (substituted health 30 tier 3 flags hiddenZone pools enc-t3)
+PASS S3 ulda_63_vessina: a Tombs row of tier 3 (wiki level 6, chapter 4) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10); flags passive  (substituted health 30 tier 3 flags passive pools enc-t3)
+PASS S3 ulda_65_thrud: a Tombs row of tier 2 (wiki level 4, chapter 1) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10); flags hiddenZone  (extended health 30 tier 2 flags hiddenZone pools enc-t2)
+PASS S3 ulda_66_siamat: a Tombs row of tier 4 (wiki level 7, chapter 1) whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health, not the printed 10)  (authentic health 30 tier 4 flags  pools enc-t4)
+PASS S3 ulda_68_wasp: a Tombs row of tier 1 (wiki level 2, chapter 1) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 1 flags  pools enc-t1)
+PASS S3 ulda_69_isiset: a Tombs row of tier 4 (wiki level 7, chapter 4) whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health, not the printed 10); flags passive,bothPlayers,recast  (authentic health 30 tier 4 flags passive,bothPlayers,recast pools enc-t4)
+PASS S3 ulda_70_rajh: a Tombs row of tier 4 (wiki level 7, chapter 4) whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health, not the printed 10)  (authentic health 30 tier 4 flags  pools enc-t4)
+PASS S3 ulda_71_ammunae: a Tombs row of tier 4 (wiki level 7, chapter 4) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted health 30 tier 4 flags  pools enc-t4)
+PASS S3 ulda_72_setesh: a Tombs row of tier 4 (wiki level 7, chapter 4) whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health, not the printed 10)  (authentic health 30 tier 4 flags  pools enc-t4)
+PASS S3 ulda_73_husam: a Tombs row of tier 4 (wiki level 7, chapter 1) whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health, not the printed 10); flags passive  (authentic health 30 tier 4 flags passive pools enc-t4)
+PASS S3 ulda_74_barim: a Tombs row of tier 3 (wiki level 6, chapter 1) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted health 30 tier 3 flags  pools enc-t3)
+PASS S3 ulda_75_avozu: a Tombs row of tier 4 (wiki level 7, chapter 1) whose plan is the row's (hero, power, a 30-card substituted deck, the act curve's Health, not the printed 10)  (substituted health 30 tier 4 flags  pools enc-t4)
+PASS S3 ulda_76_tarkus: a Tombs row of tier 2 (wiki level 4, chapter 1) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 2 flags  pools enc-t2)
+PASS S3 ulda_77_gorebite: a Tombs row of tier 1 (wiki level 2, chapter 2) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10)  (extended health 30 tier 1 flags  pools enc-t1)
+PASS S3 ulda_78_octosari: a Tombs row of tier 3 (wiki level 6, chapter 1) whose plan is the row's (hero, power, a 30-card authentic deck, the act curve's Health, not the printed 10)  (authentic health 30 tier 3 flags  pools enc-t3)
+PASS S3 ulda_79_armadillobot: a Tombs row of tier 2 (wiki level 3, chapter 4) whose plan is the row's (hero, power, a 30-card extended deck, the act curve's Health, not the printed 10); flags forcedAttack  (extended health 30 tier 2 flags forcedAttack pools enc-t2)
+PASS S4 every power, the Servant and every enchantment of the family is scripted by family 22 and keeps the client's text (18 powers, 1 token, 5 enchantments)
+PASS S5 the three passive powers and the three rule-cast ones are the registry's passive ones (never an option), the twelve others clickable; each power's Cost is the client's
+PASS S6 each has its own admission row of its family (boss-tombs-d-*, naming c-enc-22): the powers a boss's only, the Servant a boss's and the run player's; none is ever generated
+PASS S7 a family 22 power asked for the run player is refused with its row's reason
+PASS S8 the listed cards replaced are only cards the engine does not script (or Hunter's Pack and Desperate Measures, which generate Secrets), each with its named replacement  (ULD_137>EX1_025:unscripted,ULD_190>CS2_042:unscripted,ULD_198>CS2_179:unscripted,ULD_289>EX1_506:unscripted | GVG_065>CS2_125:unscripted,ULD_229>EX1_134:unscripted | ULD_160>DAL_614:unscripted,ULD_162>BRM_006:unscripted,ULD_189>CS1_069:unscripted,ULD_271>CS2_121:unscripted)
+PASS S9 the decks keep the cards the powers need: Armadillobot's Mechs, the Wasp's Beasts, Vessina's Tunnel Troggs, Rajh's and Isiset's spells  (mechs 15 beasts 18)
+PASS S10 the tier pools: two rows in enc-t1, three in enc-t2, four in enc-t3, nine in enc-t4
+PASS S11 the validator refuses a row whose power is not scripted (the Heroic Ogre-Sized Thief ULDA_BOSS_65px)  (ULDA_BOSS_65px: not scripted (boss ulda_65_thrud))
+PASS S12 the Mirage tag is a private encounter tag (never sent to the client)
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 121 passed, 0 failed

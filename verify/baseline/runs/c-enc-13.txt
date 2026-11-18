@@ -1,0 +1,116 @@
+PASS A1 the shipped data validates with the nine Rumble Run rows
+PASS A2 family 13 holds War Master Voone (family 01's row) and the eight champions, in this order  (trl_200_voone,trl_201_zentimo,trl_202_hooktusk,trl_203_thekal,trl_204_zuljin,trl_205_loti,trl_206_jeklik,trl_207_malacrass,trl_208_talanji)
+PASS A3 trl_201_zentimo: a Rumble Run row (TRL, tier 1, Rumble round 1) with hero TRLA_201h and power CS2_049; its three variants are the three SHAMAN shrines, each with its own 30-card deck; flags shrine,doubleBattlecry  (tier 1 flags shrine,doubleBattlecry variants early:TRLA_155,middle:TRLA_109,late:TRLA_154)
+PASS A3 trl_202_hooktusk: a Rumble Run row (TRL, tier 1, Rumble round 2) with hero TRLA_202h and power CS2_083b; its three variants are the three ROGUE shrines, each with its own 30-card deck; flags shrine,hiddenZone,recast  (tier 1 flags shrine,hiddenZone,recast variants early:TRLA_106,middle:TRLA_186,late:TRLA_187)
+PASS A3 trl_203_thekal: a Rumble Run row (TRL, tier 2, Rumble round 4) with hero TRLA_203h and power CS2_101; its three variants are the three PALADIN shrines, each with its own 30-card deck; flags shrine,recast  (tier 2 flags shrine,recast variants early:TRLA_138,middle:TRLA_137,late:TRLA_105)
+PASS A3 trl_204_zuljin: a Rumble Run row (TRL, tier 3, Rumble round 5) with hero TRLA_204h and power TRLA_065p; its three variants are the three HUNTER shrines, each with its own 30-card deck; flags shrine,secrets  (tier 3 flags shrine,secrets variants early:TRLA_163,middle:TRLA_162,late:TRLA_110)
+PASS A3 trl_205_loti: a Rumble Run row (TRL, tier 3, Rumble round 6) with hero TRLA_205h and power CS2_017; its three variants are the three DRUID shrines, each with its own 30-card deck; flags shrine,  (tier 3 flags shrine variants early:TRLA_116,middle:TRLA_115,late:TRLA_112)
+PASS A3 trl_206_jeklik: a Rumble Run row (TRL, tier 4, Rumble round 7) with hero TRLA_206h and power CS2_056; its three variants are the three WARLOCK shrines, each with its own 30-card deck; flags shrine,  (tier 4 flags shrine variants early:TRLA_113,middle:TRLA_178,late:TRLA_179)
+PASS A3 trl_207_malacrass: a Rumble Run row (TRL, tier 4, Rumble round 8) with hero TRLA_207h and power HERO_08bp; its three variants are the three MAGE shrines, each with its own 30-card deck; flags shrine,  (tier 4 flags shrine variants early:TRLA_128,middle:TRLA_108,late:TRLA_129)
+PASS A3 trl_208_talanji: a Rumble Run row (TRL, tier 4, Rumble round 8) with hero TRLA_208h and power CS1h_001; its three variants are the three PRIEST shrines, each with its own 30-card deck; flags shrine,doubleDeathrattle  (tier 4 flags shrine,doubleDeathrattle variants early:TRLA_146,middle:TRLA_147,late:TRLA_114)
+PASS A4 the nine rows name each of the 27 scripted shrines exactly once (TRLA_107, the fixture, never)  (TRLA_104,TRLA_105,TRLA_106,TRLA_108,TRLA_109,TRLA_110,TRLA_112,TRLA_113,TRLA_114,TRLA_115,TRLA_116,TRLA_128,TRLA_129,TRLA_137,TRLA_138,TRLA_146,TRLA_147,TRLA_154,TRLA_155,TRLA_162,TRLA_163,TRLA_170,TRLA_171,TRLA_178,TRLA_179,TRLA_186,TRLA_187)
+PASS A5 the 24 shrines of the eight rows: admitted for the run player and a boss on a catalog run (boss-shrine; TRLA_186 boss-hidden-steal), never generated, each row naming c-enc-13
+PASS A6 TRLA_110 needs the boss's generated Secrets (Hunter) and is a boss's on a catalog run only; the run player's on any run
+PASS A7 TRLA_129s Frostfire is admitted for a boss and the run player (boss-shrine-token), never generated; Malacrass's row lists it
+PASS A8 TRLA_065p Steady Throw is a boss's only (boss-power-public), never generated, never the run player's
+PASS A9 TRLA_107 Tribal Shrine stays the test fixture: scripted, admitted for no side, in no row
+PASS A10 Zul'jin's row without the boss's generated Secrets is refused: Halazzi's Trap (and Streetsmuggler) would do nothing  (TRLA_110: generates a Secret for the boss, but the row keeps the boss side's generated Secrets off: it would do nothing (boss trl_204_zuljin; set bossGeneratedSecrets) | TRLA_168: generates a Secret for the boss, but the row keeps the boss side's generated Secrets off: it would do nothing (boss trl_204_zuljin; set bossGeneratedSecrets))
+PASS A11 a variant naming the fixture shrine is refused (no boss admission)  (TRLA_107: admission board-shrine-form: a shrine's dormant form (made by ShrineRules when its shrine dies, never a card) or the TRLA_107 Tribal Shrine fixture (a scripted enemy shrine that tests place on the boss side; boss shrine rosters are phase 8): never offered, dealt or generated; lifted by none: engine-made dormant forms and the boss-side test fixture; no player role, boss deck or generation pool offers them (boss trl_205_loti variant early shrine))
+PASS A12 every listed card left out of a champion's deck is unscripted or not admitted for a boss (the Rumble Run teammates the champions play), each recorded  ( teammates 29)
+PASS A13 the boss cards that stay: Streetsmuggler in Zul'jin's late deck (with the boss's generated Secrets), none of the teammates anywhere
+PASS A14 the tier pools: two rows in enc-t1, one in enc-t2 (beside Voone), two in enc-t3, three in enc-t4
+PASS A15 trl_201_zentimo: the plan of each variant is the row's (hero, power, Health 30 on floor 1) with that variant's shrine and deck  (early:TRLA_155,middle:TRLA_109,late:TRLA_154)
+PASS A15 trl_202_hooktusk: the plan of each variant is the row's (hero, power, Health 30 on floor 1) with that variant's shrine and deck  (early:TRLA_106,middle:TRLA_186,late:TRLA_187)
+PASS A15 trl_203_thekal: the plan of each variant is the row's (hero, power, Health 30 on floor 1) with that variant's shrine and deck  (early:TRLA_138,middle:TRLA_137,late:TRLA_105)
+PASS A15 trl_204_zuljin: the plan of each variant is the row's (hero, power, Health 30 on floor 1) with that variant's shrine and deck  (early:TRLA_163,middle:TRLA_162,late:TRLA_110)
+PASS A15 trl_205_loti: the plan of each variant is the row's (hero, power, Health 30 on floor 1) with that variant's shrine and deck  (early:TRLA_116,middle:TRLA_115,late:TRLA_112)
+PASS A15 trl_206_jeklik: the plan of each variant is the row's (hero, power, Health 30 on floor 1) with that variant's shrine and deck  (early:TRLA_113,middle:TRLA_178,late:TRLA_179)
+PASS A15 trl_207_malacrass: the plan of each variant is the row's (hero, power, Health 30 on floor 1) with that variant's shrine and deck  (early:TRLA_128,middle:TRLA_108,late:TRLA_129)
+PASS A15 trl_208_talanji: the plan of each variant is the row's (hero, power, Health 30 on floor 1) with that variant's shrine and deck  (early:TRLA_146,middle:TRLA_147,late:TRLA_114)
+PASS V1 300 run seeds draw every variant of every champion, each between 60 and 140 times  (201_zentimo/middle=97 201_zentimo/late=90 201_zentimo/early=113 202_hooktusk/middle=97 202_hooktusk/late=90 202_hooktusk/early=113 203_thekal/middle=97 203_thekal/late=90 203_thekal/early=113 204_zuljin/middle=97 204_zuljin/late=90 204_zuljin/early=113 205_loti/middle=97 205_loti/late=90 205_loti/early=113 206_jeklik/middle=97 206_jeklik/late=90 206_jeklik/early=113 207_malacrass/middle=97 207_malacrass/late=90 207_malacrass/early=113 208_talanji/middle=97 208_talanji/late=90 208_talanji/early=113)
+PASS V2 the variant is a function of the run seed and the floor: the same seed gives the same variant, a state restored through the save serializer keeps it (and its plan's shrine), and other floors of the seed draw other variants  (late restored late floors late,middle,early)
+PASS V3 a run with a board shrine never meets the champion of its shrine's class (40 seeds per shrine class on acts-v3h); it still meets the other champions  (shrine runs 360 champion fights 846 mirror )
+PASS Z1 Zul'jin's hero power is Steady Throw (2), scripted by family 13 with the client's text  (<b>Hero Power</b>
+Deal $2 damage to the enemy hero.@<b>Hero Power</b>
+Deal $2 damage. @spelldmg)
+PASS Z2 it is offered once, with no target  (-)
+PASS Z3 used: the run player's hero takes 2 (a hero power: no Spell Damage), the boss's hero nothing  (30->28)
+PASS Z4 once a turn: spent
+PASS S105a Shirvallah's Protection (Thekal, late): a boss minion that survives damage gains Divine Shield
+PASS S105b a run player's minion that survives gains nothing
+PASS S106a Bottled Terror (Hooktusk, early): the boss's other minions have Stealth, the shrine and the run player's minions none
+PASS S106b Arcane Shot from the run player's hand is offered on the boss's hero and shrine, never on the stealthed Yeti  (HERO_08,TRLA_202h,TRLA_106,CS2_182)
+PASS S106c when the shrine goes dormant its Deathrattle gives the boss's minions +2 Attack (TRLA_106e), not the run player's
+PASS S108a Jan'alai's Mantle (Malacrass, middle): no spell in the boss's hand, Spell Damage 0
+PASS S108b three spells in the boss's hand: Spell Damage +3 for the boss  (3 3)
+PASS S108c Frostbolt cast from that hand deals 3 + 2 (War Golem 7/7 -> 7/2)  (2 2)
+PASS S108d the run player's spells do not count
+PASS S109a Krag'wa's Lure (Zentimo, middle): after the boss Overloads (1), its minions (the shrine too) gain 1 Attack (TRLA_109e); the run player's none  (5 1)
+PASS S109b the run player's Overload gives the boss's minions nothing
+PASS S110a Halazzi's Trap (Zul'jin, late): the plan turns the boss's generated Secrets on
+PASS S110b after the boss casts a spell, a random scripted Hunter Secret is put into play for the boss (not cast: one spell counted), from the closed boss pool  (CFM_026 pool 13)
+PASS S110c the boss's Secret zone fills to 5 different Secrets and stops  (CFM_026,EX1_533,LOE_021,EX1_609,LOOT_079)
+PASS S110d the boss knows its own Secrets (its fair view holds the real ones)
+PASS S110e the run player casting a spell puts no Secret for anyone
+PASS S110f deterministic: the same match seed puts the same Secret
+PASS S112a Gonk's Armament (Loti, late): Shapeshift gains the boss 1 Armor, which refreshes its Mana Crystals (4 for the Yeti + 2 for the power -> 0 used)  (used 4 -> 0 armor 1)
+PASS S112b the run player's Armor gain refreshes nothing  (3)
+PASS S113a Blood Pact (Jeklik, early): the boss's Fireball costs 4 Health instead of Mana  (boss 30->26 mana 10->10)
+PASS S113b the run player's spells cost Mana as ever  (cost 2 mana 10->8 hp 24->24)
+PASS S114a Bwonsamdi's Sanctum (Talanji, late): the boss's Leper Gnome's Deathrattle triggers three times (6 to the run player's hero)  (30->24)
+PASS S114b the run player's Deathrattle triggers once  (30->28)
+PASS S115a Gonk's Mark (Loti, middle): every minion the boss plays or summons gets +1/+1 (TRLA_115e); the run player's none
+PASS S116a Bonds of Balance (Loti, early): at the end of the boss's turn the shrine gains its hero's Attack (1)  (hero 1 shrine 1)
+PASS S116b the run player's hero Attack at the end of its turn gives the boss's shrine nothing
+PASS S128a Jan'alai's Flame (Malacrass, early): the boss's Fireblast costs (0) (printed 2); the run player's power keeps its cost  (0)
+PASS S128b with no Mana, Fireblast kills a Wisp and is refreshed
+PASS S128c a hit that does not kill leaves it spent
+PASS S129a Jan'alai's Progeny (Malacrass, late): the boss freezing a minion puts a Frostfire into the boss's hand (created by its shrine)
+PASS S129b the boss plays it: (0) Mana, 1 damage (the Wisp dies)
+PASS S129c the run player freezing the boss's minion gives nobody a Frostfire
+PASS S137a Shirvallah's Vengeance (Thekal, middle): after the boss's hero takes 1, the run player's hero takes 5  (boss 30->29 me 30->25)
+PASS S137b the boss damaging the run player's hero does not answer
+PASS S137c the guard is cleared
+PASS S138a Shirvallah's Grace (Thekal, early): Blessing of Kings on the boss's Yeti is cast again on the shrine (0/5 -> 4/9)  (4/9)
+PASS S138b cast on a run player's minion: no copy
+PASS S146a Bwonsamdi's Tome (Talanji, early): each spell the boss casts adds one random Priest spell to its hand, always through the boss's generation filter (admitted for a boss, never a Secret or a listed exclusion)  (30 made, 21 kinds, bad )
+PASS S146c on the boss's turn its generation pool of Priest spells drops every id the boss's lists exclude (1 of 80), and keeps the rest  (79 of 80; excluded TRL_500)
+PASS S146b the run player's spell adds nothing for anyone
+PASS S147a Bwonsamdi's Covenant (Talanji, middle): the run player healing its own hero (8) damages it instead  (20->12)
+PASS S147b the boss's own heals still heal (Lesser Heal: +2)  (25->27)
+PASS S147c the boss healing the run player's hero damages it too  (12->4)
+PASS S154a Tribute from the Tides (Zentimo, late): the boss's Elven Archer's Battlecry triggers three times (3 to the run player's hero)  (30->27)
+PASS S154b the run player's Battlecry triggers once  (30->29)
+PASS S155a Krag'wa's Grace (Zentimo, early): the boss's spells cost (2) less (Fireball 4 -> 2), its minions and the run player's spells full price  (2 4 4)
+PASS S162a Halazzi's Hunt (Zul'jin, middle): the boss's War Golem Overkills a Wisp: the cards in the boss's hand cost (1) less (TRLA_162e2)  (CS2_182:3,CS2_029:3)
+PASS S162b the run player's Overkill cuts nothing
+PASS S163a Halazzi's Guise (Zul'jin, early): each Beast the boss summons gains one of Rush, Taunt or Poisonous; the run player's Beast none  (TRLA_163e,TRLA_163e,TRLA_163e4,TRLA_163e,TRLA_163e,TRLA_163e4)
+PASS S178a Dark Reliquary (Jeklik, middle): each discard of the boss summons one random Demon for the boss, through the boss's generation filter  (12: BOT_224,CFM_900,LOOT_136,BOT_224,CS2_065,DINO_435,DAL_607,DRG_402,LOOT_136,CFM_751,EX1_310,GVG_100 bad )
+PASS S178b the run player's discard summons nothing
+PASS S179a Hir'eek's Hunger (Jeklik, late): Life Tap's 2 damage on the boss's turn goes to the run player's hero instead; the card is drawn  (boss 30->30 me 30->28)
+PASS S179b on the run player's turn the boss's hero takes its damage
+PASS S186a Treasure from Below (Hooktusk, middle): at the start of the boss's turn one card of the run player's deck is now the boss's, in its hand (the run player's deck - 1)  (1 CS2_120 deck 26->25)
+PASS S186b it costs (2) less (LOOT_204e): River Crocolisk 2 -> 0
+PASS S186c the boss's fair view: it knows exactly the card it took (a card of its own hand)
+PASS S186d the run player's other deck cards stay unknown slots in the boss's view (count = the deck's)  (25 25)
+PASS S186e in the boss's view the run player's next turn start steals nothing (the shrine works on its owner's turn)  (ok 7->7)
+PASS S186f the boss plays the stolen card (a minion of its board now)
+PASS S186g with the boss's hand full the stolen card is burned (out of the run player's deck all the same)  (deck 26->25)
+PASS S186h the run player's deck empty: nothing is stolen (the boss only draws)
+PASS S187a Pirate's Mark (Hooktusk, late): the boss's Moonfire is cast again on the same target (2 to the run player's hero), one hand cast counted  (30->28)
+PASS S187b the run player's spell is cast once
+PASS L1 each of the 24 shrines lands on the boss's board at Start of Game (left-most slot, awake, marked), none on the run player's  (TRLA_155,TRLA_109,TRLA_154,TRLA_106,TRLA_186,TRLA_187,TRLA_138,TRLA_137,TRLA_105,TRLA_163,TRLA_162,TRLA_110,TRLA_116,TRLA_115,TRLA_112,TRLA_113,TRLA_178,TRLA_179,TRLA_128,TRLA_108,TRLA_129,TRLA_146,TRLA_147,TRLA_114)
+PASS L2 the boss's fair view sees its shrine on its board  (TRLA_155,TRLA_109,TRLA_154,TRLA_106,TRLA_186,TRLA_187,TRLA_138,TRLA_137,TRLA_105,TRLA_163,TRLA_162,TRLA_110,TRLA_116,TRLA_115,TRLA_112,TRLA_113,TRLA_178,TRLA_179,TRLA_128,TRLA_108,TRLA_129,TRLA_146,TRLA_147,TRLA_114)
+PASS L3 each goes dormant in its slot when it dies (its <id>t form)  (TRLA_155,TRLA_109,TRLA_154,TRLA_106,TRLA_186,TRLA_187,TRLA_138,TRLA_137,TRLA_105,TRLA_163,TRLA_162,TRLA_110,TRLA_116,TRLA_115,TRLA_112,TRLA_113,TRLA_178,TRLA_179,TRLA_128,TRLA_108,TRLA_129,TRLA_146,TRLA_147,TRLA_114)
+PASS L4 each revives at the start of the boss's third turn after its death  (TRLA_155,TRLA_109,TRLA_154,TRLA_106,TRLA_186,TRLA_187,TRLA_138,TRLA_137,TRLA_105,TRLA_163,TRLA_162,TRLA_110,TRLA_116,TRLA_115,TRLA_112,TRLA_113,TRLA_178,TRLA_179,TRLA_128,TRLA_108,TRLA_129,TRLA_146,TRLA_147,TRLA_114)
+PASS L5 the run player's Polymorph on a boss shrine destroys it instead (dormant, no Sheep)
+PASS L6 Mind Control takes the boss's Yeti but never its shrine (not a target)  (CS2_182)
+PASS X1 (engine staging) a Rikkar Paladin's Vengeance against Thekal's: one shrine on each board
+PASS X2 the run player's Moonfire on the boss: the boss's Vengeance answers with 5; the run player's does not answer that (recursion guard)  (boss 30->29 me 30->25)
+PASS X3 (engine staging) two Treasures from Below: each owner steals one card of the other's deck at its own turn start
+PASS X4 Jeklik's Hunger against a run player's Vengeance: Life Tap's 2 go to the run player's hero, whose Vengeance answers with 5 at the boss while the redirected hit resolves, so the Hunger lets it through (a hit inside a redirect is never redirected); the chain stops, both guards cleared  (boss 30->25 me 30->28)
+PASS F1 the boss's Griftah opens a Discover with a second one chained and not yet dealt  (3 next undealt)
+PASS F2 the boss's fair view is built with the undealt chained choice (no entity to mask; was an ArgumentNullException and a fallback)  (ok)
+PASS F3 both Discovers resolve: one card to the boss's hand, one to the run player's  (boss 0->1 player 4->5)
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 112 passed, 0 failed

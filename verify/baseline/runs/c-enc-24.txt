@@ -1,0 +1,67 @@
+PASS P1 the shipped data validates with the family 24 rows
+PASS P2 Xatma, K'zrath (300 form: Systematic Betrayal, 200 form: Evoke Panic) and Vesh are major3 rows of three hero forms at 300/200/100, each phase with its own deck and 3 (Vesh: 5) extra draws, persistent damage
+PASS P3 Tekahn is the finale row: 300 Health, power-only forms at 200 (Curse of Flame) and 100 (Soul Pyre) with 40-card phase decks, no persistent damage  (2 forms)
+PASS P4 the relay lists each explorer three times: hero power n with its client finale deck n (ULDA_<Explorer>_Tekanh_Deck_n: 30 of its cards, an unscripted one replaced by a second copy), 50 Health, skipped for the run's own explorer  (12 entries)
+PASS P5 BOT_543 Omega Mind is in exactly one finale deck (Finley's third, two copies), and every finale-deck card is scripted
+PASS P6 BuildPlan: the boss starts in form 0 at full Health; its forms carry the hero, power, Health and deck of each phase  (0 300)
+PASS P7 banked damage (profile scope) starts the next fight in the phase its Health belongs to: K'zrath at 150 in form 1 (Evoke Panic, the phase-2 deck), Vesh at 90 in form 2 (Mur-nado)  (1/50 2/10)
+PASS P8 in the game the banked boss is that form's hero and power at its banked Health, the form index set  (ULDA_BOSS_38h2/ULDA_BOSS_38p1 150hp)
+PASS P9 a lost fight banks the lord's Health left (profile, per lord) and a won one clears the record  (170)
+PASS X1 Foreboding Fate costs (0), aims only at a friendly minion with a Deathrattle and triggers it (Loot Hoarder draws the boss a card); not offered without one  (EX1_096)
+PASS X2 at 200 Health or less Xatma becomes ULDA_BOSS_37h2 with Death's Embrace (passive, not clickable), keeps 199 Health, her deck is the phase-2 list and she draws 3 from it  (ULDA_BOSS_37h2/ULDA_BOSS_37p2 199hp hand 3 deck 28)
+PASS X3 Death's Embrace: two boss minions dying at once give one Reborn (the first only); the run player's first death this turn is reborn too, its second is not  (boss 1 player 1/0)
+PASS X4 the next turn the first death is reborn again
+PASS X4b a run shrine that goes dormant has not died for Death's Embrace: the run player's Yeti dying after it this turn is still the first death and is reborn  (TRLA_154t:0/3,CS2_182:4/1)
+PASS X5 at 100 or less: ULDA_BOSS_37h3 with Death's Gaze (1): 1 damage to every minion; a minion died, so Untimely Demise joins the boss's hand (Death's Embrace is no longer active: the Wisp stays dead)  (ULDA_BOSS_37h3/ULDA_BOSS_37p3 90hp CS2_182:4/4)
+PASS X6 when no minion dies Death's Gaze adds nothing
+PASS X7 Untimely Demise (3) deals 3 damage to every enemy (the run player's hero and minions), none to the boss's own  (3 3 0)
+PASS K1 Systematic Betrayal (0), K'zrath's first form: not offered with both boards empty; it rotates the minions counter-clockwise (the run player's rightmost to the boss's right end, the boss's leftmost to the run player's left end)  (player CS2_120:3/4,CS2_231:1/1 boss EX1_096:2/1,CS2_182:5/6)
+PASS K2 the two that switched sides gain +1/+1 (Chosen Betrayer); the others gain nothing
+PASS K3 a run board shrine never changes sides: the rotation passes it over and moves the others  (player CS2_120:3/4,TRLA_154:0/3 boss CS2_182:5/6)
+PASS K4 Evoke Panic (0), the 200 form: the lowest-Health minion of both rows (the run player's Wisp) attacks one of its neighbors (the Yeti or the Croc) and dies  (CS2_182:4/4,CS2_120:2/3)
+PASS K5 it is not offered while no row holds two minions that can fight  (CS2_182:4/4 | CS2_182:4/5)
+PASS K6 Murmurs of Mortality (passive, the 100 form): after a friendly minion dies, an enemy minion above 1 Health is brought to 1 Health (no damage dealt: no damage event)  (yeti 1)
+PASS K7 with no enemy minion above 1 Health it does nothing
+PASS V1 Made of Murlocs (passive): the boss's hero is Immune (6 damage does nothing)  (300 -> 300)
+PASS V2 after any Murloc dies (either side) the Immune boss loses 3 Health; another minion's death costs nothing  (297 294 294)
+PASS V3 the Murloc death that takes Vesh to 200 or less brings his next form at once: ULDA_BOSS_39h2 with Ashes Anew, 199 Health, no longer Immune, the phase-2 deck and 5 cards drawn  (ULDA_BOSS_39h2/ULDA_BOSS_39p2 199hp hand 5)
+PASS V4 Ashes Anew (0) aims only at a friendly Murloc; it destroys it and summons a Scaly Golem (0/4... the client's 1/4 Taunt) in its place, a full board included  (CS2_168 ULDA_BOSS_39m:0/4,CS2_182:4/5,CS2_231:1/1,CS2_231:1/1,CS2_231:1/1,CS2_231:1/1,CS2_231:1/1)
+PASS V5 Scaly Golem's Deathrattle gives every Murloc of both boards +1/+1  (3 3)
+PASS V6 Mur-nado costs (15) and (1) less after each Murloc death of either side while it is active (5 deaths: 10; a Yeti's death changes nothing)  (15 -> 10)
+PASS V7 Mur-nado shuffles every minion of both boards into the boss's deck (the run player's become the boss's cards); both boards are empty  (deck 25 -> 28)
+PASS V8 Mur-nado (now at 10) takes the run player's Yeti into the boss's deck but not its board shrine: the shrine goes dormant on its own board, as from any such effect  (TRLA_154t:0/3)
+PASS V9 Mrgl Mrgl Nyah Nyah summons Murlocs that died this game (the two that died: up to 3); Demonic Presence draws 3 and gains 10 Armor  (summoned 1)
+PASS V10 Giantfin draws its owner 2 cards at the end of its turn  (9 -> 10)
+PASS T1 Awaken the Flame (2) aims only at a Sanctum Golem and turns it into an Enflamed Golem in place, keeping its damage and enchantments; not offered without one  (ULDA_032 ULDA_032)
+PASS T2 Sanctum Golem can't attack; the Enflamed Golem's Deathrattle deals 3 damage to all minions and summons a Sanctum Golem  (ULDA_031:6/6,ULDA_031:6/3)
+PASS T3 at 200 or less Tekahn keeps his hero and Health and takes Curse of Flame; his deck is the phase-2 list (40 cards, no extra draw)  (ULDA_BOSS_67h/ULDA_BOSS_67p2 199hp deck 40)
+PASS T4 Curse of Flame (2) aims at an enemy minion only; the cursed minion living to the boss's next turn deals 5 damage to every character, then the curse is gone  (player 30->25 boss 199->194)
+PASS T5 a cursed minion that dies before the boss's next turn deals nothing  (25->25)
+PASS T6 at 100 or less Soul Pyre (passive): after a player plays a card, that player's hero takes damage equal to its Cost (the run player's Yeti: 4; the boss's Croc: 2)  (25->21 90->88)
+PASS T7 Rakanishu: for the rest of the game the boss's Lackeys are 4/4 (in hand, on the board, and those that come later); the run player's are not  (4/4 4/4 4/4)
+PASS T8 The Final Plague?! (10) summons C'Thun, N'Zoth, Y'Shaarj and Yogg-Saron (no Battlecry)  (OG_280:6/6,OG_133:5/7,OG_042:10/10,OG_134:7/5)
+PASS L1 the relay plan: the run's own hero first, then the four explorers in order (Elise, Finley, Brann, Reno), each with its three entries (hero power n and finale deck n) at 50 Health; the run state records the same heroes and decks for the floor  (12 entries)
+PASS L2 a run whose own hero is an explorer (Reno) meets the other three only  (ULDA_Elise,ULDA_Finley,ULDA_Brann)
+PASS L3 the match classes cover every relay hero (the boss's Secret prior): Druid, Paladin, Hunter, Mage and the run's own  (MAGE,DRUID,PALADIN,HUNTER)
+PASS L4 the entering explorer's entry (power and deck) is drawn by the match's game RNG as it enters: the same seed gives the same entry, twelve seeds give all three of Elise's  (ULDA_Elise_HP2,ULDA_Elise_HP2,ULDA_Elise_HP1,ULDA_Elise_HP2,ULDA_Elise_HP2,ULDA_Elise_HP1,ULDA_Elise_HP1,ULDA_Elise_HP1,ULDA_Elise_HP3,ULDA_Elise_HP2,ULDA_Elise_HP3,ULDA_Elise_HP3)
+PASS L5 hidden information: the boss's fair view does not know which of Elise's three entries the real game draws (its simulations, seeded on their own, enter different ones); the real game then draws its own  (ULDA_Elise_HP1,ULDA_Elise_HP2,ULDA_Elise_HP3,ULDA_Elise_HP1,ULDA_Elise_HP1,ULDA_Elise_HP1,ULDA_Elise_HP2,ULDA_Elise_HP1 real ULDA_Elise_HP2)
+PASS L6 in the game the run hero's death brings Elise (50 Health, a power of hers, a new hand of 4 from her finale deck; the boss keeps its Health), the next death Finley (with his third deck: two BOT_543)  (seed 2 ULDA_Finley/ULDA_Finley_HP3 50hp elise ULDA_Elise/ULDA_Elise_HP2 50hp hand 4 deck 26 state RUNNING boss 300->300)
+PASS L7 BOT_543 Omega Mind, played with 10 Mana Crystals, gives the spells cast this turn Lifesteal (Moonfire heals the hero 1; a Secret cast then has it); when the turn ends Mind Meld is gone and the Secret still waiting loses its Lifesteal  (30 -> 31 secret True/False)
+PASS L8 after the fourth explorer the next death ends the game; the harvest lists every hero the run player used, in order  (HERO_08>ULDA_Elise>ULDA_Finley>ULDA_Brann>ULDA_Reno)
+PASS L9 the fight's end clears the run's relay state and records the heroes used; the run's own class, hero and deck are untouched  (HERO_08,ULDA_Elise,ULDA_Finley,ULDA_Brann,ULDA_Reno)
+PASS G1 ULDA_115 is scripted as a Tombs active treasure on its own id (Cost 2, the client's name and text)
+PASS G2 it deals 10 damage (Spell Damage applies: 11 with Kobold Geomancer); outside a Plague Lord fight each cast banks as much again with its cast-time Spell Damage (10 + 11: the harvest reports 21)  (30 -> 19, banked 21)
+PASS G2b a copy the boss casts counts too (an enemy's copied or stolen cast still adds its 10, the wiki): the harvest reports 31  (31)
+PASS G3 a fight against another boss banks that damage for the run's next Plague Lord (DungeonRunState.PlagueLordDamage)  (21)
+PASS G3b cast during a Plague Lord fight, it also deals its 10 (with Spell Damage) to the Plague Lord at once: 10 on a minion cast, 11 + 11 with Kobold Geomancer on a cast at the lord; nothing is banked  (250 -> 240 -> 218)
+PASS G4 the Plague Lord fight starts with that damage (20 of 300), added to the banked Health (225 - 30 = 195: phase 2)  (20 1/5)
+PASS G5 a boss without persistent damage carries none of it
+PASS G6 the Plague Lord fight spends the banked damage  (0)
+PASS G7 the save field is append-only: written only when set (the run's body is otherwise unchanged) and read back
+PASS G8 the treasure is offered to an explorer's act run on an encounter schedule only (runs "encounters"): acts-v3h yes, acts-v2 no; it joins the Tombs treasure pool only there  (2 3)
+PASS A1 the twelve powers are admitted for a boss only
+PASS A2 the boss cards are admitted for both sides and never generated
+PASS A3 ULDA_115 is the run player's only (family run-treasure-plague-lord)
+PASS A4 the passive powers are passive in the engine and need activation; the clickable ones are not
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 65 passed, 0 failed

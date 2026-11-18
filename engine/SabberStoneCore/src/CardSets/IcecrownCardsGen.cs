@@ -2152,9 +2152,15 @@ namespace SabberStoneCore.CardSets
 			// --------------------------------------------------------
 			cards.Add("ICC_090", new CardDef(new Power
 			{
+				// Phase 8 wave 6: each OVERLOAD event counts the Mana Crystals it Overloads (the event's amount), as
+				// OverloadThisGame does, not the source's printed Overload: Plaguebringer's extra Overload (ULDA_BOSS_63p), Spell
+				// Lock's (DALA_BOSS_54p, EncounterRules.OverloadFor) and Winged Aberration's are not printed on their source. With the
+				// printed amount the cost in a game drifted from the one any copy of it computes (-OverloadThisGame), and the boss's
+				// fair-view search chose a Snowfury Giant the real game could not pay for (bp.sh enc22a, Vessina). The same for a
+				// printed Overload (Generic's amount is the card's).
 				Aura = new AdaptiveCostEffect(
 					initialisationFunction: p => -p.Controller.OverloadThisGame,
-					triggerValueFunction: p => -p.Card.Overload,
+					triggerValueFunction: p => -(p.Game.CurrentEventData?.EventNumber ?? p.Card.Overload),
 					trigger: TriggerType.OVERLOAD,
 					triggerSource: TriggerSource.FRIENDLY)
 			}));

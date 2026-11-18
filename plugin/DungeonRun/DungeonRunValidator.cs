@@ -412,6 +412,16 @@ internal static class DungeonRunValidator
             }
             else if (cls.Adventure != null || cls.Signatures.Count > 0 || cls.Health != 0) Fail(where, "only a hero row may set adventure, signatures or health");
             if (cls.Health < 0) Fail(where, $"health {cls.Health} must be positive (or absent)");
+            // Wave 5: "excludeBosses" names boss rows (the same character as the hero row); only a hero row has a character. The
+            // encounter rows load with encounters-v1.json, so an id is checked when encounters are loaded.
+            foreach (string boss in cls.ExcludeBosses)
+                if (!cls.IsHero) Fail(where, $"excludeBosses {boss}: only a hero row may exclude a boss row");
+                else if (data.Bosses.Any(b => b.IsEncounter) && data.Bosses.All(b => b.Id != boss)) Fail(where, $"excludeBosses names unknown boss {boss}");
+            // The close-out (family 25): a finale's fixed bosses are fought whatever the act draws exclude, so the default roll
+            // leaves out a default schedule whose finale fixes an excluded row (DungeonRun.DefaultSchedule); one must stay open.
+            if (cls.IsHero && cls.ExcludeBosses.Count > 0 && data.Schedules != null && data.Schedules.Defaults.Count > 0
+                && data.Schedules.Defaults.All(id => data.Schedules.Find(id)?.Acts.Any(a => a.IsFinale && a.FixedBosses.Any(cls.ExcludeBosses.Contains)) == true))
+                Fail(where, "excludeBosses: the finale of every default schedule fixes an excluded boss row, so a new run of this row has no schedule");
             if (runClasses.Count == 1)
             {
                 if (!IsClass(runClasses[0])) Fail(where, $"classes [{runClasses[0]}] is not a class name");
@@ -568,8 +578,40 @@ internal static class DungeonRunValidator
             // before its content entry exists. A treasure the table admits for catalog runs only (LOOTA_833's generated
             // Secrets) passes: DungeonRun.TreasureOfferedOn offers it on a catalog run only.
             TreasureAdmission(null, t.Id, t.Id);
-            if (t.Runs != DungeonRunTreasure.RunsAll && t.Runs != DungeonRunTreasure.RunsAct && t.Runs != DungeonRunTreasure.RunsLegacy)
-                Fail(t.Id, $"runs {t.Runs} must be all, act or legacy");
+            if (t.Runs != DungeonRunTreasure.RunsAll && t.Runs != DungeonRunTreasure.RunsAct && t.Runs != DungeonRunTreasure.RunsLegacy
+                && t.Runs != DungeonRunTreasure.RunsEncounters && t.Runs != DungeonRunTreasure.RunsV4)
+                Fail(t.Id, $"runs {t.Runs} must be all, act, legacy, encounters or v4");
+            // Step 9: a "v4" row needs a schedule file that can stamp a run 4 (no run of a released schedule may meet it).
+            // (Data loaded without schedule-v1.json has no act run at all, so it cannot meet the row either.)
+            else if (t.Runs == DungeonRunTreasure.RunsV4 && data.Schedules != null && data.Schedules.ScheduleVersion < 4)
+                Fail(t.Id, "runs v4 needs scheduleVersion 4");
+            // Step 9 (D9): a boss's reward row is its scripted card itself (no content entry), granted only by an encounter row's
+            // v4 "reward" (DungeonRun.GrantEncounterReward) to a stamp-4 run as a treasure card of the run deck.
+            if (t.Reward)
+            {
+                var rewardCard = Find(t.Id, t.Id + " reward");
+                if (rewardCard != null)
+                {
+                    Client(t.Id, t.Id + " reward");
+                    if (!rewardCard.Implemented) Fail(t.Id, "a reward card must be scripted");
+                    if (rewardCard.Type == CardType.HERO || rewardCard.Type == CardType.HERO_POWER || rewardCard.Type == CardType.ENCHANTMENT)
+                        Fail(t.Id, $"a reward is a deck card, not a {rewardCard.Type}");
+                    TreasureAdmission(rewardCard, t.Id, t.Id + " reward");
+                }
+                if (t.Offered) Fail(t.Id, "a reward is never offered in a draft (offered: false)");
+                if (t.Runs != DungeonRunTreasure.RunsV4) Fail(t.Id, "a reward is granted on a stamp-4 run only (runs v4)");
+                if (!t.Active) Fail(t.Id, "a reward is a deck card (active: true)");
+                if (t.Signature || t.Shared || t.Universal || t.UpgradesTo != null || !t.Scope.IsEmpty) Fail(t.Id, "a reward has no scope, signature, shared, universal or upgrade");
+                if (data.Bosses.Any(b => b.IsEncounter) && !data.Bosses.Any(b => b.V4?.Reward == t.Id)) Fail(t.Id, "a reward no encounter row's v4 block grants");
+                continue;
+            }
+            // Step 9 (D6): a shared treasure is a scoped generic one (a stamp-4 run lifts its scope); an upgrade keeps the flag.
+            if (t.Shared)
+            {
+                if (t.Signature || t.Legacy) Fail(t.Id, "a signature or legacy treasure is never shared");
+                if (t.Scope.IsEmpty) Fail(t.Id, "shared names a treasure with no scope (it is offered to every run already)");
+                if (t.UpgradesTo != null && data.FindTreasure(t.UpgradesTo) is DungeonRunTreasure next && !next.Shared) Fail(t.Id, $"shared, its upgrade {t.UpgradesTo} is not");
+            }
             if (!TryContent(t.Id, out var content)) { Fail(t.Id, "no engine content entry"); continue; }
             // LOOTA_802 Justicar's Ring: offered only to a run whose power it can upgrade, so its scope lists powers and only
             // powers, each with an upgraded form that a run player may use.
@@ -726,6 +768,19 @@ internal static class DungeonRunValidator
             if (boss.HasFlag(DungeonRunEncounterData.HeroSwitch) != (boss.HeroCards.Count > 0)) Fail(where, "flag heroSwitch and the hero cards must go together");
             if (boss.HasFlag(DungeonRunEncounterData.FormsFlag) != (boss.Forms.Count > 0)) Fail(where, "flag forms and the forms must go together");
             if (boss.HasFlag(DungeonRunEncounterData.ShrineFlag) != boss.Variants.Any(v => v.Shrine != null)) Fail(where, "flag shrine and a shrine variant must go together");
+            // Step 9 (lane R): the two prevention flags that follow from the row's own data need that data (one way only: a test
+            // fixture's row may leave a flag out), and the row's v4 block.
+            bool addsHand = boss.Start != null && boss.Start.BossHandAdd.Count + boss.Start.PlayerHandAdd.Count > 0 || boss.HeroCards.Count > 0;
+            if (boss.HasFlag(DungeonRunEncounterData.HandAdd) && !addsHand) Fail(where, "flag handAdd needs a start hand add or hero cards");
+            if (boss.HasFlag(DungeonRunEncounterData.ManaIdentity) && boss.Start?.BossMana == null) Fail(where, "flag manaIdentity needs a start bossMana");
+            if (data.Treasures.Count > 0)
+                foreach (string id in boss.IncompatibleTreasures.Where(id => data.FindTreasure(id) == null)) Fail(where, $"incompatibleTreasures names unknown treasure {id}");
+            if (boss.V4 != null)
+            {
+                foreach (string key in boss.V4.UnknownKeys) Fail(where, $"v4: unknown key {key}");
+                if (boss.V4.Tier != null && !DungeonRunEncounterData.Tiers.Contains(boss.V4.Tier)) Fail(where, $"v4: unknown tier {boss.V4.Tier}");
+                if (boss.V4.Reward != null && data.Treasures.Count > 0 && data.FindTreasure(boss.V4.Reward) == null) Fail(where, $"v4: reward names unknown treasure {boss.V4.Reward}");
+            }
 
             Hero(boss.HeroCard, where);
             if (boss.Power == null) Fail(where, "an encounter needs a hero power");
@@ -1042,8 +1097,16 @@ internal static class DungeonRunValidator
             if (!DungeonRunTavernTable.KnownOps.Contains(o.Op)) Fail(id, $"unknown op {o.Op ?? "(none)"}");
             if (o.Cost < 0) Fail(id, "negative cost");
             if (o.Weight < 0) Fail(id, "negative weight");
+            // Step 9: weightByAct (a stamp-4 run's weights by act) and maxPerRun (a stamp-4 run's cap, counted from the run state).
+            if (o.WeightByAct.Any(w => w < 0)) Fail(id, "weightByAct holds a negative weight");
+            if (o.WeightByAct.Length > 0 && o.AliasOf != null) Fail(id, "an alias is never offered (weight 0); it names no weightByAct");
+            if (o.MaxPerRun < 0) Fail(id, "negative maxPerRun");
+            if (o.MaxPerRun > 0 && o.Op != "health") Fail(id, $"maxPerRun on op {o.Op}: only a health option's buys are counted by the run (HealthBonus)");
             if (o.Pool != null && !DungeonRunTavernTable.KnownPools.Contains(o.Pool)) Fail(id, $"unknown pool {o.Pool}");
             if (o.Sample != null && !DungeonRunTavernTable.KnownSamples.Contains(o.Sample)) Fail(id, $"unknown sample {o.Sample}");
+            // The close-out: "runs" as a treasure's; an alias runs where its target does, so it names none.
+            if (!DungeonRunTavernTable.KnownRuns.Contains(o.Runs)) Fail(id, $"unknown runs {o.Runs ?? "(none)"}");
+            else if (o.AliasOf != null && o.Runs != DungeonRunTreasure.RunsAll) Fail(id, "an alias names no runs of its own");
             if (o.Ench != null)
             {
                 if (!DungeonRunTavernTable.KnownEnchantments.ContainsKey(o.Ench)) Fail(id, $"ench {o.Ench} is not a known deck enchantment");
@@ -1075,6 +1138,14 @@ internal static class DungeonRunValidator
         if (schedules.Find(schedules.Default) == null) errors.Add($"schedules: default {schedules.Default ?? "(none)"} is not a schedule");
         // Phase 8 (scheduleVersion 3): the rolled defaults, the pool sets, the per-schedule stamps and the global rules.
         foreach (string id in schedules.Defaults.Where(id => schedules.Find(id) == null)) errors.Add($"schedules: defaults names unknown schedule {id}");
+        // The close-out: the schedule of a data set loaded without encounters must need none (no pool set, no finale).
+        if (schedules.DefaultWithoutEncounters != null)
+        {
+            var plain = schedules.Find(schedules.DefaultWithoutEncounters);
+            if (plain == null) errors.Add($"schedules: defaultWithoutEncounters names unknown schedule {schedules.DefaultWithoutEncounters}");
+            else if (plain.MixesProvenance || plain.StampVersion >= 3 || plain.Acts.Any(a => a.IsFinale || a.Combat.Any(c => schedules.PoolSets.ContainsKey(c.Pool))))
+                errors.Add($"schedules: defaultWithoutEncounters {plain.Id} needs the encounter file (a pool set, the provenance mix or a finale)");
+        }
         foreach (var set in schedules.PoolSets.OrderBy(p => p.Key, StringComparer.Ordinal))
         {
             if (set.Value.Count == 0) errors.Add($"pool set {set.Key}: is empty");
@@ -1087,7 +1158,34 @@ internal static class DungeonRunValidator
                 errors.Add($"schedule {x.Id}: version {x.StampVersion} is outside {DungeonRunSchedules.OldestScheduleVersion}..{schedules.ScheduleVersion}");
             else if (!DungeonRunSchedules.ReleasedShapes.TryGetValue(x.StampVersion, out var stamped) || !stamped.ContainsKey(x.Id))
                 errors.Add($"schedule {x.Id}: version {x.StampVersion} never released it (DungeonRunSchedules.ReleasedShapes)");
-            if (x.Draw != null && x.Draw != DungeonRunSchedule.DrawProvenanceMix) errors.Add($"schedule {x.Id}: unknown draw {x.Draw}");
+            if (x.Draw != null && x.Draw != DungeonRunSchedule.DrawProvenanceMix && x.Draw != DungeonRunSchedule.DrawProvenanceMixV2) errors.Add($"schedule {x.Id}: unknown draw {x.Draw}");
+            // Step 9: the v2 draw and every step-9 tuning key need a stamp-4 schedule (DungeonRun.Tuned reads them; a released
+            // schedule must never carry one, or it would read differently from the release).
+            else if (x.MixesProvenanceV2 && x.StampVersion < 4) errors.Add($"schedule {x.Id}: draw {x.Draw} needs version 4");
+            var v4Keys = new List<string>(x.V4Keys);
+            if (x.Acts.Any(a => a.TreasureRareWeight != 0 || a.TreasureCommonWeight != 0)) v4Keys.Add("treasureRarity");
+            if (x.Acts.Any(a => !a.BundleAfterTreasure)) v4Keys.Add("bundleAfterTreasure");
+            if (x.Acts.Any(a => a.TurnCap != 0)) v4Keys.Add("finale.turnCap");
+            if (x.Acts.Any(a => a.FormRatchet)) v4Keys.Add("finale.formRatchet");
+            v4Keys = v4Keys.Distinct(StringComparer.Ordinal).OrderBy(k => k, StringComparer.Ordinal).ToList();
+            if (v4Keys.Count > 0 && x.StampVersion < 4) errors.Add($"schedule {x.Id}: {string.Join(", ", v4Keys)} need version 4");
+            if (x.V4Keys.Contains("drawTuning"))
+            {
+                if (!x.MixesProvenanceV2) errors.Add($"schedule {x.Id}: drawTuning without draw {DungeonRunSchedule.DrawProvenanceMixV2}");
+                if (x.DrawAlphaPermille < 0 || x.DrawAlphaPermille > 1000) errors.Add($"schedule {x.Id}: drawTuning alphaPermille {x.DrawAlphaPermille} is outside 0..1000");
+                if (x.DrawPenaltyPermille < 0) errors.Add($"schedule {x.Id}: drawTuning drawnPenaltyPermille {x.DrawPenaltyPermille} is negative");
+                if (x.LedgerMajorChance < 0 || x.LedgerMajorChance > 100) errors.Add($"schedule {x.Id}: drawTuning ledgerMajorChance {x.LedgerMajorChance} is outside 0..100");
+                if (x.MaxTrlPerAct < 0) errors.Add($"schedule {x.Id}: drawTuning maxTrlPerAct {x.MaxTrlPerAct} is negative");
+            }
+            if (x.V4Keys.Contains("upgradeEveryFloors") && x.UpgradeEveryFloors < 1) errors.Add($"schedule {x.Id}: upgradeEveryFloors {x.UpgradeEveryFloors} must be at least 1");
+            if (x.OffsetCap is int cap && cap < 0) errors.Add($"schedule {x.Id}: offsetCap {cap} is negative");
+            foreach (var a in x.Acts)
+            {
+                if ((a.TreasureRareWeight != 0 || a.TreasureCommonWeight != 0) && (a.TreasureRareWeight < 1 || a.TreasureCommonWeight < 1))
+                    errors.Add($"schedule {x.Id} act {a.Id}: treasureRarity needs rare and common weights of at least 1");
+                if (a.IsFinale && !a.BundleAfterTreasure) errors.Add($"schedule {x.Id} act {a.Id}: a finale drafts no bundle (bundleAfterTreasure)");
+                if (a.TurnCap != 0 && (a.TurnCap < 1 || a.TurnCap > 1000)) errors.Add($"schedule {x.Id} act {a.Id}: turnCap {a.TurnCap} is outside 1..1000");
+            }
             bool usesV3 = x.MixesProvenance || x.Acts.Any(a => a.AnomalyAtStart || a.TwistPool.Count > 0 || a.IsFinale
                 || a.Combat.Any(c => schedules.PoolSets.ContainsKey(c.Pool)) || a.MajorPool != null && schedules.PoolSets.ContainsKey(a.MajorPool));
             if (usesV3 && x.StampVersion < 3) errors.Add($"schedule {x.Id}: pool sets, the provenance mix, anomaly nodes, twists and a finale need version 3");
@@ -1115,14 +1213,37 @@ internal static class DungeonRunValidator
             if (string.IsNullOrEmpty(m.Id)) { errors.Add("modifier: an id is missing"); continue; }
             if (!ids.Add(m.Id)) errors.Add($"modifier {m.Id}: listed twice");
             if (string.IsNullOrEmpty(m.Name)) errors.Add($"modifier {m.Id}: no name");
+            // Step 9 (D7): "none" is the modifier offer's skip option on a stamp-4 schedule.
+            if (m.Id == DungeonRunGlobalRule.None) errors.Add($"modifier {m.Id}: \"none\" is the offer's skip option");
             foreach (string knob in m.UnknownKnobs) errors.Add($"modifier {m.Id}: unknown knob {knob}");
         }
         foreach (var boss in data.Bosses)
             foreach (string id in boss.IncompatibleModifiers.Where(id => schedules.Modifier(id) == null))
                 errors.Add($"boss {boss.Id}: incompatibleModifiers names unknown modifier {id}");
+        errors.AddRange(ValidateModifierReasons(data));
+        // Step 9: an encounter row's "v4" block (read on a stamp-4 run only): known keys, a combat or major tier, a reward row.
+        foreach (var boss in data.Bosses.Where(b => b.V4 != null))
+        {
+            string where = "boss " + boss.Id + " v4";
+            if (!boss.IsEncounter) errors.Add($"{where}: only an encounter row has a v4 block");
+            // (Unknown keys and tiers are refused with the encounter rows, in Validate.)
+            if (boss.V4.Tier != null)
+            {
+                if (!DungeonRunEncounterData.Tiers.Contains(boss.V4.Tier) || boss.V4.Tier == DungeonRunEncounterData.FinaleTier) errors.Add($"{where}: tier {boss.V4.Tier} is not a combat or major tier");
+                if (boss.Tier == DungeonRunEncounterData.FinaleTier) errors.Add($"{where}: a finale row keeps its tier");
+                if (DungeonRunEncounterData.IsCombatTier(boss.V4.Tier) != DungeonRunEncounterData.IsCombatTier(boss.Tier))
+                    errors.Add($"{where}: tier {boss.V4.Tier} changes the row's deck size rule (tier {boss.Tier}); a combat row stays a combat row");
+            }
+            if (boss.V4.Reward != null && data.FindTreasure(boss.V4.Reward)?.Reward != true) errors.Add($"{where}: reward {boss.V4.Reward} is not a reward row of run-v1.json");
+            if (boss.V4.Reward != null && boss.Tier == DungeonRunEncounterData.FinaleTier) errors.Add($"{where}: a finale fight grants no reward");
+        }
         foreach (var schedule in schedules.Schedules.Values.OrderBy(x => x.Id, StringComparer.Ordinal)) errors.AddRange(ValidateSchedule(schedule, data));
         return errors;
     }
+
+    // A rule states a non-empty reason for one of its exclusion entries (C7).
+    private static bool HasReason(DungeonRunGlobalRule rule, string entry) =>
+        rule.ExclusionReasons.TryGetValue(entry, out string why) && !string.IsNullOrWhiteSpace(why);
 
     /// <summary>
     /// Phase 8: the global rules (schedule-v1.json "rules"). Every id is unique and a card; its kind, scope and effect are
@@ -1166,12 +1287,86 @@ internal static class DungeonRunValidator
             // Checked against the loaded classes (a caller that validates the rules alone loads none).
             if (data.Classes.Count > 0)
                 foreach (string c in rule.IncompatibleClasses.Where(c => data.FindClass(c) == null)) errors.Add($"{where}: incompatibleClasses names unknown class {c}");
+            // Step 9 (lane R): the treasure exclusions, against the loaded treasures (none loaded: not checked).
+            if (data.Treasures.Count > 0)
+                foreach (string t in rule.IncompatibleTreasures.Where(t => data.FindTreasure(t) == null)) errors.Add($"{where}: incompatibleTreasures names unknown treasure {t}");
+            // Step 9 (C7): a reason names an exclusion entry of the rule; from scheduleVersion 4 every entry has one.
+            var entries = rule.ExclusionEntries.ToList();
+            foreach (string key in rule.ExclusionReasons.Keys.Where(k => !entries.Contains(k)).OrderBy(k => k, StringComparer.Ordinal))
+                errors.Add($"{where}: exclusionReasons names {key}, which is not one of its exclusions");
+            // (The rule-rule entries are checked below, with their other side.)
+            if (schedules.ScheduleVersion >= 4)
+                foreach (string entry in entries.Distinct().Where(e => !rule.IncompatibleRules.Contains(e) && !HasReason(rule, e)))
+                    errors.Add($"{where}: exclusion {entry} states no reason (exclusionReasons)");
         }
         foreach (var rule in schedules.Rules)
             foreach (string other in rule.IncompatibleRules.Where(o => !ids.Contains(o))) errors.Add($"rule {rule.Id}: incompatibleRules names unknown rule {other}");
+        // Step 9 (C7): a rule-rule list is symmetric (both rules list each other; a reason on either side) or declared one-way
+        // (only one rule lists the other, and its exclusionReasons says why). Both are read both ways (DungeonRun.RuleCandidates,
+        // ForbiddenPairs). From scheduleVersion 4 only, as the reasons are.
+        if (schedules.ScheduleVersion >= 4)
+            foreach (var rule in schedules.Rules.Where(r => !string.IsNullOrEmpty(r.Id)))
+                foreach (string other in rule.IncompatibleRules.Distinct().Where(ids.Contains))
+                {
+                    var back = schedules.Rule(other);
+                    bool symmetric = back != null && back.IncompatibleRules.Contains(rule.Id);
+                    if (symmetric && !HasReason(rule, other) && !HasReason(back, rule.Id))
+                        errors.Add($"rule {rule.Id}: exclusion {other} (listed on both rules) states no reason on either (exclusionReasons)");
+                    else if (!symmetric && !HasReason(rule, other))
+                        errors.Add($"rule {rule.Id}: lists {other} one-way (not listed back) with no reason declaring it (exclusionReasons)");
+                }
         foreach (var boss in data.Bosses)
             foreach (string id in boss.IncompatibleRules.Where(id => !ids.Contains(id))) errors.Add($"boss {boss.Id}: incompatibleRules names unknown rule {id}");
         return errors;
+    }
+
+    /// <summary>
+    /// Step 9 (D7, C7): a boss's v4 "incompatibleModifiers" names known modifiers; its "modifierReasons" name known modifiers of
+    /// one of its two lists; and a row a schedule of stamp 4 and above can reach (<see cref="ReachableOnTuned"/>) states a
+    /// reason for every modifier its v4 block neutralises. A data set with no stamp-4 schedule (every fixture before step 9)
+    /// reaches no row, so it needs no reason.
+    /// </summary>
+    internal static List<string> ValidateModifierReasons(DungeonRunData data)
+    {
+        var errors = new List<string>();
+        var schedules = data.Schedules;
+        var reachable = ReachableOnTuned(data);
+        foreach (var boss in data.Bosses)
+        {
+            string where = "boss " + boss.Id;
+            var v4 = boss.V4?.IncompatibleModifiers ?? new List<string>();
+            foreach (string id in v4.Where(id => schedules.Modifier(id) == null)) errors.Add($"{where}: v4 incompatibleModifiers names unknown modifier {id}");
+            foreach (string id in boss.ModifierReasons.Keys.OrderBy(k => k, StringComparer.Ordinal))
+                if (schedules.Modifier(id) == null || !boss.IncompatibleModifiers.Contains(id) && !v4.Contains(id))
+                    errors.Add($"{where}: modifierReasons names {id}, which is not one of its incompatible modifiers");
+            if (!reachable.Contains(boss.Id)) continue;
+            foreach (string id in v4.Where(id => !boss.ModifierReasons.TryGetValue(id, out string why) || string.IsNullOrWhiteSpace(why)))
+                errors.Add($"{where}: v4 neutralises {id} with no reason (modifierReasons)");
+        }
+        return errors;
+    }
+
+    /// <summary>
+    /// The boss rows a schedule of stamp 4 and above can draw (step 9): those of a pool its acts name (a pool set expanded; a row's
+    /// v4 tier counts as its pool) and its finales' fixed bosses. Empty when no schedule has stamp 4.
+    /// </summary>
+    internal static HashSet<string> ReachableOnTuned(DungeonRunData data)
+    {
+        var schedules = data.Schedules;
+        var ids = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var schedule in schedules.Schedules.Values.Where(x => x.StampVersion >= 4))
+        {
+            var pools = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var act in schedule.Acts)
+            {
+                foreach (string pool in act.Combat.Select(c => c.Pool).Concat(act.MajorPool == null ? new string[0] : new[] { act.MajorPool }))
+                    if (schedules.PoolSets.TryGetValue(pool, out var set)) pools.UnionWith(set); else pools.Add(pool);
+                ids.UnionWith(act.FixedBosses);
+            }
+            foreach (var boss in data.Bosses)
+                if (boss.Pools.Any(pools.Contains) || boss.V4?.Tier != null && pools.Contains(DungeonRunEncounterData.PoolOf(boss.V4.Tier))) ids.Add(boss.Id);
+        }
+        return ids;
     }
 
     /// <summary>
@@ -1199,18 +1394,22 @@ internal static class DungeonRunValidator
             foreach (string id in schedule.FinaleBosses)
             {
                 var boss = data.Bosses.FirstOrDefault(b => b.Id == id);
-                if (boss == null) Fail(where, $"finale boss {id} is not in the data");
+                // The encounter rows load with encounters-v1.json, so a finale boss is checked when encounters are loaded (as
+                // excludeBosses is); a data set without them never follows this schedule by default (defaultWithoutEncounters).
+                if (boss == null) { if (data.Bosses.Any(b => b.IsEncounter)) Fail(where, $"finale boss {id} is not in the data"); }
                 else if (boss.Tier != DungeonRunEncounterData.FinaleTier) Fail(where, $"finale boss {id} is not a finale row (tier {boss.Tier ?? "(none)"})");
                 else if (boss.Unlock != null) Fail(where, $"finale boss {id} needs an unlock");
             }
             if (schedule.FinaleBosses.Distinct().Count() != schedule.FinaleBosses.Count) Fail(where, "a finale boss is listed twice");
-            if (schedule.FinaleHeroRelay && !schedule.FinaleBosses.Any(id => data.Bosses.FirstOrDefault(b => b.Id == id)?.Relay.Count > 0))
+            if (schedule.FinaleHeroRelay && data.Bosses.Any(b => b.IsEncounter) && !schedule.FinaleBosses.Any(id => data.Bosses.FirstOrDefault(b => b.Id == id)?.Relay.Count > 0))
                 Fail(where, "heroRelay with no finale boss that lists relay heroes");
         }
         var schedules = data.Schedules;
         bool KnownPool(string pool) => pool == DungeonRunSchedules.LeftoverPool || data.Bosses.Any(b => b.Pools.Contains(pool))
             || schedules != null && schedules.PoolSets.TryGetValue(pool, out var set) && set.All(p => p == DungeonRunSchedules.LeftoverPool || data.Bosses.Any(b => b.Pools.Contains(p)) || p.StartsWith("enc-", StringComparison.Ordinal));
-        bool Member(DungeonRunBoss b, string pool) => schedules != null ? schedules.Member(b, pool) : DungeonRunSchedules.InPool(b, pool);
+        // Step 9: the v2 draw (a stamp-4 schedule) reads an encounter row's v4 tier.
+        bool Member(DungeonRunBoss b, string pool) => schedules == null ? DungeonRunSchedules.InPool(b, pool)
+            : schedule.MixesProvenanceV2 ? schedules.MemberTuned(b, pool) : schedules.Member(b, pool);
         var used = new HashSet<string>(StringComparer.Ordinal);
         for (int a = 0; a < schedule.Acts.Count; a++)
         {
@@ -1224,6 +1423,10 @@ internal static class DungeonRunValidator
                 if (act.BossHealth.Length != act.Floors || act.BossHealth.Any(h => h < 1)) Fail(at, "bossHealth needs one positive value per fixed boss");
                 if (act.BossMana.Length != act.Floors || act.BossMana.Any(m => m < 0 || m > 10)) Fail(at, "bossMana needs one value 0 to 10 per fixed boss");
                 if (act.TavernAtStart && (act.TavernGold < 0 || act.TavernOffers < 1)) Fail(at, "a finale tavern needs tavern gold 0 or more and at least 1 offer");
+                // Family 18: the finale's own twist (its "twist" key: acts-v3h's DALA_830 The Finale) is checked as an act's.
+                foreach (string id in act.TwistPool.Where(id => schedules?.Rule(id)?.Kind != DungeonRunGlobalRule.KindTwist))
+                    Fail(at, $"twist pool names {id}, which is not a twist rule");
+                if (act.TwistPool.Count > 0 && (act.TwistChance < 1 || act.TwistChance > 100)) Fail(at, $"twist chance {act.TwistChance} must be 1 to 100");
                 foreach (string id in act.FixedBosses) used.Add(id);
                 continue;
             }

@@ -41,6 +41,8 @@ NpcWorldJson.Parser = text => { using var doc = System.Text.Json.JsonDocument.Pa
 Card C(string id) => Cards.FromId(id);
 string repo = VerifyPaths.Root;
 string fixtures = args.Length > 0 ? args[0] : VerifyPaths.Fixture("p8f05/fixtures");
+// Phase 8 family 18: DALA_830 The Finale, a run-layer twist (the rule of the Heist finale block), is not one of this family's rules.
+const string Finale830 = "DALA_830";
 var facts = System.Text.Json.JsonDocument.Parse(File.ReadAllText(Path.Combine(repo, "facts", "violet-hold-2026-09.json")));
 var factById = new Dictionary<string, System.Text.Json.JsonElement>(StringComparer.Ordinal);
 foreach (var c in facts.RootElement.GetProperty("cards").EnumerateArray()) factById[c.GetProperty("id").GetString()] = c;
@@ -801,8 +803,10 @@ Guard("T", () =>
     var errors = DungeonRunValidator.Validate(data, null);
     Check("T1 the shipped data validates with the family's rule rows", errors.Count == 0, string.Join(" | ", errors.Take(4)));
     var rules = data.Schedules.Rules;
-    Check("T2 schedule-v1.json lists the 18 anomalies and the 4 twists of the Dalaran Heist", rules.Count(r => r.Provenance == "DALA" && r.Kind == "anomaly") == 18 && rules.Count(r => r.Provenance == "DALA" && r.Kind == "twist") == 4
-        && rules.Where(r => r.Provenance == "DALA" && r.Kind == "twist").Select(r => r.Id).SequenceEqual(new[] { "DALA_829", "DALA_831", "DALA_832", "DALA_833" }));
+    // Family 18 adds the fifth Heist twist, DALA_830 The Finale (effect run: the rule of acts-v3h's finale block, no match script); the four here are family 05's.
+    Check("T2 schedule-v1.json lists the 18 anomalies and the 4 twists of the Dalaran Heist (and family 18's The Finale, a run-layer twist)", rules.Count(r => r.Provenance == "DALA" && r.Kind == "anomaly") == 18 && rules.Count(r => r.Provenance == "DALA" && r.Kind == "twist" && r.Id != Finale830) == 4
+        && rules.Where(r => r.Provenance == "DALA" && r.Kind == "twist" && r.Id != Finale830).Select(r => r.Id).SequenceEqual(new[] { "DALA_829", "DALA_831", "DALA_832", "DALA_833" })
+        && rules.Single(r => r.Id == Finale830).Effect == "run");
     var glittering = data.Schedules.Rule("DALA_857");
     Check("T3 DALA_857 Glittering is rejected with its reason, and the admission table rejects it too", !glittering.Admitted && glittering.Reason.Contains("treasures")
         && !DungeonRunAdmission.Classify(null, "DALA_857", AdmitScope.Rule, null, true).Admitted && DungeonRunAdmission.RuleFor("DALA_857").Lift == DungeonRunAdmission.RuleTreasureLift);
@@ -846,7 +850,7 @@ Guard("T", () =>
     var fs = V3(fr, "MAGE", 61003);
     fs.BossSequence[0] = custom.Id;
     var left = fr.RuleCandidates(fs, fr.ScheduleFor(fs), 1, "anomaly").Select(r => r.Id).ToList();
-    var leftTwists = fr.RuleCandidates(fs, fr.ScheduleFor(fs), 1, "twist").Select(r => r.Id).Where(id => id.StartsWith("DALA_")).ToList();
+    var leftTwists = fr.RuleCandidates(fs, fr.ScheduleFor(fs), 1, "twist").Select(r => r.Id).Where(id => id.StartsWith("DALA_") && id != Finale830).ToList();
     Check("T9 a boss with the same rule as its power excludes the rule: Crying, Rattling, Wild Magic and Ogreish by flag, every board twist by boardStart",
         !left.Contains("DALA_852") && !left.Contains("DALA_853") && !left.Contains("DALA_856") && !left.Contains("DALA_861") && left.Contains("DALA_851") && left.Contains("DALA_867")
         && leftTwists.Count == 0, string.Join(",", left) + " | " + string.Join(",", leftTwists));
@@ -859,10 +863,10 @@ Guard("T", () =>
         string.Join(",", shrineTwists));
     var darius = V3(run, "GILA_600h", 61005);
     foreach (int f in Enumerable.Range(0, 5)) darius.BossSequence[f] = data.Bosses.Where(b => !b.IsEncounter && b.Band == 1 && b.Unlock == null).ElementAt(f % 3).Id;
-    var dariusTwists = run.RuleCandidates(darius, run.ScheduleFor(darius), 1, "twist").Select(r => r.Id).Where(id => id.StartsWith("DALA_")).ToList();
+    var dariusTwists = run.RuleCandidates(darius, run.ScheduleFor(darius), 1, "twist").Select(r => r.Id).Where(id => id.StartsWith("DALA_") && id != Finale830).ToList();
     var mage = V3(run, "MAGE", 61005);
     foreach (int f in Enumerable.Range(0, 5)) mage.BossSequence[f] = data.Bosses.Where(b => !b.IsEncounter && b.Band == 1 && b.Unlock == null).ElementAt(f % 3).Id;
-    var mageTwists = run.RuleCandidates(mage, run.ScheduleFor(mage), 1, "twist").Select(r => r.Id).Where(id => id.StartsWith("DALA_")).ToList();
+    var mageTwists = run.RuleCandidates(mage, run.ScheduleFor(mage), 1, "twist").Select(r => r.Id).Where(id => id.StartsWith("DALA_") && id != Finale830).ToList();
     Check("T11 Darius Crowley (his Cannons take board slots) never gets The Carts; a Mage run may get all four twists", !dariusTwists.Contains("DALA_833") && dariusTwists.Contains("DALA_831")
         && mageTwists.SequenceEqual(new[] { "DALA_829", "DALA_831", "DALA_832", "DALA_833" }), string.Join(",", dariusTwists) + " | " + string.Join(",", mageTwists));
     // Rule against rule, both ways.
@@ -894,14 +898,17 @@ Guard("T", () =>
     {
         var s = V3(tr, "MAGE", 70000 + seed);
         runs++;
-        foreach (var rule in s.ActiveRules.Where(r => r.Kind == "twist"))
+        // The close-out ships the Heist finale (act IV), whose own twist DALA_830 The Finale every run holds: the fixture's
+        // filled pools are acts I-III's.
+        foreach (var rule in s.ActiveRules.Where(r => r.Kind == "twist" && !tr.ScheduleFor(s).Acts[r.Act - 1].IsFinale))
         {
             rolledIds[rule.Id] = rolledIds.TryGetValue(rule.Id, out int n) ? n + 1 : 1;
             var bosses = tr.ScheduleFor(s).Nodes.Where(n => n.Act == rule.Act && n.IsFight).Select(n => fixture.Boss(s.BossSequence[n.Floor - 1])).ToList();
             if (bosses.Any(b => b.HasFlag("shrine"))) { withShrineBoss++; if (rule.Id == "DALA_831" || rule.Id == "DALA_833") wrong++; }
         }
     }
-    Check("T16 the fixture schedule (twist pools filled, chance 100) validates and rolls each of the four twists", fixtureErrors.Count == 0 && rolledIds.Count == 4 && rolledIds.Values.All(n => n > 20),
+    // Phase 8 family 13: nine Rumble Run rows carry the shrine flag, which keeps DALA_831 and DALA_833 out of more acts (20 and 25 of 300 runs).
+    Check("T16 the fixture schedule (twist pools filled, chance 100) validates and rolls each of the four twists", fixtureErrors.Count == 0 && rolledIds.Count == 4 && rolledIds.Values.All(n => n >= 15),
         string.Join(" | ", fixtureErrors.Take(2)) + string.Join(",", rolledIds.Select(p => p.Key + "x" + p.Value)));
     Check("T17 a rolled twist is never one a boss of its act excludes (" + withShrineBoss + " acts with a shrine boss)", wrong == 0 && withShrineBoss > 0);
     var first = V3(tr, "MAGE", 70001);

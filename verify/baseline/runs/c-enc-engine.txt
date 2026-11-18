@@ -73,6 +73,8 @@ PASS G5 DALA_864: at the end of the run player's turn only its minions gain +1/+
 PASS G6 at the end of the boss's turn the boss's minions gain +1/+1
 PASS G7 DALA_850: spells in both hands cost (2) less (never below 0), minions do not  (2 2 4 0)
 PASS G7b a repeatable spell is never brought below (1): Unstable Evolution ("Repeatable this turn") stays (1), Sound the Bells! (Echo, 2) costs (1)  (1 1)
+PASS G7c the copy Unstable Evolution adds to the hand (LOOT_504t, no tag 1114 in the client data) is repeatable too and stays (1)  (1)
+PASS G7d with no encounter rule (no Whisperer): Sound the Bells! (Echo, 2) costs (0) under two Sorcerer's Apprentices, but its Echo copy costs (1), never less  (0 True 1 used 0)
 PASS G8 two rules are both on both players, in the plan's order
 PASS G9 a clone plays under the same rule
 PASS G10 DALA_850: the rule card and its enchantment carry the client's text
@@ -121,4 +123,4 @@ PASS I11 Tess's card after it: Tess with Scavenge, 8 damage to all minions, the 
 PASS I12 the plan's own lists were never written
 PASS I13 with no encounter data the card deals its damage at once and changes the hero
 SearchTelemetry swallowed leaf exceptions 0
-RESULT 122 passed, 0 failed
+RESULT 124 passed, 0 failed

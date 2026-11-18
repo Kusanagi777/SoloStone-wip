@@ -618,8 +618,9 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     Check("ledger: the 5 lifted generated-Secret draft cards are offered and admitted for the player",
         new[] { "BOT_402", "DAL_141", "GIL_116", "ICC_204", "UNG_011" }.All(id => rows.Single(r => r["card_id"] == id) is var x && x["player_availability"].StartsWith("offered:")
             && x["ai_support"].StartsWith("ok:secret-generated") && x["classification"] == "implemented"));
-    Check("ledger: DALA_BOSS_21p is Whirt's scripted power since phase 8 (no AI block left; waiting only for its schedule to be a default); ULD_429 (scripted since phase 6 F10) is implemented, offered and unblocked", rows.Single(r => r["card_id"] == "DALA_BOSS_21p") is var p21
-        && p21["blocked_by"] == "run:default-schedule" && p21["ai_support"] == "ok:secret-generated" && p21["classification"] == "partial"
+    // The close-out (family 25) made acts-v3h and acts-v3t the defaults, so the blocker run:default-schedule left every row.
+    Check("ledger: DALA_BOSS_21p is Whirt's scripted power since phase 8, implemented and unblocked since the close-out made its schedule a default; ULD_429 (scripted since phase 6 F10) is implemented, offered and unblocked", rows.Single(r => r["card_id"] == "DALA_BOSS_21p") is var p21
+        && p21["blocked_by"] == "" && p21["ai_support"] == "ok:secret-generated" && p21["classification"] == "implemented" && !rows.Any(r => r["blocked_by"].Split(';').Contains("run:default-schedule"))
         && rows.Single(r => r["card_id"] == "ULD_429") is var hp && hp["blocked_by"] == "" && hp["classification"] == "implemented" && hp["player_availability"].StartsWith("offered:"));
     Check("ledger: the dual-class row and its starter are rows of their own", rows.Any(r => r["card_id"] == "run:class:MAGE_ROGUE") && rows.Any(r => r["card_id"] == "run:starter:tombs_reno_spellslinger"));
     // Dual-class blockers: only an explorer whose pairs have no playable row (ULDA_Reno's MAGE_ROGUE ships), and a row of its
@@ -627,7 +628,7 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     var byId = rows.ToDictionary(r => r["card_id"], r => r, StringComparer.Ordinal);
     Check("ledger: no explorer is blocked by run:dual-class since phase 6 F10 (all four rows ship), and each is its row's offered portrait",
         new[] { ("ULDA_Reno", "MAGE_ROGUE"), ("ULDA_Finley", "PALADIN_SHAMAN"), ("ULDA_Elise", "DRUID_PRIEST"), ("ULDA_Brann", "HUNTER_WARRIOR") }
-            .All(p => !byId[p.Item1]["blocked_by"].Split(';').Contains("run:dual-class") && byId[p.Item1]["player_availability"] == "offered:hero portrait:" + p.Item2));
+            .All(p => !byId[p.Item1]["blocked_by"].Split(';').Contains("run:dual-class") && byId[p.Item1]["player_availability"].Split(',')[0] == "offered:hero portrait:" + p.Item2));
     Check("ledger: Reno's original powers are not blocked by run:dual-class", rows.Where(r => r["card_id"].StartsWith("ULDA_Reno_HP", StringComparison.Ordinal))
         .All(r => !r["blocked_by"].Split(';').Contains("run:dual-class")) && rows.Any(r => r["card_id"].StartsWith("ULDA_Reno_HP", StringComparison.Ordinal)));
     Check("ledger: the run:class row of every dual row is implemented and unblocked since phase 6 F10 (none ships disabled)",
@@ -643,7 +644,7 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // the Tombs explorers pass as heroes, and ULDA_Reno, MAGE_ROGUE's portrait, is offered and implemented.
     Check("ledger: the Tombs explorers validate as run heroes (phase 6); ULDA_Reno is MAGE_ROGUE's offered portrait",
         new[] { "ULDA_Reno", "ULDA_Finley", "ULDA_Elise", "ULDA_Brann" }.All(id => byId[id]["validation"] == "passes:hero")
-        && byId["ULDA_Reno"]["player_availability"] == "offered:hero portrait:MAGE_ROGUE" && byId["ULDA_Reno"]["classification"] == "implemented"
+        && byId["ULDA_Reno"]["player_availability"].Split(',')[0] == "offered:hero portrait:MAGE_ROGUE" && byId["ULDA_Reno"]["classification"] == "implemented"
         && !rows.Any(r => r["validation"] == "rejected:unscripted-portrait"));
     var classes = rows.GroupBy(r => r["classification"]).ToDictionary(g => g.Key, g => g.Count());
     // Phase 5 (I2) moved the 22 active tavern option rows (21 options and the ULDA_912 alias, tavern-v1.json) from missing
@@ -705,9 +706,52 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // Phase 8 wave 3 (families 06, 09, 10): + 60 rows, all "partial" (26 run:boss rows: 11 of family 09, 15 of family 10; 34
     // cards of their decks that are new to the ledger: 15 and 19), and 70 rows leave "missing" for "partial" (21 rules and
     // tokens of family 06; 25 powers, cards and tokens of family 09; 15 boss powers and 9 boss cards of family 10).
-    Check("ledger golden (phase 8 wave 3: families 06, 09, 10): 4704 rows; 2813 implemented, 295 partial, 538 missing, 1058 duplicate/support, 0 intentionally adapted",
-        rows.Count == 4704 && classes.GetValueOrDefault("implemented") == 2813 && classes.GetValueOrDefault("partial") == 295 && classes.GetValueOrDefault("missing") == 538
-        && classes.GetValueOrDefault("duplicate/support") == 1058 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
+    // Phase 8 family 11: + 19 rows, all "partial" (13 run:boss rows; 6 cards of their decks new to the ledger), and 19 rows leave
+    // "missing" for "partial" (14 boss powers and 5 boss cards and tokens).
+    // Phase 8 family 12: + 23 rows, all "partial" (13 run:boss rows; 10 cards of their decks that are new to the ledger), and 15
+    // rows leave "missing" for "partial" (13 boss powers and the 2 boss cards; the 13 boss heroes stay missing, run:default-schedule).
+    // Phase 8 family 13: + 8 run:boss rows (the champions) and + 7 cards of their decks (all partial), TRLA_065p missing -> partial.
+    // Wave 4 merged (11, 12, 13): + 56 rows, not 57: FP1_029 Dancing Swords is new in both family 12's and family 13's decks.
+    // Phase 8 family 14 (Dalaran Heist bosses A): + 36 rows, all "partial" (15 run:boss rows; 21 cards of their decks that are
+    // new to the ledger), and 21 rows leave "missing" for "partial" (16 boss powers and 5 boss cards; "Scourgelord" Dazzik is a
+    // hero card and stays "missing" with the boss heroes, blocked by run:default-schedule).
+    // Phase 8 family 15: + 29 rows, all partial (14 run:boss, 15 deck cards new to the ledger); 16 rows missing -> partial (14 powers, 2 boss cards).
+    // Phase 8 family 16 (Dalaran Heist bosses C): + 34 rows, all "partial" (14 run:boss rows; 20 cards of their decks that are
+    // new to the ledger), and 16 rows leave "missing" for "partial" (14 boss powers, PARTY PORTAL! and the Exotic Pet).
+    // Phase 8 family 17 (Dalaran Heist bosses D): + 29 rows, all "partial" (14 run:boss rows; 15 cards of their decks that are
+    // new to the ledger), and 26 rows leave "missing" for "partial" (14 boss powers and 12 boss cards, Infuriated Banker and the
+    // Kirin Tor Guard among them).
+    // Phase 8 family 18: + 30 rows (16 run:boss rows, 14 cards of their decks new to the ledger), all partial; 18 rows missing -> partial (16 powers,
+    // Kirin Tor Elemental and DALA_830, a run-service rule).
+    // Phase 8 family 19 (Tombs bosses A): + 31 rows, all "partial" (18 run:boss rows; 13 cards of its decks that are new to the
+    // ledger), and 19 rows leave "missing" for "partial" (the 18 boss powers and Sand Trap).
+    // Wave 5 merged (14-19): + 158 rows, not the families' 189: 18 cards are new in the decks of two or three of these families
+    // (20 repeats) and 11 were new in wave 4 already; all 158 partial, and 116 rows leave "missing" for "partial".
+    // Phase 8 family 20 (Tombs bosses B): + 26 rows, all "partial" (18 run:boss rows; 8 cards of its decks that are new to the
+    // ledger, Mogu Cultist ULD_705 among them), and 18 rows leave "missing" for "partial" (the 18 boss powers).
+    // Phase 8 family 21 (Tombs bosses C): + 22 rows, all "partial" (17 run:boss rows; 5 cards of its decks that are new to the
+    // ledger), and 18 rows leave "missing" for "partial" (its 18 scripted powers).
+    // Phase 8 family 22 (Tombs bosses D): + 23 rows, all "partial" (18 run:boss rows; 5 cards of its decks that are new to the
+    // ledger: DAL_614, EX1_025, EX1_179, GVG_093, ICC_023), and 19 rows leave "missing" for "partial" (the 18 boss powers and
+    // Servant of Siamat).
+    // Phase 8 family 23: + 4 rows, all "partial" (the four nemeses' run:boss rows; every card of their decks was in the ledger
+    // already), and 10 rows leave "missing" for "partial" (4 boss powers, Crowskin Faithful, Crowskin Pact, Cursed Crewmember and
+    // the three Witchwood's Touch).
+    // Phase 8 family 24 (the Plague Lords and Tekahn): + 12 rows, all "partial" (4 run:boss rows; 8 cards of its decks and relay
+    // decks new to the ledger), rows leave "missing" for "partial" (its powers and boss cards), ULDA_115 "Gnomebliterator" is
+    // implemented (a Tombs treasure of encounter schedules) and ULDA_Explorers becomes a support record (a hero base form).
+    // Wave 6 merged (20-24): + 74 rows, not the families' 87: LOE_110 and DAL_614 are new in two of these families' decks and 11
+    // deck cards were new in wave 5 already; all 74 partial (61 run:boss rows, 13 cards), 83 rows leave "missing" for "partial",
+    // one for "implemented" (ULDA_115) and one for "duplicate/support" (ULDA_Explorers).
+    // The close-out (family 25): 4992 -> 4970 rows (the 22 Monster Hunt label cards are their buckets' label rows: 22 "label:"
+    // rows go); 1066 rows become implemented (807 partial, 259 missing): 1063 that waited for their schedule to be a default
+    // (run:default-schedule, or the reach gap "schedule not a default yet"), DALA_830 (the Heist finale ships), ULDA_038 and
+    // ULDA_911 (tavern options); 30 missing -> support
+    // (the 22 labels, the three tavern keepers, DALA_740's five tokens). Left: 10 partial (the eight twists of no shipped twist
+    // pool, Damph's hunt reward, Witchwood's Touch (1)) and 13 missing, each with a stated rejection or deferral.
+    Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13; wave 5: families 14-19; wave 6: families 20-24; the close-out): 4970 rows; 3880 implemented, 10 partial, 13 missing, 1067 duplicate/support, 0 intentionally adapted",
+        rows.Count == 4970 && classes.GetValueOrDefault("implemented") == 3880 && classes.GetValueOrDefault("partial") == 10 && classes.GetValueOrDefault("missing") == 13
+        && classes.GetValueOrDefault("duplicate/support") == 1067 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
 }
 
 static List<Dictionary<string, string>> ReadLedger(string path)

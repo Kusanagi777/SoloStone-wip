@@ -855,7 +855,8 @@ Guard("Treasures", () =>
     var legacyBoss = t.Where(id => id != "LOOT_998k" && (Legacy(id, AdmitScope.Boss) || !Legacy(id, AdmitScope.Player))).ToList();
     Check("L0 each of the sixteen is admitted for a boss on a catalog run and stays the run player's; the legacy verdict of the fifteen run treasures is unchanged (the run player's only)", notBoss.Count == 0 && legacyBoss.Count == 0
         && DungeonRunAdmission.RuleFor("LOOTA_806").Family == "run-treasure-boss-find" && DungeonRunAdmission.RuleFor("LOOTA_839").Family == "run-treasure-side-shuffle"
-        && DungeonRunAdmission.RuleFor("LOOTA_811").Family == "run-treasure" && !Catalog("LOOTA_811", AdmitScope.Boss) && !Catalog("LOOTA_840", AdmitScope.Boss),
+        // (family 16 moved LOOTA_811 to its run-treasure-boss-shuffle row: Wish is the core row's example now)
+        && DungeonRunAdmission.RuleFor("LOOTA_814").Family == "run-treasure" && !Catalog("LOOTA_814", AdmitScope.Boss) && !Catalog("LOOTA_840", AdmitScope.Boss),
         string.Join(",", notBoss.Concat(legacyBoss)));
     var l1 = Lair();
     var theirs = Board(l1, l1.Player1, Yeti); var own = Board(l1, l1.Player2, Yeti);

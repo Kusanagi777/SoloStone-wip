@@ -1,0 +1,8 @@
+ulda_37_xatma      ULDA tmajor3 floor 15 DRUID/druid_thicket/CS2_017                    deck 48 -> boss     turns  12 decisions  34 fallbacks  0 health 300 mana+3 power  5 checks ok form 0>0 left 300 banked -
+ulda_37_xatma      ULDA tmajor3 floor 15 HUNTER/hunter_kennel/DS1h_292                  deck 48 -> boss     turns  14 decisions  45 fallbacks  0 health 300 mana+3 power  6 checks ok form 0>0 left 294 banked 294
+ulda_38_kzrath     ULDA tmajor3 floor 15 MAGE/mage_rimeward/CS2_034                     deck 39 -> boss     turns  14 decisions  51 fallbacks  0 health 300 mana+3 power  9 checks ok form 0>0 left 297 banked 297
+ulda_38_kzrath     ULDA tmajor3 floor 15 PALADIN/paladin_gleaming/CS2_101               deck 50 -> boss     turns  16 decisions  49 fallbacks  0 health 300 mana+3 power  3 checks ok form 0>0 left 296 banked 296
+ulda_39_vesh       ULDA tmajor3 floor 15 PRIEST/priest_mending/CS1h_001                 deck 47 -> boss     turns  10 decisions  21 fallbacks  0 health 300 mana+3 power  0 checks ok form 0>0 left 282 banked 282
+ulda_39_vesh       ULDA tmajor3 floor 15 ROGUE/rogue_backalley/CS2_083b                 deck 44 -> boss     turns  13 decisions  27 fallbacks  0 health 300 mana+3 power  0 checks ok form 0>0 left 285 banked 285
+encounter run: schedule acts-v3h; power unused: -; form unreached: ulda_37_xatma,ulda_38_kzrath,ulda_39_vesh
+games 6, boss wins 6, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 3, watched ULDA_BOSS_37t x0 LOEA10_5 x0 LOEA10_5H x0 KARA_13_12H x0 LOEA16_24H x0 UNG_942t x0 ULDA_033 x0 ULDA_031 x0 ULDA_BOSS_67t x0, most boss Secrets 0

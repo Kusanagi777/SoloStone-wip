@@ -1,0 +1,2449 @@
+{
+ "schemaVersion": 1,
+ "family": "13",
+ "description": "Rumble Run opponents and boss shrines (phase 8 family 13): the eight Rumble Run champions beside War Master Voone (family 01, F01.json), each with the three shrines of its class as three variants (the boss board shrine, armed by ShrineRules.Arm for the boss as for the run player) and the deck of that challenge range. Deck lists are transcribed from hearthstone.wiki.gg boss pages (read 2026-11-14), by card name; tools/dungeon-run-catalog (step encounters) resolves the names against facts/violet-hold-2026-09.json, checks every card (scripted, client card, boss admission on a catalog run) and writes data/dungeon-run/encounters-v1.json.",
+ "method": "Each page's wikitext (index.php?action=raw) was read and its three deck tables transcribed in table order: the shrine (by dbfId, resolved against the client facts), then each card row with its quantity (a pool table without quantities lists each card once). The transcription was checked against a second, independent parse of the same tables and against family 01's hand transcription of War Master Voone's page (identical).",
+ "bosses": [
+  {
+   "id": "trl_201_zentimo",
+   "name": "Zentimo",
+   "provenance": "TRL",
+   "family": "13",
+   "hero": "TRLA_201h",
+   "power": "CS2_049",
+   "tier": "1",
+   "archetype": "midrange",
+   "level": {
+    "source": "rumble-round",
+    "original": 1
+   },
+   "flags": [
+    "shrine",
+    "doubleBattlecry"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Zentimo_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Challenge 1-2 (Krag'wa's Grace)",
+     "cards": [
+      {
+       "name": "Lightning Bolt"
+      },
+      {
+       "name": "Ancestral Knowledge"
+      },
+      {
+       "name": "Big Bad Voodoo"
+      },
+      {
+       "name": "Ice Fishing"
+      },
+      {
+       "name": "Far Sight"
+      },
+      {
+       "name": "Haunting Visions"
+      },
+      {
+       "name": "Tidal Surge"
+      },
+      {
+       "name": "Wicked Witchdoctor"
+      },
+      {
+       "name": "Volcano"
+      },
+      {
+       "name": "Krag'wa, the Frog"
+      },
+      {
+       "name": "Rain of Toads"
+      },
+      {
+       "name": "Murloc Tidecaller"
+      },
+      {
+       "name": "Huge Toad"
+      },
+      {
+       "name": "Murloc Tidehunter"
+      },
+      {
+       "name": "Wild Pyromancer"
+      },
+      {
+       "name": "Murloc Warleader"
+      },
+      {
+       "name": "Primalfin Lookout"
+      }
+     ]
+    },
+    {
+     "label": "Challenge 3-5 (Krag'wa's Lure)",
+     "cards": [
+      {
+       "name": "Finders Keepers",
+       "count": 2
+      },
+      {
+       "name": "Crushing Hand",
+       "count": 2
+      },
+      {
+       "name": "Eternal Sentinel",
+       "count": 2
+      },
+      {
+       "name": "Lava Shock",
+       "count": 2
+      },
+      {
+       "name": "Likkim",
+       "count": 2
+      },
+      {
+       "name": "Totem Golem",
+       "count": 2
+      },
+      {
+       "name": "Croak Jouster",
+       "count": 1
+      },
+      {
+       "name": "Drakkari Defender",
+       "count": 2
+      },
+      {
+       "name": "Feral Spirit",
+       "count": 2
+      },
+      {
+       "name": "Lightning Storm",
+       "count": 2
+      },
+      {
+       "name": "Unbound Elemental",
+       "count": 1
+      },
+      {
+       "name": "Flamewreathed Faceless",
+       "count": 2
+      },
+      {
+       "name": "Thunderhead",
+       "count": 1
+      },
+      {
+       "name": "Earth Elemental",
+       "count": 2
+      },
+      {
+       "name": "Spirit of the Frog",
+       "count": 1
+      },
+      {
+       "name": "Rain of Toads",
+       "count": 2
+      },
+      {
+       "name": "Snowfury Giant",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Challenge 6-8 (Tribute from the Tides)",
+     "cards": [
+      {
+       "name": "Witch's Apprentice",
+       "count": 2
+      },
+      {
+       "name": "Croak Jouster",
+       "count": 1
+      },
+      {
+       "name": "Hot Spring Guardian",
+       "count": 1
+      },
+      {
+       "name": "Leap Frog",
+       "count": 1
+      },
+      {
+       "name": "Fire Elemental",
+       "count": 2
+      },
+      {
+       "name": "Krag'wa, the Frog",
+       "count": 1
+      },
+      {
+       "name": "Jade Chieftain",
+       "count": 2
+      },
+      {
+       "name": "The Mistcaller",
+       "count": 1
+      },
+      {
+       "name": "Shudderwock",
+       "count": 1
+      },
+      {
+       "name": "Prince Keleseth",
+       "count": 1
+      },
+      {
+       "name": "Kobold Apprentice",
+       "count": 1
+      },
+      {
+       "name": "Shattered Sun Cleric",
+       "count": 1
+      },
+      {
+       "name": "Defender of Argus",
+       "count": 1
+      },
+      {
+       "name": "Lifedrinker",
+       "count": 2
+      },
+      {
+       "name": "Midnight Drake",
+       "count": 1
+      },
+      {
+       "name": "Rattling Rascal",
+       "count": 1
+      },
+      {
+       "name": "The Darkness",
+       "count": 1
+      },
+      {
+       "name": "Twilight Drake",
+       "count": 1
+      },
+      {
+       "name": "Bomb Lobber",
+       "count": 1
+      },
+      {
+       "name": "Doppelgangster",
+       "count": 1
+      },
+      {
+       "name": "Fungalmancer",
+       "count": 1
+      },
+      {
+       "name": "Seaforium Bomber",
+       "count": 2
+      },
+      {
+       "name": "Stampeding Kodo",
+       "count": 1
+      },
+      {
+       "name": "Aya Blackpaw",
+       "count": 1
+      },
+      {
+       "name": "Gelbin Mekkatorque",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Challenge 6-8 (Tribute from the Tides)"
+   },
+   "variants": [
+    {
+     "id": "early",
+     "shrine": "TRLA_155",
+     "deck": {
+      "list": "Challenge 1-2 (Krag'wa's Grace)"
+     }
+    },
+    {
+     "id": "middle",
+     "shrine": "TRLA_109",
+     "deck": {
+      "list": "Challenge 3-5 (Krag'wa's Lure)"
+     }
+    },
+    {
+     "id": "late",
+     "shrine": "TRLA_154",
+     "deck": {
+      "list": "Challenge 6-8 (Tribute from the Tides)"
+     }
+    }
+   ],
+   "fillers": [
+    "Flametongue Totem",
+    "Fire Elemental",
+    "Hex",
+    "Lightning Storm",
+    "Feral Spirit",
+    "Earth Shock",
+    "Lava Burst",
+    "Mana Tide Totem",
+    "Windspeaker",
+    "Chillwind Yeti",
+    "Boulderfist Ogre",
+    "Azure Drake"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The three Rumble Run challenge ranges (1-2, 3-5, 6-8) are three shrine variants of one row (early, middle, late), as War Master Voone's; a fight draws its variant from the run seed and the floor, not from the round. A champion meets the run in any round of the Rumble Run, so the row's tier is a recorded spread of the nine champions over the four combat tiers (round 1 here: tier 1), not a wiki fact."
+    },
+    {
+     "kind": "deck",
+     "note": "The challenge 1-2 table is a pool of possible cards without counts (the wiki: 10 or 13 cards a game); the challenge 3-5 table lists challenge 4-5 counts (17, 29 and 30 cards; starred cards only at challenge 5). Both are brought to 30 cards by the deck rule (second copies of non-Legendary singles, then the curated class fillers); the Rumble Run teammates the champions play (their special cards) are not admitted for a boss and are left out, each recorded."
+    }
+   ]
+  },
+  {
+   "id": "trl_202_hooktusk",
+   "name": "Captain Hooktusk",
+   "provenance": "TRL",
+   "family": "13",
+   "hero": "TRLA_202h",
+   "power": "CS2_083b",
+   "tier": "1",
+   "archetype": "tempo",
+   "level": {
+    "source": "rumble-round",
+    "original": 2
+   },
+   "flags": [
+    "shrine",
+    "hiddenZone",
+    "recast"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Captain_Hooktusk_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Challenge 1-2 (Bottled Terror)",
+     "cards": [
+      {
+       "name": "Serrated Tooth"
+      },
+      {
+       "name": "Swashburglar"
+      },
+      {
+       "name": "Bloodsail Howler"
+      },
+      {
+       "name": "Defias Ringleader"
+      },
+      {
+       "name": "One-eyed Cheat"
+      },
+      {
+       "name": "Raiding Party"
+      },
+      {
+       "name": "Shadowblade"
+      },
+      {
+       "name": "Shady Dealer"
+      },
+      {
+       "name": "Southsea Squidface"
+      },
+      {
+       "name": "Cursed Castaway"
+      },
+      {
+       "name": "Patches the Pirate"
+      },
+      {
+       "name": "Southsea Deckhand"
+      },
+      {
+       "name": "Sharkfin Fan"
+      },
+      {
+       "name": "Ship's Cannon"
+      },
+      {
+       "name": "Southsea Captain"
+      },
+      {
+       "name": "Captain Greenskin"
+      }
+     ]
+    },
+    {
+     "label": "Challenge 3-5 (Treasure from Below)",
+     "cards": [
+      {
+       "name": "Swashburglar",
+       "count": 2
+      },
+      {
+       "name": "Bloodsail Howler",
+       "count": 2
+      },
+      {
+       "name": "One-eyed Cheat",
+       "count": 2
+      },
+      {
+       "name": "Southsea Squidface",
+       "count": 2
+      },
+      {
+       "name": "Spectral Cutlass",
+       "count": 2
+      },
+      {
+       "name": "Walk the Plank",
+       "count": 2
+      },
+      {
+       "name": "Ethereal Peddler",
+       "count": 2
+      },
+      {
+       "name": "Gral, the Shark",
+       "count": 1
+      },
+      {
+       "name": "Cannon Barrage",
+       "count": 2
+      },
+      {
+       "name": "Raging Contender",
+       "count": 1
+      },
+      {
+       "name": "Tess Greymane",
+       "count": 1
+      },
+      {
+       "name": "Southsea Deckhand",
+       "count": 2
+      },
+      {
+       "name": "Sharkfin Fan",
+       "count": 2
+      },
+      {
+       "name": "Ship's Cannon",
+       "count": 2
+      },
+      {
+       "name": "Nightmare Amalgam",
+       "count": 2
+      },
+      {
+       "name": "Southsea Captain",
+       "count": 2
+      },
+      {
+       "name": "Captain Greenskin",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Challenge 6-8 (Pirate's Mark)",
+     "cards": [
+      {
+       "name": "Backstab",
+       "count": 2
+      },
+      {
+       "name": "Counterfeit Coin",
+       "count": 2
+      },
+      {
+       "name": "Betrayal",
+       "count": 1
+      },
+      {
+       "name": "Cheap Shot",
+       "count": 2
+      },
+      {
+       "name": "Cutpurse",
+       "count": 2
+      },
+      {
+       "name": "Eviscerate",
+       "count": 1
+      },
+      {
+       "name": "Fan of Knives",
+       "count": 2
+      },
+      {
+       "name": "Beneath the Grounds",
+       "count": 2
+      },
+      {
+       "name": "Parrot Mascot",
+       "count": 1
+      },
+      {
+       "name": "Shadow Strike",
+       "count": 2
+      },
+      {
+       "name": "Academic Espionage",
+       "count": 2
+      },
+      {
+       "name": "Lilian Voss",
+       "count": 1
+      },
+      {
+       "name": "Lobstrok Tastetester",
+       "count": 1
+      },
+      {
+       "name": "Tomb Pillager",
+       "count": 2
+      },
+      {
+       "name": "Raging Contender",
+       "count": 1
+      },
+      {
+       "name": "Bloodmage Thalnos",
+       "count": 1
+      },
+      {
+       "name": "Questing Adventurer",
+       "count": 2
+      },
+      {
+       "name": "Azure Drake",
+       "count": 2
+      },
+      {
+       "name": "Malygos",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Challenge 6-8 (Pirate's Mark)"
+   },
+   "variants": [
+    {
+     "id": "early",
+     "shrine": "TRLA_106",
+     "deck": {
+      "list": "Challenge 1-2 (Bottled Terror)"
+     }
+    },
+    {
+     "id": "middle",
+     "shrine": "TRLA_186",
+     "deck": {
+      "list": "Challenge 3-5 (Treasure from Below)"
+     }
+    },
+    {
+     "id": "late",
+     "shrine": "TRLA_187",
+     "deck": {
+      "list": "Challenge 6-8 (Pirate's Mark)"
+     }
+    }
+   ],
+   "fillers": [
+    "Backstab",
+    "Eviscerate",
+    "SI:7 Agent",
+    "Sap",
+    "Fan of Knives",
+    "Assassinate",
+    "Defias Ringleader",
+    "Azure Drake",
+    "Chillwind Yeti",
+    "Boulderfist Ogre",
+    "Shadowstep",
+    "Bloodmage Thalnos"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The three Rumble Run challenge ranges (1-2, 3-5, 6-8) are three shrine variants of one row (early, middle, late), as War Master Voone's; a fight draws its variant from the run seed and the floor, not from the round. A champion meets the run in any round of the Rumble Run, so the row's tier is a recorded spread of the nine champions over the four combat tiers (round 2 here: tier 1), not a wiki fact."
+    },
+    {
+     "kind": "deck",
+     "note": "The challenge 1-2 table is a pool of possible cards without counts (the wiki: 10 or 13 cards a game); the challenge 3-5 table lists challenge 4-5 counts (17, 29 and 30 cards; starred cards only at challenge 5). Both are brought to 30 cards by the deck rule (second copies of non-Legendary singles, then the curated class fillers); the Rumble Run teammates the champions play (their special cards) are not admitted for a boss and are left out, each recorded."
+    }
+   ]
+  },
+  {
+   "id": "trl_203_thekal",
+   "name": "High Priest Thekal",
+   "provenance": "TRL",
+   "family": "13",
+   "hero": "TRLA_203h",
+   "power": "CS2_101",
+   "tier": "2",
+   "archetype": "midrange",
+   "level": {
+    "source": "rumble-round",
+    "original": 4
+   },
+   "flags": [
+    "shrine",
+    "recast"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/High_Priest_Thekal_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Challenge 1-2 (Shirvallah's Grace)",
+     "cards": [
+      {
+       "name": "Adaptation"
+      },
+      {
+       "name": "Blessing of Might"
+      },
+      {
+       "name": "Divine Strength"
+      },
+      {
+       "name": "Potion of Heroism"
+      },
+      {
+       "name": "Primalfin Champion"
+      },
+      {
+       "name": "Shielded Minibot"
+      },
+      {
+       "name": "Seal of Champions"
+      },
+      {
+       "name": "Blessing of Kings"
+      },
+      {
+       "name": "Spirit of the Tiger"
+      },
+      {
+       "name": "Spikeridged Steed"
+      },
+      {
+       "name": "Dinosize"
+      },
+      {
+       "name": "Lynessa Sunsorrow"
+      },
+      {
+       "name": "Shirvallah, the Tiger"
+      },
+      {
+       "name": "Arcane Anomaly"
+      },
+      {
+       "name": "Brainstormer"
+      },
+      {
+       "name": "Violet Teacher"
+      },
+      {
+       "name": "Djinni of Zephyrs"
+      },
+      {
+       "name": "Grand Archivist"
+      }
+     ]
+    },
+    {
+     "label": "Challenge 3-5 (Shirvallah's Vengeance)",
+     "cards": [
+      {
+       "name": "Forbidden Healing",
+       "count": 2
+      },
+      {
+       "name": "Bloodclaw",
+       "count": 2
+      },
+      {
+       "name": "Equality",
+       "count": 1
+      },
+      {
+       "name": "Seal of Light",
+       "count": 2
+      },
+      {
+       "name": "Aldor Peacekeeper",
+       "count": 1
+      },
+      {
+       "name": "Wickerflame Burnbristle",
+       "count": 1
+      },
+      {
+       "name": "Gloryseeker",
+       "count": 1
+      },
+      {
+       "name": "Truesilver Champion",
+       "count": 2
+      },
+      {
+       "name": "Zandalari Templar",
+       "count": 2
+      },
+      {
+       "name": "Shrink Ray",
+       "count": 1
+      },
+      {
+       "name": "Lay on Hands",
+       "count": 1
+      },
+      {
+       "name": "Ragnaros, Lightlord",
+       "count": 1
+      },
+      {
+       "name": "Silver Sword",
+       "count": 1
+      },
+      {
+       "name": "Tirion Fordring",
+       "count": 1
+      },
+      {
+       "name": "Crystallizer",
+       "count": 2
+      },
+      {
+       "name": "Emerald Reaver",
+       "count": 2
+      },
+      {
+       "name": "Ornery Tortoise",
+       "count": 2
+      },
+      {
+       "name": "Bittertide Hydra",
+       "count": 2
+      },
+      {
+       "name": "Bomb Squad",
+       "count": 2
+      },
+      {
+       "name": "Zilliax",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Challenge 6-8 (Shirvallah's Protection)",
+     "cards": [
+      {
+       "name": "Sound the Bells!",
+       "count": 2
+      },
+      {
+       "name": "Aldor Peacekeeper",
+       "count": 2
+      },
+      {
+       "name": "Rallying Blade",
+       "count": 1
+      },
+      {
+       "name": "Light's Sorrow",
+       "count": 2
+      },
+      {
+       "name": "Bolvar, Fireblood",
+       "count": 2
+      },
+      {
+       "name": "Exactor of Justice",
+       "count": 1
+      },
+      {
+       "name": "Spikeridged Steed",
+       "count": 2
+      },
+      {
+       "name": "Sunkeeper Tarim",
+       "count": 1
+      },
+      {
+       "name": "The Walking Fort",
+       "count": 1
+      },
+      {
+       "name": "Val'anyr",
+       "count": 1
+      },
+      {
+       "name": "Eadric the Pure",
+       "count": 1
+      },
+      {
+       "name": "Ragnaros, Lightlord",
+       "count": 1
+      },
+      {
+       "name": "Unstable Ghoul",
+       "count": 2
+      },
+      {
+       "name": "Blood Knight",
+       "count": 1
+      },
+      {
+       "name": "Injured Blademaster",
+       "count": 2
+      },
+      {
+       "name": "Snapjaw Shellfighter",
+       "count": 2
+      },
+      {
+       "name": "Damaged Stegotron",
+       "count": 2
+      },
+      {
+       "name": "Bonemare",
+       "count": 2
+      },
+      {
+       "name": "Mosh'Ogg Enforcer",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Challenge 6-8 (Shirvallah's Protection)"
+   },
+   "variants": [
+    {
+     "id": "early",
+     "shrine": "TRLA_138",
+     "deck": {
+      "list": "Challenge 1-2 (Shirvallah's Grace)"
+     }
+    },
+    {
+     "id": "middle",
+     "shrine": "TRLA_137",
+     "deck": {
+      "list": "Challenge 3-5 (Shirvallah's Vengeance)"
+     }
+    },
+    {
+     "id": "late",
+     "shrine": "TRLA_105",
+     "deck": {
+      "list": "Challenge 6-8 (Shirvallah's Protection)"
+     }
+    }
+   ],
+   "fillers": [
+    "Consecration",
+    "Truesilver Champion",
+    "Hammer of Wrath",
+    "Blessing of Kings",
+    "Aldor Peacekeeper",
+    "Argent Protector",
+    "Guardian of Kings",
+    "Equality",
+    "Chillwind Yeti",
+    "Boulderfist Ogre",
+    "Azure Drake",
+    "Argent Squire"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The three Rumble Run challenge ranges (1-2, 3-5, 6-8) are three shrine variants of one row (early, middle, late), as War Master Voone's; a fight draws its variant from the run seed and the floor, not from the round. A champion meets the run in any round of the Rumble Run, so the row's tier is a recorded spread of the nine champions over the four combat tiers (round 4 here: tier 2), not a wiki fact."
+    },
+    {
+     "kind": "deck",
+     "note": "The challenge 1-2 table is a pool of possible cards without counts (the wiki: 10 or 13 cards a game); the challenge 3-5 table lists challenge 4-5 counts (17, 29 and 30 cards; starred cards only at challenge 5). Both are brought to 30 cards by the deck rule (second copies of non-Legendary singles, then the curated class fillers); the Rumble Run teammates the champions play (their special cards) are not admitted for a boss and are left out, each recorded."
+    }
+   ]
+  },
+  {
+   "id": "trl_204_zuljin",
+   "name": "Zul'jin",
+   "provenance": "TRL",
+   "family": "13",
+   "hero": "TRLA_204h",
+   "power": "TRLA_065p",
+   "tier": "3",
+   "archetype": "aggro",
+   "level": {
+    "source": "rumble-round",
+    "original": 5
+   },
+   "flags": [
+    "shrine",
+    "secrets"
+   ],
+   "bossGeneratedSecrets": true,
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Zul'jin_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Challenge 1-2 (Halazzi's Guise)",
+     "cards": [
+      {
+       "name": "Arcane Shot"
+      },
+      {
+       "name": "Explosive Trap"
+      },
+      {
+       "name": "Freezing Trap"
+      },
+      {
+       "name": "Scavenging Hyena"
+      },
+      {
+       "name": "Snake Trap"
+      },
+      {
+       "name": "Animal Companion"
+      },
+      {
+       "name": "Bloodscalp Strategist"
+      },
+      {
+       "name": "Eaglehorn Bow"
+      },
+      {
+       "name": "Kill Command"
+      },
+      {
+       "name": "Unleash the Hounds"
+      },
+      {
+       "name": "Flanking Strike"
+      },
+      {
+       "name": "Houndmaster"
+      },
+      {
+       "name": "Tundra Rhino"
+      },
+      {
+       "name": "Savannah Highmane"
+      },
+      {
+       "name": "King Krush"
+      },
+      {
+       "name": "Leper Gnome"
+      },
+      {
+       "name": "Bloodfen Raptor"
+      },
+      {
+       "name": "Dire Wolf Alpha"
+      },
+      {
+       "name": "Jungle Panther"
+      },
+      {
+       "name": "Ticket Scalper"
+      }
+     ]
+    },
+    {
+     "label": "Challenge 3-5 (Halazzi's Hunt)",
+     "cards": [
+      {
+       "name": "Springpaw",
+       "count": 2
+      },
+      {
+       "name": "Call Pet",
+       "count": 2
+      },
+      {
+       "name": "Spirit of the Lynx",
+       "count": 1
+      },
+      {
+       "name": "Battlestarved Lynx",
+       "count": 1
+      },
+      {
+       "name": "Flanking Strike",
+       "count": 2
+      },
+      {
+       "name": "Halazzi, the Lynx",
+       "count": 1
+      },
+      {
+       "name": "Slamma Jamma",
+       "count": 1
+      },
+      {
+       "name": "Savannah Highmane",
+       "count": 2
+      },
+      {
+       "name": "Swamp King Dred",
+       "count": 1
+      },
+      {
+       "name": "Crushing Walls",
+       "count": 1
+      },
+      {
+       "name": "Gahz'rilla",
+       "count": 1
+      },
+      {
+       "name": "Giant Sand Worm",
+       "count": 2
+      },
+      {
+       "name": "Kathrena Winterwisp",
+       "count": 1
+      },
+      {
+       "name": "King Krush",
+       "count": 1
+      },
+      {
+       "name": "Helpless Hatchling",
+       "count": 2
+      },
+      {
+       "name": "Jungle Panther",
+       "count": 2
+      },
+      {
+       "name": "Muck Hunter",
+       "count": 2
+      },
+      {
+       "name": "Amani War Bear",
+       "count": 2
+      },
+      {
+       "name": "Charged Devilsaur",
+       "count": 2
+      },
+      {
+       "name": "Oondasta",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Challenge 6-8 (Halazzi's Trap)",
+     "cards": [
+      {
+       "name": "Hunter's Mark",
+       "count": 2
+      },
+      {
+       "name": "Secret Plan",
+       "count": 2
+      },
+      {
+       "name": "Bear Trap",
+       "count": 2
+      },
+      {
+       "name": "Cat Trick",
+       "count": 1
+      },
+      {
+       "name": "Freezing Trap",
+       "count": 1
+      },
+      {
+       "name": "Venomstrike Trap",
+       "count": 2
+      },
+      {
+       "name": "Animal Companion",
+       "count": 2
+      },
+      {
+       "name": "Eaglehorn Bow",
+       "count": 2
+      },
+      {
+       "name": "Powershot",
+       "count": 1
+      },
+      {
+       "name": "Rabid Saurolisk",
+       "count": 1
+      },
+      {
+       "name": "Flanking Strike",
+       "count": 2
+      },
+      {
+       "name": "Streetsmuggler",
+       "count": 1
+      },
+      {
+       "name": "Wing Blast",
+       "count": 2
+      },
+      {
+       "name": "Baited Arrow",
+       "count": 2
+      },
+      {
+       "name": "Lesser Emerald Spellstone",
+       "count": 2
+      },
+      {
+       "name": "Troll Harbinger",
+       "count": 1
+      },
+      {
+       "name": "Crushing Walls",
+       "count": 1
+      },
+      {
+       "name": "Call of the Wild",
+       "count": 2
+      },
+      {
+       "name": "King Krush",
+       "count": 1
+      },
+      {
+       "name": "Mojomaster Zihi",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Challenge 6-8 (Halazzi's Trap)"
+   },
+   "variants": [
+    {
+     "id": "early",
+     "shrine": "TRLA_163",
+     "deck": {
+      "list": "Challenge 1-2 (Halazzi's Guise)"
+     }
+    },
+    {
+     "id": "middle",
+     "shrine": "TRLA_162",
+     "deck": {
+      "list": "Challenge 3-5 (Halazzi's Hunt)"
+     }
+    },
+    {
+     "id": "late",
+     "shrine": "TRLA_110",
+     "deck": {
+      "list": "Challenge 6-8 (Halazzi's Trap)"
+     }
+    }
+   ],
+   "fillers": [
+    "Animal Companion",
+    "Kill Command",
+    "Houndmaster",
+    "Unleash the Hounds",
+    "Arcane Shot",
+    "Savannah Highmane",
+    "Eaglehorn Bow",
+    "Ironbeak Owl",
+    "Chillwind Yeti",
+    "Boulderfist Ogre",
+    "Bloodfen Raptor",
+    "Starving Buzzard"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The three Rumble Run challenge ranges (1-2, 3-5, 6-8) are three shrine variants of one row (early, middle, late), as War Master Voone's; a fight draws its variant from the run seed and the floor, not from the round. A champion meets the run in any round of the Rumble Run, so the row's tier is a recorded spread of the nine champions over the four combat tiers (round 5 here: tier 3), not a wiki fact."
+    },
+    {
+     "kind": "deck",
+     "note": "The challenge 1-2 table is a pool of possible cards without counts (the wiki: 10 or 13 cards a game); the challenge 3-5 table lists challenge 4-5 counts (17, 29 and 30 cards; starred cards only at challenge 5). Both are brought to 30 cards by the deck rule (second copies of non-Legendary singles, then the curated class fillers); the Rumble Run teammates the champions play (their special cards) are not admitted for a boss and are left out, each recorded."
+    },
+    {
+     "kind": "deck",
+     "note": "The challenge 6-8 table lists 31 cards; the deck keeps the first 30 usable ones. Halazzi's Trap (TRLA_110) puts random Hunter Secrets into play for the boss and Streetsmuggler (TRLA_168) is in the list, so the row turns the boss side's generated Secrets on (bossGeneratedSecrets) for every variant."
+    },
+    {
+     "kind": "power",
+     "note": "Steady Throw (TRLA_065p) is Zul'jin's own hero power (client tag 380), scripted by family 13 as Steady Shot is: 2 damage to the enemy hero, no target."
+    }
+   ]
+  },
+  {
+   "id": "trl_205_loti",
+   "name": "Wardruid Loti",
+   "provenance": "TRL",
+   "family": "13",
+   "hero": "TRLA_205h",
+   "power": "CS2_017",
+   "tier": "3",
+   "archetype": "midrange",
+   "level": {
+    "source": "rumble-round",
+    "original": 6
+   },
+   "flags": [
+    "shrine"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Wardruid_Loti_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Challenge 1-2 (Bonds of Balance)",
+     "cards": [
+      {
+       "name": "Pounce"
+      },
+      {
+       "name": "Claw"
+      },
+      {
+       "name": "Lesser Jasper Spellstone"
+      },
+      {
+       "name": "Savagery"
+      },
+      {
+       "name": "Spirit of the Raptor"
+      },
+      {
+       "name": "Savage Striker"
+      },
+      {
+       "name": "Tortollan Forager"
+      },
+      {
+       "name": "Feral Rage"
+      },
+      {
+       "name": "Gnash"
+      },
+      {
+       "name": "Swipe"
+      },
+      {
+       "name": "Bite"
+      },
+      {
+       "name": "Savage Combatant"
+      },
+      {
+       "name": "Gonk, the Raptor"
+      },
+      {
+       "name": "Mana Addict"
+      },
+      {
+       "name": "Waterboy"
+      },
+      {
+       "name": "Defender of Argus"
+      },
+      {
+       "name": "Ticket Scalper"
+      }
+     ]
+    },
+    {
+     "label": "Challenge 3-5 (Gonk's Mark)",
+     "cards": [
+      {
+       "name": "Living Roots",
+       "count": 2
+      },
+      {
+       "name": "Mark of Y'Shaarj",
+       "count": 2
+      },
+      {
+       "name": "Landscaping",
+       "count": 2
+      },
+      {
+       "name": "Mulch",
+       "count": 2
+      },
+      {
+       "name": "Swipe",
+       "count": 2
+      },
+      {
+       "name": "Witching Hour",
+       "count": 2
+      },
+      {
+       "name": "Juicy Psychmelon",
+       "count": 1
+      },
+      {
+       "name": "Mark of the Loa",
+       "count": 2
+      },
+      {
+       "name": "Predatory Instincts",
+       "count": 1
+      },
+      {
+       "name": "Wispering Woods",
+       "count": 2
+      },
+      {
+       "name": "Direhorn Stomper",
+       "count": 1
+      },
+      {
+       "name": "Menagerie Warden",
+       "count": 2
+      },
+      {
+       "name": "Stampeding Roar",
+       "count": 2
+      },
+      {
+       "name": "Ironhide Direhorn",
+       "count": 2
+      },
+      {
+       "name": "Tyrantus",
+       "count": 1
+      },
+      {
+       "name": "Gurubashi Chicken",
+       "count": 1
+      },
+      {
+       "name": "Charged Devilsaur",
+       "count": 2
+      },
+      {
+       "name": "Oondasta",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Challenge 6-8 (Gonk's Armament)",
+     "cards": [
+      {
+       "name": "Spirit of the Raptor",
+       "count": 2
+      },
+      {
+       "name": "Tortollan Forager",
+       "count": 2
+      },
+      {
+       "name": "Ferocious Howl",
+       "count": 2
+      },
+      {
+       "name": "Succoring Skyscreamer",
+       "count": 1
+      },
+      {
+       "name": "Swipe",
+       "count": 1
+      },
+      {
+       "name": "Astral Tiger",
+       "count": 2
+      },
+      {
+       "name": "Bite",
+       "count": 2
+      },
+      {
+       "name": "Keeper of the Grove",
+       "count": 2
+      },
+      {
+       "name": "Oaken Summons",
+       "count": 2
+      },
+      {
+       "name": "Direhorn Stomper",
+       "count": 1
+      },
+      {
+       "name": "The Fan Favorite",
+       "count": 1,
+       "id": "TRLA_125"
+      },
+      {
+       "name": "Gonk, the Raptor",
+       "count": 1
+      },
+      {
+       "name": "Ironhide Direhorn",
+       "count": 2
+      },
+      {
+       "name": "Malorne",
+       "count": 1
+      },
+      {
+       "name": "Kun the Forgotten King",
+       "count": 1
+      },
+      {
+       "name": "Ultimate Infestation",
+       "count": 1
+      },
+      {
+       "name": "Plated Beetle",
+       "count": 2
+      },
+      {
+       "name": "Elise the Trailblazer",
+       "count": 1
+      },
+      {
+       "name": "Chromaggus",
+       "count": 1
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      },
+      {
+       "name": "Ysera",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Challenge 6-8 (Gonk's Armament)"
+   },
+   "variants": [
+    {
+     "id": "early",
+     "shrine": "TRLA_116",
+     "deck": {
+      "list": "Challenge 1-2 (Bonds of Balance)"
+     }
+    },
+    {
+     "id": "middle",
+     "shrine": "TRLA_115",
+     "deck": {
+      "list": "Challenge 3-5 (Gonk's Mark)"
+     }
+    },
+    {
+     "id": "late",
+     "shrine": "TRLA_112",
+     "deck": {
+      "list": "Challenge 6-8 (Gonk's Armament)"
+     }
+    }
+   ],
+   "fillers": [
+    "Wild Growth",
+    "Swipe",
+    "Keeper of the Grove",
+    "Druid of the Claw",
+    "Savage Roar",
+    "Claw",
+    "Mark of the Wild",
+    "Chillwind Yeti",
+    "Ironbark Protector",
+    "Boulderfist Ogre",
+    "Azure Drake",
+    "Bite"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The three Rumble Run challenge ranges (1-2, 3-5, 6-8) are three shrine variants of one row (early, middle, late), as War Master Voone's; a fight draws its variant from the run seed and the floor, not from the round. A champion meets the run in any round of the Rumble Run, so the row's tier is a recorded spread of the nine champions over the four combat tiers (round 6 here: tier 3), not a wiki fact."
+    },
+    {
+     "kind": "deck",
+     "note": "The challenge 1-2 table is a pool of possible cards without counts (the wiki: 10 or 13 cards a game); the challenge 3-5 table lists challenge 4-5 counts (17, 29 and 30 cards; starred cards only at challenge 5). Both are brought to 30 cards by the deck rule (second copies of non-Legendary singles, then the curated class fillers); the Rumble Run teammates the champions play (their special cards) are not admitted for a boss and are left out, each recorded."
+    }
+   ]
+  },
+  {
+   "id": "trl_206_jeklik",
+   "name": "High Priestess Jeklik",
+   "provenance": "TRL",
+   "family": "13",
+   "hero": "TRLA_206h",
+   "power": "CS2_056",
+   "tier": "4",
+   "archetype": "control",
+   "level": {
+    "source": "rumble-round",
+    "original": 7
+   },
+   "flags": [
+    "shrine"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/High_Priestess_Jeklik_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Challenge 1-2 (Blood Pact)",
+     "cards": [
+      {
+       "name": "Call of the Void"
+      },
+      {
+       "name": "The Soularium"
+      },
+      {
+       "name": "Voidwalker"
+      },
+      {
+       "name": "Defile"
+      },
+      {
+       "name": "Demonic Project"
+      },
+      {
+       "name": "Tiny Knight of Evil"
+      },
+      {
+       "name": "Void Analyst"
+      },
+      {
+       "name": "Demonwrath"
+      },
+      {
+       "name": "Hellfire"
+      },
+      {
+       "name": "Howlfiend"
+      },
+      {
+       "name": "Nethersoul Buster"
+      },
+      {
+       "name": "Sense Demons"
+      },
+      {
+       "name": "Hooked Reaver"
+      },
+      {
+       "name": "Voidcaller"
+      },
+      {
+       "name": "Deathweb Spider"
+      },
+      {
+       "name": "Despicable Dreadlord"
+      },
+      {
+       "name": "Floating Watcher"
+      },
+      {
+       "name": "Ectomancy"
+      },
+      {
+       "name": "Kabal Trafficker"
+      },
+      {
+       "name": "Rin, the First Disciple"
+      },
+      {
+       "name": "Abyssal Enforcer"
+      },
+      {
+       "name": "Voidlord"
+      },
+      {
+       "name": "Bloodworm"
+      }
+     ]
+    },
+    {
+     "label": "Challenge 3-5 (Dark Reliquary)",
+     "cards": [
+      {
+       "name": "Lakkari Sacrifice",
+       "count": 1
+      },
+      {
+       "name": "Malchezaar's Imp",
+       "count": 2
+      },
+      {
+       "name": "Shriek",
+       "count": 2
+      },
+      {
+       "name": "Soulfire",
+       "count": 2
+      },
+      {
+       "name": "Clutchmother Zavas",
+       "count": 1
+      },
+      {
+       "name": "Darkshire Librarian",
+       "count": 2
+      },
+      {
+       "name": "Ravenous Familiar",
+       "count": 1
+      },
+      {
+       "name": "Tiny Knight of Evil",
+       "count": 2
+      },
+      {
+       "name": "Howlfiend",
+       "count": 2
+      },
+      {
+       "name": "Reckless Diretroll",
+       "count": 2
+      },
+      {
+       "name": "Silverware Golem",
+       "count": 2
+      },
+      {
+       "name": "Bloodbloom",
+       "count": 1
+      },
+      {
+       "name": "Cataclysm",
+       "count": 1
+      },
+      {
+       "name": "Doomguard",
+       "count": 2
+      },
+      {
+       "name": "Cruel Dinomancer",
+       "count": 2
+      },
+      {
+       "name": "Dark Bargain",
+       "count": 2
+      },
+      {
+       "name": "Soulwarden",
+       "count": 2
+      },
+      {
+       "name": "Deathwing",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Challenge 6-8 (Hir'eek's Hunger)",
+     "cards": [
+      {
+       "name": "Flame Imp",
+       "count": 2
+      },
+      {
+       "name": "Kobold Librarian",
+       "count": 2
+      },
+      {
+       "name": "Vulgar Homunculus",
+       "count": 2
+      },
+      {
+       "name": "Wrathguard",
+       "count": 2
+      },
+      {
+       "name": "Chittering Tunneler",
+       "count": 2
+      },
+      {
+       "name": "Spreading Madness",
+       "count": 2
+      },
+      {
+       "name": "Unlicensed Apothecary",
+       "count": 2
+      },
+      {
+       "name": "Warp Stalker",
+       "count": 1
+      },
+      {
+       "name": "Lesser Amethyst Spellstone",
+       "count": 2
+      },
+      {
+       "name": "Pit Lord",
+       "count": 2
+      },
+      {
+       "name": "Vile Necrodoctor",
+       "count": 2
+      },
+      {
+       "name": "Dread Infernal",
+       "count": 2
+      },
+      {
+       "name": "Abyssal Enforcer",
+       "count": 2
+      },
+      {
+       "name": "Brann Bronzebeard",
+       "count": 1
+      },
+      {
+       "name": "Ancient Shade",
+       "count": 1
+      },
+      {
+       "name": "Bomb Squad",
+       "count": 2
+      },
+      {
+       "name": "Hakkar, the Soulflayer",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Challenge 6-8 (Hir'eek's Hunger)"
+   },
+   "variants": [
+    {
+     "id": "early",
+     "shrine": "TRLA_113",
+     "deck": {
+      "list": "Challenge 1-2 (Blood Pact)"
+     }
+    },
+    {
+     "id": "middle",
+     "shrine": "TRLA_178",
+     "deck": {
+      "list": "Challenge 3-5 (Dark Reliquary)"
+     }
+    },
+    {
+     "id": "late",
+     "shrine": "TRLA_179",
+     "deck": {
+      "list": "Challenge 6-8 (Hir'eek's Hunger)"
+     }
+    }
+   ],
+   "fillers": [
+    "Hellfire",
+    "Shadow Bolt",
+    "Voidwalker",
+    "Flame Imp",
+    "Dread Infernal",
+    "Doomguard",
+    "Siphon Soul",
+    "Mortal Coil",
+    "Chillwind Yeti",
+    "Boulderfist Ogre",
+    "Azure Drake",
+    "Dark Iron Dwarf"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The three Rumble Run challenge ranges (1-2, 3-5, 6-8) are three shrine variants of one row (early, middle, late), as War Master Voone's; a fight draws its variant from the run seed and the floor, not from the round. A champion meets the run in any round of the Rumble Run, so the row's tier is a recorded spread of the nine champions over the four combat tiers (round 7 here: tier 4), not a wiki fact."
+    },
+    {
+     "kind": "deck",
+     "note": "The challenge 1-2 table is a pool of possible cards without counts (the wiki: 10 or 13 cards a game); the challenge 3-5 table lists challenge 4-5 counts (17, 29 and 30 cards; starred cards only at challenge 5). Both are brought to 30 cards by the deck rule (second copies of non-Legendary singles, then the curated class fillers); the Rumble Run teammates the champions play (their special cards) are not admitted for a boss and are left out, each recorded."
+    }
+   ]
+  },
+  {
+   "id": "trl_207_malacrass",
+   "name": "Hex Lord Malacrass",
+   "provenance": "TRL",
+   "family": "13",
+   "hero": "TRLA_207h",
+   "power": "HERO_08bp",
+   "tier": "4",
+   "archetype": "control",
+   "level": {
+    "source": "rumble-round",
+    "original": 8
+   },
+   "flags": [
+    "shrine"
+   ],
+   "cards": [
+    "TRLA_129s"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Hex_Lord_Malacrass_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Challenge 1-2 (Jan'alai's Flame)",
+     "cards": [
+      {
+       "name": "Daring Fire-Eater"
+      },
+      {
+       "name": "Fallen Hero"
+      },
+      {
+       "name": "Serpent Ward"
+      },
+      {
+       "name": "Spirit of the Dragonhawk"
+      },
+      {
+       "name": "Pyromaniac"
+      },
+      {
+       "name": "Dalaran Aspirant"
+      },
+      {
+       "name": "Blast Wave"
+      },
+      {
+       "name": "Flamestrike"
+      },
+      {
+       "name": "Jan'alai, the Dragonhawk"
+      },
+      {
+       "name": "Shieldbreaker"
+      },
+      {
+       "name": "Blackwald Pixie"
+      },
+      {
+       "name": "Dragonhawk Rider"
+      },
+      {
+       "name": "Griftah"
+      },
+      {
+       "name": "Clockwork Automaton"
+      },
+      {
+       "name": "Justicar Trueheart"
+      },
+      {
+       "name": "Mosh'Ogg Announcer"
+      },
+      {
+       "name": "Nexus-Champion Saraad"
+      },
+      {
+       "name": "Kodorider"
+      },
+      {
+       "name": "Ragnaros the Firelord"
+      }
+     ]
+    },
+    {
+     "label": "Challenge 3-5 (Jan'alai's Mantle)",
+     "cards": [
+      {
+       "name": "Arcane Blast",
+       "count": 1
+      },
+      {
+       "name": "Shooting Star",
+       "count": 1
+      },
+      {
+       "name": "Arcane Explosion",
+       "count": 1
+      },
+      {
+       "name": "Primordial Glyph",
+       "count": 1
+      },
+      {
+       "name": "Research Project",
+       "count": 1
+      },
+      {
+       "name": "Sorcerer's Apprentice",
+       "count": 1
+      },
+      {
+       "name": "Arcane Intellect",
+       "count": 1
+      },
+      {
+       "name": "Cinderstorm",
+       "count": 1
+      },
+      {
+       "name": "Forgotten Torch",
+       "count": 1
+      },
+      {
+       "name": "Ice Block",
+       "count": 1
+      },
+      {
+       "name": "Mana Bind",
+       "count": 1
+      },
+      {
+       "name": "Showstopping Conjurer",
+       "count": 1
+      },
+      {
+       "name": "Spellslinger",
+       "count": 1
+      },
+      {
+       "name": "Unexpected Results",
+       "count": 1
+      },
+      {
+       "name": "Volcanic Potion",
+       "count": 1
+      },
+      {
+       "name": "Cabalist's Tome",
+       "count": 1
+      },
+      {
+       "name": "Blast Wave",
+       "count": 1
+      },
+      {
+       "name": "Deck of Wonders",
+       "count": 1
+      },
+      {
+       "name": "Ethereal Conjurer",
+       "count": 1
+      },
+      {
+       "name": "Blizzard",
+       "count": 1
+      },
+      {
+       "name": "Meteor",
+       "count": 1
+      },
+      {
+       "name": "Archmage Antonidas",
+       "count": 1
+      },
+      {
+       "name": "Firelands Portal",
+       "count": 1
+      },
+      {
+       "name": "Flamestrike",
+       "count": 1
+      },
+      {
+       "name": "Inkmaster Solia",
+       "count": 1
+      },
+      {
+       "name": "Rhonin",
+       "count": 1
+      },
+      {
+       "name": "Lorewalker Cho",
+       "count": 1
+      },
+      {
+       "name": "Kazakus",
+       "count": 1
+      },
+      {
+       "name": "Reno Jackson",
+       "count": 1
+      },
+      {
+       "name": "Yogg-Saron, Hope's End",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Challenge 6-8 (Jan'alai's Progeny)",
+     "cards": [
+      {
+       "name": "Mana Wyrm",
+       "count": 2
+      },
+      {
+       "name": "Snap Freeze",
+       "count": 2
+      },
+      {
+       "name": "Frostbolt",
+       "count": 2
+      },
+      {
+       "name": "Frostweaver",
+       "count": 1
+      },
+      {
+       "name": "Icicle",
+       "count": 1
+      },
+      {
+       "name": "Snowchugger",
+       "count": 2
+      },
+      {
+       "name": "Coldwraith",
+       "count": 1
+      },
+      {
+       "name": "Flamewaker",
+       "count": 2
+      },
+      {
+       "name": "Frost Nova",
+       "count": 2
+      },
+      {
+       "name": "Glyph Guardian",
+       "count": 1
+      },
+      {
+       "name": "Vex Crow",
+       "count": 2
+      },
+      {
+       "name": "Water Elemental",
+       "count": 2
+      },
+      {
+       "name": "Fireslinger",
+       "count": 1
+      },
+      {
+       "name": "Blizzard",
+       "count": 2
+      },
+      {
+       "name": "Archmage Antonidas",
+       "count": 1
+      },
+      {
+       "name": "Glacial Shard",
+       "count": 2
+      },
+      {
+       "name": "Bloodmage Thalnos",
+       "count": 1
+      },
+      {
+       "name": "Azure Drake",
+       "count": 2
+      },
+      {
+       "name": "Malygos",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Challenge 6-8 (Jan'alai's Progeny)"
+   },
+   "variants": [
+    {
+     "id": "early",
+     "shrine": "TRLA_128",
+     "deck": {
+      "list": "Challenge 1-2 (Jan'alai's Flame)"
+     }
+    },
+    {
+     "id": "middle",
+     "shrine": "TRLA_108",
+     "deck": {
+      "list": "Challenge 3-5 (Jan'alai's Mantle)"
+     }
+    },
+    {
+     "id": "late",
+     "shrine": "TRLA_129",
+     "deck": {
+      "list": "Challenge 6-8 (Jan'alai's Progeny)"
+     }
+    }
+   ],
+   "fillers": [
+    "Fireball",
+    "Frostbolt",
+    "Arcane Intellect",
+    "Water Elemental",
+    "Flamestrike",
+    "Polymorph",
+    "Arcane Missiles",
+    "Mana Wyrm",
+    "Sorcerer's Apprentice",
+    "Azure Drake",
+    "Chillwind Yeti",
+    "Boulderfist Ogre"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The three Rumble Run challenge ranges (1-2, 3-5, 6-8) are three shrine variants of one row (early, middle, late), as War Master Voone's; a fight draws its variant from the run seed and the floor, not from the round. A champion meets the run in any round of the Rumble Run, so the row's tier is a recorded spread of the nine champions over the four combat tiers (round 8 here: tier 4), not a wiki fact."
+    },
+    {
+     "kind": "deck",
+     "note": "The challenge 1-2 table is a pool of possible cards without counts (the wiki: 10 or 13 cards a game); the challenge 3-5 table lists challenge 4-5 counts (17, 29 and 30 cards; starred cards only at challenge 5). Both are brought to 30 cards by the deck rule (second copies of non-Legendary singles, then the curated class fillers); the Rumble Run teammates the champions play (their special cards) are not admitted for a boss and are left out, each recorded."
+    }
+   ]
+  },
+  {
+   "id": "trl_208_talanji",
+   "name": "Princess Talanji",
+   "provenance": "TRL",
+   "family": "13",
+   "hero": "TRLA_208h",
+   "power": "CS1h_001",
+   "tier": "4",
+   "archetype": "control",
+   "level": {
+    "source": "rumble-round",
+    "original": 8
+   },
+   "flags": [
+    "shrine",
+    "doubleDeathrattle"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Princess_Talanji_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Challenge 1-2 (Bwonsamdi's Tome)",
+     "cards": [
+      {
+       "name": "Regenerate"
+      },
+      {
+       "name": "Light of the Naaru"
+      },
+      {
+       "name": "Northshire Cleric"
+      },
+      {
+       "name": "Power Word: Shield"
+      },
+      {
+       "name": "Test Subject"
+      },
+      {
+       "name": "Divine Spirit"
+      },
+      {
+       "name": "Radiant Elemental"
+      },
+      {
+       "name": "Shadow Visions"
+      },
+      {
+       "name": "Dragon Soul"
+      },
+      {
+       "name": "Extra Arms"
+      },
+      {
+       "name": "Vivid Nightmare"
+      },
+      {
+       "name": "Duskbreaker"
+      },
+      {
+       "name": "Lyra the Sunshard"
+      },
+      {
+       "name": "Power Word: Replicate"
+      },
+      {
+       "name": "Zerek, Master Cloner"
+      },
+      {
+       "name": "Nightmare Amalgam"
+      },
+      {
+       "name": "Twilight Drake"
+      },
+      {
+       "name": "Ysera"
+      }
+     ]
+    },
+    {
+     "label": "Challenge 3-5 (Bwonsamdi's Covenant)",
+     "cards": [
+      {
+       "name": "Northshire Cleric",
+       "count": 2
+      },
+      {
+       "name": "Auchenai Phantasm",
+       "count": 2
+      },
+      {
+       "name": "Holy Champion",
+       "count": 2
+      },
+      {
+       "name": "Squashling",
+       "count": 2
+      },
+      {
+       "name": "Bloodwash Medic",
+       "count": 1
+      },
+      {
+       "name": "Velen's Chosen",
+       "count": 2
+      },
+      {
+       "name": "Darkshire Alchemist",
+       "count": 2
+      },
+      {
+       "name": "Quartz Elemental",
+       "count": 1
+      },
+      {
+       "name": "Nightscale Matriarch",
+       "count": 2
+      },
+      {
+       "name": "Prophet Velen",
+       "count": 1
+      },
+      {
+       "name": "Waterboy",
+       "count": 1
+      },
+      {
+       "name": "Earthen Ring Farseer",
+       "count": 2
+      },
+      {
+       "name": "Injured Blademaster",
+       "count": 2
+      },
+      {
+       "name": "Hozen Healer",
+       "count": 2
+      },
+      {
+       "name": "Maiden of the Lake",
+       "count": 2
+      },
+      {
+       "name": "Shroom Brewer",
+       "count": 2
+      },
+      {
+       "name": "Clockwork Automaton",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Challenge 6-8 (Bwonsamdi's Sanctum)",
+     "cards": [
+      {
+       "name": "Weaponized Zombie",
+       "count": 1
+      },
+      {
+       "name": "Dead Ringer",
+       "count": 2
+      },
+      {
+       "name": "Bloodwash Medic",
+       "count": 1
+      },
+      {
+       "name": "Tortollan Shellraiser",
+       "count": 2
+      },
+      {
+       "name": "Twilight's Call",
+       "count": 2
+      },
+      {
+       "name": "Shifting Shade",
+       "count": 2
+      },
+      {
+       "name": "Coffin Crasher",
+       "count": 2
+      },
+      {
+       "name": "Ghastcoiler",
+       "count": 1,
+       "id": "TRLA_149"
+      },
+      {
+       "name": "Obsidian Statue",
+       "count": 2
+      },
+      {
+       "name": "Dancing Swords",
+       "count": 2
+      },
+      {
+       "name": "Shallow Gravedigger",
+       "count": 2
+      },
+      {
+       "name": "Spawn of N'Zoth",
+       "count": 1
+      },
+      {
+       "name": "Spiritsinger Umbra",
+       "count": 1
+      },
+      {
+       "name": "Corrupted Healbot",
+       "count": 2
+      },
+      {
+       "name": "Feugen",
+       "count": 1
+      },
+      {
+       "name": "Stalagg",
+       "count": 1
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      },
+      {
+       "name": "Da Undatakah",
+       "count": 1
+      },
+      {
+       "name": "Sneed's Old Shredder",
+       "count": 1
+      },
+      {
+       "name": "Hakkar, the Soulflayer",
+       "count": 1
+      },
+      {
+       "name": "N'Zoth, the Corruptor",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Challenge 6-8 (Bwonsamdi's Sanctum)"
+   },
+   "variants": [
+    {
+     "id": "early",
+     "shrine": "TRLA_146",
+     "deck": {
+      "list": "Challenge 1-2 (Bwonsamdi's Tome)"
+     }
+    },
+    {
+     "id": "middle",
+     "shrine": "TRLA_147",
+     "deck": {
+      "list": "Challenge 3-5 (Bwonsamdi's Covenant)"
+     }
+    },
+    {
+     "id": "late",
+     "shrine": "TRLA_114",
+     "deck": {
+      "list": "Challenge 6-8 (Bwonsamdi's Sanctum)"
+     }
+    }
+   ],
+   "fillers": [
+    "Northshire Cleric",
+    "Power Word: Shield",
+    "Shadow Word: Pain",
+    "Shadow Word: Death",
+    "Holy Nova",
+    "Cabal Shadow Priest",
+    "Lightspawn",
+    "Auchenai Soulpriest",
+    "Holy Fire",
+    "Chillwind Yeti",
+    "Boulderfist Ogre",
+    "Azure Drake"
+   ],
+   "adaptations": [
+    {
+     "kind": "schedule",
+     "note": "The three Rumble Run challenge ranges (1-2, 3-5, 6-8) are three shrine variants of one row (early, middle, late), as War Master Voone's; a fight draws its variant from the run seed and the floor, not from the round. A champion meets the run in any round of the Rumble Run, so the row's tier is a recorded spread of the nine champions over the four combat tiers (round 8 here: tier 4), not a wiki fact."
+    },
+    {
+     "kind": "deck",
+     "note": "The challenge 1-2 table is a pool of possible cards without counts (the wiki: 10 or 13 cards a game); the challenge 3-5 table lists challenge 4-5 counts (17, 29 and 30 cards; starred cards only at challenge 5). Both are brought to 30 cards by the deck rule (second copies of non-Legendary singles, then the curated class fillers); the Rumble Run teammates the champions play (their special cards) are not admitted for a boss and are left out, each recorded."
+    }
+   ]
+  }
+ ],
+ "rejected": []
+}

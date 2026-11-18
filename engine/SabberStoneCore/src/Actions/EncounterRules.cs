@@ -24,10 +24,13 @@ namespace SabberStoneCore.Actions
 	{
 		// ------------------------------------------------------------------ tag table (32630-32699)
 		// One allocation table for every encounter family: a family that needs a counter adds a constant here (32636-32659; family NN's
-		// reserved number is 32635 + NN: taken 32637 by family 02, 32641 by family 06, 32643 by family 08, 32644 by family 09 and
-		// 32645 by family 10), never a number in its own file, so two families cannot collide. 32660-32699 are the global rules'
-		// (DungeonRunGlobalRules: 32660-32662 taken by family 05 and the wave 2 integration, 32680 by family 06, whose rule-state
-		// tags are 32680-32699).
+		// reserved number is 32635 + NN: taken 32637 by family 02, 32641 by family 06, 32643 by family 08, 32644 by family 09,
+		// 32645 by family 10, 32646 by family 11, 32652 by family 17, 32653 by family 18, 32657 by family 22 and 32659 by family 24;
+		// families 12-16, 19-21 and 23 took none; step 9 reserves 32638-32640, free since families 03-05 took none: 32638
+		// ULDA_111 Hearthstone's escape, 32639 GILA_911 Rewind's restart, 32640 spare for the restart family),
+		// never a number in its own file, so two families cannot collide. 32660-32699 are the global rules'
+		// (DungeonRunGlobalRules: 32660-32662 taken by family 05 and the wave 2 integration, 32680 by family 06, whose
+		// rule-state tags are 32680-32699).
 		// All of them are private: NativeMatch never sends them (IsPrivateTag joins NativeMatch.IsDecisionInternalTag).
 		/// <summary>On the boss's controller: the index of its current form (<see cref="RunEncounter.BossForms"/>).</summary>
 		public const GameTag FormIndex = (GameTag)32630;
@@ -69,6 +72,34 @@ namespace SabberStoneCore.Actions
 		/// set-aside zone, 0 for none. Family 10 (the set-aside store; rules in EncounterRules.F10.cs).
 		/// </summary>
 		public const GameTag SetAsideStore = (GameTag)32645;
+		/// <summary>
+		/// On a hero power: 1 while the use that is resolving earned it a refresh ("If any die, refresh this"); its own Inspire
+		/// trigger readies it again and clears the mark. Family 11 (Raeth Ghostsong's Desecrate; rules in EncounterRules.F11.cs).
+		/// </summary>
+		public const GameTag PowerRefresh = (GameTag)32646;
+		/// <summary>
+		/// On an Extortion (DALA_BOSS_59t3): the entity id of the card it holds in its player's set-aside zone, 0 for none.
+		/// Family 17 (Madam Goya's Blackmail; rules in EncounterRules.F17.cs).
+		/// </summary>
+		public const GameTag ExtortionEscrow = (GameTag)32652;
+		/// <summary>
+		/// On a hero power (Kazamon Steelskin's Steelskin, "You can't damage yourself"): damage its owner's sources deal to its
+		/// owner's hero is prevented. Family 18 (rules in EncounterRules.F18.cs: <see cref="PreventsSelfDamage"/>).
+		/// </summary>
+		public const GameTag SelfDamageImmune = (GameTag)32653;
+		/// <summary>
+		/// A Beautiful Oasis's Mirage (family 22; rules in DungeonRunEncounters.TombsD): on the boss's hero power, the illusion's public
+		/// hand position (1-based); on the illusion card, its twin's entity id times four, plus two, plus one when it is the added copy.
+		/// </summary>
+		public const GameTag MirageIllusion = (GameTag)32657;
+		/// <summary>
+		/// Family 24 (the Plague Lords; rules in EncounterRules.F24.cs), one counter on three kinds of entity: on a controller, the
+		/// damage its ULDA_115 "Gnomebliterator" casts banked this match for the run's next Plague Lord (10 plus the cast's Spell
+		/// Damage each, outside a Plague Lord fight: <see cref="Harvest"/>); on a Mur-nado hero power (ULDA_BOSS_39p3), the
+		/// Murlocs that died while it was active (each makes it cost (1) less); on a spell, 1 while BOT_543 Omega Mind's Mind Meld
+		/// gave it Lifesteal (taken back when the turn ends).
+		/// </summary>
+		public const GameTag PlagueCount = (GameTag)32659;
 		/// <summary>
 		/// On the game: one bit per hooked global rule (EncounterCard.HookIndex) that was applied to this match (family 05:
 		/// DungeonRunGlobalRules.Apply runs a rule's apply hook once; a rule with no player enchantment is active by this mark).
@@ -130,6 +161,23 @@ namespace SabberStoneCore.Actions
 				int cost = Math.Max(0, power.Card.Cost + extra(game));
 				if (power.Cost != cost) power.Cost = cost;
 			}
+		}
+
+		/// <summary>
+		/// Game.MainStart, right after the turn-start draw and before the death and aura pass: the current player's rule-cast
+		/// power (DungeonRunEncounters.AutoCast; the wiki's auto-cast is "the boss's first action each turn", after the
+		/// start-of-turn triggered effects) is used, so a card drawn this turn counts (For The Light! buffs it). Only a started
+		/// power (<see cref="PowerActive"/>) of a living hero; one dictionary lookup in every other game.
+		/// </summary>
+		internal static void AfterTurnStartDraw(Game game)
+		{
+			Controller c = game.CurrentPlayer;
+			HeroPower power = c?.Hero?.HeroPower;
+			if (power == null || power[PowerActive] == 0 || game.State == State.COMPLETE || c.Hero.ToBeDestroyed) return;
+			Tasks.ISimpleTask cast = DungeonRunEncounters.Find(power.Card.Id)?.AfterDraw;
+			if (cast == null) return;
+			game.TaskQueue.Execute(cast, c, power, null, historyTrigger: true);
+			game.ProcessTasks();
 		}
 
 		/// <summary>Stops a replaced hero power's trigger and aura (the old power sits in the set-aside zone afterwards).</summary>
@@ -226,10 +274,17 @@ namespace SabberStoneCore.Actions
 		/// </summary>
 		internal static void ResolveHeroForms(Game game)
 		{
+			// Step 9 (EncounterRules.S9.cs): a fight an escape or a restart ended keeps its dead heroes (no form, rat or relay
+			// takes over); after the forms and the relay, a dead run hero may restart the game (GILA_911 Rewind).
+			if (game == null || game.State == State.COMPLETE || EndedByScript(game)) return;
 			RunEncounter enc = Of(game);
-			if (enc == null || game.State == State.COMPLETE) return;
-			if (enc.BossForms.Count > 1) ResolveBoss(game, enc);
-			if (enc.PlayerRelay.Count > 0) ResolveRelay(game, enc);
+			if (enc != null)
+			{
+				ResolveUnderbellyRats(game); // family 15, The Rat King: a living Underbelly Rat replaces a dead hero (EncounterRules.F15.cs)
+				if (enc.BossForms.Count > 1) ResolveBoss(game, enc);
+				if (enc.PlayerRelay.Count > 0) ResolveRelay(game, enc);
+			}
+			ResolveRewind(game);
 		}
 
 		private static void ResolveBoss(Game game, RunEncounter enc)
@@ -286,7 +341,8 @@ namespace SabberStoneCore.Actions
 					new ReplaceHeroPower(form.Power).Process(game, boss, old, null);
 				}
 			}
-			int max = form.Health > 0 ? form.Health : hero.BaseHealth;
+			// Step 9 D11: with the form ratchet (Tekahn on acts-v4t) a threshold form with no Health of its own caps the maximum.
+			int max = RatchetMax(game, form, form.Health > 0 ? form.Health : hero.BaseHealth);
 			bool keep = form.KeepExcess && !dead && remaining > 0 && remaining < max;
 			hero.BaseHealth = max;
 			hero.Damage = keep ? max - remaining : 0;
@@ -336,9 +392,20 @@ namespace SabberStoneCore.Actions
 			Hero hero = player.Hero;
 			if (player.PlayState == PlayState.CONCEDED || !(hero.ToBeDestroyed || hero.Health <= 0)) return;
 			int used = player[RelayIndex];
-			if (used >= enc.PlayerRelay.Count) return;
+			// Family 24: a hero listed more than once (a Tombs explorer with its three finale decks) is one relay slot; which of its
+			// entries enters is drawn by the game RNG when it enters (as the original's player choice is made then), so a boss's
+			// fair-view simulation, whose clone has its own RNG, never learns it beforehand. One entry per hero: no draw.
+			var heroes = enc.PlayerRelay.Select(h => h.Hero.Id).Distinct().ToList();
+			if (used >= heroes.Count) return;
 			player[RelayIndex] = used + 1;
-			EnterRelayHero(player, enc.PlayerRelay[used]);
+			var entries = enc.PlayerRelay.Where(h => h.Hero.Id == heroes[used]).ToList();
+			RunFightHero next = entries[0];
+			if (entries.Count > 1)
+			{
+				game.OnRandomHappened(true);
+				next = entries[game.Random.Next(entries.Count)];
+			}
+			EnterRelayHero(player, next);
 		}
 
 		/// <summary>
@@ -420,9 +487,11 @@ namespace SabberStoneCore.Actions
 			var heroes = game.IdEntityDic.Values.OfType<Hero>().Where(h => h.Controller == player
 					&& (ReferenceEquals(player.Hero, h) || h.Zone == player.SetasideZone))
 				.OrderBy(h => h.Id).Select(h => h.Card.Id).ToList();
-			bool bossDead = boss.Hero.ToBeDestroyed || boss.Hero.Health <= 0;
+			// Step 9: an escape or a restart leaves the boss alive with the Health it has (its hero leaves the table without dying).
+			bool bossDead = !EndedByScript(game) && (boss.Hero.ToBeDestroyed || boss.Hero.Health <= 0);
 			return new RunMatchEnd(bossDead ? 0 : boss.Hero.Health, boss[FormIndex], boss[FormChanges],
-				Math.Max(0, player.Hero.Damage), heroes, game[NoLoss] == 1);
+				Math.Max(0, player.Hero.Damage), heroes, game[NoLoss] == 1, player[PlagueCount] + boss[PlagueCount],
+				escaped: game[Escape] != 0, restarted: game[Restart] != 0, restartSource: RestartSourceOf(game[Restart]), turns: game.Turn);
 		}
 	}
 }

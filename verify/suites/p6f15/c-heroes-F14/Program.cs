@@ -133,9 +133,11 @@ Check("T1 TRLA_065p Steady Throw is the hero power of TRLA_204h Zul'jin (its HER
     FactTag("TRLA_204h", 380) == dbfOf["TRLA_065p"] && FactName("TRLA_204h") == "Zul'jin" && FactTag("TRLA_204h", 202) == 3
     && forms.All(f => FactTag(Row(f.Cls), 380) != dbfOf["TRLA_065p"]) && FactTag("TRLA_209h", 380) != dbfOf["TRLA_065p"]
     && factById.Values.Count(c => c.GetProperty("tags").EnumerateArray().Any(t => t[0].GetInt32() == 380 && t[1].GetInt32() == dbfOf["TRLA_065p"])) == 1);
-Check("T1 TRLA_065p has no client loadout row (ADVENTURE_HERO_POWER, ADVENTURE_LOADOUT_TREASURES, GUEST_HERO) and no engine script or run content",
+// Phase 8 family 13 (wave 4) scripts Steady Throw as Zul'jin's encounter power (DungeonRunEncounters.F13.cs); it stays no run content.
+Check("T1 TRLA_065p has no client loadout row (ADVENTURE_HERO_POWER, ADVENTURE_LOADOUT_TREASURES, GUEST_HERO) and no run content; since phase 8 family 13 it is scripted only as Zul'jin's encounter power",
     !InClientTable("ADVENTURE_HERO_POWER", "TRLA_065p") && !InClientTable("ADVENTURE_LOADOUT_TREASURES", "TRLA_065p") && !InClientTable("GUEST_HERO", "TRLA_065p")
-    && !C("TRLA_065p").Implemented && !DungeonRunContent.TryGet("TRLA_065p", out _) && C("TRLA_065p").Type == CardType.HERO_POWER);
+    && C("TRLA_065p").Implemented && DungeonRunEncounters.Find("TRLA_065p")?.Family == "13" && DungeonRunEncounters.Find("TRLA_065p")?.Kind == EncounterCardKind.Power
+    && !DungeonRunContent.TryGet("TRLA_065p", out _) && C("TRLA_065p").Type == CardType.HERO_POWER);
 
 // ---------------------------------------------------------------- T2 data, validator, admission
 {
@@ -192,7 +194,9 @@ Check("T1 TRLA_065p has no client loadout row (ADVENTURE_HERO_POWER, ADVENTURE_L
     Check("T2 validator: the NEUTRAL base form TRLA_209h as a Mage row's portrait is refused", e1.Any(e => e.Contains("class TRLA_209h_Mage") && e.Contains("portrait TRLA_209h is NEUTRAL")), string.Join(" | ", e1.Take(3)));
     var e2 = DungeonRunValidator.Validate(Load(Swap(runJson, "\"hero\": \"TRLA_209h_Hunter\", \"health\": 30, \"classes\": [\"HUNTER\"], \"powers\": [\"DS1h_292\"]",
         "\"hero\": \"TRLA_209h_Hunter\", \"health\": 30, \"classes\": [\"HUNTER\"], \"powers\": [\"TRLA_065p\"]")), null);
-    Check("T2 validator: TRLA_065p as Rikkar's Hunter power is refused (not scripted)", e2.Any(e => e.StartsWith("TRLA_065p") && e.Contains("not scripted")), string.Join(" | ", e2.Take(3)));
+    // Phase 8 family 13 (wave 4): scripted now, so refused by the admission table (a boss's power only), no longer as unscripted.
+    Check("T2 validator: TRLA_065p as Rikkar's Hunter power is refused (since phase 8 family 13: a boss hero power, admission boss-power-public)",
+        e2.Any(e => e.StartsWith("TRLA_065p") && e.Contains("admission boss-power-public") && e.Contains("a boss hero power")), string.Join(" | ", e2.Take(3)));
     var e3 = DungeonRunValidator.Validate(Load(Swap(runJson, "\"cards\": [\"GVG_032\", \"LOOT_048\", \"TRL_010\", \"CORE_EX1_154\"", "\"cards\": [\"GVG_032\", \"LOOT_048\", \"TRL_010\", \"EX1_154\"")), null);
     Check("T2 validator: the unscripted original EX1_154 in a shrine starter is refused", e3.Any(e => e.StartsWith("EX1_154") && e.Contains("rumble_druid_112")), string.Join(" | ", e3.Take(3)));
     var e4 = DungeonRunValidator.Validate(Load(Swap(runJson, "\"hero\": \"TRLA_209h_Warrior\", \"health\": 30, \"classes\": [\"WARRIOR\"]", "\"hero\": \"TRLA_209h_Warrior\", \"health\": 30, \"classes\": [\"MAGE\"]")), null);

@@ -44,6 +44,11 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		public bool NeedsActivation { get; internal set; }
 		/// <summary>A hero power whose Cost follows the game: what is added to its printed Cost (EncounterRules.RefreshCosts); null for a fixed Cost.</summary>
 		internal Func<Game, int> DynamicCost { get; set; }
+		/// <summary>
+		/// A hero power the boss uses by rule (DungeonRunEncounters.AutoCast): its use, run by EncounterRules.AfterTurnStartDraw
+		/// right after its owner's turn-start draw; null for every other card.
+		/// </summary>
+		internal ISimpleTask AfterDraw { get; set; }
 		internal Func<CardDef> Script { get; set; }
 		internal Action<Card> Shape { get; set; }
 		/// <summary>A global rule's hooks beyond its player enchantment (<see cref="EncounterCardKind.Rule"/>), or null.</summary>
@@ -202,7 +207,7 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		/// engine never offers it as an option (it joins the passive ids); its trigger and aura start at game start and at a form
 		/// change (EncounterRules.ActivatePower), with no task, so a form change inside death processing is safe.
 		/// </summary>
-		private static void Passive(string id, Func<Power> power) =>
+		private static EncounterCard Passive(string id, Func<Power> power) =>
 			Add(id, EncounterCardKind.Passive, () =>
 			{
 				Power p = power();

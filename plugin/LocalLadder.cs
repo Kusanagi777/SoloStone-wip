@@ -245,7 +245,9 @@ internal static class LocalLadder
         if (!runRecorded)
         {
             if (Time.realtimeSinceStartup < runNextAttemptAt) return;
-            DungeonRunOutcome outcome = match.DungeonRunEnding == "fault" ? DungeonRunOutcome.Fault
+            // [WIN] Step 9 (lane X, D13): a restart (GILA_911 Rewind, GILA_BOSS_48t) ends the engine game as a loss or a tie; the
+            // run records it as a fault with its mark (DungeonRun.Outcomes.cs). An escape (ULDA_111) is the engine's win as it is.
+            DungeonRunOutcome outcome = match.DungeonRunEnding == "fault" || match.DungeonRunEnd?.Restarted == true ? DungeonRunOutcome.Fault
                 : match.DungeonRunEnding == "turn-limit" ? DungeonRunOutcome.TurnLimit
                 : terminalOutcome == "Won" ? DungeonRunOutcome.Win
                 : terminalOutcome == "Tied" ? DungeonRunOutcome.Tie

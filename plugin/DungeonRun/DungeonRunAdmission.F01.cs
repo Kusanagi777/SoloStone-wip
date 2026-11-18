@@ -88,8 +88,8 @@ internal static partial class DungeonRunAdmission
         {
             NeverGenerated = true,
             Family = "fight-hero-card", Admit = AdmitScope.None, Lift = TurnRestartLift,
-            Reason = "Toki's hero card for the Hagatha fight: its hero power is GILA_900p Temporal Loop (\"Start your turn over\"), which needs "
-                + "a run-owned turn restart; the encounter leaves the card out until then",
+            Reason = "Toki's hero card for the Hagatha fight: its hero power is GILA_900p Temporal Loop (\"Start your turn over\"), a turn "
+                + "restart rejected for good in step 9 (NativeMatch has no client history re-sync); the encounter leaves the card out",
             Ids = new[] { "GILA_900h2" },
         },
     };

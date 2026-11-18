@@ -130,23 +130,20 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		/// A hero power the boss uses by rule, not by a choice of its AI (the wiki's "auto-cast", for the powers whose worth the
 		/// AI's evaluation cannot see: burning unknown cards, an extra turn, a Silence of its own minions): at the start of its
 		/// owner's turn, when the owner can pay its Cost and <paramref name="when"/> holds, the Cost is paid and
-		/// <paramref name="effect"/> runs. The engine never offers it (it is registered with the passive powers); the power's
+		/// <paramref name="effect"/> runs. The wiki's Hero Power page has auto-cast powers used "as the boss's first action each
+		/// turn" and its Auto-cast page after the start-of-turn triggered effects, so the use comes after the turn-start draw:
+		/// EncounterRules.AfterTurnStartDraw runs it from Game.MainStart (wave 5 integration; until then it was a TURN_START
+		/// trigger, before the draw). The engine never offers it (it is registered with the passive powers); the power's
 		/// TAG_SCRIPT_DATA_NUM_2 counts its uses.
 		/// </summary>
 		private static void AutoCast(string id, Func<Controller, bool> when, Action<Game, Controller, IEntity, TaskStack> effect) =>
-			Passive(id, () => new Power
+			Passive(id, () => new Power()).AfterDraw = new CustomTask((g, c, s, t, stack) =>
 			{
-				Trigger = new Trigger(TriggerType.TURN_START)
-				{
-					SingleTask = new CustomTask((g, c, s, t, stack) =>
-					{
-						int cost = (s as HeroPower)?.Cost ?? 0;
-						if (c.RemainingMana < cost || !when(c)) return;
-						c.UsedMana += cost;
-						s[GameTag.TAG_SCRIPT_DATA_NUM_2] = s[GameTag.TAG_SCRIPT_DATA_NUM_2] + 1;
-						effect(g, c, s, stack);
-					}),
-				},
+				int cost = (s as HeroPower)?.Cost ?? 0;
+				if (c.RemainingMana < cost || !when(c)) return;
+				c.UsedMana += cost;
+				s[GameTag.TAG_SCRIPT_DATA_NUM_2] = s[GameTag.TAG_SCRIPT_DATA_NUM_2] + 1;
+				effect(g, c, s, stack);
 			});
 
 		/// <summary>How often a rule-cast power (<see cref="AutoCast"/>) was used this match.</summary>

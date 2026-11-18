@@ -1,0 +1,2919 @@
+{
+ "schemaVersion": 1,
+ "family": "17",
+ "description": "Dalaran Heist bosses D (phase 8 family 17): fourteen encounters of The Dalaran Heist (DALA_BOSS_46 to 59: Ichoron, Lavanthor, Zuramat the Obliterator, Cyanigosa, Nozari, Millificent Manastorm, Lieutenant Sinclari, Dancin' Deryl, Locksmith Zibb, Captain Hannigan, Queen Wagtoggle, Trade Prince Gallywix, Boommaster Flark, Madam Goya) and their boss cards (Molten Rock, Void Shift, Elementium Squirrel Bomb, Thorium Chicken, Kirin Tor Guard, Rival Accomplice, The Wire, The Other Wire, Lotus Bruiser, Fruit Slasher, Extortion; Infuriated Banker, the bank card of family 16's Gold Elemental, is scripted here too). Boss deck lists are transcribed from hearthstone.wiki.gg boss pages (read 2026-11-14), by card name; tools/dungeon-run-catalog (step 'encounters') resolves the names against facts/violet-hold-2026-09.json, checks every card and writes data/dungeon-run/encounters-v1.json. Level: the Heist boss pages have no level table and the hero cards print 30 Health, so the level is read from the page (family 14's rule): a chapter's final boss is its eighth fight (level 8); a 'Possible cards' pool's 'Total cards' column gives the deck size, which grows with the level (10 cards at level 1, 15 at 2, 20 at 3, 25 at 4 and 5, 30 from 6), and the row takes the lowest level that holds it; a counted table of 30 cards with no stated level is level 6. Tier: levels 1-2 tier 1, 3-4 tier 2, 5-6 tier 3, 7-8 tier 4 (the encounter model's table; a Heist chapter final is a combat encounter here, as family 15's Jepetto: the Heist's major is its finale, family 18). The fight's Health is the act curve's, not the printed 30.",
+ "method": "Each page's wikitext (?action=raw) was read and its deck table transcribed by verify/tools/gen/p8f17/make_f17.py: rowspan- and colspan-aware, column by column in table order, Normal and Heroic separately. A 'Possible cards' pool lists each card once; a 'Quantity' table keeps its counts (each such list sums to 30). The boss-only cards carry their id. The boss pages are the '(boss)' or '(Dalaran boss)' pages where a collectible card has the plain name.",
+ "bosses": [
+  {
+   "id": "dala_46_ichoron",
+   "name": "Ichoron",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_46h",
+   "power": "DALA_BOSS_46p",
+   "tier": "3",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Ichoron",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Arcane Artificer",
+       "count": 1
+      },
+      {
+       "name": "Flame Geyser",
+       "count": 2
+      },
+      {
+       "name": "Lesser Ruby Spellstone",
+       "count": 1
+      },
+      {
+       "name": "Frost Nova",
+       "count": 1
+      },
+      {
+       "name": "Splitting Image",
+       "count": 1
+      },
+      {
+       "name": "Scorch",
+       "count": 1
+      },
+      {
+       "name": "Water Elemental",
+       "count": 2
+      },
+      {
+       "name": "Bonfire Elemental",
+       "count": 2
+      },
+      {
+       "name": "Arcanosaur",
+       "count": 1
+      },
+      {
+       "name": "Greater Arcane Missiles",
+       "count": 2
+      },
+      {
+       "name": "Anomalus",
+       "count": 1
+      },
+      {
+       "name": "Power of Creation",
+       "count": 1
+      },
+      {
+       "name": "Healing Rain",
+       "count": 1
+      },
+      {
+       "name": "Tidal Surge",
+       "count": 1
+      },
+      {
+       "name": "Arcane Servant",
+       "count": 2
+      },
+      {
+       "name": "Tar Creeper",
+       "count": 2
+      },
+      {
+       "name": "Frost Elemental",
+       "count": 1
+      },
+      {
+       "name": "Frozen Crusher",
+       "count": 2
+      },
+      {
+       "name": "Baron Geddon",
+       "count": 1
+      },
+      {
+       "name": "Blazecaller",
+       "count": 2
+      },
+      {
+       "name": "Ragnaros the Firelord",
+       "count": 1
+      },
+      {
+       "name": "Ozruk",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Frost Nova",
+       "count": 2
+      },
+      {
+       "name": "Water Elemental",
+       "count": 2
+      },
+      {
+       "name": "Cabalist's Tome",
+       "count": 2
+      },
+      {
+       "name": "Blizzard",
+       "count": 2
+      },
+      {
+       "name": "Firelands Portal",
+       "count": 2
+      },
+      {
+       "name": "Hex Lord Malacrass",
+       "count": 1
+      },
+      {
+       "name": "Kalecgos",
+       "count": 1
+      },
+      {
+       "name": "Far Sight",
+       "count": 2
+      },
+      {
+       "name": "Healing Rain",
+       "count": 1
+      },
+      {
+       "name": "Tidal Surge",
+       "count": 1
+      },
+      {
+       "name": "Azure Drake",
+       "count": 2
+      },
+      {
+       "name": "Sludge Belcher",
+       "count": 2
+      },
+      {
+       "name": "Zilliax",
+       "count": 1
+      },
+      {
+       "name": "Emperor Thaurissan",
+       "count": 1
+      },
+      {
+       "name": "Frozen Crusher",
+       "count": 2
+      },
+      {
+       "name": "Hogger",
+       "count": 1
+      },
+      {
+       "name": "Gruul",
+       "count": 1
+      },
+      {
+       "name": "Ragnaros the Firelord",
+       "count": 1
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      },
+      {
+       "name": "Malygos",
+       "count": 1
+      },
+      {
+       "name": "Ysera",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Ichoron's page: Chapter 2, a counted table of 30 cards, no stated level. Level 6: tier 3."
+    },
+    {
+     "kind": "power",
+     "note": "Protective Bubble gives a friendly minion Divine Shield (the tag, as Hand of Protection); offered only on a minion of the boss without one. The Heroic power (all friendly minions, auto-cast) is not used."
+    }
+   ]
+  },
+  {
+   "id": "dala_47_lavanthor",
+   "name": "Lavanthor",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_47h",
+   "power": "DALA_BOSS_47p",
+   "tier": "3",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "cards": [
+    "DALA_BOSS_47t"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Lavanthor",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Flamecannon",
+       "count": 2
+      },
+      {
+       "name": "Flamestrike",
+       "count": 2
+      },
+      {
+       "name": "Armorsmith",
+       "count": 2
+      },
+      {
+       "name": "Battle Rage",
+       "count": 2
+      },
+      {
+       "name": "Cornered Sentry",
+       "count": 2
+      },
+      {
+       "name": "Rampage",
+       "count": 2
+      },
+      {
+       "name": "Frothing Berserker",
+       "count": 2
+      },
+      {
+       "name": "Mortal Strike",
+       "count": 2
+      },
+      {
+       "name": "Sudden Genesis",
+       "count": 2
+      },
+      {
+       "name": "Grommash Hellscream",
+       "count": 1
+      },
+      {
+       "name": "Rotface",
+       "count": 1
+      },
+      {
+       "name": "Flame Juggler",
+       "count": 2
+      },
+      {
+       "name": "Acolyte of Pain",
+       "count": 2
+      },
+      {
+       "name": "Grim Patron",
+       "count": 2
+      },
+      {
+       "name": "Xavius",
+       "count": 1
+      },
+      {
+       "name": "Baron Geddon",
+       "count": 1
+      },
+      {
+       "name": "Core Hound",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Devastate",
+       "count": 2
+      },
+      {
+       "name": "Armorsmith",
+       "count": 2
+      },
+      {
+       "name": "Execute",
+       "count": 2
+      },
+      {
+       "name": "Rampage",
+       "count": 2
+      },
+      {
+       "name": "Frothing Berserker",
+       "count": 2
+      },
+      {
+       "name": "Axe Flinger",
+       "count": 2
+      },
+      {
+       "name": "Bloodhoof Brave",
+       "count": 2
+      },
+      {
+       "name": "Death Revenant",
+       "count": 2
+      },
+      {
+       "name": "Security Rover",
+       "count": 2
+      },
+      {
+       "name": "Blackhowl Gunspire",
+       "count": 1
+      },
+      {
+       "name": "Tar Lord",
+       "count": 1
+      },
+      {
+       "name": "Grommash Hellscream",
+       "count": 1
+      },
+      {
+       "name": "Rotface",
+       "count": 1
+      },
+      {
+       "name": "King Mosh",
+       "count": 1
+      },
+      {
+       "name": "Acolyte of Pain",
+       "count": 2
+      },
+      {
+       "name": "Grim Patron",
+       "count": 2
+      },
+      {
+       "name": "Hogger, Doom of Elwynn",
+       "count": 1
+      },
+      {
+       "name": "Molten Giant",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Lavanthor's page: Chapter 2, a counted table of 30 cards, no stated level. Level 6: tier 3."
+    },
+    {
+     "kind": "deck",
+     "note": "Xavius is not in the client's card data (no card of that name): the encounters step fills its slot from the Heroic list."
+    },
+    {
+     "kind": "power",
+     "note": "Lava Belch summons a 0/3 Molten Rock (DALA_BOSS_47t): at the end of its player's turn it deals 1 damage to all characters (both heroes and every minion, itself included)."
+    }
+   ]
+  },
+  {
+   "id": "dala_48_zuramat",
+   "name": "Zuramat the Obliterator",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_48h",
+   "power": "DALA_BOSS_48p",
+   "tier": "4",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 8
+   },
+   "flags": [
+    "start",
+    "bothPlayers",
+    "handAdd"
+   ],
+   "cards": [
+    "DALA_BOSS_48e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Zuramat_the_Obliterator_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Void Shift",
+       "id": "DALA_BOSS_48t",
+       "count": 3
+      },
+      {
+       "name": "Call of the Void",
+       "count": 1
+      },
+      {
+       "name": "Voidwalker",
+       "count": 1
+      },
+      {
+       "name": "Demonfire",
+       "count": 2
+      },
+      {
+       "name": "Voidcaller",
+       "count": 2
+      },
+      {
+       "name": "Despicable Dreadlord",
+       "count": 2
+      },
+      {
+       "name": "Possessed Lackey",
+       "count": 2
+      },
+      {
+       "name": "Void Crusher",
+       "count": 2
+      },
+      {
+       "name": "Abyssal Enforcer",
+       "count": 2
+      },
+      {
+       "name": "Fearsome Doomguard",
+       "count": 2
+      },
+      {
+       "name": "Demonbolt",
+       "count": 2
+      },
+      {
+       "name": "Fel Lord Betrug",
+       "count": 1
+      },
+      {
+       "name": "Mal'Ganis",
+       "count": 1
+      },
+      {
+       "name": "Voidlord",
+       "count": 2
+      },
+      {
+       "name": "Jumbo Imp",
+       "count": 2
+      },
+      {
+       "name": "Deathlord",
+       "count": 2
+      },
+      {
+       "name": "The Beast",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Void Shift",
+       "id": "DALA_BOSS_48t",
+       "count": 1
+      },
+      {
+       "name": "Call of the Void",
+       "count": 2
+      },
+      {
+       "name": "Flame Imp",
+       "count": 2
+      },
+      {
+       "name": "Voidwalker",
+       "count": 1
+      },
+      {
+       "name": "Void Analyst",
+       "count": 2
+      },
+      {
+       "name": "Imp Gang Boss",
+       "count": 2
+      },
+      {
+       "name": "Void Terror",
+       "count": 2
+      },
+      {
+       "name": "Dreadsteed",
+       "count": 1
+      },
+      {
+       "name": "Imp-losion",
+       "count": 2
+      },
+      {
+       "name": "Voidcaller",
+       "count": 1
+      },
+      {
+       "name": "Bane of Doom",
+       "count": 1
+      },
+      {
+       "name": "Demonheart",
+       "count": 1
+      },
+      {
+       "name": "Despicable Dreadlord",
+       "count": 1
+      },
+      {
+       "name": "Dread Infernal",
+       "count": 1
+      },
+      {
+       "name": "Kabal Trafficker",
+       "count": 2
+      },
+      {
+       "name": "Possessed Lackey",
+       "count": 1
+      },
+      {
+       "name": "Rin, the First Disciple",
+       "count": 1
+      },
+      {
+       "name": "Abyssal Enforcer",
+       "count": 1
+      },
+      {
+       "name": "Fearsome Doomguard",
+       "count": 1
+      },
+      {
+       "name": "Fel Lord Betrug",
+       "count": 1
+      },
+      {
+       "name": "Mal'Ganis",
+       "count": 1
+      },
+      {
+       "name": "Voidlord",
+       "count": 1
+      },
+      {
+       "name": "Jumbo Imp",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "start": {
+    "playerHandAdd": [
+     "DALA_BOSS_48t",
+     "DALA_BOSS_48t"
+    ]
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Zuramat is \"the final boss that can be encountered in Chapter 2\" (the chapter's eighth fight). Level 8: tier 4."
+    },
+    {
+     "kind": "power",
+     "note": "To The Void banishes a minion: it leaves its board with no death and no Deathrattle, held by its Voided enchantment (DALA_BOSS_48e, \"In the Void.\") in family 10's set-aside store (EncounterRules.Banish). The wiki: banished minions go to a list of their own, not the list of deaths. A run shrine is never a legal target."
+    },
+    {
+     "kind": "power",
+     "note": "Void Shift (DALA_BOSS_48t, \"Destroy all minions. Summon all minions from the Void.\"): every minion of both boards is destroyed, then a new copy of each banished minion is summoned for the caster, in banishing order, while its board has room; the wiki: \"After using Void Shift, all minions in the list of banished are removed\" (the Void is empty). A copy is summoned as the list of deaths resummons (fresh, without the damage or enchantments it had)."
+    },
+    {
+     "kind": "start",
+     "note": "The wiki: \"The player is given two copies of Void Shift at Start of Game in Normal mode\" (the dialogue has a line for the player casting it). Both are given to the run player's hand after the mulligan (the row's start block); never in the run deck."
+    }
+   ]
+  },
+  {
+   "id": "dala_49_cyanigosa",
+   "name": "Cyanigosa",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_49h",
+   "power": "DALA_BOSS_49p",
+   "tier": "4",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 8
+   },
+   "flags": [
+    "passive"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Cyanigosa",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Babbling Book",
+       "count": 2
+      },
+      {
+       "name": "Frostbolt",
+       "count": 1
+      },
+      {
+       "name": "Magic Dart Frog",
+       "count": 2
+      },
+      {
+       "name": "Unstable Portal",
+       "count": 2
+      },
+      {
+       "name": "Frost Nova",
+       "count": 1
+      },
+      {
+       "name": "Blast Wave",
+       "count": 2
+      },
+      {
+       "name": "Cabalist's Tome",
+       "count": 2
+      },
+      {
+       "name": "Dragon's Breath",
+       "count": 2
+      },
+      {
+       "name": "Dragon's Fury",
+       "count": 2
+      },
+      {
+       "name": "Blizzard",
+       "count": 2
+      },
+      {
+       "name": "Dragoncaller Alanna",
+       "count": 1
+      },
+      {
+       "name": "Swamp Dragon Egg",
+       "count": 1
+      },
+      {
+       "name": "Faerie Dragon",
+       "count": 1
+      },
+      {
+       "name": "Marsh Drake",
+       "count": 2
+      },
+      {
+       "name": "Hoarding Dragon",
+       "count": 2
+      },
+      {
+       "name": "Azure Drake",
+       "count": 2
+      },
+      {
+       "name": "Chillmaw",
+       "count": 1
+      },
+      {
+       "name": "Primordial Drake",
+       "count": 1
+      },
+      {
+       "name": "Malygos",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Blast Wave",
+       "count": 2
+      },
+      {
+       "name": "Flame Lance",
+       "count": 2
+      },
+      {
+       "name": "Blizzard",
+       "count": 1
+      },
+      {
+       "name": "Meteor",
+       "count": 1
+      },
+      {
+       "name": "Firelands Portal",
+       "count": 2
+      },
+      {
+       "name": "Power of Creation",
+       "count": 2
+      },
+      {
+       "name": "Sindragosa",
+       "count": 1
+      },
+      {
+       "name": "Dragoncaller Alanna",
+       "count": 1
+      },
+      {
+       "name": "Kalecgos",
+       "count": 1
+      },
+      {
+       "name": "Arcane Tyrant",
+       "count": 2
+      },
+      {
+       "name": "Azure Drake",
+       "count": 2
+      },
+      {
+       "name": "Arcane Dynamo",
+       "count": 2
+      },
+      {
+       "name": "Bone Drake",
+       "count": 2
+      },
+      {
+       "name": "Mukla, Tyrant of the Vale",
+       "count": 1
+      },
+      {
+       "name": "Nerubian Unraveler",
+       "count": 2
+      },
+      {
+       "name": "Spiteful Summoner",
+       "count": 2
+      },
+      {
+       "name": "Malygos",
+       "count": 1
+      },
+      {
+       "name": "Nefarian",
+       "count": 1
+      },
+      {
+       "name": "Ysera",
+       "count": 1
+      },
+      {
+       "name": "Deathwing, Dragonlord",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Cyanigosa is \"the final boss that can be encountered in Chapter 2\" (the chapter's eighth fight). Level 8: tier 4."
+    },
+    {
+     "kind": "power",
+     "note": "Uncontrollable Energy: after the boss casts a spell, 1 damage to each enemy (the run player's hero and minions); a hero power's damage, so no Spell Damage."
+    }
+   ]
+  },
+  {
+   "id": "dala_50_nozari",
+   "name": "Nozari",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_50h",
+   "power": "DALA_BOSS_50p",
+   "tier": "3",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "flags": [
+    "passive"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Nozari_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Cathedral Gargoyle",
+       "count": 2
+      },
+      {
+       "name": "Flash of Light",
+       "count": 2
+      },
+      {
+       "name": "Lightforged Blessing",
+       "count": 2
+      },
+      {
+       "name": "Bronze Herald",
+       "count": 2
+      },
+      {
+       "name": "Nightbane Templar",
+       "count": 2
+      },
+      {
+       "name": "Time Out!",
+       "count": 2
+      },
+      {
+       "name": "Dragon Consort",
+       "count": 1
+      },
+      {
+       "name": "Dragon Speaker",
+       "count": 1
+      },
+      {
+       "name": "Lay on Hands",
+       "count": 1
+      },
+      {
+       "name": "Faerie Dragon",
+       "count": 2
+      },
+      {
+       "name": "Marsh Drake",
+       "count": 1
+      },
+      {
+       "name": "Dragonkin Sorcerer",
+       "count": 2
+      },
+      {
+       "name": "Cobalt Scalebane",
+       "count": 1
+      },
+      {
+       "name": "Scaled Nightmare",
+       "count": 1
+      },
+      {
+       "name": "Chillmaw",
+       "count": 1
+      },
+      {
+       "name": "Crowd Roaster",
+       "count": 1
+      },
+      {
+       "name": "Primordial Drake",
+       "count": 1
+      },
+      {
+       "name": "Dragonhatcher",
+       "count": 2
+      },
+      {
+       "name": "Nozdormu",
+       "count": 1
+      },
+      {
+       "name": "Deathwing",
+       "count": 1
+      },
+      {
+       "name": "Deathwing, Dragonlord",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Cathedral Gargoyle",
+       "count": 2
+      },
+      {
+       "name": "Lightforged Blessing",
+       "count": 1
+      },
+      {
+       "name": "Bronze Herald",
+       "count": 2
+      },
+      {
+       "name": "Blessing of Kings",
+       "count": 2
+      },
+      {
+       "name": "Dragon Consort",
+       "count": 2
+      },
+      {
+       "name": "Dragon Speaker",
+       "count": 2
+      },
+      {
+       "name": "Spikeridged Steed",
+       "count": 2
+      },
+      {
+       "name": "Faerie Dragon",
+       "count": 2
+      },
+      {
+       "name": "Netherspite Historian",
+       "count": 2
+      },
+      {
+       "name": "Dragonkin Sorcerer",
+       "count": 2
+      },
+      {
+       "name": "Twilight Guardian",
+       "count": 2
+      },
+      {
+       "name": "Cobalt Scalebane",
+       "count": 2
+      },
+      {
+       "name": "Volcanic Drake",
+       "count": 2
+      },
+      {
+       "name": "Wrathion",
+       "count": 1
+      },
+      {
+       "name": "Crowd Roaster",
+       "count": 2
+      },
+      {
+       "name": "Chromaggus",
+       "count": 1
+      },
+      {
+       "name": "Primordial Drake",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Nozari's page names no chapter or level; a counted table of 30 cards. Level 6: tier 3."
+    },
+    {
+     "kind": "power",
+     "note": "The wiki marks Sand Breath (2) as auto-cast, so it is cast by rule, not by a choice of the boss's AI (DungeonRunEncounters.AutoCast, family 09's rule): at the start of the boss's turn, when it can pay the Cost and an enemy can be hit, the Cost is paid and the power resolves. The engine never offers it as an option (it is registered with the passive powers). It deals 2 damage to a random enemy: the run player's hero or a minion an effect can pick (the game RNG); a hero power's damage, so no Spell Damage."
+    }
+   ]
+  },
+  {
+   "id": "dala_51_millificent",
+   "name": "Millificent Manastorm",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_51h",
+   "power": "DALA_BOSS_51p",
+   "tier": "3",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "cards": [
+    "DALA_BOSS_51t"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Millificent_Manastorm",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Thorium Chicken",
+       "id": "DALA_BOSS_51t2",
+       "count": 2
+      },
+      {
+       "name": "Cogmaster's Wrench",
+       "count": 2
+      },
+      {
+       "name": "Wind-up Burglebot",
+       "count": 2
+      },
+      {
+       "name": "Eternium Rover",
+       "count": 2
+      },
+      {
+       "name": "Omega Assembly",
+       "count": 2
+      },
+      {
+       "name": "Warbot",
+       "count": 2
+      },
+      {
+       "name": "Omega Devastator",
+       "count": 2
+      },
+      {
+       "name": "Iron Juggernaut",
+       "count": 1
+      },
+      {
+       "name": "Security Rover",
+       "count": 2
+      },
+      {
+       "name": "Beryllium Nullifier",
+       "count": 2
+      },
+      {
+       "name": "Annoy-o-Tron",
+       "count": 2
+      },
+      {
+       "name": "Micro Machine",
+       "count": 2
+      },
+      {
+       "name": "Tinkmaster Overspark",
+       "count": 1
+      },
+      {
+       "name": "Junkbot",
+       "count": 2
+      },
+      {
+       "name": "Zilliax",
+       "count": 1
+      },
+      {
+       "name": "Gelbin Mekkatorque",
+       "count": 1
+      },
+      {
+       "name": "Foe Reaper 4000",
+       "count": 1
+      },
+      {
+       "name": "Sneed's Old Shredder",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Thorium Chicken",
+       "id": "DALA_BOSS_51t2",
+       "count": 3
+      },
+      {
+       "name": "Annoy-o-Module",
+       "count": 2
+      },
+      {
+       "name": "Iron Sensei",
+       "count": 2
+      },
+      {
+       "name": "DOOM!",
+       "count": 1
+      },
+      {
+       "name": "Omega Assembly",
+       "count": 1
+      },
+      {
+       "name": "Dyn-o-matic",
+       "count": 2
+      },
+      {
+       "name": "Security Rover",
+       "count": 2
+      },
+      {
+       "name": "Beryllium Nullifier",
+       "count": 2
+      },
+      {
+       "name": "Mechwarper",
+       "count": 2
+      },
+      {
+       "name": "Tinkmaster Overspark",
+       "count": 1
+      },
+      {
+       "name": "Arcane Nullifier X-21",
+       "count": 2
+      },
+      {
+       "name": "Piloted Shredder",
+       "count": 2
+      },
+      {
+       "name": "Psych-o-Tron",
+       "count": 2
+      },
+      {
+       "name": "Wargear",
+       "count": 2
+      },
+      {
+       "name": "Zilliax",
+       "count": 1
+      },
+      {
+       "name": "Gelbin Mekkatorque",
+       "count": 1
+      },
+      {
+       "name": "Mechanical Whelp",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Millificent Manastorm's page: Chapter 2, a counted table of 30 cards, no stated level. Level 6: tier 3."
+    },
+    {
+     "kind": "power",
+     "note": "Tinker summons a 0/4 Elementium Squirrel Bomb (DALA_BOSS_51t): at the start of its player's turn it is destroyed and deals 2 damage to all enemies. Thorium Chicken (DALA_BOSS_51t2, the boss card of her deck) deals 3 damage to the enemy hero after the enemy plays a card."
+    }
+   ]
+  },
+  {
+   "id": "dala_52_sinclari",
+   "name": "Lieutenant Sinclari",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_52h",
+   "power": "DALA_BOSS_52p",
+   "tier": "3",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 6
+   },
+   "cards": [
+    "DALA_BOSS_52e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Lieutenant_Sinclari",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Kirin Tor Guard",
+       "id": "DALA_503",
+       "count": 4
+      },
+      {
+       "name": "Arcane Artificer",
+       "count": 2
+      },
+      {
+       "name": "Frostbolt",
+       "count": 2
+      },
+      {
+       "name": "Flamewaker",
+       "count": 2
+      },
+      {
+       "name": "Unexpected Results",
+       "count": 2
+      },
+      {
+       "name": "Cone of Cold",
+       "count": 1
+      },
+      {
+       "name": "Cosmic Anomaly",
+       "count": 2
+      },
+      {
+       "name": "Fireball",
+       "count": 2
+      },
+      {
+       "name": "Kirin Tor Tricaster",
+       "count": 1
+      },
+      {
+       "name": "Blast Wave",
+       "count": 2
+      },
+      {
+       "name": "Blizzard",
+       "count": 1
+      },
+      {
+       "name": "Flamestrike",
+       "count": 1
+      },
+      {
+       "name": "Greater Arcane Missiles",
+       "count": 1
+      },
+      {
+       "name": "Anomalus",
+       "count": 1
+      },
+      {
+       "name": "Power of Creation",
+       "count": 1
+      },
+      {
+       "name": "Rhonin",
+       "count": 1
+      },
+      {
+       "name": "Pyroblast",
+       "count": 1
+      },
+      {
+       "name": "Stonehill Defender",
+       "count": 1
+      },
+      {
+       "name": "Violet Spellsword",
+       "count": 1
+      },
+      {
+       "name": "Violet Warden",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Babbling Book",
+       "count": 2
+      },
+      {
+       "name": "Magic Trick",
+       "count": 2
+      },
+      {
+       "name": "Frostbolt",
+       "count": 2
+      },
+      {
+       "name": "Mana Cyclone",
+       "count": 2
+      },
+      {
+       "name": "Primordial Glyph",
+       "count": 2
+      },
+      {
+       "name": "Snowchugger",
+       "count": 2
+      },
+      {
+       "name": "Sorcerer's Apprentice",
+       "count": 2
+      },
+      {
+       "name": "Flamewaker",
+       "count": 2
+      },
+      {
+       "name": "Cosmic Anomaly",
+       "count": 2
+      },
+      {
+       "name": "Fireball",
+       "count": 2
+      },
+      {
+       "name": "Blast Wave",
+       "count": 2
+      },
+      {
+       "name": "Cabalist's Tome",
+       "count": 1
+      },
+      {
+       "name": "Blizzard",
+       "count": 1
+      },
+      {
+       "name": "Archmage Antonidas",
+       "count": 1
+      },
+      {
+       "name": "Medivh, the Guardian",
+       "count": 1
+      },
+      {
+       "name": "Kalecgos",
+       "count": 1
+      },
+      {
+       "name": "Violet Spellsword",
+       "count": 1
+      },
+      {
+       "name": "Violet Warden",
+       "count": 1
+      },
+      {
+       "name": "Ragnaros the Firelord",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Lieutenant Sinclari's page: Chapter 2, a counted table of 30 cards, no stated level. Level 6: tier 3."
+    },
+    {
+     "kind": "power",
+     "note": "Hold the Gates! gives any minion +2 Health and Taunt (Hold Fast!, DALA_BOSS_52e). Kirin Tor Guard (DALA_503, four in her deck) has +1 Attack for each other friendly Kirin Tor Guard."
+    }
+   ]
+  },
+  {
+   "id": "dala_53_deryl",
+   "name": "Dancin' Deryl",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_53h",
+   "power": "DALA_BOSS_53p",
+   "tier": "2",
+   "archetype": "aggro",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "cards": [
+    "DALA_BOSS_53e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Dancin%27_Deryl",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Ancestral Spirit"
+      },
+      {
+       "name": "Brrrloc"
+      },
+      {
+       "name": "Ice Fishing"
+      },
+      {
+       "name": "Reincarnate"
+      },
+      {
+       "name": "Underbelly Angler"
+      },
+      {
+       "name": "Siltfin Spiritwalker"
+      },
+      {
+       "name": "Tidal Surge"
+      },
+      {
+       "name": "Muckmorpher"
+      },
+      {
+       "name": "Everyfin is Awesome"
+      },
+      {
+       "name": "Murloc Tidecaller"
+      },
+      {
+       "name": "Toxfin"
+      },
+      {
+       "name": "Dire Wolf Alpha"
+      },
+      {
+       "name": "Rockpool Hunter"
+      },
+      {
+       "name": "Murloc Warleader"
+      },
+      {
+       "name": "Primalfin Lookout"
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Sludge Slurper"
+      },
+      {
+       "name": "Brrrloc"
+      },
+      {
+       "name": "Devolve"
+      },
+      {
+       "name": "Ghost Light Angler"
+      },
+      {
+       "name": "Underbelly Angler"
+      },
+      {
+       "name": "Call in the Finishers"
+      },
+      {
+       "name": "Scargil"
+      },
+      {
+       "name": "Everyfin is Awesome"
+      },
+      {
+       "name": "Murloc Tidecaller"
+      },
+      {
+       "name": "Hench-Clan Hogsteed"
+      },
+      {
+       "name": "Murloc Warleader"
+      },
+      {
+       "name": "Murloc Tastyfin"
+      },
+      {
+       "name": "Old Murk-Eye"
+      },
+      {
+       "name": "Finja, the Flying Star"
+      },
+      {
+       "name": "Sludge Belcher"
+      },
+      {
+       "name": "Sylvanas Windrunner"
+      },
+      {
+       "name": "Sneed's Old Shredder"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 25 of them. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "Dancin' Deryl's page: Chapter 4, a pool table of 25 cards (levels 4-5). Level 4: tier 2."
+    },
+    {
+     "kind": "power",
+     "note": "Boogie Woogie gives a friendly minion Boogie Beyond (DALA_BOSS_53e, \"Deathrattle: Resummon this minion.\", Ancestral Spirit's rule: a new copy is summoned for the minion's controller)."
+    }
+   ]
+  },
+  {
+   "id": "dala_54_zibb",
+   "name": "Locksmith Zibb",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_54h",
+   "power": "DALA_BOSS_54p",
+   "tier": "2",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 4
+   },
+   "flags": [
+    "passive",
+    "bothPlayers"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Locksmith_Zibb",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Finders Keepers"
+      },
+      {
+       "name": "Tunnel Trogg"
+      },
+      {
+       "name": "Unstable Evolution"
+      },
+      {
+       "name": "Voltaic Burst"
+      },
+      {
+       "name": "Lava Shock"
+      },
+      {
+       "name": "Likkim"
+      },
+      {
+       "name": "Maelstrom Portal"
+      },
+      {
+       "name": "Elemental Destruction"
+      },
+      {
+       "name": "Feral Spirit"
+      },
+      {
+       "name": "Healing Rain"
+      },
+      {
+       "name": "Unbound Elemental"
+      },
+      {
+       "name": "Thunderhead"
+      },
+      {
+       "name": "Eureka!"
+      },
+      {
+       "name": "Rain of Toads"
+      },
+      {
+       "name": "The Runespear"
+      },
+      {
+       "name": "Fire Fly"
+      },
+      {
+       "name": "Toothy Chest"
+      },
+      {
+       "name": "Arena Treasure Chest"
+      },
+      {
+       "name": "Marin the Fox"
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Tunnel Trogg"
+      },
+      {
+       "name": "Ancestral Knowledge"
+      },
+      {
+       "name": "Crackle"
+      },
+      {
+       "name": "Devolve"
+      },
+      {
+       "name": "Eternal Sentinel"
+      },
+      {
+       "name": "Lava Shock"
+      },
+      {
+       "name": "Likkim"
+      },
+      {
+       "name": "Totem Golem"
+      },
+      {
+       "name": "Unbound Elemental"
+      },
+      {
+       "name": "Volcano"
+      },
+      {
+       "name": "Lesser Sapphire Spellstone"
+      },
+      {
+       "name": "Al'Akir the Windlord"
+      },
+      {
+       "name": "Snowfury Giant"
+      },
+      {
+       "name": "King Mukla"
+      },
+      {
+       "name": "Sylvanas Windrunner"
+      },
+      {
+       "name": "The Lich King"
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists pools of possible cards (Normal and Heroic), not decks: the boss plays 25 of them. A combat tier fights with 30: the Normal pool in table order, a second copy of each non-Legendary card, then the Heroic pool (the encounters step records each added card)."
+    },
+    {
+     "kind": "schedule",
+     "note": "Locksmith Zibb's page: Chapter 3, a pool table of 25 cards (levels 4-5). Level 4: tier 2."
+    },
+    {
+     "kind": "power",
+     "note": "Spell Lock, \"Spells Overload for their cost.\": the text names no player, so it holds for both (the lesson of earlier families: an unqualified \"Spells\" is both players'). Each spell a player plays (cast from hand, not cancelled) Overloads that player for the Cost it was played for (the Cost it last had in hand), on top of its own Overload, through the engine's Overload bookkeeping and event (Likkim and Lava Shock of the deck see it; the engine's Tunnel Trogg answers only a card with printed Overload, so Spell Lock gives each Tunnel Trogg of that player, not silenced, its Attack for the amount itself). A spell cast by another effect is not played and brings none."
+    }
+   ]
+  },
+  {
+   "id": "dala_55_hannigan",
+   "name": "Captain Hannigan",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_55h",
+   "power": "DALA_BOSS_55p",
+   "tier": "4",
+   "archetype": "control",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 8
+   },
+   "flags": [
+    "passive"
+   ],
+   "cards": [
+    "DALA_503"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Captain_Hannigan",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Bolster",
+       "count": 2
+      },
+      {
+       "name": "Execute",
+       "count": 2
+      },
+      {
+       "name": "Sleep with the Fishes",
+       "count": 1
+      },
+      {
+       "name": "Shield Block",
+       "count": 2
+      },
+      {
+       "name": "Blood Razor",
+       "count": 2
+      },
+      {
+       "name": "Bloodhoof Brave",
+       "count": 2
+      },
+      {
+       "name": "Alley Armorsmith",
+       "count": 2
+      },
+      {
+       "name": "Brawl",
+       "count": 2
+      },
+      {
+       "name": "Direhorn Hatchling",
+       "count": 2
+      },
+      {
+       "name": "Ironforge Portal",
+       "count": 1
+      },
+      {
+       "name": "Dirty Rat",
+       "count": 2
+      },
+      {
+       "name": "Acolyte of Pain",
+       "count": 2
+      },
+      {
+       "name": "Stonehill Defender",
+       "count": 2
+      },
+      {
+       "name": "Tar Creeper",
+       "count": 2
+      },
+      {
+       "name": "Heroic Innkeeper",
+       "count": 2
+      },
+      {
+       "name": "Primordial Drake",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Lightforged Blessing",
+       "count": 1
+      },
+      {
+       "name": "Potion of Heroism",
+       "count": 1
+      },
+      {
+       "name": "Divine Favor",
+       "count": 1
+      },
+      {
+       "name": "Seal of Champions",
+       "count": 1
+      },
+      {
+       "name": "Blessing of Kings",
+       "count": 1
+      },
+      {
+       "name": "Truesilver Champion",
+       "count": 1
+      },
+      {
+       "name": "Blessed Champion",
+       "count": 1
+      },
+      {
+       "name": "Spikeridged Steed",
+       "count": 1
+      },
+      {
+       "name": "Sunkeeper Tarim",
+       "count": 1
+      },
+      {
+       "name": "Val'anyr",
+       "count": 1
+      },
+      {
+       "name": "Eadric the Pure",
+       "count": 1
+      },
+      {
+       "name": "Lynessa Sunsorrow",
+       "count": 1
+      },
+      {
+       "name": "Lay on Hands",
+       "count": 1
+      },
+      {
+       "name": "Ragnaros, Lightlord",
+       "count": 1
+      },
+      {
+       "name": "Tirion Fordring",
+       "count": 1
+      },
+      {
+       "name": "Cornered Sentry",
+       "count": 1
+      },
+      {
+       "name": "Execute",
+       "count": 1
+      },
+      {
+       "name": "Public Defender",
+       "count": 1
+      },
+      {
+       "name": "Sparring Partner",
+       "count": 1
+      },
+      {
+       "name": "Brawl",
+       "count": 2
+      },
+      {
+       "name": "Darius Crowley",
+       "count": 1
+      },
+      {
+       "name": "Ironforge Portal",
+       "count": 1
+      },
+      {
+       "name": "Cult Master",
+       "count": 1
+      },
+      {
+       "name": "Guild Recruiter",
+       "count": 1
+      },
+      {
+       "name": "Leeroy Jenkins",
+       "count": 1
+      },
+      {
+       "name": "Loatheb",
+       "count": 1
+      },
+      {
+       "name": "Recruiter",
+       "count": 1
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      },
+      {
+       "name": "Ragnaros the Firelord",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Captain Hannigan is \"the final boss that can be encountered in Chapter 3\" (the chapter's eighth fight). Level 8: tier 4."
+    },
+    {
+     "kind": "power",
+     "note": "The wiki marks Raise the Alarm (2) as auto-cast, so it is cast by rule, not by a choice of the boss's AI (DungeonRunEncounters.AutoCast, family 09's rule): at the start of the boss's turn, when it can pay the Cost and its board has room, the Cost is paid and the power resolves. The engine never offers it as an option (it is registered with the passive powers). It summons a 1/4 Kirin Tor Guard (DALA_503: +1 Attack for each other friendly Kirin Tor Guard)."
+    }
+   ]
+  },
+  {
+   "id": "dala_56_wagtoggle",
+   "name": "Queen Wagtoggle",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_56h",
+   "power": "DALA_BOSS_56p",
+   "tier": "4",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 8
+   },
+   "flags": [
+    "passive",
+    "start",
+    "hiddenZone"
+   ],
+   "cards": [
+    "DALA_BOSS_56e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Queen_Wagtoggle",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Preparation",
+       "count": 1
+      },
+      {
+       "name": "Deadly Poison",
+       "count": 2
+      },
+      {
+       "name": "Doomerang",
+       "count": 1
+      },
+      {
+       "name": "Kingsbane",
+       "count": 1
+      },
+      {
+       "name": "Leeching Poison",
+       "count": 1
+      },
+      {
+       "name": "Betrayal",
+       "count": 1
+      },
+      {
+       "name": "Cavern Shinyfinder",
+       "count": 2
+      },
+      {
+       "name": "Cutpurse",
+       "count": 2
+      },
+      {
+       "name": "Toxicologist",
+       "count": 2
+      },
+      {
+       "name": "Burgle",
+       "count": 1
+      },
+      {
+       "name": "Fan of Knives",
+       "count": 1
+      },
+      {
+       "name": "Anub'ar Ambusher",
+       "count": 2
+      },
+      {
+       "name": "Blade Flurry",
+       "count": 1
+      },
+      {
+       "name": "Elven Minstrel",
+       "count": 2
+      },
+      {
+       "name": "Kidnapper",
+       "count": 2
+      },
+      {
+       "name": "Vanish",
+       "count": 1
+      },
+      {
+       "name": "Sprint",
+       "count": 1
+      },
+      {
+       "name": "Phantom Freebooter",
+       "count": 2
+      },
+      {
+       "name": "Captain Greenskin",
+       "count": 1
+      },
+      {
+       "name": "Azalina Soulthief",
+       "count": 1
+      },
+      {
+       "name": "Marin the Fox",
+       "count": 1
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Rival Accomplice",
+       "id": "DALA_BOSS_56t",
+       "count": 2
+      },
+      {
+       "name": "Daring Escape",
+       "count": 1
+      },
+      {
+       "name": "Kingsbane",
+       "count": 1
+      },
+      {
+       "name": "Betrayal",
+       "count": 1
+      },
+      {
+       "name": "Cavern Shinyfinder",
+       "count": 2
+      },
+      {
+       "name": "Goblin Auto-Barber",
+       "count": 2
+      },
+      {
+       "name": "Toxicologist",
+       "count": 1
+      },
+      {
+       "name": "Cutthroat Buccaneer",
+       "count": 2
+      },
+      {
+       "name": "Edwin VanCleef",
+       "count": 1
+      },
+      {
+       "name": "Envenom Weapon",
+       "count": 1
+      },
+      {
+       "name": "Elven Minstrel",
+       "count": 2
+      },
+      {
+       "name": "Tinker's Sharpsword Oil",
+       "count": 2
+      },
+      {
+       "name": "Vilespine Slayer",
+       "count": 2
+      },
+      {
+       "name": "Vanish",
+       "count": 2
+      },
+      {
+       "name": "Sprint",
+       "count": 1
+      },
+      {
+       "name": "Anub'arak",
+       "count": 1
+      },
+      {
+       "name": "Captain Greenskin",
+       "count": 1
+      },
+      {
+       "name": "Sludge Belcher",
+       "count": 1
+      },
+      {
+       "name": "Chromaggus",
+       "count": 1
+      },
+      {
+       "name": "Marin the Fox",
+       "count": 1
+      },
+      {
+       "name": "Sneed's Old Shredder",
+       "count": 1
+      },
+      {
+       "name": "The Lich King",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "start": {
+    "bossDeckAdd": [
+     "DALA_BOSS_56t"
+    ]
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Queen Wagtoggle is \"the final boss that can be encountered in Chapter 1\" (the chapter's eighth fight). Level 8: tier 4."
+    },
+    {
+     "kind": "power",
+     "note": "Bribery (3) is not auto-cast on the wiki, but its worth lies in the run player's hidden deck, which the boss's fair view cannot see (there the zone is masked), so the AI would never choose it: it is cast by rule (DungeonRunEncounters.AutoCast, family 09's rule for powers whose worth the AI's evaluation cannot see) at the start of the boss's turn, when it can pay the Cost and its board has room and the run player's deck holds a card (a count, public). Tad's Pole's rule (family 09, DungeonRunEncounters.PoleCatch): a random minion of the run player's deck changes sides and is summoned for the boss, a public summon; nothing when the deck holds no minion. It is Bribed (DALA_BOSS_56e, \"Deathrattle: Return this to your opponent's hand.\"): when it dies a new copy goes to the hand of its controller's opponent."
+    },
+    {
+     "kind": "start",
+     "note": "Rival Accomplice (DALA_BOSS_56t, a vanilla 4/4) is the boss card of the Heroic list only; one copy is shuffled into her deck after the mulligan (the row's start block), so the card is met in this mode, as family 14 does for \"Scourgelord\" Dazzik."
+    }
+   ]
+  },
+  {
+   "id": "dala_57_gallywix",
+   "name": "Trade Prince Gallywix",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_57h",
+   "power": "DALA_BOSS_57p",
+   "tier": "4",
+   "archetype": "tempo",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 8
+   },
+   "flags": [
+    "passive"
+   ],
+   "cards": [
+    "GVG_028t"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Trade_Prince_Gallywix_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Pilfer",
+       "count": 1
+      },
+      {
+       "name": "Togwaggle's Scheme",
+       "count": 1
+      },
+      {
+       "name": "Evasion",
+       "count": 2
+      },
+      {
+       "name": "Underbelly Fence",
+       "count": 2
+      },
+      {
+       "name": "Hench-Clan Burglar",
+       "count": 2
+      },
+      {
+       "name": "WANTED!",
+       "count": 2
+      },
+      {
+       "name": "Ethereal Peddler",
+       "count": 1
+      },
+      {
+       "name": "Thistle Tea",
+       "count": 1
+      },
+      {
+       "name": "Baleful Banker",
+       "count": 2
+      },
+      {
+       "name": "Booty Bay Bookie",
+       "count": 2
+      },
+      {
+       "name": "Dirty Rat",
+       "count": 2
+      },
+      {
+       "name": "Hoarding Dragon",
+       "count": 2
+      },
+      {
+       "name": "Mechanical Yeti",
+       "count": 2
+      },
+      {
+       "name": "Fel Reaver",
+       "count": 2
+      },
+      {
+       "name": "Second-Rate Bruiser",
+       "count": 2
+      },
+      {
+       "name": "Gadgetzan Auctioneer",
+       "count": 2
+      },
+      {
+       "name": "Safeguard",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Eviscerate",
+       "count": 2
+      },
+      {
+       "name": "Underbelly Fence",
+       "count": 2
+      },
+      {
+       "name": "Blink Fox",
+       "count": 2
+      },
+      {
+       "name": "Edwin VanCleef",
+       "count": 1
+      },
+      {
+       "name": "Shadow Strike",
+       "count": 2
+      },
+      {
+       "name": "Shaku, the Collector",
+       "count": 1
+      },
+      {
+       "name": "Hench-Clan Burglar",
+       "count": 2
+      },
+      {
+       "name": "Obsidian Shard",
+       "count": 2
+      },
+      {
+       "name": "Vendetta",
+       "count": 2
+      },
+      {
+       "name": "Spectral Cutlass",
+       "count": 1
+      },
+      {
+       "name": "Ethereal Peddler",
+       "count": 2
+      },
+      {
+       "name": "Vilespine Slayer",
+       "count": 2
+      },
+      {
+       "name": "Trade Prince Gallywix",
+       "count": 1
+      },
+      {
+       "name": "Tess Greymane",
+       "count": 1
+      },
+      {
+       "name": "Stonesplinter Trogg",
+       "count": 2
+      },
+      {
+       "name": "Burly Rockjaw Trogg",
+       "count": 2
+      },
+      {
+       "name": "Burgly Bully",
+       "count": 2
+      },
+      {
+       "name": "Troggzor the Earthinator",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "replacements": {
+    "Fel Reaver": "DALA_502"
+   },
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Trade Prince Gallywix is \"the final boss that can be encountered in Chapter 1\" (the chapter's eighth fight). Level 8: tier 4."
+    },
+    {
+     "kind": "deck",
+     "note": "Fel Reaver (two in the list) is a collectible card the engine does not script. Curated replacement: two Infuriated Bankers (DALA_502, \"Whenever a Coin is played, gain +1/+1.\"), the Dalaran Bank's own card (the wiki lists it for the bank's Gold Elemental; Gallywix is the bank's final boss) and one that answers the Coins Greed is Good hands out; so the bank card is met in this mode."
+    },
+    {
+     "kind": "power",
+     "note": "Greed is Good: the first card the run player plays in a turn puts a new copy of that card in the boss's hand and a Gallywix's Coin (GVG_028t, the card the wiki names: \"Won't trigger Gallywix\") in the run player's; Gallywix's Coin itself buys nothing (the next card is then the first). With the boss's hand full nothing is bought that time."
+    }
+   ]
+  },
+  {
+   "id": "dala_58_flark",
+   "name": "Boommaster Flark",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_58h",
+   "power": "DALA_BOSS_58p",
+   "tier": "4",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 8
+   },
+   "flags": [
+    "start",
+    "boardStart",
+    "position"
+   ],
+   "cards": [
+    "DALA_BOSS_58e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Boommaster_Flark_(Dalaran_boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Bomb Toss",
+       "count": 1
+      },
+      {
+       "name": "Dart Trap",
+       "count": 2
+      },
+      {
+       "name": "Flare",
+       "count": 1
+      },
+      {
+       "name": "Swamp King Dred",
+       "count": 1
+      },
+      {
+       "name": "Flark's Boom-Zooka",
+       "count": 1
+      },
+      {
+       "name": "Zombie Chow",
+       "count": 2
+      },
+      {
+       "name": "Mad Bomber",
+       "count": 2
+      },
+      {
+       "name": "Kaboom Bot",
+       "count": 1
+      },
+      {
+       "name": "Evil Heckler",
+       "count": 1
+      },
+      {
+       "name": "Hecklebot",
+       "count": 1
+      },
+      {
+       "name": "Ticking Abomination",
+       "count": 2
+      },
+      {
+       "name": "Night Howler",
+       "count": 2
+      },
+      {
+       "name": "Bomb Lobber",
+       "count": 1
+      },
+      {
+       "name": "Corrupted Healbot",
+       "count": 2
+      },
+      {
+       "name": "Madder Bomber",
+       "count": 2
+      },
+      {
+       "name": "Seaforium Bomber",
+       "count": 2
+      },
+      {
+       "name": "Mad Summoner",
+       "count": 2
+      },
+      {
+       "name": "Azalina Soulthief",
+       "count": 1
+      },
+      {
+       "name": "Dr. Boom",
+       "count": 1
+      },
+      {
+       "name": "Jepetto Joybuzz",
+       "count": 1
+      },
+      {
+       "name": "Deathwing",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "On the Hunt",
+       "count": 1
+      },
+      {
+       "name": "Rapid Fire",
+       "count": 2
+      },
+      {
+       "name": "Bomb Toss",
+       "count": 1
+      },
+      {
+       "name": "Grievous Bite",
+       "count": 1
+      },
+      {
+       "name": "Animal Companion",
+       "count": 2
+      },
+      {
+       "name": "Nine Lives",
+       "count": 2
+      },
+      {
+       "name": "Spider Bomb",
+       "count": 2
+      },
+      {
+       "name": "Unleash the Hounds",
+       "count": 2
+      },
+      {
+       "name": "Deadly Shot",
+       "count": 2
+      },
+      {
+       "name": "Flark's Boom-Zooka",
+       "count": 1
+      },
+      {
+       "name": "Swamp King Dred",
+       "count": 1
+      },
+      {
+       "name": "Crushing Walls",
+       "count": 2
+      },
+      {
+       "name": "Call of the Wild",
+       "count": 2
+      },
+      {
+       "name": "Dirty Rat",
+       "count": 2
+      },
+      {
+       "name": "Seaforium Bomber",
+       "count": 1
+      },
+      {
+       "name": "Missile Launcher",
+       "count": 1
+      },
+      {
+       "name": "Sylvanas Windrunner",
+       "count": 1
+      },
+      {
+       "name": "Baron Geddon",
+       "count": 1
+      },
+      {
+       "name": "Marin the Fox",
+       "count": 1
+      },
+      {
+       "name": "Ragnaros the Firelord",
+       "count": 1
+      },
+      {
+       "name": "Deathwing",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "start": {
+    "playerBoard": [
+     "DALA_BOSS_58t",
+     "LOEA10_3",
+     "DALA_BOSS_58t2"
+    ]
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Boommaster Flark is \"the final boss that can be encountered in Chapter 4\" (the chapter's eighth fight). Level 8: tier 4."
+    },
+    {
+     "kind": "power",
+     "note": "Blast Powder coats a minion (DALA_BOSS_58e): when it takes damage it is destroyed (Divine Shield prevents the damage, so it is not); offered only on a minion not coated yet."
+    },
+    {
+     "kind": "start",
+     "note": "The wiki: \"The player starts with 1 The Wire, 1 Murloc Tinyfin and 1 The Other Wire respectively on their board.\" They land on the run player's board in that order after the mulligan (the row's start block; a run shrine stays left of them). The Wire and The Other Wire (DALA_BOSS_58t, 58t2) are 3/3 permanents: \"While wires are touching, take 5 damage at the start of your turn.\" Both carry the text; a touching pair deals 5 damage once (counted by its left wire), as the client's single Wire Watcher player enchantment (DALA_BOSS_58e2) suggests. The Murloc Tinyfin is LOEA10_3."
+    }
+   ]
+  },
+  {
+   "id": "dala_59_goya",
+   "name": "Madam Goya",
+   "provenance": "DALA",
+   "family": "17",
+   "hero": "DALA_BOSS_59h",
+   "power": "DALA_BOSS_59p",
+   "tier": "4",
+   "archetype": "midrange",
+   "level": {
+    "source": "wiki-level-table",
+    "original": 8
+   },
+   "flags": [
+    "passive",
+    "hiddenZone"
+   ],
+   "cards": [
+    "DALA_BOSS_59t3",
+    "DALA_BOSS_59e"
+   ],
+   "source": {
+    "url": "https://hearthstone.wiki.gg/wiki/Madam_Goya_(boss)",
+    "read": "2026-11-14"
+   },
+   "lists": [
+    {
+     "label": "Normal",
+     "cards": [
+      {
+       "name": "Lotus Bruiser",
+       "id": "DALA_BOSS_59t",
+       "count": 2
+      },
+      {
+       "name": "Fruit Slasher",
+       "id": "DALA_BOSS_59t2",
+       "count": 1
+      },
+      {
+       "name": "Shadowstep",
+       "count": 2
+      },
+      {
+       "name": "Jade Shuriken",
+       "count": 2
+      },
+      {
+       "name": "Jade Swarmer",
+       "count": 2
+      },
+      {
+       "name": "Lab Recruiter",
+       "count": 2
+      },
+      {
+       "name": "Blink Fox",
+       "count": 2
+      },
+      {
+       "name": "Burgle",
+       "count": 1
+      },
+      {
+       "name": "Sonya Shadowdancer",
+       "count": 1
+      },
+      {
+       "name": "Academic Espionage",
+       "count": 1
+      },
+      {
+       "name": "Elven Minstrel",
+       "count": 2
+      },
+      {
+       "name": "Thistle Tea",
+       "count": 2
+      },
+      {
+       "name": "Unidentified Contract",
+       "count": 1
+      },
+      {
+       "name": "Jade Spirit",
+       "count": 2
+      },
+      {
+       "name": "Aya Blackpaw",
+       "count": 1
+      },
+      {
+       "name": "Don Han'Cho",
+       "count": 1
+      },
+      {
+       "name": "Second-Rate Bruiser",
+       "count": 1
+      },
+      {
+       "name": "Big-Time Racketeer",
+       "count": 2
+      },
+      {
+       "name": "Gadgetzan Auctioneer",
+       "count": 2
+      }
+     ]
+    },
+    {
+     "label": "Heroic",
+     "cards": [
+      {
+       "name": "Lotus Bruiser",
+       "id": "DALA_BOSS_59t",
+       "count": 4
+      },
+      {
+       "name": "Gluttonous Trogg",
+       "count": 2
+      },
+      {
+       "name": "Fruit Slasher",
+       "id": "DALA_BOSS_59t2",
+       "count": 2
+      },
+      {
+       "name": "Jade Behemoth",
+       "count": 2
+      },
+      {
+       "name": "Jade Shuriken",
+       "count": 2
+      },
+      {
+       "name": "Jade Swarmer",
+       "count": 2
+      },
+      {
+       "name": "Trade Prince Gallywix",
+       "count": 1
+      },
+      {
+       "name": "Jade Lightning",
+       "count": 1
+      },
+      {
+       "name": "Jade Chieftain",
+       "count": 2
+      },
+      {
+       "name": "Jade Spirit",
+       "count": 2
+      },
+      {
+       "name": "Aya Blackpaw",
+       "count": 2
+      },
+      {
+       "name": "Burly Rockjaw Trogg",
+       "count": 2
+      },
+      {
+       "name": "Hoarding Dragon",
+       "count": 1
+      },
+      {
+       "name": "Soldier of Fortune",
+       "count": 1
+      },
+      {
+       "name": "Burgly Bully",
+       "count": 2
+      },
+      {
+       "name": "Loatheb",
+       "count": 1
+      },
+      {
+       "name": "Troggzor the Earthinator",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "deck": {
+    "list": "Normal"
+   },
+   "extend": [
+    "Heroic"
+   ],
+   "adaptations": [
+    {
+     "kind": "deck",
+     "note": "The wiki lists the boss's deck with its quantities (30 cards, Normal and Heroic): the Normal list is the deck; an unusable card is replaced as recorded."
+    },
+    {
+     "kind": "schedule",
+     "note": "Madam Goya is \"the final boss that can be encountered in Chapter 4\" (the chapter's eighth fight). Level 8: tier 4."
+    },
+    {
+     "kind": "power",
+     "note": "Blackmail (2) is not auto-cast on the wiki, but its worth lies in the run player's hidden hand, which the boss's fair view cannot see (there the zone is masked), so the AI would never choose it: it is cast by rule (DungeonRunEncounters.AutoCast, family 09's rule for powers whose worth the AI's evaluation cannot see) at the start of the boss's turn, when it can pay the Cost and the run player holds a card (a count, public). A random card of the run player's hand goes to that player's set-aside zone (the hand escrow: what it holds stays on it) and an Extortion (DALA_BOSS_59t3, \"Return your '{0}' to your hand.\") joins that hand; played, it returns that card itself (the wiki: \"The card replaced by Extortion retains all increment attribute buffs after being given back to the player\"). The boss never learns the card."
+    },
+    {
+     "kind": "deck",
+     "note": "Lotus Bruiser (DALA_BOSS_59t) gains +2/+2 whenever an Extortion is played (by either player); Fruit Slasher (DALA_BOSS_59t2) deals 4 damage to an enemy and, with Combo, 1 to all other enemies."
+    }
+   ]
+  }
+ ],
+ "rejected": []
+}

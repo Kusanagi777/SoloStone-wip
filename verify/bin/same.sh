@@ -1,6 +1,6 @@
 #!/bin/bash
-# verify/bin/same.sh: compares run 1 with run 2 (identical?) and run 1 with the recorded wave-3 baseline
-# (verify/baseline/runs/<name>.txt, the wave-3 main tree's second run) as differing lines. CR is ignored on both sides.
+# verify/bin/same.sh: compares run 1 with run 2 (identical?) and run 1 with the recorded baseline
+# (verify/baseline/runs/<name>.txt, the wave-6 tree's second run, Linux) as differing lines. CR is ignored on both sides.
 #   same.sh                every entry of the run list that has logs (an entry with no run-1 log prints "not run")
 #   same.sh only <dir>...  the named entries (paths relative to verify/suites)
 # The expected wave-3 picture: every suite "1 vs 2 identical; vs baseline: 0 differing lines", except c-secretsearch,
@@ -17,7 +17,7 @@ for rel in $L; do
   selfplay)
     g1="$OUT/runs/selfplay-games-1.txt"; g2="$OUT/runs/selfplay-games-2.txt"
     s="games 1 vs 2 "; if [ -f "$g2" ]; then cmp -s <(lf "$g1") <(lf "$g2") && s="${s}identical" || s="${s}DIFFER"; else s="${s}(no run 2)"; fi
-    cmp -s <(lf "$g1") <(lf "$BASE/runs/selfplay-games.txt") && s="$s; games identical to the wave-3 baseline" || s="$s; games DIFFER from the wave-3 baseline"
+    cmp -s <(lf "$g1") <(lf "$BASE/runs/selfplay-games.txt") && s="$s; games identical to the baseline" || s="$s; games DIFFER from the baseline"
     [ "$(last_lines "$a" 1)" = "$(last_lines "$base" 1)" ] && s="$s; summary equal" || s="$s; summary DIFFERS"
     echo "selfplay: $s; $(last_lines "$a" 1)" ;;
   randplay)

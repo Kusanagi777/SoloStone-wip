@@ -1334,6 +1334,7 @@ namespace SabberStoneCore.Model
 		public void MainStart()
 		{
 			MainDraw();
+			Actions.EncounterRules.AfterTurnStartDraw(this); // a boss's auto-cast power: after its turn-start draw (phase 8 wave 5)
 
 			Log(LogLevel.INFO, BlockType.PLAY, "Game", !Logging ? "" : $"[T:{Turn}/R:{Turn / 2}] with CurrentPlayer {CurrentPlayer.Name} " +
 					 $"[HP:{CurrentPlayer.Hero.Health}/M:{CurrentPlayer.RemainingMana}]");

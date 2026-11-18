@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="6">
+  <Profile>
+    <Heroes />
+    <Unlocked>
+      <string>challenge</string>
+      <string>mage_rogue_bosses5</string>
+      <string>mage_rogue_majors2</string>
+      <string>mage_rogue_majors3</string>
+      <string>mage_rogue_majors4</string>
+      <string>paladin_shaman_bosses5</string>
+      <string>paladin_shaman_majors2</string>
+      <string>paladin_shaman_majors3</string>
+      <string>paladin_shaman_majors4</string>
+      <string>druid_priest_bosses5</string>
+      <string>druid_priest_majors2</string>
+      <string>druid_priest_majors3</string>
+      <string>druid_priest_majors4</string>
+      <string>hunter_warrior_bosses5</string>
+      <string>hunter_warrior_majors2</string>
+      <string>hunter_warrior_majors3</string>
+      <string>hunter_warrior_majors4</string>
+      <string>druid_floor3</string>
+      <string>hunter_floor3</string>
+      <string>mage_floor3</string>
+      <string>paladin_floor3</string>
+      <string>priest_floor3</string>
+      <string>rogue_floor3</string>
+      <string>shaman_floor3</string>
+      <string>warlock_floor3</string>
+      <string>warrior_floor3</string>
+      <string>deathknight_floor3</string>
+      <string>demonhunter_floor3</string>
+      <string>mage_rogue_floor3</string>
+      <string>paladin_shaman_floor3</string>
+      <string>druid_priest_floor3</string>
+      <string>hunter_warrior_floor3</string>
+      <string>gila_500h3_floor3</string>
+      <string>gila_600h_floor3</string>
+      <string>gila_400h_floor3</string>
+      <string>gila_900h_floor3</string>
+      <string>dala_rakanishu_floor3</string>
+      <string>dala_barkeye_floor3</string>
+      <string>dala_vessina_floor3</string>
+      <string>dala_kriziki_floor3</string>
+      <string>dala_eudora_floor3</string>
+      <string>dala_chu_floor3</string>
+      <string>dala_squeamlish_floor3</string>
+      <string>dala_tekahn_floor3</string>
+      <string>dala_george_floor3</string>
+      <string>trla_209h_mage_floor3</string>
+      <string>trla_209h_druid_floor3</string>
+      <string>trla_209h_hunter_floor3</string>
+      <string>trla_209h_paladin_floor3</string>
+      <string>trla_209h_priest_floor3</string>
+      <string>trla_209h_rogue_floor3</string>
+      <string>trla_209h_shaman_floor3</string>
+      <string>trla_209h_warlock_floor3</string>
+      <string>trla_209h_warrior_floor3</string>
+      <string>druid_floor4</string>
+      <string>hunter_floor4</string>
+      <string>mage_floor4</string>
+      <string>paladin_floor4</string>
+      <string>priest_floor4</string>
+      <string>rogue_floor4</string>
+      <string>shaman_floor4</string>
+      <string>warlock_floor4</string>
+      <string>warrior_floor4</string>
+      <string>deathknight_floor4</string>
+      <string>demonhunter_floor4</string>
+      <string>mage_rogue_floor4</string>
+      <string>paladin_shaman_floor4</string>
+      <string>druid_priest_floor4</string>
+      <string>hunter_warrior_floor4</string>
+      <string>gila_500h3_floor4</string>
+      <string>gila_600h_floor4</string>
+      <string>gila_400h_floor4</string>
+      <string>gila_900h_floor4</string>
+      <string>dala_rakanishu_floor4</string>
+      <string>dala_barkeye_floor4</string>
+      <string>dala_vessina_floor4</string>
+      <string>dala_kriziki_floor4</string>
+      <string>dala_eudora_floor4</string>
+      <string>dala_chu_floor4</string>
+      <string>dala_squeamlish_floor4</string>
+      <string>dala_tekahn_floor4</string>
+      <string>dala_george_floor4</string>
+      <string>trla_209h_mage_floor4</string>
+      <string>trla_209h_druid_floor4</string>
+      <string>trla_209h_hunter_floor4</string>
+      <string>trla_209h_paladin_floor4</string>
+      <string>trla_209h_priest_floor4</string>
+      <string>trla_209h_rogue_floor4</string>
+      <string>trla_209h_shaman_floor4</string>
+      <string>trla_209h_warlock_floor4</string>
+      <string>trla_209h_warrior_floor4</string>
+      <string>druid_floor5</string>
+      <string>hunter_floor5</string>
+      <string>mage_floor5</string>
+      <string>paladin_floor5</string>
+      <string>priest_floor5</string>
+      <string>rogue_floor5</string>
+      <string>shaman_floor5</string>
+      <string>warlock_floor5</string>
+      <string>warrior_floor5</string>
+      <string>deathknight_floor5</string>
+      <string>demonhunter_floor5</string>
+      <string>mage_rogue_floor5</string>
+      <string>paladin_shaman_floor5</string>
+      <string>druid_priest_floor5</string>
+      <string>hunter_warrior_floor5</string>
+      <string>gila_500h3_floor5</string>
+      <string>gila_600h_floor5</string>
+      <string>gila_400h_floor5</string>
+      <string>gila_900h_floor5</string>
+      <string>dala_rakanishu_floor5</string>
+      <string>dala_barkeye_floor5</string>
+      <string>dala_vessina_floor5</string>
+      <string>dala_kriziki_floor5</string>
+      <string>dala_eudora_floor5</string>
+      <string>dala_chu_floor5</string>
+      <string>dala_squeamlish_floor5</string>
+      <string>dala_tekahn_floor5</string>
+      <string>dala_george_floor5</string>
+      <string>trla_209h_mage_floor5</string>
+      <string>trla_209h_druid_floor5</string>
+      <string>trla_209h_hunter_floor5</string>
+      <string>trla_209h_paladin_floor5</string>
+      <string>trla_209h_priest_floor5</string>
+      <string>trla_209h_rogue_floor5</string>
+      <string>trla_209h_shaman_floor5</string>
+      <string>trla_209h_warlock_floor5</string>
+      <string>trla_209h_warrior_floor5</string>
+      <string>druid_win</string>
+      <string>hunter_win</string>
+      <string>mage_win</string>
+      <string>paladin_win</string>
+      <string>priest_win</string>
+      <string>rogue_win</string>
+      <string>shaman_win</string>
+      <string>warlock_win</string>
+      <string>warrior_win</string>
+      <string>deathknight_win</string>
+      <string>demonhunter_win</string>
+      <string>mage_rogue_win</string>
+      <string>paladin_shaman_win</string>
+      <string>druid_priest_win</string>
+      <string>hunter_warrior_win</string>
+      <string>gila_500h3_win</string>
+      <string>gila_600h_win</string>
+      <string>gila_400h_win</string>
+      <string>gila_900h_win</string>
+      <string>dala_rakanishu_win</string>
+      <string>dala_barkeye_win</string>
+      <string>dala_vessina_win</string>
+      <string>dala_kriziki_win</string>
+      <string>dala_eudora_win</string>
+      <string>dala_chu_win</string>
+      <string>dala_squeamlish_win</string>
+      <string>dala_tekahn_win</string>
+      <string>dala_george_win</string>
+      <string>trla_209h_mage_win</string>
+      <string>trla_209h_druid_win</string>
+      <string>trla_209h_hunter_win</string>
+      <string>trla_209h_paladin_win</string>
+      <string>trla_209h_priest_win</string>
+      <string>trla_209h_rogue_win</string>
+      <string>trla_209h_shaman_win</string>
+      <string>trla_209h_warlock_win</string>
+      <string>trla_209h_warrior_win</string>
+    </Unlocked>
+    <Archive />
+  </Profile>
+  <Active DataVersion="dungeon-run/2" CatalogVersion="1" Seed="707" TypedSeed="false" Class="TRLA_209h_Druid" StarterDeck="rumble_druid_112" Power="CS2_017" Floor="12" Phase="PreMatch" Attempt="0" ScheduleVersion="2" Schedule="acts-v2" Node="16" NextUid="48" HealthBonus="5" MajorsCleared="2" BoardShrine="TRLA_112" DraftsWithoutDominant="1">
+    <Cards>
+      <DungeonRunCard Uid="1" Id="GVG_032" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="2" Id="LOOT_048" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="3" Id="TRL_010" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="4" Id="CORE_EX1_154" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="5" Id="OG_051" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="6" Id="LOOT_051" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="7" Id="TRL_407" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="8" Id="TRL_535" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="10" Id="AT_082" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="11" Id="LOOTA_843" Origin="treasure" AddedFloor="1" />
+      <DungeonRunCard Uid="12" Id="DAL_733" Origin="draft" AddedFloor="1" />
+      <DungeonRunCard Uid="13" Id="CORE_EX1_160" Origin="draft" AddedFloor="1" />
+      <DungeonRunCard Uid="14" Id="FP1_002" Origin="draft" AddedFloor="1" />
+      <DungeonRunCard Uid="15" Id="TRLA_121" Origin="teammate" AddedFloor="2" />
+      <DungeonRunCard Uid="16" Id="LOE_047" Origin="draft" AddedFloor="2" />
+      <DungeonRunCard Uid="17" Id="AT_090" Origin="draft" AddedFloor="2" />
+      <DungeonRunCard Uid="18" Id="LOOT_413" Origin="draft" AddedFloor="2" />
+      <DungeonRunCard Uid="19" Id="LOOTA_835" Origin="treasure" AddedFloor="3" />
+      <DungeonRunCard Uid="20" Id="GIL_558" Origin="draft" AddedFloor="3" />
+      <DungeonRunCard Uid="21" Id="LOOT_258" Origin="draft" AddedFloor="3" />
+      <DungeonRunCard Uid="22" Id="TRL_505" Origin="draft" AddedFloor="3" />
+      <DungeonRunCard Uid="23" Id="BRM_031" Origin="tavern" AddedFloor="4" />
+      <DungeonRunCard Uid="24" Id="TRLA_122" Origin="teammate" AddedFloor="4" />
+      <DungeonRunCard Uid="25" Id="CORE_EX1_154" Origin="draft" AddedFloor="4" />
+      <DungeonRunCard Uid="26" Id="EX1_178" Origin="draft" AddedFloor="4" />
+      <DungeonRunCard Uid="27" Id="ICC_047" Origin="draft" AddedFloor="4" />
+      <DungeonRunCard Uid="28" Id="LOOT_309" Origin="draft" AddedFloor="5" />
+      <DungeonRunCard Uid="29" Id="ICC_085" Origin="draft" AddedFloor="5" />
+      <DungeonRunCard Uid="30" Id="LOOT_413" Origin="draft" AddedFloor="5" />
+      <DungeonRunCard Uid="31" Id="AT_080" Origin="draft" AddedFloor="6">
+        <Mod>DALA_903e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="32" Id="AT_127" Origin="draft" AddedFloor="6" />
+      <DungeonRunCard Uid="33" Id="TRL_407" Origin="draft" AddedFloor="7" />
+      <DungeonRunCard Uid="34" Id="TRL_223" Origin="draft" AddedFloor="7" />
+      <DungeonRunCard Uid="35" Id="TRLA_123" Origin="teammate" AddedFloor="8" />
+      <DungeonRunCard Uid="36" Id="CFM_614" Origin="draft" AddedFloor="8" />
+      <DungeonRunCard Uid="37" Id="GVG_104" Origin="draft" AddedFloor="8" />
+      <DungeonRunCard Uid="38" Id="CORE_UNG_205" Origin="draft" AddedFloor="9" />
+      <DungeonRunCard Uid="39" Id="UNG_845" Origin="draft" AddedFloor="9" />
+      <DungeonRunCard Uid="40" Id="UNG_100" Origin="tavern" AddedFloor="10">
+        <Mod>DALA_906e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="41" Id="NEW1_041" Origin="tavern" AddedFloor="10">
+        <Mod>DALA_906e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="42" Id="FP1_030" Origin="tavern" AddedFloor="10">
+        <Mod>DALA_906e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="43" Id="TRL_223" Origin="tavern" AddedFloor="10">
+        <Mod>DALA_906e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="44" Id="LOOTA_814" Origin="treasure" AddedFloor="10" />
+      <DungeonRunCard Uid="45" Id="UNG_075" Origin="draft" AddedFloor="10" />
+      <DungeonRunCard Uid="46" Id="KAR_065" Origin="draft" AddedFloor="10" />
+      <DungeonRunCard Uid="47" Id="LOOT_051" Origin="draft" AddedFloor="11" />
+      <DungeonRunCard Uid="48" Id="LOOT_054" Origin="draft" AddedFloor="11" />
+    </Cards>
+    <ActiveRules>
+      <DungeonRunRule Id="mod_iron_bosses" Act="2" FromNode="6" />
+      <DungeonRunRule Id="mod_iron_bosses" Act="3" FromNode="14" />
+    </ActiveRules>
+    <Loadout Id="TRLA_209h_Druid" />
+    <ShrineUpgrades>
+      <string>TRLA_801</string>
+      <string>TRLA_802</string>
+    </ShrineUpgrades>
+    <Deck>
+      <string>GVG_032</string>
+      <string>LOOT_048</string>
+      <string>TRL_010</string>
+      <string>CORE_EX1_154</string>
+      <string>OG_051</string>
+      <string>LOOT_051</string>
+      <string>TRL_407</string>
+      <string>TRL_535</string>
+      <string>AT_082</string>
+      <string>LOOTA_843</string>
+      <string>DAL_733</string>
+      <string>CORE_EX1_160</string>
+      <string>FP1_002</string>
+      <string>TRLA_121</string>
+      <string>LOE_047</string>
+      <string>AT_090</string>
+      <string>LOOT_413</string>
+      <string>LOOTA_835</string>
+      <string>GIL_558</string>
+      <string>LOOT_258</string>
+      <string>TRL_505</string>
+      <string>BRM_031</string>
+      <string>TRLA_122</string>
+      <string>CORE_EX1_154</string>
+      <string>EX1_178</string>
+      <string>ICC_047</string>
+      <string>LOOT_309</string>
+      <string>ICC_085</string>
+      <string>LOOT_413</string>
+      <string>AT_080</string>
+      <string>AT_127</string>
+      <string>TRL_407</string>
+      <string>TRL_223</string>
+      <string>TRLA_123</string>
+      <string>CFM_614</string>
+      <string>GVG_104</string>
+      <string>CORE_UNG_205</string>
+      <string>UNG_845</string>
+      <string>UNG_100</string>
+      <string>NEW1_041</string>
+      <string>FP1_030</string>
+      <string>TRL_223</string>
+      <string>LOOTA_814</string>
+      <string>UNG_075</string>
+      <string>KAR_065</string>
+      <string>LOOT_051</string>
+      <string>LOOT_054</string>
+    </Deck>
+    <Treasures>
+      <string>LOOTA_832</string>
+      <string>LOOTA_803</string>
+      <string>grave_candle</string>
+    </Treasures>
+    <ActiveTreasures>
+      <string>LOOTA_843</string>
+      <string>LOOTA_835</string>
+      <string>LOOTA_814</string>
+    </ActiveTreasures>
+    <Upgrades />
+    <BossSequence>
+      <string>tunnel_rat</string>
+      <string>hedge_witch</string>
+      <string>cellar_matron</string>
+      <string>lantern_thief</string>
+      <string>clockwork_tyrant</string>
+      <string>frostwarden</string>
+      <string>ashen_abbess</string>
+      <string>storm_herald</string>
+      <string>golemancer</string>
+      <string>lady_of_thorns</string>
+      <string>hollow_regent</string>
+      <string>bog_croaker</string>
+      <string>pit_champion</string>
+      <string>mire_brute</string>
+      <string>sleepless_one</string>
+    </BossSequence>
+    <TakenBundles>
+      <string>bundle_neutral_elemental</string>
+    </TakenBundles>
+    <BucketTakes>
+      <DungeonRunTake Id="dh.druid.swarm" Count="2" />
+      <DungeonRunTake Id="rr.druid.beasts" Count="1" />
+      <DungeonRunTake Id="dh.druid.beasts-and-buffs" Count="1" />
+      <DungeonRunTake Id="dr.druid.wise-decisions" Count="1" />
+      <DungeonRunTake Id="dr.druid.natural-defense" Count="2" />
+      <DungeonRunTake Id="rr.druid.going-wild" Count="2" />
+      <DungeonRunTake Id="dr.druid.jungle-king" Count="1" />
+    </BucketTakes>
+    <BundleCooldowns>
+      <string>dr.druid.mana-growth@3</string>
+      <string>dh.druid.big-friends@3</string>
+      <string>rr.druid.going-wild@4</string>
+      <string>dh.druid.choices-choices@4</string>
+      <string>dr.druid.stampede@5</string>
+      <string>dr.druid.jungle-quest@5</string>
+      <string>dh.druid.swarm@6</string>
+      <string>rr.druid.beasts@6</string>
+      <string>dh.druid.roar@7</string>
+      <string>dh.druid.feral-bite@7</string>
+      <string>bundle_neutral_mechanical@8</string>
+      <string>dh.druid.nurture-and-grow@8</string>
+      <string>rr.druid.feral@9</string>
+      <string>dr.druid.taunt@9</string>
+      <string>dh.druid.recovery@10</string>
+      <string>rr.druid.natures-wrath@10</string>
+      <string>dr.druid.mana-growth@11</string>
+      <string>rr.druid.beasts@11</string>
+      <string>dr.druid.wise-decisions@12</string>
+      <string>dh.druid.all-bark@12</string>
+      <string>rr.druid.saplings@13</string>
+      <string>rr.druid.wise-decisions@13</string>
+    </BundleCooldowns>
+    <DraftedThemes>
+      <string>swarm</string>
+      <string>swarm</string>
+      <string>swarm</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>choose-one</string>
+      <string>choose-one</string>
+      <string>choose-one</string>
+      <string>taunt</string>
+      <string>taunt</string>
+      <string>taunt</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>swarm</string>
+      <string>swarm</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>beast</string>
+      <string>beast</string>
+      <string>taunt</string>
+      <string>taunt</string>
+    </DraftedThemes>
+    <Drafts>
+      <DungeonRunDraft Floor="1" Kind="treasure" Picked="LOOTA_843">
+        <Offered>
+          <string>LOOTA_843</string>
+          <string>hearty_tonic</string>
+          <string>whetstone_charm</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="1" Kind="bundle" Picked="dh.druid.swarm">
+        <Offered>
+          <string>dh.druid.swarm</string>
+          <string>dr.druid.mana-growth</string>
+          <string>dh.druid.big-friends</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.druid.swarm" Label="Swarm" Theme="swarm" Kind="pool" Source="DH">
+            <Cards>
+              <string>DAL_733</string>
+              <string>CORE_EX1_160</string>
+              <string>FP1_002</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.druid.mana-growth" Label="Mana Growth" Theme="ramp" Kind="pool" Source="DR">
+            <Cards>
+              <string>LOOT_351</string>
+              <string>EX1_169</string>
+              <string>LOOT_392</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.druid.big-friends" Label="Big Friends" Theme="big" Kind="pool" Source="DH">
+            <Cards>
+              <string>EX1_178</string>
+              <string>NEW1_038</string>
+              <string>CS2_232</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="2" Kind="teammate" Picked="TRLA_121">
+        <Offered>
+          <string>TRLA_121</string>
+          <string>TRLA_122</string>
+          <string>TRLA_123</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="2" Kind="bundle" Picked="rr.druid.beasts">
+        <Offered>
+          <string>rr.druid.beasts</string>
+          <string>rr.druid.going-wild</string>
+          <string>dh.druid.choices-choices</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="rr.druid.beasts" Label="Beasts" Theme="beast" Kind="pool" Source="RR">
+            <Cards>
+              <string>LOE_047</string>
+              <string>AT_090</string>
+              <string>LOOT_413</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.druid.going-wild" Label="Going Wild" Theme="beast" Kind="pool" Source="RR">
+            <Cards>
+              <string>AT_132</string>
+              <string>AT_080</string>
+              <string>TRL_407</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.druid.choices-choices" Label="Choices, Choices" Theme="discover" Kind="pool" Source="DH">
+            <Cards>
+              <string>GVG_041</string>
+              <string>ICC_051</string>
+              <string>ICC_832</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="treasure" Picked="LOOTA_835">
+        <Offered>
+          <string>LOOTA_835</string>
+          <string>frost_lantern</string>
+          <string>old_map</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="bundle" Picked="dh.druid.beasts-and-buffs">
+        <Offered>
+          <string>dh.druid.beasts-and-buffs</string>
+          <string>dr.druid.stampede</string>
+          <string>dr.druid.jungle-quest</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.druid.beasts-and-buffs" Label="Beasts and Buffs" Theme="beast" Kind="pool" Source="DH">
+            <Cards>
+              <string>GIL_558</string>
+              <string>LOOT_258</string>
+              <string>TRL_505</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.druid.stampede" Label="Stampede" Theme="beast" Kind="pool" Source="DR">
+            <Cards>
+              <string>ICC_808</string>
+              <string>EX1_571</string>
+              <string>UNG_111</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.druid.jungle-quest" Label="Jungle Quest" Theme="quest" Kind="pool" Source="DR">
+            <Cards>
+              <string>UNG_116</string>
+              <string>LOOT_233</string>
+              <string>CFM_308</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="4" Kind="teammate" Picked="TRLA_122">
+        <Offered>
+          <string>TRLA_122</string>
+          <string>TRLA_123</string>
+          <string>TRLA_124</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="4" Kind="bundle" Picked="dr.druid.wise-decisions">
+        <Offered>
+          <string>dr.druid.wise-decisions</string>
+          <string>dh.druid.swarm</string>
+          <string>rr.druid.beasts</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dr.druid.wise-decisions" Label="Wise Decisions" Theme="choose-one" Kind="pool" Source="DR">
+            <Cards>
+              <string>CORE_EX1_154</string>
+              <string>EX1_178</string>
+              <string>ICC_047</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.druid.swarm" Label="Swarm" Theme="swarm" Kind="pool" Source="DH">
+            <Cards>
+              <string>OG_195</string>
+              <string>CS2_011</string>
+              <string>CORE_EX1_160</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.druid.beasts" Label="Beasts" Theme="beast" Kind="pool" Source="RR">
+            <Cards>
+              <string>TRL_232</string>
+              <string>TRL_542</string>
+              <string>LOOT_314</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="5" Kind="shrine-upgrade" Picked="TRLA_801">
+        <Offered>
+          <string>TRLA_801</string>
+          <string>TRLA_806</string>
+          <string>TRLA_808</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="5" Kind="bundle" Picked="dr.druid.natural-defense">
+        <Offered>
+          <string>dr.druid.natural-defense</string>
+          <string>dh.druid.roar</string>
+          <string>dh.druid.feral-bite</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dr.druid.natural-defense" Label="Natural Defense" Theme="taunt" Kind="pool" Source="DR">
+            <Cards>
+              <string>LOOT_309</string>
+              <string>ICC_085</string>
+              <string>LOOT_413</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.druid.roar" Label="Roar!" Theme="beast" Kind="pool" Source="DH">
+            <Cards>
+              <string>LOOT_153</string>
+              <string>GIL_571</string>
+              <string>GIL_623</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.druid.feral-bite" Label="Feral Bite" Theme="beast" Kind="pool" Source="DH">
+            <Cards>
+              <string>EX1_570</string>
+              <string>LOOT_054</string>
+              <string>LOOT_048</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="6" Kind="treasure" Picked="LOOTA_832">
+        <Offered>
+          <string>LOOTA_832</string>
+          <string>champions_banner</string>
+          <string>deep_satchel</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="6" Kind="bundle" Picked="rr.druid.going-wild" Takes="2" Choosing="rr.druid.going-wild">
+        <Offered>
+          <string>rr.druid.going-wild</string>
+          <string>bundle_neutral_mechanical</string>
+          <string>dh.druid.nurture-and-grow</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="rr.druid.going-wild" Label="Going Wild" Theme="beast" Kind="pool" Source="RR">
+            <Cards>
+              <string>AT_080</string>
+              <string>AT_127</string>
+              <string>AT_099</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_neutral_mechanical" Label="Mechanical" Theme="mechanical" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>BOT_020</string>
+              <string>BOT_312</string>
+              <string>TIME_035</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.druid.nurture-and-grow" Label="Nurture and Grow" Theme="ramp" Kind="pool" Source="DH">
+            <Cards>
+              <string>CFM_713</string>
+              <string>BOT_444</string>
+              <string>ICC_085</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>AT_080</string>
+          <string>AT_127</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="7" Kind="treasure" Picked="LOOTA_803">
+        <Offered>
+          <string>LOOTA_803</string>
+          <string>LOOTA_804</string>
+          <string>iron_ward</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="7" Kind="bundle" Picked="rr.druid.going-wild" Takes="2" Choosing="rr.druid.going-wild">
+        <Offered>
+          <string>rr.druid.going-wild</string>
+          <string>rr.druid.feral</string>
+          <string>dr.druid.taunt</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="rr.druid.going-wild" Label="Going Wild" Theme="beast" Kind="pool" Source="RR">
+            <Cards>
+              <string>TRL_407</string>
+              <string>TRL_223</string>
+              <string>TRL_241</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.druid.feral" Label="Feral" Theme="beast" Kind="pool" Source="RR">
+            <Cards>
+              <string>OG_047</string>
+              <string>TRL_240</string>
+              <string>ICC_079</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.druid.taunt" Label="Taunt" Theme="taunt" Kind="pool" Source="DR">
+            <Cards>
+              <string>ICC_051</string>
+              <string>KAR_061</string>
+              <string>UNG_072</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>TRL_407</string>
+          <string>TRL_223</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="8" Kind="teammate" Picked="TRLA_123">
+        <Offered>
+          <string>TRLA_123</string>
+          <string>TRLA_125</string>
+          <string>TRLA_127</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="8" Kind="bundle" Picked="dh.druid.swarm" Takes="2" Choosing="dh.druid.swarm">
+        <Offered>
+          <string>dh.druid.swarm</string>
+          <string>dh.druid.recovery</string>
+          <string>rr.druid.natures-wrath</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.druid.swarm" Label="Swarm" Theme="swarm" Kind="pool" Source="DH">
+            <Cards>
+              <string>CFM_614</string>
+              <string>GVG_104</string>
+              <string>KAR_044</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.druid.recovery" Label="Recovery" Theme="heal" Kind="pool" Source="DH">
+            <Cards>
+              <string>GIL_667</string>
+              <string>DAL_733</string>
+              <string>GVG_033</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.druid.natures-wrath" Label="Nature's Wrath" Theme="spells" Kind="pool" Source="RR">
+            <Cards>
+              <string>EX1_095</string>
+              <string>AT_037</string>
+              <string>FP1_019</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>CFM_614</string>
+          <string>GVG_104</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="9" Kind="bundle" Picked="bundle_neutral_elemental" Takes="2" Choosing="bundle_neutral_elemental">
+        <Offered>
+          <string>bundle_neutral_elemental</string>
+          <string>dr.druid.mana-growth</string>
+          <string>rr.druid.beasts</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="bundle_neutral_elemental" Label="Elemental" Theme="elemental" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CORE_UNG_205</string>
+              <string>UNG_845</string>
+              <string>UNG_813</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.druid.mana-growth" Label="Mana Growth" Theme="ramp" Kind="pool" Source="DR">
+            <Cards>
+              <string>LOOT_392</string>
+              <string>CFM_616</string>
+              <string>EX1_169</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.druid.beasts" Label="Beasts" Theme="beast" Kind="pool" Source="RR">
+            <Cards>
+              <string>TRL_241</string>
+              <string>LOOT_314</string>
+              <string>LOE_050</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>CORE_UNG_205</string>
+          <string>UNG_845</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="10" Kind="treasure" Picked="LOOTA_814">
+        <Offered>
+          <string>LOOTA_814</string>
+          <string>LOOTA_827</string>
+          <string>mending_charm</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="10" Kind="shrine-upgrade" Picked="TRLA_802">
+        <Offered>
+          <string>TRLA_802</string>
+          <string>TRLA_806</string>
+          <string>TRLA_807</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="10" Kind="bundle" Picked="dr.druid.jungle-king" Takes="2" Choosing="dr.druid.jungle-king">
+        <Offered>
+          <string>dr.druid.jungle-king</string>
+          <string>dr.druid.wise-decisions</string>
+          <string>dh.druid.all-bark</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dr.druid.jungle-king" Label="Jungle King" Theme="beast" Kind="pool" Source="DR">
+            <Cards>
+              <string>UNG_075</string>
+              <string>KAR_065</string>
+              <string>OG_048</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.druid.wise-decisions" Label="Wise Decisions" Theme="choose-one" Kind="pool" Source="DR">
+            <Cards>
+              <string>GVG_030</string>
+              <string>LOE_115</string>
+              <string>GVG_041</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.druid.all-bark" Label="All Bark" Theme="beast" Kind="pool" Source="DH">
+            <Cards>
+              <string>BOT_419</string>
+              <string>UNG_111</string>
+              <string>DAL_256</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>UNG_075</string>
+          <string>KAR_065</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="11" Kind="treasure" Picked="grave_candle">
+        <Offered>
+          <string>grave_candle</string>
+          <string>iron_skin</string>
+          <string>spark_lantern</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="11" Kind="bundle" Picked="dr.druid.natural-defense" Takes="2" Choosing="dr.druid.natural-defense">
+        <Offered>
+          <string>dr.druid.natural-defense</string>
+          <string>rr.druid.saplings</string>
+          <string>rr.druid.wise-decisions</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dr.druid.natural-defense" Label="Natural Defense" Theme="taunt" Kind="pool" Source="DR">
+            <Cards>
+              <string>LOOT_051</string>
+              <string>LOOT_054</string>
+              <string>LOOT_413</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.druid.saplings" Label="Saplings" Theme="swarm" Kind="pool" Source="RR">
+            <Cards>
+              <string>EX1_573</string>
+              <string>BOT_419</string>
+              <string>GIL_663</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.druid.wise-decisions" Label="Wise Decisions" Theme="choose-one" Kind="pool" Source="RR">
+            <Cards>
+              <string>AT_037</string>
+              <string>TRL_343</string>
+              <string>LOE_115</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>LOOT_051</string>
+          <string>LOOT_054</string>
+        </Chosen>
+      </DungeonRunDraft>
+    </Drafts>
+    <Matches>
+      <DungeonRunMatchSummary Floor="1" Boss="tunnel_rat" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="2" Boss="hedge_witch" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="3" Boss="cellar_matron" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="4" Boss="lantern_thief" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="5" Boss="clockwork_tyrant" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="6" Boss="frostwarden" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="7" Boss="ashen_abbess" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="8" Boss="storm_herald" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="9" Boss="golemancer" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="10" Boss="lady_of_thorns" Outcome="Win" Attempt="1" />
+      <DungeonRunMatchSummary Floor="11" Boss="hollow_regent" Outcome="Win" Attempt="1" />
+    </Matches>
+    <UnlockedThisRun />
+  </Active>
+</DungeonRun>

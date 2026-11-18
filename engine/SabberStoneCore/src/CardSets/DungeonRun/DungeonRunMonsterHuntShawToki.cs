@@ -20,7 +20,8 @@ namespace SabberStoneCore.CardSets.DungeonRun
 		// ---------------------------------------------------------------- MonsterHuntShawToki
 		// The Witchwood Monster Hunt heroes Houndmaster Shaw and Toki, Time-Tinker (phase 6, family F4): Shaw's power GILA_400p
 		// Dog Whistle with its Bloodhound (GILA_400t), and the hero treasures of both. Toki plays the Mage basic power as a
-		// stand-in: Temporal Loop (GILA_900p) and Rewind (GILA_911) restart a turn or the game and stay rejected (phase 9).
+		// stand-in for Temporal Loop (GILA_900p), whose turn restart step 9 rejects for good (NativeMatch has no client history
+		// re-sync); Rewind (GILA_911), a game restart, is scripted by step 9 (DungeonRunDeferrals.cs, EncounterRules.S9.cs).
 		// Every id is keyed and shelled by its own client id, so the run deck, the treasure picker and the match show the real
 		// card; every name and text is the client's own, word for word (facts/violet-hold-2026-09.json). The treasures are the
 		// run player's cards (DungeonRunAdmission); none enters a boss deck. Every random choice uses the game RNG; every piece

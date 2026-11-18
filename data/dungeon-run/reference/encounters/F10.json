@@ -764,9 +764,6 @@
    "deck": {
     "list": "Deck"
    },
-   "replacements": {
-    "Witchwood's Touch": "Shield Block"
-   },
    "fillers": [
     "Nightmare Amalgam",
     "Murloc Tidehunter",
@@ -781,10 +778,6 @@
     {
      "kind": "deck",
      "note": "The wiki lists a deck of 45 cards. A combat tier fights with 30: the first 30 usable cards in table order; the rest is left out (recorded as over-size)."
-    },
-    {
-     "kind": "deck",
-     "note": "Witchwood's Touch (GILA_BOSS_99t2, \"Draw 2 cards. Gain 8 Armor.\") is family 23's boss card; until it is scripted its two copies are Shield Block (rerun the encounters step then)."
     },
     {
      "kind": "power",
@@ -1366,9 +1359,6 @@
    "deck": {
     "list": "Deck"
    },
-   "replacements": {
-    "Witchwood's Touch": "Shield Block"
-   },
    "fillers": [
     "Shadow Madness",
     "Holy Nova",
@@ -1380,10 +1370,6 @@
     {
      "kind": "schedule",
      "note": "The wiki's Monster Hunt page lists the boss in round 4-5 of the hunt's eight; a boss's Health there follows the round. Here the tier comes from the printed Health of its hero card (40: tier 3), as family 01's Monster Hunt row, and the fight's Health is the act curve's."
-    },
-    {
-     "kind": "deck",
-     "note": "Witchwood's Touch (GILA_BOSS_99t2, \"Draw 2 cards. Gain 8 Armor.\") is family 23's boss card; until it is scripted its two copies are Shield Block (rerun the encounters step then)."
     },
     {
      "kind": "power",

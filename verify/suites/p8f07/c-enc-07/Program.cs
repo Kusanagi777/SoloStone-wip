@@ -648,9 +648,11 @@ Guard("Rows", () =>
     foreach (string schedule in new[] { "acts-v3h", "acts-v3t" })
     {
         var drawn = new HashSet<string>(StringComparer.Ordinal);
+        // The close-out: NewRun refuses a schedule whose finale is the hero row's own character (DALA_Tekahn on acts-v3t).
+        var classes = data.Classes.Where(x => !DungeonRun.FinaleExcludes(data.Schedules.Find(schedule), x)).ToList();
         for (int seed = 0; seed < 400; seed++)
         {
-            var c = data.Classes[seed % data.Classes.Count];
+            var c = classes[seed % classes.Count];
             var s = run.NewRun(all, c.Id, c.Decks[0], c.Powers[0], 81000 + seed, schedule: schedule, signatureId: run.SignatureOffer(all, c, 81000 + seed).FirstOrDefault());
             foreach (string id in s.BossSequence) drawn.Add(id);
         }

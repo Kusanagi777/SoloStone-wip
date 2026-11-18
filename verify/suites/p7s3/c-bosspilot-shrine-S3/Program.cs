@@ -222,7 +222,7 @@ foreach (var boss in data.Bosses.SkipWhile(b => Environment.GetEnvironmentVariab
 }
 if (secretFixture) Console.WriteLine("secret fixture: closed priors " + string.Join(" ", priorClasses) + "; games with a player Secret in play " + playerSecretGames);
 if (shrineRun) Console.WriteLine($"shrine run: {shrineGames} games with a run shrine on the board, {shrineKilled} in which the boss killed it at least once; player turns ended by the stand-in cap ({PlayerTurnCap} actions) {capped}");
-if (actRun) Console.WriteLine("act run: " + data.Schedules.Default + " schedule, boss health from the act curve, the start-mana bonus applied (DungeonRunSetup.ApplyAfterStart), tavern purchases on the walk (deck enchantments and opening flags in the plan)");
+if (actRun) Console.WriteLine("act run: " + run.DefaultSchedule(0) + " schedule, boss health from the act curve, the start-mana bonus applied (DungeonRunSetup.ApplyAfterStart), tavern purchases on the walk (deck enchantments and opening flags in the plan)");
 if (catalogRun) Console.WriteLine("catalog run: widened priors " + string.Join(" ", priorClasses) + "; games with a player Secret in play " + playerSecretGames);
 // Phase 7 review: a beam leaf exception the search swallows is counted (SearchTelemetry) and must be 0; details on stderr.
 foreach (var kv in SearchTelemetry.Details()) Console.Error.WriteLine($"SWALLOWED {kv.Value} x {kv.Key}");

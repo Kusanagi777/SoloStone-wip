@@ -1,12 +1,12 @@
-gila_26_gnomenapper GIL  t3      floor  8 DRUID/druid_thicket/CS2_017                    deck 31 -> boss     turns  16 decisions  39 fallbacks  0 health  46 mana+0 power  3 checks ok
+gila_26_gnomenapper GIL  t3      floor  8 DRUID/druid_thicket/CS2_017                    deck 30 -> boss     turns  20 decisions  50 fallbacks  0 health  46 mana+1 power  4 checks ok
 gila_26_gnomenapper GIL  t3      floor  8 HUNTER/hunter_kennel/DS1h_292                  deck 32 -> boss     turns  18 decisions  43 fallbacks  0 health  46 mana+0 power  2 checks ok
 gila_26_gnomenapper GIL  t3      floor  8 MAGE/mage_rimeward/CS2_034                     deck 34 -> boss     turns  30 decisions  86 fallbacks  0 health  46 mana+0 power  8 checks ok
-gila_26_gnomenapper GIL  t3      floor  8 PALADIN/paladin_gleaming/CS2_101               deck 36 -> boss     turns  22 decisions  56 fallbacks  0 health  46 mana+0 power  7 checks ok
+gila_26_gnomenapper GIL  t3      floor  8 PALADIN/paladin_gleaming/CS2_101               deck 35 -> boss     turns  12 decisions  36 fallbacks  0 health  46 mana+1 power  2 checks ok
 gila_26_gnomenapper GIL  t3      floor  8 PRIEST/priest_mending/CS1h_001                 deck 30 -> boss     turns  16 decisions  45 fallbacks  0 health  46 mana+1 power  2 checks ok
 gila_26_gnomenapper GIL  t3      floor  8 ROGUE/rogue_backalley/CS2_083b                 deck 31 -> player   turns  17 decisions  26 fallbacks  0 health  46 mana+0 power  7 checks ok
-gila_26_gnomenapper GIL  t3      floor  8 SHAMAN/shaman_stormdebt/CS2_049                deck 30 -> boss     turns  14 decisions  33 fallbacks  0 health  46 mana+1 power  4 checks ok
-gila_26_gnomenapper GIL  t3      floor  8 WARLOCK/warlock_fiendpact/CS2_056              deck 30 -> boss     turns  12 decisions  23 fallbacks  0 health  46 mana+0 power  3 checks ok
-gila_26_gnomenapper GIL  t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 33 -> boss     turns  32 decisions  81 fallbacks  0 health  51 mana+0 power 12 checks ok
+gila_26_gnomenapper GIL  t3      floor  8 SHAMAN/shaman_stormdebt/CS2_049                deck 30 -> boss     turns  16 decisions  31 fallbacks  0 health  46 mana+0 power  5 checks ok
+gila_26_gnomenapper GIL  t3      floor  8 WARLOCK/warlock_fiendpact/CS2_056              deck 30 -> boss     turns  12 decisions  23 fallbacks  0 health  51 mana+0 power  3 checks ok
+gila_26_gnomenapper GIL  t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 32 -> boss     turns  14 decisions  31 fallbacks  0 health  46 mana+0 power  2 checks ok
 gila_26_gnomenapper GIL  t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 30 -> boss     turns  20 decisions  64 fallbacks  0 health  46 mana+0 power  4 checks ok
 encounter run: schedule acts-v3h; power unused: -; form unreached: -
-games 10, boss wins 9, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched GILA_BOSS_26t2 x17, most boss Secrets 0
+games 10, boss wins 9, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, watched GILA_BOSS_26t2 x15, most boss Secrets 0

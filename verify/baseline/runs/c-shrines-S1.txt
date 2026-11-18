@@ -4,11 +4,11 @@ PASS A1 TRLA_170: scripted with its form TRLA_170t (3-turn sleeper pointing back
 PASS A2 a new Rikkar run on rumble_warrior_170 has board shrine TRLA_170 (plan: one copy; not a power, treasure or deck card)  (TRLA_170 TRLA_170)
 PASS A1 TRLA_171: scripted with its form TRLA_171t (3-turn sleeper pointing back), admitted for the run player (and, since phase 8, a boss), never generated  (boss-shrine True)
 PASS A2 a new Rikkar run on rumble_warrior_171 has board shrine TRLA_171 (plan: one copy; not a power, treasure or deck card)  (TRLA_171 TRLA_171)
-PASS A1 TRLA_110: scripted with its form TRLA_110t (3-turn sleeper pointing back), admitted for the run player (only), never generated  (board-shrine True)
+PASS A1 TRLA_110: scripted with its form TRLA_110t (3-turn sleeper pointing back), admitted for the run player (and, since phase 8, a boss), never generated  (boss-shrine True)
 PASS A2 a new Rikkar run on rumble_hunter_110 has board shrine TRLA_110 (plan: one copy; not a power, treasure or deck card)  (TRLA_110 TRLA_110)
-PASS A1 TRLA_162: scripted with its form TRLA_162t (3-turn sleeper pointing back), admitted for the run player (only), never generated  (board-shrine True)
+PASS A1 TRLA_162: scripted with its form TRLA_162t (3-turn sleeper pointing back), admitted for the run player (and, since phase 8, a boss), never generated  (boss-shrine True)
 PASS A2 a new Rikkar run on rumble_hunter_162 has board shrine TRLA_162 (plan: one copy; not a power, treasure or deck card)  (TRLA_162 TRLA_162)
-PASS A1 TRLA_163: scripted with its form TRLA_163t (3-turn sleeper pointing back), admitted for the run player (only), never generated  (board-shrine True)
+PASS A1 TRLA_163: scripted with its form TRLA_163t (3-turn sleeper pointing back), admitted for the run player (and, since phase 8, a boss), never generated  (boss-shrine True)
 PASS A2 a new Rikkar run on rumble_hunter_163 has board shrine TRLA_163 (plan: one copy; not a power, treasure or deck card)  (TRLA_163 TRLA_163)
 PASS A3 enchantment TRLA_171e is scripted
 PASS A3 enchantment TRLA_162e is scripted

@@ -1,0 +1,105 @@
+PASS A1 Equivalent Exchange costs (1) and is cast by rule (a passive power, never offered): at the start of the boss's turn, after her draw (an empty deck: no card), with both hands holding one card, the two change sides  (casts 1 used 1 hands 1/1 fireball HAND/2)
+PASS A2 each card moves by the hand-to-hand transfer rule (a CardTransferredFact each, so the side that gave a card knows it)  (2)
+PASS A3 the boss's fair view holds the taken card exactly in its own hand; the run player's hand keeps its count  (CS2_029)
+PASS A3b the run player's other hidden cards stay masked in the boss's fair view: three drawn Yetis are Unknown stand-ins, only the Moonfire the boss gave is known  (CS2_008)
+PASS A4 with the run player's hand empty at the start of the boss's turn it is not cast (nothing changes sides)  (casts 1 vs 1)
+PASS A5 with both hands full the exchange burns nothing: ten cards each, one of each kind moved  (10/10 yeti at boss 1)
+PASS A6 a game clone carries the rule-cast count (TAG_SCRIPT_DATA_NUM_2 of the power)  (2)
+PASS A7 the exchange resolves in the boss's fair view too (a masked card of the run player's hand for one of its own); both hands keep their counts; before it, every card of the run player's hand but the ones the boss gave was masked  (ok unknown 9 shown CS2_008)
+PASS B1 Twin Paths is a passive power, started at match start; the boss's Choose One cards have both effects, the run player's do not
+PASS B2 the boss's Living Roots deals 2 damage AND summons two Saplings (no option picked)  (2 saplings 2)
+PASS B3 the run player's Living Roots still makes them choose: the damage only  (2)
+PASS C1 the Totem pool: scripted Totems of any class, the four basic Totems included  (12: AT_052,DINO_435,EX1_565,EX1_575,GIL_681,GVG_039,TRL_057,UNG_201,CS2_050,CS2_051,CS2_052,NEW1_009)
+PASS C2 Totemic Summons costs (2) and is cast by rule at the start of the boss's turn: one random Totem is summoned  (DINO_435)
+PASS C3 twelve more casts: always a Totem of the pool, of several kinds  (EX1_565,CS2_051,DINO_435,EX1_575,CS2_052,GIL_681,GVG_039,CS2_050)
+PASS C4 with a full board it is not cast  (casts 13)
+PASS D1 Lil' Eviscerate costs (2) and can be aimed at any character; without Combo it deals 1 damage  (1)
+PASS D2 after the boss played a card this turn (Combo) it deals 2  (2)
+PASS E1 Stormswell is a passive power, started at match start
+PASS E2 the boss's Lightning Bolt (Overload: 1) is cast twice on the same target: 6 damage; the copy overloads too (a spell cast by an effect overloads, the engine's rule)  (6 owed 2)
+PASS E3 a spell without Overload is cast once  (1)
+PASS E4 when the first cast kills its target, the copy has no target: it does nothing (Pirate's Mark's locked target): no other character is hit  (GRAVEYARD heroes 0/0 owed +2)
+PASS E5 the run player's Overload spells are cast once  (3)
+PASS F1 Shhh! costs (3) and is not offered while no minion is on a board
+PASS F2 it silences every minion of both boards
+PASS F3 a permanent (an untouchable Cart) is not a minion it can pick: alone on the boards it is not offered
+PASS G1 Sharkbite costs (2) and is not offered while no minion is damaged
+PASS G2 it destroys the one damaged minion; the undamaged ones stay
+PASS G3 with damaged minions on both boards the one destroyed is picked at random (both sides seen)  (boss's,player's)
+PASS G4 a damaged run shrine picked goes dormant (as from any destroy effect): its dormant form holds its place  (TRLA_154t)
+PASS G5 a dormant shrine form is never a damaged minion it can pick: with only the (damaged) dormant form on the boards it is not offered
+PASS H1 Ar'ha's Call costs (2); it attaches its player enchantment to the boss and is not offered while one waits
+PASS H2 a minion without a Battlecry leaves it waiting
+PASS H3 the next Battlecry minion resolves its Battlecry one more time (Novice Engineer draws 2), then the enchantment is gone  (2)
+PASS H4 the Battlecry after it resolves once  (1)
+PASS H5 offered again next turn
+PASS H6 Headhunter's Hatchet (her own deck's Battlecry weapon) after Ar'ha's Call: with a Beast its Battlecry resolves twice (2 + 2 Durability) and uses the enchantment up  (durability 4)
+PASS H7 so the Battlecry minion after the weapon resolves once  (1)
+PASS I1 Assembly is a passive power, started at match start; nothing was summoned for the opening hands or the mulligan, one copy for the run player's first draw of the game  (1/0)
+PASS I2 the run player draws a minion: that player summons a 1/1 copy of it (Toyification)  (CS2_120 1/1)
+PASS I3 the boss's own draw of a minion gives it a 1/1 copy too  (CS2_182)
+PASS I4 a drawn spell makes no copy (the run player's first draw and one more, the boss's turn draw)
+PASS I5 with a full board the draw makes no copy and the card stays in hand
+PASS I6 Hoard of Toys (4) summons 1/1 copies of five random scripted minions  (BOT_448 1/1,CORE_EX1_014 1/1,OG_209 1/1,BOT_445 1/1,CS2_117 1/1)
+PASS I7 with three slots left it summons three
+PASS J1 Cold Water is a passive power, started at match start
+PASS J2 a minion attacking a boss minion is not frozen
+PASS J3 the first minion that attacks the boss's hero this turn is frozen, the second is not  (True/False)
+PASS J4 next turn the first attacker is frozen again
+PASS K1 Masterpiece! costs (0): with 4 Mana left it spends all of it and summons a random minion that costs (4)  (BOT_532)
+PASS K2 with 0 to 5 Mana left the minion always costs exactly that much  (0,1,2,3,4,5)
+PASS K3 with a full board it is not offered
+PASS L1 Scroll Savvy is a passive power; the spells of the opening hand keep their Cost
+PASS L2 the text names no player: the run player's drawn spell costs (0) this turn too
+PASS L3 the spell the boss draws costs (0) this turn (Savvy); one added to its hand otherwise keeps its Cost  (0/4)
+PASS L4 a draw in the middle of its turn too
+PASS L5 at the end of the turn the spells cost (4) again (the boss's two, and the run player's from its own turn)  (4/4/4)
+PASS M1 Excavate costs (1) and is not offered without a friendly Elemental
+PASS M2 it can be aimed only at a friendly Elemental  (EX1_250)
+PASS M3 it deals 2 damage to the Elemental, then excavates (a random event)
+PASS M4 excavation 0 (nothing)  ( drew 0)
+PASS M4 excavation 1 (A Small Rock)  (GILA_500p2t drew 0)
+PASS M4 excavation 2 (one or two draws)  (CS2_182 drew 1)
+PASS M4 excavation 3 (a random Shaman card)  (OG_026 drew 0)
+PASS M4 excavation 4 (a copy of the damaged minion)  (EX1_250 drew 0)
+PASS M4 excavation 5 (a Dungeon Run treasure)  (LOOTA_812 drew 0)
+PASS M5 thirty uses: the results vary (at least four of the six seen)  (copy,draw,nothing,rock,shaman,treasure)
+PASS M6 A Small Rock is admitted for a boss on catalog runs (run-treasure-boss-find), still the run player's only on legacy runs, never generated
+PASS N1 A Tale of Kings costs (3) and summons an Underbelly Rat (10/1)
+PASS N2 the boss's hero dies with rats on its board: the eldest leaves the board without dying and a new Rat King enters with its Health (1 of 1)  (DALA_BOSS_30h/DALA_BOSS_30p 1hp RUNNING eldest SETASIDE)
+PASS N3 a game clone replays it: the second rat replaces the hero there; the real game is untouched
+PASS N4 the second death: the younger rat replaces the hero  (DALA_BOSS_30h/DALA_BOSS_30p 1hp)
+PASS N5 with no rat left the hero dies and the boss loses; the harvest counted two form changes  (COMPLETE LOST)
+PASS N6 a rat that dies in the same blow as the hero does not replace it  (COMPLETE LOST)
+PASS N7 a run player who controls a rat: the same hero comes back with the rat's Health and the rat leaves the board  (HERO_08/CS2_034 1hp RUNNING)
+PASS N8 the rat's Health includes its buffs (Blessing of Kings: 5 of 5)  (DALA_BOSS_30h/DALA_BOSS_30p 5hp rat 5/5)
+PASS N9 a Silenced rat (Ironbeak Owl) does not replace the hero: the boss dies and loses  (COMPLETE LOST)
+PASS N10 eldest by entry into play: rat A (Sapped, then replayed) is younger than rat B, so B replaces the hero and A stays  (A PLAY B SETASIDE RUNNING)
+PASS P1 the shipped data validates with the fourteen family 15 rows
+PASS P2 family 15 holds exactly these fourteen rows  (dala_16_wendy,dala_17_tala,dala_18_disidra,dala_19_linzi,dala_20_vasno,dala_22_bae_chao,dala_23_sharky,dala_24_arha,dala_25_jepetto,dala_26_fountain_golem,dala_27_rasil,dala_28_xurios,dala_29_mama_diggs,dala_30_rat_king)
+PASS P3 dala_16_wendy: a Dalaran Heist row of tier 1 (wiki level 1; the hero prints 30 Health) whose plan is the row's (hero, passive power, a 30-card extended deck, the act curve's Health), flags [passive,hiddenZone]  (extended health 30 flags passive,hiddenZone tier 1)
+PASS P3 dala_17_tala: a Dalaran Heist row of tier 3 (wiki level 6; the hero prints 30 Health) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive tier 3)
+PASS P3 dala_18_disidra: a Dalaran Heist row of tier 3 (wiki level 6; the hero prints 30 Health) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive tier 3)
+PASS P3 dala_19_linzi: a Dalaran Heist row of tier 1 (wiki level 1; the hero prints 10 Health) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 1)
+PASS P3 dala_20_vasno: a Dalaran Heist row of tier 3 (wiki level 6; the hero prints 30 Health) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive,recast]  (authentic health 30 flags passive,recast tier 3)
+PASS P3 dala_22_bae_chao: a Dalaran Heist row of tier 2 (wiki level 3; the hero prints 30 Health) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
+PASS P3 dala_23_sharky: a Dalaran Heist row of tier 2 (wiki level 4; the hero prints 30 Health) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
+PASS P3 dala_24_arha: a Dalaran Heist row of tier 3 (wiki level 6; the hero prints 30 Health) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags [doubleBattlecry]  (authentic health 30 flags doubleBattlecry tier 3)
+PASS P3 dala_25_jepetto: a Dalaran Heist row of tier 4 (wiki level 8; the hero prints 30 Health) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive,bothPlayers,hiddenZone]  (authentic health 30 flags passive,bothPlayers,hiddenZone tier 4)
+PASS P3 dala_26_fountain_golem: a Dalaran Heist row of tier 3 (wiki level 6; the hero prints 30 Health) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive tier 3)
+PASS P3 dala_27_rasil: a Dalaran Heist row of tier 3 (wiki level 6; the hero prints 30 Health) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3)
+PASS P3 dala_28_xurios: a Dalaran Heist row of tier 3 (wiki level 6; the hero prints 30 Health) whose plan is the row's (hero, passive power, a 30-card substituted deck, the act curve's Health), flags [passive]  (substituted health 30 flags passive tier 3)
+PASS P3 dala_29_mama_diggs: a Dalaran Heist row of tier 2 (wiki level 3; the hero prints 40 Health) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
+PASS P3 dala_30_rat_king: a Dalaran Heist row of tier 3 (wiki level 6; the hero prints 10 Health) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags [forms]  (authentic health 30 flags forms tier 3)
+PASS P4 every power, boss card and enchantment of the family is scripted by family 15 and keeps the client's text (14 powers, 2 cards, 3 enchantments)
+PASS P5 each has its own admission row: the fourteen powers a boss's only, the two boss cards a boss's and (taken from a boss) the run player's; none is ever generated
+PASS P6 the six admission families (the names families 08 and 09 introduced): boss-auto-cast, boss-card, boss-hidden-reveal, boss-passive-trigger, boss-public-power, boss-treasure-find  (boss-auto-cast,boss-card,boss-hidden-reveal,boss-passive-trigger,boss-public-power,boss-treasure-find)
+PASS P7 the listed cards replaced or left out: Fel Reaver (Bae Chao, unscripted), Wee Spellstopper and Glacial Mysteries (Xur'ios: unscripted, not boss-admitted), each recorded  (GVG_016>-:unscripted | GVG_122>CS2_033:unscripted,ICC_086>CS2_032:admission:unclassified)
+PASS P8 the boss cards are where the wiki lists them: two Hoards of Toys in Jepetto's deck; the Underbelly Rat in no deck (A Tale of Kings summons it; the row lists it as a card)
+PASS P9 The Rat King's one script form is a new Rat King with A Tale of Kings (the rat's hero replacement enters through it)
+PASS P10 Mama Diggs's row lists what Excavate can find (A Small Rock, the sixteen treasures) as cards, so the validator checks each
+PASS P11 a family 15 power asked for the run player is refused with its row's reason
+PASS P12 the validator holds the flag and the form together: The Rat King without his form is refused  (boss dala_30_rat_king: flag forms and the forms must go together)
+PASS P13 the tier pools: two rows in enc-t1, three in enc-t2, eight in enc-t3, one in enc-t4
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 103 passed, 0 failed

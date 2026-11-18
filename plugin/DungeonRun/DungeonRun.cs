@@ -11,7 +11,7 @@ using SabberStoneCore.Model;
 /// engine's card database: no Unity or client types, so it is tested headlessly. Every random choice derives
 /// from the run seed through <see cref="StableSeed"/> (design F1); nothing reads a clock or System.Random.
 /// </summary>
-internal sealed class DungeonRun
+internal sealed partial class DungeonRun
 {
     // RNG stream ids (design F1)
     // BucketStep: the cards a catalog bundle offer draws from its pool entry (card k of slot s: component s * 16 + k).
@@ -34,7 +34,7 @@ internal sealed class DungeonRun
     internal const int BattleScarsHealth = 100;
     /// <summary>ULDA_729 Multiclassing (a run-scope rule): "Loot can be from any class" (<see cref="LootClasses"/>).</summary>
     internal const string Multiclassing = "ULDA_729";
-    /// <summary>ULDA_115 "Gnomebliterator": while the run holds it, a persistent-damage boss starts with this much extra damage.</summary>
+    /// <summary>ULDA_115 "Gnomebliterator": each cast outside a Plague Lord fight banks this much (plus its Spell Damage) for the run's next persistent-damage boss (DungeonRunState.PlagueLordDamage).</summary>
     internal const string Gnomebliterator = "ULDA_115";
     internal const int GnomebliteratorDamage = 10;
     /// <summary>The drafts phase 7 adds (DungeonRunDraft.Kind): picked on the treasure screen.</summary>
@@ -107,14 +107,17 @@ internal sealed class DungeonRun
     // Refusal texts double as the picker's and the menu's messages (DungeonRunRuntime.NewRun).
     internal const string LockedDeck = "That deck is locked.", LockedPower = "That hero power is locked.",
         OtherClassDeck = "That deck belongs to another class.", ChooseSignature = "Choose a signature treasure.",
-        NotOffered = "That signature treasure is not on offer.";
+        NotOffered = "That signature treasure is not on offer.",
+        ExcludedFinale = "That schedule's finale is this hero's own character.";
 
     /// <summary>
     /// Starts a run with a class, one of its starter decks and one of its powers (design R2). An unknown id throws
     /// <see cref="ArgumentException"/>; a locked deck or power, or a deck of another class, throws
     /// <see cref="InvalidOperationException"/>. The run deck is a copy of the starter deck.
     /// <paramref name="schedule"/> picks the act/floor schedule: null is schedule-v1.json "default" when schedules are loaded and
-    /// the legacy fixed eight floors when none are; <see cref="DungeonRunSchedules.LegacyId"/> is always the legacy floors. An
+    /// the legacy fixed eight floors when none are; <see cref="DungeonRunSchedules.LegacyId"/> is always the legacy floors. A
+    /// named schedule whose enabled finale fixes a boss row the hero row excludes (the close-out: DALA_Tekahn on acts-v3t, whose
+    /// finale is Tekahn himself) throws <see cref="InvalidOperationException"/>, as the default roll never picks it. An
     /// act run is stamped with ScheduleVersion, Schedule and its first node, never changed afterwards, and keeps its deck as
     /// card records (<see cref="DungeonRunDeck"/>).
     /// </summary>
@@ -140,8 +143,11 @@ internal sealed class DungeonRun
         DungeonRunSchedule acts = null;
         if (schedule != DungeonRunSchedules.LegacyId && (schedule != null || Data.Schedules != null))
         {
-            string id = schedule ?? DefaultSchedule(seed);
+            string id = schedule ?? DefaultSchedule(seed, cls);
             acts = Data.Schedules?.Find(id) ?? throw new ArgumentException("Unknown schedule " + id + ".");
+            // The close-out (family 25): a finale's fixed bosses ignore excludeBosses, so a run never follows a schedule whose
+            // finale is its hero row's own character (the default roll leaves such a schedule out; a named one is refused).
+            if (FinaleExcludes(acts, cls)) throw new InvalidOperationException(ExcludedFinale);
         }
         // A generated starter (phase 6) is drawn from the run seed; a fixed one is the deck's cards.
         var starter = deck.IsGenerated ? GenerateStarter(cls, deck, seed) : deck.Cards;
@@ -161,9 +167,24 @@ internal sealed class DungeonRun
             Class = cls.Id, StarterDeck = deck.Id, Power = powerId,
             // A schedule an older version released unchanged keeps that version's stamp (DungeonRunSchedule.StampVersion).
             ScheduleVersion = acts.StampVersion, Schedule = acts.Id, Node = 0,
-            BossSequence = ActBossSequence(profile, seed, acts, ledger: !typedSeed),
         };
+        // The close-out: the starting powers this run could have begun with, for Explorer Retraining (ULDA_038) at a tavern.
+        if (acts.StampVersion >= 3)
+        {
+            var open = cls.Powers.Where(p => IsUnlocked(profile, cls.PowerUnlock(p))).Distinct(StringComparer.Ordinal).ToList();
+            if (open.Count >= 2) state.PowerChoices = string.Join(" ", open);
+        }
+        // Wave 4 review: a Rumble Run champion appears only "if the player has not chosen one of the <class> shrines" (the
+        // champions' wiki pages): a run that will hold a board shrine never draws a boss row with a shrine variant of that class.
+        string runShrine = BoardShrineFor(state);
+        // Wave 5: a run never meets a boss row of the character it plays (the hero row's "excludeBosses").
+        state.BossSequence = ActBossSequence(profile, seed, acts, ledger: !typedSeed,
+            excludeShrineClass: runShrine == null ? (CardClass?)null : Cards.FromId(runShrine).Class, excludeBosses: cls.ExcludeBosses);
         foreach (string id in starter) DungeonRunDeck.Add(state, id, DungeonRunDeck.OriginStarter);
+        // Step 9 (lane R, the ordering fix): the board shrine is the run's before its twists are rolled and its first node is
+        // entered, so a "noBoardShrine" twist or act I anomaly is never rolled or offered to a shrine run (ApplyLoadout sets the
+        // same value again).
+        state.BoardShrine = runShrine;
         // Phase 8: the acts' twists are rolled now, against the bosses just drawn (none on a schedule without twist pools).
         RollTwists(state, acts);
         EnterNode(state);
@@ -174,11 +195,31 @@ internal sealed class DungeonRun
     /// The schedule a new run with no named schedule follows (phase 8): one of schedule-v1.json "defaults", picked from the run
     /// seed on <see cref="ScheduleStream"/>, or "default" when the file lists none (every file before scheduleVersion 3).
     /// </summary>
-    internal string DefaultSchedule(long seed)
+    internal string DefaultSchedule(long seed) => DefaultSchedule(seed, null);
+
+    /// <summary>
+    /// The close-out (family 25): the default roll for a run of <paramref name="cls"/> leaves out every default schedule whose
+    /// enabled finale fixes a boss row the hero row excludes (run-v1.json "excludeBosses", the same-character rule): a finale's
+    /// fixed bosses are fought whatever the act draws exclude, so a DALA_Tekahn run never rolls acts-v3t, whose finale is
+    /// Tekahn, Plague Lord of Flame. For every other row the candidates are all the defaults and the pick is
+    /// <see cref="DefaultSchedule(long)"/>'s. The validator keeps at least one default open to every hero row. On a data set
+    /// loaded without encounters-v1.json the pick is schedule-v1.json "defaultWithoutEncounters" (acts-v2).
+    /// </summary>
+    internal string DefaultSchedule(long seed, DungeonRunClass cls)
     {
+        // A data set without the encounter file (tools and suites only) follows the schedule it followed before the close-out.
+        if (Data.EncountersVersion == 0 && Data.Schedules.DefaultWithoutEncounters != null) return Data.Schedules.DefaultWithoutEncounters;
         var defaults = Data.Schedules.Defaults;
-        return defaults.Count == 0 ? Data.Schedules.Default : defaults[StableSeed.Index(StableSeed.Derive(seed, ScheduleStream, 0), defaults.Count)];
+        if (defaults.Count == 0) return Data.Schedules.Default;
+        var open = cls == null || cls.ExcludeBosses.Count == 0 ? defaults
+            : defaults.Where(id => !FinaleExcludes(Data.Schedules.Find(id), cls)).ToList();
+        if (open.Count == 0) open = defaults;
+        return open[StableSeed.Index(StableSeed.Derive(seed, ScheduleStream, 0), open.Count)];
     }
+
+    /// <summary>Whether <paramref name="schedule"/>'s enabled finale fixes a boss row <paramref name="cls"/> excludes.</summary>
+    internal static bool FinaleExcludes(DungeonRunSchedule schedule, DungeonRunClass cls) =>
+        schedule != null && cls != null && schedule.Acts.Any(a => a.IsFinale && a.FixedBosses.Any(cls.ExcludeBosses.Contains));
 
     // ------------------------------------------------------------------ loadouts (phase 6)
 
@@ -399,10 +440,17 @@ internal sealed class DungeonRun
     /// </summary>
     /// <param name="ledger">The run reads the profile's persistent boss damage (a random-seed run): a major pool prefers the
     /// boss with the most banked damage. Only a provenance-mix schedule reads it.</param>
-    internal List<string> ActBossSequence(DungeonRunProfile profile, long seed, DungeonRunSchedule schedule, bool ledger = false)
+    /// <param name="excludeShrineClass">The class of the run's board shrine (wave 4 review): a boss row with a shrine variant of
+    /// that class is never drawn (a Rumble Run champion meets only runs that did not choose its class's shrines). Null: no filter,
+    /// every run without a board shrine draws exactly as before.</param>
+    /// <param name="excludeBosses">Boss rows the run's hero row excludes (wave 5: the same character, DungeonRunClass.ExcludeBosses):
+    /// never drawn, as if already used. Null or empty: every other run draws exactly as before.</param>
+    internal List<string> ActBossSequence(DungeonRunProfile profile, long seed, DungeonRunSchedule schedule, bool ledger = false,
+        CardClass? excludeShrineClass = null, IEnumerable<string> excludeBosses = null)
     {
         var sequence = new List<string>();
         var used = new HashSet<string>(StringComparer.Ordinal);
+        if (excludeBosses != null) used.UnionWith(excludeBosses);
         // Phase 8: how many bosses of each provenance the run holds so far (the provenance-mix draw evens them out).
         var drawn = new Dictionary<string, int>(StringComparer.Ordinal);
         // A finale's fixed bosses are never drawn by an earlier act.
@@ -424,20 +472,21 @@ internal sealed class DungeonRun
             if (schedule.MixesProvenance)
             {
                 for (int slot = 0; slot < act.Combat.Count; slot++)
-                    foreach (string id in MixedDraw(profile, seed, schedule, act, actNo * 10 + slot, act.Combat[slot].Pool, act.Combat[slot].Count, used, drawn, null))
+                    foreach (string id in MixedDraw(profile, seed, schedule, act, actNo * 10 + slot, act.Combat[slot].Pool, act.Combat[slot].Count, used, drawn, null,
+                        excludeShrineClass))
                         sequence.Add(id);
-                sequence.AddRange(MixedDraw(profile, seed, schedule, act, actNo * 10 + 9, act.MajorPool, 1, used, drawn, ledger ? profile : null));
+                sequence.AddRange(MixedDraw(profile, seed, schedule, act, actNo * 10 + 9, act.MajorPool, 1, used, drawn, ledger ? profile : null, excludeShrineClass));
                 continue;
             }
             for (int slot = 0; slot < act.Combat.Count; slot++)
             {
-                var pool = PoolCandidates(profile, act.Combat[slot].Pool, used);
+                var pool = PoolCandidates(profile, act.Combat[slot].Pool, used, excludeShrineClass);
                 if (pool.Count < act.Combat[slot].Count)
                     throw new InvalidDataException($"Schedule {schedule.Id} act {act.Id}: pool {act.Combat[slot].Pool} needs {act.Combat[slot].Count} bosses, has {pool.Count}.");
                 Shuffle(pool, seed, ActBossStream, actNo * 10 + slot);
                 foreach (string id in pool.Take(act.Combat[slot].Count)) { sequence.Add(id); used.Add(id); }
             }
-            var majors = PoolCandidates(profile, act.MajorPool, used);
+            var majors = PoolCandidates(profile, act.MajorPool, used, excludeShrineClass);
             if (majors.Count == 0) throw new InvalidDataException($"Schedule {schedule.Id} act {act.Id}: no boss left in major pool {act.MajorPool}.");
             string major = majors[StableSeed.Index(StableSeed.Derive(seed, ActBossStream, actNo * 10 + 9), majors.Count)];
             sequence.Add(major); used.Add(major);
@@ -449,9 +498,15 @@ internal sealed class DungeonRun
     /// The unlocked bosses of pool <paramref name="pool"/> (a pool, or a schedule pool set: DungeonRunSchedules.Member) not in
     /// <paramref name="used"/>, in ordinal id order.
     /// </summary>
-    internal List<string> PoolCandidates(DungeonRunProfile profile, string pool, ICollection<string> used) =>
-        Data.Bosses.Where(b => IsUnlocked(profile, b.Unlock) && !used.Contains(b.Id) && (Data.Schedules?.Member(b, pool) ?? InPool(b, pool)))
+    internal List<string> PoolCandidates(DungeonRunProfile profile, string pool, ICollection<string> used, CardClass? excludeShrineClass = null) =>
+        Data.Bosses.Where(b => IsUnlocked(profile, b.Unlock) && !used.Contains(b.Id) && (Data.Schedules?.Member(b, pool) ?? InPool(b, pool))
+                && !(excludeShrineClass != null && HasShrineOfClass(b, excludeShrineClass.Value)))
             .Select(b => b.Id).OrderBy(id => id, StringComparer.Ordinal).ToList();
+
+    /// <summary>The boss row has a shrine variant (flag shrine) whose board shrine is of <paramref name="cls"/> (a Rumble Run
+    /// champion of that class).</summary>
+    internal static bool HasShrineOfClass(DungeonRunBoss boss, CardClass cls) =>
+        boss.HasFlag(DungeonRunEncounterData.ShrineFlag) && boss.Variants.Any(v => v.Shrine != null && Cards.FromId(v.Shrine)?.Class == cls);
 
     /// <summary>
     /// The provenance-mix draw of one slot (phase 8, schedule "draw": "provenance-mix"): <paramref name="count"/> bosses of the
@@ -462,10 +517,12 @@ internal sealed class DungeonRun
     /// (<paramref name="ledgerProfile"/>) takes the candidate with the most banked persistent damage first.
     /// </summary>
     private List<string> MixedDraw(DungeonRunProfile profile, long seed, DungeonRunSchedule schedule, DungeonRunAct act, long component, string pool,
-        int count, HashSet<string> used, Dictionary<string, int> drawn, DungeonRunProfile ledgerProfile)
+        int count, HashSet<string> used, Dictionary<string, int> drawn, DungeonRunProfile ledgerProfile, CardClass? excludeShrineClass = null)
     {
+        // Step 9 (lane E, DungeonRun.Economy.cs): the "provenance-mix-v2" draw of a stamp-4 schedule (D10).
+        if (schedule.MixesProvenanceV2) return MixedDrawV2(profile, seed, schedule, act, component, pool, count, used, drawn, ledgerProfile, excludeShrineClass);
         var picks = new List<string>();
-        var candidates = PoolCandidates(profile, pool, used);
+        var candidates = PoolCandidates(profile, pool, used, excludeShrineClass);
         if (candidates.Count < count)
             throw new InvalidDataException($"Schedule {schedule.Id} act {act.Id}: pool {pool} needs {count} bosses, has {candidates.Count}.");
         var order = candidates.Select(id => Data.Boss(id).Provenance).Distinct(StringComparer.Ordinal).OrderBy(x => x, StringComparer.Ordinal).ToList();
@@ -577,8 +634,9 @@ internal sealed class DungeonRun
         // Phase 8: Health that is part of an encounter's identity (a Plague Lord's 300, Hagatha's 100) and a phased boss's
         // Health ignore the modifiers too (bossHealthDelta would move its form thresholds).
         if (boss.IsEncounter && boss.FixedHealth && boss.Health is int identity) return identity;
-        int health = boss.FixedHealth && boss.Health is int own ? own : act.BossHealth[node.FloorInAct - 1] + HealthOffset(boss);
-        return Math.Max(1, health + ActiveModifiers(state).Sum(m => m.BossHealthDelta));
+        var knobs = KnobsFor(state, boss);
+        int health = boss.FixedHealth && boss.Health is int own ? own : act.BossHealth[node.FloorInAct - 1] + knobs.HealthOffset;
+        return Math.Max(1, health + knobs.BossHealthDelta);
     }
 
     /// <summary>
@@ -601,16 +659,55 @@ internal sealed class DungeonRun
         var node = CurrentNode(state);
         // Phase 8: an encounter's own start Mana Crystals ("start.bossMana": Hagatha's 2) replace the act curve and the modifiers.
         var boss = CurrentBoss(state);
-        int bonus = boss.Start?.BossMana ?? CurrentAct(state).BossMana[node.FloorInAct - 1] + ActiveModifiers(state).Sum(m => m.BossManaDelta);
+        int bonus = boss.Start?.BossMana ?? CurrentAct(state).BossMana[node.FloorInAct - 1] + KnobsFor(state, boss).BossManaDelta;
         return Math.Max(0, Math.Min(bonus, boss.BossManaCap ?? DungeonRunSchedules.DefaultBossManaCap));
     }
 
     /// <summary>Extra player hero Health this floor: the run's HealthBonus plus the modifiers' playerHealthDelta (0 on a legacy run).</summary>
-    internal int PlayerHealthBonus(DungeonRunState state) =>
-        state.IsActRun ? state.HealthBonus + ActiveModifiers(state).Sum(m => m.PlayerHealthDelta) : 0;
+    internal int PlayerHealthBonus(DungeonRunState state)
+    {
+        if (!state.IsActRun) return 0;
+        var knobs = KnobsFor(state, FightBoss(state));
+        return knobs.HealthBonus + knobs.PlayerHealthDelta;
+    }
 
     /// <summary>Extra opening-hand cards this floor from the modifiers (0 on a legacy run).</summary>
-    internal int OpeningHandBonus(DungeonRunState state) => state.IsActRun ? ActiveModifiers(state).Sum(m => m.OpeningHandBonus) : 0;
+    internal int OpeningHandBonus(DungeonRunState state) => state.IsActRun ? KnobsFor(state, FightBoss(state)).OpeningHandBonus : 0;
+
+    // ------------------------------------------------------------------ step 9 seams (handoff/phase9/plan.md section 3, stage 0)
+
+    /// <summary>
+    /// Step 9: the run reads the step-9 tuning (the v4 schedule, tavern, treasure and encounter "v4" keys, modifier semantics,
+    /// the draw, the match-plan knobs) only when this is true: an act run on a schedule of stamp 4 and above. Every released
+    /// schedule (acts-v1, acts-v2, act1 at stamp 2; acts-v3h, acts-v3t at stamp 3) and every legacy run is false, so those runs
+    /// play and replay as released.
+    /// </summary>
+    internal static bool Tuned(DungeonRunState state) => state != null && state.IsActRun && state.ScheduleVersion >= 4;
+
+    /// <summary>
+    /// The modifier knobs of the current fight against <paramref name="boss"/> (null: no boss is known, e.g. a finished run):
+    /// each active modifier's deltas (<see cref="ActiveModifiers"/>, in the order they were taken) after
+    /// <see cref="NeutraliseKnobs"/> (lane R, DungeonRun.Rules.cs), summed, with the run's HealthBonus and the boss's Health
+    /// offset (<see cref="HealthOffset"/>), then <see cref="CapKnobs"/> (lane E, DungeonRun.Economy.cs). BossHealth,
+    /// BossStartManaBonus, PlayerHealthBonus and OpeningHandBonus read it. ActiveModifiers itself is unchanged (DraftOptions,
+    /// TavernGold and Iron Bosses' extra treasure read it directly).
+    /// </summary>
+    internal DungeonRunKnobs KnobsFor(DungeonRunState state, DungeonRunBoss boss)
+    {
+        var knobs = new DungeonRunKnobs { HealthBonus = state.HealthBonus, HealthOffset = boss == null ? 0 : HealthOffset(boss) };
+        foreach (var modifier in ActiveModifiers(state))
+        {
+            var own = DungeonRunKnobs.Of(modifier);
+            NeutraliseKnobs(state, boss, modifier, own);
+            knobs.Add(own);
+        }
+        CapKnobs(state, boss, knobs);
+        return knobs;
+    }
+
+    // The boss of the floor being fought, or null when the run has no such floor (KnobsFor's callers that need no boss row).
+    private DungeonRunBoss FightBoss(DungeonRunState state) =>
+        state.Floor >= 1 && state.Floor <= state.BossSequence.Count ? Data.Bosses.FirstOrDefault(b => b.Id == state.BossSequence[state.Floor - 1]) : null;
 
     /// <summary>Bundle offers per draft: 3 on a legacy run; the act's draft options plus draftOptionsDelta, 1 to 3, on an act run.</summary>
     internal int DraftOptions(DungeonRunState state)
@@ -654,7 +751,8 @@ internal sealed class DungeonRun
     internal DungeonRunBoss CurrentBoss(DungeonRunState state) => Data.Boss(state.BossSequence[state.Floor - 1]);
 
     /// <summary>The engine seed for the current floor. A restaged floor keeps it (design R11).</summary>
-    internal int MatchSeed(DungeonRunState state) => StableSeed.Derive(state.Seed, MatchStream, state.Floor) & int.MaxValue;
+    /// <remarks>Step 9: a restarted fight (lane X, <see cref="RestartMatchSeed"/>) may draw a fresh seed; null keeps this one.</remarks>
+    internal int MatchSeed(DungeonRunState state) => RestartMatchSeed(state) ?? StableSeed.Derive(state.Seed, MatchStream, state.Floor) & int.MaxValue;
 
     /// <summary>Design F3.</summary>
     internal int BossHealth(DungeonRunBoss boss) =>
@@ -672,7 +770,7 @@ internal sealed class DungeonRun
     /// run's Floor - 1 (every earlier floor was won). No save field.
     /// </summary>
     internal static int BossesDefeated(DungeonRunState state) =>
-        state.IsActRun ? state.Matches.Count(m => m.Outcome == DungeonRunOutcome.Win && !m.NoLoss) : Math.Max(0, state.Floor - 1);
+        state.IsActRun ? state.Matches.Count(m => m.Outcome == DungeonRunOutcome.Win && !m.NoLoss && !m.Escaped) : Math.Max(0, state.Floor - 1);
 
     /// <summary>
     /// The active treasures a treasure-Discover may offer this run (RunContext.TreasurePool, design H2): every offered,
@@ -683,8 +781,9 @@ internal sealed class DungeonRun
     {
         var cls = RunClass(state);
         var ids = new List<string>();
+        // Step 9 (lane E): a stamp-4 run's shared treasures are in every loadout's scope (TreasureInScope, D6).
         foreach (var t in Data.Treasures.Where(t => t.Active && t.Offered && !t.Legacy && !t.Signature && (pool == null || t.Pool == pool)
-            && t.Scope.Matches(cls.ClassSet, state.StarterDeck, state.Power) && TreasureOfferedOn(t, state)))
+            && TreasureInScope(t, cls, state) && TreasureOfferedOn(t, state)))
         {
             if (!DungeonRunContent.TryGet(t.Id, out var content) || content.ShellId == null) continue;
             SabberStoneCore.Model.Card card;
@@ -744,6 +843,10 @@ internal sealed class DungeonRun
             throw new InvalidOperationException($"The run deck holds {state.Deck.Count} cards; the schedule allows {DeckMin(state)} to {DeckMax(state)}.");
         var plan = BuildBasePlan(state, cls, boss);
         if (boss.IsEncounter || state.ActiveRules.Any(r => r.Kind != null)) ApplyEncounter(state, profile, boss, plan);
+        // Step 9 (lane X, DungeonRun.Outcomes.cs): TurnCap, FormRatchet and EscapeAllowed; the plan's defaults today.
+        PlanMatchEnds(state, boss, plan);
+        // Step 9 (lane R, D17): a forbidden pair the state holds is logged (DungeonRun.ForbiddenPairLog), never acted on.
+        LogForbiddenPairs(state);
         return plan;
     }
 
@@ -825,7 +928,27 @@ internal sealed class DungeonRun
         // An unfinished act run must still fit the loaded schedule (ScheduleFor, CurrentNode): a run of another schedule version
         // or a damaged node is refused here, at load, with the reason, and is never rewritten.
         if (state.IsActRun && !state.Finished) CurrentNode(state);
+        // Step 9 (lane S): likewise an unfinished run whose starter deck or bosses the loaded data does not know, rather than a
+        // KeyNotFoundException at its next fight or pick.
+        string unknown = state.Finished ? null : UnknownIdsError(state);
+        if (unknown != null) throw new InvalidDataException(unknown);
         if (state.Phase == DungeonRunPhase.InMatch) state.Phase = DungeonRunPhase.PreMatch;
+    }
+
+    /// <summary>
+    /// The run's ids the loaded data does not know, as a refusal message naming them: its starter deck (a version-1 run, which
+    /// has none, passes; a deck of a disabled row is named as such) and every id of its boss sequence. Null when all are known.
+    /// </summary>
+    internal string UnknownIdsError(DungeonRunState state)
+    {
+        var parts = new List<string>();
+        if (state.StarterDeck != null && Data.FindDeck(state.StarterDeck) == null)
+            parts.Add("starter deck " + state.StarterDeck + (Data.DisabledDecks.Any(d => d.Id == state.StarterDeck) ? " (its row is disabled)" : ""));
+        var bosses = (state.BossSequence ?? new List<string>()).Where(id => id == null || Data.Bosses.All(b => b.Id != id))
+            .Select(id => id ?? "(none)").Distinct(StringComparer.Ordinal).ToList();
+        if (bosses.Count > 0) parts.Add((bosses.Count == 1 ? "boss " : "bosses ") + string.Join(", ", bosses));
+        return parts.Count == 0 ? null
+            : "Dungeon Run save: the run names " + string.Join(" and ", parts) + ", unknown to the loaded data; the run is not resumed.";
     }
 
     /// <summary>
@@ -852,6 +975,9 @@ internal sealed class DungeonRun
             NoLoss = noLoss,
         };
         state.Matches.Add(summary);
+        // Step 9 (lane X, DungeonRun.Outcomes.cs): an escape (Win plus Escaped) or a restart (Fault plus Restarted) takes its own
+        // branch; false (every outcome today) goes on as below.
+        if (EscapeOrRestartBranch(state, profile, outcome, result, end, summary, notes)) return notes;
         // A fault restages the floor: nothing else changes (the hero switch of the floor is kept).
         if (outcome == DungeonRunOutcome.Fault) { state.Phase = DungeonRunPhase.PreMatch; return notes; }
         RecordEncounterEnd(state, profile, outcome, end, summary);
@@ -918,6 +1044,44 @@ internal sealed class DungeonRun
         return verdict.Admitted ? null : powerId + " is not admitted for the run player (" + verdict.Family + ")";
     }
 
+    /// <summary>
+    /// The close-out (family 25), ULDA_038 Explorer Retraining ("Choose a new starting Hero Power"): the starting powers the run
+    /// may switch to, the ones its row offered when it began (<see cref="DungeonRunState.PowerChoices"/>) other than the power
+    /// it plays now (the current power, or an earlier stage of it when a power upgrade has moved it on), in row order. Empty on
+    /// a run with no recorded choices (one of a schedule before stamp 3, or a row with one open power) and on a legacy run.
+    /// </summary>
+    internal List<string> RetrainPowers(DungeonRunState state)
+    {
+        if (state?.PowerChoices == null || !state.IsActRun) return new List<string>();
+        var current = state.PowerOverride ?? state.Power;
+        return state.PowerChoices.Split(' ').Where(p => p.Length > 0 && !PowerChain(p).Contains(current) && PowerOverrideError(p) == null)
+            .Distinct(StringComparer.Ordinal).ToList();
+    }
+
+    // A power and every later stage of its upgrades (run-v1.json powerUpgrades).
+    private List<string> PowerChain(string power)
+    {
+        var chain = new List<string>();
+        for (string p = power; p != null && !chain.Contains(p); p = Data.PowerUpgrades.TryGetValue(p, out var up) ? up.To : null) chain.Add(p);
+        return chain;
+    }
+
+    /// <summary>
+    /// Explorer Retraining's choice: <paramref name="power"/> (one of <see cref="RetrainPowers"/>) becomes the run's starting power
+    /// from the next fight on, as NewRun would have set it: <see cref="DungeonRunState.Power"/>, any override cleared, the old
+    /// power's upgrade record dropped and the new power's scheduled from this floor. False (nothing changed) for any other id.
+    /// </summary>
+    internal bool RepickPower(DungeonRunState state, string power)
+    {
+        if (power == null || !RetrainPowers(state).Contains(power)) return false;
+        state.Power = power;
+        state.PowerOverride = null;
+        state.Upgrades.RemoveAll(u => u.Slot == DungeonRunTreasure.SlotPower);
+        if (Data.PowerUpgrades.ContainsKey(power))
+            state.Upgrades.Add(new DungeonRunUpgrade { Key = power, SinceFloor = state.Floor, Slot = DungeonRunTreasure.SlotPower });
+        return true;
+    }
+
     // An act run's won fight: a major counts toward MajorsCleared; the schedule's last node ends the run; otherwise the node's
     // treasure draft (or a modifier's extra treasure after a major), then the bundle draft, then the next node.
     private void RecordActWin(DungeonRunState state, DungeonRunProfile profile)
@@ -929,6 +1093,8 @@ internal sealed class DungeonRun
         if (node.Index == schedule.Nodes.Count - 1) { Finish(state, profile, won: true); return; }
         // Phase 8: a finale act's fights follow one another with no treasure, reward or card draft.
         if (schedule.Acts[node.Act - 1].IsFinale) { Advance(state); return; }
+        // Step 9 (lane E, DungeonRun.Economy.cs): the boss's own reward (an encounter row's v4 "reward", D9) on a stamp-4 run.
+        GrantEncounterReward(state, node);
         bool treasure = node.TreasureDraft || major && ActiveModifiers(state).Any(m => m.ExtraTreasureAfterMajor);
         // A full deck (deckMax) has no room for an active treasure's card: the draft offers passive treasures only.
         bool full = state.Deck.Count + 1 > DeckMax(state);
@@ -1004,10 +1170,20 @@ internal sealed class DungeonRun
         classTags.UnionWith(Data.FindDeck(state.StarterDeck)?.TreasureTags ?? new List<string>());
         var candidates = Data.Treasures
             .Where(t => t.Offered && !t.Legacy && !t.Signature && !offeredBefore.Contains(t.Id) && !state.Treasures.Contains(t.Id) && !state.ActiveTreasures.Contains(t.Id))
-            .Where(t => t.Scope.Matches(cls.ClassSet, state.StarterDeck, state.Power) && TreasureOfferedOn(t, state))
+            .Where(t => TreasureInScope(t, cls, state) && TreasureOfferedOn(t, state))
             .Where(t => !passiveOnly || !t.Active)
             .OrderBy(t => t.Id, StringComparer.Ordinal).ToList();
+        // Step 9 (lane R): a treasure an active rule or a boss still to come excludes (ULDA_720 Battle Scars and LOOTA_800).
+        candidates.RemoveAll(t => RuleExcludesTreasure(state, t.Id));
         if (candidates.Count == 0) return false;
+        // Step 9 (lane E, DungeonRun.Economy.cs): a stamp-4 run's slots and per-act rarity weights (D6).
+        if (Tuned(state))
+        {
+            var tuned = TunedTreasureOffer(state, cls, candidates, classTags);
+            state.Drafts.Add(new DungeonRunDraft { Floor = state.Floor, Kind = "treasure", Offered = tuned.OrderBy(x => x, StringComparer.Ordinal).ToList() });
+            state.Phase = DungeonRunPhase.TreasureDraft;
+            return true;
+        }
 
         int Weight(DungeonRunTreasure t)
         {
@@ -1038,7 +1214,7 @@ internal sealed class DungeonRun
     /// boss prior holds them (DungeonRunAdmission.CatalogSecretPrior).
     /// </summary>
     internal static bool TreasureOfferedOn(DungeonRunTreasure t, DungeonRunState state) =>
-        t.OfferedOn(state.IsActRun) && DungeonRunAdmission.Classify(null, t.Id, AdmitScope.Player, null, state.IsCatalogRun).Admitted;
+        t.OfferedOn(state.IsActRun, state.ScheduleVersion >= 3, state.ScheduleVersion) && DungeonRunAdmission.Classify(null, t.Id, AdmitScope.Player, null, state.IsCatalogRun).Admitted;
 
     internal void PickTreasure(DungeonRunState state, string treasureId)
     {
@@ -1113,7 +1289,7 @@ internal sealed class DungeonRun
             if (wins > 0) up.Progress++;
             bool due = on == DungeonRunTreasure.UpgradeOnActClear ? majorWon
                 : wins > 0 ? up.Progress >= wins
-                : state.Floor - up.SinceFloor >= Rules.UpgradeEveryFloors;
+                : state.Floor - up.SinceFloor >= UpgradeEveryFloors(state);
             if (!due) continue;
             string next = NextStage(up.Key, slot);
             if (next == null) { state.Upgrades.Remove(up); continue; }
@@ -1187,7 +1363,10 @@ internal sealed class DungeonRun
     {
         // An act run whose deck has no room for a pick (deckMax) skips the draft: drafts never push a deck past what its
         // matches accept (taverns refuse such adds the same way). A legacy run never reaches its limit of 40.
-        if (state.IsActRun && state.Deck.Count + DraftTakes(state) > DeckMax(state)) return false;
+        // Step 9 (lane E, DungeonRun.Economy.cs): a stamp-4 act with "bundleAfterTreasure": false opens no bundle after a
+        // treasure-draft floor or its major (D5 variant (b)); a draft skipped for room becomes banked gold (D5).
+        if (state.IsActRun && NoBundleAfter(state, CurrentNode(state))) return false;
+        if (state.IsActRun && state.Deck.Count + DraftTakes(state) > DeckMax(state)) { ConvertSkippedDraft(state); return false; }
         bool opened = state.IsCatalogRun ? OpenCatalogDraft(state, DraftOptions(state)) : OpenLegacyBundleDraft(state, DraftOptions(state));
         // An act whose picks keep fewer than three cards records it on the draft (absent on every legacy draft).
         if (opened && DraftTakes(state) < 3) state.OpenDraft.Takes = DraftTakes(state);
@@ -1212,7 +1391,10 @@ internal sealed class DungeonRun
         // Only between nodes: during the floor's treasure or bundle draft the bundle draft is still to come or open.
         if (!state.IsActRun || state.Phase != DungeonRunPhase.PreMatch && state.Phase != DungeonRunPhase.Tavern && state.Phase != DungeonRunPhase.Modifier) return 0;
         var won = state.Matches.LastOrDefault(m => m.Outcome != DungeonRunOutcome.Fault);
-        if (won == null || won.Outcome != DungeonRunOutcome.Win) return 0;
+        // Step 9: an escaped fight (ULDA_111) is no won fight and drafts nothing by rule: nothing was skipped.
+        if (won == null || won.Outcome != DungeonRunOutcome.Win || won.Escaped) return 0;
+        // Step 9 (lane E): a floor that opens no bundle by design (D5 variant (b)) skipped nothing.
+        if (Tuned(state) && NoBundleAfter(state, ScheduleFor(state).FightAt(won.Floor))) return 0;
         return state.Drafts.Any(d => d.Kind == "bundle" && d.Floor == won.Floor) ? 0 : won.Floor;
     }
 
@@ -1562,7 +1744,8 @@ internal sealed class DungeonRun
 
     /// <summary>
     /// The modifiers a modifier node may offer: every schedule modifier, ordinal id order, minus those a boss of this act lists
-    /// in "incompatibleModifiers" and those already active on it.
+    /// in "incompatibleModifiers" and those already active on it. Step 9 (D7): on a stamp-4 schedule a boss row with a v4 block
+    /// bans nothing act-wide (it neutralises the conflicting knobs for its own fight: DungeonRun.NeutraliseKnobs).
     /// </summary>
     internal List<DungeonRunModifier> ModifierCandidates(DungeonRunState state)
     {
@@ -1570,7 +1753,7 @@ internal sealed class DungeonRun
         var schedule = ScheduleFor(state);
         var floors = schedule.Nodes.Where(n => n.Act == node.Act && n.IsFight).Select(n => n.Floor).ToList();
         var banned = new HashSet<string>(floors.Where(f => f >= 1 && f <= state.BossSequence.Count)
-            .SelectMany(f => Data.Bosses.FirstOrDefault(b => b.Id == state.BossSequence[f - 1])?.IncompatibleModifiers ?? new List<string>()), StringComparer.Ordinal);
+            .SelectMany(f => ActWideModifierBans(state, Data.Bosses.FirstOrDefault(b => b.Id == state.BossSequence[f - 1]))), StringComparer.Ordinal);
         var taken = new HashSet<string>(state.ActiveRules.Where(r => r.Act == node.Act).Select(r => r.Id), StringComparer.Ordinal);
         // Phase 8: a modifier an active global rule excludes (ULDA_715 Bountiful and mod_open_road) is left out too.
         foreach (var rule in ActiveGlobalRules(state)) banned.UnionWith(rule.IncompatibleModifiers);
@@ -1579,7 +1762,8 @@ internal sealed class DungeonRun
 
     /// <summary>
     /// Opens the current modifier node: <see cref="ModifierOptions"/> modifiers drawn without replacement (StableSeed
-    /// <see cref="ModifierStream"/>, Node, draw). False when no modifier is left to offer.
+    /// <see cref="ModifierStream"/>, Node, draw). False when no modifier is left to offer. Step 9 (D7): on a stamp-4 schedule the
+    /// offer ends with "none" (<see cref="DungeonRunGlobalRule.None"/>), as an anomaly offer does, so no pick is forced.
     /// </summary>
     internal bool OpenModifier(DungeonRunState state)
     {
@@ -1592,12 +1776,16 @@ internal sealed class DungeonRun
             offer.Offered.Add(picked.Id);
             candidates.Remove(picked);
         }
+        if (Tuned(state)) offer.Offered.Add(DungeonRunGlobalRule.None);
         state.ModifierOffer = offer;
         state.Phase = DungeonRunPhase.Modifier;
         return true;
     }
 
-    /// <summary>Takes an offered modifier: it is active for the rest of this act. The run moves to the next node.</summary>
+    /// <summary>
+    /// Takes an offered modifier: it is active for the rest of this act (step 9: "none", offered on a stamp-4 schedule, takes
+    /// none). The run moves to the next node.
+    /// </summary>
     internal void PickModifier(DungeonRunState state, string modifierId)
     {
         var offer = state.ModifierOffer;
@@ -1618,7 +1806,8 @@ internal sealed class DungeonRun
             Advance(state);
             return;
         }
-        state.ActiveRules.Add(new DungeonRunRule { Id = modifierId, Act = CurrentNode(state).Act, FromNode = state.Node });
+        if (modifierId != DungeonRunGlobalRule.None)
+            state.ActiveRules.Add(new DungeonRunRule { Id = modifierId, Act = CurrentNode(state).Act, FromNode = state.Node });
         state.ModifierOffer = null;
         Advance(state);
     }
@@ -1687,8 +1876,10 @@ internal sealed class DungeonRun
     /// The rules of <paramref name="kind"/> that may become active on act <paramref name="actNo"/> of this run, in file order:
     /// admitted in the data and by the admission table (scope Rule), scripted when they act in a match
     /// (DungeonRunGlobalRules.IsScripted), a run-scope rule only on act 1, not active already, and compatible with the run (a
-    /// board shrine), with the rules and modifiers active on the act, and with every boss pre-rolled for it (its flags and its
-    /// incompatibleRules).
+    /// board shrine, the run class, step 9's held treasures and opening flags: <see cref="RuleBlockedByRun"/>), with the rules
+    /// and modifiers active on the act, and with every boss pre-rolled for it (its flags and its incompatibleRules). Step 9: a
+    /// run-scope rule lasts the whole run, so it is checked against the rules (the rolled twists of every act) and the bosses
+    /// of every act.
     /// </summary>
     internal List<DungeonRunGlobalRule> RuleCandidates(DungeonRunState state, DungeonRunSchedule schedule, int actNo, string kind)
     {
@@ -1696,18 +1887,32 @@ internal sealed class DungeonRun
         var activeRules = active.Where(r => r.Kind != null).Select(r => Data.Schedules.Rule(r.Id)).Where(r => r != null).ToList();
         var activeIds = new HashSet<string>(active.Select(r => r.Id), StringComparer.Ordinal);
         var bosses = ActBosses(state, schedule, actNo);
+        // Step 9 (lane R): what a run-scope rule is checked against (built on first use: act 1's run-scope candidates only).
+        List<DungeonRunGlobalRule> runRules = null, actRules;
+        HashSet<string> runIds = null, ids;
+        List<DungeonRunBoss> runBosses = null, actBosses;
         var result = new List<DungeonRunGlobalRule>();
         foreach (var rule in Data.Schedules.Rules.Where(r => r.Kind == kind && r.Admitted))
         {
             if (rule.RunScope && actNo != 1) continue;
-            if (activeIds.Contains(rule.Id)) continue;
+            if (rule.RunScope && runIds == null)
+            {
+                runRules = state.ActiveRules.Where(r => r.Kind != null).Select(r => Data.Schedules.Rule(r.Id)).Where(r => r != null).ToList();
+                runIds = new HashSet<string>(state.ActiveRules.Select(r => r.Id), StringComparer.Ordinal);
+                runBosses = Enumerable.Range(1, schedule.Acts.Count).SelectMany(a => ActBosses(state, schedule, a)).ToList();
+            }
+            actRules = rule.RunScope ? runRules : activeRules;
+            ids = rule.RunScope ? runIds : activeIds;
+            actBosses = rule.RunScope ? runBosses : bosses;
+            if (ids.Contains(rule.Id)) continue;
             if (rule.Effect == DungeonRunGlobalRule.EffectMatch && !DungeonRunGlobalRules.IsScripted(rule.Id)) continue;
             if (!DungeonRunAdmission.Classify(null, rule.Id, AdmitScope.Rule, null, state.IsCatalogRun).Admitted) continue;
             if (rule.NoBoardShrine && state.HasBoardShrine) continue;
             if (rule.IncompatibleClasses.Contains(state.Class)) continue;
-            if (rule.IncompatibleRules.Any(activeIds.Contains) || activeRules.Any(r => r.IncompatibleRules.Contains(rule.Id))) continue;
-            if (rule.IncompatibleModifiers.Any(activeIds.Contains)) continue;
-            if (bosses.Any(b => b.IncompatibleRules.Contains(rule.Id) || b.Flags.Any(rule.IncompatibleFlags.Contains))) continue;
+            if (RuleBlockedByRun(state, rule)) continue;
+            if (rule.IncompatibleRules.Any(ids.Contains) || actRules.Any(r => r.IncompatibleRules.Contains(rule.Id))) continue;
+            if (rule.IncompatibleModifiers.Any(ids.Contains)) continue;
+            if (actBosses.Any(b => b.IncompatibleRules.Contains(rule.Id) || b.Flags.Any(rule.IncompatibleFlags.Contains))) continue;
             result.Add(rule);
         }
         return result;
@@ -1744,7 +1949,8 @@ internal sealed class DungeonRun
     }
 
     // NewRun: each act with a twist pool rolls its chance (TwistStream, act, 0) and, on a hit, one compatible twist of the pool
-    // (act, 1). A rolled twist is an active rule of that act from the start (FromNode -1).
+    // (act, 1: PickTwist, by weight on a stamp-4 schedule); a hit with no compatible twist rolls nothing. A rolled twist is an
+    // active rule of that act from the start (FromNode -1).
     private void RollTwists(DungeonRunState state, DungeonRunSchedule schedule)
     {
         for (int a = 0; a < schedule.Acts.Count; a++)
@@ -1754,7 +1960,7 @@ internal sealed class DungeonRun
             if (StableSeed.Index(StableSeed.Derive(state.Seed, TwistStream, a + 1, 0), 100) >= act.TwistChance) continue;
             var candidates = RuleCandidates(state, schedule, a + 1, DungeonRunGlobalRule.KindTwist).Where(r => act.TwistPool.Contains(r.Id)).ToList();
             if (candidates.Count == 0) continue;
-            var twist = candidates[StableSeed.Index(StableSeed.Derive(state.Seed, TwistStream, a + 1, 1), candidates.Count)];
+            var twist = PickTwist(state, candidates, a + 1);
             state.ActiveRules.Add(new DungeonRunRule { Id = twist.Id, Act = twist.RunScope ? 0 : a + 1, FromNode = -1, Kind = DungeonRunGlobalRule.KindTwist });
         }
     }
@@ -1769,7 +1975,7 @@ internal sealed class DungeonRun
 
     /// <summary>
     /// A persistent-damage boss's Health at the start of the current fight: its full Health, or what the profile's record left
-    /// (a run that reads the ledger), less <see cref="GnomebliteratorDamage"/> while the run holds ULDA_115; at least 1.
+    /// (a run that reads the ledger), less the damage the run's ULDA_115 casts banked for it (DungeonRunState.PlagueLordDamage); at least 1.
     /// </summary>
     internal int PersistentRemaining(DungeonRunState state, DungeonRunProfile profile)
     {
@@ -1777,7 +1983,7 @@ internal sealed class DungeonRun
         int full = BossHealth(state);
         if (!boss.HasFlag(DungeonRunEncounterData.PersistentDamage)) return full;
         int remaining = ReadsLedger(state) && profile?.DamageOf(boss.Id) is DungeonRunBossDamage record ? Math.Min(full, Math.Max(1, record.Remaining)) : full;
-        if (state.ActiveTreasures.Contains(Gnomebliterator) || state.Treasures.Contains(Gnomebliterator)) remaining -= GnomebliteratorDamage;
+        if (state.PlagueLordDamage > 0) remaining -= state.PlagueLordDamage;
         return Math.Max(1, remaining);
     }
 
@@ -1792,7 +1998,7 @@ internal sealed class DungeonRun
         var boss = CurrentBoss(state);
         string own = RunClass(state).HeroCard;
         var cards = boss.HeroCards.Where(h => !h.SkipFor.Contains(own)).ToList();
-        var relay = boss.Relay.Where(h => !h.SkipFor.Contains(own)).ToList();
+        var relay = RelayFor(state, boss);
         if (cards.Count == 0 && relay.Count == 0) return null;
         var result = new DungeonRunHeroSwitch { Floor = state.Floor, Kind = relay.Count > 0 ? DungeonRunHeroSwitch.KindRelay : DungeonRunHeroSwitch.KindHunters };
         foreach (var h in cards)
@@ -1804,6 +2010,18 @@ internal sealed class DungeonRun
         }
         foreach (var h in relay) result.Options.Add(new DungeonRunHeroOption { Hero = h.Hero, Power = h.Power, Deck = h.Deck, Health = h.Health });
         return result;
+    }
+
+    /// <summary>
+    /// The relay entries of the current fight against <paramref name="boss"/> (phase 8), in list order, less the ones the run's
+    /// own hero card is listed to skip. A hero listed more than once (family 24: a Tombs explorer with its three client finale
+    /// decks and powers) is one relay slot: which of its entries enters is drawn by the match's game RNG when it enters
+    /// (Actions.EncounterRules.ResolveRelay), so the boss's fair view cannot know it beforehand. Pure.
+    /// </summary>
+    internal List<DungeonRunRelayHero> RelayFor(DungeonRunState state, DungeonRunBoss boss)
+    {
+        string own = RunClass(state).HeroCard;
+        return boss.Relay.Where(h => !h.SkipFor.Contains(own)).ToList();
     }
 
     /// <summary>
@@ -1860,6 +2078,20 @@ internal sealed class DungeonRun
         plan.BossDeck = Data.BossDecks[deckId].Select(Cards.FromId).ToList();
         plan.BossSideboards = Data.BossSideboards.TryGetValue(deckId, out var boards) ? boards : null;
         plan.BossShrine = variant?.Shrine;
+        // Family 11: a mirror-deck boss (Face Collector) plays a copy of the run deck as this fight plays it, less the cards the
+        // admission table does not admit for a boss; a Fabled bundle the filter split is left out whole (FabledRules); with
+        // fewer than MinDeck cards left, or a copy the Fabled rules still refuse, it keeps the row's own deck.
+        if (boss.HasFlag(DungeonRunEncounterData.MirrorDeck))
+        {
+            var mirror = plan.PlayerDeck.Where(c => DungeonRunAdmission.Classify(c, c.Id, AdmitScope.Boss, null, state.IsCatalogRun).Admitted).ToList();
+            if (SabberStoneCore.Actions.FabledRules.DeckErrors(mirror.Select(c => c.Id)).Any())
+                mirror.RemoveAll(c => SabberStoneCore.Actions.FabledRules.IsFabled(c.Id) || SabberStoneCore.Actions.FabledRules.IsCompanion(c.Id));
+            if (mirror.Count >= DungeonRunEncounterData.MinDeck && !SabberStoneCore.Actions.FabledRules.DeckErrors(mirror.Select(c => c.Id)).Any())
+            {
+                plan.BossDeck = mirror;
+                plan.BossSideboards = null;
+            }
+        }
         if (boss.Start != null)
         {
             IReadOnlyList<SabberStoneCore.Model.Card> CardsOf(List<string> ids) => ids.Select(Cards.FromId).ToList();
@@ -1911,7 +2143,7 @@ internal sealed class DungeonRun
         string own = RunClass(state).HeroCard;
         foreach (var h in boss.HeroCards.Where(h => !h.SkipFor.Contains(own)))
             plan.PlayerHeroCards.Add(new RunFightHero { Hero = Cards.FromId(h.Hero), Deck = h.Deck.Select(Cards.FromId).ToList(), Passives = h.Passives.ToList() });
-        foreach (var h in boss.Relay.Where(h => !h.SkipFor.Contains(own)))
+        foreach (var h in RelayFor(state, boss))
             plan.PlayerRelay.Add(new RunFightHero
             {
                 Hero = Cards.FromId(h.Hero), Power = Cards.FromId(DungeonRunSetup.PowerCardId(h.Power)), Health = h.Health,
@@ -1950,6 +2182,9 @@ internal sealed class DungeonRun
                 }
             }
         }
+        // Family 24: a persistent-damage fight spends the damage ULDA_115 banked for it; every other fight banks its casts.
+        if (boss != null && boss.HasFlag(DungeonRunEncounterData.PersistentDamage)) state.PlagueLordDamage = 0;
+        else if (boss != null && end != null && end.GnomebliteratorDamage > 0) state.PlagueLordDamage += end.GnomebliteratorDamage;
         if (outcome == DungeonRunOutcome.Win && end != null && ownHero && rules.Any(r => r.Id == BattleScars))
             state.HeroDamage = Math.Max(0, Math.Min(end.PlayerHeroDamage, BattleScarsHealth - 1));
         state.HeroSwitch = null;
@@ -1988,4 +2223,32 @@ internal sealed class DungeonRunMatchIdentity
     internal IReadOnlyList<string> Deck, Classes;
     /// <summary>The fight-only heroes of the current fight, or null.</summary>
     internal DungeonRunHeroSwitch Switch;
+}
+
+/// <summary>
+/// Step 9 (stage 0): the modifier knobs one fight reads (DungeonRun.KnobsFor): the summed deltas of the act's active modifiers
+/// that a fight's plan carries, the run's HealthBonus and the boss's Health offset. Lane R neutralises one modifier's knobs for
+/// one fight (DungeonRun.NeutraliseKnobs), lane E caps the sums (DungeonRun.CapKnobs); neither changes anything yet.
+/// </summary>
+internal sealed class DungeonRunKnobs
+{
+    internal int BossHealthDelta, BossManaDelta, PlayerHealthDelta, OpeningHandBonus;
+    /// <summary>The run's permanent extra hero Health (DungeonRunState.HealthBonus: tavern Good Food, DALA_904).</summary>
+    internal int HealthBonus;
+    /// <summary>The boss's own Health offset over its band (DungeonRun.HealthOffset); 0 without a boss.</summary>
+    internal int HealthOffset;
+
+    /// <summary>One modifier's knobs (its deltas; no HealthBonus or offset).</summary>
+    internal static DungeonRunKnobs Of(DungeonRunModifier modifier) => new DungeonRunKnobs
+    {
+        BossHealthDelta = modifier.BossHealthDelta, BossManaDelta = modifier.BossManaDelta,
+        PlayerHealthDelta = modifier.PlayerHealthDelta, OpeningHandBonus = modifier.OpeningHandBonus,
+    };
+
+    /// <summary>Adds another modifier's deltas (its HealthBonus and offset are not added).</summary>
+    internal void Add(DungeonRunKnobs other)
+    {
+        BossHealthDelta += other.BossHealthDelta; BossManaDelta += other.BossManaDelta;
+        PlayerHealthDelta += other.PlayerHealthDelta; OpeningHandBonus += other.OpeningHandBonus;
+    }
 }

@@ -144,6 +144,9 @@ namespace SabberStoneCore.Model.Entities
 			try
 			{
 				RemoveWeapon();
+				// A death-pass removal still pending for this hero (Game.ClearWeapons names the hero, not the weapon) was for the
+				// weapon just replaced; dropped, so the pass cannot take the weapon equipped now (phase 8 wave 5; found by family 19).
+				if (Game.ClearWeapons != null && Game.ClearWeapons.RemoveAll(id => id == Id) > 0 && Game.ClearWeapons.Count == 0) Game.ClearWeapons = null;
 				weapon.OrderOfPlay = Game.NextOop;
 				Weapon = weapon;
 				Weapon[GameTag.ZONE] = (int)Enums.Zone.PLAY;

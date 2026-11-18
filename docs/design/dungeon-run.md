@@ -2,7 +2,7 @@
 
 > **Status**: In Design — initial specification, framework scope
 > **Author**: Kusanagi777 + Claude (game-designer / systems-designer roles)
-> **Last Updated**: 2026-11-10 (phase 3: shared draft catalog runs, dual-class rows, generated Secrets; save version 3)
+> **Last Updated**: 2026-11-17 (step 9: the economy, acts-v4h/v4t; save versions 4-6 documented)
 > **Last Verified**: 2026-11-09, against SoloStone `main` @ `0f6a476`
 > **Implements Pillar**: Deckdelve P1 "every run builds a deck you couldn't have planned", P3 "lose fast, learn fast", P4 "readable, deterministic rules"
 > **Ported from**: `dungeon-run-ccg/design/gdd/` (Deckdelve) — `run-structure.md`, `reward-draft.md`, `treasures.md`, `content.md`, `rng-event-log.md`, `meta-progression.md`
@@ -267,7 +267,7 @@ weight = round(rarityWeight × (100 + 50 × affine) / 100)
 - Slot 1 is forced to a universal treasure when one exists.
 - A held or already-offered treasure is never offered again in that run.
 
-**F7 — Difficulty targets** (tuning goal, not a rule). Floor win-rate targets are `[0.90, 0.85, 0.80, 0.70, 0.65, 0.60, 0.50, 0.40]`. That gives about 3% full-clear and a median death on floors 4–5. The MVP has 4 floors, and its targets are the first four values.
+**F7 — Difficulty targets** (tuning goal, not a rule). Floor win-rate targets are `[0.90, 0.85, 0.80, 0.70, 0.65, 0.60, 0.50, 0.40]`. That gives about 3% full-clear and a median death on floors 4–5. The MVP has 4 floors, and its targets are the first four values. On the step-9 schedules (16 and 19 fights) the run target R0 and its slot decomposition replace these values (§ Step 9: the economy).
 
 ## Edge Cases
 
@@ -444,15 +444,25 @@ The sidecar is versioned (`DungeonRunSave.Version`).
 - **Version 1** (hero select) held a hero id per run, stats per hero and the chapter unlocks.
 - **Version 2** (class, deck, power) adds `Class` and `StarterDeck` to the run, `Class` to stats rows and archive entries, `StarterDeck` and `Power` to archive entries, and `UnlockedThisRun` to the run.
 - **Version 3** (the shared draft catalog, phase 3) adds `CatalogVersion` to the run (absent = 0: a legacy run, drafting the 52 fixed bundles exactly as before), its `BucketTakes`, and each catalog bundle draft's stored `Offers` (entry, label, theme, kind, adventure tag and the three drawn cards). The upgrade from 2 changes no value: every run of an older save is a legacy run; it stamps `CatalogVersion` 0 and leaves the legacy drafts without stored offers. The first commit copies the version-2 file once to `dungeon-run.v2.xml`. A version-2 plugin refuses a version-3 file, so it can never drop the stored offers.
+- **Version 4** (the act/floor schedule, phase 4) adds the run's `ScheduleVersion` (absent = 0: a legacy-schedule run, the fixed eight floors of `run-v1.json` `rules`, byte for byte), its `Schedule` id and `Node` (an index into the schedule's flattened node list; `Floor` stays the global combat floor), `NextUid` and the card records `Cards` (authoritative for an act run; `Deck` mirrors their ids and a mismatch is refused before anything is written), `ActiveRules` (the modifiers taken), the open `Tavern` and `ModifierOffer`. A run's `ScheduleVersion` is the schedule file's `scheduleVersion` (or the schedule row's own `version`) at NewRun and never changes: it is the *schedule stamp* (1 acts-v1, 2 acts-v2 and act1, 3 acts-v3h/v3t, 4 acts-v4h/v4t), a different number from the save version. Fields added later while version 4 was current are optional and omitted at their defaults: `HealthBonus` (tavern Good Food) and `MajorsCleared` (run, stats rows and profile) in phase 5; the named `Loadout`, `PowerOverride` and `NextFight` in phase 6. The upgrade from 3 changes no value: every run of an older save is a legacy-schedule run (`ScheduleVersion` 0, no schedule, node, card records, rules, tavern or modifier offer), so its body serializes as at version 3.
+- **Version 5** (board shrines and teammates, phase 7) adds the run's `BoardShrine` (the Rumble Run shrine its starter deck names, set only on a new run of schedule stamp 2 or later) and `ShrineUpgrades` (kept apart from `Treasures`), the same two on archive entries, and the teammate and shrine-upgrade draft kinds. The upgrade from 4 is the identity: an older run has no board shrine, and its schedule never opens a teammate or shrine-upgrade draft.
+- **Version 6** (encounters, anomalies and twists, phase 8) adds the run's `HeroSwitch` (the fight-only heroes of the floor being fought, match scope) and `HeroDamage` (ULDA_720 Battle Scars), rule kinds on `ActiveRules`, the match summary's encounter facts (`Family`, `BossRemaining`, `BossForm`, `HeroesUsed`, `Rules`, `NoLoss`) and the profile's `BossDamage` (persistent boss damage per encounter: the Plague Lords). The upgrade from 5 is the identity: an older run is on schedule stamp 0, 1 or 2, which never draws an encounter, opens an anomaly node or rolls a twist. Later additions while version 6 is current, each an attribute guarded by `ShouldSerialize` (omitted at its default, so every earlier save writes the same body and no version bump is needed):
+  - `PlagueLordDamage` (family 24, ULDA_115 Gnomebliterator): damage banked for the run's next Plague Lord fight.
+  - **`PowerChoices`** (the close-out, family 25): the starting Hero Powers the run's row offered when it began (the powers whose unlock the profile held then), space-separated in row order. NewRun records it on a run of schedule stamp 3 or later when two or more were open; ULDA_038 Explorer Retraining (a tavern option) offers those other than the current power (`DungeonRun.RetrainPowers`). Null (omitted) on every other run and on every run saved before the close-out, which therefore offers no retraining.
+  - **Step 9** (plan D12; the save stays at version 6): on the run, `BankedGold` (gold banked for the next tavern: a bundle draft skipped for room, or an encounter reward with no room, D5/D9) and the match-scoped restart state of the floor being fought, `RestartIndex` (restarts so far; a restarted game's seed is `StableSeed(seed, MatchStream, floor, restartIndex)` only when it is above 0), `RestartSources` (the card ids used, for the per-source caps), `RestartCarriedDamage` (GILA_BOSS_48t: the damage the run hero carries into the restarted game) and `RestartTurns` (turns the floor's restarted games took, for the 2 x TurnCap budget); on the match summary, `Escaped` (ULDA_111 Hearthstone: `Outcome` Win with this mark, no major or kill credit, no drafts) and `Restarted` (GILA_911 Rewind, GILA_BOSS_48t: `Outcome` Fault with this mark). They follow the `NoLoss` precedent: no new enum member is written, so a version-6 reader of an older step meets only values it knows. Only a run on schedule stamp 4 can set them.
 
-Loading accepts versions 1 to 3. A newer version is refused (`InvalidDataException`), so a downgraded plugin never overwrites data it cannot read. The upgrade (`plugin/DungeonRun/DungeonRunMigration.cs`) needs the loaded data, so the runtime runs it when it first hands out the save with the rules loaded, never inside the store. Each step is caught and logged, so loading never throws on old content. Before the first commit of an upgraded file, the old file is copied once to `dungeon-run.v1.xml`.
+Loading accepts versions 1 to 6 (`DungeonRunSave.OldestVersion` to `CurrentVersion`). A newer version is refused (`InvalidDataException`), so a downgraded plugin never overwrites data it cannot read; the refusal of a version-7 file is pinned. The upgrade (`plugin/DungeonRun/DungeonRunMigration.cs`) needs the loaded data, so the runtime runs it when it first hands out the save with the rules loaded, never inside the store. Each step is caught and logged, so loading never throws on old content. Before the first commit of an upgraded file, the old file is copied once to `dungeon-run.v<N>.xml`, N the version it was loaded at (`DungeonRunStore.BackupName`).
+
+**Resume.** After the upgrade, a run left unfinished is resumed (`DungeonRun.Resume`): a run left mid-match goes back to that floor's pre-match with the same seed. A run the loaded data cannot carry is refused there, at load, with the reason, and is not resumed: an act run whose schedule stamp, schedule id, boss count or node does not fit the loaded schedules (`ScheduleFor`, `CurrentNode`), and (step 9) any run whose `StarterDeck` or a `BossSequence` id the loaded data does not know (`DungeonRun.UnknownIdsError` names them; a version-1 run, which has no starter deck id, passes; a deck of a disabled row is named as such).
+
+**Rollback.** Every change to the loaded save is applied in memory and then committed; if the change or the commit throws, the runtime rolls the save back to a copy taken before the change (`DungeonRunStore.Clone`, then `DungeonRunStore.Restore`: the profile, the run in progress and `Version`), so memory never runs ahead of the file. `Mutate` and `RecordFightOutcome` share that helper; before step 9 `RecordFightOutcome` restored the profile and run but not `Version` (D6).
 
 1. **Run in progress:** the hero id maps to a class (`legacy.heroes` in `run-v1.json`; an unknown id falls back to a class id, then to the class of the run deck's first class card, then to the first class, and is logged). If this step fails, the save stays at version 1 and the upgrade runs again on the next load; a run whose class the data does not know can still be abandoned (it is archived and adds no stats row). The deck, treasures, power or shrine, signature, bosses, drafts, cooldowns, seed, floor and phase are kept exactly; a version-1 run records no starter deck id, because none of the version-1 starters is a version-2 deck. Its offers therefore match version 1 (verified for every class hero, the Trapper, the Pilgrim and the Sellsword); a Cartographer run is now single-class (Mage) and no longer gets Rogue bundles. A power the class no longer lists is kept (an old Cartographer run on Ambush Point keeps it under Mage).
 2. **Stats:** rows merge by class (Trapper and Ranger become one Hunter row: runs and wins add, best floor is the maximum). A row of an unknown hero keeps its hero id and gets no class: it counts for class-free conditions, never for a class ladder.
 3. **Archive:** entries learn their class (none for an unknown hero); the hero id stays.
 4. **Unlocks:** each version-1 key adds the class keys that keep what it gave (`legacy.unlocks`: chapter 2 → Hunter floor 4 and 5, Paladin floor 5; chapter 3 → Warrior floor 5, Mage floor 4 and 5, Rogue floor 5; the Sellsword and Cartographer power keys → Warrior and Rogue power keys). Old keys stay; then the ladder is re-evaluated from the merged stats.
 
-The upgrade is idempotent: every step only touches rows without a class.
+The upgrade is idempotent: every step only touches rows without a class (from version 1) or sets a value an older run already reads as (from version 2 on).
 
 ## Phase 3: catalog runs (2026-11-10)
 
@@ -748,7 +758,9 @@ Rules the family adds to the model:
   returns to the deck and a deck fact (`DeckRewritten`) gives the boss's own-deck ledger the exact list.
 - **Rule-cast powers** (`DungeonRunEncounters.AutoCast`): a power the wiki marks auto-cast whose worth the boss's AI cannot
   evaluate (Devour, Stolen Time, Dispel Ward, Doors Are Closing) is registered with the passive powers (never an option) and
-  cast by a turn-start trigger that pays its Cost. Other auto-cast powers remain an AI choice.
+  cast by a turn-start trigger that pays its Cost. Waves 5-6 and the close-out review cast most of the other auto-cast powers
+  by rule too; an auto-cast power that remains an AI choice says so in its row's power note (c-enc-25 P1 checks every power
+  whose client card carries AI_MUST_PLAY, the wiki's auto-cast marker).
 - **No-loss ending** (`EncounterRules.EndWithNoLoss`): the script marks the game (`NoLoss`) and the closing side's hero is
   destroyed, so the table shows the run player's win; `DungeonRun.RecordOutcome` records a harvest with the mark as a win
   with no boss kill credit whatever outcome is reported.
@@ -820,6 +832,476 @@ rules06 (each of the 21 rules against six bosses), enc09 / enc09-seeds / enc09-a
 enc09-cards and enc10 / enc10a / enc10b / enc10-nab / enc10-cards / enc10-shrine / enc10-seeds / enc10-hagatha, each twice
 identical with 0 faults, fallbacks, failed checks and swallowed leaf exceptions; every family 06 rule was also played
 against twelve bosses of families 09 and 10 (Marin's Return and Plague of Death against the eleven they may meet).
+
+### Wave 4: Monster Hunt bosses B and C, Rumble Run champions and boss shrines (families 11, 12, 13; 2026-11-14)
+
+Three families landed together, with the DALA_850 fix: thirteen Monster Hunt encounters with a clickable power and Crooked
+Pete's form change (11), thirteen Monster Hunt encounters, ten of them with a passive power (12), and the eight Rumble Run
+champions beside War Master Voone with every board shrine admitted for a boss (13). The shipped encounter list holds 103
+rows (wave 3's 69, 13 of family 11, 13 of family 12, 8 of family 13) and 124 decks, 54 of them the wiki's list unchanged.
+The schedule is unchanged (43 rule rows). All of it stays behind acts-v3h and acts-v3t; no default changed. This is the
+first wave integrated and verified on Linux (the cloud container); `verify/baseline` now holds its results.
+
+#### Family 11: Monster Hunt bosses B (clickable powers, Crooked Pete's form change)
+
+Thirteen Witchwood encounters with a clickable power, tier by printed Health (20: tier 1; 30: tier 2; 35, 40: tier 3; 50,
+60: tier 4). Crooked Pete is the first boss whose form changes inside a match. At the start of his turn at half his maximum
+Health or less, Soot Up's trigger makes him Beastly Pete (a script form of the encounter model: GILA_BOSS_52h2 with Beast
+Within). His hand is set aside, Beastly Pete's deck replaces his, he draws 6, gains 15 Armor and keeps his Health. Face
+Collector plays a copy of the run deck (flag `mirrorDeck`: less what a boss may not hold, Fabled bundles whole, the curated
+row deck below 10 cards). Raeth's Desecrate is readied again after a use that killed (private tag `PowerRefresh` 32646, its
+own Inspire trigger). Survival of the Fittest forces every minion to attack a random enemy minion
+(`EncounterRules.AllAttackRandomEnemyMinions`). Grave Mistake resolves every Deathrattle twice. Shallow Graves never summons
+a dead run shrine. Terrify shuffles through the engine's MoveToDeck (a shrine goes dormant instead). Soul Assimilation and A
+New Face respect the shrine control and transform rules. Decks are the wiki's tables; Damph's and Sezavo's 20 cards are
+extended to 30, and Witchwood's Touch is Shield Block until family 23 scripts it. Scripts: `DungeonRunEncounters.F11.cs`,
+`Actions/EncounterRules.F11.cs`; five admission rows (`boss-hunt-power`, `boss-hunt-own-hand`, `boss-hunt-form`,
+`boss-hunt-deck-shuffle`, `boss-hunt-card-b`). Grave Mistake the spell (GILA_BOSS_43t, the hunt's treasure) is in no deck:
+scripted, admitted and tested from a fixture boss's hand.
+
+#### Family 12: Monster Hunt bosses C (passive powers)
+
+Thirteen Witchwood encounters, ten with a passive power started at match start, tier by the printed Health of the hero
+card (10 tier 1; 25, 30 tier 2; 40 tier 3; 50, 70 tier 4). Groddo raises a Bloated Zombie when an enemy minion dies; Gretta's
+Blood Red Apple makes every spell cost Health (Blood Pact's rule on both players since the review below); Forlorn Lovers
+shuffles a copy of each friendly minion that dies into her deck, presented on the shuffle so her own-deck ledger learns it; S'thara's Poisoned Drink deals 1
+damage per card drawn to either player; Vitus buffs his board; Shudderwock doubles all Battlecries for both players; The
+Whisperer gives every spell in either hand Echo, with at most ten Echo copies per player per turn (standing in for the
+client's turn timer; `EncounterRules.EchoCopiesPerTurn`); Sephira draws a spell when the run player casts one; Gobbles
+draws when a friendly Beast dies; Hannigul's Cannibalism gives +1 Attack to the minions that stood next to a dying minion,
+read inside the death pass (`EncounterRules.DeathNeighbours`). Winslow's Hypnotize shuffles both hands into their decks as
+plain cards and redraws as many, recording a hand-and-deck belief reset for both players; The Mute
+silences; Rancel's Poison Flask deals 2 and poisons a survivor, and his Infected Quillflinger hits a random enemy minion
+whenever it takes damage. Decks are the wiki's lists brought to 30 cards, each change recorded. Scripts:
+`DungeonRunEncounters.F12.cs`, `Actions/EncounterRules.F12.cs`; six admission rows. No private tag.
+
+#### Family 13: Rumble Run opponents and boss shrines
+
+The eight Rumble Run champions beside War Master Voone (Zentimo, Captain Hooktusk, High Priest Thekal, Zul'jin, Wardruid
+Loti, High Priestess Jeklik, Hex Lord Malacrass, Princess Talanji), each a row whose three variants (early, middle, late =
+challenges 1-2, 3-5, 6-8) are its class's three board shrines with that range's wiki deck. The fight's variant is drawn
+from the run seed and the floor; the shrine is armed for the boss by `ShrineRules.Arm` exactly as the run player's, and
+every shrine script reads its own controller, so the phase-7 scripts serve both sides unchanged. All 27 shrines are now
+admitted for a boss: Halazzi's Trap needs the boss's generated Secrets (Zul'jin's row turns them on), Treasure from Below's
+steal teaches the boss exactly the card it took and nothing else, and Bwonsamdi's Tome and Dark Reliquary generate through
+the boss's filter. Zul'jin's Steady Throw is scripted as Steady Shot; the other champions use basic powers. Tiers are a
+recorded spread (a champion meets the run in any round). The champions' teammate cards are not admitted for a boss and are
+left out of their decks, each recorded. The boss's fair view now tolerates a chained Discover that is not yet dealt
+(Griftah: two null guards in `plugin/FairBotState.cs`; the same hazard in `plugin/NativeMatch.cs` is left for the Windows
+plugin build). The phase-7 admission rows board-shrine, hidden-steal and shrine-token, now empty, are removed; their ids
+sit in `DungeonRunAdmission.F13.cs`.
+
+#### What the integration changed
+
+- **The Echo copy floor holds in every game.** The client's rule since Descent of Dragons is that copies of Echo cards
+  "can't cost less than (1)" (hearthstone.wiki.gg/wiki/Echo). Family 12 added `EncounterRules.EchoCopyFloor` (the last step
+  of `CostRules.AdjustCost`) for The Whisperer's fight only; family 11 then met a (0)-Cost Sound the Bells! (GIL_145) repeated
+  without end by the Rumble Mage row's run player under a cost cut, with no Whisperer in the game. The floor now applies to
+  every Echo copy (a GHOSTLY card: an Echo or "Repeatable this turn" copy) in every game; The Whisperer keeps only the
+  per-turn copy limit and the Echo on every spell (c-enc-engine G7d, c-enc-12 G10). Family 11's shrine bosspilot order is
+  restored (Gustave meets the Mage row again).
+- **DALA_850 and Unstable Evolution.** The copy Unstable Evolution puts into the hand (LOOT_504t) lacks the client's
+  "Repeatable this turn" tag 1114, so Anomaly - Arcane cut it to (0) and Hagatha's boss replayed it without end ("stuck after
+  1500 actions" in `bp.sh rules01 DALA_850`, open since the port). `DungeonRunEncounters.Repeatable` names the copy, so the
+  anomaly's floor keeps it at (1) (c-enc-engine G7c); the game ends normally (boss win, 22 turns).
+- **Tag table.** Taken numbers: 32637 (family 02), 32641 (06), 32643 (08), 32644 (09), 32645 (10), 32646 (11); families 12
+  and 13 took none.
+- The ledger gains 56 rows, not 57: FP1_029 Dancing Swords is new in both family 12's and family 13's decks.
+- **Review fixes (confirmed findings, each with a test).** Blood Red Apple ("Spells cost Health instead of Mana.", no
+  "Your"; the wiki gives Gretta blood-magic lines for the player's casts) is both players' rule (row flag `bothPlayers`,
+  admission row boss-passive-both). Hypnotize and Together Forever no longer record a deck fact read from the real deck:
+  Archbishop Benedictus (in Winslow's deck) shuffles copies of the run player's hidden deck into the boss's, and the fact
+  taught the boss's own-deck ledger what they were; the ledger now follows the moves, and the Lovers' public copy is
+  presented on its shuffle. An Echo copy Hypnotize shuffles back leaves `Game.GhostlyCards`. A Rumble Run champion appears
+  only "if the player has not chosen one of the <class> shrines" (the champions' wiki pages): a run with a board shrine
+  never draws a row with a shrine variant of that class (`DungeonRun.ActBossSequence`, `excludeShrineClass`; runs without
+  a board shrine draw exactly as before). Four tests that could not fail were made real (c-enc-11 B6/B7, c-enc-12 M4,
+  c-enc-13 V2).
+- **A cost callback and the fair view.** `bp.sh f04-player` met a fallback decision (KeyNotFoundException): the run
+  player's TRL_313 Scorch keeps an end-of-turn cost callback (its adaptive cost), and the boss's fair view masks and
+  renumbers the run player's hidden hand, so cloning the view for a search step found no entity under the callback's
+  owner id (`TriggerManager.CloneHandlers` -> `AdaptiveCostEffect.CloneDetached`). A latent defect the rebuilt fixtures'
+  seeds reached; such a detached callback is now dropped (c-w4fix Y1-Y4; every other result unchanged).
+- **Steady Throw and Rikkar.** c-heroes-F14 T1/T2 pinned TRLA_065p as unscripted; it is now Zul'jin's scripted encounter
+  power, still refused as a Rikkar power (by the admission table instead of as unscripted).
+
+**Open after the wave.** Random generation can yield unscripted cards (the engine's random pools include them; the
+generation filter drops only what admission rejects; seen: DRG_301, DRG_246, DRG_402). `plugin/NativeMatch.cs:6634` has the
+chained-Discover null hazard family 13 guarded in `FairBotState.cs` (needs the Windows plugin build). The champions'
+teammates are not admitted for a boss (their decks would be more authentic with them). Witchwood's Touch (GILA_BOSS_99t2)
+is Shield Block in families 10-12 until family 23 scripts it; then rerun the encounters step and update c-enc-10 P3/P8,
+c-enc-11 P3/P7 and c-enc-12 P3/P7.
+
+**Tests of the wave.** c-enc-11 (109 checks), c-enc-12 (105), c-enc-13 (112), c-w4fix (4), c-enc-engine G7c/G7d, and the bosspilot modes
+enc11a / enc11b / enc11-pete / enc11-cards / enc11-shrine, enc12 / enc12-seeds / enc12-hidden and enc13a / enc13b /
+enc13-seeds, each twice identical with 0 faults, fallbacks, failed checks and swallowed leaf exceptions.
+
+### Wave 5: Dalaran Heist bosses, the Heist finale and Tombs of Terror bosses A (families 14-19; 2026-11-16)
+
+Six families landed together: the Dalaran Heist's regular encounters in five lanes (14: DALA_BOSS_01-15, 15: 16-30, 16:
+31-45, 17: 46-59, 18: 60-75 with the four fixed bosses of the Heist finale and its rule DALA_830) and the first eighteen
+Tombs of Terror encounters (19). The shipped encounter list holds 194 rows (wave 4's 103, 15 of family 14, 14 each of
+families 15, 16 and 17, 16 of family 18, 18 of family 19) and 215 decks, 95 of them the wiki's list unchanged; the
+schedule lists 44 rule rows (DALA_830 is new). Everything stays behind acts-v3h and acts-v3t: no default changed, the
+acts-v3h finale block (now with the twist pool DALA_830) ships disabled with its bosses pending.
+
+The Heist boss pages have no level table and their heroes print 30 Health (10 at level 1), so all five Heist families
+tier by one rule: a page's stated level, else its deck table's size (10/15/20/25/30 cards: levels 1/2/3/4-5/6, the lowest
+level holding the largest size), a chapter's final boss level 8 (tier 4); the fight's Health is the act curve's. The Tombs
+heroes print 10 Health; family 19's tier rule (`verify/tools/gen/p8f19/tombs_tiers.py`) is shared with the later Tombs
+families.
+
+#### Family 14: Dalaran Heist bosses A
+
+Fifteen encounters (DALA_BOSS_01-15); tiers 1/2/3 hold two, nine and four rows. Decks are the Normal pool with second
+copies, then the Heroic pool, brought to 30; Oshi's and Albin's quantity lists are unchanged. New engine rule: a
+power-only script form (`EncounterRules.SwapPowerForm`) keeps the hero entity, Health, Armor and enchantments while the
+power changes: Belnaara's Take Flight! counts 15 Health damage on the power's public counter, then becomes Flying! with
+her hero Immune for two of her turns, then lands. "Scourgelord" Dazzik is a Heroic deck card (Scourgelord Garrosh's rule)
+shuffled in by the row's start block, not a form. Akazamzarak's four feats act on both players: Reductomara's (1) less
+never takes an Echo or Repeatable spell below (1) and records each owner's deck as rewritten; Presto Legendaro uses each
+side's generation filter. Open Wormhole is Duel!'s rule. Mana Echoes recasts a spell of the public play history through
+the boss's generation filter: never a Quest, and a Secret only when it is the boss's own and its Secret zone has room and
+no copy (the Monocle's rule; a run player's Secret would be a boss-generated Secret of any class, which only a row with
+`bossGeneratedSecrets` may hold). The "Kind" Waitress uses the wrong-target rule (WrongTarget50) as a defender. Blessing of
+Elune is ALL_HEALING_DOUBLE on both players; converted healing (Auchenai, Bwonsamdi's Covenant) deals the doubled damage.
+
+#### Family 15: Dalaran Heist bosses B
+
+Fourteen encounters (DALA_BOSS_16-20, 22-30); Jepetto, a chapter final, is tier 4. Equivalent Exchange and Totemic Summons
+are cast by rule (the wiki's auto-cast). Equivalent Exchange moves one random card each way by the hand-transfer rule, so
+each side knows the card it gave. Twin Paths uses Fandral's CHOOSE_BOTH aura. Stormswell recasts Overload spells on the
+same target, and the copy overloads too. Ar'ha's Call adds one Battlecry resolution to the next friendly card with a
+Battlecry (a minion, weapon or hero card: the cards `BattlecryRules.Additional` serves). Assembly gives either drawer a 1/1
+copy of a drawn minion. Scroll Savvy makes any drawn spell cost (0) that turn (its text names no player). Excavate takes
+the wiki's six listed results with equal odds; A Small Rock is also admitted for a boss on catalog runs. The Underbelly
+Rat replaces a dead hero (`Actions/EncounterRules.F15.cs`, called first in `ResolveHeroForms`): the eldest living rat (by
+entry into play; a Silenced rat has lost the text) leaves the board without dying and the hero returns with its Health;
+for The Rat King that is a new hero through his row's script form.
+
+#### Family 16: Dalaran Heist bosses C
+
+Fourteen encounters (DALA_BOSS_31-42, 44, 45); Moragg is tier 4. New engine rule: the board rotation
+(`Actions/EncounterRules.F16.cs`, `EncounterRules.Rotate(bottom, clockwise, source)`): the two rows are one ring, one step
+moves one minion across each way as a control change, rows keep their size (an empty row gains the crossing minion), and
+untouchable entities and run shrines never move. The Carousel Gryphon rotates counter-clockwise as the run player sees it
+at the end of its turn; family 24's K'zrath reuses it. Kizi's Makeover and Aki's For The Light! are auto-cast (family
+09's AutoCast). Bling it On! uses the client's Golden (PREMIUM) tag. Import "Pet" is Build-A-Beast's craft through the
+boss's generation filter, the pet named Exotic Pet. Tales of Fortune shuffles one of twenty Kobolds treasures into Ol'
+Toomba's deck, shown (Gloves of Mugging and Aleatoric Cube left out: hidden zones); five more treasures (Orb of
+Destruction, Horn of Cenarius, Portable Forge, Quel'Delar and its Blade) are admitted for a boss on catalog runs.
+Pogoshuffle's copies are shown as shuffled; Dark Tidings reveals a deck minion and puts it on top in place, recorded as
+DeckTopKnown. PARTY PORTAL!'s Partygoers are the wiki's five (Mime enters silenced). Gold Elemental's Heroic pool begins
+with Infuriated Banker, which family 17 scripts: in the merged deck it and Flame Imp are the two Heroic fills.
+
+#### Family 17: Dalaran Heist bosses D
+
+Fourteen encounters (DALA_BOSS_46-59) with ten boss cards. Zuramat's To The Void banishes a minion into the Void (family
+10's set-aside store, held by its Voided enchantment): no death, and a run shrine never enters it. Void Shift destroys all
+minions and summons new copies of the Void for its caster; the run player starts with two. Boommaster Flark: the run
+player starts with The Wire, a Murloc Tinyfin and The Other Wire; touching wires deal 5 damage once per pair at the start
+of that player's turn. Madam Goya's Blackmail puts a run player's card in hand escrow (the Extortion takes its slot),
+linked by the private tag `ExtortionEscrow` 32652; the boss never sees it, and Extortion returns the card itself. Queen
+Wagtoggle's Bribery summons a minion from the run player's deck (Tad's Pole's rule) that returns as a copy when it dies.
+Spell Lock Overloads both players for the cost each spell was played for; the engine's Tunnel Trogg answers only printed
+Overload, so `EncounterRules.OverloadFor` buffs each Trogg itself. Greed is Good buys the first card the run player plays
+each turn for a Gallywix's Coin. Sand Breath and Raise the Alarm (wiki auto-cast) and Bribery and Blackmail (their value is
+hidden from the boss's fair view) are cast by rule. Infuriated Banker replaces Gallywix's unscripted Fel Reavers.
+
+#### Family 18: Dalaran Heist bosses E and the Heist finale
+
+Twelve encounters (Sael'orn, Haro Setting-Sun, Dagg Cruelmight, Banker Biggs, Valdera Highborne, Marei Loom, Lilayell
+Suntear, Sky Captain Smiggs, Anarii Duskgrove, Kazamon Steelskin, Hesutu Stonewind, Kara Stamper) and the four fixed
+bosses of the Heist finale (Magistrix Norroa, Archmage Vargoth, Archmage Kalec, Archmage Khadgar; tier finale, levels
+9-12, decks of 35/35/40/40). Twist - The Finale (DALA_830) is the rule of acts-v3h's finale block: a twist with effect
+run, rolled with chance 100 for the finale act, never in a match plan. The block ships disabled; the fixture
+`verify/fixtures/p8f18/fixtures/schedule-finale18.json` enables it (the close-out re-pins acts-v3h's shape digest when it
+enables the block). New engine rules (`Actions/EncounterRules.F18.cs`): a player's short turn timer (`ShortTurnSeconds`,
+read from the base TIMEOUT tag: Nozdormu the Eternal's 15, Kaironomaly's 25, which NativeMatch now enforces; classic
+Nozdormu's aura neither makes nor cancels one), Steelskin's self-damage prevention (tag `SelfDamageImmune` 32653, read in
+`Character.TakeDamage`; Fatigue still hurts), and Marei Loom's left-most hand/deck swap with belief resets for both
+players (an Echo copy swapped into the deck stops being ghostly; cast by rule at the boss's turn start, the wiki's auto-cast,
+since the close-out review). Kirin Tor Elemental recasts its controller's spells
+(RecastRules). Rejected with reasons: Commander Bolan (75h/75p: his quests have no text, requirement or reward in the
+client data), the unused Phase Spider (61t) and Cheerful Spirit (DALA_501).
+
+#### Family 19: Tombs of Terror bosses A
+
+Eighteen encounters (ULDA_BOSS_01-18) and Sinkhole's Sand Trap (ULDA_030). A row's Health is the act curve's and its tier
+the boss's level in its chapter, read from its wiki deck table ("10; 15" levels 1-2 tier 1; "15; 20" and the 25-card
+level-4 lists tier 2; the 30-card level-6 lists tier 3; a full 30-card list with no lower level tier 4). Twelve
+clickable powers, Sand Surge cast by rule (the wiki's auto-cast, since the close-out review) and five passives (E.V.I.L. Promotion keeps its growing bonus in the power's own script number; Sword
+Dance shuffles a copy of the boss's destroyed weapon, enchantments and their Durability kept, into its deck; Under Wraps,
+Unstable Weaponry, "Confiscated" Goods). Mummy Ritual and Belch read the public graveyards and never raise a dead run
+shrine; Venomous Stinger's destroy makes a shrine go dormant. Sand Surge puts Sand Trap into the run player's deck as a
+public shuffle (match only, never a run deck record); drawn, it moves the top two cards of its holder's deck to the
+graveyard and draws; the boss's fair view keeps that deck masked. Brick by Brick is a boss-side Discover through the
+generation filter. Decks are the wiki's Normal lists, brought to 30 with second copies and the Heroic list; unscripted
+Saviors of Uldum collectibles are replaced by named scripted cards of the same role (Lackeys for Vera's).
+
+#### What the integration changed
+
+- **Auto-cast powers act after the turn-start draw.** Family 09's `AutoCast` fired on TURN_START, before `MainDraw`, so a
+  rule-cast power acted before its boss drew; the wiki puts it after the draw (Hero Power page: "the boss's first action
+  each turn"; Auto-cast page: after start-of-turn triggered effects). A new hook, `EncounterRules.AfterTurnStartDraw`, runs
+  in `Game.MainStart` right after `MainDraw()` and before the death and aura pass; `AutoCast` registers its power's
+  `AfterDraw` task there (cost, condition, cast count and effect unchanged). All eleven auto-cast powers of families 09,
+  15, 16 and 17 move; every bosspilot game where one plays moves with them. Checks c-enc-16 I6 (For The Light! buffs the
+  minion drawn that turn) and I7 (a hand of spells plus a drawn minion still casts); c-enc-16 I2 and c-enc-15 A1 restage
+  their premise after the draw.
+- **A run never meets a boss row of the character it plays.** A hero row may name boss rows in `excludeBosses`
+  (run-v1.json, `DungeonRunClass.ExcludeBosses`); `DungeonRun.NewRun` passes them to `ActBossSequence`, which treats them
+  as already used. Squeamlish (DALA_Squeamlish) excludes the Tombs boss Squeamlish, Mr. Chu (DALA_Chu) the Tombs boss
+  Mister Chu, George the Fallen (DALA_George) the Kobolds boss George and Karl (the wiki's George_the_Fallen lore: "They
+  later make an appearance as a boss in Dungeon Run"). Rows without the key draw exactly as before; the validator refuses
+  an unknown boss id and the key on a class row (c-w5fix Q1-Q6). Family 21's Barkeye will use the same key.
+- **A weapon replaced before the death pass.** `Game.ClearWeapons` names the hero, not the weapon, so a weapon broken in
+  an attack and replaced before the next death pass took the new weapon with it. `Hero.AddWeapon` now drops the hero's
+  pending entry when it replaces the weapon; family 19's local workaround is removed (c-w5fix W1-W3, c-enc-19 F3/F4).
+- **Unstable Evolution's copy has the Echo floor.** The regression met an endless chain in `bp.sh enc15`: against Rasil,
+  whose Millhouse Manastorm makes the run player's spells cost (0), Vessina's Unstable Evolution on a Clockwork Giant (no
+  minion costs one more, so it stays) put a (0)-Cost copy into the hand each time. The engine's copy (LOOT_504t) is no
+  GHOSTLY card, so wave 4's Echo copy floor missed it; the client prints the card with Echo since patch 23.0.3 (the wiki:
+  changed from "Repeatable this turn" to stop such a loop), so `EncounterRules.EchoCopyFloor` floors that copy at (1) too
+  (c-w5fix E1-E3).
+- **One chained-Discover guard.** Families 13 and 16 both guarded a queued Discover with no offers yet in
+  `plugin/FairBotState.cs`; family 13's guard covers both cases (c-enc-16 A8), so the file is unchanged since wave 4.
+  `plugin/NativeMatch.cs:6634` still waits for the Windows build.
+- **Tag table.** Taken numbers: 32637 (family 02), 32641 (06), 32643 (08), 32644 (09), 32645 (10), 32646 (11), 32652
+  (17, ExtortionEscrow), 32653 (18, SelfDamageImmune); families 12-16 and 19 took none.
+- **Tunnel Trogg.** The shared LOE_018 script answers printed Overload only; family 17 buffs Troggs by hand for Spell
+  Lock (a comment at the shared script says so; HANDOFF 3.4).
+- **Merge-review fixes.** The Gold Elemental deck note said Infuriated Banker had no script (family 17 scripts it; the
+  merged deck holds it); c-w5fix N1 checks that no encounter note says "no script yet" of a card a deck holds. c-enc-15 A1
+  restages Equivalent Exchange so each hand holds one card after the boss's draw.
+
+**Open after the wave.** Norroa's turn timer needs the Windows plugin build and a client check (NativeMatch). The
+own-deck ledger under-informs the boss when revealed shuffled-in cards are later burned (family 16 flag 7; never a
+leak). Kingsbane's engine helper drops enchantment Durability as Sword Dance did before its fix. The engine's Lackey
+pool can hand out the unscripted Titanic Lackey and Draconic Lackey. Commander Bolan, Phase Spider and Cheerful Spirit
+stay rejected.
+
+**Tests of the wave.** c-enc-14 (117 checks), c-enc-15 (103), c-enc-16 (124), c-enc-17 (123), c-enc-18 (109), c-enc-19
+(115), c-w5fix (19), and the bosspilot modes enc14 / enc14-seeds / enc14-flight / enc14-cards, enc15 / enc15-seeds /
+enc15-rat / enc15-toys, enc16 / enc16-seeds / enc16-carousel / enc16-cards, enc17 / enc17-seeds / enc17-void / enc17-cards
+(+ enc17-check), enc18a / enc18b / enc18-finale and enc19a / enc19b / enc19-seeds-a / enc19-seeds-b, each twice identical
+with 0 faults, fallbacks, failed checks and swallowed leaf exceptions.
+
+### Wave 6: Tombs of Terror bosses B-D, the Monster Hunt nemeses, the Plague Lords and Tekahn (families 20-24; 2026-11-16)
+
+Five families landed together: the rest of the Tombs of Terror encounters in three lanes (20: ULDA_BOSS_19-36 with Mogu
+Cultist, 21: 41-59, 22: 60-79 with Siamat's Servant), the four Final Nemesis fights of The Witchwood (23) and the three
+other Plague Lords with Tekahn and ULDA_115 (24). The shipped encounter list holds 255 rows (wave 5's 194, 18 of family 20,
+17 of family 21, 18 of family 22, 4 of family 23 and 4 of family 24) and 296 decks, 125 of them the wiki's list unchanged;
+876 adaptations and 4 rejections (Toki's hero card, Jythiros of Questions, Commander Bolan, Alternate Timeline). Everything
+stays behind acts-v3h and acts-v3t: no default changed, acts-v3t's finale (now with Tekahn pending) ships disabled.
+The Tombs families tier by family 19's rule (`verify/tools/gen/p8f19/tombs_tiers.py`, unchanged); Health is the act curve's.
+
+#### Family 20: Tombs of Terror bosses B
+
+Eighteen encounters (ULDA_BOSS_19-36) with Sothis's Mogu Cultist (ULD_705, a Saviors of Uldum stub now scripted in
+`UldumCardsGen.cs`: seven Cultists become Highkeeper Ra, ULD_705t). Eleven clickable powers, three cast by rule (Power of Wrath, Mighty Windstorm, Out of Control: the wiki's auto-cast, since the
+close-out review) and four passives. Spectral
+Swordsman gives the boss's hero Stealth while it holds a weapon; Staking A Claim gives every minion +1/+1 whenever either
+player plays a Discover card; Mother of Sand summons a Dust Devil when the boss Overloads, resolved in place; Fireshaper is
+Flamewaker's trigger. "Retired" Treasure Hunter copies a card of the run player's hand by the Copy rule (in-hand
+enchantments kept, as Mind Vision) and Mighty Windstorm makes each player swap a hand minion with a board minion (never a
+run shrine); both read the run player's hand only as their text says, and in the boss's fair view that hand is masked, so
+the search uses only cards the boss saw go there. Out of Control hits the center-most minions of each board; Vengeful
+Construct destroys a chosen minion with 2 or less Health and its neighbours (a shrine goes dormant); Madness Incarnate makes
+the hero attack three different random enemy minions through `EncounterRules.ForcedAttack`. Decks are the wiki's Normal
+lists, brought to 30 with the Heroic lists; unscripted Uldum collectibles, and Hydrologist (which offers Secrets), are
+replaced by named scripted cards of the same role, each recorded. Mogu Cultist is a scripted 1-Cost collectible now, so it
+is in every random pool of implemented cards.
+
+#### Family 21: Tombs of Terror bosses C
+
+Seventeen encounters (ULDA_BOSS_41-59 without 44, the Trap Room, an earlier row, and 58). Jythiros of Questions (58h/58p) is
+rejected: Riddle of the Sphinx needs a decision of the run player on the boss's turn and a Counter for every card type
+(phase 9 / client), recorded in F21.json, curation E21 and the admission row `boss-tombs-c-rejected`. Lich Baz'hial swaps
+her power inside the match: Lich's Phylactery (restores 20, less 1 per friendly minion death) breaks when used into Broken
+Phylactery, the row's script form 1 that changes only the power (family 14's `EncounterRules.SwapPowerForm`, shared since
+the merge), and the boss then takes double fatigue damage (`Draw.PreDrawPhase` asks
+`DungeonRunEncounters.TombsC.FatigueDamage`; one string compare per fatigue hit in every other game). Maw of the Desert and
+Arena Expert are cast by rule after the boss's turn-start draw (the wiki's auto-cast). Spoil the Ending copies a random
+spell of the run player's hand without linking the copy to its source; the boss's fair view keeps that hand masked. Sand
+Shapin' shuffles a public copy of an enemy minion into the boss's deck, summoned when drawn. Run shrines are never copied
+(What's in the Jar?, Sand Shapin') and go dormant when destroyed (Maw). Unscripted Saviors of Uldum collectibles and Secret
+generators in the wiki lists are replaced by named scripted cards.
+
+#### Family 22: Tombs of Terror bosses D
+
+Eighteen encounters (ULDA_BOSS_60-79 without 64 and 67) and Siamat's Servant (ULDA_026). Twelve clickable powers:
+Forbidden Power and Hunt the Weak keep their growing number in the power's own script number; Chain Lightning jumps to
+random adjacent minions until one dies; Ogre-Sized Thief steals a card of the run player's deck by TRLA_186's deck-steal
+rule, so the boss learns only that card; Mech "Pilot" forces a Mech to attack (`EncounterRules.ForcedAttack`). Three
+passive powers: Plaguebringer (spells (2) cheaper, Overload (1) each; a Tunnel Trogg and Thunderhead answer that Overload,
+the Trogg through family 17's `EncounterRules.OverloadFor` since the merge), Mistress of Magic (both players' first spell
+copied) and Shockwave (Rush). Three powers the wiki lists as auto-cast are cast by rule after the boss's turn-start draw:
+Lord of Destruction (stacking Cursed!), Massive Tentacles (destroys all at 8+ minions; a run shrine goes dormant) and Mirage.
+The client data has no illusion token, so Mirage follows the wiki's notes: a copy of a random card of the run player's
+hand joins it, one of the pair is the illusion (the card carries the private tag `MirageIllusion` 32657; the boss's power
+holds only its public hand position), playing it discards a random card, and it fades at the end of that player's turn.
+Decks are the wiki's Normal lists, extended with second copies and the Heroic list; unscripted cards are replaced by named
+scripted cards.
+
+#### Family 23: the Monster Hunt nemeses and Hagatha
+
+The four Final Nemesis fights of The Witchwood join Hagatha the Witch as act II majors (pool enc-major2; Health is the act
+curve plus 10). Infinite Toki's Chronoacceleration gives a friendly minion the client enchantment Accelerated (Mega-Windfury,
+destroyed at the end of the turn). Glinda Crowskin's passive False Heart makes her hero Immune while she controls a minion
+(family 06's HeroImmuneWhile); her row's flag heroImmune keeps ULDA_706 out. Crowskin Faithful draws and shuffles a new
+Faithful into its controller's deck when it dies; Crowskin Pact transforms a minion into a Faithful and takes control of it
+(a run shrine goes dormant instead). Lord Godfrey's Pistol Barrage deals 2 to a minion and its neighbours; he starts with
+Hunter's Insight in hand (the Final Nemesis page), the wiki table's one copy, so his deck holds the other 29. Captain Shivers
+starts with Kingsbane equipped, and his Plunder is cast by rule after his turn-start draw while his deck holds a weapon and
+his hand has room. Cursed Crewmember draws two cards and shuffles a copy of its caster's hand into that caster's deck.
+Witchwood's Touch (1), (2) and (3) are scripted; (2) replaces the Shield Block stand-in in the Monster Hunt decks of
+families 10-12 (the merge did families 11 and 12). Hunter's Insight and Clockwork Assistant are admitted for a boss on
+catalog runs (`run-treasure-nemesis-deck`). Alternate Timeline (a game restart) and Enhance-a-matic (a Secret generator of
+every class) are left out of Toki's deck; the first is rejected to phase 9. Hagatha's temporary hero switching stays family
+01's run-owned `DungeonRunState.HeroSwitch`, never written into the run's hero, power or deck records. Toki's hero card stays
+rejected (Temporal Loop, phase 9). With five GIL majors Hagatha is the act II major in about a tenth of runs (118 of 1000).
+
+#### Family 24: the Plague Lords and Tekahn
+
+Xatma, K'zrath and Vesh join Icarax as major3 encounters of three hero forms (300/200/100; each phase replaces the deck with
+its wiki list and draws 3, Vesh 5); a lost fight banks the lord's Health in the profile (`BossDamage`) and the next
+random-seed run meets it in that phase. ULDA_115 "Gnomebliterator" is a Tombs treasure of encounter schedules: a cast inside
+a Plague Lord fight deals its extra 10 at once; outside one, either player's cast banks 10 plus its Spell Damage in the run
+(`DungeonRunState.PlagueLordDamage`, an append-only save field with a ShouldSerialize guard, save version unchanged), which
+the next Plague Lord fight starts with and spends. Tekahn is the acts-v3t finale row: one hero, power-only forms at 200
+(Curse of Flame) and 100 (Soul Pyre), 40-card phase decks, no persistent damage; the run player's hero fights first and then
+the explorers relay at 50 Health each, each with one of its three client finale decks and the matching hero power, drawn by
+the match's game RNG as it enters (`EncounterRules.ResolveRelay`), so the boss's fair view cannot know it. New engine rules
+(`EncounterRules.F24.cs`): LoseHealth (Health lost, not damage; forms resolve at once), Evoke Panic's forced attack inside
+one row, BringToOne; K'zrath rotates with family 16's `Rotate`. Private tag `PlagueCount` 32659 (ULDA_115 casts, Mur-nado's
+Murloc deaths, Mind Meld's Lifesteal mark). Shared card fixes: Omega Mind's Mind Meld (BOT_543e) gives the spells cast that
+turn Lifesteal and takes it back at the end of the turn; the Lackey aura ULD_168e/e3 (Rakanishu's ULDA_033 uses it); a cast
+guard in `CopyCthun` (STOP instead of an InvalidCastException when the target is not a minion).
+
+#### What the integration changed
+
+- **A run never meets a boss row of its own character (continued).** Ol' Barkeye (DALA_Barkeye) excludes the Tombs boss
+  Ol' Barkeye and Vessina (DALA_Vessina) the Tombs boss Vessina (the wiki's boss pages: "one of League of E.V.I.L.'s
+  henchmen that made debut in The Dalaran Heist"); with wave 5's three pairs that is five, each run on 600 acts-v3h seeds
+  in c-w5fix Q3-Q5 (0 meetings with the key, some without). Every hero row was checked against all 255 boss rows and the
+  custom bosses; no other pair. The Heist hero Tekahn and the Plague Lord Tekahn are the same character, but that row is a
+  finale row in no act pool and a finale's fixed bosses ignore `excludeBosses`; the merge review dropped stage A's inert
+  key, and c-w5fix Q7 now fails on purpose once a shipped finale (or a pool) can hand the row to a run: the close-out
+  decides. Infinite Toki stays eligible for the Toki hero row (the original makes her Toki's own Final Nemesis).
+- **Auto-cast after the turn-start draw, everywhere.** The family 21-23 powers registered through family 09's `AutoCast`
+  (46p Maw, 48p Arena Expert, 72p, 78p, GILA_BOSS_60p Plunder) act after the draw since the merge; c-enc-23 D3/D5 state
+  Plunder's premise (the weapon not on top of the deck) and D3b shows a weapon on top is taken by the turn's draw. Mirage
+  (ULDA_BOSS_62p), a hand-written TURN_START trigger, was missed by stage A and moved by the merge review: its cast is the
+  registered entry's `AfterDraw` (c-enc-22 C9b: a 1-Health boss with an empty deck dies of Fatigue in its draw and casts
+  nothing; with the old trigger it copied a card first).
+- **Witchwood's Touch in the decks of families 11 and 12.** `make_f11.py` and `make_f12.py` no longer replace GILA_BOSS_99t2
+  with Shield Block: Cragtorr, Azalina, Gustave, Beastly Pete's form deck, Groddo and Hannigul are authentic now, Sephira
+  keeps her Wrath and Power of the Wild substitutions. c-enc-11 / c-enc-12 P3 and P7 follow.
+- **Duplicates folded.** Family 21's `TombsC.PowerOnlyForm` was family 14's `SwapPowerForm` (removed; Broken Phylactery
+  calls the shared one). Family 22's Plaguebringer Overload calls family 17's `EncounterRules.OverloadFor` for Tunnel Troggs
+  and keeps only Thunderhead's Sparks. `EncounterRules.F16.cs` and `tombs_tiers.py` are byte-identical to wave 5's.
+- **Tag table.** 32657 (family 22, MirageIllusion) and 32659 (family 24, PlagueCount); families 19-21 and 23 took none; the
+  21 private constants in 32630-32699 are unique.
+- **Snowfury Giant counts every Overload.** The regression met a fault in `bp.sh enc22a`: against Vessina, whose
+  Plaguebringer Overloads each spell by 1 through `EncounterRules.OverloadFor`, the boss's search chose a Snowfury Giant
+  (ICC_090) at 4 with 4 mana while the game held it at 6 ("engine rejected boss task"). The Giant's adaptive cost added the
+  OVERLOAD event source's printed Overload, so an Overload not printed on its source (Plaguebringer's, Spell Lock's, Winged
+  Aberration's) was not counted and a printed one could count twice; it now adds the event's amount, which is what
+  `OverloadThisGame` (the Giant's initial count) counts. A printed Overload's event amount is the card's, so other games are
+  unchanged (c-w5fix O1-O3).
+- **A form without Health of its own.** Tekahn's two forms are power-only: the hero keeps its 300 maximum, as the client's
+  one ULDA_BOSS_67h serves all three phases, so a form threshold does not cap his Health (the Plague Lords' phase heroes
+  print 200 and 100, which do). The bosspilot harnesses' family 01 check "the boss's Health is above its form's threshold"
+  now applies to forms with their own Health only; it had failed once in `bp.sh tekahn24`, a 101-turn game in which Tekahn
+  entered Curse of Flame at 195 and healed to 219 in that form.
+- **Incompatible modifiers.** Hagatha's `incompatibleModifiers` come from her own row (fixed 100 Health, the hero switch);
+  the nemeses list none, since neither the wiki nor the client data covers SoloStone's modifiers. On a seed whose act II
+  major is a nemesis the act's modifier node may offer Hagatha's three: a step-9 input (HANDOFF 3.4).
+
+**Open after the wave.** The close-out enables acts-v3t's finale on Tekahn (with `heroRelay`) and decides what a
+DALA_Tekahn run meets there. Jythiros of Questions and Alternate Timeline go to phase 9. Captain Shivers's Kingsbane uses
+the engine's Kingsbane helper, which drops enchantment Durability (wave 5's open item). Unscripted Uldum collectibles in
+the decks of families 19-22 are replaced; when they get scripts, rerun the encounters step.
+
+**Tests of the wave.** c-enc-20 (111 checks), c-enc-21 (100), c-enc-22 (121), c-enc-23 (68), c-enc-24 (65), c-w5fix (29),
+and the bosspilot modes enc20a / enc20b / enc20-seeds-a / enc20-seeds-b, enc21a / enc21b / enc21-seeds-a / enc21-seeds-b,
+enc22a / enc22b / enc22-seeds-a / enc22-seeds-b, enc23 / enc23-seeds / enc23-cards, enc24, plague24 95 / 110 / 195 / 210
+and tekahn24, each twice identical with 0 faults, fallbacks, failed checks and swallowed leaf exceptions.
+
+## Step 9: the economy (2026-11-17)
+
+Step 9 balances the combined reward economy on one schedule, with act-aware encounter and reward scaling, incompatible-
+modifier prevention and long-run save/resume validation. The plan is `handoff/phase9/plan.md`; what the code does, per plan
+item, is `handoff/phase9/implementation.md`. The step is **implemented and not yet measured**: every target below is a
+target, and every number the step tunes is an uncalibrated initial value (`handoff/phase9/values.md`).
+
+**Where it applies.** Two new schedules, **acts-v4h** and **acts-v4t**, at schedule stamp 4, are the defaults. They keep
+acts-v3h's node shape (ReleasedShapes[4] equals [3]) and share acts I-III (`sameActsAs`), so the economy is tuned once and
+only the finales differ (the Heist's four fights; Tekahn with the hero relay). Every step-9 value is read only through
+`DungeonRun.Tuned(state)` (an act run of stamp 4 or later): schedule, tavern and treasure keys, modifier semantics, the
+draw, encounter-row `v4` blocks, the new `runs: "v4"` treasure rows and the match-plan knobs. acts-v1, acts-v2, act1,
+acts-v3h and acts-v3t play as released, except for correctness fixes (rule exclusions, new boss flags, the board-shrine
+ordering at NewRun), which apply to every schedule with anomaly or twist nodes. The save stays at version 6 (§ Save
+versions).
+
+### The target: R0 and its slot decomposition
+
+One run-level target, **R0: a fresh-profile Victory rate of 1-3% on each schedule**. The per-slot targets below are its
+decomposition (F7's method, extended from 8 floors to 16 and 19 fights), and their product is checked against it, weighting
+the act III major by the draw's lord / non-lord share. At the point targets the plan puts the product at about 1.2% (v4h)
+and 1.4% (v4t).
+
+| Slot | Point target | Band |
+|---|---|---|
+| Act I combat, per fight (floors 1-4) | 0.92 | 0.88-0.95 |
+| Act I major | 0.70 | 0.60-0.80 |
+| Act II combat / major | 0.88 / 0.60 | 0.83-0.92 / 0.50-0.70 |
+| Act III combat / major (custom finals) | 0.84 / 0.55 | 0.78-0.89 / 0.45-0.65 |
+| Plague Lord as the act III major | mean damage per attempt at least 60; one-attempt kill 10-25% | — |
+| Heist finale | 0.80 per fight; all four in one run at least 0.35 | 0.72-0.87 per fight |
+| Tekahn finale | 0.45 | 0.35-0.55; at most 3 turn caps in 100 |
+
+Rules of the measurement (plan section 1 B): a fair AI on both sides; n of at least 200 per band (Tekahn 100); a band passes
+when its Wilson 95% interval overlaps it and the point estimate lies within it plus or minus 3 points; act I combat beats act
+III combat; every t3/t4 row and the named outliers are sampled by name, the four rooms (Vault, Tad, Lava Chamber, Trap Room;
+flag `room`) exempt as reward nodes; each origin's rate of reaching the act II major within 15 points of the pooled rate.
+The economy targets (plan section 1 A) are deterministic: a deck of at most deckMax 50, entering the finale at a median of
+34-42 cards (p95 at most 48); bundle drafts skipped for room converted to gold; at least 90 treasure-draft candidates for
+every loadout with treasure drafts; a rare share of 25-35% / 38-50% / 52-65% by act; DALA_904 at most twice a run; Heist :
+Tombs tavern offers about 64 : 36; a per-row meeting ratio of at most 2.5 within a tier pool.
+
+### Decisions
+
+| # | Decision (as implemented) |
+|---|---|
+| D1 | New ids acts-v4h / acts-v4t at stamp 4 carry all tuning; acts-v3h/v3t carry an explicit `"version": 3`, so raising the file's `scheduleVersion` to 4 does not re-stamp them. |
+| D2 | v4 keeps v3's node shape; the scaling is in tuning keys and the encounter rows' `v4` blocks, never in shared row fields (which v3 reads live). |
+| D3 | Difficulty is measured with a fair player on both sides in a new run harness, not with the old bosspilot's LocalBot (not built yet: the user's). |
+| D4 | Act-aware scaling through act keys: per-act treasure rarity, per-fight finale curves, `tavern.weightByAct`, DALA_904 Good Food `maxPerRun` 2 (`CapKnobs` caps HealthBonus at what the tavern can give). Player Health stays 30 and identity offsets stay (+10 for the Dungeon Run finals and the nemeses). Levers for an act I major wall, in order: the floor-5 curve value, a v4 tier override, `offsetCap` (last, an identity change). Curation `health-policy`. |
+| D5 | deckMax stays 50. Variant (b): full-size bundles (takes 3/2/2), but no bundle draft after a treasure-draft floor or a major in acts II-III (`bundleAfterTreasure: false`); a bundle skipped for room becomes 1 `BankedGold`, spent at the next tavern. DALA_902 Remove a Card weighs more in act III. |
+| D6 | One treasure economy: generic adventure treasures carry `"shared": true` after an audit (126 rows; hero-specific, signature and deck- or power-dependent texts stay scoped, each with a reason in the catalog curation), read only by stamp-4 runs. Draft slots: slot 1 universal, slot 2 the loadout's own origin, slot 3 weighted; per-act rarity weights derived from the audited pool's rare : common counts. |
+| D7 | Modifiers on v4: per-fight neutralisation plus a "none" choice. A row's `v4.incompatibleModifiers` zeroes, for that fight only, the knob it cannot carry (bossHealthDelta on a fixedHealth row, bossManaDelta on a row with its own start Mana); the act's other fights keep the modifier, and its out-of-fight effects (Iron Bosses' extra treasure) always apply. Every entry has a `modifierReasons` text. A v4 row without a block keeps the act-wide ban. Released schedules keep the act-wide ban. |
+| D8 | Twist pools mapped from the original chapters: act I [DALA_829, ULDA_801], act II [DALA_832, ULDA_802], act III [DALA_833, DALA_831, ULDA_803, ULDA_804]; the acts-v4h finale DALA_830. Chance 100 (each chapter's twist was always on), one twist per act, weighted; a hit with no compatible candidate rolls none. Curation `twists-per-act`, `plague-twists-per-act`. |
+| D9 | Per-boss rewards (`reward`, v4 only): GILA_BOSS_43t is Damph's reward, a deck card granted once per run after his fight; at deckMax it becomes 1 `BankedGold`. |
+| D10 | Draw `provenance-mix-v2` (stamp 4 only): provenance weight n_p^alpha / (1 + k drawn_p) in exact integer arithmetic, a ledger chance for a banked Plague Lord at the major, at most 1 Rumble Run champion per act. |
+| D11 | Tekahn on acts-v4t only: the finale's `turnCap` 150 and `formRatchet` (entering a form with a Health threshold and no Health of its own clamps his maximum Health to it), read into `RunMatchPlan.TurnCap` / `FormRatchet`; Belnaara's and Bazhial's script forms are untouched. |
+| D12 | The save stays at version 6; new fields are guarded attributes (`BankedGold`, the restart state, the summary's `Escaped` and `Restarted`). |
+| D13 | Restart (GILA_911 Rewind, a v4 treasure; the GILA_BOSS_48t path, card held back until its gate passes): `Fault` plus `Restarted`, the floor restaged, a persistent boss's damage banked as a loss does, a new match seed only when the restart index is above 0, one restart per source per floor and at most 2 x TurnCap turns per floor. A restart from a source the fight could not use is recorded as a loss. |
+| D14 | Escape (ULDA_111 Hearthstone, a v4 treasure): `Win` plus `Escaped`, with no major or kill credit and no drafts; an escape tavern opens on the node. Castable only when `EscapeAllowed` (deck above deckMin, not a finale act, not the last node); the card leaves the deck. |
+| D15 | Generation hygiene in Dungeon Run games: every legacy generation pool goes through `OfflineCardPools.ForGame`, which drops unscripted ids (unfiltered games get the same array); ULD_616 and DRG_052 are scripted, so the Lackey pool holds 7. |
+| D16 | Adaptation criterion for server-side gaps: adapt only when the client text states every effect, the missing parts are triggers or chances, the choice is recorded with its reason, and real games pass; otherwise reject for good (DALA_740: rejected; ULDA_607: rejected, no source decks). |
+| D17 | Prevention is a pure predicate (`DungeonRun.ForbiddenPairs`, order-independent) plus gates in the candidate lists (rules, twists, modifiers, treasure drafts, tavern options); BuildPlan only logs a violation and never changes a plan. |
+
+### Values
+
+Nothing step 9 tunes has been measured. Every value is the plan's stated initial guess or one derived from the data, listed
+with its source in `handoff/phase9/values.md`: the draw (alpha 0.7, k 1, ledger chance 50, 1 TRL per act), the per-act
+rarity (rare 26 / 39 / 53 of 100), `upgradeEveryFloors` 4, the act and finale curves (v3's), twist chance 100, the tavern
+weights by act and Good Food's cap, Tekahn's turnCap 150, the restart caps, and 1 banked gold per skipped draft or reward.
+Calibration (plan stage 4: fair-player measurement of the slots above, then encounter `v4` tier and `healthOffset`
+overrides and curve changes, in the D4 order) is still to do; until then R0 is a target, not a property of the defaults.
 
 ## Implementation Status (2026-11-09)
 

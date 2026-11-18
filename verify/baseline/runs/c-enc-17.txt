@@ -1,0 +1,125 @@
+PASS A0 with no minion of its own Protective Bubble is not offered
+PASS A1 Protective Bubble costs (1) and is offered only on a minion of the boss without Divine Shield (never an enemy, never a shielded one)  (CS2_120)
+PASS A2 it gives that minion Divine Shield
+PASS A3 with every minion of the boss shielded it is not offered
+PASS B1 Lava Belch costs (1) and summons a 0/3 Molten Rock
+PASS B2 at the end of the boss's turn the Rock deals 1 damage to all characters: both heroes, every minion, itself too  (heroes 30>29 30>29 rock 1)
+PASS B3 at the end of the run player's turn it does nothing
+PASS B4 with a full board Lava Belch is not offered
+PASS C1 the run player starts with two Void Shifts in hand (the row's start block, after the mulligan); none in its deck  (CS2_182,CS2_182,CS2_182,DALA_BOSS_48t,DALA_BOSS_48t,CS2_182)
+PASS C2 To The Void costs (2) and can be aimed at any minion of either board, never the run player's shrine  (EX1_096,CS2_182,CS2_120)
+PASS C3 a banished minion leaves its board with no death and no Deathrattle (Loot Hoarder draws nothing) for its owner's set-aside zone, held by Voided  (zone SETASIDE hand 6>6)
+PASS C4 the Void holds both, in banishing order; a game clone and the boss's fair view carry it (the banished minions were public)  (EX1_096,CS2_182)
+PASS C4b To The Void is offered in the boss's fair view too (an enemy minion on the board): the option the boss's AI chooses from  (real True)
+PASS C5 the run player's shrine cannot be banished even by the rule (the set-aside store refuses it)
+PASS C6 the boss's Void Shift destroys every minion of both boards (the Crocolisk, the Wisp) and summons a new copy of each banished minion for the boss, in order  (EX1_096,CS2_182)
+PASS C7 the run player's shrine is destroyed by it and goes dormant (it stays on its board); the Void is empty afterwards
+PASS C8 the run player's own Void Shift (from the start block) summons the boss's banished Crocolisk for the run player and destroys the rest
+PASS C9 nine minions in the Void: Void Shift summons seven (a full board) and empties the Void  (9 > 7)
+PASS D1 Uncontrollable Energy is a passive power, started at match start
+PASS D2 the run player's spell sets nothing off
+PASS D3 after the boss casts a spell (Arcane Intellect), 1 damage to each enemy (the run player's hero and minions; its own untouched)  (30>29 yeti 1)
+PASS E1 Sand Breath costs (2) and is cast by rule (a passive power, never an option of the boss)
+PASS E2 at the start of the boss's turn it pays (2) and deals 2 damage to one enemy (the hero or a minion)  (casts 1 hero 30>28 yeti 0)
+PASS E3 sixteen turns: each one hit, the hero and the minion both picked (the game RNG)  (10/6)
+PASS E4 with one Mana Crystal at its turn start it is not cast  (casts 17)
+PASS F1 Tinker costs (2) and summons a 0/4 Elementium Squirrel Bomb
+PASS F2 at the start of the run player's turn the Bomb does nothing
+PASS F3 at the start of the boss's turn it is destroyed and deals 2 damage to all enemies (the hero, the Yeti); the boss's side is untouched  (30>28 yeti 2)
+PASS F4 Thorium Chicken is a 5/1
+PASS F5 the boss's own play sets the Chicken off for nothing
+PASS F6 after the run player plays a card, 3 damage to the run player's hero (two cards: 6)  (28>22)
+PASS F7 with a full board Tinker is not offered
+PASS G1 Hold the Gates! costs (2) and can be aimed at any minion
+PASS G2 it gives +2 Health and Taunt (Hold Fast!)
+PASS G3 a lone Kirin Tor Guard is a 1/4
+PASS G4 with three on the boss's board each has +1 Attack for each other friendly Guard (3); an enemy Guard counts none of them (1)  (3/3/3/1)
+PASS G5 one dies: the other two have 2
+PASS H0 with no minion of its own Boogie Woogie is not offered
+PASS H1 Boogie Woogie costs (3) and is aimed at a minion of the boss only
+PASS H2 when it dies a new copy is summoned for the boss (undamaged, without Boogie Beyond)
+PASS I1 Spell Lock is a passive power, started at match start
+PASS I2 the run player's Fireball (4) Overloads the run player for 4  (owed 4)
+PASS I3 Lightning Bolt (1, Overload: (1)) Overloads for 2 in all  (owed 2)
+PASS I4 a Fireball made cheaper by Sorcerer's Apprentice (3 in hand) Overloads for the Cost it was played for (3)  (owed 3)
+PASS I5 a spell played for (0) Overloads nothing (Moonfire: no Overload event, the Lesser Sapphire Spellstone in hand unchanged)  (owed 0)
+PASS I6 the Overload event is raised (Lesser Sapphire Spellstone, which upgrades when its player Overloads 3 crystals, is upgraded by Fireball's 4)  (CS2_182,CS2_182,CS2_182,CS2_182,LOOT_064t1)
+PASS I7 Fireball's (4) is still owed by the run player through the boss's turn  (owed 4)
+PASS I8 the boss's own spell Overloads the boss (Arcane Explosion: 2; both players, the text names none)  (owed 2)
+PASS I9 at the run player's turn start its owed Overload locks 4 crystals  (locked 4)
+PASS I10 the run player's Fireball (4, no printed Overload): its Tunnel Trogg gains 4 Attack; a silenced Trogg and the boss's Trogg gain none  (1>5 silenced 1>1 boss 1>1)
+PASS I11 Lightning Bolt (1, Overload: (1)): 2 crystals Overloaded, the Trogg gains 2 (1 from its own rule for the printed Overload, 1 from Spell Lock)  (owed 2 attack 5>7)
+PASS I12 the boss's Arcane Explosion (2): the boss's Trogg gains 2, the run player's none  (boss 2>4 player 7>7)
+PASS J1 Raise the Alarm costs (2) and is cast by rule (a passive power, never an option of the boss)
+PASS J2 at the start of the boss's turn it pays (2) and summons a 1/4 Kirin Tor Guard
+PASS J3 the next turn a second Guard: each has 2 Attack
+PASS J4 with a full board it is not cast and costs nothing
+PASS K1 the start block shuffled one Rival Accomplice (a vanilla 4/4) into the boss's deck
+PASS K2 Bribery costs (3) and is cast by rule at the start of the boss's turn: a minion of the run player's deck is summoned for the boss and Bribed (a public summon: it is known as it arrives)  (casts 1 deck 26>25 summons 1)
+PASS K3 when it dies, a new copy goes back to the run player's hand
+PASS K4 a run player's deck with no minion: the power is still cast (a public condition: the deck holds cards) and nothing is summoned  (board 0)
+PASS K5 in the boss's fair view the run player's deck is masked: Bribery pulls nothing there and never throws  (ok)
+PASS L1 Greed is Good is a passive power, started at match start
+PASS L2 the first card the run player plays this turn: a new copy in the boss's hand and a Gallywix's Coin in the run player's  (CS2_231)
+PASS L3 the second card of the turn buys nothing
+PASS L4 the boss's own plays buy nothing  (2>2)
+PASS L5 Gallywix's Coin buys nothing ("Won't trigger Gallywix")
+PASS L6 so the next card of the turn is the first: it is bought
+PASS L7 with the boss's hand full nothing is bought (no Coin either)
+PASS L8 the turn's purchase stays open: the next card is bought
+PASS M1 the run player starts with The Wire, a Murloc Tinyfin and The Other Wire on its board, in that order, right of its shrine; the wires are permanents  (TRLA_154,DALA_BOSS_58t,LOEA10_3,DALA_BOSS_58t2)
+PASS M2 while the Tinyfin stands between them the wires do nothing  (30>30)
+PASS M3 the wires touch: at the start of the boss's turn nothing (they are the run player's)
+PASS M4 at the start of the run player's turn they deal 5 damage to its hero, once for the touching pair  (30>25)
+PASS M5 a minion placed between them parts them again: no damage  (TRLA_154,DALA_BOSS_58t,CS2_182,DALA_BOSS_58t2)
+PASS M6 Blast Powder costs (2); the wires are never targets (permanents), the Yeti and the awake shrine are  (TRLA_154,CS2_182)
+PASS M7 a coated minion is not offered again
+PASS M8 when the coated minion takes damage it is destroyed
+PASS M9 Divine Shield takes the hit: no damage, not destroyed
+PASS M10 the next hit destroys it
+PASS M11 a coated run shrine that takes damage is destroyed and its dormant form takes its slot (as from any destroy effect)  (GRAVEYARD forms 1)
+PASS N0 Blackmail costs (2) and is cast by rule (a passive power, never an option of the boss)
+PASS N1 at the start of the boss's turn the run player's one card is replaced by an Extortion that holds it (in the run player's set-aside zone)  (DALA_BOSS_59t3 SETASIDE)
+PASS N2 the boss's fair view never learns the taken card: no Yeti of the run player's anywhere in it (the escrowed card is masked)  (Unknown )
+PASS N3 the run player plays the Extortion (2): the card comes back itself, its +1/+1 kept  (HAND)
+PASS N4 Lotus Bruiser gains +2/+2 whenever an Extortion is played (by either player)  (2/3 > 4/5)
+PASS N5 with the run player's hand empty Blackmail is not cast
+PASS N5b the Extortion takes the taken card's slot: the other cards keep their order and places (taken: slot 0)  (DALA_BOSS_59t3,CS2_008,EX1_008,CS2_029)
+PASS N6 in the boss's fair view Blackmail takes a masked card (the hand keeps its count) and never throws  (ok)
+PASS N7 Fruit Slasher (4/2) without Combo: 4 damage to the chosen enemy only
+PASS N8 with Combo: 4 to the chosen enemy and 1 to every other enemy (the hero and the Crocolisk), none to the boss's side  (a 4 b 1 hero 30>29)
+PASS O1 Infuriated Banker is a 1/1
+PASS O2 the run player's Coin: +1/+1  (2/2)
+PASS O3 the Gallywix's Coin the Coin bought: +1/+1 again
+PASS O4 the boss's Counterfeit Coin: +1/+1
+PASS O5 any other card: nothing
+PASS P1 the shipped data validates with the fourteen family 17 rows
+PASS P2 family 17 holds exactly these fourteen rows  (dala_46_ichoron,dala_47_lavanthor,dala_48_zuramat,dala_49_cyanigosa,dala_50_nozari,dala_51_millificent,dala_52_sinclari,dala_53_deryl,dala_54_zibb,dala_55_hannigan,dala_56_wagtoggle,dala_57_gallywix,dala_58_flark,dala_59_goya)
+PASS P3 dala_46_ichoron: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3 level 6)
+PASS P3 dala_47_lavanthor: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, clickable power, a 30-card substituted deck, the act curve's Health), flags []  (substituted health 30 flags  tier 3 level 6)
+PASS P3 dala_48_zuramat: a Dalaran Heist row of tier 4 (level 8) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags [start,bothPlayers]  (authentic health 30 flags start,bothPlayers tier 4 level 8)
+PASS P3 dala_49_cyanigosa: a Dalaran Heist row of tier 4 (level 8) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive tier 4 level 8)
+PASS P3 dala_50_nozari: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive tier 3 level 6)
+PASS P3 dala_51_millificent: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3 level 6)
+PASS P3 dala_52_sinclari: a Dalaran Heist row of tier 3 (level 6) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3 level 6)
+PASS P3 dala_53_deryl: a Dalaran Heist row of tier 2 (level 4) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2 level 4)
+PASS P3 dala_54_zibb: a Dalaran Heist row of tier 2 (level 4) whose plan is the row's (hero, passive power, a 30-card extended deck, the act curve's Health), flags [passive,bothPlayers]  (extended health 30 flags passive,bothPlayers tier 2 level 4)
+PASS P3 dala_55_hannigan: a Dalaran Heist row of tier 4 (level 8) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive tier 4 level 8)
+PASS P3 dala_56_wagtoggle: a Dalaran Heist row of tier 4 (level 8) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive,start,hiddenZone]  (authentic health 30 flags passive,start,hiddenZone tier 4 level 8)
+PASS P3 dala_57_gallywix: a Dalaran Heist row of tier 4 (level 8) whose plan is the row's (hero, passive power, a 30-card substituted deck, the act curve's Health), flags [passive]  (substituted health 30 flags passive tier 4 level 8)
+PASS P3 dala_58_flark: a Dalaran Heist row of tier 4 (level 8) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags [start,boardStart,position]  (authentic health 30 flags start,boardStart,position tier 4 level 8)
+PASS P3 dala_59_goya: a Dalaran Heist row of tier 4 (level 8) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive,hiddenZone]  (authentic health 30 flags passive,hiddenZone tier 4 level 8)
+PASS P4 every power, boss card and enchantment of the family is scripted by family 17 and keeps the client's text (14 powers, 12 cards, 7 enchantments)
+PASS P4b the fourteen boss heroes need no script (portraits)
+PASS P5 each has its own admission row: the fourteen powers a boss's only, the twelve boss cards a boss's and the run player's; none is ever generated
+PASS P6 the six admission families of the family: heist-d-board-power (6), heist-d-void-power (1), heist-d-passive (3), heist-d-auto-cast (2), heist-d-hidden-auto-cast (2), heist-d-boss-card (12)  (heist-d-auto-cast,heist-d-board-power,heist-d-boss-card,heist-d-hidden-auto-cast,heist-d-passive,heist-d-void-power)
+PASS P7 the three start blocks: two Void Shifts to the run player's hand (Zuramat), one Rival Accomplice into the boss's deck (Wagtoggle), The Wire, Murloc Tinyfin, The Other Wire on the run player's board (Flark); no other row has one
+PASS P8 the listed cards that are replaced or left out are only Xavius (not in the client data; filled from the Heroic list) and Fel Reaver (unscripted; the bank's Infuriated Banker), each recorded  (Xavius>-:unknown | GVG_016>DALA_502:unscripted)
+PASS P9 the boss cards of the decks: Zuramat 3 Void Shifts, Millificent 2 Thorium Chickens, Sinclari 4 Kirin Tor Guards, Goya 2 Lotus Bruisers and 1 Fruit Slasher, Gallywix 2 Infuriated Bankers
+PASS P10 a family 17 power asked for the run player is refused with its row's reason
+PASS P11 the validator checks a start board: a spell there is refused  (DALA_BOSS_48t: is SPELL, a start board needs minions (boss dala_58_flark))
+PASS P12 the tier pools: two rows in enc-t2, five in enc-t3, seven in enc-t4
+PASS P13 the extra cards each row names (the tokens, the enchantments, Extortion, Gallywix's Coin, the Kirin Tor Guard) are its 'cards'
+PASS P14 the escrow tag is the family's reserved private tag (32652), inside the encounter range NativeMatch never sends
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 123 passed, 0 failed

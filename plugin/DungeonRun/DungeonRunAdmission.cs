@@ -124,11 +124,13 @@ internal static partial class DungeonRunAdmission
     internal const string ShrineFormLift = "none: engine-made dormant forms and the boss-side test fixture; no player role, boss deck or generation pool offers them";
     internal const string RunTeammateLift = "none: a run teammate; no boss deck or generation pool offers it";
     internal const string TeammateDraftLift = "phase 7 (shrines/teammates): the T1/T2 teammate families script the teammate";
-    // Phase 6 decided these stay rejected (design section 8): restoring a turn needs a rewind or full re-sync of the client's
-    // history stream, and a restart after the hero dies must run before the defeat screen; escaping a fight needs an "escape"
-    // match outcome in the native end-game flow and an acts-v1 rule for a skipped fight node. Neither exists in phase 6.
-    internal const string TurnRestartLift = "phase 9 (economy): a run-owned turn or game restart that rebuilds the client history and the bot state (deferred there by phase 6)";
-    internal const string MatchExitLift = "phase 9 (economy): a run-owned match exit (an escape outcome and a skipped fight node) that edits the run deck (deferred there by phase 6)";
+    // Phase 6 deferred these to phase 9 (design section 8). Step 9 (lane X) decided them: a game restart (GILA_911 Rewind, the
+    // restart family) and the escape (ULDA_111 Hearthstone) are run-owned match ends (Actions.EncounterRules.S9.cs, plugin
+    // DungeonRun.Outcomes.cs), admitted below; a turn restart (GILA_900p Temporal Loop) is rejected for good: it needs a rewind
+    // or full re-sync of the client's history stream, which NativeMatch cannot do. The constant names are kept from phase 6.
+    internal const string TurnRestartLift = "none: a final rejection (step 9, a SoloStone adaptation): restarting a turn needs a rewind or a full re-sync of the client's history stream and a rebuilt bot state, and NativeMatch has no client history re-sync; Toki keeps the Mage basic power (CS2_034) as a stand-in (a later Windows lane may reopen it with Game.CloneExact and a NativeMatch re-sync)";
+    /// <summary>Step 9: ULDA_111's former lift, now landed (its row admits the run player); kept so the name still resolves.</summary>
+    internal const string MatchExitLift = "none: landed in step 9 (lane X): ULDA_111 Hearthstone's escape is a run-owned match end (Actions.EncounterRules.S9.cs, DungeonRun.Outcomes.cs)";
     internal const string OwnTurnSecretLift = "phase 6 (heroes/powers/treasures): ReplyModel keeps the replier's own Secret live on its owner's turn";
     internal const string TreasureScriptLift = "phase 6 (heroes/powers/treasures): script the treasure's start-of-game or started-in-deck rule";
     internal const string TeammateScriptLift = "phase 7 (shrines/teammates): script the teammate's start-of-game or started-in-deck rule";
@@ -146,7 +148,8 @@ internal static partial class DungeonRunAdmission
     internal const string AddRule = "add a rule to DungeonRunAdmission";
     /// <summary>A run treasure's boss and generation scopes: no boss deck and no generation pool holds a run treasure.</summary>
     internal const string RunTreasureLift = "none: a run treasure; no boss deck or generation pool offers it";
-    /// <summary>ULDA_115 "Gnomebliterator" (phase 6 F12 left it rejected): its Plague Lord damage is phase 8 finale state.</summary>
+    /// <summary>ULDA_115 "Gnomebliterator" (phase 6 F12 left it rejected): its Plague Lord damage is phase 8 finale state. Since
+    /// phase 8 family 24 admits it (run-treasure-plague-lord, DungeonRunAdmission.F24.cs) no row uses this lift.</summary>
     internal const string PlagueLordLift = "phase 8 (encounters/anomalies): the Plague Lord finale encounters and the run state that carries damage to a Plague Lord into its fight";
 
     /// <summary>True when a lift names no pending work (the rejected scope is simply not used).</summary>
@@ -322,46 +325,9 @@ internal static partial class DungeonRunAdmission
         // shrine upgrade a run reward, a teammate a run deck card. None is a boss card or a generation result. Each family
         // (S1/S2/S3 shrines, U upgrades, T1/T2 teammates, D companions) moves its ids to the admitted rows as it scripts them; the
         // D ids sit in their admission families' rows above (TRLA_809 deck-wide-change, the companions start-of-game-draw).
-        new AdmissionRule
-        {
-            NeverGenerated = true,
-            Family = "board-shrine", Admit = AdmitScope.Player, Lift = BossShrineLift,
-            Reason = "the run player's board shrine: placed at Start of Game by ShrineRules, sent dormant (the slot it left) when it dies "
-                + "or would be transformed, bounced or shuffled, revived at full Health after three owner's turns; the boss sees a public "
-                + "minion and its search reproduces dormancy and revival through the engine projection (c-shrine-core S1-S12); its "
-                + "effects are public engine resolution: Armor-equal Attack (TRLA_104), Dragon cost cuts (TRLA_170), aura-granted Overkill "
-                + "(TRLA_162, TRLA_171: OverkillRules), a random keyword on summoned Beasts (TRLA_163), and TRLA_110's Hunter Secrets put "
-                + "into play by the run player (a board-shrine run is a catalog run, whose player may generate Secrets; the boss's "
-                + "Secret prior holds every Hunter Secret that generation can yield, GeneratedSecretPool) (c-shrines-S1); Spell Damage "
-                + "from the spells in hand (TRLA_108), a free Hero Power refreshed by a kill (TRLA_128), a Frostfire per freeze the run "
-                + "player causes (TRLA_129), Divine Shield after surviving damage (TRLA_105), 5 damage to the boss's hero after the run "
-                + "player's hero takes damage (TRLA_137, recursion-guarded), a copy of a spell cast on a friendly minion cast on the "
-                + "shrine (TRLA_138: RecastRules), Deathrattles two extra times (TRLA_114), a random Priest spell after each spell "
-                + "(TRLA_146: the run's generation filter), any healing of the boss's characters damages them, the boss's own heals, Lifesteal and restore passives included (TRLA_147) (c-shrines-S2, c-p7fix); "
-                + "Stealth on the run player's other minions and a +2 Attack Deathrattle when it goes dormant (TRLA_106), each spell "
-                + "cast again on the same target (TRLA_187: RecastRules, never recursive), the Overload amount as Attack for the run "
-                + "player's minions (TRLA_109), Battlecries two extra times (TRLA_154: EXTRA_BATTLECRIES_ADDITIONAL, BattlecryRules), "
-                + "spells (2) cheaper (TRLA_155), spells paid with Health (TRLA_113: SPELLS_COST_HEALTH), a random Demon per discard "
-                + "through the run's generation filter (TRLA_178), damage to the run player's hero on their own turn dealt to the boss's "
-                + "hero instead (TRLA_179); the boss sees each result as a public board, hand-count or Health change (c-shrines-S3)",
-            // Phase 8 moves a shrine to a boss-shrine row (DungeonRunAdmission.F<NN>.cs) as its boss-side test lands: TRLA_104,
-            // TRLA_170 and TRLA_171 (the Warrior shrines, family 01); the others follow in family 13.
-            Ids = new[] { "TRLA_105", "TRLA_106", "TRLA_108", "TRLA_109", "TRLA_110", "TRLA_112", "TRLA_113", "TRLA_114", "TRLA_115",
-                "TRLA_116", "TRLA_128", "TRLA_129", "TRLA_137", "TRLA_138", "TRLA_146", "TRLA_147", "TRLA_154", "TRLA_155", "TRLA_162", "TRLA_163",
-                "TRLA_178", "TRLA_179", "TRLA_187" },
-        },
-        new AdmissionRule
-        {
-            NeverGenerated = true,
-            Family = "hidden-steal", Admit = AdmitScope.Player, Lift = BossShrineLift,
-            Reason = "takes a hidden card from the opponent's deck: TRLA_186 Treasure from Below, the run player's board shrine, steals a "
-                + "random card of the boss's deck at the start of the run player's turn (it costs (2) less). Only the run player holds "
-                + "it (never a boss card or a generation result). The boss learns only what is public: a card left its deck (its "
-                + "own-deck ledger, OwnDeckLedger, drops an unknown slot by the deck count, never the stolen definition) and the run "
-                + "player's hand grew by a card its fair view masks like every other card there; the search never sees the stolen "
-                + "identity (c-shrines-S3 G9-G15)",
-            Ids = new[] { "TRLA_186" },
-        },
+        // Phase 8 moved every board shrine to its boss-shrine rows (DungeonRunAdmission.F01.cs: the three Warrior shrines; F13.cs:
+        // the other 24, with TRLA_186 and TRLA_129s), which emptied the phase-7 rows board-shrine, hidden-steal (TRLA_186) and
+        // shrine-token.
         new AdmissionRule
         {
             NeverGenerated = true,
@@ -374,15 +340,6 @@ internal static partial class DungeonRunAdmission
                 + "random card of the boss's hand to the run player's by the hand-to-hand theft rule of Gloves of Mugging (LOOTA_834: "
                 + "the hand-transfer facts, so the boss knows what left its own hand; c-teammates-T2 O3-O8)",
             Ids = new[] { "TRLA_152", "TRLA_190" },
-        },
-        new AdmissionRule
-        {
-            NeverGenerated = true,
-            Family = "shrine-token", Admit = AdmitScope.Player, Lift = BossShrineLift,
-            Reason = "a card a run board shrine makes for its owner during the game (TRLA_129s Frostfire: TRLA_129 Jan'alai's Progeny puts "
-                + "one into the run player's hand per freeze they cause); a public 0-cost 'Deal 1 damage' spell in the run player's hand, "
-                + "never a boss card or a generation result (c-shrines-S2)",
-            Ids = new[] { "TRLA_129s" },
         },
         new AdmissionRule
         {
@@ -450,8 +407,13 @@ internal static partial class DungeonRunAdmission
         },
         new AdmissionRule
         {
-            Family = "start-of-game-draw", Admit = AdmitScope.None, Lift = MatchExitLift,
-            Reason = "ends the fight and edits the run deck",
+            NeverGenerated = true,
+            Family = "start-of-game-draw", Admit = AdmitScope.Player, Lift = RunTreasureLift,
+            Reason = "treasure: only the player can hold it (a tuned run's, run-v1.json runs v4); drawn at the start of the game "
+                + "(StartOfGameRules, a self-drawing source never dealt in an opening hand), so it is public to both players; playable "
+                + "only while the match allows an escape (RunMatchPlan.EscapeAllowed: the deck above deckMin, not a finale act, not the "
+                + "last node), and its cast ends the fight as an escape (Actions.EncounterRules.EscapeToTavern: the boss leaves the table "
+                + "alive, the run layer records no kill or major credit, removes the card and opens an escape tavern; step 9 D14)",
             Ids = new[] { "ULDA_111" },
         },
         new AdmissionRule
@@ -463,8 +425,19 @@ internal static partial class DungeonRunAdmission
         new AdmissionRule
         {
             Family = "turn-rewind", Admit = AdmitScope.None, Lift = TurnRestartLift,
-            Reason = "restarts the turn or the game, which rebuilds the controllers; bot state and plan cache must restart",
-            Ids = new[] { "GILA_900p", "GILA_911" },
+            Reason = "restarts the turn, which rebuilds the controllers mid-game; bot state and plan cache must restart",
+            Ids = new[] { "GILA_900p" },
+        },
+        new AdmissionRule
+        {
+            NeverGenerated = true,
+            Family = "game-restart", Admit = AdmitScope.Player, Lift = RunTreasureLift,
+            Reason = "treasure: only the player can hold it (a tuned run's, run-v1.json runs v4); a passive with no match effect of its "
+                + "own: when the run player's hero dies (not a concession, after the relay), a match that lists it (RunMatchPlan.Restarts, "
+                + "once per floor) marks the game a restart (Actions.EncounterRules.ResolveRewind) and the run layer restages the floor "
+                + "under a new match seed from the fight's start, removing the treasure (RunMatchResult.ConsumedTreasures; step 9 D13); "
+                + "the game itself ends as the loss it is, so the boss AI plays it as any other",
+            Ids = new[] { "GILA_911" },
         },
 
         // ---------------------------------------------------------------- fixed boss decks (current run data)
@@ -509,7 +482,8 @@ internal static partial class DungeonRunAdmission
             Reason = "treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F2 T4-T33)",
             // Phase 8 family 09: the fourteen of these that King Togwaggle's Magic Candle finds (and A. F. Kay's deck lists) are
             // in DungeonRunAdmission.F09.cs (run-treasure-boss-find: the same legacy verdict, a boss too on catalog runs).
-            Ids = new[] { "LOOTA_811", "LOOTA_814", "LOOTA_837", "LOOTA_840", "LOOTA_841", "LOOTA_842", "LOOTA_842a" },
+            // Phase 8 family 16: the five Ol' Toomba shuffles into his deck are in DungeonRunAdmission.F16.cs (run-treasure-boss-shuffle).
+            Ids = new[] { "LOOTA_814", "LOOTA_840" },
         },
         new AdmissionRule
         {
@@ -573,7 +547,10 @@ internal static partial class DungeonRunAdmission
         {
             Family = "run-treasure", Admit = AdmitScope.Player, Lift = RunTreasureLift,
             Reason = "treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F3 T5-T22)",
-            Ids = new[] { "GILA_500p2t", "GILA_500t", "GILA_500t2", "GILA_500t3", "GILA_501", "GILA_503", "GILA_507", "GILA_508", "GILA_510",
+            // Phase 8 family 15: GILA_500p2t A Small Rock left this row for run-treasure-boss-find in DungeonRunAdmission.F15.cs
+            // (the same legacy verdict; on catalog runs Mama Diggs's Excavate finds it for a boss). Phase 8 family 23: GILA_503
+            // Hunter's Insight left it for run-treasure-nemesis-deck in DungeonRunAdmission.F23.cs (Lord Godfrey's deck lists it).
+            Ids = new[] { "GILA_500t", "GILA_500t2", "GILA_500t3", "GILA_501", "GILA_507", "GILA_508", "GILA_510",
                 "GILA_604", "GILA_608", "GILA_610", "GILA_611", "GILA_612" },
         },
         new AdmissionRule
@@ -599,7 +576,7 @@ internal static partial class DungeonRunAdmission
         {
             Family = "run-treasure", Admit = AdmitScope.Player, Lift = RunTreasureLift,
             Reason = "treasure: only the player can hold it; public effects the engine resolves, so the boss's legal moves and search see the result (c-treasures-F4 T4-T18)",
-            Ids = new[] { "GILA_400t", "GILA_401", "GILA_403", "GILA_410", "GILA_412", "GILA_413", "GILA_904", "GILA_907", "GILA_910" },
+            Ids = new[] { "GILA_400t", "GILA_401", "GILA_403", "GILA_410", "GILA_412", "GILA_413", "GILA_904", "GILA_910" },
         },
         new AdmissionRule
         {
@@ -775,7 +752,8 @@ internal static partial class DungeonRunAdmission
         // The Tombs active treasures offered to an explorer's act run (run-v1.json: the explorers' sixteen starters, pool Tombs),
         // their Twinspell copies and their tokens are the run player's: no boss deck lists one and the boss's generation never
         // yields one. ULDA_044 Blade of the Burning Sun is the deck-wide-change row and ULDA_503 Advanced Targeting Monocle the
-        // from-own-deck row above. ULDA_115 stays rejected (phase 8). Each row names its regression test (c-treasures-F12).
+        // from-own-deck row above. ULDA_115 is admitted by phase 8 family 24 (DungeonRunAdmission.F24.cs). Each row names its
+        // regression test (c-treasures-F12).
         new AdmissionRule
         {
             Family = "run-treasure", Admit = AdmitScope.Player, Lift = RunTreasureLift,
@@ -824,15 +802,6 @@ internal static partial class DungeonRunAdmission
                 + "deals half its hero's Health; every part is public, so the boss's own-deck sample and search see the result "
                 + "(c-treasures-F12 T19)",
             Ids = new[] { "ULDA_118" },
-        },
-        new AdmissionRule
-        {
-            Family = "finale-state", Admit = AdmitScope.None, Lift = PlagueLordLift,
-            Reason = "its second half damages the Plague Lord of the act finale whenever the run fights it; the run has no Plague Lord "
-                + "finale and no state that carries damage to it until phase 8, and a Gnomebliterator that only dealt its first half "
-                + "would misstate the card (c-treasures-F12 T28)",
-            Requires = "the phase 8 Plague Lord finale encounters, and run state that carries damage dealt to a Plague Lord into its fight",
-            Ids = new[] { DungeonRunContent.Gnomebliterator },
         },
 
         // ---------------------------------------------------------------- Dalaran Heist active treasures (phase 6 F7)
@@ -1123,6 +1092,7 @@ internal static partial class DungeonRunAdmission
         var boss = new SortedSet<string>(StringComparer.Ordinal);
         var ids = new SortedSet<string>(Cards.All.Where(c => c?.Id != null).Select(c => c.Id), StringComparer.Ordinal);
         ids.UnionWith(ById.Keys);
+        var unscripted = new HashSet<string>(UnscriptedGenerated(), StringComparer.Ordinal);
         foreach (string id in ids)
         {
             EngineCard card;
@@ -1131,6 +1101,9 @@ internal static partial class DungeonRunAdmission
             // A catalog run's player may generate Secrets, and the engine's Secret generation does not check Implemented
             // (Pressure Plate ULD_152 was generated for a Hunter): an unscripted Secret is never generated, by either side.
             if (catalogRun && card.IsSecret && !card.Implemented) { all.Add(id); continue; }
+            // Step 9 (generation hygiene): an engine generation pool's card that does nothing its text says is never generated,
+            // by either side, in either kind of run (UnscriptedGenerated).
+            if (unscripted.Contains(id)) { all.Add(id); continue; }
             // A catalog lift admits scripted cards only: an unscripted card (Hunter's Pack ULD_429) keeps its legacy verdict, so
             // a catalog run never generates one the legacy lists keep out (GeneratedRejects(true) holds every unscripted id of
             // GeneratedRejects(false)).
@@ -1146,6 +1119,83 @@ internal static partial class DungeonRunAdmission
         }
         return (all.ToArray(), boss.ToArray());
     }
+
+    // ------------------------------------------------------------------ step 9: generation hygiene (plan D15)
+
+    /// <summary>
+    /// Cards of the engine's generation pools that are a card's own fixed choice rather than a random result, never listed
+    /// by <see cref="UnscriptedGenerated"/>:
+    /// - Kazakus's potion bases (CFM_621t, CFM_621t14, CFM_621t15): KazakusPower writes the potion's effect from the two
+    ///   picked ingredients, so the engine's Implemented flag is off for a card that works.
+    /// - Kobold Hermit's four basic Totems (LOOT_062, the "Discover/BASIC_TOTEM" pool: AT_132_SHAMANa-d): the whole pool is
+    ///   the card's choice, and filtering it would leave one of the four. Known engine gap, recorded for a follow-up: the
+    ///   AT_132_SHAMAN copies carry neither the Totem race nor their totems' Taunt, Spell Damage or healing (CS2_050,
+    ///   CS2_051, CS2_052, NEW1_009 do); mapping the choice to the real totems changes every game with the card.
+    /// </summary>
+    internal static readonly IReadOnlyList<string> GenerationMechanismIds = new[]
+    {
+        "AT_132_SHAMANa", "AT_132_SHAMANb", "AT_132_SHAMANc", "AT_132_SHAMANd", "CFM_621t", "CFM_621t14", "CFM_621t15",
+    };
+
+    /// <summary>
+    /// Keywords the engine plays from the card's own tags with no script: a card whose whole text is these (Murmy's
+    /// "Reborn", Gyrocopter's "Rush Windfury", Wrath of Air Totem's "Spell Damage +1") works unscripted, so it is not listed
+    /// when its card carries every tag its text names. Lower-case text, markup removed.
+    /// </summary>
+    private static readonly (string Text, GameTag Tag)[] TagKeywords =
+    {
+        ("divine shield", GameTag.DIVINE_SHIELD), ("spell damage +", GameTag.SPELLPOWER), ("taunt", GameTag.TAUNT),
+        ("charge", GameTag.CHARGE), ("rush", GameTag.RUSH), ("windfury", GameTag.WINDFURY), ("stealth", GameTag.STEALTH),
+        ("poisonous", GameTag.POISONOUS), ("lifesteal", GameTag.LIFESTEAL), ("reborn", GameTag.REBORN),
+    };
+
+    /// <summary>
+    /// The card does nothing more than its tags: no text, or only <see cref="TagKeywords"/> that its card carries (a Spell
+    /// Damage keyword with its number). Never true for a hero card (a hero needs its armor, power and Battlecry scripted).
+    /// </summary>
+    internal static bool PlaysFromTags(EngineCard card)
+    {
+        if (card == null || card.Type == CardType.HERO) return false;
+        string text = System.Text.RegularExpressions.Regex.Replace((card.Text ?? "").ToLowerInvariant(), "<[^>]*>|\\[x\\]", " ")
+            .Replace('_', ' ').Replace('&', ' ');
+        foreach (var (word, tag) in TagKeywords)
+        {
+            if (!text.Contains(word)) continue;
+            if (card[tag] <= 0) return false;
+            text = word.EndsWith("+", StringComparison.Ordinal)
+                ? System.Text.RegularExpressions.Regex.Replace(text, System.Text.RegularExpressions.Regex.Escape(word) + "\\d+", " ")
+                : text.Replace(word, " ");
+        }
+        return System.Text.RegularExpressions.Regex.Replace(text, "[\\s.,]+|\\band\\b", "").Length == 0;
+    }
+
+    /// <summary>
+    /// Step 9 (generation hygiene, plan D15): the generated unscripted list. Every card the engine's generation pools can
+    /// yield (<see cref="OfflineCardPools.LegacyGeneratedIds"/>: the frozen legacy pools behind Discover, Replace, Adapt,
+    /// the Lackeys, Kazakus, Build-A-Beast, the Un'Goro pack, past Legendaries and the Cards.cs format, class and cost
+    /// pools) that does not do what its text says: no engine script (Implemented off), not a card that
+    /// <see cref="PlaysFromTags"/>, and not one of <see cref="GenerationMechanismIds"/>. Computed from the engine's card data,
+    /// not kept by hand, so a card scripted later (Titanic and Draconic Lackey, ULD_616 and DRG_052, in step 9) leaves it by
+    /// itself. The explicit admission table seeds the run's exclusions (<see cref="GeneratedRejects"/>); this list is added
+    /// to them for both kinds of run, so a run match never generates one, whoever generates (the engine filters every pool
+    /// read with Game.BlocksGenerated, OfflineCardPools.ForGame). The modern offline pools (OfflinePoolPolicy) hold scripted
+    /// cards only, and Death Knight and Demon Hunter pools are built from scripted cards. Ordinal order.
+    /// </summary>
+    internal static IReadOnlyList<string> UnscriptedGenerated() => UnscriptedGeneratedList.Value;
+
+    private static readonly Lazy<string[]> UnscriptedGeneratedList = new Lazy<string[]>(() =>
+    {
+        var mechanism = new HashSet<string>(GenerationMechanismIds, StringComparer.Ordinal);
+        var result = new List<string>();
+        foreach (string id in OfflineCardPools.LegacyGeneratedIds())
+        {
+            EngineCard card;
+            try { card = Cards.FromId(id); } catch { card = null; }
+            if (card == null || card.Implemented || mechanism.Contains(id) || PlaysFromTags(card)) continue;
+            result.Add(id);
+        }
+        return result.ToArray();
+    });
 
     /// <summary>
     /// Cards generation never yields in a run match, whoever generates (RunMatchPlan.ExcludedGenerated): every card of the

@@ -1,0 +1,107 @@
+PASS A1 From the Swamp is a passive power started at match start (never an option of the boss)
+PASS A1b the boss is offered no hero power
+PASS A2 a minion of the run player dies: one 1/3 Bloated Zombie rises for the boss  (1/3)
+PASS A3 a minion of the boss dies: nothing rises
+PASS A4 the Bloated Zombie's Deathrattle deals 1 damage to all characters (both heroes, every minion)  (boss 1 player 1 yeti 1 croc 1)
+PASS A5 with the boss's board full nothing rises
+PASS A6 a run shrine of the player that dies (and goes dormant) is a death: a Zombie rises
+PASS B1 Blood Red Apple is a passive power started at match start: both controllers have the SPELLS_COST_HEALTH aura
+PASS B2 the run player's spells cost Health too: Frostbolt with no Mana takes 2 Health and no Mana  (used 0 health 2)
+PASS B3 the boss's spell costs Health instead of Mana: Fireball takes 4 Health and no Mana  (used 0 health 4)
+PASS B4 the boss's minions still cost Mana  (used 4)
+PASS B5 with no Mana the boss still casts Arcane Intellect for 3 Health  (3)
+PASS C1 Together Forever is a passive power started at match start
+PASS C2 a friendly minion dies: a fresh copy (no buffs) is shuffled into the boss's deck  (deck 1)
+PASS C3 no deck fact is recorded; the shuffle presents the copy (a SHOW of the new deck card)
+PASS C4 the boss's own-deck ledger samples the copy: exactly its deck (29 Yetis and the River Crocolisk)  (CS2_182x25,CS2_120x1)
+PASS C5 a minion of the run player dies: nothing is shuffled, no fact
+PASS C6 two friendly minions die together: one copy of each
+PASS C6b the boss's own-deck ledger samples both copies too (each presented by its shuffle)  (CS2_182x25,CS2_120x1,CS2_231x1,CS2_172x1)
+PASS C7 with the deck full nothing is shuffled
+PASS D1 Poisoned Drink is a passive power started at match start; the run player's turn-1 draw cost it 1 Health, the opening hand and the mulligan nothing  (player 1 boss 0)
+PASS D2 the boss's own turn draw costs the boss 1 Health
+PASS D3 a spell that draws two costs its caster 2  (3)
+PASS D4 the run player's next draw: 1 more  (2)
+PASS D5 a card burned by a full hand was drawn: 1 damage  (1)
+PASS D6 an empty deck: Fatigue only (1), Poisoned Drink adds nothing  (1)
+PASS E1 Monstrous Aura is a passive power started at match start
+PASS E2 the boss's minions have +1/+1 (Empowered), the run player's not  (5/6)
+PASS E3 a minion that arrives later has it too
+PASS F1 Frumiousity is a passive power started at match start: one EXTRA_BATTLECRIES_BASE on each player
+PASS F2 the run player's Battlecry triggers twice (Novice Engineer draws two)  (2)
+PASS F3 the boss's Battlecry triggers twice (Murloc Tidehunter summons two Scouts)  (2)
+PASS G1 Echoes of the Witchwood is a passive power started at match start
+PASS G2 every spell in either hand has Echo; a minion has none
+PASS G3 a spell played from hand returns an Echo copy to its owner's hand (ghostly), which has Echo too and costs the printed (2)
+PASS G4 the copy is discarded when the turn ends
+PASS G5 the boss's 0-Cost Moonfire is played for free
+PASS G6 its Echo copy costs (1), never less (the client's Echo rule, EncounterRules.EchoCopyFloor)  (cost 1)
+PASS G7 The Coin, then its copies at (1) each: the chain ends when the boss has received ten Echo copies this turn (EncounterRules.EchoCopiesPerTurn: its Moonfire's and nine Coins'), the last copy has no Echo  (plays 10 copies 10)
+PASS G8 at the limit the boss's spells have no Echo; the run player's still do
+PASS G9 the next turn: Echo again for the boss's hand, the copies of the last turn are gone  (CS2_182,CS2_182,CS2_182,CS2_182,GAME_005+e,CS2_182,CS2_029+e copies 0)
+PASS G10 outside The Whisperer's fight a spell has no Echo, but an Echo copy of a (0)-Cost spell still costs (1) (EncounterRules.EchoCopyFloor holds in every game)  (cost 1)
+PASS H1 Tangled Wrath is a passive power started at match start; its printed (2) is never asked
+PASS H2 the run player casts a spell: the boss draws a spell from its deck (one of its three Fireballs)  (CS2_029)
+PASS H3 a minion played is no spell: nothing
+PASS H4 the boss's own spell: nothing
+PASS H5 no spell left in the boss's deck: nothing is drawn
+PASS I1 Hypnotize costs (2) and is a clickable power with no target
+PASS I2 each player shuffles its hand into its deck and draws as many: hand and deck sizes are kept  (boss 8/8 player 5/5)
+PASS I3 the cards went into the decks as plain cards (a buffed card loses its buff), and the new hands come from the decks  (raptor CS2_172 DECK buff False zones DECK,DECK,HAND,DECK,DECK,HAND,DECK,DECK,DECK,DECK,DECK,DECK,DECK)
+PASS I4 a belief reset of hand and deck is recorded for each player, after the draws (the new hand and the whole deck)
+PASS I5 no deck fact is recorded; the boss's own-deck ledger still samples its deck exactly (its own hand cards went back, the redraw is its own)  (ledger CS2_029x1,CS2_172x1,CS2_182x22,GAME_005x1 deck CS2_029x1,CS2_172x1,CS2_182x22,GAME_005x1)
+PASS I6 the boss's fair view knew the sapped Yeti in the run player's hand before; after Hypnotize it does not, wherever the Yeti is now  (before True after False)
+PASS I7 with both hands empty it is not offered
+PASS I8 one card in the run player's hand is enough
+PASS I9 a run player with an empty deck draws its own shuffled cards back (no Fatigue)
+PASS I10 copies of the run player's hidden deck in the boss's deck (Archbishop Benedictus) stay unknown to the boss's own-deck ledger after Hypnotize  (in deck 3 known before 0,0,0 after 0,0,0)
+PASS I11 an Echo copy shuffled back by Hypnotize and drawn again is a plain card: it is still in the boss's hand after the turn ends  (redrawn True zone HAND)
+PASS J1 Starving is a passive power started at match start
+PASS J2 a friendly Beast dies: the boss draws a card  (1)
+PASS J3 a friendly non-Beast or an enemy Beast: nothing
+PASS J4 a minion of every type is a Beast
+PASS K1 ... costs (1); any minion, never a hero  (EX1_008,CS2_120)
+PASS K2 it silences the minion: Divine Shield gone
+PASS K3 a buffed friendly minion loses its buff
+PASS L1 Cannibalism is a passive power started at match start
+PASS L2 a minion dies: the two minions next to it gain +1 Attack (Mmm, so tasty!), no one else  (1 3 4 1)
+PASS L3 at the edge: its one neighbour
+PASS L4 the run player's board too
+PASS L5 minions that die together: a surviving neighbour gains once per dying neighbour, a dying one nothing  (1)
+PASS L6 b x1 x2 x3 x4, x1 and x3 die together: b +1 (x1), x2 +2 (x1 and x3), x4 +1 (x3); the positions are those before the deaths  (b+1 x2 3 x4 2)
+PASS L7 a run shrine that dies is a death: its neighbour gains +1 Attack; its dormant form takes its slot  (3 2)
+PASS L8 a dormant shrine next to a minion that dies gains nothing; the other neighbour does
+PASS M1 Poison Flask costs (2); any minion, never a hero
+PASS M2 2 damage; the minion survives: it gains Poisonous (Dripping Poison)
+PASS M3 Divine Shield takes the hit: the minion survives and gains Poisonous
+PASS M4 a minion the hit kills gains nothing  (dead True poison False/False used 2)
+PASS M5 Infected Quillflinger is the client's 3/7 for (4)
+PASS M6 it takes damage with no enemy minion: nothing (never the hero)
+PASS M7 it takes damage: 1 damage to one random enemy minion
+PASS M8 the pick is random (both enemy minions are hit over several hits); the hit that kills it still triggers (six hits with an enemy minion on the board)  (e1 4 e2 2)
+PASS M9 in the run player's hands (taken from a boss) it hits the boss's minion
+PASS P1 the shipped data validates with the thirteen family 12 rows
+PASS P2 family 12 holds exactly these thirteen rows  (gila_24_groddo,gila_30_gretta,gila_39_forlorn_lovers,gila_45_sthara,gila_46_vitus,gila_47_shudderwock,gila_50_whisperer,gila_63_sephira,gila_64_winslow,gila_65_gobbles,gila_66_mute,gila_67_hannigul,gila_68_rancel)
+PASS P3 gila_24_groddo: a Monster Hunt row of tier 2 (printed Health 30) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive tier 2)
+PASS P3 gila_30_gretta: a Monster Hunt row of tier 2 (printed Health 30) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive,bothPlayers]  (authentic health 30 flags passive,bothPlayers tier 2)
+PASS P3 gila_39_forlorn_lovers: a Monster Hunt row of tier 4 (printed Health 70) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive tier 4)
+PASS P3 gila_45_sthara: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, passive power, a 30-card extended deck, the act curve's Health), flags [passive,bothPlayers]  (extended health 30 flags passive,bothPlayers tier 3)
+PASS P3 gila_46_vitus: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive]  (authentic health 30 flags passive tier 3)
+PASS P3 gila_47_shudderwock: a Monster Hunt row of tier 4 (printed Health 50) whose plan is the row's (hero, passive power, a 30-card substituted deck, the act curve's Health), flags [passive,bothPlayers,doubleBattlecry]  (substituted health 30 flags passive,bothPlayers,doubleBattlecry tier 4)
+PASS P3 gila_50_whisperer: a Monster Hunt row of tier 2 (printed Health 25) whose plan is the row's (hero, passive power, a 30-card substituted deck, the act curve's Health), flags [passive,bothPlayers,recast]  (substituted health 30 flags passive,bothPlayers,recast tier 2)
+PASS P3 gila_63_sephira: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, passive power, a 30-card substituted deck, the act curve's Health), flags [passive]  (substituted health 30 flags passive tier 3)
+PASS P3 gila_64_winslow: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags [bothPlayers,hiddenZone]  (authentic health 30 flags bothPlayers,hiddenZone tier 3)
+PASS P3 gila_65_gobbles: a Monster Hunt row of tier 1 (printed Health 10) whose plan is the row's (hero, passive power, a 30-card extended deck, the act curve's Health), flags [passive]  (extended health 30 flags passive tier 1)
+PASS P3 gila_66_mute: a Monster Hunt row of tier 2 (printed Health 25) whose plan is the row's (hero, clickable power, a 30-card extended deck, the act curve's Health), flags []  (extended health 30 flags  tier 2)
+PASS P3 gila_67_hannigul: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, passive power, a 30-card authentic deck, the act curve's Health), flags [passive,bothPlayers,position]  (authentic health 30 flags passive,bothPlayers,position tier 3)
+PASS P3 gila_68_rancel: a Monster Hunt row of tier 3 (printed Health 40) whose plan is the row's (hero, clickable power, a 30-card authentic deck, the act curve's Health), flags []  (authentic health 30 flags  tier 3)
+PASS P4 every power, boss card and enchantment of the family is scripted by family 12 and keeps the client's text (13 powers, 2 cards, 3 enchantments)
+PASS P5 each has its own admission row: the thirteen powers a boss's only, the two boss cards a boss's and (taken from a boss) the run player's; none is ever generated
+PASS P6 the six admission families of the family: boss-passive-public (4), boss-passive-both (5), boss-deck-rewrite (1), boss-hidden-shuffle (1), boss-minion-power (2), boss-hunt-minion (2)  (boss-deck-rewrite,boss-hidden-shuffle,boss-hunt-minion,boss-minion-power,boss-passive-both,boss-passive-public)
+PASS P7 the listed cards that are replaced or left out are only cards the engine does not script (or the 31st card of Shudderwock's list), each recorded; Witchwood's Touch is kept since wave 6  ( | EX1_154>LOOT_051:unscripted,EX1_160>CFM_614:unscripted | EX1_154>LOOT_051:unscripted | UNG_088>-:over-size)
+PASS P8 the boss cards are where the wiki lists them: three Infected Quillflingers in Rancel's deck; the Bloated Zombie only rises (in no deck)
+PASS P9 a family 12 power asked for the run player is refused with its row's reason
+PASS P10 the tier pools: one row in enc-t1, four in enc-t2, six in enc-t3, two in enc-t4
+PASS P11 the flags keep the anomalies that would double a rule away: Wild Magic (recast) from The Whisperer, Battlecries twice (doubleBattlecry) from Shudderwock
+SearchTelemetry swallowed leaf exceptions 0
+RESULT 105 passed, 0 failed

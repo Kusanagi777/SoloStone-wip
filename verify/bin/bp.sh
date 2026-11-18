@@ -2,8 +2,9 @@
 # verify/bin/bp.sh: the bosspilot stage (wave-3 p8w3/bp.sh). One mode per call; an encounter mode runs twice and is
 # compared without the timing column. Results: verify/.out/bp/bp-<name>-a.txt / -b.txt (logs in verify/.out/bp/logs).
 # Each result is also compared with its record, expected 0 differing lines, the first that exists of:
-#   verify/baseline/bp/bp-<name>-a.txt       "vs wave-3 baseline"   (the wave-3 main tree, p8w3)
-#   verify/baseline/bp-port/bp-<name>-a.txt  "vs port record"       (modes wave 3 did not rerun, recorded by the port on
+#   verify/baseline/bp/bp-<name>-a.txt       "vs wave-6 baseline"   (every mode, the wave-6 tree on Linux, 2026-11-16/17;
+#                                                                    the older records it replaced are in git history)
+#   verify/baseline/bp-port/bp-<name>-a.txt  "vs port record"       (history: modes wave 3 did not rerun, recorded by the port on
 #                                                                    the wave-3 tree, 2026-11-13; README.md section 4)
 #   verify/baseline/bp-w1/bp-<name>-a.txt    "vs wave-1 record"     (the seven shrine modes, fixture, catalog)
 #   verify/baseline/bp-w2/bp-<name>-a.txt    "vs wave-2 reference"  (history only; every wave-2 mode has a port record)
@@ -22,6 +23,28 @@
 #                        bp.sh enc09-auto|enc09-finals|enc09-rooms|enc09-cards   (c-bosspilot-enc09)
 #   family 10 modes:     bp.sh enc10|enc10-nab|enc10-seeds|enc10-hagatha        (twice per call)
 #                        bp.sh enc10a|enc10b|enc10-cards|enc10-shrine <k>         (one run per call, k = 1 or 2; then `bp.sh same <mode>`)
+#   family 11 modes:     bp.sh enc11-pete                                         (twice per call)
+#                        bp.sh enc11a|enc11b|enc11-cards|enc11-shrine <k>         (one run per call, k = 1 or 2; then `bp.sh same <mode>`)
+#   family 12 modes:     bp.sh enc12|enc12-seeds|enc12-hidden                     (twice per call)
+#   family 13 modes:     bp.sh enc13a|enc13b|enc13-seeds   (the nine Rumble Run champions, every shrine variant; twice per call)
+#   family 14 modes:     bp.sh enc14|enc14-seeds|enc14-flight|enc14-cards           (twice per call; enc14-cards: the fixture rows play every boss card)
+#   family 15 modes:     bp.sh enc15|enc15-seeds|enc15-rat|enc15-toys            (twice per call)
+#   family 16 modes:     bp.sh enc16|enc16-seeds|enc16-carousel|enc16-cards        (twice per call; enc16-cards: the fixture rows play every boss card and treasure)
+#   family 17 modes:     bp.sh enc17|enc17-seeds|enc17-void|enc17-cards <k>  (c-bosspilot-enc09; one run per call, k = 1 or 2; then `bp.sh same <mode>`,
+#                        and for enc17-cards `bp.sh enc17-check`: the fixture rows played every boss card)
+#   family 18 modes:     bp.sh enc18a|enc18b|enc18-finale <k>                     (one run per call, k = 1 or 2; then `bp.sh same <mode>`;
+#                                                                                  enc18-finale on the fixture schedule with the Heist finale enabled)
+#   family 19 modes:     bp.sh enc19a|enc19b|enc19-seeds-a|enc19-seeds-b         (twice per call; a = ULDA_BOSS_01-09, b = 10-18)
+#   family 20 modes:     bp.sh enc20a|enc20b|enc20-seeds-a|enc20-seeds-b         (twice per call; a = ULDA_BOSS_19-27, b = 28-36)
+#   family 21 modes:     bp.sh enc21a|enc21b|enc21-seeds-a|enc21-seeds-b         (twice per call; a = ULDA_BOSS_41-49, b = 50-59)
+#   family 22 modes:     bp.sh enc22a|enc22b|enc22-seeds-a|enc22-seeds-b         (twice per call; a = ULDA_BOSS_60-69, b = 70-79)
+#   family 23 modes:     bp.sh enc23|enc23-seeds                                 (twice per call; FAMILY=23: the four nemeses and Hagatha)
+#                        bp.sh enc23-cards <k>                                    (one run per call, k = 1 or 2; then `bp.sh same enc23-cards`)
+#   family 24 modes:     bp.sh enc24 | plague24 <carried 95|110|195|210> | tekahn24  (twice per call; tekahn24: the fixture finale with the relay)
+#   close-out (25):      bp.sh finale25                  the SHIPPED acts-v3h Heist finale (twice per call)
+#                        bp.sh tekahn25                  the SHIPPED acts-v3t finale on Tekahn with the hero relay (twice per call)
+#                        bp.sh sweep25 <a|b|c> <k>       new runs with no named schedule (the default roll), each fought at a floor of
+#                                                        its own (DEFAULT_SWEEP; one run per call; then `bp.sh same sweep25-<a|b|c>`)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -75,6 +98,55 @@ CARDS10=GILA_BOSS_23t,GILA_BOSS_26t2,GILA_BOSS_27t,GILA_BOSS_29t,GILA_BOSS_35t,G
 W10=gila_38_cozzlewurt
 PAD10=$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10,$W10
 SHR10=gila_26_gnomenapper,gila_27_experiment_3c,gila_29_sazzmi,gila_32_niira,gila_35_chupacabran,gila_36_griselda,gila_22_willie,gila_26_gnomenapper,gila_29_sazzmi
+# family 11
+A11=gila_40_splintergraft,gila_41_brushwood,gila_42_baran,gila_43_damph,gila_44_sezavo,gila_51_garrow,gila_52_pete
+B11=gila_54_cragtorr,gila_55_azalina,gila_56_face_collector,gila_57_raeth,gila_58_grum,gila_62_gustave
+CARDS11=GILA_BOSS_41t,GILA_BOSS_43t,GILA_BOSS_55t2,GILA_BOSS_57t
+W11=gila_44_sezavo
+PAD11=$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11,$W11
+SHR11=gila_62_gustave,gila_51_garrow,gila_58_grum,gila_56_face_collector,gila_57_raeth,gila_41_brushwood,gila_55_azalina,gila_40_splintergraft,gila_42_baran
+# family 12: the three rows that change a hidden zone or repeat spells (Forlorn Lovers' own deck, The Whisperer's Echo, Hypnotize)
+HID12=gila_39_forlorn_lovers,gila_50_whisperer,gila_64_winslow
+# family 13: the nine Rumble Run champions (Voone is family 01's row, filed under 13), 2 games per shrine variant; the boss cards watched
+A13=trl_200_voone,trl_201_zentimo,trl_202_hooktusk,trl_203_thekal,trl_204_zuljin
+B13=trl_205_loti,trl_206_jeklik,trl_207_malacrass,trl_208_talanji
+CARDS13=TRLA_168,TRLA_129s
+# family 14: the boss cards played from hand (the four magical feats, "Scourgelord" Dazzik)
+CARDS14=DALA_BOSS_03t,DALA_BOSS_03t2,DALA_BOSS_03t3,DALA_BOSS_03t4,DALA_BOSS_06dk
+# family 15 (Dalaran Heist bosses B): the boss card Jepetto's deck lists (the Underbelly Rat is summoned by A Tale of Kings)
+CARDS15=DALA_BOSS_25t
+# family 16: the boss card and the treasures newly admitted for a boss, played from hand (PARTY PORTAL!, Orb of Destruction,
+# Horn of Cenarius, Portable Forge, Quel'Delar)
+CARDS16=DALA_BOSS_38t,LOOTA_811,LOOTA_837,LOOTA_841,LOOTA_842
+# family 17: the boss cards a boss plays from hand; the rows whose power is cast by rule (c-bosspilot-enc09 reports "auto N")
+CARDS17=DALA_BOSS_48t,DALA_BOSS_51t2,DALA_503,DALA_BOSS_56t,DALA_BOSS_59t,DALA_BOSS_59t2,DALA_502
+AUTO17=dala_50_nozari,dala_55_hannigan,dala_56_wagtoggle,dala_59_goya
+# family 18 (Dalaran Heist bosses E): the twelve combat rows (the four finale rows have no floor on the shipped schedule, whose
+# finale is disabled: enc18-finale fights them on the fixture schedule with the finale enabled)
+A18=dala_61_saelorn,dala_62_haro,dala_63_dagg,dala_64_biggs,dala_65_valdera,dala_66_marei
+B18=dala_68_lilayell,dala_70_smiggs,dala_71_anarii,dala_72_kazamon,dala_73_hesutu,dala_74_kara
+# family 19
+A19=ulda_01_cardish,ulda_02_zafarr,ulda_03_vera,ulda_04_nash,ulda_05_glack,ulda_06_chu,ulda_07_squeamlish,ulda_08_sinkhole,ulda_09_demolisher
+B19=ulda_10_terraviss,ulda_11_robold,ulda_12_pyramad,ulda_13_scalesnout,ulda_14_sirinell,ulda_15_herring,ulda_16_battrund,ulda_17_ichabod,ulda_18_twizzleflux
+CARDS19=ULD_326t,DAL_606,DAL_614,DAL_739
+# family 20
+A20=ulda_19_sothis,ulda_20_kham,ulda_21_illidara,ulda_22_colossus,ulda_23_skarik,ulda_24_palm_tree,ulda_25_zenda,ulda_26_thudd,ulda_27_toomba
+B20=ulda_28_sazin,ulda_29_ozara,ulda_30_ermavar,ulda_31_drasar,ulda_32_edra,ulda_33_ruby,ulda_34_dovo,ulda_35_ptah,ulda_36_kasa
+CARDS20=ULD_705,LOE_029,CS2_091,EX1_409
+# family 21
+A21=ulda_41_alda,ulda_42_rhogi,ulda_43_jolene,ulda_45_belloc,ulda_46_wildtooth,ulda_47_jar,ulda_48_ilza,ulda_49_craz
+B21=ulda_50_barkeye,ulda_51_kasmut,ulda_52_bazhial,ulda_53_maru,ulda_54_janak,ulda_55_murlocs,ulda_56_frog,ulda_57_winged_guardian,ulda_59_dire_bat
+CARDS21=ULD_286,ULD_217,ULD_206,DAL_614,FP1_007
+# family 22
+A22=ulda_60_zaraam,ulda_61_kyriss,ulda_62_oasis,ulda_63_vessina,ulda_65_thrud,ulda_66_siamat,ulda_68_wasp,ulda_69_isiset
+B22=ulda_70_rajh,ulda_71_ammunae,ulda_72_setesh,ulda_73_husam,ulda_74_barim,ulda_75_avozu,ulda_76_tarkus,ulda_77_gorebite,ulda_78_octosari,ulda_79_armadillobot
+CARDS22=LOE_018,EX1_556,GVG_006
+# family 23
+CARDS23=GILA_BOSS_49t,GILA_BOSS_49t2,GILA_BOSS_60t,GILA_BOSS_99t,GILA_BOSS_99t2,GILA_BOSS_99t3,GILA_503,GILA_907,GILA_BOSS_61t,GILA_BOSS_61t3
+FIX23=fix23_glinda,fix23_shivers,fix23_toki,fix23_godfrey
+# family 24: the three Plague Lords it adds (Icarax is family 01's enc01 / plague) and the boss cards they play from hand
+LORDS24=ulda_37_xatma,ulda_38_kzrath,ulda_39_vesh
+CARDS24=ULDA_BOSS_37t,LOEA10_5,LOEA10_5H,KARA_13_12H,LOEA16_24H,UNG_942t,ULDA_033,ULDA_031,ULDA_BOSS_67t
 
 strip() { sed -E "s/ +[0-9.]+s$//" "$1" | tr -d '\r'; }
 need() { # need <suite dir>: cd into it, or stop when it is not ported yet
@@ -87,7 +159,7 @@ compare() { # compare <name>: a vs b, stderr, and the recorded baseline
   cmp -s "$R/bp-$name-a.txt" "$R/bp-$name-b.txt" && echo "bosspilot $name identical" || echo "bosspilot $name DIFFER"
   echo "stderr bytes: $(cat "$LOGS/$name-err-1.txt" "$LOGS/$name-err-2.txt" 2>/dev/null | wc -c | tr -d ' ')"
   if [ -f "$BASE/bp/bp-$name-a.txt" ]; then
-    echo "bosspilot $name vs wave-3 baseline: $(diff <(tr -d '\r' < "$BASE/bp/bp-$name-a.txt") "$R/bp-$name-a.txt" | grep -c '^[<>]') differing lines"
+    echo "bosspilot $name vs wave-6 baseline: $(diff <(tr -d '\r' < "$BASE/bp/bp-$name-a.txt") "$R/bp-$name-a.txt" | grep -c '^[<>]') differing lines"
   elif [ -f "$BASE/bp-port/bp-$name-a.txt" ]; then
     # a mode wave 3 did not rerun: recorded by the port on the wave-3 tree (README.md sections 4 and 6)
     echo "bosspilot $name vs port record (wave-3 tree): $(diff <(tr -d '\r' < "$BASE/bp-port/bp-$name-a.txt") "$R/bp-$name-a.txt" | grep -c '^[<>]') differing lines"
@@ -214,6 +286,92 @@ enc10-shrine) need $E; once enc10-shrine "$2" BOSS=$PAD10,$SHR10 GAMES=1
   echo "fights against a shrine row (TRLA_209h_*) by the nine rows: $(grep -v "^$W10" "$LOGS/enc10-shrine-$2.txt" | grep -c 'TRLA_209h_') of 9" ;;
 enc10-seeds) need $E; twice enc10-seeds FAMILY=10 SEED_BASE=19000 WATCH=$CARDS10 ;;
 enc10-hagatha) need $E; twice enc10-hagatha BOSS=gila_61_hagatha GAMES=6 WATCH=GILA_BOSS_27t ;;
+enc11a) need $E; once enc11a "$2" BOSS=$A11 GAMES=4 WATCH=$CARDS11 ;;
+enc11b) need $E; once enc11b "$2" BOSS=$B11 GAMES=4 WATCH=$CARDS11 ;;
+enc11-pete) need $E; twice enc11-pete BOSS=fix11_pete GAMES=6 ENCOUNTERS_JSON=$FX/p8f11/fixtures/encounters-f11.json ;;
+enc11-cards) need $E; once enc11-cards "$2" BOSS=fix11_brushwood,fix11_damph,fix11_azalina,fix11_raeth GAMES=6 WATCH=$CARDS11 ENCOUNTERS_JSON=$FX/p8f11/fixtures/encounters-f11.json
+  unplayed=$(tail -n 1 "$LOGS/enc11-cards-$2.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Za-z0-9_]+ x0( |$)" | xargs)
+  [ -z "$unplayed" ] && echo "bosspilot enc11-cards: the boss played Hack, Grave Mistake, Soul Assimilation and Shallow Graves from hand" || echo "bosspilot enc11-cards UNPLAYED: $unplayed" ;;
+enc11-shrine) need $E; once enc11-shrine "$2" BOSS=$PAD11,$SHR11 GAMES=1
+  echo "fights against a shrine row (TRLA_209h_*) by the nine rows: $(grep -v "^$W11" "$LOGS/enc11-shrine-$2.txt" | grep -c 'TRLA_209h_') of 9" ;;
+enc12) need $E; twice enc12 FAMILY=12 WATCH=GILA_BOSS_68t ;;
+enc12-seeds) need $E; twice enc12-seeds FAMILY=12 SEED_BASE=19000 WATCH=GILA_BOSS_68t ;;
+enc12-hidden) need $E; twice enc12-hidden BOSS=$HID12 GAMES=6 ;;
+enc13a) need $E; twice enc13a BOSS=$A13 GAMES=2 WATCH=$CARDS13
+  echo "enc13a: fights against a Rikkar row with its own shrine (TRLA_209h_*): $(grep -c 'TRLA_209h_' "$R/bp-enc13a-a.txt")" ;;
+enc13b) need $E; twice enc13b BOSS=$B13 GAMES=2 WATCH=$CARDS13
+  echo "enc13b: fights against a Rikkar row with its own shrine (TRLA_209h_*): $(grep -c 'TRLA_209h_' "$R/bp-enc13b-a.txt")" ;;
+enc13-seeds) need $E; twice enc13-seeds FAMILY=13 GAMES=1 SEED_BASE=19000 WATCH=$CARDS13 ;;
+enc14) need $E; twice enc14 FAMILY=14 WATCH=$CARDS14 ;;
+enc14-seeds) need $E; twice enc14-seeds FAMILY=14 SEED_BASE=19000 WATCH=$CARDS14 ;;
+enc14-flight) need $E; twice enc14-flight BOSS=dala_07_belnaara GAMES=8 ;;
+enc14-cards) need $E; twice enc14-cards BOSS=fix14_dazzik,fix14_akazamzarak GAMES=6 WATCH=$CARDS14 ENCOUNTERS_JSON=$FX/p8f14/fixtures/encounters-f14.json
+  # every boss card of the family was played from hand by a boss at least once
+  unplayed=$(tail -n 1 "$R/bp-enc14-cards-a.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Za-z0-9_]+ x0( |$)" | xargs)
+  [ -z "$unplayed" ] && echo "bosspilot enc14-cards: all 5 boss cards played by the boss" || echo "bosspilot enc14-cards UNPLAYED: $unplayed" ;;
+enc15) need $E; twice enc15 FAMILY=15 WATCH=$CARDS15 ;;
+enc15-seeds) need $E; twice enc15-seeds FAMILY=15 SEED_BASE=19000 WATCH=$CARDS15 ;;
+enc15-rat) # The Rat King: the Underbelly Rat's hero replacement (form changes) in games he loses or nearly loses
+  need $E; twice enc15-rat BOSS=dala_30_rat_king GAMES=8 ;;
+enc15-toys) # Jepetto Joybuzz: Assembly on both sides and Hoard of Toys played from hand by the boss
+  need $E; twice enc15-toys BOSS=dala_25_jepetto GAMES=8 WATCH=$CARDS15 ;;
+enc16) need $E; twice enc16 FAMILY=16 WATCH=$CARDS16 ;;
+enc16-seeds) need $E; twice enc16-seeds FAMILY=16 SEED_BASE=19000 WATCH=$CARDS16 ;;
+enc16-carousel) need $E; twice enc16-carousel BOSS=dala_34_carousel GAMES=8 ;;
+enc16-cards) need $E; twice enc16-cards BOSS=fix16_tipsi,fix16_toomba,fix16_quel GAMES=6 WATCH=$CARDS16 ENCOUNTERS_JSON=$FX/p8f16/fixtures/encounters-f16.json
+  # every watched card was played from hand by a boss at least once
+  unplayed=$(tail -n 1 "$R/bp-enc16-cards-a.txt" | sed 's/.*, watched //; s/, most boss Secrets.*//' | grep -oE "[A-Z0-9_a-z]+ x0( |$)" | xargs)
+  [ -z "$unplayed" ] && echo "bosspilot enc16-cards: all 5 watched cards played by the boss" || echo "bosspilot enc16-cards UNPLAYED: $unplayed" ;;
+enc17) need $E9; once enc17 "$2" FAMILY=17 WATCH=$CARDS17 AUTO=$AUTO17 ;;
+enc17-seeds) need $E9; once enc17-seeds "$2" FAMILY=17 SEED_BASE=19000 WATCH=$CARDS17 AUTO=$AUTO17 ;;
+enc17-void) need $E9; once enc17-void "$2" BOSS=dala_48_zuramat GAMES=6 WATCH=$CARDS17 ;;
+enc17-cards) need $E9; once enc17-cards "$2" BOSS=fix17_zuramat,fix17_millificent,fix17_wagtoggle,fix17_goya,fix17_gallywix GAMES=4 WATCH=$CARDS17 ENCOUNTERS_JSON=$FX/p8f17/fixtures/encounters-f17.json ;;
+enc17-check) # after `bp.sh same enc17-cards`: every boss card of the family was played from hand by a boss at least once
+  [ -f "$R/bp-enc17-cards-a.txt" ] || { echo "bosspilot enc17-check FAIL: no $R/bp-enc17-cards-a.txt (run bp.sh enc17-cards 1 and 2, then bp.sh same enc17-cards)"; exit 1; }
+  last=$(tail -n 1 "$R/bp-enc17-cards-a.txt"); missing=""; unplayed=""
+  case "$last" in *", watched "*) ;; *) echo "bosspilot enc17-check FAIL: the last line holds no watched counts: $last"; exit 1 ;; esac
+  for id in ${CARDS17//,/ }; do
+    n=$(echo "$last" | grep -oE "(^| )$id x[0-9]+" | sed 's/.* x//' | head -n 1)
+    if [ -z "$n" ]; then missing="$missing $id"; elif [ "$n" -eq 0 ]; then unplayed="$unplayed $id"; fi
+  done
+  if [ -n "$missing$unplayed" ]; then echo "bosspilot enc17-check FAIL: missing:${missing:- none} unplayed:${unplayed:- none}"; exit 1; fi
+  echo "bosspilot enc17-cards: all $(echo ${CARDS17//,/ } | wc -w) boss cards played by the boss" ;;
+enc18a) need $E; once enc18a "$2" BOSS=$A18 ;;
+enc18b) need $E; once enc18b "$2" BOSS=$B18 ;;
+enc18-finale) # the Heist finale (fixture: acts-v3h with its finale enabled): Norroa, Vargoth, Kalec, Khadgar in order, floors 16-19
+  need $E; once enc18-finale "$2" FINALE=1 WATCH=KARA_00_08 SCHEDULE_JSON=$FX/p8f18/fixtures/schedule-finale18.json ;;
+enc19a) need $E; twice enc19a BOSS=$A19 WATCH=$CARDS19 ;;
+enc19b) need $E; twice enc19b BOSS=$B19 WATCH=$CARDS19 ;;
+enc19-seeds-a) need $E; twice enc19-seeds-a BOSS=$A19 SEED_BASE=19000 WATCH=$CARDS19 ;;
+enc19-seeds-b) need $E; twice enc19-seeds-b BOSS=$B19 SEED_BASE=19000 WATCH=$CARDS19 ;;
+enc20a) need $E; twice enc20a BOSS=$A20 WATCH=$CARDS20 ;;
+enc20b) need $E; twice enc20b BOSS=$B20 WATCH=$CARDS20 ;;
+enc20-seeds-a) need $E; twice enc20-seeds-a BOSS=$A20 SEED_BASE=20000 WATCH=$CARDS20 ;;
+enc20-seeds-b) need $E; twice enc20-seeds-b BOSS=$B20 SEED_BASE=20000 WATCH=$CARDS20 ;;
+enc21a) need $E; twice enc21a BOSS=$A21 WATCH=$CARDS21 ;;
+enc21b) need $E; twice enc21b BOSS=$B21 WATCH=$CARDS21 ;;
+enc21-seeds-a) need $E; twice enc21-seeds-a BOSS=$A21 SEED_BASE=19000 WATCH=$CARDS21 ;;
+enc21-seeds-b) need $E; twice enc21-seeds-b BOSS=$B21 SEED_BASE=19000 WATCH=$CARDS21 ;;
+enc22a) need $E; twice enc22a BOSS=$A22 WATCH=$CARDS22 ;;
+enc22b) need $E; twice enc22b BOSS=$B22 WATCH=$CARDS22 ;;
+enc22-seeds-a) need $E; twice enc22-seeds-a BOSS=$A22 SEED_BASE=19000 WATCH=$CARDS22 ;;
+enc22-seeds-b) need $E; twice enc22-seeds-b BOSS=$B22 SEED_BASE=19000 WATCH=$CARDS22 ;;
+enc23) need $E; twice enc23 FAMILY=23 WATCH=$CARDS23 ;;
+enc23-seeds) need $E; twice enc23-seeds FAMILY=23 SEED_BASE=19000 WATCH=$CARDS23 ;;
+enc23-cards) need $E; once enc23-cards "$2" BOSS=$FIX23 GAMES=4 WATCH=$CARDS23 ENCOUNTERS_JSON=$FX/p8f23/fixtures/encounters-f23.json ;;
+enc24) need $E; twice enc24 BOSS=$LORDS24 GAMES=2 WATCH=$CARDS24 ;;
+plague24) # each lord starts with <carried> damage banked: 110 / 210 start phase 2 / 3, 95 / 195 cross a threshold in play
+  need $E; c=${2:-95}; twice plague24-$c BOSS=$LORDS24 GAMES=1 CARRIED=$c WATCH=$CARDS24 ;;
+tekahn24) # fixture schedule: acts-v3t's finale enabled on Tekahn with the hero relay; the run hero starts at 1 Health so the explorers enter
+  need $E; twice tekahn24 FINALE=1 GAMES=2 PLAYER_HEALTH=1 SCHEDULE=acts-v3t SCHEDULE_JSON=$FX/p8f24/fixtures/schedule-tekahn.json WATCH=$CARDS24 ;;
+# ---- the close-out (family 25): the shipped schedules, no fixture
+finale25) # the Heist finale as acts-v3h ships it since the close-out: Norroa, Vargoth, Kalec, Khadgar in order, floors 16-19
+  need $E; twice finale25 FINALE=1 WATCH=KARA_00_08 ;;
+tekahn25) # acts-v3t's finale as it ships: Tekahn with the hero relay; the run hero starts at 1 Health so the explorers enter
+  need $E; twice tekahn25 FINALE=1 GAMES=2 PLAYER_HEALTH=1 SCHEDULE=acts-v3t WATCH=$CARDS24 ;;
+sweep25) # the default roll: runs 0-15 (a), 16-31 (b) and 32-47 (c), the run rows in turn, each fought at floor 1 + 7i of its schedule
+  case "$2" in a) from=0 ;; b) from=16 ;; c) from=32 ;; *) echo "usage: bp.sh sweep25 <a|b|c> <k>"; exit 2 ;; esac
+  need $E; once sweep25-$2 "$3" DEFAULT_SWEEP=16 DEFAULT_SWEEP_FROM=$from SEED_BASE=25000 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;
@@ -226,5 +384,5 @@ shrineU) need $SUITES/p7u/c-bosspilot-shrine-U; released shrineU SHRINE_RUN=1 ;;
 shrineT1) need $SUITES/p7t1/c-bosspilot-teammates-T1; released shrineT1 SHRINE_RUN=1 ;;
 shrineT2) need $SUITES/p7t2/c-bosspilot-teammates-T2; released shrineT2 SHRINE_RUN=1 ;;
 shrineD) need $SUITES/p7d/c-bosspilot-companions-D; released shrineD SHRINE_RUN=1 ;;
-*) sed -n 2,29p "$0"; exit 2 ;;
+*) sed -n '2,/^[^#]/{/^#/p}' "$0"; exit 2 ;;   # the whole usage block: every comment line before the first command
 esac

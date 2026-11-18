@@ -115,6 +115,16 @@ public sealed class DungeonRunMatchSummary
     /// <summary>The fight ended with no loss and no boss kill (a script ended it: Treasure Vault); omitted when false.</summary>
     [XmlAttribute] public bool NoLoss;
     public bool ShouldSerializeNoLoss() => NoLoss;
+    // ---- step 9 (still save version 6, the NoLoss pattern): each is omitted at its default, so no earlier summary changes.
+    /// <summary>
+    /// ULDA_111 Hearthstone: the fight was escaped (<see cref="Outcome"/> Win with this mark: no major credit, no kill credit,
+    /// no drafts); omitted when false.
+    /// </summary>
+    [XmlAttribute] public bool Escaped;
+    public bool ShouldSerializeEscaped() => Escaped;
+    /// <summary>GILA_911 Rewind, GILA_BOSS_48t: the fight was restarted (<see cref="Outcome"/> Fault with this mark); omitted when false.</summary>
+    [XmlAttribute] public bool Restarted;
+    public bool ShouldSerializeRestarted() => Restarted;
 }
 
 /// <summary>An active treasure card that grows: where it sits and when it was last upgraded.</summary>
@@ -404,6 +414,44 @@ public sealed class DungeonRunState
     /// </summary>
     [XmlAttribute] public int HeroDamage;
     public bool ShouldSerializeHeroDamage() => HeroDamage != 0;
+    /// <summary>
+    /// Phase 8 family 24: damage banked for the run's next Plague Lord fight (a persistentDamage encounter) by ULDA_115
+    /// "Gnomebliterator", 10 plus the cast's Spell Damage per cast in the run's other fights, by either player ("Also deal 10
+    /// damage to the Plague Lord when you fight it"; a cast inside a Plague Lord fight deals it to the lord at once);
+    /// that fight's start spends it (DungeonRun.PersistentRemaining) and its end clears it. 0 (omitted) otherwise.
+    /// </summary>
+    [XmlAttribute] public int PlagueLordDamage;
+    public bool ShouldSerializePlagueLordDamage() => PlagueLordDamage != 0;
+    /// <summary>
+    /// The close-out (family 25): the starting Hero Powers the run's row offered when it began (its powers whose unlock the
+    /// profile held then), space-separated in row order, for ULDA_038 Explorer Retraining ("Choose a new starting Hero Power",
+    /// a tavern option of encounter schedules: DungeonRun.RetrainPowers). Recorded by NewRun on a run of schedule stamp 3 and
+    /// above when two or more were open; null (omitted) otherwise, and on every run saved before the close-out.
+    /// </summary>
+    [XmlAttribute] public string PowerChoices;
+    public bool ShouldSerializePowerChoices() => PowerChoices != null;
+    // ---- step 9 (still save version 6): guarded attributes, each omitted at its default, so every earlier run writes the same body.
+    /// <summary>Gold banked for the next tavern (step 9 D5: a bundle draft skipped for room); 0 (omitted) otherwise.</summary>
+    [XmlAttribute] public int BankedGold;
+    public bool ShouldSerializeBankedGold() => BankedGold != 0;
+    /// <summary>
+    /// Step 9 D13, match scope: how many times the floor being fought was restarted (GILA_911 Rewind, GILA_BOSS_48t); 0
+    /// (omitted) before the first restart and once the floor is decided.
+    /// </summary>
+    [XmlAttribute] public int RestartIndex;
+    public bool ShouldSerializeRestartIndex() => RestartIndex != 0;
+    /// <summary>Step 9 D13, match scope: the restart sources used on the floor being fought (card ids, comma-separated, for the per-source caps); null (omitted) otherwise.</summary>
+    [XmlAttribute] public string RestartSources;
+    public bool ShouldSerializeRestartSources() => RestartSources != null;
+    /// <summary>Step 9 D13, match scope: the damage the run hero carries into the restarted game (GILA_BOSS_48t Alternate Timeline); 0 (omitted) otherwise.</summary>
+    [XmlAttribute] public int RestartCarriedDamage;
+    public bool ShouldSerializeRestartCarriedDamage() => RestartCarriedDamage != 0;
+    /// <summary>
+    /// Step 9 D13 (lane X), match scope: the game turns the restarted games of the floor being fought took (the cumulative
+    /// turn budget: a floor's games take at most twice the fight's TurnCap); 0 (omitted) otherwise.
+    /// </summary>
+    [XmlAttribute] public int RestartTurns;
+    public bool ShouldSerializeRestartTurns() => RestartTurns != 0;
 
     /// <summary>The run deck as card ids (pool cards and active-treasure shells).</summary>
     public List<string> Deck = new List<string>();
@@ -566,6 +614,19 @@ internal static class DungeonRunStore
             stream.Position = 0;
             return (DungeonRunSave)Serializer.Deserialize(stream);
         }
+    }
+
+    /// <summary>
+    /// Rolls <paramref name="save"/> back to <paramref name="snapshot"/> (a <see cref="Clone"/> taken before a change): its
+    /// profile, run in progress and version. A change can raise the version (the first commit of an upgraded file), so a
+    /// rollback that kept it would leave memory a version ahead of the file. <see cref="DungeonRunSave.LoadedVersion"/> is not
+    /// touched: only a successful <see cref="Save"/> moves it. Used by the runtime's Mutate and RecordFightOutcome (step 9 D6).
+    /// </summary>
+    internal static void Restore(DungeonRunSave save, DungeonRunSave snapshot)
+    {
+        save.Profile = snapshot.Profile;
+        save.Active = snapshot.Active;
+        save.Version = snapshot.Version;
     }
 
     internal static void Save(string profileDirectory, DungeonRunSave save)

@@ -6,9 +6,9 @@ gila_25_ivan       GIL  t2      floor  3 PRIEST/priest_mending/CS1h_001         
 gila_25_ivan       GIL  t2      floor  3 ROGUE/rogue_backalley/CS2_083b                 deck 17 -> boss     turns  29 decisions  61 fallbacks  0 health  34 mana+0 power  6 checks ok rule ULDA_706 seen 164
 loot_48_trapped_room LOOT t2      floor  3 SHAMAN/shaman_stormdebt/CS2_049                deck 17 -> boss     turns  30 decisions  55 fallbacks  0 health  34 mana+0 power  0 checks ok rule ULDA_706 seen 166
 loot_48_trapped_room LOOT t2      floor  3 WARLOCK/warlock_fiendpact/CS2_056              deck 16 -> boss     turns  31 decisions  41 fallbacks  0 health  34 mana+0 power  0 checks ok rule ULDA_706 seen 144
-dala_21_whirt      DALA t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 32 -> boss     turns  45 decisions 144 fallbacks  0 health  51 mana+0 power 16 checks ok rule ULDA_706 seen 361
-dala_21_whirt      DALA t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 31 -> boss     turns  36 decisions  95 fallbacks  0 health  46 mana+0 power 16 checks ok rule ULDA_706 seen 380
-ulda_44_trap_room  ULDA t3      floor  8 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 31 -> player   turns  13 decisions  12 fallbacks  0 health  46 mana+1 power  3 checks ok rule ULDA_706 seen 53
-ulda_44_trap_room  ULDA t3      floor  8 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 35 -> player   turns  44 decisions  84 fallbacks  0 health  46 mana+0 power  8 checks ok rule ULDA_706 seen 212
+dala_21_whirt      DALA t3      floor  8 WARRIOR/warrior_plated/CS2_102                 deck 35 -> player   turns  60 decisions 124 fallbacks  0 health  46 mana+0 power 25 checks ok rule ULDA_706 seen 372
+dala_21_whirt      DALA t3      floor  8 DEATHKNIGHT/deathknight_bones/HERO_11bp        deck 31 -> boss     turns  41 decisions  86 fallbacks  0 health  51 mana+0 power 19 checks ok rule ULDA_706 seen 368
+ulda_44_trap_room  ULDA t3      floor  8 DEMONHUNTER/demonhunter_glaives/HERO_10bp      deck 31 -> player   turns  15 decisions  18 fallbacks  0 health  46 mana+0 power  3 checks ok rule ULDA_706 seen 59
+ulda_44_trap_room  ULDA t3      floor  8 MAGE_ROGUE/tombs_reno_spellslinger/ULDA_Reno_HP1 deck 34 -> player   turns  47 decisions  76 fallbacks  0 health  46 mana+0 power 10 checks ok rule ULDA_706 seen 228
 encounter run: schedule acts-v3h, rule ULDA_706; power unused: -; form unreached: -
-games 12, boss wins 9, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, rule-seen 2060, rule-unseen -
+games 12, boss wins 8, faults 0, fallbacks 0, failed checks 0, swallowed leaf exceptions 0, power-unused 0, form-unreached 0, rule-seen 2081, rule-unseen -

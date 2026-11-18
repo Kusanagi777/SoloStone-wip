@@ -75,7 +75,13 @@ namespace SabberStoneCore.Tasks.SimpleTasks
 			if (targets.Count == 0)
 				return TaskState.STOP;
 
-			Card[] results = TotalAdaptCards.ChooseNElements(3, game.Random);
+			// A run match never offers an Adapt its generation filter blocks (step 9, generation hygiene); every other game draws
+			// from the same ten as before.
+			Card[] adaptCards = OfflineCardPools.ForGame(game, TotalAdaptCards);
+			if (adaptCards.Length == 0)
+				return TaskState.STOP;
+
+			Card[] results = adaptCards.ChooseNElements(3, game.Random);
 
 			Generic.CreateChoiceCards.Invoke(controller, source, targets, ChoiceType.GENERAL, ChoiceAction.ADAPT,
 				results, null);
