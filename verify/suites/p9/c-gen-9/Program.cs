@@ -20,11 +20,12 @@ using SabberStoneCore.Tasks.SimpleTasks;
 //      exclusions (GeneratedRejects, both kinds of run)
 //   P  every Dungeon Run random pool enumerated in run matches (legacy and catalog run, the run player and the boss
 //      generating): the frozen legacy pools, the Cards.cs pools built on them, the Death Knight and Demon Hunter pools, and the
-//      run's own encounter and treasure pools (found by reflection): 0 unscripted ids; an unfiltered game gets every legacy pool
+//      run's own encounter and treasure pools (found by reflection: every *Pool, *Candidates and *Parts method): 0 unscripted ids; an unfiltered game gets every legacy pool
 //      back as the same list (selfplay and randplay draw from the same arrays)
 //   C  every routed call site (AddLackeyTask, DiscoverTask x5, ReplaceTask, AdaptTask, Kazakus, Un'Goro pack, both
-//      Build-A-Beasts, past Legendaries, RandomMinion, RandomMinionNumber, TransformRandom): in a run match whose exclusions
-//      leave a few cards of the pool, every result is one of them
+//      Build-A-Beasts, F16 Import "Pet", past Legendaries, RandomMinion, RandomMinionNumber, TransformRandom): in a run match
+//      whose exclusions leave a few cards of the pool, every result is one of them (the five Discover types are also filtered by
+//      DiscoverTask's own run filter, so only both filters off make those five fail)
 //   L  the Lackeys: the pool has 7 cards, all scripted; Titanic Lackey (ULD_616) and Draconic Lackey (DRG_052) do what their text says
 //   K  Kingsbane (LOOT_542): the shuffled copy keeps the Durability its enchantments added, not the Durability it lost
 //   G  200 seeded run games (LocalBot both sides; v4 defaults, every loadout, encounter bosses): 0 unscripted cards generated
@@ -158,8 +159,8 @@ Guard("U", () =>
         legacyIds.Count > 1000 && legacyNames.All(n => !n.StartsWith("Entourage/", StringComparison.Ordinal)) && legacyIds.Distinct().Count() == legacyIds.Count);
     var keywordOnly = legacyIds.Select(C).Where(c => c != null && !c.Implemented && !mechanismIds.Contains(c.Id) && DungeonRunAdmission.PlaysFromTags(c)).Select(c => c.Id).ToList();
     Note("keyword-only unscripted pool cards exempted (" + keywordOnly.Count + ", " + Hash(keywordOnly) + "): " + string.Join(",", keywordOnly));
-    Check("U4 every keyword-only exemption carries each keyword its text names (Taunt, Rush, Reborn, ... on the card's tags) and is not a hero",
-        keywordOnly.All(id => { var c = C(id); string tx = (c.Text ?? "").ToLowerInvariant();
+    Check("U4 the keyword-only exemptions are the 6 pool cards whose whole text is keywords (DRG_061 DRG_065 DRG_239 ULD_193 ULD_450 ULD_723); each carries every keyword it names and is not a hero",
+        keywordOnly.SequenceEqual(new[] { "DRG_061", "DRG_065", "DRG_239", "ULD_193", "ULD_450", "ULD_723" }) && keywordOnly.All(id => { var c = C(id); string tx = (c.Text ?? "").ToLowerInvariant();
             return c.Type != CardType.HERO && (!tx.Contains("taunt") || c[GameTag.TAUNT] > 0) && (!tx.Contains("rush") || c[GameTag.RUSH] > 0) && (!tx.Contains("reborn") || c[GameTag.REBORN] > 0)
                 && (!tx.Contains("divine shield") || c[GameTag.DIVINE_SHIELD] > 0) && (!tx.Contains("charge") || c[GameTag.CHARGE] > 0) && (!tx.Contains("windfury") || c[GameTag.WINDFURY] > 0)
                 && (!tx.Contains("battlecry") && !tx.Contains("deathrattle") && !tx.Contains("discover") && !tx.Contains("whenever") && !tx.Contains("after ")); }));
@@ -206,6 +207,14 @@ Guard("P", () =>
             Check("P2 " + k.Name + " run, " + (side == 1 ? "player" : "boss") + " generating: the " + derived.Count + " Cards.cs pools (class, format, cost, Death Knight, Demon Hunter, Lackeys, totems) hold 0 unscripted ids",
                 leftD.Count == 0, Few(leftD.Select(p => p.Name + "[" + string.Join(" ", p.Bad.Take(4)) + "]")));
         }
+    // The Entourage lists (a card's own fixed set, LegacyGenerationV1 "Entourage/<id>": Animal Companion's three, Totemic Call's
+    // four): not routed through the filter (implementation record, deviation 13), so they must hold no unscripted card themselves.
+    var entourage = LegacyGenerationV1.Names.Where(nm => nm.StartsWith("Entourage/", StringComparison.Ordinal)).OrderBy(nm => nm, StringComparer.Ordinal).ToList();
+    var entBad = entourage.SelectMany(nm => LegacyGenerationV1.Ids(nm).Where(unscriptedAll.Contains).Select(id => nm.Substring(10) + ":" + id)).Distinct().ToList();
+    var entSourcesBad = entourage.Where(nm => LegacyGenerationV1.Ids(nm).Any(unscriptedAll.Contains)).Select(nm => nm.Substring(10)).ToList();
+    var rejL = new HashSet<string>(DungeonRunAdmission.GeneratedRejects(false), StringComparer.Ordinal); var rejC = new HashSet<string>(DungeonRunAdmission.GeneratedRejects(true), StringComparer.Ordinal);
+    Check("P5 the " + entourage.Count + " Entourage lists: an unscripted card sits only in the list of a card that is itself unscripted and never generated in a run (Elite Tauren Chieftain's three songs)",
+        entSourcesBad.All(id => unscriptedAll.Contains(id) && rejL.Contains(id) && rejC.Contains(id)) && entourage.Count >= 30, "with one: " + Few(entBad, 30));
     // An unfiltered game: the same list back, so a non-run game's random draws read the same arrays as before step 9.
     var plain = Ready(null);
     Check("P4 outside a run match every legacy pool and Cards.cs pool is returned as the same list (no filtering, no copy)",
@@ -217,7 +226,7 @@ Guard("P", () =>
     var asm = typeof(DungeonRunContent).Assembly;
     var methods = asm.GetTypes().Where(t => t.Namespace == "SabberStoneCore.CardSets.DungeonRun")
         .SelectMany(t => t.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
-        .Where(m => (m.Name.EndsWith("Pool", StringComparison.Ordinal) || m.Name.EndsWith("Candidates", StringComparison.Ordinal)) && !m.IsGenericMethodDefinition
+        .Where(m => (m.Name.EndsWith("Pool", StringComparison.Ordinal) || m.Name.EndsWith("Candidates", StringComparison.Ordinal) || m.Name.EndsWith("Parts", StringComparison.Ordinal)) && !m.IsGenericMethodDefinition
             && (typeof(IEnumerable<Card>).IsAssignableFrom(m.ReturnType) || typeof(IEnumerable<string>).IsAssignableFrom(m.ReturnType)))
         .OrderBy(m => m.DeclaringType.FullName + "." + m.Name + "/" + m.GetParameters().Length, StringComparer.Ordinal).ToList();
     var classes = new[] { CardClass.MAGE, CardClass.WARRIOR, CardClass.HUNTER, CardClass.PRIEST, CardClass.ROGUE, CardClass.DRUID, CardClass.PALADIN, CardClass.SHAMAN, CardClass.WARLOCK, CardClass.DEMONHUNTER, CardClass.DEATHKNIGHT };
@@ -377,6 +386,20 @@ Guard("C", () =>
         Drop(c);
     }
     Check("C Build-A-Beast (SpecificTask): the offered first parts are only the parts the filter leaves", beastBuilds.Count > 0 && beastBuilds.All(keepBeasts.Contains), Few(beastBuilds.Where(id => !keepBeasts.Contains(id))));
+    // The client Build-A-Beast (CardSets/Client/BuildABeast.cs, EffectContext.Generatable) and Import "Pet" (F16, ExoticPetParts).
+    var clientBegin = typeof(DungeonRunContent).Assembly.GetType("SabberStoneCore.CardSets.Client.BuildABeast").GetMethod("Begin", BindingFlags.Static | BindingFlags.NonPublic);
+    var clientParts = new SortedSet<string>(StringComparer.Ordinal); var petParts = new SortedSet<string>(StringComparer.Ordinal);
+    for (int s = 0; s < 6; s++)
+    {
+        var g = Allow(beastBoth, keepBeasts, 400 + s);
+        var c = g.Player1; Mana(c); EmptyHand(c);
+        clientBegin.Invoke(null, new object[] { new SabberStoneCore.EffectSystem.EffectContext(g, c.Id, c.Hero.Id) });
+        foreach (var id in Offer(c).Select(x => x.Id)) clientParts.Add(id);
+        Drop(c);
+        foreach (bool first in new[] { true, false }) foreach (var x in DungeonRunEncounters.ExoticPetParts(c, first)) petParts.Add(x.Id);
+    }
+    Check("C Build-A-Beast (client, EffectContext.Generatable): the offered parts are only the parts the filter leaves", clientParts.Count > 0 && clientParts.All(keepBeasts.Contains), Few(clientParts.Where(id => !keepBeasts.Contains(id))));
+    Check("C Import \"Pet\" (F16 ExoticPetParts): both part pools are only the parts the filter leaves", petParts.Count > 0 && petParts.All(keepBeasts.Contains), Few(petParts.Where(id => !keepBeasts.Contains(id))));
 });
 
 // ============================================================ L  the Lackeys
