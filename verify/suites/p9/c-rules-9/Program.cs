@@ -10,7 +10,8 @@ using SabberStoneCore.CardSets.DungeonRun;
 //      and opening-flag keys, the v4 block's incompatibleModifiers and modifierReasons, "none"), each refused with its message,
 //      and the shipped data and the fixture accepted
 //   F  D17: ForbiddenPairs on constructed states: each kind of pair it reports, the same lines in either order, nothing on a
-//      clean run, and BuildPlan's log line
+//      clean run, BuildPlan's log line, and RuleCandidates leaving out every rule the predicate would pair (F14: a fight-only
+//      hero with no flag behind it, the gate check this suite added to RuleCandidates)
 //   S  C2: the ordering fix: every Rumble shrine deck x 200 seeds on acts-v3h and acts-v4h, no stored act I anomaly offer and
 //      no rolled twist carries noBoardShrine
 //   T  C5: the twist roll: on the shipped defaults (2000 new runs) each of the eight act twists rolls in at least 15% of runs,
@@ -22,6 +23,7 @@ using SabberStoneCore.CardSets.DungeonRun;
 //      stamp 4 every modifier node offers at least one modifier and then "none"
 //   K  C4: every fight knob of every modifier x every major, finale and fixedHealth row a stamp-4 run reaches: the knob moves the
 //      built plan, or the row's v4 block neutralises the modifier with a reason, or no modifier can be active on that floor
+// One argument: the fixture file (default verify/fixtures/p9/schedule-twists9.json, from verify/tools/gen/p9/make_twists9.py).
 static object FromJson(JsonElement e)
 {
     switch (e.ValueKind)
@@ -221,6 +223,21 @@ Guard("F", () =>
         && !run.RuleCandidates(new Func<DungeonRunState>(() => { var s = Clean(70006); s.ActiveRules.Add(new DungeonRunRule { Id = "mod_open_road", Act = 1, FromNode = -1 }); return s; })(), run.ScheduleFor(s6), 1, "anomaly").Any(r => r.Id == "ULDA_715")
         && !run.RuleCandidates(new Func<DungeonRunState>(() => { var s = New(run, darius, darius.Decks[0], 70009, "acts-v4h"); s.ActiveRules.RemoveAll(r => r.Kind != null); return s; })(), run.ScheduleFor(s9), 3, "twist").Any(r => r.Id == "DALA_833")
         && !run.RuleCandidates(new Func<DungeonRunState>(() => { var s = Clean(70010); s.BossSequence[1] = "gila_61_hagatha"; return s; })(), run.ScheduleFor(s10), 1, "twist").Any(r => r.Id == "DALA_833"));
+    // The fight-only hero on its own: Hagatha without her heroSwitch flag still gives the run player Darius's card, which
+    // DALA_833 names in incompatibleClasses. The predicate reports the pair, so the gate must leave the twist out too.
+    var unflagged = Load();
+    unflagged.Boss("gila_61_hagatha").Flags.Remove("heroSwitch");
+    var ur = new DungeonRun(unflagged);
+    var umage = unflagged.ClassRows.First(c => c.Id == "MAGE");
+    var us = New(ur, umage, umage.Decks[0], 70014, "acts-v4h");
+    foreach (var n in ur.ScheduleFor(us).Nodes.Where(n => n.IsFight && n.Act == 1)) us.BossSequence[n.Floor - 1] = plain[(n.Floor - 1) % plain.Count].Id;
+    us.BossSequence[1] = "gila_61_hagatha";
+    us.ActiveRules.RemoveAll(r => r.Kind != null);
+    bool gateOffers = ur.RuleCandidates(us, ur.ScheduleFor(us), 1, "twist").Any(r => r.Id == "DALA_833");
+    us.ActiveRules.Add(Rule("DALA_833", 1, "twist"));
+    var lu = ur.ForbiddenPairs(us);
+    Check("F14 a rule x fight-only hero pair with no flag behind it: the predicate reports it and RuleCandidates leaves the rule out", !gateOffers
+        && lu.SequenceEqual(new[] { "act 1: DALA_833 x gila_61_hagatha (fight-only hero GILA_600h2, incompatibleClasses)" }), "gate offers " + gateOffers + "; " + string.Join(" | ", lu));
 });
 
 // ============================================================ S. C2: the ordering fix on every Rumble shrine deck
