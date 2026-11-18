@@ -1040,9 +1040,11 @@ string[] tavernEnchants = table.Options.Where(o => o.Ench != null).Select(o => o
     // F13 (a run-layer tavern flag): both rows are implemented, their deferral notes gone.
     Check("T5 DALA_721 (phase 6 F7) is implemented with no deferral note",
         rows["DALA_721"][Col("classification")] == "implemented" && !rows["DALA_721"][Col("notes")].Contains("deferred: phase"));
-    Check("T5 ULDA_011 (phase 6 F13) is implemented with no deferral note; the turn-restart and match-exit rows say phase 9",
+    // Step 9 (lane X) landed the turn restart (GILA_911 Rewind) and the match exit (ULDA_111 Hearthstone): both rows are
+    // implemented (v4 treasures) and their phase-9 deferral notes are gone.
+    Check("T5 ULDA_011 (phase 6 F13) is implemented with no deferral note; the turn-restart and match-exit rows are implemented by step 9, no deferral note",
         rows["ULDA_011"][Col("classification")] == "implemented" && !rows["ULDA_011"][Col("notes")].Contains("deferred: phase")
-        && new[] { "GILA_911", "ULDA_111" }.All(id => rows[id][Col("notes")].Contains("deferred: phase 9") && !rows[id][Col("notes")].Contains("deferred: phase 6")));
+        && new[] { "GILA_911", "ULDA_111" }.All(id => rows[id][Col("classification")] == "implemented" && !rows[id][Col("notes")].Contains("deferred: phase")));
     var lift = rows.Values.Where(f => f[Col("ai_support")].Contains("own-deck ledger")).ToList();
     // Phase 7 D: TRLA_809 Windfall Blessing (deck-wide-change, the run player's) joined the BossDeckLedgerLift rows: ten.
     Check("T5 the ten BossDeckLedgerLift rows (TRLA_809 since phase 7 D) carry the phase-8 relabel", lift.Count == 10 && lift.Any(f => f[0] == "TRLA_809")

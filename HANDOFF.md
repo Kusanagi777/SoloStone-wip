@@ -290,8 +290,9 @@ From the wave-3 integration:
 - LOOTA_BOSS_53h2 is a portrait support record.
 - LOOTA_103 and LOOTA_BOSS_52t keep the ledger blocker `run:deck-mutation`.
 - A Vault whose treasures would pass the deck maximum adds none.
-- The c-bosspilot ACT_RUN label says acts-v1 but runs acts-v2 (deferred label fix). The other deferred items of phase 8
-  are closed: BOT_543 Omega Mind and ULD_152 Pressure Plate are implemented in the ledger (BOT_543 in Tekahn's relay deck,
+- Closed: the c-bosspilot ACT_RUN label prints the schedule the walk follows (`run.DefaultSchedule(0)`, acts-v2 on its data
+  without the encounter file) in all eight act-mode harnesses since phase 8; step 9 only corrected their stale header comment.
+  The other deferred items of phase 8 are closed: BOT_543 Omega Mind and ULD_152 Pressure Plate are implemented in the ledger (BOT_543 in Tekahn's relay deck,
   ULD_152 in the Trap Room and Cardish boss decks and two Brann buckets); ULD_152's named-game recheck is the user's.
   Typhoon already asks `ShrineRules.InterceptLeave`, since `a95b97e`.
 - Never put a card-database-reading task in a static field initializer of a `DungeonRunEncounters` partial file.

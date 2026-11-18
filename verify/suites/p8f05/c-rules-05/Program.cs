@@ -907,8 +907,10 @@ Guard("T", () =>
             if (bosses.Any(b => b.HasFlag("shrine"))) { withShrineBoss++; if (rule.Id == "DALA_831" || rule.Id == "DALA_833") wrong++; }
         }
     }
-    // Phase 8 family 13: nine Rumble Run rows carry the shrine flag, which keeps DALA_831 and DALA_833 out of more acts (20 and 25 of 300 runs).
-    Check("T16 the fixture schedule (twist pools filled, chance 100) validates and rolls each of the four twists", fixtureErrors.Count == 0 && rolledIds.Count == 4 && rolledIds.Values.All(n => n >= 15),
+    // Phase 8 family 13: nine Rumble Run rows carry the shrine flag, which kept DALA_831 and DALA_833 out of more acts (20 and 25 of
+    // 300 runs), so wave 4 lowered the threshold to >= 15. Since wave 5 the rolls are far above it (the close-out: 57 and 71; step 9:
+    // DALA_831 x58, DALA_833 x71, DALA_829 x358, DALA_832 x364), so step 9 restores the original "more than 20".
+    Check("T16 the fixture schedule (twist pools filled, chance 100) validates and rolls each of the four twists", fixtureErrors.Count == 0 && rolledIds.Count == 4 && rolledIds.Values.All(n => n > 20),
         string.Join(" | ", fixtureErrors.Take(2)) + string.Join(",", rolledIds.Select(p => p.Key + "x" + p.Value)));
     Check("T17 a rolled twist is never one a boss of its act excludes (" + withShrineBoss + " acts with a shrine boss)", wrong == 0 && withShrineBoss > 0);
     var first = V3(tr, "MAGE", 70001);

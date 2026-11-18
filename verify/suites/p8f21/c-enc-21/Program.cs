@@ -629,9 +629,9 @@ Guard("Rows", () =>
         ("ulda_49_craz", "49", "Craz", "4", 7, "substituted", 3, ""),
         ("ulda_50_barkeye", "50", "Ol' Barkeye", "3", 6, "substituted", 1, "passive"),
         ("ulda_51_kasmut", "51", "Kasmut", "2", 4, "extended", 3, "passive,bothPlayers"),
-        ("ulda_52_bazhial", "52", "Lich Baz'hial", "4", 7, "authentic", 3, "forms"),
+        ("ulda_52_bazhial", "52", "Lich Baz'hial", "4", 7, "authentic", 3, "forms,fatigue"), // step 9 (lane R) adds the new boss flags: fatigue
         ("ulda_53_maru", "53", "Taskmaster Maru", "2", 4, "extended", 1, ""),
-        ("ulda_54_janak", "54", "Janak", "2", 4, "extended", 3, ""),
+        ("ulda_54_janak", "54", "Janak", "2", 4, "extended", 3, "charge"), // step 9 (lane R) adds the new boss flags: charge
         ("ulda_55_murlocs", "55", "Water-Toting Murlocs", "1", 2, "extended", 2, "bothPlayers"),
         ("ulda_56_frog", "56", "Sand Puffer Frog", "1", 2, "extended", 1, "passive"),
         ("ulda_57_winged_guardian", "57", "Winged Guardian", "2", 4, "extended", 1, ""),

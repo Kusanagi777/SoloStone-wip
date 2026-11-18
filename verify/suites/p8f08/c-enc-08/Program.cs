@@ -622,7 +622,7 @@ Guard("Rows", () =>
         ("loot_17_jinzo", "LOOTA_BOSS_17h", "LOOTA_BOSS_17p", "2", 0, "authentic", new[] { "passive", "bothPlayers", "doubleBattlecry" }),
         ("loot_19_gutmook", "LOOTA_BOSS_19h", "LOOTA_BOSS_19p", "2", 0, "authentic", new[] { "passive" }),
         ("loot_33_gutmook", "LOOTA_BOSS_33h", "LOOTA_BOSS_33p", "3", 0, "authentic", new[] { "passive" }),
-        ("loot_31_candlebeard", "LOOTA_BOSS_31h", "LOOTA_BOSS_31p", "3", 0, "authentic", new[] { "passive" }),
+        ("loot_31_candlebeard", "LOOTA_BOSS_31h", "LOOTA_BOSS_31p", "3", 0, "authentic", new[] { "passive", "charge" }), // step 9 (lane R) adds the new boss flags: charge
         ("loot_36_ixlid", "LOOTA_BOSS_36h", "LOOTA_BOSS_36p", "3", 20, "substituted", new string[0]),
         ("loot_37_lyris", "LOOTA_BOSS_37h", "LOOTA_BOSS_37p", "2", 0, "authentic", new string[0]),
         ("loot_38_vex", "LOOTA_BOSS_38h", "LOOTA_BOSS_38p", "3", 0, "authentic", new[] { "passive", "bothPlayers", "doubleBattlecry", "doubleDeathrattle" }),
@@ -632,7 +632,7 @@ Guard("Rows", () =>
         ("loot_42_jari", "LOOTA_BOSS_42h", "LOOTA_BOSS_42p", "2", 0, "substituted", new string[0]),
         ("loot_43_jeeru", "LOOTA_BOSS_43h", "LOOTA_BOSS_43p", "3", 0, "substituted", new[] { "bothPlayers", "hiddenZone" }),
         ("loot_46_flurgl", "LOOTA_BOSS_46h", "LOOTA_BOSS_46p", "2", 0, "authentic", new string[0]),
-        ("loot_47_lava_chamber", "LOOTA_BOSS_47h", "LOOTA_BOSS_47p", "3", 0, "authentic", new[] { "passive", "bothPlayers" }),
+        ("loot_47_lava_chamber", "LOOTA_BOSS_47h", "LOOTA_BOSS_47p", "3", 0, "authentic", new[] { "passive", "bothPlayers", "room" }), // step 9 (lane R) adds the new boss flags: room
         ("loot_51_russell", "LOOTA_BOSS_51h", "LOOTA_BOSS_51p", "2", 0, "authentic", new string[0]),
     };
     Check("P2 family 08 holds exactly these seventeen rows", data.Encounters.Where(b => b.Family == "08").Select(b => b.Id).OrderBy(i => i, StringComparer.Ordinal)

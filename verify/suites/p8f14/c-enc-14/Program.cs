@@ -756,7 +756,7 @@ Guard("Rows", () =>
         ("dala_11_noz", "11", "Noz Timbertail", "3", 6, "substituted", new[] { "passive", "bothPlayers" }, true),
         ("dala_12_cravitz", "12", "Cravitz Lorent", "2", 4, "extended", new[] { "bothPlayers" }, false),
         ("dala_13_albin", "13", "Albin Eastoft", "3", 6, "authentic", new string[0], false),
-        ("dala_14_tierra", "14", "Tierra Blythe", "2", 3, "extended", new string[0], false),
+        ("dala_14_tierra", "14", "Tierra Blythe", "2", 3, "extended", new[] { "attackRedirect" }, false), // step 9 (lane R) adds the new boss flags: attackRedirect
         ("dala_15_nici", "15", "Moon Priestess Nici", "2", 3, "extended", new[] { "passive", "bothPlayers" }, true),
     };
     Check("P2 family 14 holds exactly these fifteen rows", data.Encounters.Where(b => b.Family == "14").Select(b => b.Id).OrderBy(i => i, StringComparer.Ordinal)

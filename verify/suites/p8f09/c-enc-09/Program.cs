@@ -1001,16 +1001,16 @@ Guard("Rows", () =>
     Check("M1 the shipped data validates with the eleven family 09 rows", errors.Count == 0, string.Join(" | ", errors.Take(4)));
     var rows = new (string id, string hero, string power, string tier, int health, int offset, string kind, int deck, string[] flags)[]
     {
-        ("loot_20_brimstone", "LOOTA_BOSS_20h", "LOOTA_BOSS_20p", "2", 0, 0, "authentic", 30, new[] { "start", "boardStart", "passive" }),
-        ("loot_22_tad", "LOOTA_BOSS_22h", "LOOTA_BOSS_22p", "3", 20, 0, "authentic", 10, new[] { "listedDeck" }),
+        ("loot_20_brimstone", "LOOTA_BOSS_20h", "LOOTA_BOSS_20p", "2", 0, 0, "authentic", 30, new[] { "start", "boardStart", "passive", "manaIdentity" }), // step 9 (lane R) adds the new boss flags: manaIdentity
+        ("loot_22_tad", "LOOTA_BOSS_22h", "LOOTA_BOSS_22p", "3", 20, 0, "authentic", 10, new[] { "listedDeck", "manaIdentity", "room" }), // step 9 (lane R) adds the new boss flags: manaIdentity, room
         ("loot_50_max", "LOOTA_BOSS_50h", "LOOTA_BOSS_50p", "2", 0, 0, "authentic", 30, new string[0]),
-        ("loot_52_vault", "LOOTA_BOSS_52h", "LOOTA_BOSS_52p", "3", 60, 0, "curated", 10, new[] { "start", "boardStart", "listedDeck", "noLoss", "passive" }),
+        ("loot_52_vault", "LOOTA_BOSS_52h", "LOOTA_BOSS_52p", "3", 60, 0, "curated", 10, new[] { "start", "boardStart", "listedDeck", "noLoss", "passive", "manaIdentity", "room" }), // step 9 (lane R) adds the new boss flags: manaIdentity, room
         ("loot_53_inara", "LOOTA_BOSS_53h", "LOOTA_BOSS_53p", "3", 0, 0, "authentic", 30, new[] { "passive" }),
         ("loot_54_kay", "LOOTA_BOSS_54h", "LOOTA_BOSS_54p", "2", 0, 0, "substituted", 30, new string[0]),
         ("loot_25_vustrasz", "LOOTA_BOSS_25h", "LOOTA_BOSS_25p", "major1", 0, 10, "authentic", 30, new[] { "start", "boardStart" }),
         ("loot_26_xol", "LOOTA_BOSS_26h", "LOOTA_BOSS_26p8", "major1", 0, 10, "authentic", 30, new[] { "passive" }),
         ("loot_34_azari", "LOOTA_BOSS_34h", "LOOTA_BOSS_34p", "major1", 0, 10, "authentic", 30, new[] { "hiddenZone", "passive" }),
-        ("loot_49_darkness", "LOOTA_BOSS_49h", "LOOTA_BOSS_49p", "major1", 0, 10, "authentic", 30, new[] { "start" }),
+        ("loot_49_darkness", "LOOTA_BOSS_49h", "LOOTA_BOSS_49p", "major1", 0, 10, "authentic", 30, new[] { "start", "handAdd" }), // step 9 (lane R) adds the new boss flags: handAdd
         ("loot_99_togwaggle", "LOOTA_BOSS_99h", "LOOTA_BOSS_99p", "major1", 0, 10, "authentic", 30, new string[0]),
     };
     Check("M2 family 09 holds exactly these eleven rows", data.Encounters.Where(b => b.Family == "09").Select(b => b.Id).OrderBy(i => i, StringComparer.Ordinal)

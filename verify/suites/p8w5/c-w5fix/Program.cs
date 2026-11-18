@@ -22,7 +22,8 @@ using SabberStoneCore.Tasks.PlayerTasks;
 //          22). The close-out (family 25) closes DALA_Tekahn / ulda_67_tekahn (family 24's finale row, the fixed boss of
 //          acts-v3t's finale, which excludeBosses cannot filter): the key makes the default roll leave acts-v3t out for that
 //          row (DungeonRun.DefaultSchedule), NewRun refuses acts-v3t named for it, and a DALA_Tekahn run follows acts-v3h,
-//          whose finale is the Heist's (Q7-Q10; Q7 was the close-out's tripwire until then).
+//          whose finale is the Heist's (Q7-Q10; Q7 was the close-out's tripwire until then). Step 9 made acts-v4h and
+//          acts-v4t the defaults: Q7-Q11 now walk acts-v4t (Tekahn's finale too) and acts-v4h, and Q10 also refuses acts-v3t.
 //   E1-E3  Unstable Evolution's hand copy (LOOT_504t) never costs less than (1) (the Echo copy floor; the client prints the
 //          card with Echo since patch 23.0.3): under Millhouse Manastorm's "enemy spells cost (0)" the run player's copies
 //          looped without end against Rasil (bp.sh enc15, "stuck after 1500 actions", found by this regression).
@@ -163,7 +164,9 @@ Guard("Q", () =>
     var pairs = new[] { (Hero: "DALA_Squeamlish", Boss: "ulda_07_squeamlish", Class: "DRUID"), (Hero: "DALA_Chu", Boss: "ulda_06_chu", Class: "WARRIOR"),
         (Hero: "DALA_George", Boss: "loot_15_george_karl", Class: "PALADIN"), (Hero: "DALA_Barkeye", Boss: "ulda_50_barkeye", Class: "HUNTER"),
         (Hero: "DALA_Vessina", Boss: "ulda_63_vessina", Class: "SHAMAN") };
-    var finalePairs = new[] { (Hero: "DALA_Tekahn", Boss: "ulda_67_tekahn", Class: "WARLOCK", Schedule: "acts-v3t") }; // the close-out (Q7-Q10)
+    // Step 9 (wave 9b): the defaults are acts-v4h and acts-v4t; acts-v4t's finale is Tekahn's too (acts-v3t's, released, stays).
+    var finalePairs = new[] { (Hero: "DALA_Tekahn", Boss: "ulda_67_tekahn", Class: "WARLOCK", Schedule: "acts-v4t") }; // the close-out (Q7-Q10), step 9's defaults
+    const string Heist = "acts-v4h", Released = "acts-v3t";
     var errors = DungeonRunValidator.Validate(data, null);
     Check("Q1 the shipped data validates", errors.Count == 0, string.Join(" | ", errors.Take(3)));
     var excluding = data.Classes.Where(c => c.ExcludeBosses.Count > 0).Select(c => c.Id + ":" + string.Join(",", c.ExcludeBosses)).OrderBy(x => x).ToList();
@@ -211,7 +214,7 @@ Guard("Q", () =>
         {
             var s = run.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed);
             if (s.BossSequence.Contains(Boss)) met++;
-            if (s.Schedule == "acts-v3h" && s.ScheduleVersion == 3) followed++;
+            if (s.Schedule == Heist && s.ScheduleVersion == 4) followed++;
             var w = runWithout.NewRun(all, Hero, row.Decks[0], row.Powers[0], seed);
             if (w.BossSequence.Contains(Boss)) metWithout++;
             if (w.Schedule == Schedule) rolledWithout++;
@@ -219,21 +222,24 @@ Guard("Q", () =>
             if (c.Schedule == Schedule) classRolled++;
             if (c.BossSequence.Contains(Boss)) metClass++;
         }
-        Check($"Q7 {Boss} (the character of {Hero}) is a finale row in no act pool, and the fixed boss of the shipped finale of {Schedule} only; {Seeds} {Hero} new runs on the default roll all follow acts-v3h (stamped 3) and none meets it",
-            data.Boss(Boss).Tier == "finale" && inPools.Count == 0 && naming.SequenceEqual(new[] { Schedule }) && data.Schedules.Defaults.Contains(Schedule)
-            && row.ExcludeBosses.SequenceEqual(new[] { Boss }) && met == 0 && followed == Seeds,
-            "met " + met + ", acts-v3h " + followed + ", pools " + string.Join(",", inPools) + ", finales " + string.Join(",", naming));
+        Check($"Q7 {Boss} (the character of {Hero}) is a finale row in no act pool, and the fixed boss of the shipped finales of {Released} and {Schedule} only; {Seeds} {Hero} new runs on the default roll all follow {Heist} (stamped 4) and none meets it",
+            data.Boss(Boss).Tier == "finale" && inPools.Count == 0 && naming.SequenceEqual(new[] { Released, Schedule }) && data.Schedules.Defaults.Contains(Schedule)
+            && !data.Schedules.Defaults.Contains(Released) && row.ExcludeBosses.SequenceEqual(new[] { Boss }) && met == 0 && followed == Seeds,
+            "met " + met + ", " + Heist + " " + followed + ", pools " + string.Join(",", inPools) + ", finales " + string.Join(",", naming));
         Check($"Q8 the same {Seeds} seeds with {Hero}'s key removed: some runs roll {Schedule} and meet {Boss} in its finale (Q7 can fail)",
             metWithout > 0 && metWithout == rolledWithout, "met " + metWithout + ", rolled " + rolledWithout);
         Check($"Q9 the exclusion is the hero row's only: {Seeds} {Class} class-row new runs roll {Schedule} and meet {Boss} as often as {Hero} would without its key",
             classRolled > 0 && metClass == classRolled && classRolled == rolledWithout, "rolled " + classRolled + ", met " + metClass);
-        string refusal = null;
+        string refusal = null, refusalReleased = null;
         try { run.NewRun(all, Hero, row.Decks[0], row.Powers[0], 1, schedule: Schedule); } catch (InvalidOperationException e) { refusal = e.Message; }
+        try { run.NewRun(all, Hero, row.Decks[0], row.Powers[0], 1, schedule: Released); } catch (InvalidOperationException e) { refusalReleased = e.Message; }
         var named = run.NewRun(all, Class, cls.Decks[0], cls.Powers[0], 1, schedule: Schedule);
         var onV3h = run.NewRun(all, Hero, row.Decks[0], row.Powers[0], 1, schedule: "acts-v3h");
-        Check($"Q10 NewRun refuses {Schedule} named for {Hero} (\"{DungeonRun.ExcludedFinale}\"), takes it for {Class} (its finale is {Boss}) and takes acts-v3h for {Hero}",
-            refusal == DungeonRun.ExcludedFinale && named.BossSequence.Last() == Boss && onV3h.BossSequence.Last() == "dala_60_khadgar" && !onV3h.BossSequence.Contains(Boss),
-            "refusal " + (refusal ?? "(none)"));
+        var onHeist = run.NewRun(all, Hero, row.Decks[0], row.Powers[0], 1, schedule: Heist);
+        Check($"Q10 NewRun refuses {Schedule} and {Released} named for {Hero} (\"{DungeonRun.ExcludedFinale}\"), takes {Schedule} for {Class} (its finale is {Boss}) and takes acts-v3h and {Heist} for {Hero}",
+            refusal == DungeonRun.ExcludedFinale && refusalReleased == DungeonRun.ExcludedFinale && named.BossSequence.Last() == Boss
+            && onV3h.BossSequence.Last() == "dala_60_khadgar" && !onV3h.BossSequence.Contains(Boss) && onHeist.BossSequence.Last() == "dala_60_khadgar" && !onHeist.BossSequence.Contains(Boss),
+            "refusal " + (refusal ?? "(none)") + " / " + (refusalReleased ?? "(none)"));
         // The validator keeps a default open to every hero row: with acts-v3t the only default, DALA_Tekahn would have none.
         var only = Copy();
         only.Schedules.Defaults.Clear(); only.Schedules.Defaults.Add(Schedule);
