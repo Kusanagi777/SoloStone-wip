@@ -531,9 +531,11 @@ Guard("S146", () =>
         made.AddRange(g.Player2.HandZone);
         if (g.State == State.COMPLETE) break;
     }
-    var excluded = new HashSet<string>(plan.ExcludedGeneratedBoss ?? new string[0]);
-    // The engine's random pools hold unscripted cards too (as for the run player's Tome and every random card since phase 2): only
-    // the admission lists are the generation filter, so an unscripted card may come (a card with no effect), never an excluded one.
+    // Step 9 (lane G, D15): the both-sides list (ExcludedGenerated) now holds the generated unscripted cards (five Priest spells of
+    // this pool), so the filter the boss's generation reads is both lists; before, the Priest spells it dropped were all boss-side.
+    var excluded = new HashSet<string>((plan.ExcludedGeneratedBoss ?? new string[0]).Concat(plan.ExcludedGenerated ?? new string[0]));
+    // Before step 9 the engine's random pools held unscripted cards too (as for the run player's Tome and every random card since
+    // phase 2); step 9 lists them, so neither an unscripted nor an excluded card comes.
     var bad = made.Where(p => p.Card.Type != CardType.SPELL || p.Card.Class != CardClass.PRIEST || p.Card.IsSecret || excluded.Contains(p.Card.Id)
         || !DungeonRunAdmission.Classify(p.Card, p.Card.Id, AdmitScope.Boss, null, catalogRun: true).Admitted).Select(p => p.Card.Id).ToList();
     Check("S146a Bwonsamdi's Tome (Talanji, early): each spell the boss casts adds one random Priest spell to its hand, always through the boss's generation filter (admitted for a boss, never a Secret or a listed exclusion)",

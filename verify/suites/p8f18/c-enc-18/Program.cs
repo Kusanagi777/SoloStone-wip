@@ -518,10 +518,11 @@ Guard("Finale", () =>
     var shipped = data.Schedules.Find("acts-v3h");
     var rule = data.Schedules.Rule("DALA_830");
     // The close-out (family 25) ships the finale as this family built it on the fixture (which is now the shipped file).
-    Check("R1 the shipped acts-v3h ends with the Heist finale (the close-out: four acts, the four bosses fixed) and DALA_830 is an admitted twist with effect run, in the finale's twist pool only",
+    Check("R1 the shipped acts-v3h ends with the Heist finale (the close-out: four acts, the four bosses fixed) and DALA_830 is an admitted twist with effect run, in the finale's twist pool only (acts-v3h's and, since step 9, acts-v4h's)",
         shipped.FinaleEnabled && shipped.Acts.Count == 4 && shipped.Acts[3].IsFinale && shipped.Acts[3].FixedBosses.SequenceEqual(fixedBosses) && rule != null && rule.Kind == DungeonRunGlobalRule.KindTwist
         && rule.Effect == DungeonRunGlobalRule.EffectRun && rule.Admitted && !DungeonRunGlobalRules.IsScripted("DALA_830")
-        && data.Schedules.Schedules.Values.SelectMany(x => x.Acts.Where(a => a.TwistPool.Contains("DALA_830")).Select(a => x.Id + ":" + a.IsFinale)).OrderBy(x => x).SequenceEqual(new[] { "acts-v3h:True" })
+        // Step 9: acts-v4h's finale keeps DALA_830 (twist-pools.json), so two finales name it, still no act I-III pool.
+        && data.Schedules.Schedules.Values.SelectMany(x => x.Acts.Where(a => a.TwistPool.Contains("DALA_830")).Select(a => x.Id + ":" + a.IsFinale)).OrderBy(x => x, StringComparer.Ordinal).SequenceEqual(new[] { "acts-v3h:True", "acts-v4h:True" })
         && DungeonRunAdmission.Classify(C("DALA_830"), "DALA_830", AdmitScope.Rule).Admitted && !DungeonRunAdmission.Classify(C("DALA_830"), "DALA_830", AdmitScope.Player).Admitted);
     var fx = Load(fixtureSchedule);
     var fxErrors = DungeonRunValidator.Validate(fx, null);
@@ -602,7 +603,7 @@ Guard("Rows", () =>
         ("dala_70_smiggs", 70, "Sky Captain Smiggs", "3", 6, 30, "authentic", 30, new[] { "bothPlayers" }),
         ("dala_71_anarii", 71, "Anarii Duskgrove", "3", 6, 30, "authentic", 30, new string[0]),
         ("dala_72_kazamon", 72, "Kazamon Steelskin", "3", 6, 30, "authentic", 30, new[] { "passive" }),
-        ("dala_73_hesutu", 73, "Hesutu Stonewind", "2", 3, 30, "extended", 30, new string[0]),
+        ("dala_73_hesutu", 73, "Hesutu Stonewind", "2", 3, 30, "extended", 30, new[] { "windfury" }), // step 9 (lane R) adds the new boss flags: windfury
         ("dala_74_kara", 74, "Kara Stamper", "3", 6, 30, "authentic", 30, new string[0]),
         ("dala_43_norroa", 43, "Magistrix Norroa", "finale", 9, 30, "authentic", 35, new[] { "passive" }),
         ("dala_67_vargoth", 67, "Archmage Vargoth", "finale", 10, 30, "authentic", 35, new string[0]),

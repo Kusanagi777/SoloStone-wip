@@ -937,7 +937,13 @@ Guard("W", () =>
         && !DungeonRunAdmission.Classify(null, id, AdmitScope.Player, null, true).Admitted && !DungeonRunAdmission.Classify(null, id, AdmitScope.Boss, null, true).Admitted && rejects.Contains(id)));
     Check("W9 the tokens are admitted for a rule only and never generated", tokens.All(id => DungeonRunAdmission.Classify(null, id, AdmitScope.Rule, null, true).Admitted
         && !DungeonRunAdmission.Classify(null, id, AdmitScope.Boss, null, true).Admitted && rejects.Contains(id)));
-    Check("W10 no shipped act names a plague in its twist pool yet (the close-out fills the pools)", data.Schedules.Schedules.Values.All(sc => sc.Acts.All(a => !a.TwistPool.Any(twists.Contains))));
+    // Step 9 (lane R, D8) filled the act I-III twist pools of acts-v4h (acts-v4t shares its acts), chapter-mapped: ULDA_801 in act I,
+    // ULDA_802 in act II, ULDA_803 and ULDA_804 in act III; no released schedule (stamp 3 or below) and no finale names a plague.
+    var plagueActs = data.Schedules.Schedules.Values.SelectMany(sc => sc.Acts.Select((a, i) => (sc, a, i))).Where(x => x.a.TwistPool.Any(twists.Contains))
+        .Select(x => x.sc.Id + ":" + (x.i + 1) + ":" + string.Join("+", x.a.TwistPool.Where(twists.Contains))).OrderBy(x => x, StringComparer.Ordinal).ToList();
+    Check("W10 only step 9's acts-v4h and acts-v4t name a plague in a twist pool, chapter-mapped in acts I-III (no released schedule, no finale)",
+        plagueActs.SequenceEqual(new[] { "acts-v4h:1:ULDA_801", "acts-v4h:2:ULDA_802", "acts-v4h:3:ULDA_803+ULDA_804", "acts-v4t:1:ULDA_801", "acts-v4t:2:ULDA_802", "acts-v4t:3:ULDA_803+ULDA_804" })
+        && data.Schedules.Schedules.Values.Where(sc => sc.StampVersion <= 3).All(sc => sc.Acts.All(a => !a.TwistPool.Any(twists.Contains))), string.Join(" ", plagueActs));
     // The anomaly offer: every admitted Tombs anomaly can be rolled at act I, a twist never.
     var offered = new HashSet<string>();
     for (long seed = 1; seed <= 900; seed++)

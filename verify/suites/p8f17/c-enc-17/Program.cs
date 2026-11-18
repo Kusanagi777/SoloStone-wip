@@ -670,7 +670,7 @@ Guard("Rows", () =>
     {
         ("dala_46_ichoron", "46", "Ichoron", "3", 6, "authentic", new string[0], false),
         ("dala_47_lavanthor", "47", "Lavanthor", "3", 6, "substituted", new string[0], false),
-        ("dala_48_zuramat", "48", "Zuramat the Obliterator", "4", 8, "authentic", new[] { "start", "bothPlayers" }, false),
+        ("dala_48_zuramat", "48", "Zuramat the Obliterator", "4", 8, "authentic", new[] { "start", "bothPlayers", "handAdd" }, false), // step 9 (lane R) adds the new boss flags: handAdd
         ("dala_49_cyanigosa", "49", "Cyanigosa", "4", 8, "authentic", new[] { "passive" }, true),
         ("dala_50_nozari", "50", "Nozari", "3", 6, "authentic", new[] { "passive" }, true),
         ("dala_51_millificent", "51", "Millificent Manastorm", "3", 6, "authentic", new string[0], false),
