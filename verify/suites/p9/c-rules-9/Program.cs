@@ -11,7 +11,8 @@ using SabberStoneCore.CardSets.DungeonRun;
 //      and the shipped data and the fixture accepted
 //   F  D17: ForbiddenPairs on constructed states: each kind of pair it reports, the same lines in either order, nothing on a
 //      clean run, BuildPlan's log line, and RuleCandidates leaving out every rule the predicate would pair (F14: a fight-only
-//      hero with no flag behind it, the gate check this suite added to RuleCandidates)
+//      hero with no flag behind it, the gate check this suite added to RuleCandidates; F15: a run-scope rule against a later act,
+//      on a data copy)
 //   S  C2: the ordering fix: every Rumble shrine deck x 200 seeds on acts-v3h and acts-v4h, no stored act I anomaly offer and
 //      no rolled twist carries noBoardShrine
 //   T  C5: the twist roll: on the shipped defaults (2000 new runs) each of the eight act twists rolls in at least 15% of runs,
@@ -238,6 +239,33 @@ Guard("F", () =>
     var lu = ur.ForbiddenPairs(us);
     Check("F14 a rule x fight-only hero pair with no flag behind it: the predicate reports it and RuleCandidates leaves the rule out", !gateOffers
         && lu.SequenceEqual(new[] { "act 1: DALA_833 x gila_61_hagatha (fight-only hero GILA_600h2, incompatibleClasses)" }), "gate offers " + gateOffers + "; " + string.Join(" | ", lu));
+    // C1's run-scope half: a run-scope anomaly offered in act I is checked against every act's bosses (and rules). No shipped
+    // run-scope rule excludes a boss or a rule, so a data copy gives ULDA_729 an incompatibleFlags entry ("charge") that only an
+    // act III boss carries: act I's gate must leave it out, the predicate must report it on act 3, and without the act III boss
+    // the gate offers it (the exclusion is the act III boss's alone).
+    var scoped = Load();
+    scoped.Schedules.Rule("ULDA_729").IncompatibleFlags.Add("charge");
+    var sr = new DungeonRun(scoped);
+    var smage = scoped.ClassRows.First(c => c.Id == "MAGE");
+    DungeonRunState AllPlain(long seed)
+    {
+        var st = New(sr, smage, smage.Decks[0], seed, "acts-v4h");
+        foreach (var n in sr.ScheduleFor(st).Nodes.Where(n => n.IsFight && !sr.ScheduleFor(st).Acts[n.Act - 1].IsFinale)) st.BossSequence[n.Floor - 1] = plain[(n.Floor - 1) % plain.Count].Id;
+        st.ActiveRules.RemoveAll(r => r.Kind != null);
+        return st;
+    }
+    var quietRun = AllPlain(70015);
+    var loudRun = AllPlain(70015);
+    int act3Floor = sr.ScheduleFor(loudRun).Nodes.First(n => n.IsFight && n.Act == 3).Floor;
+    loudRun.BossSequence[act3Floor - 1] = charge.Id;
+    bool offeredQuiet = sr.RuleCandidates(quietRun, sr.ScheduleFor(quietRun), 1, "anomaly").Any(r => r.Id == "ULDA_729");
+    bool offeredLoud = sr.RuleCandidates(loudRun, sr.ScheduleFor(loudRun), 1, "anomaly").Any(r => r.Id == "ULDA_729");
+    loudRun.ActiveRules.Add(Rule("ULDA_729", 0, "anomaly"));
+    var l15 = sr.ForbiddenPairs(loudRun).Where(l => l.Contains("ULDA_729")).ToList();
+    Check("F15 a run-scope anomaly is checked against a later act's bosses (ULDA_729 given incompatibleFlags charge, " + charge.Id + " on act III floor " + act3Floor
+        + "): act I's gate leaves it out, offers it without that boss, and the predicate reports it once on act 3",
+        offeredQuiet && !offeredLoud && l15.SequenceEqual(new[] { "act 3: ULDA_729 x " + charge.Id + " (flag charge)" }),
+        "offered without " + offeredQuiet + ", with " + offeredLoud + "; " + string.Join(" | ", l15));
 });
 
 // ============================================================ S. C2: the ordering fix on every Rumble shrine deck
@@ -276,8 +304,15 @@ Guard("S", () =>
 
 // ============================================================ T. C5: the twist roll
 // Whether twist t can be rolled on act a of run s: an independent reading of the data (the rule's admission, the board shrine,
-// the run class, and every boss pre-rolled for the act: its incompatibleRules and flags). At roll time no other rule is active
+// the run class, and every boss pre-rolled for the act: its incompatibleRules and flags, and its fight-only heroes, Hagatha's hero
+// cards and a finale's relay heroes, against the rule's incompatibleClasses by character). At roll time no other rule is active
 // on the act (twists are act rules, rolled before the first node).
+// One character: equal ids, or ids that are a letter followed by digits and differ only in the digits (GILA_600h, GILA_600h2).
+bool SameHero(string a, string b)
+{
+    string Trim(string id) { string t = id.TrimEnd("0123456789".ToCharArray()); return t.Length > 0 && char.IsLetter(t[t.Length - 1]) ? t : null; }
+    return a == b || Trim(a) != null && Trim(a) == Trim(b);
+}
 bool Compatible(DungeonRunData d, DungeonRunState s, DungeonRunSchedule schedule, int act, string twistId)
 {
     var t = d.Schedules.Rule(twistId);
@@ -288,6 +323,7 @@ bool Compatible(DungeonRunData d, DungeonRunState s, DungeonRunSchedule schedule
     {
         var boss = d.Boss(s.BossSequence[n.Floor - 1]);
         if (boss.IncompatibleRules.Contains(twistId) || boss.Flags.Any(t.IncompatibleFlags.Contains)) return false;
+        if (boss.HeroCards.Select(h => h.Hero).Concat(boss.Relay.Select(h => h.Hero)).Any(h => t.IncompatibleClasses.Any(c => SameHero(c, h)))) return false;
     }
     return true;
 }
@@ -504,7 +540,10 @@ Guard("W", () =>
     Check("W4 every fight's plan builds (BuildPlan never throws at PreMatch)", planErrors == 0, string.Join(" | ", planLines));
     Check("W5 C3: on stamp 4 every modifier node opens an offer (" + modNodes + " nodes)", modSkipped == 0 && modNodes > 0, string.Join(" | ", livenessLines));
     Check("W6 C3: on stamp 4 every modifier offer holds at least one modifier and ends with \"none\" (no forced single pick)", modForced == 0 && modNoNone == 0, string.Join(" | ", livenessLines));
-    Check("W7 the walks take anomalies of many kinds (at least 25 distinct rules, run-scope ones included)", taken.Count >= 25 && taken.Contains("ULDA_720") && taken.Contains("ULDA_721"), string.Join(",", taken.OrderBy(x => x, StringComparer.Ordinal)));
+    // The run-scope anomalies are ULDA_720 and ULDA_729 (scope "run"); ULDA_721 is an act-scope match rule.
+    var runScope = data.Schedules.Rules.Where(r => r.RunScope && r.Admitted && r.Kind == DungeonRunGlobalRule.KindAnomaly).Select(r => r.Id).ToList();
+    Check("W7 the walks take anomalies of many kinds (at least 25 distinct rules, both run-scope ones included: " + string.Join(", ", runScope) + ")",
+        taken.Count >= 25 && runScope.Count == 2 && runScope.All(taken.Contains), string.Join(",", taken.OrderBy(x => x, StringComparer.Ordinal)));
 });
 
 // ============================================================ K. C4: every modifier knob x the majors, finales and fixedHealth rows

@@ -95,7 +95,9 @@ else
     throw new Exception("no stamp-4 floor draws " + boss.Id);
 }
 
-DungeonRunState Reach(DungeonRunClass cls, string schedule, int floor, long seed)
+// The walk takes no rules, so it skips the treasures a case rule's incompatibleTreasures names: a real run holding one is never
+// offered that rule (RuleCandidates), so a walk that drafted it would make a state no run reaches (review: ULDA_720 x LOOTA_800).
+DungeonRunState Reach(DungeonRunClass cls, string schedule, int floor, long seed, ISet<string> avoid)
 {
     var s = run.NewRun(all, cls.Id, cls.Decks[0], cls.Powers[0], seed, schedule: schedule, signatureId: run.SignatureOffer(all, cls, seed).FirstOrDefault());
     if (!DungeonRun.Tuned(s)) throw new Exception("not a stamp-4 run");
@@ -105,7 +107,7 @@ DungeonRunState Reach(DungeonRunClass cls, string schedule, int floor, long seed
         switch (s.Phase)
         {
             case DungeonRunPhase.PreMatch: run.BeginMatch(s); run.RecordOutcome(s, scratch, DungeonRunOutcome.Win); break;
-            case DungeonRunPhase.TreasureDraft: run.PickTreasure(s, s.OpenDraft.Offered[0]); break;
+            case DungeonRunPhase.TreasureDraft: run.PickTreasure(s, s.OpenDraft.Offered.FirstOrDefault(t => !avoid.Contains(t)) ?? s.OpenDraft.Offered[0]); break;
             // An anomaly or modifier node takes none on the walk: the case injects its own at the fight.
             case DungeonRunPhase.Modifier:
                 run.PickModifier(s, s.ModifierOffer.Kind == DungeonRunGlobalRule.KindAnomaly || s.ModifierOffer.Offered.Contains(DungeonRunGlobalRule.None) ? DungeonRunGlobalRule.None : s.ModifierOffer.Offered[0]);
@@ -137,7 +139,8 @@ foreach (var c in cases)
     try
     {
         (schedule, floor) = Placement(boss);
-        var s = Reach(cls, schedule, floor, seedBase + c.Number);
+        var avoid = new HashSet<string>(c.Rules.SelectMany(id => data.Schedules.Rule(id)?.IncompatibleTreasures ?? new List<string>()), StringComparer.Ordinal);
+        var s = Reach(cls, schedule, floor, seedBase + c.Number, avoid);
         s.BossSequence[floor - 1] = boss.Id;
         int act = run.CurrentNode(s).Act;
         s.ActiveRules.RemoveAll(r => r.Kind != null || r.Act == act);
