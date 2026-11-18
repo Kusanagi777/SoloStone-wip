@@ -45,6 +45,9 @@
 #                        bp.sh tekahn25                  the SHIPPED acts-v3t finale on Tekahn with the hero relay (twice per call)
 #                        bp.sh sweep25 <a|b|c> <k>       new runs with no named schedule (the default roll), each fought at a floor of
 #                                                        its own (DEFAULT_SWEEP; one run per call; then `bp.sh same sweep25-<a|b|c>`)
+#   step 9 (lane R):     bp.sh pairs9 <chunk> <k>        C6: chunk <chunk> of the covering array verify/fixtures/p9/pairs9.txt
+#                                                        (verify/tools/balance/pairs.py; c-bosspilot-pairs9, real games on the shipped
+#                                                        stamp-4 schedules; one run per call; then `bp.sh same pairs9-<chunk>`)
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -372,6 +375,10 @@ tekahn25) # acts-v3t's finale as it ships: Tekahn with the hero relay; the run h
 sweep25) # the default roll: runs 0-15 (a), 16-31 (b) and 32-47 (c), the run rows in turn, each fought at floor 1 + 7i of its schedule
   case "$2" in a) from=0 ;; b) from=16 ;; c) from=32 ;; *) echo "usage: bp.sh sweep25 <a|b|c> <k>"; exit 2 ;; esac
   need $E; once sweep25-$2 "$3" DEFAULT_SWEEP=16 DEFAULT_SWEEP_FROM=$from SEED_BASE=25000 ;;
+# ---- step 9 (lane R): the covering array of the incompatibility prevention (plan C6)
+pairs9) # one chunk of verify/fixtures/p9/pairs9.txt (the first column), every case one game
+  [ -n "$2" ] || { echo "usage: bp.sh pairs9 <chunk> <k>"; exit 2; }
+  need $SUITES/p9/c-bosspilot-pairs9; once pairs9-$2 "$3" CHUNK=$2 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;
