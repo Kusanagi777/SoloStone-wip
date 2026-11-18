@@ -496,7 +496,9 @@ namespace SabberStoneCore.Auras
 				AppliedEntityIdCollection.ForEach(Game.IdEntityDic, effects,
 					(id, idDict, effs) =>
 					{
-						IPlayable entity = idDict[id];
+						// An applied id the game no longer holds (a hidden hand card a fair-view copy re-registered): nothing
+						// to give back (SwitchingAura.RemoveInternal).
+						if (!idDict.TryGetValue(id, out IPlayable entity)) return;
 						for (int i = 0; i < effs.Length; i++)
 							effs[i].RemoveAuraFrom(entity, _ownerId);
 					});
@@ -513,7 +515,7 @@ namespace SabberStoneCore.Auras
 				AppliedEntityIdCollection.ForEach(_ownerId, Game.IdEntityDic,
 					(id, ownerId, idDict) =>
 					{
-						IPlayable entity = idDict[id];
+						if (!idDict.TryGetValue(id, out IPlayable entity)) return;
 						for (int i = entity.AppliedEnchantments.Count - 1; i >= 0; i--)
 							if (entity.AppliedEnchantments[i].Creator.Id == ownerId)
 								entity.AppliedEnchantments[i].Remove();

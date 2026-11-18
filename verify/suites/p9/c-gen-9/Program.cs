@@ -158,8 +158,9 @@ var kinds = new[] { (Name: "legacy", Catalog: false), (Name: "catalog", Catalog:
 // and the aura's applied id 64 was in no IdEntityDic of the view, so the end of the boss's simulated turn (EndTurnTrigger ->
 // SwitchingAura.TurnOff -> RemoveInternal) threw KeyNotFoundException and the search fell back (4 FALLBACK lines). A view id
 // left by a hidden card names nothing or another hidden stand-in, so there is nothing to give back (Effect.RemoveAuraFrom's rule
-// for stand-ins, c-w3fix X2). Two enchantments on the first hidden card are dropped by the view, so the later cards' ids are
-// beyond every id it hands out.
+// for stand-ins, c-w3fix X2). The view hands out no id above the ones it keeps; two enchantments on the first hidden card
+// (dropped by the view) keep the Fireball's and the Yeti's ids above them whatever else it drops (A2 checks it). With
+// FairBotState's canonicalisation off, A2 fails (ids in the view) and A3-A6 pass with or without the engine fix.
 Guard("A", () =>
 {
     const string Kalecgos = "DAL_609", Glinda = "GIL_618", Portal = "EX1_315", Fireball = "CS2_029", Kings = "CS2_092e";
