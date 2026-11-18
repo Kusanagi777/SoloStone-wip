@@ -22,6 +22,8 @@ using System.Text.Json;
 //      their v4 block). A field the reference had must hold the reference's value; a field step 9 added is either neutral on
 //      the released object (its default: the key is absent) or read only through DungeonRun.Tuned, or one of lane R's
 //      documented correctness fixes (each named below with its reason); any other field fails as unclassified
+//   T  the readers of the Tuned-only fields (tavern weightByAct and maxPerRun, treasure shared) on new runs of the released act
+//      schedules: they read the released values (weight, no cap, scope only)
 // "record <file>" writes the reference (used only by record_sched9.sh, on the f62275b export).
 var data = Sched9.Load();
 string[] released = Sched9.Released;
@@ -223,6 +225,44 @@ Guard("P", () =>
         string.Join(" ", attributed.Where(x => !applied.Contains(x.Key)).Select(x => x.Key)));
     Check("P10 no reference object is gone, and step 9 added no schedule-visible object but the runs-v4 treasures", missing.Count == 0 && fresh.All(k => Kind(k) == "treasure"),
         "gone: " + string.Join(" ", missing.Take(8)) + "; new: " + string.Join(" ", fresh.Where(k => Kind(k) != "treasure").Take(8)));
+});
+
+// ============================================================ T. the Tuned-only fields are not read on a released run
+// P classifies weightByAct, maxPerRun and shared as Tuned-only; T runs the readers on new runs of the released act schedules.
+Guard("T", () =>
+{
+    var run = new DungeonRun(data);
+    var profile = new DungeonRunProfile(); profile.Unlocked.AddRange(data.Unlocks.Keys);
+    string[] actRuns = { "acts-v1", "acts-v2", "act1", "acts-v3h", "acts-v3t" };
+    var rows = data.Classes.Where(c => c.Decks.Count > 0).ToList();
+    var options = data.Tavern.Options.ToList();
+    var weightBad = new List<string>(); var capBad = new List<string>(); var scopeBad = new List<string>();
+    int states = 0, v4Differs = 0;
+    foreach (string id in actRuns.Concat(new[] { "acts-v4h" }))
+        foreach (var row in rows)
+        {
+            DungeonRunState st;
+            try { st = run.NewRun(profile, row.Id, row.Decks[0], row.Powers[0], 4243, schedule: id); }
+            catch (InvalidOperationException) { continue; } // a finale this row is excluded from
+            bool v4 = id == "acts-v4h";
+            if (!v4) states++;
+            st.HealthBonus = 30;
+            foreach (var o in options)
+            {
+                int w = DungeonRunTavernNode.OfferWeight(run, st, o);
+                if (v4) { if (w != o.Weight) v4Differs++; continue; }
+                if (w != o.Weight) weightBad.Add(id + ":" + o.Id + "=" + w);
+                if (DungeonRunTavernNode.RunCapReached(st, o)) capBad.Add(id + ":" + o.Id);
+            }
+            if (v4) continue;
+            var cls = run.RunClass(st);
+            foreach (var t in data.Treasures)
+                if (DungeonRun.TreasureInScope(t, cls, st) != t.Scope.Matches(cls.ClassSet, st.StarterDeck, st.Power)) scopeBad.Add(id + ":" + row.Id + ":" + t.Id);
+        }
+    Check($"T1 on new runs of the five released schedules ({states} states) every tavern option weighs its released \"weight\" (weightByAct unread); acts-v4h reads weightByAct ({v4Differs} option weights differ there)",
+        states > 100 && weightBad.Count == 0 && v4Differs > 0, string.Join(" ", weightBad.Take(8)));
+    Check("T2 and no option is at its maxPerRun on them (HealthBonus 30: maxPerRun unread)", capBad.Count == 0, string.Join(" ", capBad.Take(8)));
+    Check("T3 and every treasure is in scope exactly where its scope matches (\"shared\" unread)", scopeBad.Count == 0, scopeBad.Count + ": " + string.Join(" ", scopeBad.Take(8)));
 });
 
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");
