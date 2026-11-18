@@ -18,10 +18,9 @@ using SabberStoneCore.Tasks.PlayerTasks;
 // twist and the anomaly on the fight's act, a run-scope anomaly on the run; the modifier on the fight's act), replacing the
 // walk's own. The plan is built by DungeonRun.BuildPlan and the game played through the run setup path with the fair AI on the
 // boss and the local bot on the run player (the encounter harness's loop, with the plan's own turn cap), then recorded.
-// Expected: 0 faults, 0 fallbacks, 0 failed checks, 0 swallowed leaf exceptions; known exception: chunk 23 case 1722
-// (dala_07_belnaara, MAGE) logs 3 boss-AI fallbacks at turn 20 with or without its rule, a KeyNotFoundException in the engine's
-// SwitchingAura.RemoveInternal (an entity id no longer in IdEntityDic) during the AI's search simulation (FairBotState.Apply ->
-// EndTurnTask): a pre-step-9 engine defect, left open (handoff/phase9/tests.md), so chunk 23 exits 3.
+// Expected: 0 faults, 0 fallbacks, 0 failed checks, 0 swallowed leaf exceptions. Chunk 23 case 1722 (dala_07_belnaara, MAGE)
+// logged 3 boss-AI fallbacks at turn 20 (exit 3) until the engine fix of SwitchingAura.RemoveInternal (an applied id of a hand
+// card the boss's fair view had re-registered; handoff/phase9/tests.md section 2, c-gen-9 A): 0 since.
 //   PAIRS=path     the case file (default verify/fixtures/p9/pairs9.txt)
 //   CHUNK=n        only the cases of chunk n (the file's first column); CASES=a-b only case numbers a..b
 //   RULES=id,id    instead of the file: one case with these rules (twists and anomalies), with BOSS=id, MODIFIER=id, CLASS=id

@@ -47,6 +47,14 @@ Found and NOT fixed (pre-step-9, not step-9 code):
   (FairBotState.Apply -> EndTurnTask -> MainEnd -> AuraUpdate). The search falls back (3 FALLBACK lines at turn 20). Seen in
   pairs9 chunk 23 case 1722 (dala_07_belnaara, MAGE, seed 9901722) with or without the case's rule, so chunk 23 exits 3. Not
   fixed here: an engine change moves every simulation-dependent record; noted in the pairs9 harness header and README.
+  **Fixed afterwards (branch wip/t-aura).** Cause: the boss's fair view gives the opponent's masked hand cards new ids
+  (FairBotState.CanonicalizePrivateActors), so a hand aura on the opponent's board keeps an applied id the view does not hold
+  (enc08: the run player's Kalecgos DAL_609 on Conjurer's Calling, id 64 -> 25 in the view). Fix: Aura.RemoveInternal,
+  SwitchingAura.RemoveInternal and SummoningPortalAura.RemoveAll skip an applied id the game does not hold (nothing to give
+  back, as Effect.RemoveAuraFrom treats the view's stand-ins); the real game never drops an id. Test: c-gen-9 A (9 checks;
+  A3-A6 fail without the fix). It showed on bosspilot enc08 (loot_39_kraxx t20, 4 fallbacks) because lane G's generation
+  filter (ed72e5c, merged 6418c1e) changed that game. Moved: the faulting games only (enc08 kraxx fallbacks 4 -> 0, the
+  game otherwise identical; pairs9 case 1722 fallbacks 3 -> 0, turns 34 -> 35).
 
 ## 3. Pins moved (lane pins; every one listed in implementation.md section 5)
 
