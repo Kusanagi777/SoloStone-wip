@@ -217,16 +217,29 @@ foreach (var boss in bosses)
                 var view = new MulliganView(choice.Choices.Select(id => new MulliganCard(id, game.IdEntityDic[id].Card.Id, game.IdEntityDic[id].Card.Cost)),
                     false, pilot.Deck.CardIds, game.Player1.Hero.Card.Class);
                 game.Process(ChooseTask.Mulligan(game.Player2, BotDriver.Mulligan(view, new DeckPlanMulligan(pilot.Plan)).ToList()));
+                // MainBegin places the start block and then runs on through the first turn's start (its turn-start triggers and
+                // draw: a drawn AT_130 Sea Reaver kills a 1-Health start minion). The boards the start block left are read when
+                // that first turn starts, before its triggers and draw.
+                List<string> startBossBoard = null, startPlayerBoard = null;
+                TriggerManager.TriggerHandler firstTurnStart = sender =>
+                {
+                    if (startBossBoard != null) return;
+                    startBossBoard = game.Player2.BoardZone.Select(m => m.Card.Id).ToList();
+                    startPlayerBoard = game.Player1.BoardZone.Select(m => m.Card.Id).ToList();
+                };
+                game.TriggerManager.TurnStartTrigger += firstTurnStart;
                 game.MainBegin();
+                game.TriggerManager.TurnStartTrigger -= firstTurnStart;
                 // After MainBegin: the boss's shrine is on its board, the start block landed, the hero cards are in hand.
                 if (variant?.Shrine != null)
                     Check(ShrineRules.Of(game.Player2).Any(m => m.Card.Id == variant.Shrine), "the boss shrine " + variant.Shrine + " is not on its board", problems);
                 if (boss.Start != null)
                 {
+                    Check(startBossBoard != null, "start: the first turn did not start in MainBegin", problems);
                     foreach (string id in boss.Start.BossBoard.Distinct())
-                        Check(game.Player2.BoardZone.Count(m => m.Card.Id == id) >= 1, "start: " + id + " is not on the boss board", problems);
+                        Check(startBossBoard?.Contains(id) == true, "start: " + id + " is not on the boss board", problems);
                     foreach (string id in boss.Start.PlayerBoard.Distinct())
-                        Check(game.Player1.BoardZone.Count(m => m.Card.Id == id) >= 1, "start: " + id + " is not on the player board", problems);
+                        Check(startPlayerBoard?.Contains(id) == true, "start: " + id + " is not on the player board", problems);
                     if (boss.Start.BossWeapon != null) Check(game.Player2.Hero.Weapon?.Card.Id == boss.Start.BossWeapon, "start: the boss weapon", problems);
                 }
                 foreach (var option in plan.PlayerHeroCards)

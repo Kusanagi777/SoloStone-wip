@@ -39,24 +39,40 @@ In step-9 code:
   F14 (failed before, passes after). Nothing moves on the shipped data (Hagatha's `heroSwitch` flag already excludes
   DALA_833): c-rules-05/06, c-enc-model and c-enc-25 give byte-identical output with and without it.
 
+Found by the full regression (t/all.q on 1c9014d, stopped at 136 of 185 to restart on the fixed tree):
+- **bp.sh enc17: "start: LOEA10_3 is not on the player board"** (dala_58_flark vs DALA_Chu). Not a product defect: the
+  check sampled the boards after `game.MainBegin()`, which also runs turn 1's start (NextStep advances on its own). Chu's
+  top card is AT_130 Sea Reaver ("When you draw this, deal 1 damage to your minions"), which kills the 1/1 Murloc Tinyfin
+  the start block summoned. The deck order moved at the close-out (a2ef0c6, ULDA_038 Explorer Retraining as a stamp-3
+  tavern option; with its weight 0 Chu's floor-13 deck is back to 31 cards and the game passes), not at step 9; the c25
+  regression had enc17 queued but never ran it. Fix (6059f74, harness only): the base harness
+  `verify/suites/p8f01/c-bosspilot-encounter` reads both boards at the first turn start (`TriggerManager.TurnStartTrigger`,
+  after the start block, before turn 1's triggers and draw) and fails if no first turn start was seen; the four generated
+  copies regenerated (twice byte-identical), the hand-kept p8f04 copy edited the same way. The check keeps its exact
+  meaning (no carve-out). Shown failing: 7 Wisps on the player board before MainBegin -> FAIL 3 per flark game. Moved:
+  enc17's Chu/flark line (FAIL 1 -> ok) and its summary line; enc09 byte-identical.
+- **bp.sh enc08 fallbacks 0 -> 4** and pairs9 chunks 8, 11, 12 (cases 608, 781, 848, 854): the same KeyNotFoundException
+  as below, fixed by the aura-removal fix.
+
 No other step-9 defect was found by any lane. Defects in the lanes' own tests, found by the review and fixed (section 4).
 
-Found after the lanes and fixed (pre-step-9, not step-9 code):
-- **Fair view: an aura kept the retired ids of a hidden hand** (seen as SwitchingAura.RemoveInternal throwing
-  KeyNotFoundException, `idDict[id]` for an id no longer in `IdEntityDic`, inside the boss AI's search simulation
-  FairBotState.Apply -> EndTurnTask -> MainEnd -> AuraUpdate; 3 FALLBACK lines at turn 20 of pairs9 chunk 23 case 1722,
-  dala_07_belnaara, MAGE, seed 9901722, with or without the case's rule). Cause: the player's Kalecgos (DAL_609, a
-  SwitchingAura on its own hand) was applied to the hand card id 89; the boss's view masks that hand and
-  `CanonicalizePrivateActors` retires every hidden id and reissues the slots (89 -> 34), but the aura's applied set kept 89.
-  The engine never retires ids itself, so the engine was not at fault. Skipping absent ids in RemoveInternal would be wrong:
-  freed ids are reissued, so a stale id can also point at another hidden card and the aura's removal would strip that card's
-  effects without any error. Fix: `Game.RemoveDetachedAuraTargetsForFairView` (engine, `Model/Game.FairView.cs`, beside
-  RemoveDetachedTriggersForFairView; `Aura.ForgetUnregisteredTargets`, MultiAura children included) drops applied ids
-  whose entity is no longer registered, and CanonicalizePrivateActors calls it after retiring the hidden ids and before
-  reissuing any. Test: c-secretsearch case 12 KalecgosHiddenHand (before the fix: 72 applied ids on reissued non-hand cards,
-  check failed; after: 0, 3/0). Records: pairs9 chunk 23 exits 0 (only case 1722's line moves: fallbacks 3 -> 0, turns 34 ->
-  35; the other 80 games are identical to the unfixed tree); selfplay 2CE546A18F96DCBC and randplay 22043E377F1097F3 unchanged;
-  c-secretsearch 689 -> 692 (the new case; every other line identical to the unfixed tree).
+Found and NOT fixed (pre-step-9, not step-9 code):
+- **Engine: SwitchingAura.RemoveInternal throws KeyNotFoundException** (`engine/SabberStoneCore/src/Auras/SwitchingAura.cs`
+  line 123, `idDict[id]` for an entity no longer in `IdEntityDic`), inside the boss AI's search simulation
+  (FairBotState.Apply -> EndTurnTask -> MainEnd -> AuraUpdate). The search falls back (3 FALLBACK lines at turn 20). Seen in
+  pairs9 chunk 23 case 1722 (dala_07_belnaara, MAGE, seed 9901722) with or without the case's rule, so chunk 23 exits 3. Not
+  fixed here: an engine change moves every simulation-dependent record; noted in the pairs9 harness header and README.
+  **Fixed afterwards (branch wip/t-aura).** Cause: the boss's fair view gives the opponent's masked hand cards new ids
+  (FairBotState.CanonicalizePrivateActors), so a hand aura on the opponent's board keeps an applied id the view does not hold
+  (enc08: the run player's Kalecgos DAL_609 on Conjurer's Calling, id 64 -> 25 in the view). Fix: Aura.RemoveInternal,
+  SwitchingAura.RemoveInternal and SummoningPortalAura.RemoveAll skip an applied id the game does not hold (nothing to give
+  back, as Effect.RemoveAuraFrom treats the view's stand-ins); the real game never drops an id. Test: c-gen-9 A (9 checks;
+  A3-A6 fail without the fix). It showed on bosspilot enc08 (loot_39_kraxx t20, 4 fallbacks) because lane G's generation
+  filter (ed72e5c, merged 6418c1e) changed that game. Moved: the faulting games only (enc08 kraxx fallbacks 4 -> 0, the
+  game otherwise identical; pairs9 case 1722 fallbacks 3 -> 0, turns 34 -> 35; enc09 loot_49_darkness vs Rakanishu turns
+  10 -> 12, decisions 24 -> 27, power 4 -> 5: the run player's Sorcerer's Apprentice EX1_608 dying in the boss's search threw
+  the same way 83 times at turn 8, and TurnPlanner's simulation-fault handler pruned those lines without a fallback, so no
+  counter showed it). c-gen-9 61 -> 70 checks (the 9 of A), its G digest unchanged.
 
 ## 3. Pins moved (lane pins; every one listed in implementation.md section 5)
 
@@ -96,7 +112,8 @@ Every lane's work was reviewed and each finding verified; the verifier's verdict
 1. pairs9 false "forbidden pair" failures (high): the walk to the fight floor drafted LOOTA_800 before ULDA_720 was injected
    (cases 1712, 1713, 1726, 1730). Fixed: Reach() skips the treasures the case rules' `incompatibleTreasures` name. Chunk 23
    cases 1710-1730: failed checks 4 -> 0, twice identical.
-2. Chunk 23 case 1722 fallbacks (medium): the fair-view defect in section 2, fixed after the review (chunk 23 exits 0).
+2. Chunk 23 case 1722 fallbacks (medium): the engine defect in section 2, left open here; the harness header and README
+   stated it as the known exception. Fixed afterwards on wip/t-aura (section 2).
 3. C1's run-scope half untested (medium): new F15 on a data copy (ULDA_729 given `incompatibleFlags` charge, a charge boss
    on act III): act I's gate leaves it out, offers it without that boss, ForbiddenPairs reports it once on act 3. Shown
    failing with RuleCandidates' run-scope branch reverted to the act's own lists.
@@ -164,7 +181,8 @@ c-gen-9 61/0, twice identical (games digest FA19ACD009E32E15).
 ## 5. Checks on this tree
 
 All on this tree (`wip/t-int`), each harness call through the harness lock; logs under `scratchpad/t/s3/`.
-- Engine: 0 warnings, 0 errors, md5 `da3fa601007fd83b3ce2cfa7e5899060` (unchanged by the test phase).
+- Engine: 0 warnings, 0 errors, md5 `da3fa601007fd83b3ce2cfa7e5899060` (unchanged by the test phase until the aura-removal
+  fix of section 2, wip/t-aura: `831bbb9f42571c0e1676ba12f144eb48`).
 - Build-all in slices: the catalog tool, all 93 suite projects, randplay and the 39 hall projects: every line exit 0, 0
   errors (138 clean lines, the gen tools included).
 - `gen.sh` twice: the six generated files unchanged (encounters 255 rows, 296 decks, 876 adaptations, 4 rejected; catalog
@@ -186,7 +204,7 @@ All on this tree (`wip/t-int`), each harness call through the harness lock; logs
   the record of the ab48ab1 base harness build.
 - Everything else (the other 67 run entries, every bosspilot stage, pairs9's other chunks, ends9's other parts,
   treasure9, the hall) is the full regression in `all.q`. Expected there: the bosspilot records and the run entries that
-  pins listed as moved differ from `verify/baseline` (wave 6) with 0 failures; pairs9 chunk 23 exits 0 (case 1722 fixed);
+  pins listed as moved differ from `verify/baseline` (wave 6) with 0 failures; pairs9 chunk 23 exits 3 (case 1722);
   every other new mode 0 faults, 0 fallbacks, 0 failed checks, run 1 = run 2.
 
 ## 6. Left open
@@ -195,6 +213,13 @@ All on this tree (`wip/t-int`), each harness call through the harness lock; logs
   (`mod_hot_start` against `DefaultBossManaCap` 3 on act III majors), c-econ-9 A2 (finale deck median 32, band 34-42) and
   A10 (per-row ratio 4.52 at 6000 runs, band 2.5: lower k or raise alpha), B9's 17 named outliers (targets.json B9.named
   empty), every B criterion (calib.q).
-- The engine defect in section 2.
+- The engine defect in section 2: fixed on wip/t-aura (engine md5 da3fa601 -> 831bbb9f), merged into this tree (c014194).
+- **Engine, not fixed (released behaviour):** `engine/SabberStoneCore/src/Actions/Draw.cs` CompleteDraw (about lines
+  106-113, since 0.1.0) moves every drawn card with a TopdeckTask from the hand to the set-aside zone for good. Right for
+  "cast when drawn" spells; wrong for minions with a draw effect that should stay in hand (AT_130 Sea Reaver, GVG_007 Flame
+  Leviathan). Found while debugging enc17; fixing it changes released games, so it is left for a decision.
+- **Coverage misses (no fault):** bp.sh f04-boss prints "never played by the boss: ULD_290 x0 ULD_721 x0". ULD_290 is the
+  wave-6 miss (HANDOFF 3.4); ULD_721 was played once on the wave-6 and close-out trees and 0 times on this tree (the games
+  moved with step 9; seed-sensitive, 40 games).
 - `verify/baseline` is not re-recorded (the full regression first).
 - The harness was not built on an f62275b export (bp9-before); the run harness reads the step-9 fields by reflection.

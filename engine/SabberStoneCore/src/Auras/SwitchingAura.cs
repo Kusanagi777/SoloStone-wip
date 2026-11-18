@@ -120,7 +120,10 @@ namespace SabberStoneCore.Auras
 			AppliedEntityIdCollection.ForEach(Game.IdEntityDic, Effects,
 				(id, idDict, effs) =>
 				{
-					IPlayable entity = idDict[id];
+					// An applied id the game no longer holds: a hidden hand card a fair-view copy re-registered under
+					// another id (FairBotState masks and renumbers the opponent's hand). There is nothing to give back,
+					// as for the view's stand-in itself (Effect.RemoveAuraFrom). The real game never drops an id.
+					if (!idDict.TryGetValue(id, out IPlayable entity)) return;
 					for (int i = 0; i < effs.Length; i++)
 						effs[i].RemoveAuraFrom(entity, Owner.Id);
 				});

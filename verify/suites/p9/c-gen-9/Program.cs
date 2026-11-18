@@ -29,6 +29,11 @@ using SabberStoneCore.Tasks.SimpleTasks;
 //   L  the Lackeys: the pool has 7 cards, all scripted; Titanic Lackey (ULD_616) and Draconic Lackey (DRG_052) do what their text says
 //   K  Kingsbane (LOOT_542): the shuffled copy keeps the Durability its enchantments added, not the Durability it lost
 //   G  200 seeded run games (LocalBot both sides; v4 defaults, every loadout, encounter bosses): 0 unscripted cards generated
+//   A  hand auras whose cards the boss's fair view re-registers (test phase, the enc08 fallbacks): the view gives the opponent's
+//      hidden hand cards new ids (FairBotState canonicalisation), so an aura on the opponent's board can hold an applied id the
+//      view no longer has; Kalecgos (DAL_609, SwitchingAura) turning off at the end of the boss's simulated turn, Glinda
+//      Crowskin (GIL_618, Aura) and Summoning Portal (EX1_315, SummoningPortalAura) leaving play in the view resolve with no
+//      exception, and in the real game every aura still gives back what it gave
 // Typhoon's InterceptLeave is not re-tested here: lane G changed nothing (it is there since a95b97e; c-enc-engine E7-E10).
 // C_GEN_9_ONLY=U,P,... runs only those sections; C_GEN_9_GAMES=n plays n games in G (default 200).
 int failures = 0, passes = 0;
@@ -146,6 +151,69 @@ void Drop(Controller c) => c.Choice = null;
 
 // The run kinds the pools are read under: a legacy run (GeneratedRejects(false), the run player's Secrets off) and a catalog run.
 var kinds = new[] { (Name: "legacy", Catalog: false), (Name: "catalog", Catalog: true) };
+
+// ============================================================ A  hand auras whose cards the boss's fair view re-registers
+// bosspilot enc08 (loot_39_kraxx against Toki, turn 20): the run player's Kalecgos had made the Conjurer's Calling in its hand
+// cost (0); the boss's fair view masked that hand and gave its cards new ids (FairBotState.CanonicalizePrivateActors: 64 -> 25),
+// and the aura's applied id 64 was in no IdEntityDic of the view, so the end of the boss's simulated turn (EndTurnTrigger ->
+// SwitchingAura.TurnOff -> RemoveInternal) threw KeyNotFoundException and the search fell back (4 FALLBACK lines). A view id
+// left by a hidden card names nothing or another hidden stand-in, so there is nothing to give back (Effect.RemoveAuraFrom's rule
+// for stand-ins, c-w3fix X2). The view hands out no id above the ones it keeps; two enchantments on the first hidden card
+// (dropped by the view) keep the Fireball's and the Yeti's ids above them whatever else it drops (A2 checks it). With
+// FairBotState's canonicalisation off, A2 fails (ids in the view) and A3-A6 pass with or without the engine fix.
+Guard("A", () =>
+{
+    const string Kalecgos = "DAL_609", Glinda = "GIL_618", Portal = "EX1_315", Fireball = "CS2_029", Kings = "CS2_092e";
+    void Kill(Game game, Minion m) { new DestroyTask(EntityType.TARGET).Process(game, m.Controller, m.Controller.Hero, m, null); game.DeathProcessingAndAuraUpdate(); }
+    string Try(Action body) { try { body(); return ""; } catch (Exception e) { var x = e.InnerException ?? e; return x.GetType().Name + ": " + x.Message.Split('\n')[0]; } }
+    (Game g, Controller p1, Controller p2, Minion kalecgos, Minion glinda, Minion portal, IPlayable spell, IPlayable minion) Scene()
+    {
+        var g = Ready(BasePlan(true), history: true);
+        Controller p1 = g.Player1, p2 = g.Player2;
+        ToSide(g, p1); EmptyHand(p1);
+        var kalecgos = Board(g, p1, Kalecgos); var glinda = Board(g, p1, Glinda); var portal = Board(g, p1, Portal);
+        var first = ToHand(g, p1, Croc);
+        Generic.AddEnchantmentBlock(g, C(Kings), kalecgos, first); Generic.AddEnchantmentBlock(g, C(Kings), kalecgos, first);
+        var spell = ToHand(g, p1, Fireball); var minion = ToHand(g, p1, Yeti);
+        ToSide(g, p2);
+        return (g, p1, p2, kalecgos, glinda, portal, spell, minion);
+    }
+    Game View(Game g) => FairBotState.Create(g, g.Player2.PlayerId, 3, DeckStyle.Tempo).FingerprintGame;
+    Minion In(Game view, Minion real) => (Minion)view.IdEntityDic[real.Id];
+
+    var (g, p1, p2, kalecgos, glinda, portal, spell, minion) = Scene();
+    Check("A1 on the boss's turn the run player's Kalecgos makes the Fireball in its hand cost 0, Glinda gives the Yeti Echo, the Portal makes it cost 2",
+        spell.Cost == 0 && minion[GameTag.ECHO] == 1 && minion.Cost == 2, $"Fireball {spell.Cost} Yeti Echo {minion[GameTag.ECHO]} cost {minion.Cost}");
+    var view = View(g);
+    var vHand = (view.Player1.PlayerId == p1.PlayerId ? view.Player1 : view.Player2).HandZone;
+    Check("A2 the boss's fair view masks the run player's hand and re-registers it: the Fireball's and the Yeti's ids are in no IdEntityDic of the view",
+        vHand != null && vHand.Count == 3 && vHand.All(c => c is Unknown) && !view.IdEntityDic.ContainsKey(spell.Id) && !view.IdEntityDic.ContainsKey(minion.Id),
+        $"hand {vHand?.Count} masked {vHand?.Count(c => c is Unknown)} ids {spell.Id},{minion.Id} in view {view.IdEntityDic.ContainsKey(spell.Id)},{view.IdEntityDic.ContainsKey(minion.Id)}");
+    // The failing path of enc08: the boss's fair state ends its turn with Kalecgos in play (SwitchingAura.TurnOff -> RemoveAll).
+    var bot = FairBotState.Create(g, p2.PlayerId, 3, DeckStyle.Tempo);
+    string endError = Try(() => bot.Apply(BotAction.From(EndTurnTask.Any(p2))));
+    Check("A3 the boss's fair state ends its turn with the run player's Kalecgos in play (Kalecgos turns off; no exception)", endError == "", endError);
+    var v4 = View(g); var vk = In(v4, kalecgos);
+    string kError = Try(() => Kill(v4, vk));
+    Check("A4 Kalecgos dies in the boss's fair view (SwitchingAura removed; no exception)", kError == "" && vk.Zone.Type == Zone.GRAVEYARD, kError);
+    var v5 = View(g); var vg = In(v5, glinda);
+    string gError = Try(() => Kill(v5, vg));
+    Check("A5 Glinda dies in the boss's fair view (Aura removed; no exception)", gError == "" && vg.Zone.Type == Zone.GRAVEYARD, gError);
+    var v6 = View(g); var vp = In(v6, portal);
+    string pError = Try(() => Kill(v6, vp));
+    Check("A6 the Summoning Portal dies in the boss's fair view (SummoningPortalAura removed; no exception)", pError == "" && vp.Zone.Type == Zone.GRAVEYARD, pError);
+    // The real game gives back what each aura gave (every applied id is there): the views above changed nothing in it.
+    Kill(g, glinda); Kill(g, portal);
+    Check("A7 in the real game Glinda's and the Portal's deaths take Echo and the discount from the Yeti", minion[GameTag.ECHO] == 0 && minion.Cost == 4,
+        $"Echo {minion[GameTag.ECHO]} cost {minion.Cost}");
+    EndTurn(g);
+    Check("A8 in the real game Kalecgos is on again at the start of the run player's turn (the Fireball costs 0)", spell.Cost == 0, $"Fireball {spell.Cost}");
+    Mana(p1);
+    var second = ToHand(g, p1, Fireball);
+    bool cast = Play(g, spell, p2.Hero);
+    Check("A9 in the real game the run player's first spell is cast for 0 and Kalecgos then gives back the discount (the next Fireball costs 4)",
+        cast && second.Cost == 4 && kalecgos.Zone.Type == Zone.PLAY, $"cast {cast} next Fireball {second.Cost}");
+});
 
 // ============================================================ U  the unscripted set
 Guard("U", () =>
