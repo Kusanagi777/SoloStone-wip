@@ -108,8 +108,11 @@ namespace SabberStoneCore.Actions
             {
                 if (game.History)
                     game.PowerHistory.Add(PowerHistoryBuilder.BlockStart(BlockType.TRIGGER, playable.Id, "", 0, 0));
-                // Illusion retains its actual hand residence when its summon cannot fit.
-                if (playable.Card.Id != "EDR_260t" || !controller.BoardZone.IsFull)
+                // A "When you draw this" minion (TOPDECK: AT_130 Sea Reaver, GVG_007 Flame Leviathan) stays in hand; Casts and
+                // Summoned When Drawn cards leave it (no Summoned When Drawn minion carries TOPDECK). Illusion retains its
+                // actual hand residence when its summon cannot fit.
+                bool staysInHand = playable is Minion && playable.Card[GameTag.TOPDECK] != 0;
+                if (!staysInHand && (playable.Card.Id != "EDR_260t" || !controller.BoardZone.IsFull))
                     controller.SetasideZone.Add(controller.HandZone.Remove(playable));
                 game.Log(LogLevel.INFO, BlockType.TRIGGER, "TOPDECK",
                     !game.Logging ? "" : $"{playable}'s TOPDECK effect is activated.");
