@@ -29,7 +29,7 @@ string root = VerifyPaths.Data;
 // catalog drafts, the player's generated Secrets on, and the boss on its own pilot options with the run's widened Secret
 // prior (DungeonRunAdmission.CatalogSecretPrior over DungeonRun.RunClasses; the dual-class row MAGE_ROGUE joins the sweep).
 // ACT_RUN=1: phase 4 I1. The data loads with the catalog and the act/floor schedules (schedule-v1.json), so every run is an
-// act run on the default schedule (schedule-v1.json "default": acts-v2; and a catalog run): the run walks its nodes (two-card drafts, taverns, modifiers) to the boss's floor,
+// act run on the default schedule (this data has no encounter file, so schedule-v1.json "defaultWithoutEncounters": acts-v2; the "act run:" line prints run.DefaultSchedule(0), the schedule the walk follows; and a catalog run): the run walks its nodes (two-card drafts, taverns, modifiers) to the boss's floor,
 // and the plan carries the act's health curve. A band-1 boss is fought on floor 1, a band-3 boss as the act I major (floor
 // 5), a band-2 boss on floor 6 (act II, after its modifier) and a final as the act III major (floor 15, a 40-odd card deck).
 bool actRun = Environment.GetEnvironmentVariable("ACT_RUN") == "1";
