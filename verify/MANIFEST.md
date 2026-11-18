@@ -116,6 +116,7 @@ Each suite folder holds its `*.cs` and `*.csproj` only (no `Program.cs.pre-*` ba
 | (new in wave 6, family 22 lane) | `verify/suites/p8f22/c-enc-22` | wave 6 | Enc22.csproj Program.cs |
 | (new in wave 6, family 23 lane) | `verify/suites/p8f23/c-enc-23` | wave 6 | Enc23.csproj Program.cs |
 | (new in wave 6, family 24 lane) | `verify/suites/p8f24/c-enc-24` | wave 6 | Enc24.csproj Program.cs |
+| (new in step 9, lane M) | `verify/suites/p9/c-bosspilot-run` | step 9 | BossPilotRun.csproj Program.cs RunPilot.cs (links `p8f01/c-bosspilot-encounter/PlayGame.cs`, the game loop factored out of the encounter harness, whose output is unchanged); built by `builds.sh only p9/c-bosspilot-run`, run by `bp.sh slots9`, `outliers9`, `finale9`, `tekahn9`, `longrun9`, `treasure9`, `gate48t`, `uld152` |
 
 ## 3. The audit hall (all G3)
 
@@ -199,6 +200,7 @@ c-acts A10, c-enc-model F2), which gives back exactly the Windows bytes on Windo
 | (new in wave 5) `p8f18/fixtures/schedule-finale18.json` | `p8f18/fixtures/` | c-enc-18, `bp.sh enc18-finale` (SCHEDULE_JSON) | schedule-v1.json with the acts-v3h finale block enabled (fixedBosses from pending), written by `verify/tools/gen/p8f18/make_fixture.py` |
 | (new in wave 6) `p8f23/fixtures/encounters-f23.json` | `p8f23/fixtures/` | `bp.sh enc23-cards` (ENCOUNTERS_JSON) | the merged encounters-v1.json plus four fixture rows (fix23_glinda, fix23_shivers, fix23_toki, fix23_godfrey), written by `verify/tools/gen/p8f23/make_fixture.py` |
 | (new in wave 6) `p8f24/fixtures/schedule-tekahn.json` | `p8f24/fixtures/` | c-enc-24, `bp.sh tekahn24` (SCHEDULE_JSON) | schedule-v1.json with the acts-v3t finale enabled on Tekahn and its hero relay on, written by `verify/tools/gen/p8f24/make_fixture.py` |
+| (new in step 9, lane M) `p9/targets.json` | `p9/` | `verify/tools/balance/check_targets.py`, `bp.sh outliers9` (B9.named) | the step-9 difficulty targets (plan section 1 B), hand-kept: each with its source and its derivation from R0; the seed bases S1 and S2 |
 | `audit-inventory/cards.tsv` | `audit-inventory/cards.tsv` | hall audit-chunk-9 (G3; was absolute) | the audit inventory |
 
 Repository files the suites read (already in git, not copied): `data/**`, `facts/violet-hold-2026-09.json`,
@@ -254,6 +256,7 @@ now: `bp.sh` reads one only for a mode `bp/` does not hold.
 | (new in wave 6) `make_f22.py`, `patch_curation.py` | `verify/tools/gen/p8f22/` | wave 6 | `F22.json` (the wiki transcription; uses `p8f19/tombs_tiers.py`); the E22 entry of curation.json (idempotent; not rerun) |
 | (new in wave 6) `make_f23.py`, `make_fixture.py` | `verify/tools/gen/p8f23/` | wave 6 | `F23.json` (the wiki transcription); `encounters-f23.json` |
 | (new in wave 6) `make_f24.py`, `make_fixture.py` | `verify/tools/gen/p8f24/` | wave 6 | `F24.json` (the wiki transcription); `schedule-tekahn.json` (the acts-v3t finale enabled on Tekahn) |
+| (new in step 9, lane M) `agg.py`, `check_targets.py` | `verify/tools/balance/` | step 9 | not generators: `agg.py <logs>` aggregates the run harness's G/R lines into JSON, `check_targets.py <agg.json> [--strict]` checks it against `verify/fixtures/p9/targets.json` |
 
 The G3 generators take no arguments: each reads the repository it sits in and writes its default output under verify/
 (`verify/fixtures/<family>/fixtures/...`, or the suite folder for the two harness generators); an optional argument
