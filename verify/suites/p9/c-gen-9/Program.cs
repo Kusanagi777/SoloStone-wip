@@ -34,6 +34,9 @@ using SabberStoneCore.Tasks.SimpleTasks;
 //      view no longer has; Kalecgos (DAL_609, SwitchingAura) turning off at the end of the boss's simulated turn, Glinda
 //      Crowskin (GIL_618, Aura) and Summoning Portal (EX1_315, SummoningPortalAura) leaving play in the view resolve with no
 //      exception, and in the real game every aura still gives back what it gave
+//   D  "When you draw this" minions (test phase, enc17): a drawn AT_130 Sea Reaver or GVG_007 Flame Leviathan resolves its
+//      draw effect and stays in hand (Generic.CompleteDraw had set every TopdeckTask card aside); Casts When Drawn (GVG_056t)
+//      and Summoned When Drawn (TLC_513t2) cards still leave the hand
 // Typhoon's InterceptLeave is not re-tested here: lane G changed nothing (it is there since a95b97e; c-enc-engine E7-E10).
 // C_GEN_9_ONLY=U,P,... runs only those sections; C_GEN_9_GAMES=n plays n games in G (default 200).
 int failures = 0, passes = 0;
@@ -213,6 +216,57 @@ Guard("A", () =>
     bool cast = Play(g, spell, p2.Hero);
     Check("A9 in the real game the run player's first spell is cast for 0 and Kalecgos then gives back the discount (the next Fireball costs 4)",
         cast && second.Cost == 4 && kalecgos.Zone.Type == Zone.PLAY, $"cast {cast} next Fireball {second.Cost}");
+});
+
+// ============================================================ D  "When you draw this" minions stay in hand
+// bosspilot enc17 (dala_58_flark against DALA_Chu): the drawn AT_130 Sea Reaver dealt its damage, then sat in SETASIDE for good
+// and the hand stayed at 5. Only cards whose draw effect replaces them (Casts When Drawn spells, Summoned When Drawn minions,
+// none tagged TOPDECK) leave the hand. Without the engine fix D1, D3 and D4 fail; D2, D5, D6 and D7 pass either way.
+Guard("D", () =>
+{
+    const string Reaver = "AT_130", Leviathan = "GVG_007", Mine = "GVG_056t", Ninja = "TLC_513t2";
+    (Game g, Controller p1, Controller p2, Minion wisp, Minion yeti, Minion enemy) Scene()
+    {
+        var g = Ready(BasePlan(true));
+        Controller p1 = g.Player1, p2 = g.Player2;
+        ToSide(g, p1); EmptyHand(p1); ClearBoard(p1); ClearBoard(p2);
+        return (g, p1, p2, Board(g, p1, Wisp), Board(g, p1, Yeti), Board(g, p2, Yeti));
+    }
+    IPlayable Top(Controller c, string id) => Entity.FromCard(c, C(id), zone: c.DeckZone);
+    string Where(IPlayable p) => p.Zone?.Type.ToString() ?? "none";
+
+    var (g, p1, p2, wisp, yeti, enemy) = Scene();
+    var reaver = Top(p1, Reaver);
+    int hand = p1.HandZone.Count;
+    Generic.Draw(p1, reaver); g.DeathProcessingAndAuraUpdate();
+    Check("D1 a drawn Sea Reaver stays in its owner's hand (hand +1), not set aside", reaver.Zone?.Type == Zone.HAND
+        && p1.HandZone.Count == hand + 1 && !p1.SetasideZone.Contains(reaver), $"zone {Where(reaver)} hand {hand} -> {p1.HandZone.Count}");
+    Check("D2 its draw effect resolved: 1 damage to its owner's minions only (the Wisp dies, the Yeti has 4 Health, the enemy Yeti 5)",
+        wisp.Zone?.Type == Zone.GRAVEYARD && yeti.Health == 4 && enemy.Health == 5, $"Wisp {Where(wisp)} Yeti {yeti.Health} enemy {enemy.Health}");
+    bool played = reaver.Zone?.Type == Zone.HAND && Play(g, reaver);
+    Check("D3 the drawn Sea Reaver is then played from hand as a 6/7", played && reaver.Zone?.Type == Zone.PLAY
+        && ((Minion)reaver).AttackDamage == 6 && ((Minion)reaver).Health == 7, $"played {played} zone {Where(reaver)}");
+
+    (g, p1, p2, wisp, yeti, enemy) = Scene();
+    var leviathan = Top(p1, Leviathan);
+    EndTurn(g); EndTurn(g); g.DeathProcessingAndAuraUpdate();
+    Check("D4 a Flame Leviathan drawn at the start of its owner's turn stays in hand", g.CurrentPlayer == p1 && leviathan.Zone?.Type == Zone.HAND
+        && p1.HandZone.Contains(leviathan), $"current {g.CurrentPlayer.Name} zone {Where(leviathan)}");
+    Check("D5 its draw effect resolved: 2 damage to every minion (the Wisp dies, both Yetis have 3 Health)",
+        wisp.Zone?.Type == Zone.GRAVEYARD && yeti.Health == 3 && enemy.Health == 3, $"Wisp {Where(wisp)} Yeti {yeti.Health} enemy {enemy.Health}");
+
+    (g, p1, p2, wisp, yeti, enemy) = Scene();
+    var mine = Top(p1, Mine);
+    int health = p1.Hero.Health; hand = p1.HandZone.Count;
+    Generic.Draw(p1, mine); g.DeathProcessingAndAuraUpdate();
+    Check("D6 a drawn Burrowing Mine (Casts When Drawn) still leaves the hand: 10 damage to its owner, a replacement card drawn",
+        mine.Zone?.Type != Zone.HAND && p1.Hero.Health == health - 10 && p1.HandZone.Count == hand + 1,
+        $"zone {Where(mine)} hero {health} -> {p1.Hero.Health} hand {hand} -> {p1.HandZone.Count}");
+    var ninja = Top(p1, Ninja);
+    hand = p1.HandZone.Count;
+    Generic.Draw(p1, ninja); g.DeathProcessingAndAuraUpdate();
+    Check("D7 a drawn Tortollan Ninja (Summoned When Drawn) is still summoned, a replacement card drawn",
+        ninja.Zone?.Type == Zone.PLAY && p1.HandZone.Count == hand + 1, $"zone {Where(ninja)} hand {hand} -> {p1.HandZone.Count}");
 });
 
 // ============================================================ U  the unscripted set
