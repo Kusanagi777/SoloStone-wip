@@ -273,7 +273,7 @@ for (int bi = 0; bi < bosses.Count; bi++)
                     }
                     else if (!game.Process(task)) throw new Exception($"engine rejected {who} task | " + string.Join(" | ", recent));
                 }
-                while (game.State != State.COMPLETE && game.Turn <= 100)
+                while (game.State != State.COMPLETE && game.Turn <= plan.TurnCap)
                 {
                     if (game.CurrentPlayer == game.Player2)
                     {
@@ -315,8 +315,9 @@ for (int bi = 0; bi < bosses.Count; bi++)
                     Check(game.Player2.Hero.Card.Id == (boss.Forms.Take(end.BossForm).Select(f => f.Hero).LastOrDefault(h => h != null) ?? boss.HeroCard), "the boss hero is not its form's", problems);
                     // Only a form with its own Health caps the hero at the threshold (the Plague Lords' 200 / 100 heroes); a form without
                     // one keeps the hero's maximum (Tekahn's power-only forms: the client's one 300-Health hero), so the boss may heal above
-                    // the threshold and stays in the form (wave 6: tekahn24, healed 195 -> 219 in Curse of Flame).
-                    if (form != null && form.HealthAtMost > 0 && form.Health > 0 && !bossDead) Check(game.Player2.Hero.Health <= form.HealthAtMost, "the boss's Health is above its form's threshold", problems);
+                    // the threshold and stays in the form (wave 6: tekahn24, healed 195 -> 219 in Curse of Flame). With the plan's form
+                    // ratchet (step 9 D11: Tekahn on acts-v4t) a form without its own Health caps the hero at the threshold too.
+                    if (form != null && form.HealthAtMost > 0 && (form.Health > 0 || plan.FormRatchet) && !bossDead) Check(game.Player2.Hero.Health <= form.HealthAtMost, "the boss's Health is above its form's threshold", problems);
                     if (!bossDead && end.BossForm + 1 <= boss.Forms.Count && boss.Forms[end.BossForm].HealthAtMost > 0)
                         Check(game.Player2.Hero.Health > boss.Forms[end.BossForm].HealthAtMost, "the boss should be in its next form", problems);
                     formChangesSeen += end.BossFormChanges;
