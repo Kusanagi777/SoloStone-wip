@@ -96,12 +96,13 @@ string BestTreasure(DungeonRunState s, IEnumerable<string> options)
 
 // ------------------------------------------------------------ the walker
 var scratch = new DungeonRunProfile();
+List<string> charmChain = null; // charm_seedling's stages (set below, before the first walk)
 int TakesOf(DungeonRunSchedule sc, DungeonRunNode node) => Math.Max(1, Math.Min(3, sc.Acts[node.Act - 1].DraftTakes));
 // Walks a run to its end, every fight won. beforeStep (optional) may change the state before each step, and the walk stops
 // before the first step at which stop (optional) holds (the constructed cases).
 Walk WalkRun(DungeonRunState s, Action<DungeonRunState, Walk> beforeStep = null, Func<DungeonRunState, bool> stop = null)
 {
-    var w = new Walk { Schedule = s.Schedule, Origin = Origin(run.RunClass(s)), Row = s.Class, Tuned = DungeonRun.Tuned(s), DeckMax = run.DeckMax(s) };
+    var w = new Walk { Seed = s.Seed, Schedule = s.Schedule, Origin = Origin(run.RunClass(s)), Row = s.Class, Tuned = DungeonRun.Tuned(s), DeckMax = run.DeckMax(s) };
     var sc = run.ScheduleFor(s);
     w.Signatures = s.Loadout?.Signature?.Count ?? 0;
     int bankedPred = Math.Max(0, s.BankedGold);
@@ -125,6 +126,7 @@ Walk WalkRun(DungeonRunState s, Action<DungeonRunState, Walk> beforeStep = null,
                     && !s.ActiveTreasures.Contains(reward) && !s.Treasures.Contains(reward);
                 bool rewardRoom = s.Deck.Count + 1 <= run.DeckMax(s);
                 int floor = s.Floor;
+                w.LastFight = floor;
                 run.BeginMatch(s);
                 run.RecordOutcome(s, scratch, DungeonRunOutcome.Win);
                 if (rewardable && !rewardRoom) { bankedPred++; w.BankedEarned++; }
@@ -141,9 +143,10 @@ Walk WalkRun(DungeonRunState s, Action<DungeonRunState, Walk> beforeStep = null,
                     foreach (string t in draft.Offered) w.TreasureOffers.Add((node.Act, t, nonPassive));
                     if (nonPassive) w.NonPassiveOffers.Add(draft.Offered.ToList());
                     string pick = BestTreasure(s, draft.Offered);
+                    int draftFloor = draft.Floor;
                     run.PickTreasure(s, pick);
                     w.TreasurePicks++;
-                    if (pick == "charm_seedling" && w.CharmPick < 0) w.CharmPick = s.Floor;
+                    if (pick == "charm_seedling" && w.CharmPick < 0) w.CharmPick = draftFloor;
                 }
                 else
                 {
@@ -210,7 +213,10 @@ Walk WalkRun(DungeonRunState s, Action<DungeonRunState, Walk> beforeStep = null,
         if (s.BankedGold != bankedPred) { w.BankedBad++; Bad($"BankedGold {s.BankedGold}, expected {bankedPred}"); bankedPred = s.BankedGold; }
         w.MaxDeck = Math.Max(w.MaxDeck, s.Deck.Count);
         if (s.Deck.Count > run.DeckMax(s)) Bad("deck " + s.Deck.Count + " past deckMax " + run.DeckMax(s));
-        if (w.CharmPick >= 0 && w.CharmFull < 0 && FinalCharm(s)) w.CharmFull = s.Floor;
+        // A stage swaps after a won fight (ApplyUpgrades): full growth is dated by the floor of the fight just won (the state may
+        // already stand on the next node, a tavern on the following floor).
+        if (w.CharmPick >= 0 && w.CharmFull < 0 && FinalCharm(s)) w.CharmFull = w.LastFight;
+        if (w.CharmPick >= 0) { string stage = charmChain.LastOrDefault(id => s.ActiveTreasures.Contains(id) || s.Treasures.Contains(id)) ?? "-"; if (stage != w.CharmStage) { w.CharmStage = stage; w.CharmTrace += " " + s.Phase + "@" + s.Floor + "/fight " + w.LastFight + "=" + stage; } }
     }
     w.Victory = s.Phase == DungeonRunPhase.Victory;
     w.ShrineUpgrades = s.ShrineUpgrades?.Count ?? 0;
@@ -219,6 +225,7 @@ Walk WalkRun(DungeonRunState s, Action<DungeonRunState, Walk> beforeStep = null,
 // charm_seedling's last stage: the end of its upgradesTo chain.
 string charmLast = "charm_seedling";
 while (data.FindTreasure(charmLast)?.UpgradesTo is string next) charmLast = next;
+charmChain = Chain("charm_seedling");
 bool FinalCharm(DungeonRunState s) => charmLast != "charm_seedling" && s.ActiveTreasures.Contains(charmLast);
 
 // ============================================================ W. the run set
@@ -373,7 +380,7 @@ Guard("G", () =>
     var natural = walks.Where(w => w.CharmPick > 0 && w.CharmPick + (w.Tuned ? 8 : 4) <= 15).ToList();
     Check($"G3 A8: every walk of the run set that picked charm_seedling by floor {15 - 8} (v4) or {15 - 4} (acts-v3h) grew it fully in 8 floors on v4, 4 on acts-v3h ({natural.Count(w => w.Tuned)} + {natural.Count(w => !w.Tuned)} walks)",
         natural.Count(w => w.Tuned) > 0 && natural.Count(w => !w.Tuned) > 0 && natural.All(w => w.CharmFull - w.CharmPick == (w.Tuned ? 8 : 4)),
-        string.Join(" ", natural.Where(w => w.CharmFull - w.CharmPick != (w.Tuned ? 8 : 4)).Take(4).Select(w => w.Schedule + ":" + w.CharmPick + "->" + w.CharmFull)));
+        string.Join(" ", natural.Where(w => w.CharmFull - w.CharmPick != (w.Tuned ? 8 : 4)).Take(4).Select(w => w.Schedule + ":" + w.CharmPick + "->" + w.CharmFull + " [" + w.Row + " seed " + w.Seed + w.CharmTrace + "]")));
 });
 List<string> Chain(string id) { var l = new List<string> { id }; while (data.FindTreasure(l[l.Count - 1])?.UpgradesTo is string n && l.Count < 8) l.Add(n); return l; }
 
@@ -513,6 +520,17 @@ Guard("D", () =>
     Note("A10 default roll (600 runs, " + string.Join(" ", v4.Schedules.OrderBy(p => p.Key, StringComparer.Ordinal).Select(p => p.Key + " " + p.Value)) + "): " + Show(r4));
     Note("A10 acts-v3h / acts-v3t today (600 runs): " + Show(r3));
     Note("A10 default roll, 6000 runs (sampling noise reduced): " + Show(rb));
+    // Where the 6000-run ratio comes from: per tier pool, the mean meetings per row of each provenance, and the rows at the min and max.
+    foreach (string t in tiers)
+    {
+        var group = data.Bosses.Where(b => b.IsEncounter && TierOf(b, true) == t && (b.Unlock == null || run.IsUnlocked(all, b.Unlock))).ToList();
+        if (group.Count < 2) continue;
+        var byProv = group.GroupBy(b => b.Provenance).OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g => $"{g.Key} {g.Count()}x{F1(g.Average(b => (double)big.Met.GetValueOrDefault(b.Id)))}");
+        var lo = group.OrderBy(b => big.Met.GetValueOrDefault(b.Id)).ThenBy(b => b.Id, StringComparer.Ordinal).First();
+        var hi = group.OrderByDescending(b => big.Met.GetValueOrDefault(b.Id)).ThenBy(b => b.Id, StringComparer.Ordinal).First();
+        Note($"A10 6000 runs, {t}: rows per provenance x mean meetings: {string.Join(", ", byProv)}; min {lo.Id} ({lo.Provenance}) {big.Met.GetValueOrDefault(lo.Id)}, max {hi.Id} ({hi.Provenance}) {big.Met.GetValueOrDefault(hi.Id)}");
+    }
     double worst4 = r4.Where(x => x.Rows >= 2).Max(x => x.Ratio), worst3 = r3.Where(x => x.Rows >= 2).Max(x => x.Ratio), worstB = rb.Where(x => x.Rows >= 2).Max(x => x.Ratio);
     double prov4 = Median(v4.Provenances.Select(x => (double)x)), prov3 = Median(v3.Provenances.Select(x => (double)x));
     Measure("A10", "per-row meeting ratio max/min within each encounter tier pool (600 default-roll runs), worst pool; median distinct provenances per run",
@@ -540,4 +558,7 @@ internal sealed class Walk
     internal List<string> TavernOffers = new List<string>();
     internal HashSet<string> BundleEntries = new HashSet<string>(StringComparer.Ordinal);
     internal int CharmPick = -1, CharmFull = -1;
+    internal string CharmStage = "", CharmTrace = "";
+    internal long Seed;
+    internal int LastFight = -1;
 }
