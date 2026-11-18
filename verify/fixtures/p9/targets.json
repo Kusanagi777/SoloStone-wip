@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "about": "Step 9 difficulty targets (handoff/phase9/plan.md section 1 B), read by verify/tools/balance/check_targets.py and by the run harness (verify/suites/p9/c-bosspilot-run, MODE=outliers reads B9.named). Every target names its source and how it follows from R0. Rates are the run player's win rate per fight with the fair AI on both sides.",
+  "seeds": {
+    "S1": 9100000,
+    "S2": 9200000,
+    "source": "plan section 1 (seed bases): S1 is the calibration base, S2 the held-out base; final acceptance runs on S2 only. The values are this harness's (SEED_BASE); each mode adds its own offset (slots 1000000 x band, finale 3000000, tekahn 4000000, outliers 5000000, longrun 6000000, treasure 7000000, named 8000000), so the ranges never meet."
+  },
+  "acceptance": {
+    "n": 200,
+    "nTekahn": 100,
+    "interval": "wilson95",
+    "pointTolerance": 0.03,
+    "source": "plan section 1 B: every band needs n >= 200 (Tekahn n = 100); a band passes when its Wilson 95% interval overlaps the band and its point estimate lies within the band +- 3 points. A smaller n is reported as indicative (check_targets.py prints 'n below')."
+  },
+  "R0": {
+    "band": [0.01, 0.03],
+    "pointV4h": 0.012,
+    "pointV4t": 0.014,
+    "source": "plan section 1 B, R0: a fresh-profile Victory rate of 1-3% on each schedule, the product of the measured slot rates over the schedule's fights (acts I-III: 4 combat floors and a major each; the finale: 4 Heist fights on acts-v4h, Tekahn on acts-v4t).",
+    "derivation": "R0 = B1^4 x B2 x B3c^4 x B3m x B4c^4 x m3 x F, where m3 = (1 - lambda) x B4m + lambda x k1 is the act III major's rate (lambda the draw's Plague Lord share of the act III major, k1 the lord's one-attempt kill rate, B5's midpoint 0.175) and F = B6^4 (acts-v4h) or B7 (acts-v4t). At the point targets this is 2.0% / 2.2% with lambda 0, 1.78% / 1.96% with lambda 0.175 and 1.20% / 1.31% with lambda 0.6: the plan's 'about 1.2% (v4h) and 1.4% (v4t)' holds for a lord share of about 0.6 / 0.5. check_targets.py computes the product from the measured slot rates, where the measured act III major rate already mixes the lords in at the drawn share, and reports the share it saw."
+  },
+  "bands": [
+    {"id": "B1", "slot": "I-combat", "point": 0.92, "band": [0.88, 0.95], "fights": 4,
+     "source": "plan B1 (act I combat, per fight, floors 1-4)",
+     "derivation": "R0's first factor: 4 fights at 0.92 survive at 0.72; the band keeps the product of act I (B1^4 x B2) within 0.42-0.65"},
+    {"id": "B2", "slot": "I-major", "point": 0.70, "band": [0.60, 0.80], "fights": 1,
+     "source": "plan B2 (act I major); design D4's act I major wall (levers: the floor-5 curve, LOOT finals to major2, offsetCap last)",
+     "derivation": "R0 factor; act I survival B1^4 x B2 = 0.50 at the points"},
+    {"id": "B3c", "slot": "II-combat", "point": 0.88, "band": [0.83, 0.92], "fights": 4,
+     "source": "plan B3 (act II combat)",
+     "derivation": "R0 factor; act II survival B3c^4 x B3m = 0.36 at the points"},
+    {"id": "B3m", "slot": "II-major", "point": 0.60, "band": [0.50, 0.70], "fights": 1,
+     "source": "plan B3 (act II major)",
+     "derivation": "R0 factor"},
+    {"id": "B4c", "slot": "III-combat", "point": 0.84, "band": [0.78, 0.89], "fights": 4,
+     "source": "plan B4 (act III combat)",
+     "derivation": "R0 factor; act III survival B4c^4 x m3"},
+    {"id": "B4m", "slot": "III-major", "point": 0.55, "band": [0.45, 0.65], "fights": 1, "excludeLords": true,
+     "source": "plan B4 (act III major, custom finals)",
+     "derivation": "R0 factor (the non-lord part of m3); the Plague Lords are B5's"}
+  ],
+  "B5": {
+    "slot": "III-major", "lordsOnly": true, "meanDamageAtLeast": 60, "oneAttemptKill": [0.10, 0.25],
+    "source": "plan B5 (Plague Lord, act III major): mean damage per attempt >= 60; one-attempt kill 10-25%",
+    "derivation": "a lord is meant to take several runs (persistent damage), so its one-attempt rate replaces B4m in m3 at the drawn share"
+  },
+  "B6": {
+    "mode": "finale", "point": 0.80, "band": [0.72, 0.87], "allFourAtLeast": 0.35,
+    "source": "plan B6 (Heist finale): 0.80 per fight, all four in one run >= 0.35",
+    "derivation": "F = B6^4 = 0.41 at the point; the joint rate is counted over the runs whose four fights were all played (finale9 plays each fight of run g on the same seed)"
+  },
+  "B7": {
+    "mode": "tekahn", "point": 0.45, "band": [0.35, 0.55], "turnCapsAtMost": 0.03, "n": 100,
+    "source": "plan B7 (Tekahn finale, n = 100): 0.45; turn caps <= 3 of 100",
+    "derivation": "F on acts-v4t; 0.45 against the Heist finale's 0.41 keeps the two schedules' R0 within 0.2 points"
+  },
+  "B8": {
+    "lowAct": "I-combat", "highAct": "III-combat", "p": 0.05, "reversalTolerance": 0.03,
+    "source": "plan B8: act I combat beats act III combat (one-sided test, p < 0.05); adjacent acts are ordered by point estimate, a reversal of <= 3 points tolerated",
+    "derivation": "the point targets fall by act (0.92 > 0.88 > 0.84; 0.70 > 0.60 > 0.55)"
+  },
+  "B9": {
+    "n": 20, "flagAbove": 0.98, "flagBelow": 0.45, "exemptFlag": "room",
+    "named": [],
+    "source": "plan B9: every t3/t4 row plus the 17 named outliers, n = 20 each, on their act's combat slot; flagged when the Wilson interval lies entirely above 0.98 or entirely below 0.45; rows flagged room are exempt (reward nodes)",
+    "derivation": "a row outside these limits moves its slot's rate by more than the band's width at its draw share",
+    "namedNote": "The plan counts 17 named outliers but no list of them is recorded in the tree (plan, implementation.md, values.md, the phase-8 reports). 'named' is left empty until the list is supplied; outliers9 then samples every t3/t4 row only. BOSS=id,id samples any rows instead."
+  },
+  "B10": {
+    "mode": "longrun", "runs": 240,
+    "source": "plan B10: longrun9, 240 runs, every fight played, stratified by origin; the run-depth distribution matches the depth predicted from the measured slot rates (each floor's survival within its CI); no Victory count requirement",
+    "derivation": "predicted survival to floor f = the product of the measured slot rates of floors 1..f-1"
+  },
+  "B11": {
+    "mode": "longrun", "reach": "II-major", "tolerance": 0.15, "nPerOrigin": 40,
+    "source": "plan B11: the rate of reaching the act II major per origin (Monster Hunt, Heist, Rumble, Tombs, classes; n >= 40 each from longrun9) is within +-15 points of the pooled rate",
+    "derivation": "one economy (D6): no origin should be carried or held back by its treasures"
+  }
+}
