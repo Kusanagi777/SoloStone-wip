@@ -15,8 +15,10 @@ using SabberStoneCore.CardSets.DungeonRun;
 //      of a loadout, and of a row, share one profile, so a Plague Lord's banked damage and the stats carry into the next run.
 //      On a stamp-4 schedule the walker also escapes (ULDA_111) and restarts (GILA_911) once whenever the plan allows it.
 //   D1 after every step the run is saved to a file, loaded, upgraded (a version-6 save: the identity) and resumed, and the walk
-//      goes on from the loaded object; its digest (the whole save, profile included) and its step lines equal those of an
-//      unbroken twin walked beside it from the same new run.
+//      goes on from the loaded object; its step lines and its save file (the whole save, profile included) equal those of an
+//      unbroken twin walked beside it from the same new run (the bytes the twin's save would write), and so does the loaded
+//      end state. The twin never crashes and builds each plan once, so the crash checks and the extra BuildPlan calls of the
+//      reloaded run are shown to change nothing.
 //   D2 a crash at InMatch at every pre-match (on a copy of the save): the fight starts, the save is written and loaded, and the
 //      restaged pre-match equals the one before the crash except Attempt (+1) and the floor's HeroSwitch (the documented quirk:
 //      BeginMatch stores it, Resume keeps it); the rebuilt plan and match seed are the same. Hero-switch (Hagatha), relay
@@ -63,7 +65,10 @@ var data = DungeonRunData.Parse(R("dungeon-run/run-v1.json"), R("dungeon-run/poo
 var run = new DungeonRun(data);
 DungeonRunProfile All() { var p = new DungeonRunProfile(); p.Unlocked.AddRange(data.Unlocks.Keys); return p; }
 string Origin(DungeonRunClass c) => c.Adventure ?? "classes";
-string reloadDir = VerifyPaths.Out("tmp/longrun9/reload"), crashDir = VerifyPaths.Out("tmp/longrun9/crash");
+// The save files go through DungeonRunStore.Save and Load as the plugin's do; on a host with a RAM file system (/dev/shm) they
+// live there, since Save flushes every write to disk and the walk writes about 150000 files (the folder is removed at the end).
+string tmpRoot = Directory.Exists("/dev/shm") ? "/dev/shm/solostone-longrun9-" + Environment.ProcessId : VerifyPaths.Out("tmp/longrun9");
+string reloadDir = Path.Combine(tmpRoot, "reload"), crashDir = Path.Combine(tmpRoot, "crash");
 foreach (string d in new[] { reloadDir, crashDir }) { if (Directory.Exists(d)) Directory.Delete(d, true); Directory.CreateDirectory(d); }
 
 string[] schedules = { "acts-v3h", "acts-v3t", "acts-v4h", "acts-v4t" };
@@ -144,7 +149,8 @@ void WalkPair(Tally t, string schedule, DungeonRunClass row, string deck, long s
         t.Reloads++; if (up) t.Upgrades++;
         t.Steps++;
         if (la != lb && !broken) { t.LineMismatch++; t.Bad($"D1 {tag} step {b.Steps}: {la} | twin {lb}"); broken = true; }
-        if (!broken && LongRunWalker.Digest(a.Save) != LongRunWalker.Digest(b.Save))
+        // The file the reloaded run was just saved to (what it continues from) against the bytes the twin would write.
+        if (!broken && LongRunWalker.FileDigest(reloadDir) != LongRunWalker.StoreDigest(b.Save))
         {
             t.DigestMismatch++; broken = true;
             t.Bad($"D1 {tag} step {b.Steps} ({lb}): {LongRunWalker.FirstDiff(LongRunWalker.Xml(b.Save), LongRunWalker.Xml(a.Save))}");
@@ -152,6 +158,8 @@ void WalkPair(Tally t, string schedule, DungeonRunClass row, string deck, long s
         Invariants(a);
     }
     if (!a.Done && !broken) { t.LineMismatch++; t.Bad($"D1 {tag}: the reloaded run did not end with its twin"); }
+    // The final loaded object too (a field a load drops would show in the next file; after the last step there is none).
+    if (!broken && LongRunWalker.Digest(a.Save) != LongRunWalker.Digest(b.Save)) { t.DigestMismatch++; t.Bad($"D1 {tag}: the loaded end state differs from the twin's"); }
     t.Fights += b.Fights; t.Escapes += b.Escapes; t.Restarts += b.Restarts; t.Ends++;
     var end = b.State;
     if (end.Phase == DungeonRunPhase.Victory && defeat == 0) t.Victories++;
@@ -222,6 +230,7 @@ Guard("checks", () =>
     Check("C1 no forbidden pair (DungeonRun.ForbiddenPairs) in any state of any walk", Sum(t => t.Forbidden) == 0, Sum(t => t.Forbidden) + " states");
 });
 
+try { Directory.Delete(tmpRoot, true); } catch (IOException) { }
 Console.WriteLine($"TIME {clock.Elapsed.TotalSeconds:F0}s");
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");
 return failures == 0 ? 0 : 1;

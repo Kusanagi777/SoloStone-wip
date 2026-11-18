@@ -196,6 +196,28 @@ internal sealed class LongRunWalker
     internal static string Digest(DungeonRunSave save) => Hash16(Xml(save));
 
     /// <summary>
+    /// The digest of the bytes DungeonRunStore.Save writes for <paramref name="save"/> (the same serializer and overload as the
+    /// file, into memory): equal to <see cref="FileDigest"/> of a file saved from an equal save.
+    /// </summary>
+    internal static string StoreDigest(DungeonRunSave save)
+    {
+        using var stream = new MemoryStream();
+        StoreSerializer.Serialize(stream, save);
+        return HashBytes(stream.ToArray());
+    }
+
+    /// <summary>The digest of the save file in <paramref name="dir"/> as DungeonRunStore.Save wrote it.</summary>
+    internal static string FileDigest(string dir) => HashBytes(File.ReadAllBytes(Path.Combine(dir, DungeonRunStore.FileName)));
+
+    private static readonly System.Xml.Serialization.XmlSerializer StoreSerializer = new System.Xml.Serialization.XmlSerializer(typeof(DungeonRunSave));
+
+    private static string HashBytes(byte[] bytes)
+    {
+        using var sha = System.Security.Cryptography.SHA256.Create();
+        return BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", "").Substring(0, 16);
+    }
+
+    /// <summary>
     /// The reload of the plugin's load path: the save is written to <paramref name="dir"/> (DungeonRunStore.Save, the file the
     /// runtime writes), loaded back (DungeonRunStore.Load), upgraded (DungeonRunMigration.Upgrade: a version-6 file is the
     /// identity, reported in <paramref name="upgraded"/>) and resumed (DungeonRun.Resume, which also refuses unknown ids).
@@ -218,7 +240,9 @@ internal sealed class LongRunWalker
     /// </summary>
     internal static string CrashRestage(DungeonRun run, DungeonRunSave save, string dir)
     {
-        var before = DungeonRunStore.Clone(save);
+        // The save itself is the pre-match before the crash (BuildPlan and the XML only read it); the crash runs on a copy.
+        var before = save;
+        string original = Xml(before);
         string planBefore = PlanDigest(run.BuildPlan(before.Active, before.Profile)) + " seed " + run.MatchSeed(before.Active);
         var crash = DungeonRunStore.Clone(save);
         run.BeginMatch(crash.Active);
@@ -233,7 +257,7 @@ internal sealed class LongRunWalker
         // Mask the two allowed differences, then the whole save must be the pre-match's byte for byte.
         int attempt = s.Attempt; var heroSwitch = s.HeroSwitch;
         s.Attempt = before.Active.Attempt; s.HeroSwitch = before.Active.HeroSwitch;
-        string masked = Xml(loaded), original = Xml(before);
+        string masked = Xml(loaded);
         s.Attempt = attempt; s.HeroSwitch = heroSwitch;
         if (masked != original) problems.Add("the restaged save differs beyond Attempt and HeroSwitch: " + FirstDiff(original, masked));
         string planAfter = null;
