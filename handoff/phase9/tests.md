@@ -73,6 +73,16 @@ Found and NOT fixed (pre-step-9, not step-9 code):
   10 -> 12, decisions 24 -> 27, power 4 -> 5: the run player's Sorcerer's Apprentice EX1_608 dying in the boss's search threw
   the same way 83 times at turn 8, and TurnPlanner's simulation-fault handler pruned those lines without a fallback, so no
   counter showed it). c-gen-9 61 -> 70 checks (the 9 of A), its G digest unchanged.
+  **Complement (PR 2, the fair view itself).** The skip covers only an id the view no longer holds. CanonicalizePrivateActors
+  reissues freed ids, so a retired applied id can also name another hidden card (a deck slot), and removing the aura then
+  gives that card's effects back with no error. `Game.RemoveDetachedAuraTargetsForFairView` (`Model/Game.FairView.cs`,
+  beside RemoveDetachedTriggersForFairView; `Aura.ForgetUnregisteredTargets`, MultiAura children included) drops every
+  applied id whose entity is no longer registered; CanonicalizePrivateActors calls it after retiring the hidden ids and
+  before reissuing any. Test: c-secretsearch case 12 KalecgosHiddenHand (the player's Kalecgos on 1-3 hidden Fireballs, 6
+  seeds): with the skip alone 72 applied ids name reissued non-hand cards (fails); with both 0 (3/0). Moved: nothing but
+  that case. Both trees (skip alone, skip + complement) give identical enc08 and enc09 (each twice identical), pairs9
+  chunks 8, 11, 12 and 23 (0 fallbacks), selfplay 2CE546A18F96DCBC, randplay 22043E377F1097F3 and c-gen-9 70/0;
+  c-secretsearch 689 -> 692 (the new case; its CatalogPlayerSecrets lines already differed from wave 6 on the step-9 tree).
 
 ## 3. Pins moved (lane pins; every one listed in implementation.md section 5)
 
