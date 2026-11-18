@@ -97,8 +97,8 @@ Every lane's work was reviewed and each finding verified; the verifier's verdict
 1. pairs9 false "forbidden pair" failures (high): the walk to the fight floor drafted LOOTA_800 before ULDA_720 was injected
    (cases 1712, 1713, 1726, 1730). Fixed: Reach() skips the treasures the case rules' `incompatibleTreasures` name. Chunk 23
    cases 1710-1730: failed checks 4 -> 0, twice identical.
-2. Chunk 23 case 1722 fallbacks (medium): the engine defect in section 2, left open; the harness header and README state
-   it as the known exception.
+2. Chunk 23 case 1722 fallbacks (medium): the engine defect in section 2, left open here; the harness header and README
+   stated it as the known exception. Fixed afterwards on wip/t-aura (section 2).
 3. C1's run-scope half untested (medium): new F15 on a data copy (ULDA_729 given `incompatibleFlags` charge, a charge boss
    on act III): act I's gate leaves it out, offers it without that boss, ForbiddenPairs reports it once on act 3. Shown
    failing with RuleCandidates' run-scope branch reverted to the act's own lists.
@@ -166,7 +166,8 @@ c-gen-9 61/0, twice identical (games digest FA19ACD009E32E15).
 ## 5. Checks on this tree
 
 All on this tree (`wip/t-int`), each harness call through the harness lock; logs under `scratchpad/t/s3/`.
-- Engine: 0 warnings, 0 errors, md5 `da3fa601007fd83b3ce2cfa7e5899060` (unchanged by the test phase).
+- Engine: 0 warnings, 0 errors, md5 `da3fa601007fd83b3ce2cfa7e5899060` (unchanged by the test phase until the aura-removal
+  fix of section 2, wip/t-aura: `831bbb9f42571c0e1676ba12f144eb48`).
 - Build-all in slices: the catalog tool, all 93 suite projects, randplay and the 39 hall projects: every line exit 0, 0
   errors (138 clean lines, the gen tools included).
 - `gen.sh` twice: the six generated files unchanged (encounters 255 rows, 296 decks, 876 adaptations, 4 rejected; catalog
@@ -197,6 +198,6 @@ All on this tree (`wip/t-int`), each harness call through the harness lock; logs
   (`mod_hot_start` against `DefaultBossManaCap` 3 on act III majors), c-econ-9 A2 (finale deck median 32, band 34-42) and
   A10 (per-row ratio 4.52 at 6000 runs, band 2.5: lower k or raise alpha), B9's 17 named outliers (targets.json B9.named
   empty), every B criterion (calib.q).
-- The engine defect in section 2.
+- The engine defect in section 2: fixed on wip/t-aura (engine md5 da3fa601 -> 831bbb9f), not yet merged into this tree.
 - `verify/baseline` is not re-recorded (the full regression first).
 - The harness was not built on an f62275b export (bp9-before); the run harness reads the step-9 fields by reflection.
