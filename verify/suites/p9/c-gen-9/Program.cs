@@ -155,8 +155,10 @@ Guard("U", () =>
     Check("U1 UnscriptedGenerated is exactly the legacy pools' unscripted ids by the test's own definition (ordinal order)",
         listed.SequenceEqual(mine), "listed " + listed.Count + ", test " + mine.Count + "; only listed " + Few(listed.Except(mine)) + "; only test " + Few(mine.Except(listed)));
     Check("U2 the list holds 230 ids (the implementation record)", listed.Count == 230, listed.Count + " " + Hash(listed));
-    Check("U3 the legacy pools hold " + legacyIds.Count + " distinct ids over " + legacyNames.Count + " pools; none is an Entourage pool",
-        legacyIds.Count > 1000 && legacyNames.All(n => !n.StartsWith("Entourage/", StringComparison.Ordinal)) && legacyIds.Distinct().Count() == legacyIds.Count);
+    // A pin (the implementation record's numbers): a change to the legacy pool set moves it. (LegacyGeneratedIds is distinct and
+    // LegacyPoolNames leaves the Entourage pools out by construction, so only the counts can fail.)
+    Check("U3 the legacy pools hold 2924 distinct ids over 88 pools (pinned)", legacyIds.Count == 2924 && legacyNames.Count == 88,
+        legacyIds.Count + " ids, " + legacyNames.Count + " pools");
     var keywordOnly = legacyIds.Select(C).Where(c => c != null && !c.Implemented && !mechanismIds.Contains(c.Id) && DungeonRunAdmission.PlaysFromTags(c)).Select(c => c.Id).ToList();
     Note("keyword-only unscripted pool cards exempted (" + keywordOnly.Count + ", " + Hash(keywordOnly) + "): " + string.Join(",", keywordOnly));
     Check("U4 the keyword-only exemptions are the 6 pool cards whose whole text is keywords (DRG_061 DRG_065 DRG_239 ULD_193 ULD_450 ULD_723); each carries every keyword it names and is not a hero",
@@ -221,12 +223,13 @@ Guard("P", () =>
         raw.All(p => ReferenceEquals(OfflineCardPools.ForGame(plain, p.Pool), p.Pool)) && derived.All(p => ReferenceEquals(OfflineCardPools.ForGame(plain, p.Pool), p.Pool))
         && ReferenceEquals(OfflineCardPools.ForGame(plain, AddLackeyTask.Lackeys), AddLackeyTask.Lackeys));
 
-    // The run's own pools (encounters, treasures, shrines): every static method of the Dungeon Run card sets named *Pool or
-    // *Candidates that returns cards or card ids, called with every argument shape it takes, in a run match, for each side.
+    // The run's own pools (encounters, treasures, shrines): every static method of the Dungeon Run card sets (nested types
+    // included) that returns cards or card ids, whatever its name, called with every argument shape it takes, in a run match,
+    // for each side. A method whose arguments cannot be built, or a call that throws, fails P3 (it would be a pool not checked).
     var asm = typeof(DungeonRunContent).Assembly;
     var methods = asm.GetTypes().Where(t => t.Namespace == "SabberStoneCore.CardSets.DungeonRun")
         .SelectMany(t => t.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
-        .Where(m => (m.Name.EndsWith("Pool", StringComparison.Ordinal) || m.Name.EndsWith("Candidates", StringComparison.Ordinal) || m.Name.EndsWith("Parts", StringComparison.Ordinal)) && !m.IsGenericMethodDefinition
+        .Where(m => !m.IsGenericMethodDefinition && !m.IsSpecialName && !m.Name.Contains("<") && !m.DeclaringType.Name.Contains("<")
             && (typeof(IEnumerable<Card>).IsAssignableFrom(m.ReturnType) || typeof(IEnumerable<string>).IsAssignableFrom(m.ReturnType)))
         .OrderBy(m => m.DeclaringType.FullName + "." + m.Name + "/" + m.GetParameters().Length, StringComparer.Ordinal).ToList();
     var classes = new[] { CardClass.MAGE, CardClass.WARRIOR, CardClass.HUNTER, CardClass.PRIEST, CardClass.ROGUE, CardClass.DRUID, CardClass.PALADIN, CardClass.SHAMAN, CardClass.WARLOCK, CardClass.DEMONHUNTER, CardClass.DEATHKNIGHT };
@@ -259,6 +262,8 @@ Guard("P", () =>
                     else if (pt == typeof(CardClass)) vals = classes.Cast<object>();
                     else if (pt == typeof(string)) vals = treasurePools.Cast<object>();
                     else if (pt == typeof(string[])) vals = new object[] { new string[0] };
+                    else if (pt == typeof(Race)) vals = new object[] { Race.INVALID, Race.BEAST, Race.DRAGON, Race.MURLOC, Race.DEMON, Race.MECHANICAL, Race.ELEMENTAL, Race.PIRATE, Race.TOTEM };
+                    else if (pt == typeof(Card)) vals = new object[] { C(Yeti), C("EX1_165"), C("CFM_621") };
                     else if (pt == typeof(Func<Card, bool>)) vals = p.HasDefaultValue ? new object[] { null, (Func<Card, bool>)(x => true) } : new object[] { (Func<Card, bool>)(x => true) };
                     else { unknown = true; break; }
                     argSets = argSets.SelectMany(a => vals.Select(v => a.Append(v).ToArray())).ToList();
@@ -269,15 +274,16 @@ Guard("P", () =>
                 {
                     object result;
                     try { result = m.Invoke(null, args); calls++; called.Add(key); }
-                    catch (TargetInvocationException) { failedCalls++; continue; }
+                    catch (TargetInvocationException e) { failedCalls++; called.Add(key + " [threw " + e.InnerException?.GetType().Name + "]"); continue; }
                     var ids = result is IEnumerable<Card> cs ? cs.Where(x => x != null).Select(x => x.Id) : ((IEnumerable<string>)result).Where(x => x != null);
                     foreach (var id in ids) { seen.Add(id); if (unscriptedAll.Contains(id)) bad.Add(key + ":" + id); }
                 }
             }
         }
         if (k.Name == "legacy") Note("run pools called (" + called.Count + "): " + string.Join(" ", called));
-        Check("P3 " + k.Name + " run: the " + methods.Count + " run pool methods (" + calls + " calls, both sides) yield " + seen.Count + " distinct ids, 0 unscripted",
-            bad.Count == 0 && methods.Count >= 20 && calls >= 100 && seen.Count >= 500, Few(bad) + "; calls that threw " + failedCalls);
+        Check("P3 " + k.Name + " run: the " + methods.Count + " run pool methods (" + calls + " calls, both sides) yield " + seen.Count + " distinct ids, 0 unscripted; every method called",
+            bad.Count == 0 && failedCalls == 0 && methods.Count >= 30 && calls >= 100 && seen.Count >= 500,
+            Few(bad) + "; calls not made or that threw " + failedCalls + ": " + Few(called.Where(x => x.Contains(" ["))));
     }
 });
 
@@ -343,6 +349,19 @@ Guard("C", () =>
         var c = g.Player1; Mana(c); EmptyHand(c);
         KazakusPower.CreateCostChoices(c, c.Hero);
         var r = Offer(c).Select(x => x.Id).ToList(); Drop(c); return r;
+    }, anyCard: true);
+    // The ingredient choices (PotionGenerating's second and third ForGame sites): the cost-1 potion picked, then its first
+    // ingredient; both offers come from the cost-1 ingredient pool (Potion/1), of which the filter leaves four.
+    Site("Kazakus (PotionGenerating) second and third choices", potionCards[1], 4, g =>
+    {
+        var c = g.Player1; Mana(c); EmptyHand(c);
+        KazakusPower.CreateCostChoices(c, c.Hero);
+        // The picks go through the engine's choice path (ChooseTask.Pick -> KazakusPower.Action), as a player makes them.
+        Pick(g, c, c.Choice.Choices.FindIndex(id => g.IdEntityDic[id].Card.Cost == 1));
+        var second = Offer(c).Select(x => x.Id).ToList();
+        Pick(g, c, 0);
+        var third = Offer(c).Select(x => x.Id).ToList(); Drop(c);
+        return second.Count == 0 || third.Count == 0 ? new List<string>() : second.Concat(third).ToList();
     }, anyCard: true);
     var ungoro = SpecificTask.UngoroPack;
     { var warm = Ready(null); ungoro.Process(warm, warm.Player1, warm.Player1.Hero, null, null); }   // the pack pools are built on first use
@@ -534,6 +553,7 @@ Guard("G", () =>
     var bosses = data.Encounters.Where(b => data.BossDecks.ContainsKey(b.Deck)).Select(b => b.Id).OrderBy(x => x, StringComparer.Ordinal).ToList();
     var generatedAll = new SortedDictionary<string, int>(StringComparer.Ordinal);
     var unscriptedMade = new SortedDictionary<string, int>(StringComparer.Ordinal);
+    int setupMade = 0;
     var notImplementedMade = new SortedSet<string>(StringComparer.Ordinal);
     int games = 0, faults = 0, generatedEntities = 0, ended = 0; var faultLines = new List<string>(); var gameLines = new System.Text.StringBuilder();
     var types = new HashSet<CardType> { CardType.MINION, CardType.SPELL, CardType.WEAPON, CardType.HERO, CardType.LOCATION };
@@ -558,12 +578,23 @@ Guard("G", () =>
             }
             var g = Ready(plan, 5000 + i * 31);
             var known = new HashSet<(int, string)>();
+            // What the plan itself puts in the game (both decks and heroes): at the start of play every other entity was made by
+            // the setup (Start of Game treasures and passives, encounter and global rules), and is checked as a generated card too.
+            var planned = new HashSet<string>(plan.PlayerDeck.Concat(plan.BossDeck).Where(x => x != null).Select(x => x.Id)
+                .Concat(new[] { plan.PlayerHero?.Id, plan.BossHero?.Id }.Where(x => x != null)), StringComparer.Ordinal);
             void Scan(bool record)
             {
                 foreach (var e in g.IdEntityDic.Values)
                 {
                     if (e?.Card == null || !types.Contains(e.Card.Type)) continue;
-                    if (!known.Add((e.Id, e.Card.Id)) || !record) continue;
+                    if (!known.Add((e.Id, e.Card.Id))) continue;
+                    if (!record)
+                    {
+                        if (planned.Contains(e.Card.Id)) continue;
+                        setupMade++;
+                        if (unscriptedAll.Contains(e.Card.Id) && (e.Card.Type != CardType.HERO || legacySet.Contains(e.Card.Id))) unscriptedMade[e.Card.Id + " (" + boss + ", game " + i + ", setup)"] = 1;
+                        continue;
+                    }
                     generatedEntities++;
                     generatedAll[e.Card.Id] = generatedAll.TryGetValue(e.Card.Id, out int v) ? v + 1 : 1;
                     // A hero card counts only when a generation pool holds it: an encounter's form heroes (George and Karl, Xatma's
@@ -595,13 +626,13 @@ Guard("G", () =>
         }
         catch (Exception e) { faults++; if (faultLines.Count < 5) faultLines.Add(i + " " + boss + " " + e.GetType().Name + ": " + e.Message.Split('\n')[0]); }
     }
-    Note("G: " + games + " games (" + ended + " ended), " + generatedEntities + " cards made during play, " + generatedAll.Count + " distinct; with no script: " + Few(notImplementedMade, 40));
+    Note("G: " + games + " games (" + ended + " ended), " + generatedEntities + " cards made during play, " + generatedAll.Count + " distinct; " + setupMade + " made by the setup (not the plan's); with no script: " + Few(notImplementedMade, 40));
     foreach (var f in faultLines) Note("G fault " + f);
     Note("G games digest " + Hash(new[] { gameLines.ToString() }) + ", made-card digest " + Hash(generatedAll.Select(kv => kv.Key + "=" + kv.Value)));
     File.WriteAllText(VerifyPaths.Out("tmp/c-gen-9-games.txt"), gameLines.ToString());
     Check("G1 " + n + " seeded run games are played (v4 defaults, every loadout in turn, encounter bosses), no fault", games == n && faults == 0, games + " games, " + faults + " faults");
     Check("G2 the games make many cards during play (the check below has something to see)", generatedEntities >= 15 * n && generatedAll.Count >= 300, generatedEntities + " / " + generatedAll.Count);
-    Check("G3 0 unscripted cards are generated in the " + n + " games", unscriptedMade.Count == 0, Few(unscriptedMade.Keys, 20));
+    Check("G3 0 unscripted cards are generated in the " + n + " games (during play and by the setup)", unscriptedMade.Count == 0, Few(unscriptedMade.Keys, 20));
 });
 
 Console.WriteLine("RESULT " + passes + " passed, " + failures + " failed");
