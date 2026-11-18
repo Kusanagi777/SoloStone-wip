@@ -17,8 +17,8 @@ using SabberStoneCore.Tasks.PlayerTasks;
 // Secrets as its prior, fight-only hero cards played at once, the pilot rebuilt when the relay or a hero switch changes its hero),
 // the plan's own turn cap (Step9.TurnCap: 100 before step 9), the harvest reported as LocalLadder reports it (a restart as a
 // Fault) and DungeonRun.RecordOutcome; a restarted floor is played again until it is decided. The game loop is the encounter
-// harness's (PlayGame.cs, shared). ULDA_111 Hearthstone is left out of the player's options (lane-x.md section 6: the AI would
-// score the escape as a win; bp.sh ends9 covers the cast).
+// harness's (PlayGame.cs, a copy). ULDA_111 Hearthstone is left out of the player's options (lane-x.md section 6: the AI would
+// score the escape as a win; the cast is covered by lane ends: c-ends-9 section E and bp.sh ends9 escape / refuse).
 //   MODE=slots     plan B1-B4: new runs (the default roll unless SCHEDULE) of rotating loadouts, each walked to a floor of the
 //                  band and fought against the boss its run drew there. BANDS=I-combat,I-major,II-combat,II-major,III-combat,III-major
 //                  (default all); game g of band b: loadout (37g + 11b) mod L, seed SEED_BASE + 1000000 b + g, a combat band's
@@ -159,6 +159,7 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
     var problems = new List<string>();
     string result = "-", extra = ""; int games = 0, restarts = 0, turns = 0, cap0 = 0, hp = 0, left = 0, start = 0, decisions = 0;
     int floor = s.Floor, node = s.Node;
+    bool capWrong = false;
     var sources = new List<string>();
     for (int k = 0; k < 4 && s.Floor == floor && s.Node == node && s.Phase == DungeonRunPhase.PreMatch; k++)
     {
@@ -166,7 +167,15 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
         int cap = Step9.TurnCap(plan);
         if (k == 0) { cap0 = cap; start = plan.BossHealth - plan.BossCarriedDamage; }
         Check(plan.EncounterId == (boss.IsEncounter ? boss.Id : null) && plan.EncounterDeck == boss.IsEncounter, "plan is not the boss row's", problems);
-        Check(cap >= 100, "turn cap " + cap, problems);
+        // The floor's first game has the fight's own cap (100, or the act's / the relay's); a restarted game gets what is left of
+        // the floor's 2 x cap budget (D13, DungeonRun.PlanMatchEnds: max(1, 2 x cap - the turns of the floor's earlier games)).
+        if (k == 0) Check(cap >= 100, "turn cap " + cap, problems);
+        else
+        {
+            int left0 = Math.Max(1, 2 * cap0 - turns);
+            Check(cap == left0, "game " + k + "'s turn cap " + cap + ", not the floor budget's " + left0 + " (2 x " + cap0 + " - " + turns + ")", problems);
+            if (cap != left0) capWrong = true;
+        }
         var pilot = DungeonRunBossPilot.Build(boss, plan, data, runClasses: run.MatchClasses(s));
         var npcProfile = pilot.Profile.WithBudget(testBudget);
         var golden = new GoldenPilot(npcProfile, pilot.Plan, null, pilot.SecretPrior);
@@ -279,9 +288,12 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
     }
     if (restarts > 0)
     {
-        Check(turns <= 2 * cap0 + 2, "the floor's games took " + turns + " turns, over 2 x " + cap0, problems);
+        // A restart is played inside its game's cap, and only the floor's last game can stop at its cap (on turn cap + 1), so with
+        // the budget's caps the games take at most 2 x cap0 + 1 turns. The GATE field counts the floors over it or with a
+        // restarted game whose cap is not the budget's (the per-game check above).
+        Check(turns <= 2 * cap0 + 1, "the floor's games took " + turns + " turns, over 2 x " + cap0 + " (+1 for a game stopped at its cap)", problems);
         gateMaxRestarts = Math.Max(gateMaxRestarts, restarts);
-        if (turns > 2 * cap0 + 2) gateTurnExcess++;
+        if (turns > 2 * cap0 + 1 || capWrong) gateTurnExcess++;
     }
     if (result == "-") problems.Add("the floor was not decided in 4 games");
     return (result, games, restarts, turns, cap0, hp, left, start, decisions, extra, problems);

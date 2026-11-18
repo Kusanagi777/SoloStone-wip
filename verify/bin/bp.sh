@@ -58,7 +58,7 @@
 #                        bp.sh gate48t <from> <n> <k>           stage 4 item 3: Infinite Toki with GILA_BOSS_48t in his deck (data copy in
 #                                                               memory), n fair games from <from> (gate48t-<from>-<n>; the GATE line)
 #                        bp.sh uld152 <k>                       ULD_152 named games: ulda_01_cardish and ulda_44_trap_room (their decks list
-#                                                               it) against Brann runs holding the Pressure Plate of each of his two buckets
+#                                                               it) against Brann runs with two ULD_152 put in the run deck (not drawn)
 #                        python3 -I verify/tools/balance/agg.py <logs> > agg.json; python3 -I verify/tools/balance/check_targets.py agg.json
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
@@ -396,7 +396,8 @@ finale9|tekahn9|longrun9|treasure9) [ $# -eq 4 ] || { echo "usage: bp.sh $m <fro
   need $SUITES/p9/c-bosspilot-run; once $m-$2-$3${SEED_BASE:+-s$SEED_BASE} "$4" MODE=${m%9} FROM=$2 N=$3 ;;
 gate48t) [ $# -eq 4 ] || { echo "usage: bp.sh gate48t <from> <n> <k>"; exit 2; }
   need $SUITES/p9/c-bosspilot-run; once gate48t-$2-$3${SEED_BASE:+-s$SEED_BASE} "$4" MODE=named TOKI48=1 BOSS=gila_48_infinite_toki FROM=$2 N=$3 WATCH=GILA_BOSS_48t ;;
-uld152) # the two boss decks that list ULD_152 against Brann runs holding the Pressure Plates of his two buckets (one each)
+uld152) # the two boss decks that list ULD_152 against Brann runs with two ULD_152 Pressure Plates put in the run deck (PLAYER_CARDS: two
+  # drafted copies, standing in for one per bucket of his; the bucket draft itself is not exercised)
   [ $# -eq 2 ] || { echo "usage: bp.sh uld152 <k>"; exit 2; }
   need $SUITES/p9/c-bosspilot-run
   once uld152 "$2" MODE=named BOSS=ulda_01_cardish,ulda_44_trap_room N=4 WATCH=ULD_152 PLAYER_CLASS=HUNTER_WARRIOR PLAYER_CARDS=ULD_152,ULD_152 PLAYER_WATCH=ULD_152 ;;

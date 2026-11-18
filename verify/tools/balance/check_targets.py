@@ -108,7 +108,9 @@ def main(argv):
         k1 = lords["win"] / lords["n"]
         lo, hi = wilson(lords["win"], lords["n"])
         share = lords["n"] / s["all"]["n"]
-        ok = mean >= b5["meanDamageAtLeast"] and hi >= b5["oneAttemptKill"][0] and lo <= b5["oneAttemptKill"][1]
+        # The one-attempt kill rate is a band like B1-B4: its interval overlaps it and its point lies within it +- the tolerance.
+        kb = b5["oneAttemptKill"]
+        ok = mean >= b5["meanDamageAtLeast"] and hi >= kb[0] and lo <= kb[1] and kb[0] - tol <= k1 <= kb[1] + tol
         rep.put("PASS" if ok else "MISS", "B5 Plague Lords", "mean damage %.1f (>= %d), one-attempt kill %s (band %.2f-%.2f), lord share %.3f"
                 % (mean, b5["meanDamageAtLeast"], fmt(lords["win"], lords["n"]), b5["oneAttemptKill"][0], b5["oneAttemptKill"][1], share))
     # B6: the Heist finale per fight and all four in one run.
@@ -123,7 +125,9 @@ def main(argv):
     joint = agg.get("finale", {}).get("joint", {})
     if joint.get("runs"):
         lo, hi = wilson(joint["allWon"], joint["runs"])
-        ok = hi >= b6["allFourAtLeast"] and joint.get("fightsPerRun") == 4
+        # A floor, judged by the acceptance rule's both halves: the interval reaches it and the point is within the tolerance of it.
+        pj = joint["allWon"] / joint["runs"]
+        ok = hi >= b6["allFourAtLeast"] and pj >= b6["allFourAtLeast"] - tol and joint.get("fightsPerRun") == 4
         rep.put("PASS" if ok else "MISS", "B6 all four", "%s over runs with %s fights played (>= %.2f)"
                 % (fmt(joint["allWon"], joint["runs"]), joint.get("fightsPerRun"), b6["allFourAtLeast"]))
     # B7: Tekahn.

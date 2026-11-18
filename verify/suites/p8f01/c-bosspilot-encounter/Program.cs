@@ -246,24 +246,44 @@ for (int bi = 0; bi < bosses.Count; bi++)
                 }
                 foreach (var option in plan.PlayerHeroCards)
                     Check(game.Player1.HandZone.Concat(game.Player1.DeckZone).Any(c => c.Card.Id == option.Hero.Id), "hero card " + option.Hero.Id + " was not given", problems);
-                // The game loop is shared with the step-9 run harness (PlayGame.cs): the fair AI on the boss, a literal 100-turn cap.
-                var bossSide = new FairSide(game, game.Player2.PlayerId, pilot.Deck.Style, golden, npcProfile, boss.Id);
-                bossSide.OnTask = task =>
+                int decisionIndex = 0, actions = 0;
+                var recent = new Queue<string>();
+                void Act(PlayerTask task, string who)
                 {
-                    if (watch != null && task is PlayCardTask played0 && played0.Source != null && watch.Contains(played0.Source.Card.Id))
-                        watched[played0.Source.Card.Id] = watched.TryGetValue(played0.Source.Card.Id, out int seen0) ? seen0 + 1 : 1;
-                };
-                try
+                    recent.Enqueue($"t{game.Turn} {who}: {task}");
+                    if (recent.Count > 10) recent.Dequeue();
+                    if (++actions > 1500) throw new Exception("stuck after 1500 actions | " + string.Join(" | ", recent));
+                    if (task is ChooseTask pick && game.Step != Step.BEGIN_MULLIGAN)
+                    {
+                        var decision = game.GetPendingDecisions().Single(d => d.ControllerId == task.Controller.Id);
+                        if (!game.TryAnswer(new SabberStoneCore.Model.Decisions.DecisionAnswer(decision.Id, decision.ControllerId, pick.Choices.ToArray()), out var why))
+                            throw new Exception($"engine rejected {who} choice ({why}) | " + string.Join(" | ", recent));
+                    }
+                    else if (!game.Process(task)) throw new Exception($"engine rejected {who} task | " + string.Join(" | ", recent));
+                }
+                while (game.State != State.COMPLETE && game.Turn <= 100)
                 {
-                    PlayGame.Loop(game, 100, bossSide.Decide, () =>
+                    if (game.CurrentPlayer == game.Player2)
+                    {
+                        var (task, trace) = BotDriver.Decide(game, game.Player2.PlayerId, pilot.Deck.Style,
+                            st => golden.DecidePilot(st, new GoldenContext(game.Turn, decisionIndex, unchecked(997 * game.Turn + decisionIndex * 31), npcProfile)),
+                            ref decisionIndex, golden.Options);
+                        decisions++;
+                        if (trace?.Kind == "fallback") { fallbacks++; Console.Error.WriteLine($"  FALLBACK {boss.Id} t{game.Turn}: {trace.FallbackReason}"); }
+                        if (task is HeroPowerTask) uses++;
+                        if (watch != null && task is PlayCardTask played0 && played0.Source != null && watch.Contains(played0.Source.Card.Id))
+                            watched[played0.Source.Card.Id] = watched.TryGetValue(played0.Source.Card.Id, out int seen0) ? seen0 + 1 : 1;
+                        Act(task, "boss");
+                        if (watch != null) mostSecrets = Math.Max(mostSecrets, game.Player2.SecretZone.Count);
+                    }
+                    else
                     {
                         // The run player plays a fight-only hero card as soon as it can (the hero-switch path), else the local bot's pick.
                         var options = game.Player1.Options();
                         var heroCard = options.FirstOrDefault(t => t is PlayCardTask play && play.Source is Hero);
-                        return heroCard ?? LocalBot.Choose(options);
-                    }, () => { if (watch != null) mostSecrets = Math.Max(mostSecrets, game.Player2.SecretZone.Count); });
+                        Act(heroCard ?? LocalBot.Choose(options), "player");
+                    }
                 }
-                finally { decisions = bossSide.Decisions; fallbacks = bossSide.Fallbacks; uses = bossSide.PowerUses; }
                 turns = game.Turn;
                 result = game.State != State.COMPLETE ? "turn-cap" : game.Player2.PlayState == PlayState.WON ? "boss" : game.Player1.PlayState == PlayState.WON ? "player" : "tie";
                 if (result == "boss") bossWins++;

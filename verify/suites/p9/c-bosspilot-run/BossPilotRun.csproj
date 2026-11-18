@@ -22,8 +22,6 @@
     <Compile Include="$(SoloStoneRoot)plugin/LadderRules.cs" />
     <Compile Include="$(SoloStoneRoot)plugin/LocalCardCatalog.cs" />
     <Compile Include="$(SoloStoneRoot)plugin/LocalBot.cs" />
-    <!-- the game loop shared with the encounter bosspilot (plan D3: the old harness stays byte-identical) -->
-    <Compile Include="$(VerifyRoot)suites/p8f01/c-bosspilot-encounter/PlayGame.cs" Link="PlayGame.cs" />
     <Reference Include="SabberStoneCore"><HintPath>$(EngineDll)</HintPath></Reference>
   </ItemGroup>
 </Project>

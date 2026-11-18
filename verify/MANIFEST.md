@@ -116,7 +116,7 @@ Each suite folder holds its `*.cs` and `*.csproj` only (no `Program.cs.pre-*` ba
 | (new in wave 6, family 22 lane) | `verify/suites/p8f22/c-enc-22` | wave 6 | Enc22.csproj Program.cs |
 | (new in wave 6, family 23 lane) | `verify/suites/p8f23/c-enc-23` | wave 6 | Enc23.csproj Program.cs |
 | (new in wave 6, family 24 lane) | `verify/suites/p8f24/c-enc-24` | wave 6 | Enc24.csproj Program.cs |
-| (new in step 9, lane M) | `verify/suites/p9/c-bosspilot-run` | step 9 | BossPilotRun.csproj Program.cs RunPilot.cs (links `p8f01/c-bosspilot-encounter/PlayGame.cs`, the game loop factored out of the encounter harness, whose output is unchanged); built by `builds.sh only p9/c-bosspilot-run`, run by `bp.sh slots9`, `outliers9`, `finale9`, `tekahn9`, `longrun9`, `treasure9`, `gate48t`, `uld152` |
+| (new in step 9, lane M) | `verify/suites/p9/c-bosspilot-run` | step 9 | BossPilotRun.csproj Program.cs RunPilot.cs PlayGame.cs (the encounter harness's game loop, copied: the four generators patch that loop by its text, so it stays inline in `p8f01/c-bosspilot-encounter`); built by `builds.sh only p9/c-bosspilot-run`, run by `bp.sh slots9`, `outliers9`, `finale9`, `tekahn9`, `longrun9`, `treasure9`, `gate48t`, `uld152` |
 
 ## 3. The audit hall (all G3)
 

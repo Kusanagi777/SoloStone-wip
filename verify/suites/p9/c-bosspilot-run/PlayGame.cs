@@ -5,9 +5,10 @@ using SabberStoneCore.Enums;
 using SabberStoneCore.Model;
 using SabberStoneCore.Tasks.PlayerTasks;
 
-// Step 9 (plan D3): the game loop of the encounter bosspilot, factored out of its Program.cs so that the run harness
-// (verify/suites/p9/c-bosspilot-run, which links this file) plays its games with the same code. The encounter harness's output
-// stays byte for byte what it was: the same calls in the same order, the same 1500-action guard, the same messages.
+// Step 9 (plan D3): the run harness's game loop, a copy of the encounter bosspilot's (verify/suites/p8f01/c-bosspilot-encounter
+// Program.cs): the same calls in the same order, the same action guard, the same messages. It is a copy, not a shared file: four
+// generators (make_bp_collect.py, make_bp_rules.py, make_bp_rules06.py, make_harness.py) patch the encounter harness's loop by
+// its exact text, so that loop stays inline there.
 
 /// <summary>
 /// One side of a game piloted by the fair AI (GoldenPilot through BotDriver.Decide): the encounter harness's boss, the run
