@@ -254,6 +254,7 @@ now: `bp.sh` reads one only for a mode `bp/` does not hold.
 | (new in wave 6) `make_f22.py`, `patch_curation.py` | `verify/tools/gen/p8f22/` | wave 6 | `F22.json` (the wiki transcription; uses `p8f19/tombs_tiers.py`); the E22 entry of curation.json (idempotent; not rerun) |
 | (new in wave 6) `make_f23.py`, `make_fixture.py` | `verify/tools/gen/p8f23/` | wave 6 | `F23.json` (the wiki transcription); `encounters-f23.json` |
 | (new in wave 6) `make_f24.py`, `make_fixture.py` | `verify/tools/gen/p8f24/` | wave 6 | `F24.json` (the wiki transcription); `schedule-tekahn.json` (the acts-v3t finale enabled on Tekahn) |
+| (new in step 9, lane S tests) `record_replay_v3.sh`, `Record9.cs` | `verify/tools/gen/p9/` | step 9 | `verify/fixtures/p9/replay-v3/` (c-enc-25 L4): eight acts-v3h/v3t saves at the L4 stops, `replay.txt` and `exclusions.txt`, recorded on an f62275b export with the frozen `c-enc-25/ReplayV3.cs` (`record_replay_v3.sh <scratch folder>`, under the harness lock; twice byte-identical) |
 
 The G3 generators take no arguments: each reads the repository it sits in and writes its default output under verify/
 (`verify/fixtures/<family>/fixtures/...`, or the suite folder for the two harness generators); an optional argument

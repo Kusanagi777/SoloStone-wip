@@ -23,6 +23,10 @@ using System.Text.Json;
 //   L  legacy replay: runs saved before the close-out flipped the defaults (the two version-5 golden saves and eight version-6
 //      saves of new runs on the then default acts-v2) load and replay step for step as they did on the pre-close-out tree
 //      (verify/fixtures/p8f25/replay.txt, recorded there by verify/tools/gen/p8f25/record_replay.sh)
+//   L4 released-schedule replay (step 9, plan D5): eight acts-v3h/acts-v3t runs saved at the plan's L4 stops on the tree before
+//      step 9 (f62275b; verify/fixtures/p9/replay-v3, recorded there by verify/tools/gen/p9/record_replay_v3.sh with the frozen
+//      ReplayV3.cs) replay step for step as recorded, except lines that follow an offer a step-9 correctness fix changed: each
+//      such offer is redrawn exactly as recorded once the exclusions f62275b lacked (its exclusions.txt) are lifted
 //   R  the reachability sweep: hundreds of new runs on the default roll; meetings per adventure, and every boss row that can
 //      never appear, each with its reason (tier, unlock, exclusion, finale-only)
 static object FromJson(JsonElement e)
@@ -340,13 +344,180 @@ Guard("L", () =>
 Guard("L4", () =>
 {
     string fixtures = VerifyPaths.Fixture("p9/replay-v3");
-    var files = Enumerable.Range(0, ReplayV3.Stops.Length).Select(i => Path.Combine(fixtures, ReplayV3.FileName(i))).ToList();
-    var lines = new List<string>();
-    foreach (string f in files) lines.AddRange(ReplayV3.Walk(run, f));
-    if (Environment.GetEnvironmentVariable("C_ENC25_REPLAY_V3") is string dump && dump.Length > 0) File.WriteAllText(dump, string.Join("\n", lines) + "\n", new UTF8Encoding(false));
+    int n = ReplayV3.Stops.Length;
+    var files = Enumerable.Range(0, n).Select(i => Path.Combine(fixtures, ReplayV3.FileName(i))).ToList();
+    // The recording, split per save (each replay starts with its "save" line).
     var expected = File.ReadAllLines(Path.Combine(fixtures, "replay.txt"));
-    int differ = Enumerable.Range(0, Math.Max(lines.Count, expected.Length)).Count(i => i >= lines.Count || i >= expected.Length || lines[i] != expected[i]);
-    Note("L4 " + differ + " of " + expected.Length + " lines differ");
+    var recorded = new List<List<string>>();
+    foreach (string line in expected) { if (line.StartsWith("save ", StringComparison.Ordinal)) recorded.Add(new List<string>()); recorded[recorded.Count - 1].Add(line); }
+    // f62275b's own exclusion data (written by the recorder from that tree's parse): what the released schedules already excluded.
+    var oldRules = new Dictionary<string, Dictionary<string, string>>(StringComparer.Ordinal);
+    var oldBosses = new Dictionary<string, Dictionary<string, string>>(StringComparer.Ordinal);
+    foreach (string line in File.ReadAllLines(Path.Combine(fixtures, "exclusions.txt")))
+    {
+        var t = line.Split(' ');
+        var fields = new Dictionary<string, string>(StringComparer.Ordinal);
+        for (int k = 2; k + 1 < t.Length; k += 2) fields[t[k]] = t[k + 1];
+        (t[0] == "rule" ? oldRules : oldBosses)[t[1]] = fields;
+    }
+    bool OldHas(Dictionary<string, Dictionary<string, string>> table, string id, string key, string value) =>
+        table.TryGetValue(id, out var f) && f.TryGetValue(key, out var list) && list.Split(',').Contains(value);
+
+    var schedules = data.Schedules;
+    List<DungeonRunBoss> BossesOfAct(DungeonRunState st, DungeonRunSchedule sc, int act) =>
+        sc.Nodes.Where(nd => nd.Act == act && nd.IsFight && nd.Floor >= 1 && nd.Floor <= st.BossSequence.Count)
+            .Select(nd => data.Bosses.FirstOrDefault(b => b.Id == st.BossSequence[nd.Floor - 1])).Where(b => b != null).ToList();
+    // Why the current tree leaves rule r out of act `act`'s candidates (RuleCandidates' conditions, in its order), each cause
+    // marked new when the f62275b data did not have it (a step-9 correctness fix: lane R's exclusions, flags, rule keys, and the
+    // run-scope check against every act).
+    List<(string Cause, bool New)> RuleCauses(DungeonRunState st, DungeonRunSchedule sc, int act, DungeonRunGlobalRule r)
+    {
+        var causes = new List<(string, bool)>();
+        var active = st.ActiveRules.Where(x => x.Act == 0 || x.Act == act).ToList();
+        var ids = new HashSet<string>((r.RunScope ? st.ActiveRules : active).Select(x => x.Id), StringComparer.Ordinal);
+        var actIds = new HashSet<string>(active.Select(x => x.Id), StringComparer.Ordinal);
+        var rulesNow = (r.RunScope ? st.ActiveRules : active).Where(x => x.Kind != null).Select(x => schedules.Rule(x.Id)).Where(x => x != null).ToList();
+        var bosses = r.RunScope ? Enumerable.Range(1, sc.Acts.Count).SelectMany(a => BossesOfAct(st, sc, a)).ToList() : BossesOfAct(st, sc, act);
+        var actBosses = new HashSet<string>(BossesOfAct(st, sc, act).Select(b => b.Id), StringComparer.Ordinal);
+        if (r.RunScope && act != 1) causes.Add(("run scope, act " + act, false));
+        if (ids.Contains(r.Id)) causes.Add(("already active", false));
+        if (r.Effect == DungeonRunGlobalRule.EffectMatch && !SabberStoneCore.CardSets.DungeonRun.DungeonRunGlobalRules.IsScripted(r.Id)) causes.Add(("not scripted", false));
+        if (!DungeonRunAdmission.Classify(null, r.Id, AdmitScope.Rule, null, st.IsCatalogRun).Admitted) causes.Add(("not admitted", false));
+        if (r.NoBoardShrine && st.HasBoardShrine) causes.Add(("noBoardShrine", !OldHas(oldRules, r.Id, "noBoardShrine", "True")));
+        if (r.IncompatibleClasses.Contains(st.Class)) causes.Add(("class " + st.Class, !OldHas(oldRules, r.Id, "classes", st.Class)));
+        foreach (string t in r.IncompatibleTreasures.Where(t => DungeonRun.HoldsTreasure(st, t))) causes.Add(("treasure " + t + " (incompatibleTreasures)", true));
+        if (r.NoOpeningFlags && st.Cards.Any(c => c.Opening)) causes.Add(("an opening-flag card (noOpeningFlags)", true));
+        foreach (var other in rulesNow.Where(o => r.IncompatibleRules.Contains(o.Id) || o.IncompatibleRules.Contains(r.Id)))
+            causes.Add(("rule " + other.Id, !(OldHas(oldRules, r.Id, "rules", other.Id) || OldHas(oldRules, other.Id, "rules", r.Id)) || !actIds.Contains(other.Id)));
+        foreach (string m in r.IncompatibleModifiers.Where(ids.Contains)) causes.Add(("modifier " + m, !OldHas(oldRules, r.Id, "modifiers", m) || !actIds.Contains(m)));
+        foreach (var b in bosses)
+        {
+            bool cross = !actBosses.Contains(b.Id);
+            if (b.IncompatibleRules.Contains(r.Id)) causes.Add(("boss " + b.Id + " incompatibleRules", cross || !OldHas(oldBosses, b.Id, "rules", r.Id)));
+            foreach (string f in b.Flags.Where(r.IncompatibleFlags.Contains))
+                causes.Add(("boss " + b.Id + " flag " + f + (cross ? " (another act: the run-scope check)" : ""), cross || !OldHas(oldRules, r.Id, "flags", f) || !OldHas(oldBosses, b.Id, "flags", f)));
+        }
+        return causes;
+    }
+    // The modifiers the current tree bans on the act (ModifierCandidates' sources), each cause marked new as above.
+    List<(string Cause, bool New)> ModifierCauses(DungeonRunState st, string m)
+    {
+        var causes = new List<(string, bool)>();
+        var node = run.CurrentNode(st);
+        var sc = run.ScheduleFor(st);
+        if (st.ActiveRules.Any(x => x.Act == node.Act && x.Id == m)) causes.Add(("already active", false));
+        foreach (var b in BossesOfAct(st, sc, node.Act).Where(b => DungeonRun.ActWideModifierBans(st, b).Contains(m)))
+            causes.Add(("boss " + b.Id + " incompatibleModifiers", !OldHas(oldBosses, b.Id, "modifiers", m)));
+        foreach (var r in run.ActiveGlobalRules(st).Where(r => r.IncompatibleModifiers.Contains(m)))
+            causes.Add(("rule " + r.Id + " incompatibleModifiers", !OldHas(oldRules, r.Id, "modifiers", m)));
+        return causes;
+    }
+    // OpenAnomaly's and OpenModifier's draws over a candidate list (the same streams and order).
+    List<string> DrawAnomaly(DungeonRunState st, List<DungeonRunGlobalRule> candidates)
+    {
+        var left = candidates.ToList(); var offer = new List<string>();
+        for (int k = 0; k < DungeonRun.AnomalyOptions && left.Count > 0; k++)
+        {
+            int roll = StableSeed.Index(StableSeed.Derive(st.Seed, DungeonRun.AnomalyStream, st.Node, k), left.Sum(r => Math.Max(1, r.Weight)));
+            var picked = left[left.Count - 1];
+            foreach (var r in left) { roll -= Math.Max(1, r.Weight); if (roll < 0) { picked = r; break; } }
+            offer.Add(picked.Id); left.Remove(picked);
+        }
+        offer.Add(DungeonRunGlobalRule.None);
+        return offer;
+    }
+    List<string> DrawModifier(DungeonRunState st, List<DungeonRunModifier> candidates)
+    {
+        var left = candidates.ToList(); var offer = new List<string>();
+        for (int k = 0; k < DungeonRun.ModifierOptions && left.Count > 0; k++)
+        {
+            var picked = left[StableSeed.Index(StableSeed.Derive(st.Seed, DungeonRun.ModifierStream, st.Node, k), left.Count)];
+            offer.Add(picked.Id); left.Remove(picked);
+        }
+        return offer;
+    }
+    // Attributes a moved offer: lifting every exclusion the current tree has and f62275b had not reproduces the recorded offer.
+    string Attribute(DungeonRunState st, string kind, List<string> recordedOffer, out bool ok)
+    {
+        ok = false;
+        var sc = run.ScheduleFor(st);
+        int act = run.CurrentNode(st).Act;
+        var lifted = new List<string>();
+        List<string> redraw;
+        if (kind == "anomaly")
+        {
+            var now = run.RuleCandidates(st, sc, act, DungeonRunGlobalRule.KindAnomaly);
+            var before = new List<DungeonRunGlobalRule>();
+            foreach (var r in schedules.Rules.Where(r => r.Kind == DungeonRunGlobalRule.KindAnomaly && r.Admitted))
+            {
+                if (now.Contains(r)) { before.Add(r); continue; }
+                var causes = RuleCauses(st, sc, act, r);
+                if (causes.Count > 0 && causes.All(c => c.New)) { before.Add(r); lifted.Add(r.Id + " [" + string.Join("; ", causes.Select(c => c.Cause)) + "]"); }
+            }
+            redraw = DrawAnomaly(st, before);
+        }
+        else if (kind == "modifier")
+        {
+            var now = run.ModifierCandidates(st);
+            var before = new List<DungeonRunModifier>();
+            foreach (var m in schedules.Modifiers.OrderBy(m => m.Id, StringComparer.Ordinal))
+            {
+                if (now.Contains(m)) { before.Add(m); continue; }
+                var causes = ModifierCauses(st, m.Id);
+                if (causes.Count > 0 && causes.All(c => c.New)) { before.Add(m); lifted.Add(m.Id + " [" + string.Join("; ", causes.Select(c => c.Cause)) + "]"); }
+            }
+            redraw = DrawModifier(st, before);
+        }
+        else return "a moved " + kind + " line: no step-9 attribution for it";
+        ok = lifted.Count > 0 && redraw.SequenceEqual(recordedOffer);
+        return "lifted " + string.Join(", ", lifted) + " -> redraw " + string.Join(",", redraw) + (ok ? " = recorded" : " != recorded " + string.Join(",", recordedOffer));
+    }
+    string Seen(string line) { int k = line.IndexOf(" => ", StringComparison.Ordinal); return k < 0 ? line : line.Substring(0, k); }
+    string Kind(string line) => line.Split(' ')[0];
+    List<string> OfferOf(string line) => Seen(line).Split(' ').ElementAtOrDefault(1)?.Split(',').ToList() ?? new List<string>();
+
+    var lines = new List<string>();
+    int movedLines = 0, attributed = 0;
+    var moved = new List<string>(); var unattributed = new List<string>(); var headers = new List<string>();
+    for (int i = 0; i < n; i++)
+    {
+        var pre = new Dictionary<int, DungeonRunSave>();
+        var cur = ReplayV3.Walk(run, files[i], (k, sv) => pre[k] = DungeonRunStore.Clone(sv));
+        lines.AddRange(cur);
+        var exp = i < recorded.Count ? recorded[i] : new List<string>();
+        if (cur[0] != exp.ElementAtOrDefault(0)) headers.Add(ReplayV3.FileName(i));
+        int d = Enumerable.Range(0, Math.Max(cur.Count, exp.Count)).FirstOrDefault(k => k >= cur.Count || k >= exp.Count || cur[k] != exp[k], -1);
+        if (d < 0) continue;
+        int count = Enumerable.Range(0, Math.Max(cur.Count, exp.Count)).Count(k => k >= cur.Count || k >= exp.Count || cur[k] != exp[k]);
+        movedLines += count;
+        string at = $"{ReplayV3.FileName(i)} line {d} ({count} of {exp.Count} lines move from it)";
+        // The first moved line is a step that did the same as recorded but whose resulting state differs: the node it entered
+        // made a different offer (the next line), which a step-9 exclusion explains.
+        bool sameStep = d > 0 && d + 1 < cur.Count && d + 1 < exp.Count && Seen(cur[d]) == Seen(exp[d]) && Kind(cur[d + 1]) == Kind(exp[d + 1])
+            && Seen(cur[d + 1]) != Seen(exp[d + 1]) && pre.ContainsKey(d + 1);
+        if (!sameStep) { unattributed.Add(at + ": " + cur.ElementAtOrDefault(d) + " | recorded " + exp.ElementAtOrDefault(d)); continue; }
+        string why = Attribute(pre[d + 1].Active, Kind(cur[d + 1]), OfferOf(exp[d + 1]), out bool ok);
+        string entry = $"{at}: {Kind(exp[d + 1])} offer {string.Join(",", OfferOf(exp[d + 1]))} -> {string.Join(",", OfferOf(cur[d + 1]))}; {why}";
+        if (ok) { attributed++; moved.Add(entry); } else unattributed.Add(entry);
+    }
+    if (Environment.GetEnvironmentVariable("C_ENC25_REPLAY_V3") is string dump && dump.Length > 0) File.WriteAllText(dump, string.Join("\n", lines) + "\n", new UTF8Encoding(false));
+    foreach (string m in moved) Note("L4 moved: " + m);
+    foreach (string m in unattributed) Note("L4 unattributed: " + m);
+    var saves = files.Select(ReplayV3.Read).ToList();
+    Check($"L4 the {n} saves recorded on f62275b (verify/tools/gen/p9/record_replay_v3.sh) are stamp-3 runs of acts-v3h and acts-v3t at their stops"
+        + " (act I anomaly, a shrine run's act I anomaly holding a rule its board shrine excludes, the finale tavern, Hagatha's and the relay's pre-match,"
+        + " a Plague Lord in the match, a modifier node, a tavern purchase waiting for its target), and each loads and resumes as it did there",
+        saves.All(x => x.Version == 6 && x.Active.ScheduleVersion == 3) && saves.Select(x => x.Active.Schedule).SequenceEqual(ReplayV3.Stops.Select(x => x.Schedule))
+        && saves.Select(x => x.Active.Class).SequenceEqual(ReplayV3.Stops.Select(x => x.Row)) && saves[5].Active.Phase == DungeonRunPhase.InMatch
+        && saves[7].Active.Tavern?.Pending != null && saves[1].Active.HasBoardShrine && headers.Count == 0 && recorded.Count == n,
+        headers.Count + " load lines differ: " + string.Join(" ", headers));
+    Check($"L4 each replay equals the recording, or every line it moves follows one offer that lifting the step-9 exclusions (those f62275b's exclusions.txt lacks) redraws exactly as recorded"
+        + $" ({movedLines} of {expected.Length} lines move, in {attributed} attributed and {unattributed.Count} unattributed replays)",
+        unattributed.Count == 0 && lines.Count(l => l.StartsWith("save ", StringComparison.Ordinal)) == n, string.Join(" | ", unattributed));
+    string shrine = recorded[1].FirstOrDefault(l => l.StartsWith("anomaly ", StringComparison.Ordinal));
+    Check("L4 a stored offer is never redrawn: the shrine run's act I anomaly offer (" + Seen(shrine ?? "(none)") + "), made before the ordering fix, replays as recorded",
+        shrine != null && lines.Contains(shrine) && OfferOf(shrine).Any(id => data.Schedules.Rule(id)?.NoBoardShrine == true));
+    Check("L4 every replayed run ends in victory", lines.Count(l => l.StartsWith("end Victory", StringComparison.Ordinal)) == n);
 });
 
 // ============================================================ R. the reachability sweep
