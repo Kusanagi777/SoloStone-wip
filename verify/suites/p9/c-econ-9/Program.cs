@@ -130,7 +130,12 @@ Walk WalkRun(DungeonRunState s, Action<DungeonRunState, Walk> beforeStep = null,
                 run.BeginMatch(s);
                 run.RecordOutcome(s, scratch, DungeonRunOutcome.Win);
                 if (rewardable && !rewardRoom) { bankedPred++; w.BankedEarned++; }
-                if (rewardable && rewardRoom) { w.Rewards++; if (!s.ActiveTreasures.Contains(reward) || !s.Deck.Contains(reward)) Bad("reward " + reward + " not granted"); }
+                if (rewardable && rewardRoom)
+                {
+                    // Counted once the engine granted it (A12's boss rewards column); a missed grant is a W10 failure.
+                    if (s.ActiveTreasures.Contains(reward) && s.Deck.Contains(reward)) w.Rewards++;
+                    else { w.RewardBad++; Bad("reward " + reward + " not granted"); }
+                }
                 if (!s.Finished && node.Index != sc.Nodes.Count - 1 && !sc.Acts[node.Act - 1].IsFinale) pending = (floor, node);
                 break;
             }
@@ -276,8 +281,13 @@ Guard("W", () =>
     var bankBad = v4w.Where(w => w.BankedBad > 0 || w.TavernGoldBad > 0).ToList();
     Check($"W4 A3: every bundle skip for room (and every reward with no room) becomes 1 banked gold, spent at the next tavern ({v4w.Sum(w => w.BankedEarned)} banked gold over the v4 walks)",
         bankBad.Count == 0, bankBad.Count + " walks; " + string.Join(" | ", bankBad.Take(3).Select(w => w.FirstBad)));
-    Check("W5 A3: the released runs (acts-v3h) bank nothing (BankedGold stays 0; their taverns get the act's gold only)", v3w.All(w => w.BankedEarned == 0 && w.BankedBad == 0 && w.TavernGoldBad == 0),
+    // (BankedEarned is the walker's own prediction and only moves on a tuned walk, so it is not part of W5: the engine's
+    // BankedGold and the tavern gold are.)
+    Check("W5 A3: the released runs (acts-v3h) bank nothing (BankedGold stays 0; their taverns get the act's gold only)", v3w.All(w => w.BankedBad == 0 && w.TavernGoldBad == 0),
         string.Join(" | ", v3w.Where(w => w.BankedBad > 0 || w.TavernGoldBad > 0).Take(3).Select(w => w.FirstBad)));
+    var rewardBad = v4w.Where(w => w.RewardBad > 0).ToList();
+    Check($"W10 A12: every boss reward with room is granted (the treasure active and its card in the deck; {v4w.Sum(w => w.Rewards)} granted over the v4 walks)",
+        rewardBad.Count == 0 && v4w.Sum(w => w.Rewards) > 0, rewardBad.Count + " walks; " + string.Join(" | ", rewardBad.Take(3).Select(w => w.FirstBad)));
     // A5
     int ownShare(List<Walk> ws, out int total)
     {
@@ -560,7 +570,7 @@ internal sealed class Walk
 {
     internal string Schedule, Origin, Row;
     internal bool Victory, Tuned;
-    internal int Steps, MaxDeck, DeckMax, FinaleDeck = -1, RoomSkips, OtherSkips, BankedEarned, Good904, TreasurePicks, Teammates, ShrineUpgrades, Signatures, Rewards;
+    internal int Steps, MaxDeck, DeckMax, FinaleDeck = -1, RoomSkips, OtherSkips, BankedEarned, RewardBad, Good904, TreasurePicks, Teammates, ShrineUpgrades, Signatures, Rewards;
     internal int BankedBad, TavernGoldBad;
     internal string FirstBad;
     internal List<(int Act, string Id, bool NonPassive)> TreasureOffers = new List<(int, string, bool)>();
