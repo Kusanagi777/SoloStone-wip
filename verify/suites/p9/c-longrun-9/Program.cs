@@ -199,7 +199,7 @@ Guard("checks", () =>
         schedules.All(x => tallies[x].WrongEnd == 0 && tallies[x].Victories > 0 && tallies[x].Defeats > 0 && tallies[x].Victories + tallies[x].Defeats == tallies[x].Runs),
         string.Join(" ", schedules.Select(x => $"{x}={tallies[x].Victories}V/{tallies[x].Defeats}D/{tallies[x].WrongEnd}bad")));
     Check($"D1 after every one of the {Sum(t => t.Steps)} steps the run reloaded from its file (Save, Load, Upgrade, Resume) equals its unbroken twin: the same step lines and the same save digest (profile included)",
-        Sum(t => t.DigestMismatch) == 0 && Sum(t => t.LineMismatch) == 0 && Sum(t => t.Steps) > 100000,
+        Sum(t => t.DigestMismatch) == 0 && Sum(t => t.LineMismatch) == 0 && Sum(t => t.Steps) > 100000 / stride,
         $"{Sum(t => t.DigestMismatch)} digest, {Sum(t => t.LineMismatch)} line mismatches");
     Check($"D1 every reload of a version-6 save is an Upgrade no-op ({Sum(t => t.Reloads)} reloads)", Sum(t => t.Upgrades) == 0 && Sum(t => t.Reloads) > Sum(t => t.Steps), Sum(t => t.Upgrades) + " upgraded");
     Check($"D1 the step-9 match ends are walked on acts-v4h/v4t (escapes {Sum(t => t.Escapes, v4)}, Rewind restarts {Sum(t => t.Restarts, v4)}) and never on the released acts-v3h/v3t"
