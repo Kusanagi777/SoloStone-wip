@@ -32,7 +32,8 @@ using SabberStoneCore.Tasks.PlayerTasks;
 //   MODE=treasure  plan E (D6): every "shared" treasure (TREASURES_FROM / N chunk) held by a loadout of another origin on acts-v4h,
 //                  one game on floor 2; its active card's plays are counted
 //   MODE=named     BOSS=id,id with GAMES each on SCHEDULE (default acts-v4h) at the first floor that draws the row; PLAYER_CLASS=row
-//                  ids and PLAYER_DECK=deck ids pick the loadouts, PLAYER_CARDS=id,id join the run deck; TOKI48=1 puts
+//                  ids and PLAYER_DECK=deck ids pick the loadouts, PLAYER_CARDS=id,id join the run deck, PLAYER_TREASURES=id,id
+//                  are held (as a pick gives them: GILA_911 Rewind replays a lost floor); TOKI48=1 puts
 //                  GILA_BOSS_48t in Infinite Toki's deck in the loaded data (in memory: the shipped files are untouched) and adds
 //                  the gate's line (plan stage 4 item 3)
 // Common: N=games per unit (GAMES is the same), FROM=first index, SEED_BASE (default 9100000, targets.json S1), SCHEDULE_JSON /
@@ -127,6 +128,18 @@ List<(int Act, string Kind, int Floor, string Pool)> Floors(DungeonRunSchedule s
     return floors;
 }
 
+// The run holds treasure t from now on, as PickTreasure gives it (an active one's card joins the deck); returns that card's id.
+string Hold(DungeonRunState s, DungeonRunTreasure t)
+{
+    string shell = t.Active ? DungeonRunContent.Get(t.Id).ShellId : null;
+    if (!s.Treasures.Contains(t.Id) && !s.ActiveTreasures.Contains(t.Id))
+    {
+        if (t.Active) { s.ActiveTreasures.Add(t.Id); DungeonRunDeck.Add(s, shell, DungeonRunDeck.OriginTreasure); }
+        else s.Treasures.Add(t.Id);
+    }
+    return shell;
+}
+
 string Identity(DungeonRunState s) => string.Join("|", s.Class, s.StarterDeck, s.Power, s.PowerOverride ?? "-", string.Join(",", s.Deck),
     string.Join(",", s.Cards.Select(c => c.Uid + ":" + c.Id)), string.Join(",", s.Treasures), string.Join(",", s.ActiveTreasures), s.BoardShrine ?? "-");
 
@@ -197,12 +210,13 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
         };
         string hero = game.Player1.Hero.Card.Id;
         int heroChanges = 0;
+        // Watched Secrets seen in a Secret zone, by entity: "boss:<id>" or "player:<id>" (the side that held it).
         var secrets = new Dictionary<int, string>();
         void Secrets()
         {
             if (watch == null && playerWatch == null) return;
-            foreach (var sz in new[] { game.Player1.SecretZone, game.Player2.SecretZone })
-                foreach (var e in sz) if ((watch?.Contains(e.Card.Id) ?? false) || (playerWatch?.Contains(e.Card.Id) ?? false)) secrets[e.Id] = e.Card.Id;
+            foreach (var e in game.Player2.SecretZone) if (watch?.Contains(e.Card.Id) ?? false) secrets[e.Id] = "boss:" + e.Card.Id;
+            foreach (var e in game.Player1.SecretZone) if (playerWatch?.Contains(e.Card.Id) ?? false) secrets[e.Id] = "player:" + e.Card.Id;
         }
         PlayerTask Player()
         {
@@ -413,12 +427,7 @@ switch (mode)
             var profile = new DungeonRunProfile(); profile.Unlocked.AddRange(data.Unlocks.Keys);
             try { RunWalk.ToFloor(run, s, profile, 2); }
             catch (Exception e) { faults++; Console.WriteLine($"G mode=treasure treasure={t.Id} result=FAULT walk: {e.Message.Split('\n')[0]}"); continue; }
-            string shell = t.Active ? DungeonRunContent.Get(t.Id).ShellId : null;
-            if (!s.Treasures.Contains(t.Id) && !s.ActiveTreasures.Contains(t.Id))
-            {
-                if (t.Active) { s.ActiveTreasures.Add(t.Id); DungeonRunDeck.Add(s, shell, DungeonRunDeck.OriginTreasure); }
-                else s.Treasures.Add(t.Id);
-            }
+            string shell = Hold(s, t);
             var plan = run.BuildPlan(s, profile);
             bool inPlan = t.Active ? plan.PlayerDeck.Any(c => c.Id == shell) : plan.PlayerTreasures.Contains(t.Id);
             if (!inPlan) { failed++; Console.Error.WriteLine($"  CHECK treasure {t.Id}: the fight's plan does not hold it"); }
@@ -448,6 +457,7 @@ switch (mode)
                 catch (Exception e) { faults++; Console.WriteLine($"G mode=named row={boss.Id} g={g} result=FAULT walk: {e.Message.Split('\n')[0]}"); continue; }
                 s.BossSequence[at.Floor - 1] = boss.Id;
                 foreach (string id in playerCards ?? new string[0]) DungeonRunDeck.Add(s, id, DungeonRunDeck.OriginDraft);
+                foreach (string id in List("PLAYER_TREASURES") ?? new string[0]) Hold(s, data.Treasure(id));
                 Play($"mode=named row={boss.Id} g={g}", s, profile, boss, li);
             }
         break;
@@ -457,8 +467,8 @@ switch (mode)
 
 foreach (var kv in SearchTelemetry.Details()) Console.Error.WriteLine($"SWALLOWED {kv.Value} x {kv.Key}");
 string Counts(string[] ids, SortedDictionary<string, int> d) => string.Join(" ", ids.Distinct().Select(id => id + " x" + (d.TryGetValue(id, out int had) ? had : 0)));
-if (watch != null) Console.WriteLine("watched (boss plays from hand) " + Counts(watch, watched) + "; Secrets sprung " + Counts(watch, sprung));
-if (playerWatch != null) Console.WriteLine("player watched (plays) " + Counts(playerWatch, playerPlayed) + "; Secrets sprung " + Counts(playerWatch, sprung));
+if (watch != null) Console.WriteLine("watched (boss plays from hand) " + Counts(watch, watched) + "; boss Secrets sprung " + Counts(watch.Select(id => "boss:" + id).ToArray(), sprung));
+if (playerWatch != null) Console.WriteLine("player watched (plays) " + Counts(playerWatch, playerPlayed) + "; player Secrets sprung " + Counts(playerWatch.Select(id => "player:" + id).ToArray(), sprung));
 if (toki48) Console.WriteLine($"GATE GILA_BOSS_48t: fights {fights}, faults {faults}, Alternate Timeline casts {timelineCasts}, restarts {restartsAll}, most restarts on one floor {gateMaxRestarts}, floors over 2 x TurnCap {gateTurnExcess}");
 Console.WriteLine($"run harness: mode {mode}, loadouts {loadouts.Count}, seed base {seedBase}, from {from}, n {n}");
 Console.WriteLine($"fights {fights}, games {gamesPlayed}, player wins {playerWins}, boss wins {bossWins}, turn caps {caps}, ties {ties}, escapes {escapes}, restarts {restartsAll}, faults {faults}, fallbacks {bossFallbacks + playerFallbacks} (boss {bossFallbacks}, player {playerFallbacks}), failed checks {failed}, swallowed leaf exceptions {SearchTelemetry.SwallowedLeafErrors}");
