@@ -119,7 +119,7 @@ Guard("S", () =>
     var profile = new DungeonRunProfile(); profile.Unlocked.AddRange(data.Unlocks.Keys);
     var cls = data.FindClass("MAGE");
     string[] tuned = data.Schedules.Schedules.Values.Where(s => s.StampVersion >= 4).Select(s => s.Id).OrderBy(x => x, StringComparer.Ordinal).ToArray();
-    var states = released.Concat(tuned).ToDictionary(id => id, id => run.NewRun(profile, cls.Id, cls.Decks[0], cls.Powers[0], 4242, schedule: id), StringComparer.Ordinal);
+    var states = released.Concat(tuned).Distinct().ToDictionary(id => id, id => run.NewRun(profile, cls.Id, cls.Decks[0], cls.Powers[0], 4242, schedule: id), StringComparer.Ordinal);
     Check("S4 a new run on each released schedule is stamped with its StampVersion and is not Tuned", released.All(id => states[id].ScheduleVersion == stamps[id] && !DungeonRun.Tuned(states[id])),
         string.Join(" ", released.Select(id => id + "=" + states[id].ScheduleVersion + (DungeonRun.Tuned(states[id]) ? " tuned" : ""))));
     Check("S5 a new run on acts-v4h and acts-v4t (the only stamp-4 schedules) is stamped 4 and Tuned", tuned.SequenceEqual(new[] { "acts-v4h", "acts-v4t" })
