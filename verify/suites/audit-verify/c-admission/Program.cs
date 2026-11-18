@@ -197,14 +197,21 @@ Check("deck rows: 6 highlander, 5 not-started-in-deck, 17 from-own-deck, 9 deck-
     deckRows.Count(id => DungeonRunAdmission.RuleFor(id).Family == "highlander") == 6 && deckRows.Count(id => DungeonRunAdmission.RuleFor(id).Family == "not-started-in-deck") == 5
     && deckRows.Count(id => DungeonRunAdmission.RuleFor(id).Family == "from-own-deck") == 17 && deckRows.Count(id => DungeonRunAdmission.RuleFor(id).Family == "deck-wide-change") == 9
     && deckRows.Count(id => DungeonRunAdmission.RuleFor(id).Family == "start-of-game-draw") == 15 && deckRows.Count(id => DungeonRunAdmission.RuleFor(id).Family == "empty-deck") == 2);
-Check("turn-rewind: GILA_900p and GILA_911, rejected everywhere", rewindRows.All(id => DungeonRunAdmission.RuleFor(id).Family == "turn-rewind" && DungeonRunAdmission.RuleFor(id).Admit == AdmitScope.None));
+// Step 9 (lane X, D13) scripted GILA_911 Rewind as a run-owned restart: its row moved to game-restart, the run player only, never
+// generated; GILA_900p Temporal Loop stays turn-rewind, rejected everywhere (a final rejection).
+Check("turn-rewind: GILA_900p rejected everywhere; GILA_911 is step 9's game-restart, the run player's only and never generated",
+    rewindRows.OrderBy(x => x, StringComparer.Ordinal).SequenceEqual(new[] { "GILA_900p", "GILA_911" })
+    && DungeonRunAdmission.RuleFor("GILA_900p").Family == "turn-rewind" && DungeonRunAdmission.RuleFor("GILA_900p").Admit == AdmitScope.None
+    && DungeonRunAdmission.RuleFor("GILA_911").Family == "game-restart" && DungeonRunAdmission.RuleFor("GILA_911").Admit == AdmitScope.Player
+    && DungeonRunAdmission.RuleFor("GILA_911").NeverGenerated);
 var deckRejected = deckRows.Concat(rewindRows).Where(id => DungeonRunAdmission.RuleFor(id).Admit == AdmitScope.None).OrderBy(x => x, StringComparer.Ordinal).ToList();
 var pendingRows = deckRows.Concat(rewindRows).Where(id => DungeonRunAdmission.RuleFor(id).Requires != null).OrderBy(x => x, StringComparer.Ordinal).ToList();
 // Phase 6 F15 lifted ULD_003, GILA_511 and the five treasure start-of-game draws; phase 7 T2 lifted TRLA_191 (scripted with
 // SelfCondition.IsNotStartInDeck); phase 7 D lifted TRLA_809 (deck-wide-change) and the nine teammate start-of-game draws: no
-// pending row remains, and the rejected ones are the three phase 9 rows.
-Check("of the 56 deck and rewind rows, the rejected ones are ULDA_111, GILA_900p and GILA_911 (phase 9); none has a pending requirement (phase 7 D lifted TRLA_809 and the nine companions)",
-    deckRejected.SequenceEqual(new[] { "GILA_900p", "GILA_911", "ULDA_111" }) && pendingRows.Count == 0
+// pending row remains, and the rejected ones were the three phase 9 rows. Step 9 (lane X) admitted ULDA_111 (the escape) and
+// GILA_911 (the restart) for the run player: GILA_900p is the one rejected row left.
+Check("of the 56 deck and rewind rows, the rejected one is GILA_900p (step 9 admitted ULDA_111 and GILA_911); none has a pending requirement (phase 7 D lifted TRLA_809 and the nine companions)",
+    deckRejected.SequenceEqual(new[] { "GILA_900p" }) && pendingRows.Count == 0
     && new[] { "TRLA_809", "TRLA_121", "TRLA_135", "TRLA_139", "TRLA_148", "TRLA_156", "TRLA_164", "TRLA_172", "TRLA_180", "TRLA_188" }.All(id => DungeonRunAdmission.RuleFor(id).Admit == AdmitScope.Player
         && deckRows.Contains(id)), string.Join(",", deckRejected) + " / pending " + pendingRows.Count);
 Check("Gral and the deck-wide-change player cards: player yes, boss no (phase 5 lift)",
@@ -288,16 +295,32 @@ foreach (var rule in DungeonRunAdmission.Rules)
         zephrys.Implemented && zv.Family == "highlander" && zp.Admitted && !zb.Admitted && zv.Requires == null && zv.Lift == DungeonRunAdmission.WishBossLift
         && DungeonRunAdmission.IsNoneLift(DungeonRunAdmission.WishBossLift));
 }
-Check("turn-rewind is lifted by the turn restart, ULDA_111 by the match exit (both deferred to phase 9 by phase 6)",
-    DungeonRunAdmission.RuleFor("GILA_900p").Lift == DungeonRunAdmission.TurnRestartLift && DungeonRunAdmission.RuleFor("GILA_911").Lift == DungeonRunAdmission.TurnRestartLift
-    && DungeonRunAdmission.RuleFor("ULDA_111").Lift == DungeonRunAdmission.MatchExitLift);
+// Phase 6 deferred both to phase 9. Step 9: GILA_900p's lift is the final rejection (TurnRestartLift, a "none:" lift); ULDA_111
+// and GILA_911 landed as run treasures (RunTreasureLift: no boss deck or generation pool offers them).
+Check("turn-rewind keeps the turn restart's final rejection; ULDA_111 and GILA_911 are run treasures (step 9 landed the match exit and the restart)",
+    DungeonRunAdmission.RuleFor("GILA_900p").Lift == DungeonRunAdmission.TurnRestartLift && DungeonRunAdmission.IsNoneLift(DungeonRunAdmission.TurnRestartLift)
+    && DungeonRunAdmission.RuleFor("GILA_911").Lift == DungeonRunAdmission.RunTreasureLift && DungeonRunAdmission.RuleFor("ULDA_111").Lift == DungeonRunAdmission.RunTreasureLift);
 Check("TRLA_809 is admitted for the run player by phase 7 D; its boss side waits on the own-deck ledger (BossDeckLedgerLift, phase 8)",
     DungeonRunAdmission.RuleFor("TRLA_809").Lift == DungeonRunAdmission.BossDeckLedgerLift && DungeonRunAdmission.RuleFor("TRLA_809").Admit == AdmitScope.Player
     && DungeonRunAdmission.RuleFor("TRLA_809").NeverGenerated);
 // Every pending lift names a numbered goal phase after this one, with that phase's name; "none:" lifts name no work.
 var phaseNames = new Dictionary<int, string> { [3] = "shared draft catalog", [4] = "acts", [5] = "deck mutation/Bob", [6] = "heroes/powers/treasures",
     [7] = "shrines/teammates", [8] = "encounters/anomalies", [9] = "economy" };
-foreach (var rule in DungeonRunAdmission.Rules.Where(r => r.Lift != null && !DungeonRunAdmission.IsNoneLift(r.Lift) && r.Lift != DungeonRunAdmission.AddRule))
+// Step 9 is phase 9, the last numbered phase: the lifts it left pending name their owner past it, each one pinned here by text:
+// DALA_857's boss-side treasure model (not planned), Jythiros's client lane, Alternate Timeline's stage-3 gate.
+var afterPhase9 = new Dictionary<string, string>
+{
+    [DungeonRunAdmission.RuleTreasureLift] = "a boss-side treasure model (not planned; step 9 rechecked it and shares treasures player-side only): ",
+    [DungeonRunAdmission.RiddleLift] = "client (a Windows lane, not step 9: step 9 adds no decision of the non-current player): ",
+    [DungeonRunAdmission.AlternateTimelineLift] = "step 9 stage-3 gate (real games): ",
+};
+Check("the lifts past phase 9 are exactly DALA_857's, Jythiros's and Alternate Timeline's, each naming its owner",
+    DungeonRunAdmission.Rules.Where(r => afterPhase9.ContainsKey(r.Lift ?? "")).SelectMany(r => r.Ids ?? new string[0]).OrderBy(x => x, StringComparer.Ordinal)
+        .SequenceEqual(new[] { "DALA_857", "GILA_BOSS_48t", "ULDA_BOSS_58p" })
+    && afterPhase9.All(p => p.Key.StartsWith(p.Value, StringComparison.Ordinal) && p.Key.Length > p.Value.Length + 20),
+    string.Join(",", DungeonRunAdmission.Rules.Where(r => afterPhase9.ContainsKey(r.Lift ?? "")).SelectMany(r => r.Ids ?? new string[0])));
+foreach (var rule in DungeonRunAdmission.Rules.Where(r => r.Lift != null && !DungeonRunAdmission.IsNoneLift(r.Lift) && r.Lift != DungeonRunAdmission.AddRule
+    && !afterPhase9.ContainsKey(r.Lift)))
 {
     var m = System.Text.RegularExpressions.Regex.Match(rule.Lift, @"^phase (\d) \(([^)]*)\): \S");
     string name = rule.Family + " " + (rule.Ids?[0] ?? "(default)");
@@ -620,7 +643,13 @@ foreach (var card in Cards.All.Where(c => c?.Id != null).GroupBy(c => c.Id).Sele
     if (rejected && listed && (player && !never ? !bossSet.Contains(card.Id) : !rejectSet.Contains(card.Id))) wrongSide.Add(card.Id);
 }
 Check("no card of the engine pool is rejected by Classify(Generated) without being listed", missing.Count == 0, missing.Count + ": " + string.Join(",", missing.Take(20)));
-Check("no listed card is admitted in the Generated scope", extra.Count == 0, string.Join(",", extra.Take(20)));
+// Step 9 (lane G, D15): the generated unscripted list (UnscriptedGenerated, computed from the engine's pools) joins the
+// rejects although Classify admits those cards (Classify reads the table, not the script): every other listed card is rejected.
+var unscriptedGenerated = new HashSet<string>(DungeonRunAdmission.UnscriptedGenerated(), StringComparer.Ordinal);
+Check("no listed card is admitted in the Generated scope, except the unscripted generated cards (step 9), each listed for both sides and unscripted",
+    extra.All(id => unscriptedGenerated.Contains(id) && rejectSet.Contains(id) && !bossSet.Contains(id) && !Cards.FromId(id).Implemented)
+    && unscriptedGenerated.All(id => rejectSet.Contains(id)) && extra.Count > 0,
+    extra.Count + " extra; not unscripted-generated: " + string.Join(",", extra.Where(id => !unscriptedGenerated.Contains(id)).Take(20)));
 Check("player-admitted rejects are boss-only, the rest apply to both sides", wrongSide.Count == 0, string.Join(",", wrongSide.Take(20)));
 var collectibleRejects = Cards.All.Where(c => c.Collectible && c.Implemented && !c.IsSecret && rejectSet.Contains(c.Id)).Select(c => c.Id).Distinct().Count();
 Note("Generated lists: " + rejects.Count + " for both sides (" + collectibleRejects + " collectible, scripted, non-Secret), " + bossRejects.Count + " boss-only");
@@ -702,13 +731,14 @@ Check("DungeonRun.BuildPlan source carries both lists, per run kind, and the pla
 // ---------------------------------------------------------------- 8. validator coverage: passive treasures, legacy powers, content shells
 {
     var tdata = new DungeonRunData { DataVersion = "admission", Rules = data.Rules };
-    // Phase 6 F15 admitted GILA_511 and ULDA_045t; phase 7 T2 admitted TRLA_191 and phase 7 D TRLA_121 (teammates): GILA_911
-    // (turn-rewind, phase 9) and ULDA_111 (start-of-game-draw, a match exit, phase 9) are rejected ids that stand in as passive treasures.
-    tdata.Treasures.Add(new DungeonRunTreasure { Id = "GILA_911", Rarity = "common", Universal = true });
-    tdata.Treasures.Add(new DungeonRunTreasure { Id = "ULDA_111", Rarity = "common", Universal = true });
+    // Phase 6 F15 admitted GILA_511 and ULDA_045t; phase 7 T2 admitted TRLA_191 and phase 7 D TRLA_121 (teammates); step 9
+    // admitted GILA_911 and ULDA_111 (lane X): DALA_740 (treasure-data-gap) and DALA_857 (global-rule-rejected), both rejected for
+    // good in step 9, are rejected ids that stand in as passive treasures.
+    tdata.Treasures.Add(new DungeonRunTreasure { Id = "DALA_740", Rarity = "common", Universal = true });
+    tdata.Treasures.Add(new DungeonRunTreasure { Id = "DALA_857", Rarity = "common", Universal = true });
     var terr = DungeonRunValidator.Validate(tdata, null);
-    Check("a passive treasure the table rejects (GILA_911) fails admission", terr.Any(e => e.StartsWith("GILA_911: admission turn-rewind:") && e.Contains("phase 9")), string.Join(" | ", terr.Where(e => e.StartsWith("GILA_911"))));
-    Check("a passive treasure the table rejects (ULDA_111) fails admission", terr.Any(e => e.StartsWith("ULDA_111: admission start-of-game-draw:")), string.Join(" | ", terr.Where(e => e.StartsWith("ULDA_111"))));
+    Check("a passive treasure the table rejects (DALA_740) fails admission", terr.Any(e => e.StartsWith("DALA_740: admission treasure-data-gap:") && e.Contains("lifted by none: a data gap")), string.Join(" | ", terr.Where(e => e.StartsWith("DALA_740"))));
+    Check("a passive treasure the table rejects (DALA_857) fails admission", terr.Any(e => e.StartsWith("DALA_857: admission global-rule-rejected:")), string.Join(" | ", terr.Where(e => e.StartsWith("DALA_857"))));
     var ldata = new DungeonRunData { DataVersion = "admission", Rules = data.Rules };
     ldata.Classes.Add(new DungeonRunClass { Id = "HUNTER", Name = "probe", HeroCard = "HERO_05", Powers = new List<string> { "HERO_05bp" } });
     ldata.LegacyHeroes["probe"] = new DungeonRunLegacyHero { Class = "HUNTER", Power = "GILA_900p" };
@@ -716,7 +746,7 @@ Check("DungeonRun.BuildPlan source carries both lists, per run kind, and the pla
     Check("a legacy hero power the table rejects (GILA_900p) fails admission", lerr.Any(e => e.StartsWith("GILA_900p: admission turn-rewind:")), string.Join(" | ", lerr.Where(e => e.StartsWith("GILA"))));
     // Synthetic content entries: a shrine power whose shell the table rejects, and a passive treasure with a rejected effect shell.
     var shrine = new RunContent { Key = "probe_shrine_1", Kind = RunContentKind.PassivePower, ShellId = "GILA_900p", Name = "probe", Text = "probe" };
-    var fx = new RunContent { Key = "probe_fx", Kind = RunContentKind.Effect, ShellId = "ULDA_111", Name = "probe", Text = "probe" }; // TRLA_809 until phase 7 D admitted it
+    var fx = new RunContent { Key = "probe_fx", Kind = RunContentKind.Effect, ShellId = "GILA_900h2", Name = "probe", Text = "probe" }; // TRLA_809 until phase 7 D, ULDA_111 until step 9 admitted them
     var passive = new RunContent { Key = "probe_passive", Kind = RunContentKind.PassiveTreasure, EffectKey = "probe_fx", Name = "probe", Text = "probe" };
     var cdata = new DungeonRunData { DataVersion = "admission", Rules = data.Rules };
     cdata.Treasures.Add(new DungeonRunTreasure { Id = "probe_passive", Rarity = "common", Universal = true });
@@ -724,7 +754,7 @@ Check("DungeonRun.BuildPlan source carries both lists, per run kind, and the pla
     var cerr = DungeonRunValidator.Validate(cdata, null, content);
     Check("a shrine content shell the table rejects fails admission (content loop, player scope)", cerr.Any(e => e.StartsWith("GILA_900p: admission turn-rewind:") && e.Contains("content probe_shrine_1")),
         string.Join(" | ", cerr.Where(e => e.Contains("probe"))));
-    Check("a passive treasure's rejected effect shell fails admission", cerr.Any(e => e.StartsWith("ULDA_111: admission start-of-game-draw:") && e.Contains("probe_passive effect")),
+    Check("a passive treasure's rejected effect shell fails admission", cerr.Any(e => e.StartsWith("GILA_900h2: admission fight-hero-card:") && e.Contains("probe_passive effect")),
         string.Join(" | ", cerr.Where(e => e.Contains("probe"))));
     var realErr = DungeonRunValidator.Validate(data, null, DungeonRunContent.All);
     Check("the real data still validates with every content shell classified", realErr.Count == 0, string.Join(" | ", realErr.Take(10)));
