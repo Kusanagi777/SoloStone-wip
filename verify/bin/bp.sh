@@ -48,6 +48,9 @@
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
+#   step 9 (lane X):     bp.sh ends9 <escape|refuse|rewind|toki|tekahn> <k>   the match ends in real games on the shipped stamp-4
+#                                                        schedules, each floor played until it is decided (p9/c-bosspilot-ends9; one
+#                                                        run per call; then `bp.sh same ends9-<part>`)
 #   bp.sh same <name>    compare the two logs of a one-run-per-call mode (a vs b, and vs the baseline)
 # A harness that overflows its stack does not exit: every run is wrapped in `timeout` (exit 124 = stopped by it; LIMIT=<s>).
 . "$(dirname "$0")/../lib/env.sh"
@@ -203,6 +206,9 @@ case $m in
 same) name=$2; [ -n "$name" ] || { echo "usage: bp.sh same <name>"; exit 2; }
   strip "$LOGS/$name-1.txt" > "$R/bp-$name-a.txt"; strip "$LOGS/$name-2.txt" > "$R/bp-$name-b.txt"
   compare "$name" ;;
+ends9) # step 9 lane X: escapes, restarts and the Tekahn finale, one part per call (c-bosspilot-ends9 PART=<part>)
+  case "$2" in escape|refuse|rewind|toki|tekahn) ;; *) echo "usage: bp.sh ends9 <escape|refuse|rewind|toki|tekahn> <k>"; exit 2 ;; esac
+  need $SUITES/p9/c-bosspilot-ends9; once ends9-$2 "$3" PART=$2 ;;
 enc01) need $E; twice enc01 BOSS=$ENC01 ;;
 old01) need $E; twice old01 BOSS=$OLD01 ;;
 secret4) need $E; twice secret4 BOSS=loot_35_brandlemar,loot_48_trapped_room,gila_25_ivan,ulda_44_trap_room GAMES=6 ;;
