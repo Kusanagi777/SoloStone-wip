@@ -39,6 +39,21 @@ In step-9 code:
   F14 (failed before, passes after). Nothing moves on the shipped data (Hagatha's `heroSwitch` flag already excludes
   DALA_833): c-rules-05/06, c-enc-model and c-enc-25 give byte-identical output with and without it.
 
+Found by the full regression (t/all.q on 1c9014d, stopped at 136 of 185 to restart on the fixed tree):
+- **bp.sh enc17: "start: LOEA10_3 is not on the player board"** (dala_58_flark vs DALA_Chu). Not a product defect: the
+  check sampled the boards after `game.MainBegin()`, which also runs turn 1's start (NextStep advances on its own). Chu's
+  top card is AT_130 Sea Reaver ("When you draw this, deal 1 damage to your minions"), which kills the 1/1 Murloc Tinyfin
+  the start block summoned. The deck order moved at the close-out (a2ef0c6, ULDA_038 Explorer Retraining as a stamp-3
+  tavern option; with its weight 0 Chu's floor-13 deck is back to 31 cards and the game passes), not at step 9; the c25
+  regression had enc17 queued but never ran it. Fix (6059f74, harness only): the base harness
+  `verify/suites/p8f01/c-bosspilot-encounter` reads both boards at the first turn start (`TriggerManager.TurnStartTrigger`,
+  after the start block, before turn 1's triggers and draw) and fails if no first turn start was seen; the four generated
+  copies regenerated (twice byte-identical), the hand-kept p8f04 copy edited the same way. The check keeps its exact
+  meaning (no carve-out). Shown failing: 7 Wisps on the player board before MainBegin -> FAIL 3 per flark game. Moved:
+  enc17's Chu/flark line (FAIL 1 -> ok) and its summary line; enc09 byte-identical.
+- **bp.sh enc08 fallbacks 0 -> 4** and pairs9 chunks 8, 11, 12 (cases 608, 781, 848, 854): the same KeyNotFoundException
+  as below, fixed by the aura-removal fix.
+
 No other step-9 defect was found by any lane. Defects in the lanes' own tests, found by the review and fixed (section 4).
 
 Found and NOT fixed (pre-step-9, not step-9 code):
@@ -198,6 +213,13 @@ All on this tree (`wip/t-int`), each harness call through the harness lock; logs
   (`mod_hot_start` against `DefaultBossManaCap` 3 on act III majors), c-econ-9 A2 (finale deck median 32, band 34-42) and
   A10 (per-row ratio 4.52 at 6000 runs, band 2.5: lower k or raise alpha), B9's 17 named outliers (targets.json B9.named
   empty), every B criterion (calib.q).
-- The engine defect in section 2: fixed on wip/t-aura (engine md5 da3fa601 -> 831bbb9f), not yet merged into this tree.
+- The engine defect in section 2: fixed on wip/t-aura (engine md5 da3fa601 -> 831bbb9f), merged into this tree (c014194).
+- **Engine, not fixed (released behaviour):** `engine/SabberStoneCore/src/Actions/Draw.cs` CompleteDraw (about lines
+  106-113, since 0.1.0) moves every drawn card with a TopdeckTask from the hand to the set-aside zone for good. Right for
+  "cast when drawn" spells; wrong for minions with a draw effect that should stay in hand (AT_130 Sea Reaver, GVG_007 Flame
+  Leviathan). Found while debugging enc17; fixing it changes released games, so it is left for a decision.
+- **Coverage misses (no fault):** bp.sh f04-boss prints "never played by the boss: ULD_290 x0 ULD_721 x0". ULD_290 is the
+  wave-6 miss (HANDOFF 3.4); ULD_721 was played once on the wave-6 and close-out trees and 0 times on this tree (the games
+  moved with step 9; seed-sensitive, 40 games).
 - `verify/baseline` is not re-recorded (the full regression first).
 - The harness was not built on an f62275b export (bp9-before); the run harness reads the step-9 fields by reflection.
