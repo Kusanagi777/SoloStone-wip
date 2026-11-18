@@ -45,6 +45,21 @@
 #                        bp.sh tekahn25                  the SHIPPED acts-v3t finale on Tekahn with the hero relay (twice per call)
 #                        bp.sh sweep25 <a|b|c> <k>       new runs with no named schedule (the default roll), each fought at a floor of
 #                                                        its own (DEFAULT_SWEEP; one run per call; then `bp.sh same sweep25-<a|b|c>`)
+#   step 9 (lane M):     the fair-player run harness (p9/c-bosspilot-run: the fair AI on both sides, the plan's turn cap, restarts
+#                        replayed), one chunk per call (k = 1 or 2; then `bp.sh same <name>`; names below); SEED_BASE=<n> from the
+#                        environment picks the seed base (default targets.json S1 9100000) and joins the name as -s<n):
+#                        bp.sh slots9 <band> <from> <n> <k>     B1-B4: n games of band I-combat|I-major|II-combat|II-major|III-combat|III-major
+#                                                               from game <from>, new runs on the default roll  (slots9-<band>-<from>-<n>)
+#                        bp.sh outliers9 <row0> <rows> <from> <n> <k>   B9: rows <row0>..+<rows> of the t3/t4 + named list (outliers9-<row0>-<rows>-<from>-<n>)
+#                        bp.sh finale9 <from> <n> <k>           B6: the acts-v4h Heist finale, its four fights per run g (finale9-<from>-<n>)
+#                        bp.sh tekahn9 <from> <n> <k>           B7: the acts-v4t Tekahn finale with the relay, full Health (tekahn9-<from>-<n>)
+#                        bp.sh longrun9 <from> <n> <k>          B10/B11: whole runs, every fight played, origins in turn (longrun9-<from>-<n>)
+#                        bp.sh treasure9 <from> <n> <k>         D6: shared treasures <from>..+<n>, one game each on another origin (treasure9-<from>-<n>)
+#                        bp.sh gate48t <from> <n> <k>           stage 4 item 3: Infinite Toki with GILA_BOSS_48t in his deck (data copy in
+#                                                               memory), n fair games from <from> (gate48t-<from>-<n>; the GATE line)
+#                        bp.sh uld152 <k>                       ULD_152 named games: ulda_01_cardish and ulda_44_trap_room (their decks list
+#                                                               it) against Brann runs holding the Pressure Plate of each of his two buckets
+#                        python3 -I verify/tools/balance/agg.py <logs> > agg.json; python3 -I verify/tools/balance/check_targets.py agg.json
 #   cross-family:        bp.sh cross <rule> <tag> <boss,boss,...>     (c-bosspilot-rules05: a family 05 rule on other bosses;
 #                                                                      cross05.sh drives the wave-2 set, tag w2)
 #                        bp.sh cross06 <rule> <tag> <boss,boss,...>   (c-bosspilot-rules06: a family 06 rule on other bosses)
@@ -372,6 +387,19 @@ tekahn25) # acts-v3t's finale as it ships: Tekahn with the hero relay; the run h
 sweep25) # the default roll: runs 0-15 (a), 16-31 (b) and 32-47 (c), the run rows in turn, each fought at floor 1 + 7i of its schedule
   case "$2" in a) from=0 ;; b) from=16 ;; c) from=32 ;; *) echo "usage: bp.sh sweep25 <a|b|c> <k>"; exit 2 ;; esac
   need $E; once sweep25-$2 "$3" DEFAULT_SWEEP=16 DEFAULT_SWEEP_FROM=$from SEED_BASE=25000 ;;
+# ---- step 9 lane M: the fair-player run harness (p9/c-bosspilot-run), one chunk per call
+slots9) [ $# -eq 5 ] || { echo "usage: bp.sh slots9 <band> <from> <n> <k>"; exit 2; }
+  need $SUITES/p9/c-bosspilot-run; once slots9-$2-$3-$4${SEED_BASE:+-s$SEED_BASE} "$5" MODE=slots BANDS=$2 FROM=$3 N=$4 ;;
+outliers9) [ $# -eq 6 ] || { echo "usage: bp.sh outliers9 <row0> <rows> <from> <n> <k>"; exit 2; }
+  need $SUITES/p9/c-bosspilot-run; once outliers9-$2-$3-$4-$5${SEED_BASE:+-s$SEED_BASE} "$6" MODE=outliers ROWS_FROM=$2 ROWS=$3 FROM=$4 N=$5 ;;
+finale9|tekahn9|longrun9|treasure9) [ $# -eq 4 ] || { echo "usage: bp.sh $m <from> <n> <k>"; exit 2; }
+  need $SUITES/p9/c-bosspilot-run; once $m-$2-$3${SEED_BASE:+-s$SEED_BASE} "$4" MODE=${m%9} FROM=$2 N=$3 ;;
+gate48t) [ $# -eq 4 ] || { echo "usage: bp.sh gate48t <from> <n> <k>"; exit 2; }
+  need $SUITES/p9/c-bosspilot-run; once gate48t-$2-$3${SEED_BASE:+-s$SEED_BASE} "$4" MODE=named TOKI48=1 BOSS=gila_48_infinite_toki FROM=$2 N=$3 WATCH=GILA_BOSS_48t ;;
+uld152) # the two boss decks that list ULD_152 against Brann runs holding the Pressure Plates of his two buckets (one each)
+  [ $# -eq 2 ] || { echo "usage: bp.sh uld152 <k>"; exit 2; }
+  need $SUITES/p9/c-bosspilot-run
+  once uld152 "$2" MODE=named BOSS=ulda_01_cardish,ulda_44_trap_room N=4 WATCH=ULD_152 PLAYER_CLASS=HUNTER_WARRIOR PLAYER_CARDS=ULD_152,ULD_152 PLAYER_WATCH=ULD_152 ;;
 # ---- the released harnesses
 run) need $SUITES/audit-verify/c-bosspilot; released run ;;
 fixture) need $SUITES/audit-verify/c-bosspilot; released fixture SECRET_FIXTURE=1 ;;
