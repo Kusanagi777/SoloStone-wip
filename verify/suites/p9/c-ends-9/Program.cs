@@ -357,7 +357,7 @@ Guard("R", () =>
     var end = DungeonRunSetup.Harvest(g);
     Check("R1 a real game: the run hero dies with Rewind listed -> tag 32639 = 1, Rewind consumed, the game a loss, the harvest a Rewind restart with its turns",
         plan.Restarts.SequenceEqual(new[] { Rewind }) && g.State == State.COMPLETE && g.Player1.PlayState == PlayState.LOST && g[EncounterRules.Restart] == EncounterRules.RestartRewind
-        && g.RunResult.ConsumedTreasures.SequenceEqual(new[] { Rewind }) && end.Restarted && end.RestartSource == Rewind && !end.Escaped && end.Turns == g.Turn && end.Turns >= 3,
+        && g.RunResult?.ConsumedTreasures.SequenceEqual(new[] { Rewind }) == true && end.Restarted && end.RestartSource == Rewind && !end.Escaped && end.Turns == g.Turn && end.Turns >= 3,
         $"state {g.State} play {g.Player1.PlayState} mark {g[EncounterRules.Restart]} turns {end.Turns}");
     var noList = At("acts-v4h", Combat, null, 9302);
     var g0 = Ready(run.BuildPlan(noList, All()));
@@ -386,6 +386,9 @@ Guard("R", () =>
         && s.Matches.Last().Outcome == DungeonRunOutcome.Win && s.Phase != DungeonRunPhase.PreMatch,
         $"fault keeps {faultKeeps}, index {s.RestartIndex} sources {s.RestartSources ?? "-"} phase {s.Phase}");
 
+});
+Guard("R", () =>
+{
     // Rewind is consumed even when the host passes no match result (outcome-implied, as the escape).
     var bare = At("acts-v4h", Combat, null, 9303); bare.Treasures.Add(Rewind);
     Fight(bare, All(), DungeonRunOutcome.Fault, End(30, playerDamage: 30, restartSource: Rewind), null);
@@ -398,6 +401,9 @@ Guard("R", () =>
     Check("R8 Rewind's cap: once per floor; a second copy is not listed, and a second Rewind restart is refused: recorded as the loss, the run over",
         capped.Restarts.Count == 0 && bare.Matches.Last().Outcome == DungeonRunOutcome.Loss && !bare.Matches.Last().Restarted && bare.Finished && bare.Phase == DungeonRunPhase.Defeat
         && capNotes.Contains("restart refused (" + Rewind + "): its once-per-floor restart is used; recorded as Loss"), string.Join(" | ", capNotes));
+});
+Guard("R", () =>
+{
     // The caps are per source: Rewind used never blocks Alternate Timeline (Toki with the card in his deck, act II's major).
     var t = At("acts-v4h", Major2, Toki, 9304, tokiRun);
     t.Treasures.Add(Rewind);
@@ -412,6 +418,9 @@ Guard("R", () =>
         tp.Restarts.SequenceEqual(new[] { Rewind, Timeline }) && tp2.Restarts.SequenceEqual(new[] { Timeline }) && second && tp3.Restarts.Count == 0
         && t.Finished && tNotes2.Contains("restart refused (" + Timeline + "): its once-per-floor restart is used; recorded as Loss"),
         Plan(tp) + " | " + Plan(tp2) + " | " + string.Join(" | ", tNotes) + " | " + string.Join(" | ", tNotes2));
+});
+Guard("R", () =>
+{
     // A source the fight could not use is refused (no Rewind held; Alternate Timeline on a boss without it).
     var none1 = At("acts-v4h", Combat, null, 9305);
     var n1 = Fight(none1, All(), DungeonRunOutcome.Loss, End(30, restartSource: Rewind), null);
@@ -421,6 +430,9 @@ Guard("R", () =>
         none1.Finished && none1.RestartIndex == 0 && n1.Any(n => n.StartsWith("restart refused (" + Rewind + "): this fight has no such restart"))
         && none2.Finished && none2.Matches.Last().Outcome == DungeonRunOutcome.Loss && n2.Any(n => n.StartsWith("restart refused (" + Timeline + "): this fight has no such restart")),
         string.Join(" | ", n1) + " || " + string.Join(" | ", n2));
+});
+Guard("R", () =>
+{
     // The turn budget: a floor's games take at most 2 x TurnCap; a restart that leaves no turn is a turn limit.
     var budget = At("acts-v4h", Combat, null, 9307); budget.Treasures.Add(Rewind);
     var bNotes = Fight(budget, All(), DungeonRunOutcome.Loss, End(30, restartSource: Rewind, turns: 199), null);
@@ -430,6 +442,9 @@ Guard("R", () =>
     Check("R11 the budget: a restart after 199 of 200 turns is refused as a TurnLimit; after 150 it is taken and the new game's cap is 50",
         budget.Finished && budget.Matches.Last().Outcome == DungeonRunOutcome.TurnLimit && bNotes.Any(n => n.Contains("the floor's turn budget is spent; recorded as TurnLimit"))
         && budget2.RestartIndex == 1 && bp2.TurnCap == 50, string.Join(" | ", bNotes) + " | " + Plan(bp2));
+});
+Guard("R", () =>
+{
     // Lord damage banked on a restart (a ledger run): the new game starts at the banked remaining; the run's lord damage spent.
     var lord = At("acts-v4h", Lord, Xatma, 9309); lord.Treasures.Add(Rewind); lord.PlagueLordDamage = 10;
     var lp = All();
@@ -442,6 +457,9 @@ Guard("R", () =>
         $"carried {lordPlan.BossCarriedDamage} -> {lordPlan2.BossCarriedDamage}, banked {lp.DamageOf(Xatma)?.Remaining}, lord damage {lord.PlagueLordDamage}");
     Check("R6 a restart is no last boss: LastBoss names the fight before it (the walk's floor 14), not Xatma's restarted game",
         lord.Matches.Last().Restarted && DungeonRun.LastBoss(lord) == lord.BossSequence[Lord - 2], DungeonRun.LastBoss(lord) ?? "-");
+});
+Guard("R", () =>
+{
     // A typed seed reads no ledger: nothing is banked, and the run's lord damage is kept for the restarted game.
     var typedLord = At("acts-v4h", Lord, Xatma, 9317, typed: true); typedLord.Treasures.Add(Rewind); typedLord.PlagueLordDamage = 10;
     var tl0 = All();
@@ -449,6 +467,9 @@ Guard("R", () =>
     Check("R19 on a typed seed (no ledger) the restart banks nothing and keeps the run's lord damage: the new game starts 10 down again",
         typedLord.RestartIndex == 1 && tl0.DamageOf(Xatma) == null && typedLord.PlagueLordDamage == 10 && run.BuildPlan(typedLord, tl0).BossCarriedDamage == 10,
         "lord damage " + typedLord.PlagueLordDamage);
+});
+Guard("R", () =>
+{
     // Rewind runs after the relay: Tekahn on acts-v4t, the run hero dies -> a relay hero enters (no restart); the last one dies -> Rewind.
     var relay = At("acts-v4t", Finale, Tekahn, 9318); relay.Treasures.Add(Rewind);
     var relayPlan = run.BuildPlan(relay, All());
@@ -465,6 +486,9 @@ Guard("R", () =>
     Fight(relay, All(), DungeonRunOutcome.Loss, endY, gy.RunResult);
     Check("R21 the relay fight's restart carries nothing (the run hero was not the one that died) and restages the finale", relay.RestartIndex == 1
         && relay.RestartCarriedDamage == 0 && relay.Phase == DungeonRunPhase.PreMatch && !relay.Treasures.Contains(Rewind));
+});
+Guard("R", () =>
+{
     // Rewind under Battle Scars: the fight-start damage stays (earlier fights' damage kept, this fight's undone).
     var scars = At("acts-v4h", Combat, null, 9310); AddRule(scars, BattleScars); scars.Treasures.Add(Rewind); scars.HeroDamage = 10;
     var sp = run.BuildPlan(scars, All());
@@ -473,6 +497,9 @@ Guard("R", () =>
     Check("R13 Rewind under Battle Scars: started 10 down, died -> restarted 10 down (HeroDamage 10 kept, nothing carried)",
         sp.PlayerCarriedDamage == 10 && sp.PlayerHeroHealth == 100 && scars.HeroDamage == 10 && scars.RestartCarriedDamage == 0 && sp2.PlayerCarriedDamage == 10 && scars.RestartIndex == 1,
         Plan(sp) + " -> " + Plan(sp2));
+});
+Guard("R", () =>
+{
     // Alternate Timeline carries the run hero's damage of the game it ended (on top of Battle Scars' start damage).
     var tc = At("acts-v4h", Major2, Toki, 9311, tokiRun);
     Fight(tc, All(), DungeonRunOutcome.Fault, End(40, playerDamage: 17, restartSource: Timeline), null, tokiRun);
@@ -483,6 +510,9 @@ Guard("R", () =>
     Check("R14 48t carries Health: 17 damage taken -> RestartCarriedDamage 17, the new game 17 down; under Battle Scars (5 at the start, 25 at the end) 20 carried, 25 down",
         tc.RestartCarriedDamage == 17 && tcp.PlayerCarriedDamage == 17 && ts.RestartCarriedDamage == 20 && ts.HeroDamage == 5 && tsp.PlayerCarriedDamage == 25,
         Plan(tcp) + " | " + Plan(tsp));
+});
+Guard("R", () =>
+{
     // A real game: Toki casts Alternate Timeline (listed) -> both heroes leave (a tie), the game marked with its source.
     var tg = At("acts-v4h", Major2, Toki, 9313, tokiRun);
     var tgPlan = tokiRun.BuildPlan(tg, All());
@@ -500,6 +530,9 @@ Guard("R", () =>
     Fight(tg, All(), DungeonRunOutcome.Tie, endT, gt.RunResult, tokiRun);
     Check("R16 the run takes the tie with the mark as the restart: restaged, 9 damage carried into the new game", tg.RestartIndex == 1 && tg.Phase == DungeonRunPhase.PreMatch
         && tg.RestartCarriedDamage == 9 && tokiRun.BuildPlan(tg, All()).PlayerCarriedDamage == 9);
+});
+Guard("R", () =>
+{
     // Without the listing (a released run, the same deck) Toki cannot cast it.
     var tr = At("acts-v3h", Major2, Toki, 9314, tokiRun);
     var trPlan = tokiRun.BuildPlan(tr, All());
@@ -509,6 +542,9 @@ Guard("R", () =>
     bool trCast = gr.Process(PlayCardTask.Any(gr.Player2, tl));
     Check("R17 on a released schedule (acts-v3h, Toki's deck holding it) Alternate Timeline is unplayable: no restart listed, a forced cast refused",
         trPlan.Restarts.Count == 0 && !Playable(gr.Player2, Timeline) && !trCast && gr.State != State.COMPLETE && gr[EncounterRules.Restart] == 0);
+});
+Guard("R", () =>
+{
     // A released run never takes the restart branch: a reported mark is the plain fault it is reported as; Rewind stays.
     var rel = At("acts-v3h", Combat, null, 9315); rel.Treasures.Add(Rewind);
     Fight(rel, All(), DungeonRunOutcome.Fault, End(30, restartSource: Rewind), null);
