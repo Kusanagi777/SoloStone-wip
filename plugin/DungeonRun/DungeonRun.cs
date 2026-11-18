@@ -1913,6 +1913,9 @@ internal sealed partial class DungeonRun
             if (rule.IncompatibleRules.Any(ids.Contains) || actRules.Any(r => r.IncompatibleRules.Contains(rule.Id))) continue;
             if (rule.IncompatibleModifiers.Any(ids.Contains)) continue;
             if (actBosses.Any(b => b.IncompatibleRules.Contains(rule.Id) || b.Flags.Any(rule.IncompatibleFlags.Contains))) continue;
+            // Step 9 (lane R tests, c-rules-9 F14): a fight-only hero of an act boss (hero cards, relay heroes) whose character the
+            // rule's incompatibleClasses names, as ForbiddenPairs reports it.
+            if (rule.IncompatibleClasses.Count > 0 && actBosses.Any(b => FightHeroes(b).Any(h => rule.IncompatibleClasses.Any(c => SameCharacter(c, h))))) continue;
             result.Add(rule);
         }
         return result;

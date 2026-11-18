@@ -995,6 +995,19 @@ Guard("W", () =>
     var shrineRun = run.NewRun(All(data), shrineDeck.Class, shrineDeck.Id, data.Class(shrineDeck.Class).Powers[0], 91006, schedule: "acts-v3h");
     Plain(run, shrineRun);
     Check("W16 a run with a board shrine is never offered No-Face", shrineRun.HasBoardShrine && !Candidates(run, shrineRun, 1, "anomaly").Contains("ULDA_706") && Candidates(run, shrineRun, 1, "anomaly").Contains("ULDA_714"));
+    // Step 9 (lane R, C2): the act I anomaly offer NewRun stores is drawn after the board shrine is set (the ordering fix), so the
+    // stored offer itself never holds No-Face (W16 above reads the candidates afterwards, which held before the fix too).
+    int storedOffers = 0, storedNoFace = 0;
+    var shrineDecks = data.Decks.Where(x => x.Shrine != null && data.FindClass(x.Class) != null).ToList();
+    foreach (var deck in shrineDecks)
+        for (int k = 0; k < 20; k++)
+        {
+            var stored = run.NewRun(All(data), deck.Class, deck.Id, data.Class(deck.Class).Powers[0], 93000 + 100 * shrineDecks.IndexOf(deck) + k, schedule: "acts-v3h");
+            if (!stored.HasBoardShrine || stored.ModifierOffer?.Kind != DungeonRunGlobalRule.KindAnomaly) continue;
+            storedOffers++;
+            if (stored.ModifierOffer.Offered.Contains("ULDA_706")) storedNoFace++;
+        }
+    Check("W16b the act I anomaly offer a new shrine run stores never holds No-Face (27 shrine decks x 20 seeds)", storedOffers == 27 * 20 && storedNoFace == 0, storedOffers + " offers, " + storedNoFace + " with ULDA_706");
     // Rule against rule, both ways.
     DungeonRunState With(string rule, string kind)
     {

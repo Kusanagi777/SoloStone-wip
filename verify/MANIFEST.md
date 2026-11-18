@@ -254,6 +254,8 @@ now: `bp.sh` reads one only for a mode `bp/` does not hold.
 | (new in wave 6) `make_f22.py`, `patch_curation.py` | `verify/tools/gen/p8f22/` | wave 6 | `F22.json` (the wiki transcription; uses `p8f19/tombs_tiers.py`); the E22 entry of curation.json (idempotent; not rerun) |
 | (new in wave 6) `make_f23.py`, `make_fixture.py` | `verify/tools/gen/p8f23/` | wave 6 | `F23.json` (the wiki transcription); `encounters-f23.json` |
 | (new in wave 6) `make_f24.py`, `make_fixture.py` | `verify/tools/gen/p8f24/` | wave 6 | `F24.json` (the wiki transcription); `schedule-tekahn.json` (the acts-v3t finale enabled on Tekahn) |
+| (new in step 9, lane R tests) `make_twists9.py` | `verify/tools/gen/p9/` | step 9 | `verify/fixtures/p9/schedule-twists9.json` (c-rules-9 T: all eight act twists in every act of acts-v4h at chances 70 / 85 / 55 and of acts-v3h at 100, DALA_829 weight 4) |
+| (new in step 9, lane R tests) `pairs.py` | `verify/tools/balance/` | step 9 | `verify/fixtures/p9/pairs9.txt` and `pairs9-declared.txt`: the C6 covering array for `bp.sh pairs9 <chunk> <k>` (c-bosspilot-pairs9) and its declared pairs |
 
 The G3 generators take no arguments: each reads the repository it sits in and writes its default output under verify/
 (`verify/fixtures/<family>/fixtures/...`, or the suite folder for the two harness generators); an optional argument
