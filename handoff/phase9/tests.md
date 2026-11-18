@@ -54,7 +54,10 @@ Found and NOT fixed (pre-step-9, not step-9 code):
   back, as Effect.RemoveAuraFrom treats the view's stand-ins); the real game never drops an id. Test: c-gen-9 A (9 checks;
   A3-A6 fail without the fix). It showed on bosspilot enc08 (loot_39_kraxx t20, 4 fallbacks) because lane G's generation
   filter (ed72e5c, merged 6418c1e) changed that game. Moved: the faulting games only (enc08 kraxx fallbacks 4 -> 0, the
-  game otherwise identical; pairs9 case 1722 fallbacks 3 -> 0, turns 34 -> 35).
+  game otherwise identical; pairs9 case 1722 fallbacks 3 -> 0, turns 34 -> 35; enc09 loot_49_darkness vs Rakanishu turns
+  10 -> 12, decisions 24 -> 27, power 4 -> 5: the run player's Sorcerer's Apprentice EX1_608 dying in the boss's search threw
+  the same way 83 times at turn 8, and TurnPlanner's simulation-fault handler pruned those lines without a fallback, so no
+  counter showed it). c-gen-9 61 -> 70 checks (the 9 of A), its G digest unchanged.
 
 ## 3. Pins moved (lane pins; every one listed in implementation.md section 5)
 
