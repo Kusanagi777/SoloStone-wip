@@ -1,0 +1,925 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="6">
+  <Profile>
+    <Heroes />
+    <Unlocked>
+      <string>challenge</string>
+      <string>mage_rogue_bosses5</string>
+      <string>mage_rogue_majors2</string>
+      <string>mage_rogue_majors3</string>
+      <string>mage_rogue_majors4</string>
+      <string>paladin_shaman_bosses5</string>
+      <string>paladin_shaman_majors2</string>
+      <string>paladin_shaman_majors3</string>
+      <string>paladin_shaman_majors4</string>
+      <string>druid_priest_bosses5</string>
+      <string>druid_priest_majors2</string>
+      <string>druid_priest_majors3</string>
+      <string>druid_priest_majors4</string>
+      <string>hunter_warrior_bosses5</string>
+      <string>hunter_warrior_majors2</string>
+      <string>hunter_warrior_majors3</string>
+      <string>hunter_warrior_majors4</string>
+      <string>druid_floor3</string>
+      <string>hunter_floor3</string>
+      <string>mage_floor3</string>
+      <string>paladin_floor3</string>
+      <string>priest_floor3</string>
+      <string>rogue_floor3</string>
+      <string>shaman_floor3</string>
+      <string>warlock_floor3</string>
+      <string>warrior_floor3</string>
+      <string>deathknight_floor3</string>
+      <string>demonhunter_floor3</string>
+      <string>mage_rogue_floor3</string>
+      <string>paladin_shaman_floor3</string>
+      <string>druid_priest_floor3</string>
+      <string>hunter_warrior_floor3</string>
+      <string>gila_500h3_floor3</string>
+      <string>gila_600h_floor3</string>
+      <string>gila_400h_floor3</string>
+      <string>gila_900h_floor3</string>
+      <string>dala_rakanishu_floor3</string>
+      <string>dala_barkeye_floor3</string>
+      <string>dala_vessina_floor3</string>
+      <string>dala_kriziki_floor3</string>
+      <string>dala_eudora_floor3</string>
+      <string>dala_chu_floor3</string>
+      <string>dala_squeamlish_floor3</string>
+      <string>dala_tekahn_floor3</string>
+      <string>dala_george_floor3</string>
+      <string>trla_209h_mage_floor3</string>
+      <string>trla_209h_druid_floor3</string>
+      <string>trla_209h_hunter_floor3</string>
+      <string>trla_209h_paladin_floor3</string>
+      <string>trla_209h_priest_floor3</string>
+      <string>trla_209h_rogue_floor3</string>
+      <string>trla_209h_shaman_floor3</string>
+      <string>trla_209h_warlock_floor3</string>
+      <string>trla_209h_warrior_floor3</string>
+      <string>druid_floor4</string>
+      <string>hunter_floor4</string>
+      <string>mage_floor4</string>
+      <string>paladin_floor4</string>
+      <string>priest_floor4</string>
+      <string>rogue_floor4</string>
+      <string>shaman_floor4</string>
+      <string>warlock_floor4</string>
+      <string>warrior_floor4</string>
+      <string>deathknight_floor4</string>
+      <string>demonhunter_floor4</string>
+      <string>mage_rogue_floor4</string>
+      <string>paladin_shaman_floor4</string>
+      <string>druid_priest_floor4</string>
+      <string>hunter_warrior_floor4</string>
+      <string>gila_500h3_floor4</string>
+      <string>gila_600h_floor4</string>
+      <string>gila_400h_floor4</string>
+      <string>gila_900h_floor4</string>
+      <string>dala_rakanishu_floor4</string>
+      <string>dala_barkeye_floor4</string>
+      <string>dala_vessina_floor4</string>
+      <string>dala_kriziki_floor4</string>
+      <string>dala_eudora_floor4</string>
+      <string>dala_chu_floor4</string>
+      <string>dala_squeamlish_floor4</string>
+      <string>dala_tekahn_floor4</string>
+      <string>dala_george_floor4</string>
+      <string>trla_209h_mage_floor4</string>
+      <string>trla_209h_druid_floor4</string>
+      <string>trla_209h_hunter_floor4</string>
+      <string>trla_209h_paladin_floor4</string>
+      <string>trla_209h_priest_floor4</string>
+      <string>trla_209h_rogue_floor4</string>
+      <string>trla_209h_shaman_floor4</string>
+      <string>trla_209h_warlock_floor4</string>
+      <string>trla_209h_warrior_floor4</string>
+      <string>druid_floor5</string>
+      <string>hunter_floor5</string>
+      <string>mage_floor5</string>
+      <string>paladin_floor5</string>
+      <string>priest_floor5</string>
+      <string>rogue_floor5</string>
+      <string>shaman_floor5</string>
+      <string>warlock_floor5</string>
+      <string>warrior_floor5</string>
+      <string>deathknight_floor5</string>
+      <string>demonhunter_floor5</string>
+      <string>mage_rogue_floor5</string>
+      <string>paladin_shaman_floor5</string>
+      <string>druid_priest_floor5</string>
+      <string>hunter_warrior_floor5</string>
+      <string>gila_500h3_floor5</string>
+      <string>gila_600h_floor5</string>
+      <string>gila_400h_floor5</string>
+      <string>gila_900h_floor5</string>
+      <string>dala_rakanishu_floor5</string>
+      <string>dala_barkeye_floor5</string>
+      <string>dala_vessina_floor5</string>
+      <string>dala_kriziki_floor5</string>
+      <string>dala_eudora_floor5</string>
+      <string>dala_chu_floor5</string>
+      <string>dala_squeamlish_floor5</string>
+      <string>dala_tekahn_floor5</string>
+      <string>dala_george_floor5</string>
+      <string>trla_209h_mage_floor5</string>
+      <string>trla_209h_druid_floor5</string>
+      <string>trla_209h_hunter_floor5</string>
+      <string>trla_209h_paladin_floor5</string>
+      <string>trla_209h_priest_floor5</string>
+      <string>trla_209h_rogue_floor5</string>
+      <string>trla_209h_shaman_floor5</string>
+      <string>trla_209h_warlock_floor5</string>
+      <string>trla_209h_warrior_floor5</string>
+      <string>druid_win</string>
+      <string>hunter_win</string>
+      <string>mage_win</string>
+      <string>paladin_win</string>
+      <string>priest_win</string>
+      <string>rogue_win</string>
+      <string>shaman_win</string>
+      <string>warlock_win</string>
+      <string>warrior_win</string>
+      <string>deathknight_win</string>
+      <string>demonhunter_win</string>
+      <string>mage_rogue_win</string>
+      <string>paladin_shaman_win</string>
+      <string>druid_priest_win</string>
+      <string>hunter_warrior_win</string>
+      <string>gila_500h3_win</string>
+      <string>gila_600h_win</string>
+      <string>gila_400h_win</string>
+      <string>gila_900h_win</string>
+      <string>dala_rakanishu_win</string>
+      <string>dala_barkeye_win</string>
+      <string>dala_vessina_win</string>
+      <string>dala_kriziki_win</string>
+      <string>dala_eudora_win</string>
+      <string>dala_chu_win</string>
+      <string>dala_squeamlish_win</string>
+      <string>dala_tekahn_win</string>
+      <string>dala_george_win</string>
+      <string>trla_209h_mage_win</string>
+      <string>trla_209h_druid_win</string>
+      <string>trla_209h_hunter_win</string>
+      <string>trla_209h_paladin_win</string>
+      <string>trla_209h_priest_win</string>
+      <string>trla_209h_rogue_win</string>
+      <string>trla_209h_shaman_win</string>
+      <string>trla_209h_warlock_win</string>
+      <string>trla_209h_warrior_win</string>
+    </Unlocked>
+    <Archive />
+  </Profile>
+  <Active DataVersion="dungeon-run/2" CatalogVersion="1" Seed="35001" TypedSeed="false" Class="MAGE_ROGUE" StarterDeck="tombs_reno_spellslinger" Power="ULDA_Reno_HP1" Floor="16" Phase="PreMatch" Attempt="0" ScheduleVersion="3" Schedule="acts-v3t" Node="26" NextUid="50" HealthBonus="5" MajorsCleared="3" PowerChoices="ULDA_Reno_HP1 ULDA_Reno_HP2 ULDA_Reno_HP3" DraftsWithoutDominant="1">
+    <Cards>
+      <DungeonRunCard Uid="1" Id="CS2_072" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="2" Id="KAR_009" Origin="starter" AddedFloor="1">
+        <Mod>ULDA_606e</Mod>
+        <Mod>DALA_908e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="3" Id="EX1_182" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="4" Id="EX1_055" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="5" Id="EX1_608" Origin="starter" AddedFloor="1">
+        <Mod>DALA_908e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="6" Id="TRL_156" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="7" Id="UNG_057" Origin="starter" AddedFloor="1">
+        <Mod>DALA_903e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="8" Id="GVG_003" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="9" Id="AT_007" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="10" Id="BOT_604" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="11" Id="ULDA_021" Origin="signature" AddedFloor="1" />
+      <DungeonRunCard Uid="12" Id="LOOTA_826" Origin="treasure" AddedFloor="1" />
+      <DungeonRunCard Uid="13" Id="CS2_025" Origin="draft" AddedFloor="1" />
+      <DungeonRunCard Uid="14" Id="ULD_239" Origin="draft" AddedFloor="1" />
+      <DungeonRunCard Uid="15" Id="NEW1_004" Origin="draft" AddedFloor="1" />
+      <DungeonRunCard Uid="17" Id="ULD_240" Origin="draft" AddedFloor="2" />
+      <DungeonRunCard Uid="18" Id="EX1_287" Origin="draft" AddedFloor="2" />
+      <DungeonRunCard Uid="19" Id="LOOTA_836" Origin="treasure" AddedFloor="3" />
+      <DungeonRunCard Uid="20" Id="UNG_846" Origin="draft" AddedFloor="3" />
+      <DungeonRunCard Uid="21" Id="LOOT_103" Origin="draft" AddedFloor="3" />
+      <DungeonRunCard Uid="22" Id="UNG_205" Origin="draft" AddedFloor="3" />
+      <DungeonRunCard Uid="23" Id="UNG_084" Origin="draft" AddedFloor="4" />
+      <DungeonRunCard Uid="24" Id="UNG_809" Origin="draft" AddedFloor="4" />
+      <DungeonRunCard Uid="25" Id="EX1_249" Origin="draft" AddedFloor="4" />
+      <DungeonRunCard Uid="26" Id="CORE_EX1_509" Origin="draft" AddedFloor="5" />
+      <DungeonRunCard Uid="27" Id="GVG_064" Origin="draft" AddedFloor="5" />
+      <DungeonRunCard Uid="28" Id="OG_161" Origin="draft" AddedFloor="5" />
+      <DungeonRunCard Uid="29" Id="DAL_578" Origin="draft" AddedFloor="6">
+        <Mod>DALA_914e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="31" Id="LOOTA_835" Origin="treasure" AddedFloor="7" />
+      <DungeonRunCard Uid="32" Id="CORE_UNG_205" Origin="draft" AddedFloor="7" />
+      <DungeonRunCard Uid="33" Id="UNG_845" Origin="draft" AddedFloor="7" />
+      <DungeonRunCard Uid="34" Id="KAR_069" Origin="draft" AddedFloor="8" />
+      <DungeonRunCard Uid="35" Id="TRL_015" Origin="draft" AddedFloor="8" />
+      <DungeonRunCard Uid="36" Id="CAP_002" Origin="draft" AddedFloor="9" />
+      <DungeonRunCard Uid="37" Id="TIME_711" Origin="draft" AddedFloor="9" />
+      <DungeonRunCard Uid="38" Id="UNG_907" Origin="draft" AddedFloor="10" />
+      <DungeonRunCard Uid="41" Id="TLC_226" Origin="draft" AddedFloor="11" />
+      <DungeonRunCard Uid="42" Id="LOOT_535" Origin="draft" AddedFloor="12" />
+      <DungeonRunCard Uid="43" Id="LOOT_172" Origin="draft" AddedFloor="12" />
+      <DungeonRunCard Uid="44" Id="CFM_621" Origin="tavern" AddedFloor="13" />
+      <DungeonRunCard Uid="45" Id="DAL_416" Origin="draft" AddedFloor="13" />
+      <DungeonRunCard Uid="46" Id="GIL_677" Origin="draft" AddedFloor="13" />
+      <DungeonRunCard Uid="47" Id="UNG_070" Origin="draft" AddedFloor="14" />
+      <DungeonRunCard Uid="48" Id="UNG_818" Origin="draft" AddedFloor="14" />
+      <DungeonRunCard Uid="49" Id="EX1_129" Origin="draft" AddedFloor="15" />
+      <DungeonRunCard Uid="50" Id="CFM_065" Origin="draft" AddedFloor="15" />
+    </Cards>
+    <ActiveRules>
+      <DungeonRunRule Id="DALA_853" Act="1" FromNode="0" Kind="anomaly" />
+      <DungeonRunRule Id="DALA_865" Act="2" FromNode="7" Kind="anomaly" />
+      <DungeonRunRule Id="mod_lean_supply" Act="2" FromNode="8" />
+      <DungeonRunRule Id="DALA_864" Act="3" FromNode="16" Kind="anomaly" />
+      <DungeonRunRule Id="mod_iron_bosses" Act="3" FromNode="17" />
+    </ActiveRules>
+    <Loadout Id="MAGE_ROGUE">
+      <Signature>
+        <string>ULDA_021</string>
+      </Signature>
+    </Loadout>
+    <Deck>
+      <string>CS2_072</string>
+      <string>KAR_009</string>
+      <string>EX1_182</string>
+      <string>EX1_055</string>
+      <string>EX1_608</string>
+      <string>TRL_156</string>
+      <string>UNG_057</string>
+      <string>GVG_003</string>
+      <string>AT_007</string>
+      <string>BOT_604</string>
+      <string>ULDA_021</string>
+      <string>LOOTA_826</string>
+      <string>CS2_025</string>
+      <string>ULD_239</string>
+      <string>NEW1_004</string>
+      <string>ULD_240</string>
+      <string>EX1_287</string>
+      <string>LOOTA_836</string>
+      <string>UNG_846</string>
+      <string>LOOT_103</string>
+      <string>UNG_205</string>
+      <string>UNG_084</string>
+      <string>UNG_809</string>
+      <string>EX1_249</string>
+      <string>CORE_EX1_509</string>
+      <string>GVG_064</string>
+      <string>OG_161</string>
+      <string>DAL_578</string>
+      <string>LOOTA_835</string>
+      <string>CORE_UNG_205</string>
+      <string>UNG_845</string>
+      <string>KAR_069</string>
+      <string>TRL_015</string>
+      <string>CAP_002</string>
+      <string>TIME_711</string>
+      <string>UNG_907</string>
+      <string>TLC_226</string>
+      <string>LOOT_535</string>
+      <string>LOOT_172</string>
+      <string>CFM_621</string>
+      <string>DAL_416</string>
+      <string>GIL_677</string>
+      <string>UNG_070</string>
+      <string>UNG_818</string>
+      <string>EX1_129</string>
+      <string>CFM_065</string>
+    </Deck>
+    <Treasures>
+      <string>LOOTA_803</string>
+      <string>LOOTA_804</string>
+      <string>LOOTA_818</string>
+      <string>LOOTA_800</string>
+    </Treasures>
+    <ActiveTreasures>
+      <string>ULDA_021</string>
+      <string>LOOTA_826</string>
+      <string>LOOTA_836</string>
+      <string>LOOTA_835</string>
+    </ActiveTreasures>
+    <Upgrades />
+    <BossSequence>
+      <string>gila_38_cozzlewurt</string>
+      <string>loot_11_mogark</string>
+      <string>tunnel_rat</string>
+      <string>dala_02_awilo</string>
+      <string>loot_34_azari</string>
+      <string>ulda_03_vera</string>
+      <string>trl_203_thekal</string>
+      <string>gila_33_scarecrow</string>
+      <string>ulda_20_kham</string>
+      <string>lady_of_thorns</string>
+      <string>dala_47_lavanthor</string>
+      <string>trl_205_loti</string>
+      <string>ulda_06_chu</string>
+      <string>trl_208_talanji</string>
+      <string>sleepless_one</string>
+      <string>ulda_67_tekahn</string>
+    </BossSequence>
+    <TakenBundles>
+      <string>bundle_neutral_murloc</string>
+      <string>bundle_neutral_elemental</string>
+      <string>bundle_rogue_spells</string>
+      <string>bundle_mage_elemental</string>
+    </TakenBundles>
+    <BucketTakes>
+      <DungeonRunTake Id="tot.reno-jackson.multiple-enemies" Count="2" />
+      <DungeonRunTake Id="tot.reno-jackson.secrets" Count="1" />
+      <DungeonRunTake Id="rr.mage.elementals" Count="1" />
+      <DungeonRunTake Id="tot.reno-jackson.elements" Count="1" />
+      <DungeonRunTake Id="tot.reno-jackson.discover" Count="1" />
+      <DungeonRunTake Id="dh.rogue.scallywags" Count="1" />
+      <DungeonRunTake Id="dh.mage.elements" Count="1" />
+      <DungeonRunTake Id="dr.mage.big-spells" Count="1" />
+      <DungeonRunTake Id="dh.rogue.thief" Count="1" />
+      <DungeonRunTake Id="dr.mage.elementals" Count="1" />
+    </BucketTakes>
+    <BundleCooldowns>
+      <string>mh.toki-time-tinker.boom@3</string>
+      <string>bundle_neutral_mechanical@3</string>
+      <string>dr.rogue.assassin@4</string>
+      <string>bundle_neutral_murloc@4</string>
+      <string>dr.rogue.thief@5</string>
+      <string>dr.rogue.evasive@5</string>
+      <string>bundle_neutral_mechanical@6</string>
+      <string>dr.mage.elementals@6</string>
+      <string>rr.mage.elementals@7</string>
+      <string>dr.rogue.death-dealer@7</string>
+      <string>dh.rogue.cutthroat@8</string>
+      <string>dh.mage.trade-secrets@9</string>
+      <string>bundle_mage_battlecry@10</string>
+      <string>rr.rogue.misfits@11</string>
+      <string>dh.mage.burn@12</string>
+      <string>bundle_rogue_weapons@13</string>
+      <string>tot.reno-jackson.combo@13</string>
+      <string>tot.reno-jackson.spell-damage@14</string>
+      <string>dr.mage.magical-friends@14</string>
+      <string>rr.mage.magical-friends@15</string>
+      <string>tot.reno-jackson.multiple-enemies@15</string>
+      <string>tot.reno-jackson.old-god@16</string>
+      <string>bundle_mage_spells@16</string>
+      <string>dh.mage.powered-up@17</string>
+      <string>mh.tess-greymane.resourceful@17</string>
+    </BundleCooldowns>
+    <DraftedThemes>
+      <string>removal</string>
+      <string>removal</string>
+      <string>removal</string>
+      <string>secret</string>
+      <string>secret</string>
+      <string>secret</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>murloc</string>
+      <string>murloc</string>
+      <string>murloc</string>
+      <string>discover</string>
+      <string>discover</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>pirate</string>
+      <string>pirate</string>
+      <string>spells</string>
+      <string>spells</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>spells</string>
+      <string>spells</string>
+      <string>steal</string>
+      <string>steal</string>
+      <string>elemental</string>
+      <string>elemental</string>
+      <string>removal</string>
+      <string>removal</string>
+    </DraftedThemes>
+    <Drafts>
+      <DungeonRunDraft Floor="1" Kind="treasure" Picked="LOOTA_826">
+        <Offered>
+          <string>LOOTA_826</string>
+          <string>ULDA_503</string>
+          <string>lucky_coin</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="1" Kind="bundle" Picked="tot.reno-jackson.multiple-enemies">
+        <Offered>
+          <string>tot.reno-jackson.multiple-enemies</string>
+          <string>mh.toki-time-tinker.boom</string>
+          <string>bundle_neutral_mechanical</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="tot.reno-jackson.multiple-enemies" Label="Multiple Enemies" Theme="removal" Kind="pool" Source="ToT">
+            <Cards>
+              <string>CS2_025</string>
+              <string>ULD_239</string>
+              <string>NEW1_004</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.toki-time-tinker.boom" Label="BOOM!" Theme="mechanical" Kind="pool" Source="MH">
+            <Cards>
+              <string>KAR_097</string>
+              <string>LOOT_535</string>
+              <string>UNG_955</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_neutral_mechanical" Label="Mechanical" Theme="mechanical" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>BOT_020</string>
+              <string>BOT_312</string>
+              <string>TIME_035</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="2" Kind="bundle" Picked="tot.reno-jackson.secrets">
+        <Offered>
+          <string>tot.reno-jackson.secrets</string>
+          <string>dr.rogue.assassin</string>
+          <string>bundle_neutral_murloc</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="tot.reno-jackson.secrets" Label="Secrets" Theme="secret" Kind="pool" Source="ToT">
+            <Cards>
+              <string>EX1_274</string>
+              <string>ULD_240</string>
+              <string>EX1_287</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.rogue.assassin" Label="Assassin" Theme="removal" Kind="pool" Source="DR">
+            <Cards>
+              <string>BRM_008</string>
+              <string>EX1_134</string>
+              <string>UNG_064</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_neutral_murloc" Label="Murloc" Theme="murloc" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CORE_EX1_509</string>
+              <string>GVG_064</string>
+              <string>OG_161</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="treasure" Picked="LOOTA_836">
+        <Offered>
+          <string>LOOTA_836</string>
+          <string>ULDA_008</string>
+          <string>bottomless_tome</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="bundle" Picked="rr.mage.elementals">
+        <Offered>
+          <string>rr.mage.elementals</string>
+          <string>dr.rogue.thief</string>
+          <string>dr.rogue.evasive</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="rr.mage.elementals" Label="Elementals" Theme="elemental" Kind="pool" Source="RR">
+            <Cards>
+              <string>UNG_846</string>
+              <string>LOOT_103</string>
+              <string>UNG_205</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.rogue.thief" Label="Thief" Theme="steal" Kind="pool" Source="DR">
+            <Cards>
+              <string>ICC_811</string>
+              <string>UNG_856</string>
+              <string>EX1_100</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.rogue.evasive" Label="Evasive" Theme="quest" Kind="pool" Source="DR">
+            <Cards>
+              <string>EX1_145</string>
+              <string>CFM_693</string>
+              <string>UNG_067</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="4" Kind="bundle" Picked="tot.reno-jackson.elements">
+        <Offered>
+          <string>tot.reno-jackson.elements</string>
+          <string>bundle_neutral_mechanical</string>
+          <string>dr.mage.elementals</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="tot.reno-jackson.elements" Label="Elements" Theme="elemental" Kind="pool" Source="ToT">
+            <Cards>
+              <string>UNG_084</string>
+              <string>UNG_809</string>
+              <string>EX1_249</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_neutral_mechanical" Label="Mechanical" Theme="mechanical" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>BOT_020</string>
+              <string>BOT_312</string>
+              <string>TIME_035</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.mage.elementals" Label="Elementals" Theme="elemental" Kind="pool" Source="DR">
+            <Cards>
+              <string>CS2_033</string>
+              <string>UNG_070</string>
+              <string>UNG_847</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="5" Kind="bundle" Picked="bundle_neutral_murloc">
+        <Offered>
+          <string>bundle_neutral_murloc</string>
+          <string>rr.mage.elementals</string>
+          <string>dr.rogue.death-dealer</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="bundle_neutral_murloc" Label="Murloc" Theme="murloc" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CORE_EX1_509</string>
+              <string>GVG_064</string>
+              <string>OG_161</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.mage.elementals" Label="Elementals" Theme="elemental" Kind="pool" Source="RR">
+            <Cards>
+              <string>UNG_847</string>
+              <string>UNG_809</string>
+              <string>GIL_645</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.rogue.death-dealer" Label="Death Dealer" Theme="removal" Kind="pool" Source="DR">
+            <Cards>
+              <string>ICC_201</string>
+              <string>ICC_702</string>
+              <string>LOOT_503</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="6" Kind="treasure" Picked="LOOTA_803">
+        <Offered>
+          <string>LOOTA_803</string>
+          <string>ULDA_101</string>
+          <string>mending_charm</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="6" Kind="bundle" Picked="tot.reno-jackson.discover" Takes="2" Choosing="tot.reno-jackson.discover">
+        <Offered>
+          <string>tot.reno-jackson.discover</string>
+          <string>dh.rogue.cutthroat</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="tot.reno-jackson.discover" Label="Discover" Theme="discover" Kind="pool" Source="ToT">
+            <Cards>
+              <string>DAL_578</string>
+              <string>ULD_236</string>
+              <string>DAL_416</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.rogue.cutthroat" Label="Cutthroat" Theme="combo" Kind="pool" Source="DH">
+            <Cards>
+              <string>CS2_073</string>
+              <string>EX1_162</string>
+              <string>EX1_046</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>DAL_578</string>
+          <string>ULD_236</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="7" Kind="treasure" Picked="LOOTA_835">
+        <Offered>
+          <string>LOOTA_835</string>
+          <string>ULDA_035</string>
+          <string>frost_lantern</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="7" Kind="bundle" Picked="bundle_neutral_elemental" Takes="2" Choosing="bundle_neutral_elemental">
+        <Offered>
+          <string>bundle_neutral_elemental</string>
+          <string>dh.mage.trade-secrets</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="bundle_neutral_elemental" Label="Elemental" Theme="elemental" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CORE_UNG_205</string>
+              <string>UNG_845</string>
+              <string>UNG_813</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.mage.trade-secrets" Label="Trade Secrets" Theme="secret" Kind="pool" Source="DH">
+            <Cards>
+              <string>EX1_612</string>
+              <string>BOT_573</string>
+              <string>EX1_274</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>CORE_UNG_205</string>
+          <string>UNG_845</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="8" Kind="bundle" Picked="dh.rogue.scallywags" Takes="2" Choosing="dh.rogue.scallywags">
+        <Offered>
+          <string>dh.rogue.scallywags</string>
+          <string>bundle_mage_battlecry</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.rogue.scallywags" Label="Scallywags" Theme="pirate" Kind="pool" Source="DH">
+            <Cards>
+              <string>KAR_069</string>
+              <string>TRL_015</string>
+              <string>GVG_075</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_mage_battlecry" Label="Battlecry" Theme="battlecry" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CATA_484</string>
+              <string>CATA_483</string>
+              <string>TIME_858</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>KAR_069</string>
+          <string>TRL_015</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="9" Kind="bundle" Picked="bundle_rogue_spells" Takes="2" Choosing="bundle_rogue_spells">
+        <Offered>
+          <string>bundle_rogue_spells</string>
+          <string>rr.rogue.misfits</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="bundle_rogue_spells" Label="Spells" Theme="spells" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CAP_002</string>
+              <string>TIME_711</string>
+              <string>TIME_712</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.rogue.misfits" Label="Misfits" Theme="random" Kind="pool" Source="RR">
+            <Cards>
+              <string>OG_330</string>
+              <string>LOOT_026</string>
+              <string>UNG_064</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>CAP_002</string>
+          <string>TIME_711</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="10" Kind="bundle" Picked="dh.mage.elements" Takes="2" Choosing="dh.mage.elements">
+        <Offered>
+          <string>dh.mage.elements</string>
+          <string>dh.mage.burn</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.mage.elements" Label="Elements" Theme="elemental" Kind="pool" Source="DH">
+            <Cards>
+              <string>UNG_907</string>
+              <string>UNG_027</string>
+              <string>BOT_604</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.mage.burn" Label="BURN!" Theme="spells" Kind="pool" Source="DH">
+            <Cards>
+              <string>BRM_002</string>
+              <string>CFM_065</string>
+              <string>GVG_001</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>UNG_907</string>
+          <string>UNG_027</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="11" Kind="treasure" Picked="LOOTA_804">
+        <Offered>
+          <string>LOOTA_804</string>
+          <string>champions_banner</string>
+          <string>thrifty_gloves</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="11" Kind="bundle" Picked="bundle_mage_elemental" Takes="2" Choosing="bundle_mage_elemental">
+        <Offered>
+          <string>bundle_mage_elemental</string>
+          <string>bundle_rogue_weapons</string>
+          <string>tot.reno-jackson.combo</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="bundle_mage_elemental" Label="Elemental" Theme="elemental" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CORE_DRG_107</string>
+              <string>TLC_226</string>
+              <string>TRL_311</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_rogue_weapons" Label="Weapons" Theme="weapons" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>FIR_922</string>
+              <string>ICC_850</string>
+              <string>CS2_080</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="tot.reno-jackson.combo" Label="Combo" Theme="combo" Kind="pool" Source="ToT">
+            <Cards>
+              <string>OG_070</string>
+              <string>UNG_064</string>
+              <string>DAL_415</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>CORE_DRG_107</string>
+          <string>TLC_226</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="12" Kind="treasure" Picked="LOOTA_818">
+        <Offered>
+          <string>LOOTA_818</string>
+          <string>ULDA_112</string>
+          <string>charm_seedling</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="12" Kind="bundle" Picked="dr.mage.big-spells" Takes="2" Choosing="dr.mage.big-spells">
+        <Offered>
+          <string>dr.mage.big-spells</string>
+          <string>tot.reno-jackson.spell-damage</string>
+          <string>dr.mage.magical-friends</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dr.mage.big-spells" Label="Big Spells" Theme="spells" Kind="pool" Source="DR">
+            <Cards>
+              <string>LOOT_535</string>
+              <string>LOOT_172</string>
+              <string>LOOT_170</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="tot.reno-jackson.spell-damage" Label="Spell Damage" Theme="spell-damage" Kind="pool" Source="ToT">
+            <Cards>
+              <string>AT_004</string>
+              <string>GIL_506</string>
+              <string>AT_006</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.mage.magical-friends" Label="Magical Friends" Theme="spell-damage" Kind="pool" Source="DR">
+            <Cards>
+              <string>EX1_095</string>
+              <string>EX1_012</string>
+              <string>EX1_284</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>LOOT_535</string>
+          <string>LOOT_172</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="13" Kind="bundle" Picked="dh.rogue.thief" Takes="2" Choosing="dh.rogue.thief">
+        <Offered>
+          <string>dh.rogue.thief</string>
+          <string>rr.mage.magical-friends</string>
+          <string>tot.reno-jackson.multiple-enemies</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.rogue.thief" Label="Thief" Theme="steal" Kind="pool" Source="DH">
+            <Cards>
+              <string>DAL_416</string>
+              <string>GIL_677</string>
+              <string>CFM_781</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.mage.magical-friends" Label="Magical Friends" Theme="spell-damage" Kind="pool" Source="RR">
+            <Cards>
+              <string>EX1_559</string>
+              <string>EX1_095</string>
+              <string>CFM_807</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="tot.reno-jackson.multiple-enemies" Label="Multiple Enemies" Theme="removal" Kind="pool" Source="ToT">
+            <Cards>
+              <string>OG_083</string>
+              <string>EX1_249</string>
+              <string>CS2_028</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>DAL_416</string>
+          <string>GIL_677</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="14" Kind="bundle" Picked="dr.mage.elementals" Takes="2" Choosing="dr.mage.elementals">
+        <Offered>
+          <string>dr.mage.elementals</string>
+          <string>tot.reno-jackson.old-god</string>
+          <string>bundle_mage_spells</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dr.mage.elementals" Label="Elementals" Theme="elemental" Kind="pool" Source="DR">
+            <Cards>
+              <string>UNG_070</string>
+              <string>UNG_818</string>
+              <string>UNG_816</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="tot.reno-jackson.old-god" Label="Old God" Theme="old-god" Kind="pool" Source="ToT">
+            <Cards>
+              <string>OG_162</string>
+              <string>OG_282</string>
+              <string>OG_255</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_mage_spells" Label="Spells" Theme="spells" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>AT_004</string>
+              <string>CS2_026</string>
+              <string>TLC_334</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>UNG_070</string>
+          <string>UNG_818</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="15" Kind="treasure" Picked="LOOTA_800">
+        <Offered>
+          <string>LOOTA_800</string>
+          <string>LOOTA_819</string>
+          <string>LOOTA_834</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="15" Kind="bundle" Picked="tot.reno-jackson.multiple-enemies" Takes="2" Choosing="tot.reno-jackson.multiple-enemies">
+        <Offered>
+          <string>tot.reno-jackson.multiple-enemies</string>
+          <string>dh.mage.powered-up</string>
+          <string>mh.tess-greymane.resourceful</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="tot.reno-jackson.multiple-enemies" Label="Multiple Enemies" Theme="removal" Kind="pool" Source="ToT">
+            <Cards>
+              <string>EX1_129</string>
+              <string>CFM_065</string>
+              <string>BOT_453</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.mage.powered-up" Label="Powered Up" Theme="hero-power" Kind="pool" Source="DH">
+            <Cards>
+              <string>AT_004</string>
+              <string>BOT_254</string>
+              <string>EX1_284</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.tess-greymane.resourceful" Label="Resourceful" Theme="discover" Kind="pool" Source="MH">
+            <Cards>
+              <string>AT_035</string>
+              <string>LOOT_204</string>
+              <string>EX1_095</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>EX1_129</string>
+          <string>CFM_065</string>
+        </Chosen>
+      </DungeonRunDraft>
+    </Drafts>
+    <Matches>
+      <DungeonRunMatchSummary Floor="1" Boss="gila_38_cozzlewurt" Outcome="Win" Attempt="1" Family="10" Rules="DALA_853" />
+      <DungeonRunMatchSummary Floor="2" Boss="loot_11_mogark" Outcome="Win" Attempt="1" Family="07" Rules="DALA_853" />
+      <DungeonRunMatchSummary Floor="3" Boss="tunnel_rat" Outcome="Win" Attempt="1" Rules="DALA_853" />
+      <DungeonRunMatchSummary Floor="4" Boss="dala_02_awilo" Outcome="Win" Attempt="1" Family="14" Rules="DALA_853" />
+      <DungeonRunMatchSummary Floor="5" Boss="loot_34_azari" Outcome="Win" Attempt="1" Family="09" Rules="DALA_853" />
+      <DungeonRunMatchSummary Floor="6" Boss="ulda_03_vera" Outcome="Win" Attempt="1" Family="19" Rules="DALA_865" />
+      <DungeonRunMatchSummary Floor="7" Boss="trl_203_thekal" Outcome="Win" Attempt="1" Family="13" Rules="DALA_865" />
+      <DungeonRunMatchSummary Floor="8" Boss="gila_33_scarecrow" Outcome="Win" Attempt="1" Family="10" Rules="DALA_865" />
+      <DungeonRunMatchSummary Floor="9" Boss="ulda_20_kham" Outcome="Win" Attempt="1" Family="20" Rules="DALA_865" />
+      <DungeonRunMatchSummary Floor="10" Boss="lady_of_thorns" Outcome="Win" Attempt="1" Rules="DALA_865" />
+      <DungeonRunMatchSummary Floor="11" Boss="dala_47_lavanthor" Outcome="Win" Attempt="1" Family="17" Rules="DALA_864" />
+      <DungeonRunMatchSummary Floor="12" Boss="trl_205_loti" Outcome="Win" Attempt="1" Family="13" Rules="DALA_864" />
+      <DungeonRunMatchSummary Floor="13" Boss="ulda_06_chu" Outcome="Win" Attempt="1" Family="19" Rules="DALA_864" />
+      <DungeonRunMatchSummary Floor="14" Boss="trl_208_talanji" Outcome="Win" Attempt="1" Family="13" Rules="DALA_864" />
+      <DungeonRunMatchSummary Floor="15" Boss="sleepless_one" Outcome="Win" Attempt="1" Rules="DALA_864" />
+    </Matches>
+    <UnlockedThisRun />
+  </Active>
+</DungeonRun>

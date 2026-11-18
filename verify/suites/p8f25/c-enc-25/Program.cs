@@ -336,6 +336,19 @@ Guard("L", () =>
         && lines.Count(l => l.StartsWith("end ", StringComparison.Ordinal)) == files.Count);
 });
 
+// ============================================================ L4. released-schedule replay (step 9)
+Guard("L4", () =>
+{
+    string fixtures = VerifyPaths.Fixture("p9/replay-v3");
+    var files = Enumerable.Range(0, ReplayV3.Stops.Length).Select(i => Path.Combine(fixtures, ReplayV3.FileName(i))).ToList();
+    var lines = new List<string>();
+    foreach (string f in files) lines.AddRange(ReplayV3.Walk(run, f));
+    if (Environment.GetEnvironmentVariable("C_ENC25_REPLAY_V3") is string dump && dump.Length > 0) File.WriteAllText(dump, string.Join("\n", lines) + "\n", new UTF8Encoding(false));
+    var expected = File.ReadAllLines(Path.Combine(fixtures, "replay.txt"));
+    int differ = Enumerable.Range(0, Math.Max(lines.Count, expected.Length)).Count(i => i >= lines.Count || i >= expected.Length || lines[i] != expected[i]);
+    Note("L4 " + differ + " of " + expected.Length + " lines differ");
+});
+
 // ============================================================ R. the reachability sweep
 Guard("R", () =>
 {

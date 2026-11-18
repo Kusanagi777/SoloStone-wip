@@ -1,0 +1,319 @@
+rule DALA_850 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_864 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_866 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_851 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_852 kind anomaly scope act flags doubleBattlecry rules  modifiers  classes  noBoardShrine False
+rule DALA_853 kind anomaly scope act flags doubleDeathrattle rules  modifiers  classes  noBoardShrine False
+rule DALA_854 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_855 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_856 kind anomaly scope act flags recast rules  modifiers  classes  noBoardShrine False
+rule DALA_857 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_858 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_859 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_860 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_861 kind anomaly scope act flags forcedAttack rules  modifiers  classes  noBoardShrine False
+rule DALA_862 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_863 kind anomaly scope act flags deckReplace,relay rules  modifiers  classes  noBoardShrine False
+rule DALA_865 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_867 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule DALA_829 kind twist scope act flags boardStart rules DALA_831,DALA_832,DALA_833 modifiers  classes  noBoardShrine False
+rule DALA_831 kind twist scope act flags boardStart,shrine rules DALA_832 modifiers  classes  noBoardShrine True
+rule DALA_832 kind twist scope act flags boardStart rules DALA_833 modifiers  classes  noBoardShrine False
+rule DALA_833 kind twist scope act flags boardStart,shrine rules  modifiers  classes GILA_600h noBoardShrine True
+rule ULDA_702 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_705 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_706 kind anomaly scope act flags heroImmune,shrine rules  modifiers  classes  noBoardShrine True
+rule ULDA_707 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_708 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_709 kind anomaly scope act flags  rules DALA_831 modifiers  classes  noBoardShrine False
+rule ULDA_710 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_711 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_712 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_713 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_714 kind anomaly scope act flags damageCap rules  modifiers  classes  noBoardShrine False
+rule ULDA_715 kind anomaly scope act flags  rules  modifiers mod_open_road classes  noBoardShrine False
+rule ULDA_719 kind anomaly scope act flags boardStart rules DALA_829,DALA_832,DALA_833,ULDA_804 modifiers  classes  noBoardShrine False
+rule ULDA_720 kind anomaly scope run flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_721 kind anomaly scope act flags deckReplace,heroSwitch,relay,secrets rules ULDA_801 modifiers  classes  noBoardShrine False
+rule ULDA_724 kind anomaly scope act flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_729 kind anomaly scope run flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_801 kind twist scope act flags deckReplace,relay rules  modifiers  classes  noBoardShrine False
+rule ULDA_802 kind twist scope act flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_803 kind twist scope act flags  rules  modifiers  classes  noBoardShrine False
+rule ULDA_804 kind twist scope act flags boardStart rules DALA_829,DALA_832,DALA_833 modifiers  classes  noBoardShrine False
+rule DALA_830 kind twist scope act flags  rules  modifiers  classes  noBoardShrine False
+boss tunnel_rat flags  rules  modifiers 
+boss bog_croaker flags  rules  modifiers 
+boss lantern_thief flags  rules  modifiers 
+boss mire_brute flags  rules  modifiers 
+boss hedge_witch flags  rules  modifiers 
+boss cellar_matron flags  rules  modifiers 
+boss ashen_abbess flags  rules  modifiers 
+boss tollkeeper flags  rules  modifiers 
+boss golemancer flags  rules  modifiers 
+boss storm_herald flags  rules  modifiers 
+boss frostwarden flags  rules  modifiers 
+boss pit_champion flags  rules  modifiers 
+boss hollow_regent flags  rules  modifiers 
+boss lady_of_thorns flags  rules  modifiers 
+boss clockwork_tyrant flags  rules  modifiers 
+boss ember_matron flags  rules  modifiers 
+boss devouring_maw flags  rules  modifiers 
+boss gilded_king flags  rules  modifiers 
+boss sleepless_one flags  rules  modifiers 
+boss hollow_sovereign flags  rules  modifiers 
+boss ulda_40_icarax flags deckReplace,forms,persistentDamage rules  modifiers mod_iron_bosses,mod_open_road
+boss gila_61_hagatha flags heroSwitch,passive rules  modifiers mod_hot_start,mod_iron_bosses,mod_open_road
+boss dala_21_whirt flags secrets rules  modifiers 
+boss trl_200_voone flags shrine rules  modifiers 
+boss loot_35_brandlemar flags secrets rules  modifiers 
+boss loot_48_trapped_room flags passive,secrets rules  modifiers 
+boss gila_25_ivan flags secrets rules  modifiers 
+boss ulda_44_trap_room flags secrets rules  modifiers 
+boss loot_04_sturmi flags  rules  modifiers 
+boss loot_05_hamm flags  rules  modifiers 
+boss loot_06_blackseed flags  rules  modifiers 
+boss loot_09_frostfur flags  rules  modifiers 
+boss loot_10_graves flags  rules  modifiers 
+boss loot_11_mogark flags  rules  modifiers 
+boss loot_12_candlebeard flags  rules  modifiers 
+boss loot_13_thaddock flags  rules  modifiers 
+boss loot_18_giant_rat flags  rules  modifiers 
+boss loot_21_gnosh flags  rules  modifiers 
+boss loot_23_bristlesnarl flags  rules  modifiers 
+boss loot_24_mothergloop flags  rules  modifiers 
+boss loot_27_sturmi flags  rules  modifiers 
+boss loot_28_hamm flags  rules  modifiers 
+boss loot_29_blackseed flags  rules  modifiers 
+boss loot_30_mogark flags  rules  modifiers 
+boss loot_44_wee_whelp flags  rules  modifiers 
+boss loot_45_bink flags  rules  modifiers 
+boss loot_15_george_karl flags forms rules  modifiers mod_iron_bosses,mod_open_road
+boss loot_16_azun flags bothPlayers,doubleDeathrattle,passive rules  modifiers 
+boss loot_17_jinzo flags bothPlayers,doubleBattlecry,passive rules  modifiers 
+boss loot_19_gutmook flags passive rules  modifiers 
+boss loot_33_gutmook flags passive rules  modifiers 
+boss loot_31_candlebeard flags passive rules  modifiers 
+boss loot_36_ixlid flags  rules  modifiers mod_iron_bosses,mod_open_road
+boss loot_37_lyris flags  rules  modifiers 
+boss loot_38_vex flags bothPlayers,doubleBattlecry,doubleDeathrattle,passive rules  modifiers 
+boss loot_39_kraxx flags  rules  modifiers 
+boss loot_40_seriona flags  rules  modifiers 
+boss loot_41_whompwhisker flags bothPlayers,hiddenZone rules  modifiers 
+boss loot_42_jari flags  rules  modifiers 
+boss loot_43_jeeru flags bothPlayers,hiddenZone rules  modifiers 
+boss loot_46_flurgl flags  rules  modifiers 
+boss loot_47_lava_chamber flags bothPlayers,passive rules  modifiers 
+boss loot_51_russell flags  rules  modifiers 
+boss loot_20_brimstone flags boardStart,passive,start rules  modifiers mod_hot_start
+boss loot_22_tad flags listedDeck rules  modifiers mod_hot_start,mod_iron_bosses,mod_open_road
+boss loot_50_max flags  rules  modifiers 
+boss loot_52_vault flags boardStart,listedDeck,noLoss,passive,start rules  modifiers mod_hot_start,mod_iron_bosses,mod_open_road
+boss loot_53_inara flags passive rules  modifiers 
+boss loot_54_kay flags  rules  modifiers 
+boss loot_25_vustrasz flags boardStart,start rules  modifiers 
+boss loot_26_xol flags passive rules  modifiers 
+boss loot_34_azari flags hiddenZone,passive rules  modifiers 
+boss loot_49_darkness flags start rules  modifiers 
+boss loot_99_togwaggle flags  rules  modifiers 
+boss gila_20_mangy_wolf flags  rules  modifiers 
+boss gila_21_rottooth flags  rules  modifiers 
+boss gila_22_willie flags  rules  modifiers 
+boss gila_23_grubb flags start rules  modifiers 
+boss gila_26_gnomenapper flags  rules  modifiers 
+boss gila_27_experiment_3c flags  rules  modifiers 
+boss gila_29_sazzmi flags  rules  modifiers 
+boss gila_31_gnarlroot flags  rules  modifiers 
+boss gila_32_niira flags  rules  modifiers 
+boss gila_33_scarecrow flags start rules  modifiers 
+boss gila_34_havnixx flags  rules  modifiers 
+boss gila_35_chupacabran flags  rules  modifiers 
+boss gila_36_griselda flags  rules  modifiers 
+boss gila_37_wharrgarbl flags  rules  modifiers 
+boss gila_38_cozzlewurt flags  rules  modifiers 
+boss gila_40_splintergraft flags  rules  modifiers 
+boss gila_41_brushwood flags forcedAttack rules  modifiers 
+boss gila_42_baran flags  rules  modifiers 
+boss gila_43_damph flags doubleDeathrattle rules  modifiers 
+boss gila_44_sezavo flags  rules  modifiers 
+boss gila_51_garrow flags  rules  modifiers 
+boss gila_52_pete flags deckReplace,forms rules  modifiers 
+boss gila_54_cragtorr flags  rules  modifiers 
+boss gila_55_azalina flags  rules  modifiers 
+boss gila_56_face_collector flags mirrorDeck rules  modifiers 
+boss gila_57_raeth flags  rules  modifiers 
+boss gila_58_grum flags  rules  modifiers 
+boss gila_62_gustave flags  rules  modifiers 
+boss gila_24_groddo flags passive rules  modifiers 
+boss gila_30_gretta flags bothPlayers,passive rules  modifiers 
+boss gila_39_forlorn_lovers flags passive rules  modifiers 
+boss gila_45_sthara flags bothPlayers,passive rules  modifiers 
+boss gila_46_vitus flags passive rules  modifiers 
+boss gila_47_shudderwock flags bothPlayers,doubleBattlecry,passive rules  modifiers 
+boss gila_50_whisperer flags bothPlayers,passive,recast rules  modifiers 
+boss gila_63_sephira flags passive rules  modifiers 
+boss gila_64_winslow flags bothPlayers,hiddenZone rules  modifiers 
+boss gila_65_gobbles flags passive rules  modifiers 
+boss gila_66_mute flags  rules  modifiers 
+boss gila_67_hannigul flags bothPlayers,passive,position rules  modifiers 
+boss gila_68_rancel flags  rules  modifiers 
+boss trl_201_zentimo flags doubleBattlecry,shrine rules  modifiers 
+boss trl_202_hooktusk flags hiddenZone,recast,shrine rules  modifiers 
+boss trl_203_thekal flags recast,shrine rules  modifiers 
+boss trl_204_zuljin flags secrets,shrine rules  modifiers 
+boss trl_205_loti flags shrine rules  modifiers 
+boss trl_206_jeklik flags shrine rules  modifiers 
+boss trl_207_malacrass flags shrine rules  modifiers 
+boss trl_208_talanji flags doubleDeathrattle,shrine rules  modifiers 
+boss dala_01_chomper flags  rules  modifiers 
+boss dala_02_awilo flags passive rules  modifiers 
+boss dala_03_akazamzarak flags bothPlayers,hiddenZone rules  modifiers 
+boss dala_04_kaye flags bothPlayers,hiddenZone rules  modifiers 
+boss dala_05_bonepaw flags bothPlayers,recast rules  modifiers 
+boss dala_06_dazzik flags start rules  modifiers 
+boss dala_07_belnaara flags forms,heroImmune,passive rules  modifiers 
+boss dala_08_applebough flags  rules  modifiers 
+boss dala_09_oshi flags  rules  modifiers 
+boss dala_10_mo flags passive rules  modifiers 
+boss dala_11_noz flags bothPlayers,passive rules  modifiers 
+boss dala_12_cravitz flags bothPlayers rules  modifiers 
+boss dala_13_albin flags  rules  modifiers 
+boss dala_14_tierra flags  rules  modifiers 
+boss dala_15_nici flags bothPlayers,passive rules  modifiers 
+boss dala_16_wendy flags hiddenZone,passive rules  modifiers 
+boss dala_17_tala flags passive rules  modifiers 
+boss dala_18_disidra flags passive rules  modifiers 
+boss dala_19_linzi flags  rules  modifiers 
+boss dala_20_vasno flags passive,recast rules  modifiers 
+boss dala_22_bae_chao flags  rules  modifiers 
+boss dala_23_sharky flags  rules  modifiers 
+boss dala_24_arha flags doubleBattlecry rules  modifiers 
+boss dala_25_jepetto flags bothPlayers,hiddenZone,passive rules  modifiers 
+boss dala_26_fountain_golem flags passive rules  modifiers 
+boss dala_27_rasil flags  rules  modifiers 
+boss dala_28_xurios flags passive rules  modifiers 
+boss dala_29_mama_diggs flags  rules  modifiers 
+boss dala_30_rat_king flags forms rules  modifiers 
+boss dala_31_timothy flags  rules  modifiers 
+boss dala_32_kizi flags passive rules  modifiers 
+boss dala_33_gold_elemental flags passive rules  modifiers 
+boss dala_34_carousel flags bothPlayers,passive,position rules  modifiers 
+boss dala_35_zoie flags passive rules  modifiers 
+boss dala_36_draemus flags  rules  modifiers 
+boss dala_37_toomba flags  rules  modifiers 
+boss dala_38_tipsi flags  rules  modifiers 
+boss dala_39_aki flags passive rules  modifiers 
+boss dala_40_oxana flags passive rules  modifiers 
+boss dala_41_ungan flags  rules  modifiers 
+boss dala_42_pogo flags  rules  modifiers 
+boss dala_44_erekem flags hiddenZone rules  modifiers 
+boss dala_45_moragg flags  rules  modifiers 
+boss dala_46_ichoron flags  rules  modifiers 
+boss dala_47_lavanthor flags  rules  modifiers 
+boss dala_48_zuramat flags bothPlayers,start rules  modifiers 
+boss dala_49_cyanigosa flags passive rules  modifiers 
+boss dala_50_nozari flags passive rules  modifiers 
+boss dala_51_millificent flags  rules  modifiers 
+boss dala_52_sinclari flags  rules  modifiers 
+boss dala_53_deryl flags  rules  modifiers 
+boss dala_54_zibb flags bothPlayers,passive rules  modifiers 
+boss dala_55_hannigan flags passive rules  modifiers 
+boss dala_56_wagtoggle flags hiddenZone,passive,start rules  modifiers 
+boss dala_57_gallywix flags passive rules  modifiers 
+boss dala_58_flark flags boardStart,position,start rules  modifiers 
+boss dala_59_goya flags hiddenZone,passive rules  modifiers 
+boss dala_61_saelorn flags hiddenZone rules  modifiers 
+boss dala_62_haro flags bothPlayers rules  modifiers 
+boss dala_63_dagg flags  rules  modifiers 
+boss dala_64_biggs flags  rules  modifiers 
+boss dala_65_valdera flags damageCap,passive rules  modifiers 
+boss dala_66_marei flags bothPlayers,hiddenZone rules  modifiers 
+boss dala_68_lilayell flags passive rules  modifiers 
+boss dala_70_smiggs flags bothPlayers rules  modifiers 
+boss dala_71_anarii flags  rules  modifiers 
+boss dala_72_kazamon flags passive rules  modifiers 
+boss dala_73_hesutu flags  rules  modifiers 
+boss dala_74_kara flags  rules  modifiers 
+boss dala_43_norroa flags passive rules  modifiers 
+boss dala_67_vargoth flags  rules  modifiers 
+boss dala_69_kalec flags  rules  modifiers 
+boss dala_60_khadgar flags recast rules  modifiers 
+boss ulda_01_cardish flags  rules  modifiers 
+boss ulda_02_zafarr flags  rules  modifiers 
+boss ulda_03_vera flags  rules  modifiers 
+boss ulda_04_nash flags  rules  modifiers 
+boss ulda_05_glack flags  rules  modifiers 
+boss ulda_06_chu flags  rules  modifiers 
+boss ulda_07_squeamlish flags  rules  modifiers 
+boss ulda_08_sinkhole flags  rules  modifiers 
+boss ulda_09_demolisher flags  rules  modifiers 
+boss ulda_10_terraviss flags  rules  modifiers 
+boss ulda_11_robold flags  rules  modifiers 
+boss ulda_12_pyramad flags  rules  modifiers 
+boss ulda_13_scalesnout flags  rules  modifiers 
+boss ulda_14_sirinell flags  rules  modifiers 
+boss ulda_15_herring flags  rules  modifiers 
+boss ulda_16_battrund flags  rules  modifiers 
+boss ulda_17_ichabod flags  rules  modifiers 
+boss ulda_18_twizzleflux flags  rules  modifiers 
+boss ulda_19_sothis flags  rules  modifiers 
+boss ulda_20_kham flags passive rules  modifiers 
+boss ulda_21_illidara flags bothPlayers,passive rules  modifiers 
+boss ulda_22_colossus flags bothPlayers rules  modifiers 
+boss ulda_23_skarik flags  rules  modifiers 
+boss ulda_24_palm_tree flags  rules  modifiers 
+boss ulda_25_zenda flags  rules  modifiers 
+boss ulda_26_thudd flags  rules  modifiers 
+boss ulda_27_toomba flags hiddenZone rules  modifiers 
+boss ulda_28_sazin flags bothPlayers,hiddenZone rules  modifiers 
+boss ulda_29_ozara flags passive rules  modifiers 
+boss ulda_30_ermavar flags passive rules  modifiers 
+boss ulda_31_drasar flags  rules  modifiers 
+boss ulda_32_edra flags  rules  modifiers 
+boss ulda_33_ruby flags bothPlayers,position rules  modifiers 
+boss ulda_34_dovo flags bothPlayers rules  modifiers 
+boss ulda_35_ptah flags position rules  modifiers 
+boss ulda_36_kasa flags forcedAttack rules  modifiers 
+boss ulda_41_alda flags  rules  modifiers 
+boss ulda_42_rhogi flags  rules  modifiers 
+boss ulda_43_jolene flags hiddenZone rules  modifiers 
+boss ulda_45_belloc flags passive rules  modifiers 
+boss ulda_46_wildtooth flags bothPlayers,passive rules  modifiers 
+boss ulda_47_jar flags  rules  modifiers 
+boss ulda_48_ilza flags bothPlayers,hiddenZone,passive rules  modifiers 
+boss ulda_49_craz flags  rules  modifiers 
+boss ulda_50_barkeye flags passive rules  modifiers 
+boss ulda_51_kasmut flags bothPlayers,passive rules  modifiers 
+boss ulda_52_bazhial flags forms rules  modifiers 
+boss ulda_53_maru flags  rules  modifiers 
+boss ulda_54_janak flags  rules  modifiers 
+boss ulda_55_murlocs flags bothPlayers rules  modifiers 
+boss ulda_56_frog flags passive rules  modifiers 
+boss ulda_57_winged_guardian flags  rules  modifiers 
+boss ulda_59_dire_bat flags  rules  modifiers 
+boss ulda_60_zaraam flags  rules  modifiers 
+boss ulda_61_kyriss flags  rules  modifiers 
+boss ulda_62_oasis flags hiddenZone rules  modifiers 
+boss ulda_63_vessina flags passive rules  modifiers 
+boss ulda_65_thrud flags hiddenZone rules  modifiers 
+boss ulda_66_siamat flags  rules  modifiers 
+boss ulda_68_wasp flags  rules  modifiers 
+boss ulda_69_isiset flags bothPlayers,passive,recast rules  modifiers 
+boss ulda_70_rajh flags  rules  modifiers 
+boss ulda_71_ammunae flags  rules  modifiers 
+boss ulda_72_setesh flags  rules  modifiers 
+boss ulda_73_husam flags passive rules  modifiers 
+boss ulda_74_barim flags  rules  modifiers 
+boss ulda_75_avozu flags  rules  modifiers 
+boss ulda_76_tarkus flags  rules  modifiers 
+boss ulda_77_gorebite flags  rules  modifiers 
+boss ulda_78_octosari flags  rules  modifiers 
+boss ulda_79_armadillobot flags forcedAttack rules  modifiers 
+boss gila_48_infinite_toki flags  rules  modifiers 
+boss gila_49_glinda flags heroImmune,passive rules  modifiers 
+boss gila_59_godfrey flags start rules  modifiers 
+boss gila_60_shivers flags passive,start rules  modifiers 
+boss ulda_37_xatma flags deckReplace,forms,persistentDamage rules  modifiers mod_iron_bosses,mod_open_road
+boss ulda_38_kzrath flags deckReplace,forms,persistentDamage rules  modifiers mod_iron_bosses,mod_open_road
+boss ulda_39_vesh flags deckReplace,forms,persistentDamage rules  modifiers mod_iron_bosses,mod_open_road
+boss ulda_67_tekahn flags deckReplace,forms,relay rules  modifiers mod_iron_bosses,mod_open_road
