@@ -36,7 +36,8 @@ using SabberStoneCore.Tasks.SimpleTasks;
 //      exception, and in the real game every aura still gives back what it gave
 //   D  "When you draw this" minions (test phase, enc17): a drawn AT_130 Sea Reaver or GVG_007 Flame Leviathan resolves its
 //      draw effect and stays in hand (Generic.CompleteDraw had set every TopdeckTask card aside); Casts When Drawn (GVG_056t)
-//      and Summoned When Drawn (TLC_513t2) cards still leave the hand
+//      and Summoned When Drawn (TLC_513t2) cards still leave the hand; Flame Leviathan's 2 damage reaches all characters, both
+//      heroes included (its TopdeckTask had targeted EntityType.ALLMINIONS)
 // Typhoon's InterceptLeave is not re-tested here: lane G changed nothing (it is there since a95b97e; c-enc-engine E7-E10).
 // C_GEN_9_ONLY=U,P,... runs only those sections; C_GEN_9_GAMES=n plays n games in G (default 200).
 int failures = 0, passes = 0;
@@ -221,7 +222,8 @@ Guard("A", () =>
 // ============================================================ D  "When you draw this" minions stay in hand
 // bosspilot enc17 (dala_58_flark against DALA_Chu): the drawn AT_130 Sea Reaver dealt its damage, then sat in SETASIDE for good
 // and the hand stayed at 5. Only cards whose draw effect replaces them (Casts When Drawn spells, Summoned When Drawn minions,
-// none tagged TOPDECK) leave the hand. Without the engine fix D1, D3 and D4 fail; D2, D5, D6 and D7 pass either way.
+// none tagged TOPDECK) leave the hand. Without the engine fix D1, D3 and D4 fail; without the GVG_007 fix (its TopdeckTask hit
+// EntityType.ALLMINIONS, not ALL: "deal 2 damage to all characters") D5 fails; D2, D6 and D7 pass either way.
 Guard("D", () =>
 {
     const string Reaver = "AT_130", Leviathan = "GVG_007", Mine = "GVG_056t", Ninja = "TLC_513t2";
@@ -249,11 +251,16 @@ Guard("D", () =>
 
     (g, p1, p2, wisp, yeti, enemy) = Scene();
     var leviathan = Top(p1, Leviathan);
-    EndTurn(g); EndTurn(g); g.DeathProcessingAndAuraUpdate();
+    EndTurn(g);
+    int own = p1.Hero.Health, foe = p2.Hero.Health, ownArmor = p1.Hero.Armor, foeArmor = p2.Hero.Armor;
+    EndTurn(g); g.DeathProcessingAndAuraUpdate();
     Check("D4 a Flame Leviathan drawn at the start of its owner's turn stays in hand", g.CurrentPlayer == p1 && leviathan.Zone?.Type == Zone.HAND
         && p1.HandZone.Contains(leviathan), $"current {g.CurrentPlayer.Name} zone {Where(leviathan)}");
-    Check("D5 its draw effect resolved: 2 damage to every minion (the Wisp dies, both Yetis have 3 Health)",
-        wisp.Zone?.Type == Zone.GRAVEYARD && yeti.Health == 3 && enemy.Health == 3, $"Wisp {Where(wisp)} Yeti {yeti.Health} enemy {enemy.Health}");
+    Check("D5 its draw effect resolved: 2 damage to all characters (the Wisp dies, both Yetis have 3 Health, both heroes lose 2 Health)",
+        wisp.Zone?.Type == Zone.GRAVEYARD && yeti.Health == 3 && enemy.Health == 3 && ownArmor == 0 && foeArmor == 0
+        && p1.Hero.Health == own - 2 && p2.Hero.Health == foe - 2,
+        $"Wisp {Where(wisp)} Yeti {yeti.Health} enemy {enemy.Health} hero {own} -> {p1.Hero.Health} (armor {ownArmor})"
+        + $" enemy hero {foe} -> {p2.Hero.Health} (armor {foeArmor})");
 
     (g, p1, p2, wisp, yeti, enemy) = Scene();
     var mine = Top(p1, Mine);
