@@ -54,6 +54,18 @@ Found by the full regression (t/all.q on 1c9014d, stopped at 136 of 185 to resta
 - **bp.sh enc08 fallbacks 0 -> 4** and pairs9 chunks 8, 11, 12 (cases 608, 781, 848, 854): the same KeyNotFoundException
   as below, fixed by the aura-removal fix.
 
+- **bp.sh treasure9 84 21: 9 player fallbacks** ("Sequence contains no matching element", treasure index 96, ULDA_111
+  Hearthstone held by Heist DALA_George vs loot_18_giant_rat). Test-harness defect (b186c5f, lane M): the run harness kept
+  ULDA_111 from the player only by filtering the task list passed to BotDriver.Decide, but the fair search plans on its own
+  copy of the game, where the escape is allowed, picked the cast, and `BotAction.Resolve` found no such task. Fix (5e02e40,
+  harness only, p9/c-bosspilot-run): `Step9.CloseEscape(plan)` sets the plan's EscapeAllowed false before Configure, so
+  Hearthstone is unplayable in the game and in the search's copies; the old filter stays and a new check fails if the cast
+  is ever offered (shown failing with CloseEscape skipped: 37 offers, 9 fallbacks). Moved: the ULDA_111 line of chunk 84
+  (turns 11 -> 9, hp 21 -> 30, decisions 60 -> 42, new field `escape=closed`) and the summary; chunks 0, 21, 42, 63, 105
+  byte-identical. Also movable, never run yet: slots9, gate48t, uld152, longrun9 (calib.q, gate.q). Left latent (plugin):
+  BotDriver.Decide's `nativeActionEnabled` filter has the same reach; no effect while NativeMatch.NativeActionEnabled is
+  the constant true.
+
 No other step-9 defect was found by any lane. Defects in the lanes' own tests, found by the review and fixed (section 4).
 
 Found and NOT fixed (pre-step-9, not step-9 code):
