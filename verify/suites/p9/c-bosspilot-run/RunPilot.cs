@@ -33,6 +33,14 @@ internal static class Step9
         escapeAllowed.SetValue(plan, false);
         return true;
     }
+    private static readonly FieldInfo restartTag = typeof(SabberStoneCore.Actions.EncounterRules).GetField("Restart");
+    private static readonly FieldInfo escapeTag = typeof(SabberStoneCore.Actions.EncounterRules).GetField("Escape");
+    /// <summary>
+    /// A script ended the game (GILA_BOSS_48t Alternate Timeline's or GILA_911 Rewind's restart, ULDA_111 Hearthstone's escape):
+    /// the game's own marks (EncounterRules.Restart, Escape), read from the game, not from the harvest; false on a tree without them.
+    /// </summary>
+    internal static bool EndedByScript(Game game) => GameMark(game, restartTag) != 0 || GameMark(game, escapeTag) != 0;
+    private static int GameMark(Game game, FieldInfo tag) => tag == null ? 0 : game[(SabberStoneCore.Enums.GameTag)tag.GetValue(null)];
     internal static bool Flag(object o, string name) => o?.GetType().GetProperty(name)?.GetValue(o) is bool b && b;
     internal static string Text(object o, string name) => o?.GetType().GetProperty(name)?.GetValue(o) as string;
     internal static int Int(object o, string name)
