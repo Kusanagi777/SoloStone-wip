@@ -33,6 +33,7 @@ using SabberStoneCore.Tasks.PlayerTasks;
 //      effect still queued (Game.OneTurnEffects); the fair view masks it, and the end of a simulated turn gave the effect back
 //      to the Unknown stand-in (ATK.Remove -> NotImplementedException): the run player's and the boss's fair states end the
 //      turn with no exception, the view queues no effect on an actor it masked, and the real game still gives the Attack back
+//      (V7: the view keeps a public actor's one-turn effect, the relay hero's own +4: only the masked actor's go)
 // C_ENDS_9_ONLY=P,E,... runs only those sections (for the break-and-run proofs; unset: every section).
 static object FromJson(System.Text.Json.JsonElement e)
 {
@@ -766,6 +767,23 @@ Guard("V", () =>
     string bossError = Try(() => boss.Apply(BotAction.From(EndTurnTask.Any(p2))));
     Check("V6 the boss's fair state ends its turn after its form change (no exception, no one-turn effect on a masked actor)",
         bossError == "" && bossMasked == 0, bossError + $" masked {bossMasked}");
+
+    // V7: only the masked actor's effects go. The relay hero that entered strikes too; its +4 is public and stays queued in the
+    // view, on the same hero (a fix that dropped every one-turn effect would pass V2-V3 and fail here).
+    var s7 = At("acts-v4t", Finale, Tekahn, 9322, cls: "WARRIOR");
+    var g7 = Ready(run.BuildPlan(s7, All()));
+    Controller q1 = g7.Player1;
+    Hero dead7 = q1.Hero;
+    bool struck7 = Strike(g7, q1);
+    Hurt(g7, dead7, 0);
+    Hero relay7 = q1.Hero;
+    bool struckAgain = relay7 != dead7 && Strike(g7, q1) && relay7.AttackDamage == 4;
+    var view7 = FairBotState.Create(g7, q1.PlayerId, 3, DeckStyle.Tempo, Golden()).FingerprintGame;
+    int kept = view7.OneTurnEffects.Count(p => p.entityId == relay7.Id && view7.IdEntityDic.TryGetValue(p.entityId, out var e)
+        && e is Hero && e.Card.Id == relay7.Card.Id && p.effect.Tag == GameTag.ATK && p.effect.Value == 4);
+    Check("V7 the fair view keeps the public relay hero's own +4 this turn while dropping the masked old hero's",
+        struck7 && struckAgain && kept == 1 && Masked(view7, g7) == 0,
+        $"struck {struck7}/{struckAgain}, relay {relay7.Card.Id}, kept {kept}, masked {Masked(view7, g7)} of {view7.OneTurnEffects.Count}");
 });
 
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");
