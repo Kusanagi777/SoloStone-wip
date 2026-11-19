@@ -192,7 +192,7 @@ c-acts A10, c-enc-model F2), which gives back exactly the Windows bytes on Windo
 | `p7/before/run-v1.json`, `catalog-v1.json`, `schedule-v1.json` | `p7/before/` | c-shrine-core (was absolute) | phase-6 data for the save migration check (the folder's `SabberStoneCore-p6f18.dll` is NOT copied) |
 | `p8f01/golden-sequences.txt`, `golden-save-legacy-v5.xml`, `golden-save-acts-v5.xml` | `p8f01/` | c-enc-model (was absolute `SP\p8f01`) | released sequences, version-5 saves |
 | `p8f01/fixtures/schedule-finale.json`, `schedule-relay.json`, `encounters-relay.json` | `p8f01/fixtures/` | `bp.sh finale`, `bp.sh relay` (SCHEDULE_JSON / ENCOUNTERS_JSON) | the wave-1 finale and relay fixture schedules (LF, no BOM: byte-identical copies) |
-| `p8f01b/fixtures/encounters-secretfix.json` | `p8f01b/fixtures/` | `bp.sh secretfix` (ENCOUNTERS_JSON) | Manhunter Ivan with two Streetsmugglers (byte-identical copy) |
+| `p8f01b/fixtures/encounters-secretfix.json` | `p8f01b/fixtures/` | `bp.sh secretfix` (ENCOUNTERS_JSON) | Manhunter Ivan with two Streetsmugglers (hand-kept, no generator: the wave-1 copy plus the four shipped acts-v3h finale rows and decks, copied verbatim from `encounters-v1.json` in step 9's test phase, because a run on the shipped acts-v3h resolves its finale's fixed bosses at NewRun since the close-out enabled it) |
 | `p8f02/fixtures/encounters-collectA.json` | `p8f02/fixtures/` | `bp.sh collectA` (ENCOUNTERS_JSON) | kept with its generator |
 | `p8f03/fixtures/encounters-f03.json` | `p8f03/fixtures/` | c-collectibles-B (G3), `bp.sh enc03 <slice>` | |
 | `p8f04/fixtures/encounters-f04.json` | `p8f04/fixtures/` | c-collectibles-C (G3), `bp.sh f04-boss`, `bp.sh f04-player` | |
