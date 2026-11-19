@@ -214,10 +214,27 @@ All on this tree (`wip/t-int`), each harness call through the harness lock; logs
   A10 (per-row ratio 4.52 at 6000 runs, band 2.5: lower k or raise alpha), B9's 17 named outliers (targets.json B9.named
   empty), every B criterion (calib.q).
 - The engine defect in section 2: fixed on wip/t-aura (engine md5 da3fa601 -> 831bbb9f), merged into this tree (c014194).
-- **Engine, not fixed (released behaviour):** `engine/SabberStoneCore/src/Actions/Draw.cs` CompleteDraw (about lines
-  106-113, since 0.1.0) moves every drawn card with a TopdeckTask from the hand to the set-aside zone for good. Right for
-  "cast when drawn" spells; wrong for minions with a draw effect that should stay in hand (AT_130 Sea Reaver, GVG_007 Flame
-  Leviathan). Found while debugging enc17; fixing it changes released games, so it is left for a decision.
+- **Engine, fixed (changes released games; review the moves before re-recording):** `engine/SabberStoneCore/src/Actions/Draw.cs`
+  CompleteDraw (since 0.1.0) set every drawn card with a TopdeckTask aside for good. Right for Casts When Drawn spells and
+  Summoned When Drawn minions; wrong for "When you draw this" minions (AT_130 Sea Reaver, GVG_007 Flame Leviathan). Found
+  while debugging enc17. Fix: a minion whose card carries TOPDECK stays in hand.
+  - The 26 cards with a TopdeckTask: 21 Casts When Drawn spells (AT_035t BOT_511t DALA_716t DALA_Warrior_HP2t DAL_582t
+    EDR_445pt3 GVG_056t JAIL_386t JAIL_443t JAIL_879t JAIL_881t LOE_110t LOOT_026e LOOT_106t LOOT_526t SW_439t TIME_025t
+    TRL_541t ULDA_030 ULDA_801t ULD_286t) and 3 Summoned When Drawn minions (CAP_400t2t EDR_260t TLC_513t2, all TOPDECK 0)
+    leave the hand as before; AT_130 and GVG_007 (TOPDECK 1) stay. In the whole card DB every "When you draw this" minion
+    has TOPDECK 1 (also DAL_185, a DRAW trigger in hand, and the unscripted TOT_330, TOT_334); no Summoned When Drawn minion has it.
+  - Test: c-gen-9 D (7 checks; 70 -> 77). On the unfixed engine D1, D3, D4 fail; D2, D5, D6, D7 pass either way.
+  - Engine md5 `831bbb9f42571c0e1676ba12f144eb48` -> `be14eef8767e265ed19c36012ad0de85` (0 warnings, 0 errors).
+  - Measured on this tree, before and after, each twice (`runs.sh 1/2 all`; `bp.sh run`, `act`, `catalog`, `enc09`,
+    `f04-boss`, `enc17 1/2`): every entry run 1 = run 2 on both sides (c-secretsearch's timing lines and c-longrun-9's TIME
+    excepted). What moved, after vs before, all else byte-equal:
+    - c-gen-9: D1, D3, D4 FAIL -> PASS; RESULT 74 passed, 3 failed -> 77 passed, 0 failed (G digest unchanged).
+    - randplay: game 119 (line 120 of randplay-games): Player 2's drawn GVG_007 now stays in hand and is played; the game
+      ends 16,-1 turn 28 -> -1,17 turn 23. Digest `22043E377F1097F3` -> `F4B15E7C27E9B2EC` (games 200).
+    - bp enc17 (dala_58_flark vs DALA_Chu, DALA t4 floor 13, row 25 of bp-enc17-a/b): boss still wins, turns 11 -> 9,
+      decisions 22 -> 16, fallbacks 0, checks ok.
+    - Unchanged: the other 75 run entries (selfplay digest 2CE546A18F96DCBC included), bp run 40/27, act 40/27, catalog
+      40/28, enc09, f04-boss (its coverage line unchanged). The other bosspilot modes were not rerun.
 - **Coverage misses (no fault):** bp.sh f04-boss prints "never played by the boss: ULD_290 x0 ULD_721 x0". ULD_290 is the
   wave-6 miss (HANDOFF 3.4); ULD_721 was played once on the wave-6 and close-out trees and 0 times on this tree (the games
   moved with step 9; seed-sensitive, 40 games).
