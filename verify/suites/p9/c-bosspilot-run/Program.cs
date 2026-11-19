@@ -203,10 +203,7 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
         var game = new Game(cfg);
         game.StartGame();
         if (game.FirstPlayer != game.Player1) throw new Exception("player not first");
-        void DiagZ(string at) { if (Environment.GetEnvironmentVariable("FABLED_DIAG") == "1") Console.Error.WriteLine("DIAG " + at + " p1=" + string.Join(",", game.Player1.DeckZone.Concat(game.Player1.HandZone).OrderBy(c => c.Id).Select(c => c.Id + ":" + c.Card.Id))); }
-        DiagZ("afterStart");
         DungeonRunSetup.ApplyAfterStart(game, plan);
-        DiagZ("afterApply");
         if (playerHealth > 0) game.Player1.Hero.Damage = Math.Max(0, game.Player1.Hero.BaseHealth - playerHealth);
         var prior = RunPilot.BossSecretPrior(plan);
         var pp = RunPilot.Build(s.Class + "." + floor, game.Player1.Hero.Card, plan.PlayerDeck.Select(c => c.Id).ToList(), testBudget);
@@ -224,14 +221,6 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
             false, pilot.Deck.CardIds, game.Player1.Hero.Card.Class);
         game.Process(ChooseTask.Mulligan(game.Player2, BotDriver.Mulligan(view, new DeckPlanMulligan(pilot.Plan)).ToList()));
         game.MainBegin();
-        if (Environment.GetEnvironmentVariable("FABLED_DIAG") == "1")
-        {
-            Console.Error.WriteLine("DIAG start p1deck=" + string.Join(",", game.Player1.DeckZone.Concat(game.Player1.HandZone).OrderBy(c => c.Id).Select(c => c.Id + ":" + c.Card.Id)));
-            Console.Error.WriteLine("DIAG start p2 min id=" + game.Player2.DeckZone.Concat(game.Player2.HandZone).Min(c => c.Id) + " plandeck=" + string.Join(",", plan.PlayerDeck.Select(c => c.Id)));
-            Console.Error.WriteLine("DIAG start rules=" + string.Join(",", plan.GlobalRules) + " treasures=" + string.Join(",", plan.PlayerTreasures) + " hp=" + plan.PlayerHeroPowerId + " shrine=" + plan.PlayerShrine + " bossplan=" + string.Join(",", plan.BossDeck.Select(c => c.Id)));
-            Console.Error.WriteLine("DIAG start p2deck=" + string.Join(",", game.Player2.DeckZone.Concat(game.Player2.HandZone).OrderBy(c => c.Id).Select(c => c.Id + ":" + c.Card.Id)));
-            Console.Error.WriteLine("DIAG start p1 setaside/secret/board=" + string.Join(",", game.Player1.SetasideZone.Concat(game.Player1.SecretZone).Concat(game.Player1.BoardZone).Select(c => c.Id + ":" + c.Card.Id)));
-        }
         var bossSide = new FairSide(game, game.Player2.PlayerId, pilot.Deck.Style, golden, npcProfile, boss.Id);
         bossSide.OnTask = task =>
         {
@@ -253,8 +242,6 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
         playerSide.OnTask = task =>
         {
             if (playerWatch != null && task is PlayCardTask p && p.Source != null && playerWatch.Contains(p.Source.Card.Id)) Bump(playerPlayed, p.Source.Card.Id);
-            if (Environment.GetEnvironmentVariable("FABLED_DIAG") == "1" && task is PlayCardTask dp && dp.Source != null)
-                Console.Error.WriteLine("DIAG play t" + game.Turn + " " + dp.Source.Card.Id + " (" + dp.Source.Card.Name + ") handTIME=" + string.Join(",", game.Player1.HandZone.Select(c => c.Card.Id).Where(i => i.StartsWith("TIME_") || i.StartsWith("CATA_"))));
         };
         string hero = game.Player1.Hero.Card.Id;
         int heroChanges = 0;
@@ -266,32 +253,14 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
             foreach (var e in game.Player2.SecretZone) if (watch?.Contains(e.Card.Id) ?? false) secrets[e.Id] = "boss:" + e.Card.Id;
             foreach (var e in game.Player1.SecretZone) if (playerWatch?.Contains(e.Card.Id) ?? false) secrets[e.Id] = "player:" + e.Card.Id;
         }
-        string lastHand = null;
         PlayerTask Player()
         {
             Secrets();
-            if (Environment.GetEnvironmentVariable("FABLED_DIAG") == "1")
-            {
-                string h = string.Join(",", game.Player1.HandZone.Select(c => c.Id + ":" + c.Card.Id + ":cr" + c[GameTag.CREATOR]));
-                if (h != lastHand) { lastHand = h; Console.Error.WriteLine("DIAG hand t" + game.Turn + " " + h); }
-            }
             // The relay or a hero switch changed the run player's hero: the pilot follows the cards it now holds.
             if (game.Player1.Hero.Card.Id != hero)
             {
                 hero = game.Player1.Hero.Card.Id; heroChanges++;
                 var ids = game.Player1.DeckZone.Concat(game.Player1.HandZone).Select(c => c.Card.Id).ToList();
-                if (Environment.GetEnvironmentVariable("FABLED_DIAG") == "1")
-                {
-                    Console.Error.WriteLine("DIAG turn=" + game.Turn + " hero=" + hero + " held=" + string.Join(",", ids.Where(i => i.StartsWith("TIME_") || i.StartsWith("CATA_"))));
-                    Console.Error.WriteLine("DIAG plandeck TIME/CATA=" + string.Join(",", plan.PlayerDeck.Select(c => c.Id).Where(i => i.StartsWith("TIME_") || i.StartsWith("CATA_"))));
-                    Console.Error.WriteLine("DIAG bossdeck TIME/CATA=" + string.Join(",", pilot.Deck.CardIds.Where(i => i.StartsWith("TIME_") || i.StartsWith("CATA_"))));
-                    foreach (var c in game.Player1.HandZone.Concat(game.Player1.DeckZone).Where(c => c.Card.Id.StartsWith("TIME_") || c.Card.Id.StartsWith("CATA_")))
-                        Console.Error.WriteLine("DIAG ent " + c.Id + " " + c.Card.Id + " zone=" + c.Zone?.Type + " creator=" + c[GameTag.CREATOR] + " p2first=" + game.Player2.Id);
-                    Console.Error.WriteLine("DIAG p1grave=" + string.Join(",", game.Player1.GraveyardZone.Select(c => c.Card.Id)));
-                    Console.Error.WriteLine("DIAG p2 entity ids: " + string.Join(",", game.IdEntityDic.Values.Where(e => e.Card.Id == "TIME_209" || e.Card.Id == "TIME_209t" || e.Card.Id == "TIME_209t2" || e.Card.Id == "CATA_190h").Select(e => e.Id + ":" + e.Card.Id + ":c" + e.Controller?.PlayerId + ":" + e.Zone?.Type)));
-                    try { RunPilot.Build("diag", game.Player1.Hero.Card, ids, testBudget); Console.Error.WriteLine("DIAG old Build ok"); }
-                    catch (Exception ex) { Console.Error.WriteLine("DIAG old Build threw: " + ex); }
-                }
                 var np = RunPilot.Replan(s.Class + "." + floor + "." + heroChanges, game.Player1.Hero.Card, ids, testBudget);
                 playerSide.Golden = new GoldenPilot(np.Profile, np.Plan, null, prior);
                 playerSide.Profile = np.Profile;
