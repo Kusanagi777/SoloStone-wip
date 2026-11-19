@@ -28,6 +28,11 @@ using SabberStoneCore.Tasks.PlayerTasks;
 //   F  D12: every new field round-trips (summary Escaped / Restarted, BankedGold, RestartIndex, RestartSources,
 //      RestartCarriedDamage, RestartTurns), each is omitted at its default, a version-6 file with them loads, version 7 is refused
 //   S  lane S: DungeonRunStore.Restore restores Version (D6); Resume refuses unknown starter deck and BossSequence ids
+//   V  a hero replaced this turn in the fair view (test phase, the tekahn9 32-4 fallbacks): a hero that gained Attack "this
+//      turn" and is then replaced (the Tekahn relay; a Plague Lord's next form) sits in the set-aside zone with its one-turn
+//      effect still queued (Game.OneTurnEffects); the fair view masks it, and the end of a simulated turn gave the effect back
+//      to the Unknown stand-in (ATK.Remove -> NotImplementedException): the run player's and the boss's fair states end the
+//      turn with no exception, the view queues no effect on an actor it masked, and the real game still gives the Attack back
 // C_ENDS_9_ONLY=P,E,... runs only those sections (for the break-and-run proofs; unset: every section).
 static object FromJson(System.Text.Json.JsonElement e)
 {
@@ -703,6 +708,64 @@ Guard("S", () =>
     string rdone = Refusal(done), rv1 = Refusal(v1), rgood = Refusal(good);
     Check("S7 Resume lets through a finished run (not checked), a run with no starter deck id (version 1) and a known run, which goes back to pre-match",
         rdone == null && rv1 == null && rgood == null && good.Phase == DungeonRunPhase.PreMatch, (rdone ?? "-") + " | " + (rv1 ?? "-"));
+});
+
+// ============================================================ V. a hero replaced this turn, in the fair view
+// bosspilot tekahn9 32-4 (games 33 and 35): the relay hero Brann played Heroic Strike (CS2_105: +4 Attack this turn), attacked
+// and died; Reno entered and Brann went to the set-aside zone with his +4 still in Game.OneTurnEffects (the real game gives it
+// back at the end of the turn). The run player's fair view masked the set-aside Brann (an Unknown at his id), and every
+// simulated end of that turn (MainCleanUp) gave the +4 back to the Unknown: ATK.Remove has no stand-in path
+// (NotImplementedException), the search fell back (4 FALLBACK lines). The boss's own replaced form takes the same path.
+Guard("V", () =>
+{
+    const string HeroicStrike = "CS2_105";
+    string Try(Action body) { try { body(); return ""; } catch (Exception e) { var x = e.InnerException ?? e; return x.GetType().Name + ": " + x.Message.Split('\n')[0]; } }
+    // The view's queued one-turn effects that do not name the real game's actor: an Unknown stand-in at its id, no actor, or
+    // another card (a masked id the view gave to a sampled card of the own deck).
+    int Masked(Game view, Game real) => view.OneTurnEffects.Count(p => !view.IdEntityDic.TryGetValue(p.entityId, out var e) || e is Unknown
+        || !real.IdEntityDic.TryGetValue(p.entityId, out var r) || r.Card.Id != e.Card.Id);
+    // The golden path's view options (GoldenPilot.Options: Secrets removed or tracked, the own deck tracked).
+    FairOptions Golden() => new FairOptions { RemoveOpponentSecrets = true, TrackOwnDeck = true, MaterializeOwnDeckTriggers = true };
+    bool Strike(Game g, Controller c) { Mana(c); var card = ToHand(g, c, HeroicStrike); return g.Process(PlayCardTask.Any(c, card)); }
+
+    // V1-V4: the Tekahn relay on acts-v4t, the run player's turn.
+    var s = At("acts-v4t", Finale, Tekahn, 9320, cls: "WARRIOR");
+    var plan = run.BuildPlan(s, All());
+    var g = Ready(plan);
+    Controller p1 = g.Player1;
+    Hero first = p1.Hero;
+    bool struck = Strike(g, p1) && first.AttackDamage == 4;
+    Hurt(g, first, 0);
+    bool queued = g.OneTurnEffects.Any(p => p.entityId == first.Id);
+    Check("V1 the relay: the run hero gains +4 Attack this turn (Heroic Strike), dies, a relay hero enters; the dead hero is set aside with its +4 still queued",
+        struck && plan.PlayerRelay.Count > 0 && g.State != State.COMPLETE && p1.Hero != first && first.Zone == p1.SetasideZone && queued,
+        $"struck {struck}, hero {p1.Hero.Card.Id}, old zone {first.Zone?.Type}, queued {queued}");
+    var view = FairBotState.Create(g, p1.PlayerId, 3, DeckStyle.Tempo, Golden()).FingerprintGame;
+    Check("V2 the run player's fair view queues no one-turn effect on an actor it masked", Masked(view, g) == 0,
+        $"{Masked(view, g)} of {view.OneTurnEffects.Count}; old hero in view {(view.IdEntityDic.TryGetValue(first.Id, out var vo) ? vo.GetType().Name + " " + vo.Card.Id : "-")}");
+    var mine = FairBotState.Create(g, p1.PlayerId, 3, DeckStyle.Tempo, Golden());
+    string endError = Try(() => mine.Apply(BotAction.From(EndTurnTask.Any(p1))));
+    Check("V3 the run player's fair state ends the turn after the relay (no exception)", endError == "", endError);
+    string realError = Try(() => EndTurn(g));
+    Check("V4 the real game ends the turn and gives the set-aside hero's +4 back (Attack 0, nothing queued)",
+        realError == "" && g.CurrentPlayer == g.Player2 && first.AttackDamage == 0 && g.OneTurnEffects.Count == 0, realError + $" attack {first.AttackDamage}");
+
+    // V5-V6: a Plague Lord's next form on acts-v4h, the boss's turn (the live host's NPC: its own fair view).
+    var lord = At("acts-v4h", Lord, Xatma, 9321, cls: "WARRIOR");
+    var gl = Ready(run.BuildPlan(lord, All()));
+    EndTurn(gl);
+    Controller p2 = gl.Player2;
+    Hero form = p2.Hero;
+    bool lordStruck = Strike(gl, p2) && form.AttackDamage == 4;
+    Hurt(gl, form, 150);
+    Check("V5 Xatma gains +4 Attack this turn and crosses a form threshold: the next form enters, the old form is set aside with its +4 queued",
+        lordStruck && gl.CurrentPlayer == p2 && p2.Hero != form && form.Zone == p2.SetasideZone && gl.OneTurnEffects.Any(p => p.entityId == form.Id),
+        $"struck {lordStruck}, hero {p2.Hero.Card.Id}, old zone {form.Zone?.Type}, old {form.Id}, queued [{string.Join(",", gl.OneTurnEffects.Select(p => p.entityId + " " + p.effect))}], enchantments [{string.Join(",", gl.OneTurnEffectEnchantments.Select(e => e.Card.Id + ">" + e.Target.Id))}]");
+    var boss = FairBotState.Create(gl, p2.PlayerId, 3, DeckStyle.Tempo, Golden());
+    int bossMasked = Masked(boss.FingerprintGame, gl);
+    string bossError = Try(() => boss.Apply(BotAction.From(EndTurnTask.Any(p2))));
+    Check("V6 the boss's fair state ends its turn after its form change (no exception, no one-turn effect on a masked actor)",
+        bossError == "" && bossMasked == 0, bossError + $" masked {bossMasked}");
 });
 
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");
