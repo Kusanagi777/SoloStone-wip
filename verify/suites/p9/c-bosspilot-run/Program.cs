@@ -248,7 +248,10 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
             {
                 hero = game.Player1.Hero.Card.Id; heroChanges++;
                 var ids = game.Player1.DeckZone.Concat(game.Player1.HandZone).Select(c => c.Card.Id).ToList();
-                var np = RunPilot.Build(s.Class + "." + floor + "." + heroChanges, game.Player1.Hero.Card, ids, testBudget);
+                foreach (var e in game.Player1.DeckZone.Concat(game.Player1.HandZone).Where(e => FabledRules.IsFabled(e.Card.Id) || FabledRules.IsCompanion(e.Card.Id)))
+                    Console.Error.WriteLine("DBG held " + e.Card.Id + " zone " + e.Zone?.Type + " creator " + (game.IdEntityDic.TryGetValue(e[GameTag.CREATOR], out var cr) ? cr.Card.Id + "/" + cr.Controller?.PlayerId : "-") + " displayed " + (game.IdEntityDic.TryGetValue(e[GameTag.DISPLAYED_CREATOR], out var dc) ? dc.Card.Id : "-"));
+                Console.Error.WriteLine("DBG hero " + hero + " turn " + game.Turn + " plandeck " + string.Join(",", plan.PlayerDeck.Select(c => c.Id).Where(i => i.StartsWith("TIME_2"))) + " ids " + string.Join(",", ids.Where(i => i.StartsWith("TIME_2"))) + " graveyard " + string.Join(",", game.Player1.GraveyardZone.Select(c => c.Card.Id)) + " weapon " + game.Player1.Hero.Weapon?.Card.Id + " board " + string.Join(",", game.Player1.BoardZone.Select(c=>c.Card.Id)) + " setaside " + string.Join(",", game.Player1.SetasideZone.Select(c=>c.Card.Id)));
+                var np = RunPilot.Replan(s.Class + "." + floor + "." + heroChanges, game.Player1.Hero.Card, ids, testBudget);
                 playerSide.Golden = new GoldenPilot(np.Profile, np.Plan, null, prior);
                 playerSide.Profile = np.Profile;
             }
@@ -333,7 +336,7 @@ bool Play(string head, DungeonRunState s, DungeonRunProfile profile, DungeonRunB
         line = $"result={f.Result} games={f.Games} restarts={f.Restarts} turns={f.Turns} cap={f.Cap} hp={f.Hp} boss={f.BossLeft}/{f.BossStart} decisions={f.Decisions}"
             + $" checks={(f.Problems.Count == 0 ? "ok" : "FAIL" + f.Problems.Count)}{f.Extra}";
     }
-    catch (Exception e) { faults++; ok = false; line = "result=FAULT " + e.GetType().Name + ": " + e.Message.Split('\n')[0]; }
+    catch (Exception e) { faults++; ok = false; Console.Error.WriteLine("DBG " + e); line = "result=FAULT " + e.GetType().Name + ": " + e.Message.Split('\n')[0]; }
     Console.WriteLine($"G {head} sched={s.Schedule} floor={floor} slot={slot} boss={boss.Id} prov={boss.Provenance} tier={boss.Tier} room={(boss.HasFlag("room") ? 1 : 0)}"
         + $" lord={(boss.HasFlag(DungeonRunEncounterData.PersistentDamage) ? 1 : 0)} origin={lo.Origin} loadout={lo.Cls.Id}/{s.StarterDeck}/{s.Power} deck={deck} {line}{tail?.Invoke() ?? ""} {sw.ElapsedMilliseconds / 1000.0,6:F1}s");
     return ok;

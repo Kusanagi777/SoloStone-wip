@@ -58,13 +58,30 @@ internal static class Step9
 /// </summary>
 internal static class RunPilot
 {
+    private const DeckArchetype Archetype = DeckArchetype.Midrange;
+
+    /// <summary>
+    /// The pilot of a fight's run deck (<paramref name="ids"/> = the plan's PlayerDeck): a deck list, so it passes the deck rules
+    /// (LocalDeck: a Fabled bundle whole).
+    /// </summary>
     internal static (LocalDeck Deck, DeckPlan Plan, NpcProfile Profile) Build(string tag, Card hero, IReadOnlyList<string> ids, Budget budget)
     {
-        const DeckArchetype archetype = DeckArchetype.Midrange;
+        var deck = new LocalDeck("dungeon-player:" + tag, "Run player", hero.Id, "Run player", "Dungeon Run player", NpcDeckLibrary.StyleFor(Archetype),
+            new string[0], ids.ToArray(), "dungeon-run");
+        var (plan, profile) = Replan(tag, hero, ids, budget);
+        return (deck, plan, profile);
+    }
+
+    /// <summary>
+    /// The plan and profile of the cards the player holds mid-game (deck and hand, after a hero switch or the relay). Not a deck
+    /// list, so no deck rule applies: a card the game gave the player (a copy of the boss's TIME_209 without its TIME_209t)
+    /// splits a Fabled bundle legally.
+    /// </summary>
+    internal static (DeckPlan Plan, NpcProfile Profile) Replan(string tag, Card hero, IReadOnlyList<string> ids, Budget budget)
+    {
+        const DeckArchetype archetype = Archetype;
         string deckId = "dungeon-player:" + tag;
         var cards = ids.ToArray();
-        var deck = new LocalDeck(deckId, "Run player", hero.Id, "Run player", "Dungeon Run player", NpcDeckLibrary.StyleFor(archetype),
-            new string[0], cards, "dungeon-run");
         var entry = new NpcDeckEntry(deckId, 1, "Run player", hero.Class.ToString(), hero.Id, "dungeon-run", "dungeon-run", null,
             new NpcDeckTags(archetype, 3, 1, 0, 3, LadderBand.Bronze, LadderBand.Legend), null,
             cards.GroupBy(id => id, StringComparer.Ordinal).Select(g => new NpcDeckCard(g.Key, g.Count())), new NpcDeckSideboard[0]);
@@ -73,7 +90,7 @@ internal static class RunPilot
         var personality = new Personality(.6, 1.2, .25, .5, new EmoteProfile(0, 30), .5, 0, int.MaxValue);
         var profile = new NpcProfile("dungeon.player." + tag, 1, "Run player", deckId, null, 0, personality, NpcCatalog.All[0].Budget, plan.Id)
             .WithBudget(budget);
-        return (deck, plan, profile);
+        return (plan, profile);
     }
 
     internal static IReadOnlyDictionary<string, double> BossSecretPrior(RunMatchPlan plan)
