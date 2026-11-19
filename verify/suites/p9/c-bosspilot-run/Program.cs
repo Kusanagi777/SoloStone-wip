@@ -40,6 +40,8 @@ using SabberStoneCore.Tasks.PlayerTasks;
 // Common: N=games per unit (GAMES is the same), FROM=first index, SEED_BASE (default 9100000, targets.json S1), SCHEDULE_JSON /
 // ENCOUNTERS_JSON fixture data, WATCH=ids (boss plays from hand, Secrets sprung), PLAYER_WATCH=ids (the run player's), PLAYER_HEALTH.
 // Each fight prints one "G" line of key=value fields (verify/tools/balance/agg.py reads them); longrun adds an "R" line per run.
+// A choice opened for the side whose turn it is not is answered before anything else (PlayGame.Loop, the live host's order;
+// offturn=N on the line), and a side that acts past the other side's open choice is a FAULT.
 // Expected: 0 faults, 0 fallbacks (either side), 0 failed checks, 0 swallowed leaf exceptions.
 static object FromJson(System.Text.Json.JsonElement e)
 {
@@ -159,7 +161,7 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
 {
     var problems = new List<string>();
     string result = "-", extra = ""; int games = 0, restarts = 0, turns = 0, cap0 = 0, hp = 0, left = 0, start = 0, decisions = 0;
-    int floor = s.Floor, node = s.Node;
+    int floor = s.Floor, node = s.Node, offTurn = 0;
     bool capWrong = false, escapeClosed = false;
     var sources = new List<string>();
     for (int k = 0; k < 4 && s.Floor == floor && s.Node == node && s.Phase == DungeonRunPhase.PreMatch; k++)
@@ -260,7 +262,8 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
             }
             return playerSide.Decide();
         }
-        try { PlayGame.Loop(game, cap, bossSide.Decide, Player, Secrets, actionLimit: 15 * Math.Max(100, cap)); }
+        // A choice answered off turn (PlayGame.Loop) is counted on the fight's line (offturn=N; absent when none).
+        try { offTurn += PlayGame.Loop(game, cap, bossSide.Decide, Player, Secrets, actionLimit: 15 * Math.Max(100, cap)); }
         finally { decisions += bossSide.Decisions + playerSide.Decisions; bossFallbacks += bossSide.Fallbacks; playerFallbacks += playerSide.Fallbacks; }
         Check(hearthOffered == 0, "game " + k + ": the player was offered ULDA_111 Hearthstone's cast " + hearthOffered + " times (its escape is closed)", problems);
         Secrets();
@@ -309,6 +312,7 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
         gateMaxRestarts = Math.Max(gateMaxRestarts, restarts);
         if (turns > 2 * cap0 + 1 || capWrong) gateTurnExcess++;
     }
+    if (offTurn > 0) extra += " offturn=" + offTurn;
     if (result == "-") problems.Add("the floor was not decided in 4 games");
     return (result, games, restarts, turns, cap0, hp, left, start, decisions, extra, problems);
 }
