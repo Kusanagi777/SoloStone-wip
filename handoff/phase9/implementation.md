@@ -235,7 +235,8 @@ The default flip (wave 9b):
 - c-enc-25 B1/B2/B7/R (ledger counts and blockers; B7's list of never-rolled twists is empty now and the HANDOFF 3.3
   paragraph it reads is reworded; R's reachability now walks v4 with draw v2);
 - c-w5fix Q7-Q11 (default names), c-enc-model J1 and G8-G13 (v4 modifier offer with "none", new flags);
-- bp records on the defaults (sweep25 a/b/c, the unnamed finale25);
+- bp records on the defaults (sweep25 a/b/c; finale25 names the shipped acts-v3h finale, so the flip does not move it,
+  and finale9 covers the v4h finale);
 - c-acts:107 pins `ScheduleVersion == 3` (now 4); c-enc-model F1, c-shrine-core, c-w5fix, c-enc-24, c-enc-25 where they pin
   the file version, the schedule list or ReleasedShapes.
 

@@ -66,6 +66,49 @@ Found by the full regression (t/all.q on 1c9014d, stopped at 136 of 185 to resta
   BotDriver.Decide's `nativeActionEnabled` filter has the same reach; no effect while NativeMatch.NativeActionEnabled is
   the constant true.
 
+Found by the rest of the full regression, the reduced calibration and the gate (`t/gc.q`, 118 lines, on bcdf246; the
+defects below each fixed in its own worktree, verified by a second worker in another, merged with `--no-ff`; the movers
+rerun on the fixed tree in `t/fix.q`, twice identical):
+- **bp.sh gate48t: "harvest: boss remaining Health" failed** (g=6 and g=14, one failed check each in chunks 0 and 8).
+  Test-harness defect (227b4d9, merged b2f440c, p9/c-bosspilot-run): Alternate Timeline (GILA_BOSS_48t,
+  EncounterRules.RestartGame) marks both heroes ToBeDestroyed so the game ends as a tie, and the harvest reports the boss
+  alive with the Health it has (D13); the oracle read the mark as a death. It now reads the game's own Restart/Escape marks
+  (by reflection) and expects the boss's Health on a script end. Shown failing with Harvest reverted to "ToBeDestroyed is
+  dead". Moved: failed checks 1 -> 0 in chunks 0 and 8.
+- **bp.sh gate48t 32 8 g=36: "engine rejected boss task" (END_TURN) and two boss FALLBACKs.** Test-harness defect
+  (19b71c7, merged aabecaa): Act II's ULDA_802 Plague of Madness made the player's Vicious Fledgling attack at the end of the
+  player's turn; its Adapt opened a choice for the player after the turn had passed. The harness drove only the current
+  player, so the boss acted past the open choice (Frost Nova left a pending SpellCompletion, END_TURN refused). The live host
+  never lets the NPC act while the human holds a choice (NativeMatch.NpcCanAct). PlayGame.Loop now answers the off-turn
+  side's choice first (LocalBot's pick), counts it (`offturn=N` on the G line) and faults a side that acts past the other's
+  open choice. Moved: chunk 32 faults 1 -> 0, boss wins 8.
+- **bp.sh slots9 II-major 0 25 g=24: "Fabled bundle TIME_209 requires exactly one TIME_209t per copy".** Test-harness
+  defect (09b3e10, merged 0cc45f6): the act's global rule ULDA_721 Aleatory (EncounterRules.MixDecks) dealt the player the
+  boss's TIME_209 and CATA_190h, the player played CATA_190h (a hero change), and the harness rebuilt the player's pilot as a
+  LocalDeck from deck + hand, whose Fabled deck rule refuses a held TIME_209 without its TIME_209t. RunPilot.Replan now
+  derives plan and profile from the held cards without deck rules; Build (the run deck at fight start) keeps them, with a
+  self-check. (9353c5b corrected the first diagnosis, LOOTA_834, from instrumentation since reverted.) Moved: that chunk's
+  player wins 2 -> 3, faults 0.
+- **bp.sh sweep25 a/b/c exit 134: "not a run of acts-v3h".** Test-harness defect (432e518, b46f441, merged 6d6727c, the
+  encounter harness and its four generated copies): the DEFAULT_SWEEP path still checked each run against the harness's
+  acts-v3h fallback after the default flip to acts-v4h/v4t. It now checks the schedule the run walks; the plan-rules check
+  expects exactly the twists the new run rolled (kind twist, FromNode -1, from their act's pool; the verifier showed the
+  first version accepted anomalies). Sweep lines name the plan's rules. First records on this tree.
+- **bp.sh secretfix: "Schedule acts-v3h finale: unknown boss dala_43_norroa".** Fixture defect (22387db, e01fc38, bd5a620,
+  merged 8d2f850): since the close-out a run on the shipped acts-v3h resolves its finale's fixed bosses at NewRun, and the
+  hand-kept fixture held only Manhunter Ivan's row. It gains the four acts-v3h finale rows and decks verbatim from
+  `encounters-v1.json`; `bp.sh secretfix` now also fails unless the boss played TRLA_168 (MANIFEST updated).
+- **bp.sh tekahn9 32 4: 4 player FALLBACK lines** (games 33 and 35, relay hero Brann with Heroic Strike;
+  NotImplementedException from ATK.GetRef). Plugin defect, also reachable live (879f7d6, 33d8bdc, merged into this tree): a
+  hero that gained Attack this turn and was then replaced (the Tekahn relay, a Plague Lord's next form) sits set aside with
+  its effect still in Game.OneTurnEffects; FairBotState.Mask turned it into an Unknown, and each simulated end of turn gave
+  the effect back to the stand-in. Mask now drops the masked actor's one-turn effects, as Minion.Reset does for a minion
+  leaving play; the real game is unchanged. The boss's own view after a form change hit the same path on the live host.
+  Test: c-ends-9 V1-V7 (58 -> 65 checks; V2, V3, V6 fail without the fix, V7 fails if Mask clears every one-turn effect).
+  The fix is under `#if ENGINE_SOURCE` (the default plugin build); the prebuilt-engine vendor build keeps the old Mask.
+  Moved: tekahn9 chunk 32 fallbacks 4 -> 0 (game 33 decisions 577 -> 576).
+The final-tree regression (`t/final.q`) records which other games moved with these fixes (section 5).
+
 No other step-9 defect was found by any lane. Defects in the lanes' own tests, found by the review and fixed (section 4).
 
 Found and NOT fixed (pre-step-9, not step-9 code):
@@ -155,7 +198,7 @@ majors; both calibration items), twice identical.
 3. ends9's floor budget off by one for a capped restarted game (low): a capped game counts `cap` turns.
 4. Vacuous sub-claims (low): K1/K2 heal through the engine (TakeHeal); R21 drops "carries nothing"; S1 sets LoadedVersion
    apart from the snapshot's; the always-true per-game cap check in ends9 dropped.
-c-ends-9 58/0, twice identical.
+c-ends-9 58/0, twice identical (65 after the fair-view fix of section 2, V1-V7).
 
 ### gen (5 confirmed)
 1. P3 picked pools by name (medium): it now takes every static method of the Dungeon Run card sets returning cards or ids

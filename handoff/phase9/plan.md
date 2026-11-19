@@ -355,7 +355,7 @@ Lane E's initial v4 table is written here, with its sources, instead of being fi
 | p8f05/06/18/24 schedule fixtures and their asserts | yes (9b) | rebuilt from the shipped file, which now holds v4 |
 | c-enc-23 | only if 48t lands | Toki's deck |
 | tekahn24/25 | **No** | ratchet and TurnCap are gated to v4 |
-| bp records on defaults (sweep25 a/b/c, unnamed finale25) | yes (9b) | they now walk v4 |
+| bp records on defaults (sweep25 a/b/c) | yes (9b) | they now walk v4 (finale25 names the shipped acts-v3h finale and does not move with the flip; finale9 covers v4h) |
 | rules05/06, cross05/06 bp | some rows (9a) | exclusions and flags |
 | generation-hitting records; selfplay/randplay only if they generate ULD_616/DRG_052 | yes (9a) | lane G |
 | encounters-v1.json and its counts | yes | flags, reasons, `room`, `v4` blocks |
