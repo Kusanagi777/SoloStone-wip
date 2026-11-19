@@ -155,6 +155,20 @@ int timelineCasts = 0, gateMaxRestarts = 0, gateTurnExcess = 0;
 void Bump(SortedDictionary<string, int> d, string id) => d[id] = d.TryGetValue(id, out int had) ? had + 1 : 1;
 void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(what); }
 
+// The pilots' deck rules (silent when they hold; a failure is a failed check): the fight-start pilot is built from the run deck,
+// a deck list, so a Fabled bundle it splits is refused; the hero-change replan takes the cards the player holds as they are, so
+// a boss card that reached the player without its companions is no fault (slots9 II-major g=24: the act's global rule ULDA_721
+// Aleatory, EncounterRules.MixDecks, dealt the player the boss's TIME_209 and CATA_190h while TIME_209t and TIME_209t2 stayed
+// with the boss, and the player turned CATA_190h holding TIME_209 without TIME_209t). Each case on its own, so a refusal of
+// either is reported.
+{
+    var shaman = Cards.FromId("HERO_02");
+    try { RunPilot.Build("rules", shaman, new[] { "TIME_209", "TIME_218" }, testBudget); failed++; Console.Error.WriteLine("  CHECK pilot rules: the run-deck pilot took a deck that splits the Fabled bundle TIME_209"); }
+    catch (InvalidOperationException) { }
+    try { RunPilot.Replan("rules", shaman, new[] { "TIME_209", "TIME_218" }, testBudget); }
+    catch (Exception e) { failed++; Console.Error.WriteLine("  CHECK pilot rules: the hero-change replan refused held cards: " + e.Message); }
+}
+
 // One fight: the floor's games until it is decided (a restart restages the floor; at most 4 games).
 (string Result, int Games, int Restarts, int Turns, int Cap, int Hp, int BossLeft, int BossStart, int Decisions, string Extra, List<string> Problems)
     Fight(DungeonRunState s, DungeonRunProfile profile, DungeonRunBoss boss)
@@ -250,7 +264,7 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
             {
                 hero = game.Player1.Hero.Card.Id; heroChanges++;
                 var ids = game.Player1.DeckZone.Concat(game.Player1.HandZone).Select(c => c.Card.Id).ToList();
-                var np = RunPilot.Build(s.Class + "." + floor + "." + heroChanges, game.Player1.Hero.Card, ids, testBudget);
+                var np = RunPilot.Replan(s.Class + "." + floor + "." + heroChanges, game.Player1.Hero.Card, ids, testBudget);
                 playerSide.Golden = new GoldenPilot(np.Profile, np.Plan, null, prior);
                 playerSide.Profile = np.Profile;
             }
