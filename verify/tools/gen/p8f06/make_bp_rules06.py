@@ -44,10 +44,14 @@ const int ScarsCarried = 25;
 # a run-scope rule is active from the start of the run
 src = once(src,
 '''    var scratch = new DungeonRunProfile();
-    if (!s.IsActRun || s.ScheduleVersion != schedule.StampVersion) throw new Exception("not a run of " + scheduleId);
+    // The run is of the schedule it walks: the named one, or on the default roll the default it rolled.
+    var walked = defaultRoll ? run.ScheduleFor(s) : schedule;
+    if (!s.IsActRun || s.ScheduleVersion != walked.StampVersion) throw new Exception("not a run of " + walked.Id);
 ''',
 '''    var scratch = new DungeonRunProfile();
-    if (!s.IsActRun || s.ScheduleVersion != schedule.StampVersion) throw new Exception("not a run of " + scheduleId);
+    // The run is of the schedule it walks: the named one, or on the default roll the default it rolled.
+    var walked = defaultRoll ? run.ScheduleFor(s) : schedule;
+    if (!s.IsActRun || s.ScheduleVersion != walked.StampVersion) throw new Exception("not a run of " + walked.Id);
     if (forced != null && forced.RunScope) s.ActiveRules.Add(new DungeonRunRule { Id = forced.Id, Act = 0, FromNode = -1, Kind = forced.Kind });
 ''')
 src = once(src,

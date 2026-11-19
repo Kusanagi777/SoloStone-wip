@@ -27,8 +27,9 @@ using SabberStoneCore.Tasks.PlayerTasks;
 //   WATCH=id,id       counts how often the boss played each of these cards from hand and how many Secrets the boss held at most
 //                     (the final line then ends with "watched ..."; a fixture mode asserts the card under test was really played)
 //   DEFAULT_SWEEP=n   the close-out (family 25): n runs started as a new run is, with no named schedule (the default roll:
-//                     acts-v3h or acts-v3t), the hero rows in turn; run i walks its real nodes to floor 1 + 7i mod its floor
-//                     count and plays the boss its sequence drew there (no row is put on a floor); SCHEDULE and FINALE are ignored;
+//                     the schedule file's defaults, acts-v4h or acts-v4t since step 9), the hero rows in turn; run i walks its
+//                     real nodes to floor 1 + 7i mod its floor count and plays the boss its sequence drew there (no row is put on
+//                     a floor); SCHEDULE and FINALE are ignored (each run walks the schedule it rolled);
 //                     DEFAULT_SWEEP_FROM=i0 starts at run i0 (the seed is SEED_BASE + i, the row data.Classes[i mod count])
 // A boss with shrine variants plays its games once per variant (the seeds that roll that variant).
 // Family 06 variant (p8f06/make_bp_rules06.py): BOSS may name a custom boss; RULE is injected with its own kind, a run-scope
@@ -105,7 +106,9 @@ DungeonRunState ReachFloor(DungeonRunClass cls, int floor, long seed, bool defau
     if (defaultRoll && (!s.IsActRun || s.ScheduleVersion != run.ScheduleFor(s).StampVersion || !data.Schedules.Defaults.Contains(s.Schedule)))
         throw new Exception("not a run of a default schedule");
     var scratch = new DungeonRunProfile();
-    if (!s.IsActRun || s.ScheduleVersion != schedule.StampVersion) throw new Exception("not a run of " + scheduleId);
+    // The run is of the schedule it walks: the named one, or on the default roll the default it rolled.
+    var walked = defaultRoll ? run.ScheduleFor(s) : schedule;
+    if (!s.IsActRun || s.ScheduleVersion != walked.StampVersion) throw new Exception("not a run of " + walked.Id);
     if (forced != null && forced.RunScope) s.ActiveRules.Add(new DungeonRunRule { Id = forced.Id, Act = 0, FromNode = -1, Kind = forced.Kind });
     while (!(s.Floor == floor && s.Phase == DungeonRunPhase.PreMatch))
     {
@@ -212,6 +215,14 @@ for (int bi = 0; bi < bosses.Count; bi++)
                 if (defaultSweep > 0 && !boss.IsEncounter) Check(plan.EncounterId == null && !plan.EncounterDeck, "a custom row's plan names an encounter", problems); else
                 Check(boss.IsEncounter ? plan.EncounterId == boss.Id && plan.EncounterDeck : plan.EncounterId == null && !plan.EncounterDeck, "plan is not the boss's", problems);
                 Check(plan.BossGeneratedSecrets == boss.BossGeneratedSecrets, "plan boss generated Secrets", problems);
+                // A sweep run (no RULE) keeps the twists its new run rolled itself (stamp 4: a twist per act, from that act's twist
+                // pool, FromNode -1; the walk takes no anomaly): the plan holds those of this act that act in the match, in the order
+                // taken, and no other rule (an anomaly or a twist from outside its pool fails it). Elsewhere no rule but RULE's is active.
+                var sweptActs = defaultSweep > 0 ? run.ScheduleFor(s).Acts : null;
+                var rolledRules = defaultSweep > 0 && forcedRule == null ? s.ActiveRules.Where(r => r.Kind == DungeonRunGlobalRule.KindTwist && r.FromNode == -1
+                        && (r.Act == 0 ? sweptActs.Any(a => a.TwistPool.Contains(r.Id)) : r.Act == run.CurrentNode(s).Act && sweptActs[r.Act - 1].TwistPool.Contains(r.Id)))
+                    .Select(r => data.Schedules.Rule(r.Id)).Where(r => r.Effect == DungeonRunGlobalRule.EffectMatch).Select(r => r.Id).ToList() : null;
+                if (rolledRules != null) Check(plan.GlobalRules.SequenceEqual(rolledRules), "plan global rules", problems); else
                 Check(plan.GlobalRules.SequenceEqual(forcedRule == null || runLayerRule ? new string[0] : new[] { forcedRule }), "plan global rules", problems);
                 if (forced != null) Check(run.RuleActive(s, forced.Id), "the rule is not active on the run", problems);
                 int foreignCards = 0;
@@ -369,7 +380,7 @@ for (int bi = 0; bi < bosses.Count; bi++)
                 if (plan.PlayerHeroCards.Count + plan.PlayerRelay.Count > 0) extra += $" heroes {string.Join(">", end.HeroesUsed)}";
                 if (variant != null) extra += $" variant {variant.Id} shrine {variant.Shrine ?? "-"}";
                 if (probe != null) { probe.End(problems); bossSeen += probe.Seen; ruleSeen += probe.Seen; extra += " rule " + forcedRule + " seen " + probe.Seen; }
-                if (defaultSweep > 0) extra += " schedule " + s.Schedule;
+                if (defaultSweep > 0) extra += " schedule " + s.Schedule + (plan.GlobalRules.Count > 0 ? " rules " + string.Join(",", plan.GlobalRules) : "");
             }
             catch (Exception e) { result = "FAULT " + e.GetType().Name + ": " + e.Message.Split('\n')[0]; faults++; }
             ms = sw.ElapsedMilliseconds; games++; totalFallbacks += fallbacks;
