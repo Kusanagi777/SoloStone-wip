@@ -74,8 +74,8 @@ internal static class RunPilot
 
     /// <summary>
     /// The plan and profile of the cards the player holds mid-game (deck and hand, after a hero switch or the relay). Not a deck
-    /// list, so no deck rule applies: a card the game gave the player (the boss's TIME_209 stolen by LOOTA_834 Gloves of Mugging,
-    /// without its TIME_209t) splits a Fabled bundle legally.
+    /// list, so no deck rule applies: a card the game gave the player (the boss's TIME_209 dealt to the player by ULDA_721
+    /// Aleatory's deck mix, its TIME_209t left with the boss) splits a Fabled bundle legally.
     /// </summary>
     internal static (DeckPlan Plan, NpcProfile Profile) Replan(string tag, Card hero, IReadOnlyList<string> ids, Budget budget)
     {

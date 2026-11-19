@@ -155,9 +155,10 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
 
 // The pilots' deck rules (silent when they hold; a failure is a failed check): the fight-start pilot is built from the run deck,
 // a deck list, so a Fabled bundle it splits is refused; the hero-change replan takes the cards the player holds as they are, so
-// a boss card taken without its companions is no fault (slots9 II-major g=24: LOOTA_834 Gloves of Mugging stole the boss's
-// TIME_209 and CATA_190h, and the player turned CATA_190h holding TIME_209 without TIME_209t). Each case on its own, so a
-// refusal of either is reported.
+// a boss card that reached the player without its companions is no fault (slots9 II-major g=24: the act's global rule ULDA_721
+// Aleatory, EncounterRules.MixDecks, dealt the player the boss's TIME_209 and CATA_190h while TIME_209t and TIME_209t2 stayed
+// with the boss, and the player turned CATA_190h holding TIME_209 without TIME_209t). Each case on its own, so a refusal of
+// either is reported.
 {
     var shaman = Cards.FromId("HERO_02");
     try { RunPilot.Build("rules", shaman, new[] { "TIME_209", "TIME_218" }, testBudget); failed++; Console.Error.WriteLine("  CHECK pilot rules: the run-deck pilot took a deck that splits the Fabled bundle TIME_209"); }
