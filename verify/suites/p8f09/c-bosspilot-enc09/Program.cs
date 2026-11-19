@@ -209,9 +209,12 @@ for (int bi = 0; bi < bosses.Count; bi++)
                 if (defaultSweep > 0 && !boss.IsEncounter) Check(plan.EncounterId == null && !plan.EncounterDeck, "a custom row's plan names an encounter", problems); else
                 Check(plan.EncounterId == boss.Id && plan.EncounterDeck, "plan is not the encounter's", problems);
                 Check(plan.BossGeneratedSecrets == boss.BossGeneratedSecrets, "plan boss generated Secrets", problems);
-                // A sweep run (no RULE) keeps the rules its new run rolled itself (stamp 4: a twist per act; the walk takes no anomaly):
-                // the plan holds those of this act that act in the match, in the order taken. Elsewhere no rule but RULE's is active.
-                var rolledRules = defaultSweep > 0 && forcedRule == null ? s.ActiveRules.Where(r => r.Kind != null && (r.Act == 0 || r.Act == run.CurrentNode(s).Act))
+                // A sweep run (no RULE) keeps the twists its new run rolled itself (stamp 4: a twist per act, from that act's twist
+                // pool, FromNode -1; the walk takes no anomaly): the plan holds those of this act that act in the match, in the order
+                // taken, and no other rule (an anomaly or a twist from outside its pool fails it). Elsewhere no rule but RULE's is active.
+                var sweptActs = defaultSweep > 0 ? run.ScheduleFor(s).Acts : null;
+                var rolledRules = defaultSweep > 0 && forcedRule == null ? s.ActiveRules.Where(r => r.Kind == DungeonRunGlobalRule.KindTwist && r.FromNode == -1
+                        && (r.Act == 0 ? sweptActs.Any(a => a.TwistPool.Contains(r.Id)) : r.Act == run.CurrentNode(s).Act && sweptActs[r.Act - 1].TwistPool.Contains(r.Id)))
                     .Select(r => data.Schedules.Rule(r.Id)).Where(r => r.Effect == DungeonRunGlobalRule.EffectMatch).Select(r => r.Id).ToList() : null;
                 if (rolledRules != null) Check(plan.GlobalRules.SequenceEqual(rolledRules), "plan global rules", problems); else
                 Check(plan.GlobalRules.SequenceEqual(forcedRule == null ? new string[0] : new[] { forcedRule }), "plan global rules", problems);
