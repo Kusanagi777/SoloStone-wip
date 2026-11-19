@@ -18,7 +18,8 @@ using SabberStoneCore.Tasks.PlayerTasks;
 // the plan's own turn cap (Step9.TurnCap: 100 before step 9), the harvest reported as LocalLadder reports it (a restart as a
 // Fault) and DungeonRun.RecordOutcome; a restarted floor is played again until it is decided. The game loop is the encounter
 // harness's (PlayGame.cs, a copy). ULDA_111 Hearthstone is left out of the player's options (lane-x.md section 6: the AI would
-// score the escape as a win; the cast is covered by lane ends: c-ends-9 section E and bp.sh ends9 escape / refuse).
+// score the escape as a win; the cast is covered by lane ends: c-ends-9 section E and bp.sh ends9 escape / refuse): every fight's
+// plan has its escape closed (Step9.CloseEscape), so the card is unplayable on the game and on the fair search's own copies of it.
 //   MODE=slots     plan B1-B4: new runs (the default roll unless SCHEDULE) of rotating loadouts, each walked to a floor of the
 //                  band and fought against the boss its run drew there. BANDS=I-combat,I-major,II-combat,II-major,III-combat,III-major
 //                  (default all); game g of band b: loadout (37g + 11b) mod L, seed SEED_BASE + 1000000 b + g, a combat band's
@@ -159,7 +160,7 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
     var problems = new List<string>();
     string result = "-", extra = ""; int games = 0, restarts = 0, turns = 0, cap0 = 0, hp = 0, left = 0, start = 0, decisions = 0;
     int floor = s.Floor, node = s.Node;
-    bool capWrong = false;
+    bool capWrong = false, escapeClosed = false;
     var sources = new List<string>();
     for (int k = 0; k < 4 && s.Floor == floor && s.Node == node && s.Phase == DungeonRunPhase.PreMatch; k++)
     {
@@ -180,6 +181,11 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
         var npcProfile = pilot.Profile.WithBudget(testBudget);
         var golden = new GoldenPilot(npcProfile, pilot.Plan, null, pilot.SecretPrior);
         var cfg = new GameConfig { RandomSeed = run.MatchSeed(s), Shuffle = true, SkipMulligan = false, History = false, Logging = false, FormatType = FormatType.FT_WILD };
+        // The pilot leaves ULDA_111 Hearthstone out by the plan, not by a filter of its options alone: the fair search plans on its
+        // own copy of the game, where an allowed escape stays playable, so it picked the cast and the driver found it nowhere in the
+        // filtered options (BotAction.Resolve: "Sequence contains no matching element", a FALLBACK on each such decision).
+        // A fight whose escape it closed says so on its line (escape=closed).
+        if (Step9.CloseEscape(plan) && !escapeClosed) { escapeClosed = true; extra += " escape=closed"; }
         DungeonRunSetup.Configure(cfg, plan);
         var game = new Game(cfg);
         game.StartGame();
@@ -212,7 +218,14 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
             }
         };
         var playerSide = new FairSide(game, game.Player1.PlayerId, pp.Deck.Style, playerGolden, pp.Profile, "player " + boss.Id);
-        if (hearth != null) playerSide.Enabled = t => !(t is PlayCardTask p && p.Source?.Card.Id == hearth);
+        // The filter stays as a guard, and counts: with the escape closed the player is never offered the cast.
+        int hearthOffered = 0;
+        if (hearth != null) playerSide.Enabled = t =>
+        {
+            bool cast = t is PlayCardTask p && p.Source?.Card.Id == hearth;
+            if (cast) hearthOffered++;
+            return !cast;
+        };
         playerSide.OnTask = task =>
         {
             if (playerWatch != null && task is PlayCardTask p && p.Source != null && playerWatch.Contains(p.Source.Card.Id)) Bump(playerPlayed, p.Source.Card.Id);
@@ -249,6 +262,7 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
         }
         try { PlayGame.Loop(game, cap, bossSide.Decide, Player, Secrets, actionLimit: 15 * Math.Max(100, cap)); }
         finally { decisions += bossSide.Decisions + playerSide.Decisions; bossFallbacks += bossSide.Fallbacks; playerFallbacks += playerSide.Fallbacks; }
+        Check(hearthOffered == 0, "game " + k + ": the player was offered ULDA_111 Hearthstone's cast " + hearthOffered + " times (its escape is closed)", problems);
         Secrets();
         foreach (var e in secrets) if (game.IdEntityDic.TryGetValue(e.Key, out var ent) && ent.Zone?.Type == Zone.GRAVEYARD) Bump(sprung, e.Value);
         turns += game.Turn;

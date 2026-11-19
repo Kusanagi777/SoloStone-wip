@@ -17,11 +17,22 @@ internal static class Step9
     private static readonly PropertyInfo turnCap = typeof(RunMatchPlan).GetProperty("TurnCap");
     private static readonly PropertyInfo formRatchet = typeof(RunMatchPlan).GetProperty("FormRatchet");
     private static readonly PropertyInfo restarts = typeof(RunMatchPlan).GetProperty("Restarts");
+    private static readonly PropertyInfo escapeAllowed = typeof(RunMatchPlan).GetProperty("EscapeAllowed");
 
     /// <summary>The fight's turn cap: the plan's TurnCap, or 100 (NativeMatch.DungeonRunTurnCap) on a tree without it.</summary>
     internal static int TurnCap(RunMatchPlan plan) => turnCap == null ? 100 : (int)turnCap.GetValue(plan);
     internal static bool FormRatchet(RunMatchPlan plan) => formRatchet != null && (bool)formRatchet.GetValue(plan);
     internal static IList<string> Restarts(RunMatchPlan plan) => restarts == null ? new List<string>() : (IList<string>)restarts.GetValue(plan) ?? new List<string>();
+    /// <summary>
+    /// Closes the fight's escape: RunMatchPlan.EscapeAllowed false, as on a fight that allows none (the engine then makes ULDA_111
+    /// Hearthstone unplayable). Returns whether the plan had allowed it; false on a tree without it.
+    /// </summary>
+    internal static bool CloseEscape(RunMatchPlan plan)
+    {
+        if (escapeAllowed == null || !(bool)escapeAllowed.GetValue(plan)) return false;
+        escapeAllowed.SetValue(plan, false);
+        return true;
+    }
     internal static bool Flag(object o, string name) => o?.GetType().GetProperty(name)?.GetValue(o) is bool b && b;
     internal static string Text(object o, string name) => o?.GetType().GetProperty(name)?.GetValue(o) as string;
     internal static int Int(object o, string name)
