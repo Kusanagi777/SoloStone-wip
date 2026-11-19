@@ -48,7 +48,7 @@ parent session's summary. No file here holds the original nine-step text verbati
 | 6 Heroes, powers, treasures | done | `data/dungeon-run/run-v1.json`, `engine/SabberStoneCore/src/CardSets/DungeonRun/DungeonRun{Heist,MonsterHunt,Tombs}*.cs`, `DungeonRunActives.cs` |
 | 7 Shrines, teammates | done | `engine/.../CardSets/DungeonRun/DungeonRunShrines*.cs` (S2, S3, U, T1, T2, D) |
 | 8 Encounters | families 01-24 merged; the close-out (family 25) done on `wip/c25`, its full regression pending | see below |
-| 9 Economy, scaling, prevention | **implemented, untested** on `wip/s9` (lanes R, E, X, G merged; acts-v4h/v4t are the defaults). Testing, measurement and calibration are the user's (section 3.3) | `handoff/phase9/implementation.md`, `plan.md`, `values.md`; `plugin/DungeonRun/DungeonRun.{Rules,Economy,Outcomes}.cs` |
+| 9 Economy, scaling, prevention | implemented (lanes R, E, X, G; acts-v4h/v4t are the defaults) and tested on `wip/t-int` (seven test lanes, the full regression, the reduced calibration and the 48t/ULD_152 gate; `handoff/phase9/tests.md`). Calibration values and the [WIN] checks are open (section 3.3) | `handoff/phase9/implementation.md`, `plan.md`, `values.md`; `plugin/DungeonRun/DungeonRun.{Rules,Economy,Outcomes}.cs` |
 
 The design record is `docs/design/dungeon-run.md` (sections "Phase 8: the encounter model" and "Wave 1/2/3/4/5/6").
 
@@ -140,7 +140,16 @@ casts of the stage-B review).
   one fix pass. The prompts are at the end of `handoff/phase8/workflow-encounters-lanes.js`. Fidelity and runs-and-state
   ran on `wip/c25` and their confirmed findings are fixed (close-out report sections 2 and 3); the regression lens is the
   full-regression queue, which has not run yet.
-- **Step 9 is implemented and untested** on `wip/s9` (worktree `/home/user/wt/s9`); the record is
+- **Step 9's test phase** (`wip/t-int`, record `handoff/phase9/tests.md`): seven test lanes added `c-rules-9`, `c-econ-9`,
+  `c-sched-9`, `c-ends-9`, `c-gen-9`, `c-longrun-9`, c-enc-25 L4 and the fair-player run harness (`p9/c-bosspilot-run`,
+  modes slots9, finale9, tekahn9, treasure9, gate48t, uld152, ...); the pins implementation.md section 5 predicted moved.
+  Defects found and fixed: RuleCandidates and fight-only heroes, the aura-removal KeyNotFoundException in the boss's fair
+  view (engine), the fair view keeping a masked hero's one-turn effects (plugin, live-reachable: the Tekahn relay, a Plague
+  Lord form change), and seven harness or fixture defects (tests.md section 2). The final-tree regression was stopped at
+  the user's request (63 of 177 lines, all exit 0), so `verify/baseline` is still wave 6's and the calibration
+  aggregation (agg.py, check_targets.py) was not rerun on the final tree. Known calibration misses: c-rules-9 T2 and K1,
+  c-econ-9 A2 and A10 (tests.md section 6).
+- **Step 9 was implemented** on `wip/s9` (worktree `/home/user/wt/s9`); the record is
   `handoff/phase9/implementation.md` (per plan item: done, not done, deviations; the uncalibrated values; the [WIN] edits;
   the checks and pins expected to move). The user changed the scope to implementation only: **every test, measurement,
   calibration and re-record of step 9 is the user's**, and none has run. What is in place:
