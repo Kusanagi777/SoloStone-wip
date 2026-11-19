@@ -269,7 +269,10 @@ void Check(bool ok, string what, List<string> problems) { if (!ok) problems.Add(
         Check(game.Turn <= cap + 1, "game " + k + " ran past its cap " + cap, problems);
         string r = game.State != State.COMPLETE ? "turn-cap" : game.Player2.PlayState == PlayState.WON ? "boss" : game.Player1.PlayState == PlayState.WON ? "player" : "tie";
         var end = DungeonRunSetup.Harvest(game);
-        bool bossDead = game.Player2.Hero.ToBeDestroyed || game.Player2.Hero.Health <= 0;
+        // A script end marks the boss hero to leave the table without dying: Alternate Timeline's restart marks both heroes
+        // (EncounterRules.RestartGame), Hearthstone's escape the boss's. The boss keeps the Health it has, and the harvest reports
+        // it (D13: a persistent-damage boss banks it as a loss does; any other boss starts the restaged game at its own start).
+        bool bossDead = !Step9.EndedByScript(game) && (game.Player2.Hero.ToBeDestroyed || game.Player2.Hero.Health <= 0);
         Check(end.BossRemainingHealth == (bossDead ? 0 : game.Player2.Hero.Health), "harvest: boss remaining Health", problems);
         Check(end.BossForm == game.Player2[EncounterRules.FormIndex], "harvest: boss form", problems);
         if (boss.Forms.Count > 0 && end.BossForm > 0 && !bossDead)
