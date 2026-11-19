@@ -231,7 +231,11 @@ enc01) need $E; twice enc01 BOSS=$ENC01 ;;
 old01) need $E; twice old01 BOSS=$OLD01 ;;
 secret4) need $E; twice secret4 BOSS=loot_35_brandlemar,loot_48_trapped_room,gila_25_ivan,ulda_44_trap_room GAMES=6 ;;
 secretfix) # fixture row: Manhunter Ivan with two Streetsmugglers (TRLA_168 in a boss deck; boss-side generated Secrets on)
-  need $E; twice secretfix GAMES=6 WATCH=TRLA_168,ICC_204 BOSS=fix_168_smuggler ENCOUNTERS_JSON=$FX/p8f01b/fixtures/encounters-secretfix.json ;;
+  # (the fixture holds the shipped acts-v3h finale rows: a run on acts-v3h resolves its finale's fixed bosses at NewRun)
+  need $E; twice secretfix GAMES=6 WATCH=TRLA_168,ICC_204 BOSS=fix_168_smuggler ENCOUNTERS_JSON=$FX/p8f01b/fixtures/encounters-secretfix.json
+  # the card under test was played from hand by the boss at least once (the WATCH count of the last line)
+  k=$(tail -n 1 "$R/bp-secretfix-a.txt" | grep -o 'TRLA_168 x[0-9]*' | sed 's/.* x//')
+  [ "${k:-0}" -ge 1 ] && echo "bosspilot secretfix: the boss played TRLA_168 $k times" || echo "bosspilot secretfix NOT PLAYED: TRLA_168" ;;
 rules01) need $E; for r in ${2:-DALA_850 DALA_864 DALA_866}; do twice rules01-$r RULE=$r BOSS=dala_21_whirt,trl_200_voone,gila_61_hagatha; done ;;
 plague) # Icarax: each phase starts a game (carried 110, 210; 0 is in enc01) and each threshold is crossed in play (95, 195, 199)
   need $E; for c in 95 110 195 199 210; do twice plague-$c CARRIED=$c BOSS=ulda_40_icarax; done ;;
