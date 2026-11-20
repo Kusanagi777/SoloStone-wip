@@ -806,6 +806,21 @@ Guard("W", () =>
         Check("W4 opening hands of Sea Reavers keep them (no card lost to the set-aside zone)", p.HandZone.Count(x => x.Card.Id == Reaver) >= 3 && p.SetasideZone.All(x => x.Card.Id != Reaver),
             "hand " + p.HandZone.Count(x => x.Card.Id == Reaver) + " setaside " + p.SetasideZone.Count(x => x.Card.Id == Reaver) + " first " + (g.FirstPlayer == p));
     }
+    // W4b the opening deal fires no "When you draw this" effect (Hearthstone: cards dealt into the starting hand do not
+    // trigger; the engine already skips them for mulligan replacements). Flame Leviathans dealt into the opening hand leave
+    // both heroes at 30 and open no TRIGGER block, read before MainBegin's turn-1 draw (an ordinary draw, which does fire).
+    {
+        var cfg = new GameConfig { RandomSeed = 7, Shuffle = false, SkipMulligan = false, History = true, Logging = false, FormatType = FormatType.FT_WILD,
+            Player1HeroClass = CardClass.WARRIOR, Player2HeroClass = CardClass.MAGE,
+            Player1Deck = Thirty(Leviathan).Select(C).ToList(), Player2Deck = Thirty(Yeti).Select(C).ToList() };
+        var g = new Game(cfg);
+        g.StartGame();
+        var p = g.Player1;
+        var dealt = p.HandZone.Where(x => x.Card.Id == Leviathan).ToList();
+        Check("W4b Flame Leviathans dealt into the opening hand do not fire (heroes at 30, no TRIGGER block, all still in hand)",
+            dealt.Count >= 3 && g.Player1.Hero.Health == 30 && g.Player2.Hero.Health == 30 && dealt.All(x => !Triggered(g, x) && x.Zone == p.HandZone),
+            "dealt " + dealt.Count + " heroes " + g.Player1.Hero.Health + "/" + g.Player2.Hero.Health + " triggered " + dealt.Count(x => Triggered(g, x)));
+    }
     // W5 Casts When Drawn spells (the tag: Ancient Curse; TOPDECK only: Burrowing Mine): cast, out of the hand, the next card drawn.
     foreach (var (id, dmg) in new[] { (Curse, 7), (Mine, 10) })
     {
