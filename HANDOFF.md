@@ -145,7 +145,9 @@ casts of the stage-B review).
   modes slots9, finale9, tekahn9, treasure9, gate48t, uld152, ...); the pins implementation.md section 5 predicted moved.
   Defects found and fixed: RuleCandidates and fight-only heroes, the aura-removal KeyNotFoundException in the boss's fair
   view (engine), the fair view keeping a masked hero's one-turn effects (plugin, live-reachable: the Tekahn relay, a Plague
-  Lord form change), and seven harness or fixture defects (tests.md section 2). The final-tree regression was stopped at
+  Lord form change), the engine's "When you draw this" minions (Sea Reaver, Flame Leviathan) leaving the hand for good
+  (fixed at the user's request; released games move, randplay digest F4B15E7C27E9B2EC, engine md5 59b1ecee), and seven
+  harness or fixture defects (tests.md section 2). The final-tree regression was stopped at
   the user's request (63 of 177 lines, all exit 0), so `verify/baseline` is still wave 6's and the calibration
   aggregation (agg.py, check_targets.py) was not rerun on the final tree. Known calibration misses: c-rules-9 T2 and K1,
   c-econ-9 A2 and A10 (tests.md section 6).

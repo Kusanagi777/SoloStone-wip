@@ -107,7 +107,24 @@ rerun on the fixed tree in `t/fix.q`, twice identical):
   Test: c-ends-9 V1-V7 (58 -> 65 checks; V2, V3, V6 fail without the fix, V7 fails if Mask clears every one-turn effect).
   The fix is under `#if ENGINE_SOURCE` (the default plugin build); the prebuilt-engine vendor build keeps the old Mask.
   Moved: tekahn9 chunk 32 fallbacks 4 -> 0 (game 33 decisions 577 -> 576).
-The final-tree regression (`t/final.q`) records which other games moved with these fixes (section 5).
+The final-tree regression (`t/final.q`) was stopped at the user's request at 63 of 177 lines (all exit 0), before its
+comparison; which other games moved with these fixes is not recorded.
+
+Fixed at the user's request after the test phase (released behaviour):
+- **Engine: "When you draw this" minions left the hand for good** (0d2477d, 89f5ca7, merged 9a972d2;
+  `engine/SabberStoneCore/src/Actions/Draw.cs`, since 0.1.0). CompleteDraw moved every drawn card with a TopdeckTask to the
+  set-aside zone. Of the 26 such cards (21 spells, three minions with the client's Summoned When Drawn tag 3128: TLC_513t2,
+  EDR_260t, CAP_400t2t, and two plain minions), AT_130 Sea Reaver and GVG_007 Flame Leviathan must stay in hand after their
+  effect; an opening hand of Sea Reavers was dealt empty. A drawn card now leaves the hand only if it is a spell or has
+  tag 3128 (EDR_260t's full-board exception unchanged). Test: c-gen-9 W0-W9 (70 -> 90 checks; W0 lists the 26 cards and
+  the rule, so a new draw-effect card fails it; 6 fail on the old engine). A second worker re-derived the card list
+  (including the Creation and Zombeast definitions that inherit their parts' draw effects; no tag-3128 minion is in their
+  pools) and confirmed. Engine md5 831bbb9f -> `59b1ecee21da486d8d8dbcd422914ba5`. `runs.sh 1 all` against this tree's
+  run 1: c-gen-9 (the W lines and the count; its G digest unchanged), randplay digest 22043E377F1097F3 ->
+  F4B15E7C27E9B2EC (game 120 only, seed 1119: player 2's opening-hand Flame Leviathan is kept and played on turn 13;
+  twice), c-secretsearch detail lines only (summary 689/0); `bp.sh enc17`: the Chu/flark game 11 -> 9 turns, 22 -> 16
+  decisions, boss win, checks pass (twice). Not rerun: the other bosspilot modes that use Chu's deck
+  (`enc-dala_63_dagg`, which holds Sea Reaver) or any deck with AT_130/GVG_007.
 
 No other step-9 defect was found by any lane. Defects in the lanes' own tests, found by the review and fixed (section 4).
 
@@ -269,12 +286,16 @@ All on this tree (`wip/t-int`), each harness call through the harness lock; logs
   A10 (per-row ratio 4.52 at 6000 runs, band 2.5: lower k or raise alpha), B9's 17 named outliers (targets.json B9.named
   empty), every B criterion (calib.q).
 - The engine defect in section 2: fixed on wip/t-aura (engine md5 da3fa601 -> 831bbb9f), merged into this tree (c014194).
-- **Engine, not fixed (released behaviour):** `engine/SabberStoneCore/src/Actions/Draw.cs` CompleteDraw (about lines
-  106-113, since 0.1.0) moves every drawn card with a TopdeckTask from the hand to the set-aside zone for good. Right for
-  "cast when drawn" spells; wrong for minions with a draw effect that should stay in hand (AT_130 Sea Reaver, GVG_007 Flame
-  Leviathan). Found while debugging enc17; fixing it changes released games, so it is left for a decision.
+- The Draw.cs "When you draw this" defect: fixed (section 2, 9a972d2). Left from it:
+  - plugin `plugin/Npc/DeckPlanEvaluator.OwnDeck.cs` `DrawnCard` still treats every TopdeckTask card as leaving the hand
+    (its comment says so) and `DrawnValue.Applies` includes AT_130/GVG_007 (an option, off by default);
+  - plugin `plugin/NativeMatch.cs` names a hidden drawn card only when it moves to the set-aside zone, so a boss's Sea
+    Reaver stays nameless in its hand while its effect fires (check what the client shows, [WIN]);
+  - older engine behaviour, unchanged: Flame Leviathan hits minions only (the card says all characters); the opening deal
+    triggers draw effects; CAP_400t2t with a full enemy board stays set aside for good; TLC_513t2 with a full board goes
+    to the graveyard.
 - **Coverage misses (no fault):** bp.sh f04-boss prints "never played by the boss: ULD_290 x0 ULD_721 x0". ULD_290 is the
   wave-6 miss (HANDOFF 3.4); ULD_721 was played once on the wave-6 and close-out trees and 0 times on this tree (the games
   moved with step 9; seed-sensitive, 40 games).
-- `verify/baseline` is not re-recorded (the full regression first).
+- `verify/baseline` is not re-recorded (the final-tree regression was stopped; engine md5 is now 59b1ecee).
 - The harness was not built on an f62275b export (bp9-before); the run harness reads the step-9 fields by reflection.
