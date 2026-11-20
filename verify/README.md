@@ -123,7 +123,7 @@ differ between any two runs; its SUMMARY line is what must match):
 | c-enc-08 | 113 | c-rules-06 | 224 |
 | c-enc-09 | 166 | c-enc-10 | 116 |
 | c-w3fix | 4 | c-secretscan | faults 0 (both generations; items 851) |
-| c-secretsearch | SUMMARY checks passed 689 failed 0 | selfplay | decks 57 games 200 p1 103 p2 97 other 0 faults 0 digest 2CE546A18F96DCBC |
+| c-secretsearch | SUMMARY checks passed 689 failed 0 (692 / 0 since case 12, step 9's test phase) | selfplay | decks 57 games 200 p1 103 p2 97 other 0 faults 0 digest 2CE546A18F96DCBC |
 | randplay | games=200 digest=1DE562A92D22C987 (regkeys 2588) | c-enc-11 (wave 4) | RESULT 109 passed, 0 failed |
 | c-enc-12 (wave 4) | RESULT 105 passed, 0 failed | c-enc-13 (wave 4) | RESULT 112 passed, 0 failed |
 | c-w4fix (wave 4) | RESULT 4 passed, 0 failed | c-enc-14 (wave 5) | RESULT 117 passed, 0 failed |

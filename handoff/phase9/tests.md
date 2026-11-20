@@ -116,8 +116,8 @@ Fixed at the user's request after the test phase (released behaviour):
   set-aside zone. Of the 26 such cards (21 spells, three minions with the client's Summoned When Drawn tag 3128: TLC_513t2,
   EDR_260t, CAP_400t2t, and two plain minions), AT_130 Sea Reaver and GVG_007 Flame Leviathan must stay in hand after their
   effect; an opening hand of Sea Reavers was dealt empty. A drawn card now leaves the hand only if it is a spell or has
-  tag 3128 (EDR_260t's full-board exception unchanged). Test: c-gen-9 W0-W9 (70 -> 90 checks; W0 lists the 26 cards and
-  the rule, so a new draw-effect card fails it; 6 fail on the old engine). A second worker re-derived the card list
+  tag 3128 (EDR_260t's full-board exception unchanged). Test: c-gen-9 W0-W9 (70 -> 90 checks, 92 with W2d and W4b below; W0 lists
+  the 26 cards and the rule, so a new draw-effect card fails it; 6 fail on the old engine). A second worker re-derived the card list
   (including the Creation and Zombeast definitions that inherit their parts' draw effects; no tag-3128 minion is in their
   pools) and confirmed. Engine md5 831bbb9f -> `59b1ecee21da486d8d8dbcd422914ba5`. `runs.sh 1 all` against this tree's
   run 1: c-gen-9 (the W lines and the count; its G digest unchanged), randplay digest 22043E377F1097F3 ->
@@ -132,6 +132,21 @@ Fixed at the user's request after the test phase (released behaviour):
   (c-gen-9, randplay game 120 to F4B15E7C27E9B2EC, enc17's Chu/flark game 11 -> 9 turns). Everything else measured was
   byte-equal: the other 75 run entries (selfplay 2CE546A18F96DCBC), bp run 40/27, act 40/27, catalog 40/28, enc09 and
   f04-boss.
+- **Engine: GVG_007 Flame Leviathan hit minions only** (port of PR Kusanagi777/SoloStone-wip#3 as 9c45815, 03767d1):
+  "deal 2 damage to all characters", but its TopdeckTask targeted EntityType.ALLMINIONS; now EntityType.ALL. Test: c-gen-9
+  W2d (both heroes 30 -> 28; fails before, 30 -> 30). PR #3's branch sat on the closed duplicate Draw.cs fix (PR #4), so
+  only the card line was ported and the check added to section W.
+- **Engine: the opening deal fired "When you draw this" effects** (f0d5d58, `Actions/Draw.cs`). Found by the review of the
+  merge: with ALL, a Flame Leviathan dealt into the opening hand hit both heroes for 2 before the mulligan (Hearthstone does
+  not trigger draw effects for the starting hand; the engine already skipped them for mulligan replacements, Choose.cs
+  AddHandPhase). During Step BEGIN_DRAW the stay-in-hand class (not a spell, not Summoned When Drawn) no longer runs its
+  TopdeckTask; Casts When Drawn spells and Summoned When Drawn minions are unchanged. Test: c-gen-9 W4b (3 dealt, heroes
+  24/24 before; 30/30 and no TRIGGER block after).
+  Both fixes together, with PR #2 below, on f0d5d58 (engine md5 `b8159b68dedddacbd1aaaa88b0c70c28`, build-all 0 errors),
+  `runs.sh 1 all` against the Draw.cs fix's run 1 (wip/t-draw): c-gen-9 (W2d, W4b; 90 -> 92/0), c-secretsearch (PR #2's case
+  12; 689 -> 692/0), randplay digest F4B15E7C27E9B2EC -> D636637696A3BCE4 (game 120 only, the game with GVG_007; run 2 the same digest);
+  every other entry byte-equal (c-rules-9 56/2, T2 and K1 as before). `bp.sh enc08`, `enc09`: twice identical, 0 faults,
+  0 fallbacks; enc17 and pairs9 chunks 8, 11, 12 and 23 below.
 
 No other step-9 defect was found by any lane. Defects in the lanes' own tests, found by the review and fixed (section 4).
 
@@ -160,7 +175,8 @@ Found and NOT fixed (pre-step-9, not step-9 code):
   before reissuing any. Test: c-secretsearch case 12 KalecgosHiddenHand (the player's Kalecgos on 1-3 hidden Fireballs, 6
   seeds): with the skip alone 72 applied ids name reissued non-hand cards (fails); with both 0 (3/0). Moved: nothing but
   that case. Both trees (skip alone, skip + complement) give identical enc08 and enc09 (each twice identical), pairs9
-  chunks 8, 11, 12 and 23 (0 fallbacks), selfplay 2CE546A18F96DCBC, randplay 22043E377F1097F3 and c-gen-9 70/0;
+  chunks 8, 11, 12 and 23 (0 fallbacks), selfplay 2CE546A18F96DCBC, randplay 22043E377F1097F3 and c-gen-9 70/0 (measured
+  by that session on a tree before the Draw.cs fix; this tree's values are in the Draw.cs and GVG_007 entries above);
   c-secretsearch 689 -> 692 (the new case; its CatalogPlayerSecrets lines already differed from wave 6 on the step-9 tree).
 
 ## 3. Pins moved (lane pins; every one listed in implementation.md section 5)
@@ -308,11 +324,12 @@ All on this tree (`wip/t-int`), each harness call through the harness lock; logs
     (its comment says so) and `DrawnValue.Applies` includes AT_130/GVG_007 (an option, off by default);
   - plugin `plugin/NativeMatch.cs` names a hidden drawn card only when it moves to the set-aside zone, so a boss's Sea
     Reaver stays nameless in its hand while its effect fires (check what the client shows, [WIN]);
-  - older engine behaviour, unchanged: Flame Leviathan hits minions only (the card says all characters); the opening deal
-    triggers draw effects; CAP_400t2t with a full enemy board stays set aside for good; TLC_513t2 with a full board goes
-    to the graveyard.
+  - Flame Leviathan's target (all characters) and the opening deal's draw effects: fixed (section 2, 03767d1, f0d5d58);
+  - older engine behaviour, unchanged: a Casts When Drawn spell or Summoned When Drawn minion dealt into the opening hand
+    still fires (not checked against the client); CAP_400t2t with a full enemy board stays set aside for good; TLC_513t2
+    with a full board goes to the graveyard.
 - **Coverage misses (no fault):** bp.sh f04-boss prints "never played by the boss: ULD_290 x0 ULD_721 x0". ULD_290 is the
   wave-6 miss (HANDOFF 3.4); ULD_721 was played once on the wave-6 and close-out trees and 0 times on this tree (the games
   moved with step 9; seed-sensitive, 40 games).
-- `verify/baseline` is not re-recorded (the final-tree regression was stopped; engine md5 is now 59b1ecee).
+- `verify/baseline` is not re-recorded (the final-tree regression was stopped; engine md5 is now b8159b68).
 - The harness was not built on an f62275b export (bp9-before); the run harness reads the step-9 fields by reflection.
