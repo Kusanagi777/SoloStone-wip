@@ -160,6 +160,23 @@ static partial class Program
             if(skipped.Count!=0 && Environment.GetEnvironmentVariable("SOLOSTONE_REQUIRE_ALL")=="1") { Console.Error.WriteLine("FAIL: skipped with SOLOSTONE_REQUIRE_ALL=1: "+string.Join("; ",skipped)); return 1; }
             Console.WriteLine("PASS "+count+" installer checks, "+skipped.Count+" skipped"+(skipped.Count==0?"":" ("+string.Join("; ",skipped)+")")); return 0;
         } catch(Exception e) { Console.Error.WriteLine(e); return 1; }
-        finally { Directory.Delete(temp,true); }
+        finally { RemoveTemp(temp); }
+    }
+    // Best effort: a failed cleanup must not replace the run's result. On Windows a file can be read-only or briefly held
+    // (an antivirus scan of a fake Hearthstone.exe), so clear the attribute and retry; if it still fails, say where it is.
+    static void RemoveTemp(string temp) {
+        for(int attempt=1;;attempt++) {
+            try {
+                if(!Directory.Exists(temp)) return;
+                foreach(string file in Directory.EnumerateFiles(temp,"*",SearchOption.AllDirectories)) {
+                    try { var attributes=File.GetAttributes(file); if((attributes&FileAttributes.ReadOnly)!=0) File.SetAttributes(file,attributes&~FileAttributes.ReadOnly); } catch(IOException) {} catch(UnauthorizedAccessException) {}
+                }
+                Directory.Delete(temp,true); return;
+            }
+            catch(Exception e) when(e is IOException || e is UnauthorizedAccessException) {
+                if(attempt>=5) { Console.Error.WriteLine("WARN could not remove the test folder "+temp+": "+e.Message); return; }
+                System.Threading.Thread.Sleep(500*attempt);
+            }
+        }
     }
 }
