@@ -10,7 +10,8 @@ using SoloStone;
 // Findings from the independent code review: each of these failed against the code before its fix.
 static partial class Program
 {
-    static string PluginSource(string name) => File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"plugin-source",name));
+    // LF whatever the checkout (Git for Windows checks out CRLF by default); the checks below match \n.
+    static string PluginSource(string name) => File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"plugin-source",name)).Replace("\r\n","\n");
     // ---- item 2: first start before the marker, and a newer release over a pending one ----
     static void PendingHealthTests(string temp) {
         // Exit 0: the player closed it. Nothing happens and the check stays pending.

@@ -7,7 +7,8 @@ using SoloStone;
 
 static partial class Program
 {
-    static string Source(string name) => File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"launcher-source",name));
+    // LF whatever the checkout (Git for Windows checks out CRLF by default); the checks below match \n.
+    static string Source(string name) => File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"launcher-source",name)).Replace("\r\n","\n");
     static string StripHooks(string text) {
         // Removes every "#if SOLOSTONE_TEST_HOOKS" region, up to its #else or #endif.
         return Regex.Replace(text,@"#if SOLOSTONE_TEST_HOOKS.*?(#else|#endif)","",RegexOptions.Singleline);
