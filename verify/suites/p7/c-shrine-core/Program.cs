@@ -134,8 +134,9 @@ Guard("D", () =>
     var schedules = data.Schedules;
     var v2 = schedules.Find("acts-v2");
     // The close-out (family 25): the defaults are acts-v3h and acts-v3t; a data set without the encounter file keeps acts-v2.
-    Check("D5 schedule data is scheduleVersion 3 (phase 8; acts-v2 still stamps 2), defaults acts-v3h and acts-v3t (acts-v2 without the encounter file); acts-v1 and act1 keep their released shapes",
-        schedules.ScheduleVersion == 3 && v2.StampVersion == 2 && schedules.Default == "acts-v3h" && schedules.DefaultWithoutEncounters == "acts-v2" && DungeonRunSchedules.ShapeDigest(schedules.Find("acts-v1")) == "3293D82FA6BD48B3"
+    // Step 9 (wave 9b): scheduleVersion 4, the defaults acts-v4h and acts-v4t.
+    Check("D5 schedule data is scheduleVersion 4 (step 9; acts-v2 still stamps 2), defaults acts-v4h and acts-v4t (acts-v2 without the encounter file); acts-v1 and act1 keep their released shapes",
+        schedules.ScheduleVersion == 4 && v2.StampVersion == 2 && schedules.Default == "acts-v4h" && schedules.Defaults.SequenceEqual(new[] { "acts-v4h", "acts-v4t" }) && schedules.DefaultWithoutEncounters == "acts-v2" && DungeonRunSchedules.ShapeDigest(schedules.Find("acts-v1")) == "3293D82FA6BD48B3"
         && DungeonRunSchedules.ShapeDigest(schedules.Find("act1")) == "3673E8AE7F914E4F",
         $"v{schedules.ScheduleVersion} {schedules.Default} {DungeonRunSchedules.ShapeDigest(schedules.Find("acts-v1"))}");
     Check("D6 acts-v2's shape is pinned for version 2 (ReleasedShapes[2])",
@@ -145,7 +146,8 @@ Guard("D", () =>
     Check("D7 acts-v2: teammate drafts after I.2, I.4, II.3, III.3; shrine-upgrade drafts after the I and II majors; the same nodes as acts-v1",
         string.Join(",", tm) == "1.2,1.4,2.3,3.3" && string.Join(",", su) == "1.5,2.5" && v2.Nodes.Count == schedules.Find("acts-v1").Nodes.Count
         && schedules.Find("acts-v1").Nodes.All(n => !n.TeammateDraft && !n.ShrineUpgradeDraft), string.Join(",", tm) + " | " + string.Join(",", su));
-    var v1only = Load(schedule: scheduleJson.Replace("\"scheduleVersion\": 3", "\"scheduleVersion\": 1"));
+    var v1only = Load(schedule: scheduleJson.Replace("\"scheduleVersion\": 4", "\"scheduleVersion\": 1"));
+    Check("D8 the version edit took (the anchor is the shipped file's version)", v1only.Schedules.ScheduleVersion == 1);
     Check("D8 a version-1 file never reads the phase-7 keys", v1only.Schedules.Schedules.Values.All(s => s.Nodes.All(n => !n.TeammateDraft && !n.ShrineUpgradeDraft)));
     var errors = DungeonRunValidator.Validate(data, null);
     var mine = errors.Where(e => e.Contains("shrine") || e.Contains("teammate") || e.Contains("schedule")).ToList();
@@ -675,7 +677,7 @@ Guard("V", () =>
         var plan = run.BuildPlan(walked);
         Check("V2 its plan has no shrine", plan.PlayerShrine == null && plan.PlayerShrineUpgrades.Count == 0);
         var future = NewRun(Druid, "rumble_druid_115", 502);
-        future.ScheduleVersion = 4; // phase 8: 3 is the loaded version
+        future.ScheduleVersion = 5; // phase 8: 3 was the loaded version; step 9: 4 is
         bool refused = false;
         try { run.ScheduleFor(future); } catch (InvalidDataException) { refused = true; }
         Check("V3 a run on a future schedule version is still refused", refused);

@@ -1487,6 +1487,10 @@ public sealed class FairBotState
         old.ActivatedTrigger?.Remove();
 #if ENGINE_SOURCE
         old.OngoingEffect?.Remove();
+        // Its "this turn" effects end with it (Minion.Reset's rule for a minion leaving play): the stand-in has nothing to give
+        // back, and canonicalisation may hand its id to another card (a sampled own-deck card). A hero replaced this turn keeps
+        // them in the set-aside zone (the Tekahn relay, a Plague Lord's form), and the simulated turn end reached the stand-in.
+        game.OneTurnEffects.RemoveAll(p => p.entityId == old.Id);
         // Include retired actors: their cached references still reveal the old definition and counters.
         var attachments = new List<Enchantment>();
         var privateIds = new HashSet<int> { old.Id };

@@ -73,6 +73,9 @@ namespace SabberStoneCore.Actions
 
         public static IPlayable Draw(Controller controller, int index) => CompleteDraw(controller, controller.DeckZone.Remove(index));
 
+        // The client's "Summoned When Drawn" keyword (no GameTag name in this engine).
+        private const GameTag SummonedWhenDrawn = (GameTag)3128;
+
         private static IPlayable CompleteDraw(Controller controller, IPlayable playable)
         {
             using var cardStateEntry = controller.HandZone.DeferCardStateEntry();
@@ -108,8 +111,11 @@ namespace SabberStoneCore.Actions
             {
                 if (game.History)
                     game.PowerHistory.Add(PowerHistoryBuilder.BlockStart(BlockType.TRIGGER, playable.Id, "", 0, 0));
-                // Illusion retains its actual hand residence when its summon cannot fit.
-                if (playable.Card.Id != "EDR_260t" || !controller.BoardZone.IsFull)
+                // Only a card the draw consumes leaves the hand: a Casts When Drawn spell (every spell with a TopdeckTask) and a
+                // Summoned When Drawn minion, whose task moves the card itself. A "When you draw this" minion (Sea Reaver,
+                // Flame Leviathan) stays in hand. Illusion retains its actual hand residence when its summon cannot fit.
+                if ((playable is Spell || playable.Card[SummonedWhenDrawn] != 0)
+                    && (playable.Card.Id != "EDR_260t" || !controller.BoardZone.IsFull))
                     controller.SetasideZone.Add(controller.HandZone.Remove(playable));
                 game.Log(LogLevel.INFO, BlockType.TRIGGER, "TOPDECK",
                     !game.Logging ? "" : $"{playable}'s TOPDECK effect is activated.");

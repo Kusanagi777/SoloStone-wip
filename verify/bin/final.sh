@@ -20,6 +20,10 @@
 #                    tekahn24, and enc23-cards (one run per call, then `bp.sh same`)
 #     c25            the close-out's modes on the shipped schedules: finale25 tekahn25 (twice per call), and sweep25 a, b, c
 #                    (one run per call, then `bp.sh same`)
+#     p9             the step-9 modes that are not calibration: pairs9 1-25 (the C6 covering array), ends9 escape refuse rewind
+#                    toki tekahn, treasure9 over the 126 shared treasures in 6 chunks (one run per call, then `bp.sh same`);
+#                    calibration (slots9 outliers9 finale9 tekahn9 longrun9) and the 48t gate (gate48t, uld152) are run as queues
+#                    (handoff/phase9/tests.md)
 # Each stage writes verify/.out/final-<stage>.log (and prints it). The wave-3 set takes about 3 hours on a quiet machine
 # (cross06 and rules06 are most of it); the extra stages about 2-3 more. On a machine shared with other harness runs,
 # run stages or slices through the harness lock instead (README.md), each call under about 6 minutes.
@@ -77,6 +81,16 @@ for stage in "$@"; do
     for m in finale25 tekahn25; do bash "$B/bp.sh" $m 2>&1 | cut -c1-700 >> "$L"; done
     for x in a b c; do
       bash "$B/bp.sh" sweep25 $x 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" sweep25 $x 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same sweep25-$x >> "$L" 2>&1
+    done ;;
+  p9)
+    for x in $(seq 1 25) ; do
+      bash "$B/bp.sh" pairs9 $x 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" pairs9 $x 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same pairs9-$x >> "$L" 2>&1
+    done
+    for x in escape refuse rewind toki tekahn; do
+      bash "$B/bp.sh" ends9 $x 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" ends9 $x 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same ends9-$x >> "$L" 2>&1
+    done
+    for f in 0 21 42 63 84 105; do
+      bash "$B/bp.sh" treasure9 $f 21 1 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" treasure9 $f 21 2 2>&1 | cut -c1-700 >> "$L"; bash "$B/bp.sh" same treasure9-$f-21 >> "$L" 2>&1
     done ;;
   rules05) for r in $RULES05; do bash "$B/bp.sh" rules05 $r 2>&1 | cut -c1-330 >> "$L"; done ;;
   cross05) : > "$OUT/bp/cross05.log"; bash "$B/cross05.sh" $RULES05 > /dev/null; cat "$OUT/bp/cross05.log" >> "$L" ;;

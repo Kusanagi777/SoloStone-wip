@@ -207,6 +207,15 @@ modes, and any mode that meets those bosses (sweep25-a meets Sinkhole), to diffe
 reason too; their `power` column counts clicks only, so it reads 0 for a rule-cast power (c-enc-18 F, c-enc-19 H and
 c-enc-20 D, J, O count the casts).
 
+**Step 9's tests (the test phase; not a baseline yet; `handoff/phase9/tests.md`).** Six suites join the run list as entries
+72-77 (`p9/c-sched-9`, `c-econ-9`, `c-rules-9`, `c-ends-9`, `c-gen-9`, `c-longrun-9`; 77 entries, 93 build projects with the
+three step-9 bosspilot harnesses `p9/c-bosspilot-pairs9`, `c-bosspilot-ends9` and `c-bosspilot-run`). c-rules-9 fails T2
+and K1 by design until calibration (two act III twists roll in about 10% of runs, below 15%; `mod_hot_start` is a no-op on
+the floor-15 majors); c-longrun-9's `TIME` line is left out of `same.sh`'s comparison. The `final.sh` stage `p9` runs the
+non-calibration modes: `bp.sh pairs9 1-25` (chunk 23 exited 3, three boss-AI fallbacks in case 1722, until the engine's
+aura-removal fix, tests.md section 2), `bp.sh ends9 <part>` and `bp.sh treasure9`. The calibration modes (`slots9`,
+`outliers9`, `finale9`, `tekahn9`, `longrun9`) and the 48t gate (`gate48t`, `uld152`) run as queues.
+
 Generators (`gen.sh`): all six generated files byte-identical; encounters "255 rows, 296 decks (125 authentic, 171
 changed), 876 adaptations, 4 rejected"; catalog "506 entries (452 offerable pool, 2 withdrawn, 52 fixed), 6508 admitted
 and 1 excluded"; ledger rows 4992, implemented 2814, partial 817, missing 302, duplicate/support 1059, adapted 0. The

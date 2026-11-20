@@ -62,8 +62,10 @@ namespace SabberStoneCore.Auras
 
 		private void RemoveAll()
 		{
+			// An applied id the game no longer holds (a hidden hand card a fair-view copy re-registered): nothing to give
+			// back (SwitchingAura.RemoveInternal).
 			AppliedEntityIdCollection.ForEach(Game.IdEntityDic,
-				(i, dict) => DeApply(dict[i]));
+				(i, dict) => { if (dict.TryGetValue(i, out IPlayable entity)) DeApply(entity); });
 			Game.Auras.Remove(this);
 		}
 

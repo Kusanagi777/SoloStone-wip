@@ -448,7 +448,7 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     var bad = DungeonRunData.Parse(runJson, poolJson, npcJson, catalogJson);
     var e1 = bad.Bundles.First(b => b.Id == "dr.mage.unique");
     e1.Candidates.Add(new DungeonRunCandidate { Id = "BOT_914", WikiId = "BOT_914" });   // unscripted (Whizbang; Zephrys is scripted since phase 6 F15, Pressure Plate since phase 8 family 01)
-    e1.Candidates.Add(new DungeonRunCandidate { Id = "ULDA_111", WikiId = "ULDA_111" }); // admission start-of-game-draw (phase 9)
+    e1.Candidates.Add(new DungeonRunCandidate { Id = "GILA_900p", WikiId = "GILA_900p" }); // admission turn-rewind (step 9 admitted ULDA_111; GILA_900p stays rejected for good)
     var e2 = bad.Bundles.First(b => b.IsPool && b.Offerable && b.Id != e1.Id && b.Classes.SequenceEqual(new[] { "DRUID" }));
     e2.Candidates.Add(new DungeonRunCandidate { Id = "CS2_024", WikiId = "CS2_024" });   // Frostbolt in a Druid entry
     var e3 = bad.Bundles.First(b => b.IsPool && b.Offerable && b.Id != e1.Id && b.Id != e2.Id);
@@ -461,7 +461,7 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     e6.Candidates.Add(new DungeonRunCandidate { Id = "RLK_024", WikiId = "RLK_024" });  // Death Strike: a rune cost
     var berrs = DungeonRunValidator.Validate(bad, null);
     Check("stale catalog: an unscripted candidate and a candidate the table rejects are validation errors", berrs.Any(e => e.StartsWith("BOT_914: not scripted (dr.mage.unique)"))
-        && berrs.Any(e => e.StartsWith("ULDA_111: admission start-of-game-draw")), string.Join(" | ", berrs.Where(e => e.Contains("BOT_914") || e.Contains("ULDA_111")).Take(4)));
+        && berrs.Any(e => e.StartsWith("GILA_900p: admission turn-rewind")), string.Join(" | ", berrs.Where(e => e.Contains("BOT_914") || e.Contains("GILA_900p")).Take(4)));
     Check("stale catalog: an off-class candidate is a validation error", berrs.Any(e => e.StartsWith("CS2_024: class MAGE, not allowed in DRUID (" + e2.Id + ")")), string.Join(" | ", berrs.Where(e => e.Contains("CS2_024")).Take(3)));
     Check("stale catalog: a wrong avgCost is a validation error", berrs.Any(e => e.StartsWith(e3.Id + ": avgCost")));
     Check("stale catalog: an offerable entry with 2 candidates is a validation error", berrs.Any(e => e == e4.Id + ": has 2 candidates, needs at least 3"), string.Join(" | ", berrs.Where(e => e.StartsWith(e4.Id)).Take(2)));
@@ -749,8 +749,11 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // ULDA_911 (tavern options); 30 missing -> support
     // (the 22 labels, the three tavern keepers, DALA_740's five tokens). Left: 10 partial (the eight twists of no shipped twist
     // pool, Damph's hunt reward, Witchwood's Touch (1)) and 13 missing, each with a stated rejection or deferral.
-    Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13; wave 5: families 14-19; wave 6: families 20-24; the close-out): 4970 rows; 3880 implemented, 10 partial, 13 missing, 1067 duplicate/support, 0 intentionally adapted",
-        rows.Count == 4970 && classes.GetValueOrDefault("implemented") == 3880 && classes.GetValueOrDefault("partial") == 10 && classes.GetValueOrDefault("missing") == 13
+    // Step 9: the eight twists roll on the v4 defaults (partial -> implemented), ULDA_111 and GILA_911 are v4 treasures (missing ->
+    // implemented), GILA_BOSS_48t's restart path is scripted (missing -> partial, its deck role waits for the gate): implemented
+    // 3880 -> 3890, partial 10 -> 3 (GILA_BOSS_43t, GILA_BOSS_48t, GILA_BOSS_99t), missing 13 -> 10.
+    Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13; wave 5: families 14-19; wave 6: families 20-24; the close-out; step 9): 4970 rows; 3890 implemented, 3 partial, 10 missing, 1067 duplicate/support, 0 intentionally adapted",
+        rows.Count == 4970 && classes.GetValueOrDefault("implemented") == 3890 && classes.GetValueOrDefault("partial") == 3 && classes.GetValueOrDefault("missing") == 10
         && classes.GetValueOrDefault("duplicate/support") == 1067 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
 }
 

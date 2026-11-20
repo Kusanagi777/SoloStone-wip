@@ -27,8 +27,9 @@ using SabberStoneCore.Tasks.PlayerTasks;
 //   WATCH=id,id       counts how often the boss played each of these cards from hand and how many Secrets the boss held at most
 //                     (the final line then ends with "watched ..."; a fixture mode asserts the card under test was really played)
 //   DEFAULT_SWEEP=n   the close-out (family 25): n runs started as a new run is, with no named schedule (the default roll:
-//                     acts-v3h or acts-v3t), the hero rows in turn; run i walks its real nodes to floor 1 + 7i mod its floor
-//                     count and plays the boss its sequence drew there (no row is put on a floor); SCHEDULE and FINALE are ignored;
+//                     the schedule file's defaults, acts-v4h or acts-v4t since step 9), the hero rows in turn; run i walks its
+//                     real nodes to floor 1 + 7i mod its floor count and plays the boss its sequence drew there (no row is put on
+//                     a floor); SCHEDULE and FINALE are ignored (each run walks the schedule it rolled);
 //                     DEFAULT_SWEEP_FROM=i0 starts at run i0 (the seed is SEED_BASE + i, the row data.Classes[i mod count])
 // A boss with shrine variants plays its games once per variant (the seeds that roll that variant).
 // Family 09 variant (p8f09/make_harness.py): a game line ends with " auto N" for a power cast by rule and " no-loss" for a fight
@@ -102,7 +103,9 @@ DungeonRunState ReachFloor(DungeonRunClass cls, int floor, long seed, bool defau
     if (defaultRoll && (!s.IsActRun || s.ScheduleVersion != run.ScheduleFor(s).StampVersion || !data.Schedules.Defaults.Contains(s.Schedule)))
         throw new Exception("not a run of a default schedule");
     var scratch = new DungeonRunProfile();
-    if (!s.IsActRun || s.ScheduleVersion != schedule.StampVersion) throw new Exception("not a run of " + scheduleId);
+    // The run is of the schedule it walks: the named one, or on the default roll the default it rolled.
+    var walked = defaultRoll ? run.ScheduleFor(s) : schedule;
+    if (!s.IsActRun || s.ScheduleVersion != walked.StampVersion) throw new Exception("not a run of " + walked.Id);
     while (!(s.Floor == floor && s.Phase == DungeonRunPhase.PreMatch))
     {
         switch (s.Phase)
@@ -206,6 +209,14 @@ for (int bi = 0; bi < bosses.Count; bi++)
                 if (defaultSweep > 0 && !boss.IsEncounter) Check(plan.EncounterId == null && !plan.EncounterDeck, "a custom row's plan names an encounter", problems); else
                 Check(plan.EncounterId == boss.Id && plan.EncounterDeck, "plan is not the encounter's", problems);
                 Check(plan.BossGeneratedSecrets == boss.BossGeneratedSecrets, "plan boss generated Secrets", problems);
+                // A sweep run (no RULE) keeps the twists its new run rolled itself (stamp 4: a twist per act, from that act's twist
+                // pool, FromNode -1; the walk takes no anomaly): the plan holds those of this act that act in the match, in the order
+                // taken, and no other rule (an anomaly or a twist from outside its pool fails it). Elsewhere no rule but RULE's is active.
+                var sweptActs = defaultSweep > 0 ? run.ScheduleFor(s).Acts : null;
+                var rolledRules = defaultSweep > 0 && forcedRule == null ? s.ActiveRules.Where(r => r.Kind == DungeonRunGlobalRule.KindTwist && r.FromNode == -1
+                        && (r.Act == 0 ? sweptActs.Any(a => a.TwistPool.Contains(r.Id)) : r.Act == run.CurrentNode(s).Act && sweptActs[r.Act - 1].TwistPool.Contains(r.Id)))
+                    .Select(r => data.Schedules.Rule(r.Id)).Where(r => r.Effect == DungeonRunGlobalRule.EffectMatch).Select(r => r.Id).ToList() : null;
+                if (rolledRules != null) Check(plan.GlobalRules.SequenceEqual(rolledRules), "plan global rules", problems); else
                 Check(plan.GlobalRules.SequenceEqual(forcedRule == null ? new string[0] : new[] { forcedRule }), "plan global rules", problems);
                 var pilot = DungeonRunBossPilot.Build(boss, plan, data, runClasses: run.MatchClasses(s));
                 var npcProfile = pilot.Profile.WithBudget(testBudget);
@@ -236,16 +247,29 @@ for (int bi = 0; bi < bosses.Count; bi++)
                 var view = new MulliganView(choice.Choices.Select(id => new MulliganCard(id, game.IdEntityDic[id].Card.Id, game.IdEntityDic[id].Card.Cost)),
                     false, pilot.Deck.CardIds, game.Player1.Hero.Card.Class);
                 game.Process(ChooseTask.Mulligan(game.Player2, BotDriver.Mulligan(view, new DeckPlanMulligan(pilot.Plan)).ToList()));
+                // MainBegin places the start block and then runs on through the first turn's start (its turn-start triggers and
+                // draw: a drawn AT_130 Sea Reaver kills a 1-Health start minion). The boards the start block left are read when
+                // that first turn starts, before its triggers and draw.
+                List<string> startBossBoard = null, startPlayerBoard = null;
+                TriggerManager.TriggerHandler firstTurnStart = sender =>
+                {
+                    if (startBossBoard != null) return;
+                    startBossBoard = game.Player2.BoardZone.Select(m => m.Card.Id).ToList();
+                    startPlayerBoard = game.Player1.BoardZone.Select(m => m.Card.Id).ToList();
+                };
+                game.TriggerManager.TurnStartTrigger += firstTurnStart;
                 game.MainBegin();
+                game.TriggerManager.TurnStartTrigger -= firstTurnStart;
                 // After MainBegin: the boss's shrine is on its board, the start block landed, the hero cards are in hand.
                 if (variant?.Shrine != null)
                     Check(ShrineRules.Of(game.Player2).Any(m => m.Card.Id == variant.Shrine), "the boss shrine " + variant.Shrine + " is not on its board", problems);
                 if (boss.Start != null)
                 {
+                    Check(startBossBoard != null, "start: the first turn did not start in MainBegin", problems);
                     foreach (string id in boss.Start.BossBoard.Distinct())
-                        Check(game.Player2.BoardZone.Count(m => m.Card.Id == id) >= 1, "start: " + id + " is not on the boss board", problems);
+                        Check(startBossBoard?.Contains(id) == true, "start: " + id + " is not on the boss board", problems);
                     foreach (string id in boss.Start.PlayerBoard.Distinct())
-                        Check(game.Player1.BoardZone.Count(m => m.Card.Id == id) >= 1, "start: " + id + " is not on the player board", problems);
+                        Check(startPlayerBoard?.Contains(id) == true, "start: " + id + " is not on the player board", problems);
                     if (boss.Start.BossWeapon != null) Check(game.Player2.Hero.Weapon?.Card.Id == boss.Start.BossWeapon, "start: the boss weapon", problems);
                 }
                 foreach (var option in plan.PlayerHeroCards)
@@ -265,7 +289,7 @@ for (int bi = 0; bi < bosses.Count; bi++)
                     }
                     else if (!game.Process(task)) throw new Exception($"engine rejected {who} task | " + string.Join(" | ", recent));
                 }
-                while (game.State != State.COMPLETE && game.Turn <= 100)
+                while (game.State != State.COMPLETE && game.Turn <= plan.TurnCap)
                 {
                     if (game.CurrentPlayer == game.Player2)
                     {
@@ -302,8 +326,9 @@ for (int bi = 0; bi < bosses.Count; bi++)
                     Check(game.Player2.Hero.Card.Id == (boss.Forms.Take(end.BossForm).Select(f => f.Hero).LastOrDefault(h => h != null) ?? boss.HeroCard), "the boss hero is not its form's", problems);
                     // Only a form with its own Health caps the hero at the threshold (the Plague Lords' 200 / 100 heroes); a form without
                     // one keeps the hero's maximum (Tekahn's power-only forms: the client's one 300-Health hero), so the boss may heal above
-                    // the threshold and stays in the form (wave 6: tekahn24, healed 195 -> 219 in Curse of Flame).
-                    if (form != null && form.HealthAtMost > 0 && form.Health > 0 && !bossDead) Check(game.Player2.Hero.Health <= form.HealthAtMost, "the boss's Health is above its form's threshold", problems);
+                    // the threshold and stays in the form (wave 6: tekahn24, healed 195 -> 219 in Curse of Flame). With the plan's form
+                    // ratchet (step 9 D11: Tekahn on acts-v4t) a form without its own Health caps the hero at the threshold too.
+                    if (form != null && form.HealthAtMost > 0 && (form.Health > 0 || plan.FormRatchet) && !bossDead) Check(game.Player2.Hero.Health <= form.HealthAtMost, "the boss's Health is above its form's threshold", problems);
                     if (!bossDead && end.BossForm + 1 <= boss.Forms.Count && boss.Forms[end.BossForm].HealthAtMost > 0)
                         Check(game.Player2.Hero.Health > boss.Forms[end.BossForm].HealthAtMost, "the boss should be in its next form", problems);
                     formChangesSeen += end.BossFormChanges;
@@ -331,7 +356,7 @@ for (int bi = 0; bi < bosses.Count; bi++)
                 if (plan.PlayerHeroCards.Count + plan.PlayerRelay.Count > 0) extra += $" heroes {string.Join(">", end.HeroesUsed)}";
                 if (variant != null) extra += $" variant {variant.Id} shrine {variant.Shrine ?? "-"}";
                 if (forcedRule != null) extra += " rule " + forcedRule;
-                if (defaultSweep > 0) extra += " schedule " + s.Schedule;
+                if (defaultSweep > 0) extra += " schedule " + s.Schedule + (plan.GlobalRules.Count > 0 ? " rules " + string.Join(",", plan.GlobalRules) : "");
             }
             catch (Exception e) { result = "FAULT " + e.GetType().Name + ": " + e.Message.Split('\n')[0]; faults++; }
             ms = sw.ElapsedMilliseconds; games++; totalFallbacks += fallbacks;

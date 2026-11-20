@@ -187,15 +187,20 @@ Guard("Toki", () =>
     Check("A7 the power resolves in the boss's fair view (the boards are public): the minion gains Accelerated there", viewPlay == "ok" && Has(vm, Accelerated), viewPlay);
     var deck = data.BossDecks[data.Boss(Toki).Deck];
     string Subs(string id) => string.Join(",", data.Boss(id).Source.Substitutions.Select(x => (x.Listed ?? "-") + ">" + (x.Used ?? "-") + ":" + x.Reason));
-    Check("A8 her deck: the wiki's 30 without Alternate Timeline (rejected, phase 9) and Enhance-a-matic (a Secret generator not lifted for a boss), filled back to 30 by second copies; two Witchwood's Touch (3)",
+    // Step 9 (lane X) scripted Alternate Timeline's restart, so its substitution reason moved from "unscripted" to its admission
+    // row (nemesis-rejected-restart, until the stage-3 gate); the deck is unchanged.
+    Check("A8 her deck: the wiki's 30 without Alternate Timeline (rejected until step 9's gate) and Enhance-a-matic (a Secret generator not lifted for a boss), filled back to 30 by second copies; two Witchwood's Touch (3)",
         deck.Count == 30 && !deck.Contains(Timeline) && !deck.Contains("GILA_903") && deck.Count(id => id == Touch3) == 2 && deck.Count(id => id == Assistant) == 2
-        && Subs(Toki) == "GILA_903>-:admission:secret-generated,GILA_BOSS_48t>-:unscripted,->GILA_907:fill:second-copy,->EX1_287:fill:second-copy"
+        && Subs(Toki) == "GILA_903>-:admission:secret-generated,GILA_BOSS_48t>-:admission:nemesis-rejected-restart,->GILA_907:fill:second-copy,->EX1_287:fill:second-copy"
         && data.Boss(Toki).Source.Kind == DungeonRunDeckSource.KindSubstituted, Subs(Toki));
     var rejected = data.RejectedEncounters.FirstOrDefault(r => r.Id == Timeline);
     var timelineRule = DungeonRunAdmission.Classify(C(Timeline), Timeline, AdmitScope.Boss, null, catalogRun: true);
-    Check("A9 Alternate Timeline is rejected with its reason and lift (a run-owned game restart, phase 9): the encounter file's rejection and an admission row that admits no scope",
-        rejected != null && rejected.Reason.Contains("restart") && rejected.Lift.StartsWith("phase 9") && !C(Timeline).Implemented && !DungeonRunEncounters.IsScripted(Timeline)
-        && !timelineRule.Admitted && DungeonRunAdmission.RuleFor(Timeline)?.Admit == AdmitScope.None && DungeonRunAdmission.RuleFor(Timeline)?.Lift == DungeonRunAdmission.TurnRestartLift);
+    // Step 9 (lane X): the restart is scripted (EncounterRules.S9.cs); the card stays rejected, now lifted by the stage-3 gate
+    // (AlternateTimelineLift, in the encounter file's rejection and the admission row alike), no longer by phase 9's TurnRestartLift.
+    Check("A9 Alternate Timeline is rejected with its reason and lift (a run-owned game restart, scripted in step 9, admitted only after the stage-3 gate): the encounter file's rejection and an admission row that admits no scope",
+        rejected != null && rejected.Reason.Contains("restart") && rejected.Lift == DungeonRunAdmission.AlternateTimelineLift && C(Timeline).Implemented && DungeonRunEncounters.IsScripted(Timeline)
+        && !timelineRule.Admitted && DungeonRunAdmission.RuleFor(Timeline)?.Admit == AdmitScope.None && DungeonRunAdmission.RuleFor(Timeline)?.Lift == DungeonRunAdmission.AlternateTimelineLift,
+        "implemented " + C(Timeline).Implemented + " encounterScripted " + DungeonRunEncounters.IsScripted(Timeline) + " lift " + rejected?.Lift?.Substring(0, 30));
 });
 
 // ============================================================ B  Glinda Crowskin: False Heart, Crowskin Faithful, Crowskin Pact
@@ -489,7 +494,7 @@ Guard("Rows", () =>
     {
         (Toki, "48", "Infinite Toki", 60, "substituted", new string[0]),
         (Glinda, "49", "Glinda Crowskin", 50, "authentic", new[] { "heroImmune", "passive" }),
-        (Godfrey, "59", "Lord Godfrey", 60, "authentic", new[] { "start" }),
+        (Godfrey, "59", "Lord Godfrey", 60, "authentic", new[] { "start", "handAdd" }), // step 9 (lane R) adds the new boss flags: handAdd
         (Shivers, "60", "Captain Shivers", 75, "substituted", new[] { "passive", "start" }),
     };
     Check("H2 family 23 holds the four nemeses and Hagatha, all act II majors", data.Encounters.Where(b => b.Family == "23").Select(b => b.Id).OrderBy(i => i, StringComparer.Ordinal)

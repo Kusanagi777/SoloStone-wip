@@ -1,0 +1,911 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DungeonRun xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="6">
+  <Profile>
+    <Heroes />
+    <Unlocked>
+      <string>challenge</string>
+      <string>mage_rogue_bosses5</string>
+      <string>mage_rogue_majors2</string>
+      <string>mage_rogue_majors3</string>
+      <string>mage_rogue_majors4</string>
+      <string>paladin_shaman_bosses5</string>
+      <string>paladin_shaman_majors2</string>
+      <string>paladin_shaman_majors3</string>
+      <string>paladin_shaman_majors4</string>
+      <string>druid_priest_bosses5</string>
+      <string>druid_priest_majors2</string>
+      <string>druid_priest_majors3</string>
+      <string>druid_priest_majors4</string>
+      <string>hunter_warrior_bosses5</string>
+      <string>hunter_warrior_majors2</string>
+      <string>hunter_warrior_majors3</string>
+      <string>hunter_warrior_majors4</string>
+      <string>druid_floor3</string>
+      <string>hunter_floor3</string>
+      <string>mage_floor3</string>
+      <string>paladin_floor3</string>
+      <string>priest_floor3</string>
+      <string>rogue_floor3</string>
+      <string>shaman_floor3</string>
+      <string>warlock_floor3</string>
+      <string>warrior_floor3</string>
+      <string>deathknight_floor3</string>
+      <string>demonhunter_floor3</string>
+      <string>mage_rogue_floor3</string>
+      <string>paladin_shaman_floor3</string>
+      <string>druid_priest_floor3</string>
+      <string>hunter_warrior_floor3</string>
+      <string>gila_500h3_floor3</string>
+      <string>gila_600h_floor3</string>
+      <string>gila_400h_floor3</string>
+      <string>gila_900h_floor3</string>
+      <string>dala_rakanishu_floor3</string>
+      <string>dala_barkeye_floor3</string>
+      <string>dala_vessina_floor3</string>
+      <string>dala_kriziki_floor3</string>
+      <string>dala_eudora_floor3</string>
+      <string>dala_chu_floor3</string>
+      <string>dala_squeamlish_floor3</string>
+      <string>dala_tekahn_floor3</string>
+      <string>dala_george_floor3</string>
+      <string>trla_209h_mage_floor3</string>
+      <string>trla_209h_druid_floor3</string>
+      <string>trla_209h_hunter_floor3</string>
+      <string>trla_209h_paladin_floor3</string>
+      <string>trla_209h_priest_floor3</string>
+      <string>trla_209h_rogue_floor3</string>
+      <string>trla_209h_shaman_floor3</string>
+      <string>trla_209h_warlock_floor3</string>
+      <string>trla_209h_warrior_floor3</string>
+      <string>druid_floor4</string>
+      <string>hunter_floor4</string>
+      <string>mage_floor4</string>
+      <string>paladin_floor4</string>
+      <string>priest_floor4</string>
+      <string>rogue_floor4</string>
+      <string>shaman_floor4</string>
+      <string>warlock_floor4</string>
+      <string>warrior_floor4</string>
+      <string>deathknight_floor4</string>
+      <string>demonhunter_floor4</string>
+      <string>mage_rogue_floor4</string>
+      <string>paladin_shaman_floor4</string>
+      <string>druid_priest_floor4</string>
+      <string>hunter_warrior_floor4</string>
+      <string>gila_500h3_floor4</string>
+      <string>gila_600h_floor4</string>
+      <string>gila_400h_floor4</string>
+      <string>gila_900h_floor4</string>
+      <string>dala_rakanishu_floor4</string>
+      <string>dala_barkeye_floor4</string>
+      <string>dala_vessina_floor4</string>
+      <string>dala_kriziki_floor4</string>
+      <string>dala_eudora_floor4</string>
+      <string>dala_chu_floor4</string>
+      <string>dala_squeamlish_floor4</string>
+      <string>dala_tekahn_floor4</string>
+      <string>dala_george_floor4</string>
+      <string>trla_209h_mage_floor4</string>
+      <string>trla_209h_druid_floor4</string>
+      <string>trla_209h_hunter_floor4</string>
+      <string>trla_209h_paladin_floor4</string>
+      <string>trla_209h_priest_floor4</string>
+      <string>trla_209h_rogue_floor4</string>
+      <string>trla_209h_shaman_floor4</string>
+      <string>trla_209h_warlock_floor4</string>
+      <string>trla_209h_warrior_floor4</string>
+      <string>druid_floor5</string>
+      <string>hunter_floor5</string>
+      <string>mage_floor5</string>
+      <string>paladin_floor5</string>
+      <string>priest_floor5</string>
+      <string>rogue_floor5</string>
+      <string>shaman_floor5</string>
+      <string>warlock_floor5</string>
+      <string>warrior_floor5</string>
+      <string>deathknight_floor5</string>
+      <string>demonhunter_floor5</string>
+      <string>mage_rogue_floor5</string>
+      <string>paladin_shaman_floor5</string>
+      <string>druid_priest_floor5</string>
+      <string>hunter_warrior_floor5</string>
+      <string>gila_500h3_floor5</string>
+      <string>gila_600h_floor5</string>
+      <string>gila_400h_floor5</string>
+      <string>gila_900h_floor5</string>
+      <string>dala_rakanishu_floor5</string>
+      <string>dala_barkeye_floor5</string>
+      <string>dala_vessina_floor5</string>
+      <string>dala_kriziki_floor5</string>
+      <string>dala_eudora_floor5</string>
+      <string>dala_chu_floor5</string>
+      <string>dala_squeamlish_floor5</string>
+      <string>dala_tekahn_floor5</string>
+      <string>dala_george_floor5</string>
+      <string>trla_209h_mage_floor5</string>
+      <string>trla_209h_druid_floor5</string>
+      <string>trla_209h_hunter_floor5</string>
+      <string>trla_209h_paladin_floor5</string>
+      <string>trla_209h_priest_floor5</string>
+      <string>trla_209h_rogue_floor5</string>
+      <string>trla_209h_shaman_floor5</string>
+      <string>trla_209h_warlock_floor5</string>
+      <string>trla_209h_warrior_floor5</string>
+      <string>druid_win</string>
+      <string>hunter_win</string>
+      <string>mage_win</string>
+      <string>paladin_win</string>
+      <string>priest_win</string>
+      <string>rogue_win</string>
+      <string>shaman_win</string>
+      <string>warlock_win</string>
+      <string>warrior_win</string>
+      <string>deathknight_win</string>
+      <string>demonhunter_win</string>
+      <string>mage_rogue_win</string>
+      <string>paladin_shaman_win</string>
+      <string>druid_priest_win</string>
+      <string>hunter_warrior_win</string>
+      <string>gila_500h3_win</string>
+      <string>gila_600h_win</string>
+      <string>gila_400h_win</string>
+      <string>gila_900h_win</string>
+      <string>dala_rakanishu_win</string>
+      <string>dala_barkeye_win</string>
+      <string>dala_vessina_win</string>
+      <string>dala_kriziki_win</string>
+      <string>dala_eudora_win</string>
+      <string>dala_chu_win</string>
+      <string>dala_squeamlish_win</string>
+      <string>dala_tekahn_win</string>
+      <string>dala_george_win</string>
+      <string>trla_209h_mage_win</string>
+      <string>trla_209h_druid_win</string>
+      <string>trla_209h_hunter_win</string>
+      <string>trla_209h_paladin_win</string>
+      <string>trla_209h_priest_win</string>
+      <string>trla_209h_rogue_win</string>
+      <string>trla_209h_shaman_win</string>
+      <string>trla_209h_warlock_win</string>
+      <string>trla_209h_warrior_win</string>
+    </Unlocked>
+    <Archive />
+  </Profile>
+  <Active DataVersion="dungeon-run/2" CatalogVersion="1" Seed="36002" TypedSeed="false" Class="GILA_600h" StarterDeck="mh_darius_militia" Power="CS2_102" Floor="15" Phase="InMatch" Attempt="1" ScheduleVersion="3" Schedule="acts-v3t" Node="24" NextUid="49" MajorsCleared="2" PowerChoices="GILA_600p CS2_102" DraftsWithoutDominant="2">
+    <Cards>
+      <DungeonRunCard Uid="1" Id="GIL_653" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="2" Id="GIL_113" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="3" Id="GIL_113" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="4" Id="EX1_412" Origin="starter" AddedFloor="1">
+        <Mod>DALA_903e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="5" Id="CS2_106" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="6" Id="GIL_578" Origin="tavern" AddedFloor="10" />
+      <DungeonRunCard Uid="8" Id="GIL_155" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="9" Id="CORE_OG_218" Origin="starter" AddedFloor="1" />
+      <DungeonRunCard Uid="10" Id="CS2_104" Origin="starter" AddedFloor="1">
+        <Mod>DALA_914e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="11" Id="GILA_803" Origin="treasure" AddedFloor="1" />
+      <DungeonRunCard Uid="12" Id="TRL_323" Origin="draft" AddedFloor="1" />
+      <DungeonRunCard Uid="13" Id="EX1_572" Origin="draft" AddedFloor="1" />
+      <DungeonRunCard Uid="14" Id="UNG_848" Origin="draft" AddedFloor="1" />
+      <DungeonRunCard Uid="15" Id="AT_127" Origin="draft" AddedFloor="2" />
+      <DungeonRunCard Uid="16" Id="EX1_016" Origin="draft" AddedFloor="2" />
+      <DungeonRunCard Uid="17" Id="ICC_314" Origin="draft" AddedFloor="2" />
+      <DungeonRunCard Uid="18" Id="GILA_604" Origin="treasure" AddedFloor="3" />
+      <DungeonRunCard Uid="19" Id="AT_072" Origin="draft" AddedFloor="3" />
+      <DungeonRunCard Uid="21" Id="ICC_314" Origin="draft" AddedFloor="3" />
+      <DungeonRunCard Uid="22" Id="OG_317" Origin="draft" AddedFloor="4" />
+      <DungeonRunCard Uid="23" Id="EX1_562" Origin="draft" AddedFloor="4" />
+      <DungeonRunCard Uid="24" Id="NEW1_024" Origin="draft" AddedFloor="4" />
+      <DungeonRunCard Uid="25" Id="JAIL_376" Origin="draft" AddedFloor="5" />
+      <DungeonRunCard Uid="26" Id="TRL_360" Origin="draft" AddedFloor="5" />
+      <DungeonRunCard Uid="27" Id="EX1_411" Origin="draft" AddedFloor="5" />
+      <DungeonRunCard Uid="28" Id="AT_070" Origin="draft" AddedFloor="6" />
+      <DungeonRunCard Uid="29" Id="NEW1_011" Origin="draft" AddedFloor="6" />
+      <DungeonRunCard Uid="30" Id="TB_CoOpv3_001" Origin="treasure" AddedFloor="7" />
+      <DungeonRunCard Uid="31" Id="OG_300" Origin="draft" AddedFloor="7" />
+      <DungeonRunCard Uid="33" Id="EX1_414" Origin="draft" AddedFloor="8" />
+      <DungeonRunCard Uid="34" Id="TRL_541" Origin="draft" AddedFloor="8" />
+      <DungeonRunCard Uid="35" Id="AT_099" Origin="draft" AddedFloor="9" />
+      <DungeonRunCard Uid="36" Id="AT_082" Origin="draft" AddedFloor="9" />
+      <DungeonRunCard Uid="37" Id="OG_220" Origin="tavern" AddedFloor="10" />
+      <DungeonRunCard Uid="38" Id="TRL_523" Origin="draft" AddedFloor="10" />
+      <DungeonRunCard Uid="39" Id="TRL_569" Origin="draft" AddedFloor="10" />
+      <DungeonRunCard Uid="40" Id="GVG_110" Origin="draft" AddedFloor="11" />
+      <DungeonRunCard Uid="41" Id="TRL_329" Origin="draft" AddedFloor="11">
+        <Mod>DALA_903e</Mod>
+      </DungeonRunCard>
+      <DungeonRunCard Uid="42" Id="GILA_801" Origin="treasure" AddedFloor="12" />
+      <DungeonRunCard Uid="43" Id="ICC_405" Origin="draft" AddedFloor="12" />
+      <DungeonRunCard Uid="44" Id="GIL_547" Origin="draft" AddedFloor="12" />
+      <DungeonRunCard Uid="45" Id="UNG_848" Origin="draft" AddedFloor="13" />
+      <DungeonRunCard Uid="46" Id="AT_123" Origin="draft" AddedFloor="13" />
+      <DungeonRunCard Uid="47" Id="OG_218" Origin="draft" AddedFloor="14" />
+      <DungeonRunCard Uid="48" Id="LOOT_383" Origin="draft" AddedFloor="14" />
+      <DungeonRunCard Uid="49" Id="GIL_547" Origin="tavern" AddedFloor="15" />
+    </Cards>
+    <ActiveRules>
+      <DungeonRunRule Id="ULDA_721" Act="1" FromNode="0" Kind="anomaly" />
+      <DungeonRunRule Id="ULDA_708" Act="2" FromNode="7" Kind="anomaly" />
+      <DungeonRunRule Id="mod_open_road" Act="2" FromNode="8" />
+      <DungeonRunRule Id="ULDA_712" Act="3" FromNode="16" Kind="anomaly" />
+      <DungeonRunRule Id="mod_hot_start" Act="3" FromNode="17" />
+    </ActiveRules>
+    <Loadout Id="GILA_600h" />
+    <Deck>
+      <string>GIL_653</string>
+      <string>GIL_113</string>
+      <string>GIL_113</string>
+      <string>EX1_412</string>
+      <string>CS2_106</string>
+      <string>GIL_578</string>
+      <string>GIL_155</string>
+      <string>CORE_OG_218</string>
+      <string>CS2_104</string>
+      <string>GILA_803</string>
+      <string>TRL_323</string>
+      <string>EX1_572</string>
+      <string>UNG_848</string>
+      <string>AT_127</string>
+      <string>EX1_016</string>
+      <string>ICC_314</string>
+      <string>GILA_604</string>
+      <string>AT_072</string>
+      <string>ICC_314</string>
+      <string>OG_317</string>
+      <string>EX1_562</string>
+      <string>NEW1_024</string>
+      <string>JAIL_376</string>
+      <string>TRL_360</string>
+      <string>EX1_411</string>
+      <string>AT_070</string>
+      <string>NEW1_011</string>
+      <string>TB_CoOpv3_001</string>
+      <string>OG_300</string>
+      <string>EX1_414</string>
+      <string>TRL_541</string>
+      <string>AT_099</string>
+      <string>AT_082</string>
+      <string>OG_220</string>
+      <string>TRL_523</string>
+      <string>TRL_569</string>
+      <string>GVG_110</string>
+      <string>TRL_329</string>
+      <string>GILA_801</string>
+      <string>ICC_405</string>
+      <string>GIL_547</string>
+      <string>UNG_848</string>
+      <string>AT_123</string>
+      <string>OG_218</string>
+      <string>LOOT_383</string>
+      <string>GIL_547</string>
+    </Deck>
+    <Treasures>
+      <string>LOOTA_824</string>
+      <string>GILA_814</string>
+    </Treasures>
+    <ActiveTreasures>
+      <string>GILA_803</string>
+      <string>GILA_604</string>
+      <string>blazing_rod</string>
+      <string>GILA_801</string>
+    </ActiveTreasures>
+    <Upgrades />
+    <BossSequence>
+      <string>ulda_68_wasp</string>
+      <string>loot_18_giant_rat</string>
+      <string>bog_croaker</string>
+      <string>dala_33_gold_elemental</string>
+      <string>loot_25_vustrasz</string>
+      <string>gila_37_wharrgarbl</string>
+      <string>trl_200_voone</string>
+      <string>dala_72_kazamon</string>
+      <string>gila_43_damph</string>
+      <string>ember_matron</string>
+      <string>trl_204_zuljin</string>
+      <string>ulda_19_sothis</string>
+      <string>gila_55_azalina</string>
+      <string>tunnel_rat</string>
+      <string>ulda_38_kzrath</string>
+      <string>ulda_67_tekahn</string>
+    </BossSequence>
+    <TakenBundles>
+      <string>bundle_warrior_weapons</string>
+    </TakenBundles>
+    <BucketTakes>
+      <DungeonRunTake Id="rr.warrior.dragon-heart" Count="2" />
+      <DungeonRunTake Id="mh.darius-crowley.legends" Count="1" />
+      <DungeonRunTake Id="dh.warrior.legends" Count="2" />
+      <DungeonRunTake Id="rr.warrior.legendary" Count="3" />
+      <DungeonRunTake Id="dr.warrior.charge" Count="1" />
+      <DungeonRunTake Id="dr.warrior.legendary" Count="1" />
+      <DungeonRunTake Id="mh.darius-crowley.commander" Count="1" />
+      <DungeonRunTake Id="dr.warrior.dragon-heart" Count="1" />
+      <DungeonRunTake Id="dr.warrior.taunt" Count="1" />
+    </BucketTakes>
+    <BundleCooldowns>
+      <string>rr.warrior.smash@3</string>
+      <string>dh.warrior.mercenaries@3</string>
+      <string>bundle_neutral_murloc@4</string>
+      <string>mh.darius-crowley.dragonfire@4</string>
+      <string>dh.warrior.mercenaries@5</string>
+      <string>rr.warrior.tank-up@5</string>
+      <string>rr.warrior.fervent-fans@6</string>
+      <string>dh.warrior.legends@6</string>
+      <string>rr.warrior.rush@7</string>
+      <string>mh.darius-crowley.pirates@7</string>
+      <string>dh.warrior.damaged@8</string>
+      <string>dr.warrior.weapons@8</string>
+      <string>dr.warrior.charge@9</string>
+      <string>mh.darius-crowley.legends@9</string>
+      <string>mh.darius-crowley.dragonfire@10</string>
+      <string>rr.warrior.dragon-heart@10</string>
+      <string>dr.warrior.berserker@11</string>
+      <string>rr.warrior.legendary@11</string>
+      <string>mh.darius-crowley.legends@12</string>
+      <string>dh.warrior.dragon@12</string>
+      <string>dr.warrior.dragon-heart@13</string>
+      <string>dr.warrior.everybody-hurts@13</string>
+      <string>bundle_neutral_battlecry@14</string>
+      <string>rr.warrior.protection@14</string>
+      <string>mh.darius-crowley.armory@15</string>
+      <string>dh.warrior.big-minions@15</string>
+      <string>bundle_warrior_spells@16</string>
+      <string>dr.warrior.pirates@16</string>
+    </BundleCooldowns>
+    <DraftedThemes>
+      <string>dragon</string>
+      <string>dragon</string>
+      <string>dragon</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>weapons</string>
+      <string>weapons</string>
+      <string>weapons</string>
+      <string>charge</string>
+      <string>charge</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>buff</string>
+      <string>buff</string>
+      <string>dragon</string>
+      <string>dragon</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>legendary</string>
+      <string>dragon</string>
+      <string>dragon</string>
+      <string>taunt</string>
+      <string>taunt</string>
+    </DraftedThemes>
+    <Drafts>
+      <DungeonRunDraft Floor="1" Kind="treasure" Picked="GILA_803">
+        <Offered>
+          <string>GILA_803</string>
+          <string>GILA_824</string>
+          <string>quiet_satchel</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="1" Kind="bundle" Picked="rr.warrior.dragon-heart">
+        <Offered>
+          <string>rr.warrior.dragon-heart</string>
+          <string>rr.warrior.smash</string>
+          <string>dh.warrior.mercenaries</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="rr.warrior.dragon-heart" Label="Dragon Heart" Theme="dragon" Kind="pool" Source="RR">
+            <Cards>
+              <string>TRL_323</string>
+              <string>EX1_572</string>
+              <string>UNG_848</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.warrior.smash" Label="Smash" Theme="weapons" Kind="pool" Source="RR">
+            <Cards>
+              <string>EX1_408</string>
+              <string>TRL_321</string>
+              <string>GVG_052</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.warrior.mercenaries" Label="Mercenaries" Theme="aggro" Kind="pool" Source="DH">
+            <Cards>
+              <string>NEW1_027</string>
+              <string>NEW1_018</string>
+              <string>CFM_637</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="2" Kind="bundle" Picked="mh.darius-crowley.legends">
+        <Offered>
+          <string>mh.darius-crowley.legends</string>
+          <string>bundle_neutral_murloc</string>
+          <string>mh.darius-crowley.dragonfire</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="mh.darius-crowley.legends" Label="Legends" Theme="legendary" Kind="pool" Source="MH">
+            <Cards>
+              <string>AT_127</string>
+              <string>EX1_016</string>
+              <string>ICC_314</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_neutral_murloc" Label="Murloc" Theme="murloc" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>CORE_EX1_509</string>
+              <string>GVG_064</string>
+              <string>OG_161</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.darius-crowley.dragonfire" Label="Dragonfire" Theme="dragon" Kind="pool" Source="MH">
+            <Cards>
+              <string>CFM_806</string>
+              <string>NEW1_030</string>
+              <string>AT_071</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="treasure" Picked="GILA_604">
+        <Offered>
+          <string>GILA_604</string>
+          <string>LOOTA_801</string>
+          <string>gilded_idol</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="3" Kind="bundle" Picked="dh.warrior.legends">
+        <Offered>
+          <string>dh.warrior.legends</string>
+          <string>dh.warrior.mercenaries</string>
+          <string>rr.warrior.tank-up</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.warrior.legends" Label="Legends" Theme="legendary" Kind="pool" Source="DH">
+            <Cards>
+              <string>AT_072</string>
+              <string>UNG_933</string>
+              <string>ICC_314</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.warrior.mercenaries" Label="Mercenaries" Theme="aggro" Kind="pool" Source="DH">
+            <Cards>
+              <string>TRL_015</string>
+              <string>AT_070</string>
+              <string>GVG_075</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.warrior.tank-up" Label="Tank Up!" Theme="taunt" Kind="pool" Source="RR">
+            <Cards>
+              <string>BOT_042</string>
+              <string>ICC_837</string>
+              <string>EX1_410</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="4" Kind="bundle" Picked="rr.warrior.legendary">
+        <Offered>
+          <string>rr.warrior.legendary</string>
+          <string>rr.warrior.fervent-fans</string>
+          <string>dh.warrior.legends</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="rr.warrior.legendary" Label="Legendary" Theme="legendary" Kind="pool" Source="RR">
+            <Cards>
+              <string>OG_317</string>
+              <string>EX1_562</string>
+              <string>NEW1_024</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.warrior.fervent-fans" Label="Fervent Fans" Theme="swarm" Kind="pool" Source="RR">
+            <Cards>
+              <string>EX1_043</string>
+              <string>UNG_072</string>
+              <string>EX1_402</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.warrior.legends" Label="Legends" Theme="legendary" Kind="pool" Source="DH">
+            <Cards>
+              <string>GVG_110</string>
+              <string>BRM_028</string>
+              <string>OG_220</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="5" Kind="bundle" Picked="bundle_warrior_weapons">
+        <Offered>
+          <string>bundle_warrior_weapons</string>
+          <string>rr.warrior.rush</string>
+          <string>mh.darius-crowley.pirates</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="bundle_warrior_weapons" Label="Weapons" Theme="weapons" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>JAIL_376</string>
+              <string>TRL_360</string>
+              <string>EX1_411</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.warrior.rush" Label="Rush" Theme="rush" Kind="pool" Source="RR">
+            <Cards>
+              <string>TRL_327</string>
+              <string>TRL_329</string>
+              <string>TRL_020</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.darius-crowley.pirates" Label="Pirates" Theme="pirate" Kind="pool" Source="MH">
+            <Cards>
+              <string>CFM_637</string>
+              <string>AT_070</string>
+              <string>OG_033</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="6" Kind="treasure" Picked="LOOTA_824">
+        <Offered>
+          <string>LOOTA_824</string>
+          <string>LOOTA_831</string>
+          <string>hearty_tonic</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="6" Kind="bundle" Picked="dr.warrior.charge" Takes="2" Choosing="dr.warrior.charge">
+        <Offered>
+          <string>dr.warrior.charge</string>
+          <string>dh.warrior.damaged</string>
+          <string>dr.warrior.weapons</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dr.warrior.charge" Label="Charge!" Theme="charge" Kind="pool" Source="DR">
+            <Cards>
+              <string>AT_070</string>
+              <string>NEW1_011</string>
+              <string>CS2_146</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.warrior.damaged" Label="Damaged" Theme="self-damage" Kind="pool" Source="DH">
+            <Cards>
+              <string>EX1_400</string>
+              <string>EX1_402</string>
+              <string>EX1_604</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.warrior.weapons" Label="Weapons" Theme="weapons" Kind="pool" Source="DR">
+            <Cards>
+              <string>EX1_409</string>
+              <string>OG_033</string>
+              <string>ICC_281</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>AT_070</string>
+          <string>NEW1_011</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="7" Kind="treasure" Picked="blazing_rod">
+        <Offered>
+          <string>blazing_rod</string>
+          <string>mending_charm</string>
+          <string>stoneskin_idol</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="7" Kind="bundle" Picked="dr.warrior.legendary" Takes="2" Choosing="dr.warrior.legendary">
+        <Offered>
+          <string>dr.warrior.legendary</string>
+          <string>dr.warrior.charge</string>
+          <string>mh.darius-crowley.legends</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dr.warrior.legendary" Label="Legendary" Theme="legendary" Kind="pool" Source="DR">
+            <Cards>
+              <string>OG_300</string>
+              <string>FP1_030</string>
+              <string>AT_132</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.warrior.charge" Label="Charge!" Theme="charge" Kind="pool" Source="DR">
+            <Cards>
+              <string>EX1_116</string>
+              <string>EX1_067</string>
+              <string>AT_070</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.darius-crowley.legends" Label="Legends" Theme="legendary" Kind="pool" Source="MH">
+            <Cards>
+              <string>GVG_056</string>
+              <string>FP1_013</string>
+              <string>LOE_079</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>OG_300</string>
+          <string>FP1_030</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="8" Kind="bundle" Picked="dh.warrior.legends" Takes="2" Choosing="dh.warrior.legends">
+        <Offered>
+          <string>dh.warrior.legends</string>
+          <string>mh.darius-crowley.dragonfire</string>
+          <string>rr.warrior.dragon-heart</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dh.warrior.legends" Label="Legends" Theme="legendary" Kind="pool" Source="DH">
+            <Cards>
+              <string>EX1_414</string>
+              <string>TRL_541</string>
+              <string>GVG_113</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.darius-crowley.dragonfire" Label="Dragonfire" Theme="dragon" Kind="pool" Source="MH">
+            <Cards>
+              <string>ICC_029</string>
+              <string>NEW1_030</string>
+              <string>AT_017</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.warrior.dragon-heart" Label="Dragon Heart" Theme="dragon" Kind="pool" Source="RR">
+            <Cards>
+              <string>ICC_027</string>
+              <string>EX1_043</string>
+              <string>UNG_848</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>EX1_414</string>
+          <string>TRL_541</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="9" Kind="bundle" Picked="mh.darius-crowley.commander" Takes="2" Choosing="mh.darius-crowley.commander">
+        <Offered>
+          <string>mh.darius-crowley.commander</string>
+          <string>dr.warrior.berserker</string>
+          <string>rr.warrior.legendary</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="mh.darius-crowley.commander" Label="Commander" Theme="buff" Kind="pool" Source="MH">
+            <Cards>
+              <string>AT_099</string>
+              <string>AT_082</string>
+              <string>GIL_561</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.warrior.berserker" Label="Berserker" Theme="self-damage" Kind="pool" Source="DR">
+            <Cards>
+              <string>FP1_021</string>
+              <string>GVG_052</string>
+              <string>EX1_603</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.warrior.legendary" Label="Legendary" Theme="legendary" Kind="pool" Source="RR">
+            <Cards>
+              <string>TRL_542</string>
+              <string>NEW1_024</string>
+              <string>ICC_405</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>AT_099</string>
+          <string>AT_082</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="10" Kind="bundle" Picked="rr.warrior.dragon-heart" Takes="2" Choosing="rr.warrior.dragon-heart">
+        <Offered>
+          <string>rr.warrior.dragon-heart</string>
+          <string>mh.darius-crowley.legends</string>
+          <string>dh.warrior.dragon</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="rr.warrior.dragon-heart" Label="Dragon Heart" Theme="dragon" Kind="pool" Source="RR">
+            <Cards>
+              <string>TRL_523</string>
+              <string>TRL_569</string>
+              <string>EX1_043</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.darius-crowley.legends" Label="Legends" Theme="legendary" Kind="pool" Source="MH">
+            <Cards>
+              <string>LOOT_380</string>
+              <string>EX1_298</string>
+              <string>OG_042</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.warrior.dragon" Label="Dragon" Theme="dragon" Kind="pool" Source="DH">
+            <Cards>
+              <string>AT_071</string>
+              <string>AT_123</string>
+              <string>LOOT_540</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>TRL_523</string>
+          <string>TRL_569</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="11" Kind="treasure" Picked="GILA_814">
+        <Offered>
+          <string>GILA_814</string>
+          <string>LOOTA_818</string>
+          <string>deep_satchel</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="11" Kind="bundle" Picked="rr.warrior.legendary" Takes="2" Choosing="rr.warrior.legendary">
+        <Offered>
+          <string>rr.warrior.legendary</string>
+          <string>dr.warrior.dragon-heart</string>
+          <string>dr.warrior.everybody-hurts</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="rr.warrior.legendary" Label="Legendary" Theme="legendary" Kind="pool" Source="RR">
+            <Cards>
+              <string>GVG_110</string>
+              <string>TRL_329</string>
+              <string>EX1_414</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.warrior.dragon-heart" Label="Dragon Heart" Theme="dragon" Kind="pool" Source="DR">
+            <Cards>
+              <string>BRM_030</string>
+              <string>BRM_034</string>
+              <string>EX1_284</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.warrior.everybody-hurts" Label="Everybody Hurts" Theme="self-damage" Kind="pool" Source="DR">
+            <Cards>
+              <string>OG_149</string>
+              <string>ICC_064</string>
+              <string>EX1_400</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>GVG_110</string>
+          <string>TRL_329</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="12" Kind="treasure" Picked="GILA_801">
+        <Offered>
+          <string>GILA_801</string>
+          <string>LOOTA_840</string>
+          <string>frost_lantern</string>
+        </Offered>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="12" Kind="bundle" Picked="rr.warrior.legendary" Takes="2" Choosing="rr.warrior.legendary">
+        <Offered>
+          <string>rr.warrior.legendary</string>
+          <string>bundle_neutral_battlecry</string>
+          <string>rr.warrior.protection</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="rr.warrior.legendary" Label="Legendary" Theme="legendary" Kind="pool" Source="RR">
+            <Cards>
+              <string>ICC_405</string>
+              <string>GIL_547</string>
+              <string>LOOT_516</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_neutral_battlecry" Label="Battlecry" Theme="battlecry" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>AT_105</string>
+              <string>TRL_509</string>
+              <string>UNG_847</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="rr.warrior.protection" Label="Protection" Theme="divine-shield" Kind="pool" Source="RR">
+            <Cards>
+              <string>BOT_059</string>
+              <string>OG_218</string>
+              <string>EX1_402</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>ICC_405</string>
+          <string>GIL_547</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="13" Kind="bundle" Picked="dr.warrior.dragon-heart" Takes="2" Choosing="dr.warrior.dragon-heart">
+        <Offered>
+          <string>dr.warrior.dragon-heart</string>
+          <string>mh.darius-crowley.armory</string>
+          <string>dh.warrior.big-minions</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dr.warrior.dragon-heart" Label="Dragon Heart" Theme="dragon" Kind="pool" Source="DR">
+            <Cards>
+              <string>UNG_848</string>
+              <string>AT_123</string>
+              <string>BRM_026</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="mh.darius-crowley.armory" Label="Armory" Theme="weapons" Kind="pool" Source="MH">
+            <Cards>
+              <string>LOOT_285</string>
+              <string>GVG_053</string>
+              <string>ICC_837</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dh.warrior.big-minions" Label="Big Minions" Theme="big" Kind="pool" Source="DH">
+            <Cards>
+              <string>AT_072</string>
+              <string>UNG_838</string>
+              <string>EX1_298</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>UNG_848</string>
+          <string>AT_123</string>
+        </Chosen>
+      </DungeonRunDraft>
+      <DungeonRunDraft Floor="14" Kind="bundle" Picked="dr.warrior.taunt" Takes="2" Choosing="dr.warrior.taunt">
+        <Offered>
+          <string>dr.warrior.taunt</string>
+          <string>bundle_warrior_spells</string>
+          <string>dr.warrior.pirates</string>
+        </Offered>
+        <Offers>
+          <DungeonRunOffer Id="dr.warrior.taunt" Label="Taunt" Theme="taunt" Kind="pool" Source="DR">
+            <Cards>
+              <string>OG_218</string>
+              <string>LOOT_383</string>
+              <string>LOE_009</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="bundle_warrior_spells" Label="Spells" Theme="spells" Kind="fixed" Source="SoloStone">
+            <Cards>
+              <string>BOT_299</string>
+              <string>ICC_091</string>
+              <string>LOOT_203</string>
+            </Cards>
+          </DungeonRunOffer>
+          <DungeonRunOffer Id="dr.warrior.pirates" Label="Pirates" Theme="pirate" Kind="pool" Source="DR">
+            <Cards>
+              <string>NEW1_018</string>
+              <string>NEW1_024</string>
+              <string>CFM_325</string>
+            </Cards>
+          </DungeonRunOffer>
+        </Offers>
+        <Chosen>
+          <string>OG_218</string>
+          <string>LOOT_383</string>
+        </Chosen>
+      </DungeonRunDraft>
+    </Drafts>
+    <Matches>
+      <DungeonRunMatchSummary Floor="1" Boss="ulda_68_wasp" Outcome="Win" Attempt="1" Family="22" Rules="ULDA_721" />
+      <DungeonRunMatchSummary Floor="2" Boss="loot_18_giant_rat" Outcome="Win" Attempt="1" Family="07" Rules="ULDA_721" />
+      <DungeonRunMatchSummary Floor="3" Boss="bog_croaker" Outcome="Win" Attempt="1" Rules="ULDA_721" />
+      <DungeonRunMatchSummary Floor="4" Boss="dala_33_gold_elemental" Outcome="Win" Attempt="1" Family="16" Rules="ULDA_721" />
+      <DungeonRunMatchSummary Floor="5" Boss="loot_25_vustrasz" Outcome="Win" Attempt="1" Family="09" Rules="ULDA_721" />
+      <DungeonRunMatchSummary Floor="6" Boss="gila_37_wharrgarbl" Outcome="Win" Attempt="1" Family="10" Rules="ULDA_708" />
+      <DungeonRunMatchSummary Floor="7" Boss="trl_200_voone" Outcome="Win" Attempt="1" Family="13" Rules="ULDA_708" />
+      <DungeonRunMatchSummary Floor="8" Boss="dala_72_kazamon" Outcome="Win" Attempt="1" Family="18" Rules="ULDA_708" />
+      <DungeonRunMatchSummary Floor="9" Boss="gila_43_damph" Outcome="Win" Attempt="1" Family="11" Rules="ULDA_708" />
+      <DungeonRunMatchSummary Floor="10" Boss="ember_matron" Outcome="Win" Attempt="1" Rules="ULDA_708" />
+      <DungeonRunMatchSummary Floor="11" Boss="trl_204_zuljin" Outcome="Win" Attempt="1" Family="13" Rules="ULDA_712" />
+      <DungeonRunMatchSummary Floor="12" Boss="ulda_19_sothis" Outcome="Win" Attempt="1" Family="20" Rules="ULDA_712" />
+      <DungeonRunMatchSummary Floor="13" Boss="gila_55_azalina" Outcome="Win" Attempt="1" Family="11" Rules="ULDA_712" />
+      <DungeonRunMatchSummary Floor="14" Boss="tunnel_rat" Outcome="Win" Attempt="1" Rules="ULDA_712" />
+    </Matches>
+    <UnlockedThisRun />
+  </Active>
+</DungeonRun>

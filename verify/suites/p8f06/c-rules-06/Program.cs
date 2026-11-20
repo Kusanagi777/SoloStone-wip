@@ -937,7 +937,13 @@ Guard("W", () =>
         && !DungeonRunAdmission.Classify(null, id, AdmitScope.Player, null, true).Admitted && !DungeonRunAdmission.Classify(null, id, AdmitScope.Boss, null, true).Admitted && rejects.Contains(id)));
     Check("W9 the tokens are admitted for a rule only and never generated", tokens.All(id => DungeonRunAdmission.Classify(null, id, AdmitScope.Rule, null, true).Admitted
         && !DungeonRunAdmission.Classify(null, id, AdmitScope.Boss, null, true).Admitted && rejects.Contains(id)));
-    Check("W10 no shipped act names a plague in its twist pool yet (the close-out fills the pools)", data.Schedules.Schedules.Values.All(sc => sc.Acts.All(a => !a.TwistPool.Any(twists.Contains))));
+    // Step 9 (lane R, D8) filled the act I-III twist pools of acts-v4h (acts-v4t shares its acts), chapter-mapped: ULDA_801 in act I,
+    // ULDA_802 in act II, ULDA_803 and ULDA_804 in act III; no released schedule (stamp 3 or below) and no finale names a plague.
+    var plagueActs = data.Schedules.Schedules.Values.SelectMany(sc => sc.Acts.Select((a, i) => (sc, a, i))).Where(x => x.a.TwistPool.Any(twists.Contains))
+        .Select(x => x.sc.Id + ":" + (x.i + 1) + ":" + string.Join("+", x.a.TwistPool.Where(twists.Contains))).OrderBy(x => x, StringComparer.Ordinal).ToList();
+    Check("W10 only step 9's acts-v4h and acts-v4t name a plague in a twist pool, chapter-mapped in acts I-III (no released schedule, no finale)",
+        plagueActs.SequenceEqual(new[] { "acts-v4h:1:ULDA_801", "acts-v4h:2:ULDA_802", "acts-v4h:3:ULDA_803+ULDA_804", "acts-v4t:1:ULDA_801", "acts-v4t:2:ULDA_802", "acts-v4t:3:ULDA_803+ULDA_804" })
+        && data.Schedules.Schedules.Values.Where(sc => sc.StampVersion <= 3).All(sc => sc.Acts.All(a => !a.TwistPool.Any(twists.Contains))), string.Join(" ", plagueActs));
     // The anomaly offer: every admitted Tombs anomaly can be rolled at act I, a twist never.
     var offered = new HashSet<string>();
     for (long seed = 1; seed <= 900; seed++)
@@ -989,6 +995,19 @@ Guard("W", () =>
     var shrineRun = run.NewRun(All(data), shrineDeck.Class, shrineDeck.Id, data.Class(shrineDeck.Class).Powers[0], 91006, schedule: "acts-v3h");
     Plain(run, shrineRun);
     Check("W16 a run with a board shrine is never offered No-Face", shrineRun.HasBoardShrine && !Candidates(run, shrineRun, 1, "anomaly").Contains("ULDA_706") && Candidates(run, shrineRun, 1, "anomaly").Contains("ULDA_714"));
+    // Step 9 (lane R, C2): the act I anomaly offer NewRun stores is drawn after the board shrine is set (the ordering fix), so the
+    // stored offer itself never holds No-Face (W16 above reads the candidates afterwards, which held before the fix too).
+    int storedOffers = 0, storedNoFace = 0;
+    var shrineDecks = data.Decks.Where(x => x.Shrine != null && data.FindClass(x.Class) != null).ToList();
+    foreach (var deck in shrineDecks)
+        for (int k = 0; k < 20; k++)
+        {
+            var stored = run.NewRun(All(data), deck.Class, deck.Id, data.Class(deck.Class).Powers[0], 93000 + 100 * shrineDecks.IndexOf(deck) + k, schedule: "acts-v3h");
+            if (!stored.HasBoardShrine || stored.ModifierOffer?.Kind != DungeonRunGlobalRule.KindAnomaly) continue;
+            storedOffers++;
+            if (stored.ModifierOffer.Offered.Contains("ULDA_706")) storedNoFace++;
+        }
+    Check("W16b the act I anomaly offer a new shrine run stores never holds No-Face (27 shrine decks x 20 seeds)", storedOffers == 27 * 20 && storedNoFace == 0, storedOffers + " offers, " + storedNoFace + " with ULDA_706");
     // Rule against rule, both ways.
     DungeonRunState With(string rule, string kind)
     {

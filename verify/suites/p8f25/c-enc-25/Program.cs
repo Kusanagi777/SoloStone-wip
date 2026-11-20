@@ -23,6 +23,10 @@ using System.Text.Json;
 //   L  legacy replay: runs saved before the close-out flipped the defaults (the two version-5 golden saves and eight version-6
 //      saves of new runs on the then default acts-v2) load and replay step for step as they did on the pre-close-out tree
 //      (verify/fixtures/p8f25/replay.txt, recorded there by verify/tools/gen/p8f25/record_replay.sh)
+//   L4 released-schedule replay (step 9, plan D5): eight acts-v3h/acts-v3t runs saved at the plan's L4 stops on the tree before
+//      step 9 (f62275b; verify/fixtures/p9/replay-v3, recorded there by verify/tools/gen/p9/record_replay_v3.sh with the frozen
+//      ReplayV3.cs) replay step for step as recorded, except lines that follow an offer a step-9 correctness fix changed: each
+//      such offer is redrawn exactly as recorded once the exclusions f62275b lacked (its exclusions.txt) are lifted
 //   R  the reachability sweep: hundreds of new runs on the default roll; meetings per adventure, and every boss row that can
 //      never appear, each with its reason (tier, unlock, exclusion, finale-only)
 static object FromJson(JsonElement e)
@@ -47,8 +51,11 @@ void Check(string name, bool ok, string detail = "")
     Console.WriteLine((ok ? "PASS " : "FAIL ") + name + (detail.Length > 0 ? "  (" + detail + ")" : ""));
 }
 void Note(string text) => Console.WriteLine("NOTE " + text);
+// C_ENC25_ONLY=A,L4,... runs only those sections (for the break-and-run proofs; unset: every section).
+var only = Environment.GetEnvironmentVariable("C_ENC25_ONLY") is string o && o.Length > 0 ? o.Split(',') : null;
 void Guard(string name, Action body)
 {
+    if (only != null && !only.Contains(name)) return;
     try { body(); }
     catch (Exception e) { failures++; Console.WriteLine("FAIL " + name + " threw " + e.GetType().Name + ": " + e.Message.Split('\n')[0] + " @ " + (e.StackTrace ?? "").Split('\n').FirstOrDefault()?.Trim()); }
 }
@@ -97,11 +104,16 @@ Guard("A", () =>
         && rows["ULDA_911"]["player_availability"].StartsWith("offered:tavern"));
     Check("A5 ULDA_038 Explorer Retraining is a tavern option of encounter schedules (repickPower, runs encounters, weight 1), implemented",
         retrain != null && retrain.Op == "repickPower" && retrain.Runs == DungeonRunTreasure.RunsEncounters && retrain.Weight == 1 && Cls("ULDA_038") == "implemented");
-    Check("A6 ULDA_607 House Special stays deferred: in tavern-v1.json deferred with its reason, no option, missing with data:bombastic-decks-absent",
+    // Step 9 made the deferral final (tavern-v1.json "deferred" keeps the row; its reason now says rejected for good).
+    Check("A6 ULDA_607 House Special stays out: in tavern-v1.json deferred with its reason (rejected for good, step 9), no option, missing with data:bombastic-decks-absent",
         data.Tavern.Option("ULDA_607") == null && Cls("ULDA_607") == "missing" && rows["ULDA_607"]["blocked_by"].Split(';').Contains("data:bombastic-decks-absent")
-        && R("dungeon-run/tavern-v1.json").Contains("\"id\": \"ULDA_607\", \"reason\": \"Bob's Bombastic Decks were server-side"));
-    Check("A7 ULDA_111 Hearthstone, GILA_900p Temporal Loop and GILA_911 Rewind are phase 9 (missing, each with its F15 reason)",
-        new[] { "ULDA_111", "GILA_900p", "GILA_911" }.All(id => Cls(id) == "missing" && rows[id]["notes"].Contains("phase 9")));
+        && R("dungeon-run/tavern-v1.json").Contains("\"id\": \"ULDA_607\", \"reason\": \"rejected for good (step 9): Bob's Bombastic Decks were server-side"));
+    // The close-out left the three to phase 9; step 9 (lane X) landed ULDA_111 (the escape) and GILA_911 (the restart) as v4
+    // treasures and made GILA_900p a final rejection.
+    Check("A7 ULDA_111 Hearthstone and GILA_911 Rewind are implemented (step 9's tuned-run treasures); GILA_900p Temporal Loop stays missing, rejected for good (step 9)",
+        new[] { "ULDA_111", "GILA_911" }.All(id => Cls(id) == "implemented" && rows[id]["player_availability"] == "offered:treasure" && !rows[id]["notes"].Contains("phase 9"))
+        && Cls("GILA_900p") == "missing" && rows["GILA_900p"]["notes"].Contains("rejected for good (step 9"),
+        string.Join(" ", new[] { "ULDA_111", "GILA_911", "GILA_900p" }.Select(id => id + "=" + Cls(id))));
     // The runs-and-state review (rerun): a weight-0 alias is never drawn under its own id (DungeonRunTavern.Open keeps weight > 0),
     // so its row must say the run is offered the alias's target ("via <id>", the ledger's reprint convention), not the card itself.
     var aliases = data.Tavern.Options.Where(o => o.Weight <= 0 && o.AliasOf != null).ToList();
@@ -127,13 +139,14 @@ Guard("B", () =>
     {
         // missing: rejections and deferrals, each recorded by its family
         ["DALA_501"] = "missing", ["DALA_740"] = "missing", ["DALA_857"] = "missing", ["DALA_BOSS_61t"] = "missing", ["DALA_BOSS_75h"] = "missing",
-        ["DALA_BOSS_75p"] = "missing", ["GILA_900p"] = "missing", ["GILA_911"] = "missing", ["GILA_BOSS_48t"] = "missing", ["ULDA_111"] = "missing",
+        ["DALA_BOSS_75p"] = "missing", ["GILA_900p"] = "missing",
         ["ULDA_607"] = "missing", ["ULDA_BOSS_58h"] = "missing", ["ULDA_BOSS_58p"] = "missing",
-        // partial: scripted and admitted, reached by no shipped feature (the close-out's stated reasons)
-        ["DALA_829"] = "partial", ["DALA_831"] = "partial", ["DALA_832"] = "partial", ["DALA_833"] = "partial", ["ULDA_801"] = "partial",
-        ["ULDA_802"] = "partial", ["ULDA_803"] = "partial", ["ULDA_804"] = "partial", ["GILA_BOSS_43t"] = "partial", ["GILA_BOSS_99t"] = "partial",
+        // partial: scripted and admitted, reached by no shipped feature (the close-out's stated reasons). Step 9: the eight twists
+        // roll on the v4 defaults and ULDA_111 / GILA_911 are v4 treasures (all implemented); GILA_BOSS_48t's restart is scripted
+        // (missing -> partial: out of Toki's deck until the stage-3 gate).
+        ["GILA_BOSS_43t"] = "partial", ["GILA_BOSS_48t"] = "partial", ["GILA_BOSS_99t"] = "partial",
     };
-    Check("B1 the rows left missing (13) or partial (10) are exactly the pinned rejections, deferrals and unreached rows",
+    Check("B1 the rows left missing (10) or partial (3) are exactly the pinned rejections, deferrals and unreached rows (step 9: 13 / 10 before)",
         open.Count == expected.Count && open.All(r => expected.TryGetValue(r["card_id"], out var c) && c == r["classification"]),
         string.Join(" ", open.Where(r => !expected.ContainsKey(r["card_id"])).Select(r => r["card_id"] + "=" + r["classification"]).Take(8)) + " / " + open.Count);
     // The blocker table of the ledger's Markdown: "| `key` | rows | only | collectible | what it needs |" rows. A key counts as
@@ -144,23 +157,33 @@ Guard("B", () =>
     var undescribed = open.SelectMany(r => r["blocked_by"].Split(';', StringSplitOptions.RemoveEmptyEntries).Where(k => !described.Contains(k)).Select(k => r["card_id"] + ":" + k)).ToList();
     Check("B2 each of them carries a blocker, and the ledger's blocker table describes every blocker it names (a non-empty \"What it needs\" cell)", open.All(r => r["blocked_by"].Length > 0) && undescribed.Count == 0,
         string.Join(" ", undescribed.Take(6)));
-    Check("B2 each partial row names its own reason (run:twist-pools, run:hunt-reward, data:unused-in-adventure), not a generic capability",
-        open.Where(r => r["classification"] == "partial").All(r => r["blocked_by"] == "run:twist-pools" || r["blocked_by"] == "run:hunt-reward" || r["blocked_by"] == "data:unused-in-adventure"),
+    // Step 9: run:twist-pools is gone (the pools are filled); GILA_BOSS_48t names its stage-3 gate (the restart's admission row, the
+    // encounter file's rejection, the roster it is left out of).
+    var partialReasons = new Dictionary<string, string>(StringComparer.Ordinal)
+    {
+        ["GILA_BOSS_43t"] = "run:hunt-reward", ["GILA_BOSS_99t"] = "data:unused-in-adventure",
+        ["GILA_BOSS_48t"] = "ai:nemesis-rejected-restart;validation:encounter-rejected;run:encounter-roster",
+    };
+    Check("B2 each partial row names its own reason (run:hunt-reward, data:unused-in-adventure, 48t's restart gate), not a generic capability",
+        open.Where(r => r["classification"] == "partial").All(r => partialReasons.TryGetValue(r["card_id"], out var why) && r["blocked_by"] == why),
         string.Join(" ", open.Where(r => r["classification"] == "partial").Select(r => r["card_id"] + "=" + r["blocked_by"])));
     // The rejections the families reported (HANDOFF 3.1 / 3.4 and the lane reports): the id, where the reason is recorded, a word of it.
     var reported = new (string Id, string Where, string Word)[]
     {
         ("DALA_BOSS_75h", "encounterRejections", "data gap"), ("DALA_BOSS_75p", "E18", "no text"), ("DALA_BOSS_61t", "E18", "unused"),
         ("DALA_501", "E18", "unused"), ("ULDA_BOSS_58h", "encounterRejections", "non-current player"), ("ULDA_BOSS_58p", "E21", "non-current player"),
-        ("GILA_BOSS_48t", "encounterRejections", "phase 9"), ("GILA_900h2", "encounterRejections", "phase 9"), ("DALA_857", "E05", "treasure"),
-        ("DALA_740", "E25", "data-gap"), ("ULDA_607", "E25", "Bombastic"), ("ULDA_111", "E25", "phase 9"), ("GILA_900p", "E25", "phase 9"), ("GILA_911", "E25", "phase 9"),
+        // Step 9: 48t's lift is the stage-3 gate, GILA_900h2's and GILA_900p's a final rejection; ULDA_111 and GILA_911 landed (A7).
+        ("GILA_BOSS_48t", "encounterRejections", "step 9 stage-3 gate"), ("GILA_900h2", "encounterRejections", "final rejection (step 9"), ("DALA_857", "E05", "treasure"),
+        ("DALA_740", "E25", "data-gap"), ("ULDA_607", "E25", "Bombastic"), ("GILA_900p", "E25", "rejected for good (step 9"),
         ("TRLA_209h", "F14", "NEUTRAL"), ("LOOTA_BOSS_53h2", "-", "portrait"),
     };
     var families = curation.RootElement.GetProperty("landedFamilies").EnumerateArray().ToList();
     bool InFamily(string fam, string id) => families.Any(f => f.GetProperty("id").GetString() == fam && f.TryGetProperty("rejected", out var rej) && rej.TryGetProperty(id, out _));
     bool InRejections(string id) => curation.RootElement.GetProperty("encounterRejections").EnumerateArray()
         .Any(e => e.GetProperty("id").GetString() == id || e.TryGetProperty("power", out var p) && p.GetString() == id);
-    var unrecorded = reported.Where(x => !(rows.TryGetValue(x.Id, out var r) && r["classification"] != "implemented" && r["classification"] != "partial"
+    // GILA_BOSS_48t is partial since step 9 (its restart is scripted; the card stays rejected for the deck), the one rejection
+    // allowed to be partial; every other stays missing or support.
+    var unrecorded = reported.Where(x => !(rows.TryGetValue(x.Id, out var r) && r["classification"] != "implemented" && (r["classification"] != "partial" || x.Id == "GILA_BOSS_48t")
         && (r["notes"].IndexOf(x.Word, StringComparison.OrdinalIgnoreCase) >= 0 || x.Where == "-" && r["roles"].Contains(x.Word))
         && (x.Where == "-" || (x.Where == "encounterRejections" ? InRejections(x.Id) : InFamily(x.Where, x.Id))))).Select(x => x.Id).ToList();
     Check("B3 every rejection the families reported is recorded: not implemented in the ledger, the reason in its notes, and in curation.json (the family's rejected list or encounterRejections)",
@@ -173,7 +196,9 @@ Guard("B", () =>
     var e25 = families.SingleOrDefault(f => f.GetProperty("id").GetString() == "E25");
     Check("B6 curation.json lands family E25 with its ids, support records and rejections", e25.ValueKind == JsonValueKind.Object
         && e25.GetProperty("ids").EnumerateArray().Select(x => x.GetString()).OrderBy(x => x).SequenceEqual(new[] { "DALA_740", "GILA_900p", "GILA_911", "ULDA_038", "ULDA_111", "ULDA_607", "ULDA_911" })
-        && e25.GetProperty("supportRecords").GetArrayLength() == 30 && e25.GetProperty("rejected").EnumerateObject().Count() == 5);
+        // Step 9 landed ULDA_111 and GILA_911: E25's rejected map keeps ULDA_607, DALA_740 and GILA_900p (5 -> 3).
+        && e25.GetProperty("supportRecords").GetArrayLength() == 30
+        && e25.GetProperty("rejected").EnumerateObject().Select(p => p.Name).OrderBy(x => x, StringComparer.Ordinal).SequenceEqual(new[] { "DALA_740", "GILA_900p", "ULDA_607" }));
     // The runs-and-state review (rerun): an admitted twist no default schedule can roll (an act whose pool holds it at a chance
     // above 0) is not eligible anywhere in the mode, so the completion bar is open for it. Each must be partial with run:twist-pools,
     // and HANDOFF.md section 3.3 must hand it to step 9 by id (the close-out left that list without the act I-III twist pools).
@@ -185,8 +210,13 @@ Guard("B", () =>
     int s33 = handoff.IndexOf("\n### 3.3 ", StringComparison.Ordinal), s34 = handoff.IndexOf("\n### 3.4 ", StringComparison.Ordinal);
     string then = s33 >= 0 && s34 > s33 ? handoff.Substring(s33, s34 - s33) : "";
     var unowned = idle.Where(id => !(Cls(id) == "partial" && rows[id]["blocked_by"] == "run:twist-pools" && then.Contains(id))).ToList();
-    Check($"B7 the {idle.Count} admitted twists no default schedule rolls (DALA_829, 831-833, ULDA_801-804) are partial with run:twist-pools, and HANDOFF 3.3 hands each to step 9 by id",
-        idle.Count == 8 && unowned.Count == 0 && then.Contains("twist pool"), string.Join(" ", unowned) + (then.Length == 0 ? " (no section 3.3)" : ""));
+    // Step 9 filled the pools (acts-v4h / acts-v4t, the defaults): no admitted twist is idle, the eight are implemented and rolled
+    // by a default, and HANDOFF 3.3 says so (the per-id rule above holds for an idle twist, of which there is none now).
+    var eight = new[] { "DALA_829", "DALA_831", "DALA_832", "DALA_833", "ULDA_801", "ULDA_802", "ULDA_803", "ULDA_804" };
+    var notLanded = eight.Where(id => !(rolled.Contains(id) && Cls(id) == "implemented" && rows[id]["blocked_by"] == "")).ToList();
+    Check($"B7 the {idle.Count} admitted twists no default schedule rolls: none since step 9; the eight act I-III twists (DALA_829, 831-833, ULDA_801-804) are rolled by a default and implemented, and HANDOFF 3.3 says they roll on the v4 defaults",
+        idle.Count == 0 && unowned.Count == 0 && notLanded.Count == 0 && then.Contains("The 8 act I-III twists (DALA_829, DALA_831-833, ULDA_801-804) roll on the v4 defaults"),
+        string.Join(" ", idle.Concat(notLanded)) + (then.Length == 0 ? " (no section 3.3)" : ""));
     var counts = ledger.GroupBy(r => r["classification"]).OrderBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key + " " + g.Count());
     Note("B ledger: " + ledger.Count + " rows; " + string.Join(", ", counts));
 });
@@ -334,6 +364,222 @@ Guard("L", () =>
         && starts.Select(x => x.Active.Class).SequenceEqual(Replay.Starts.Select(x => x.Row)));
     Check("L3 every replayed run ends in victory (the policy wins every fight)", lines.Where(l => l.StartsWith("end ", StringComparison.Ordinal)).All(l => l.StartsWith("end Victory", StringComparison.Ordinal))
         && lines.Count(l => l.StartsWith("end ", StringComparison.Ordinal)) == files.Count);
+});
+
+// ============================================================ L4. released-schedule replay (step 9)
+Guard("L4", () =>
+{
+    string fixtures = VerifyPaths.Fixture("p9/replay-v3");
+    int n = ReplayV3.Stops.Length;
+    var files = Enumerable.Range(0, n).Select(i => Path.Combine(fixtures, ReplayV3.FileName(i))).ToList();
+    // The recording, split per save (each replay starts with its "save" line).
+    var expected = File.ReadAllLines(Path.Combine(fixtures, "replay.txt"));
+    var recorded = new List<List<string>>();
+    foreach (string line in expected) { if (line.StartsWith("save ", StringComparison.Ordinal)) recorded.Add(new List<string>()); recorded[recorded.Count - 1].Add(line); }
+    // f62275b's own exclusion data (written by the recorder from that tree's parse): what the released schedules already excluded.
+    var oldRules = new Dictionary<string, Dictionary<string, string>>(StringComparer.Ordinal);
+    var oldBosses = new Dictionary<string, Dictionary<string, string>>(StringComparer.Ordinal);
+    foreach (string line in File.ReadAllLines(Path.Combine(fixtures, "exclusions.txt")))
+    {
+        var t = line.Split(' ');
+        var fields = new Dictionary<string, string>(StringComparer.Ordinal);
+        for (int k = 2; k + 1 < t.Length; k += 2) fields[t[k]] = t[k + 1];
+        (t[0] == "rule" ? oldRules : oldBosses)[t[1]] = fields;
+    }
+    bool OldHas(Dictionary<string, Dictionary<string, string>> table, string id, string key, string value) =>
+        table.TryGetValue(id, out var f) && f.TryGetValue(key, out var list) && list.Split(',').Contains(value);
+
+    var schedules = data.Schedules;
+    List<DungeonRunBoss> BossesOfAct(DungeonRunState st, DungeonRunSchedule sc, int act) =>
+        sc.Nodes.Where(nd => nd.Act == act && nd.IsFight && nd.Floor >= 1 && nd.Floor <= st.BossSequence.Count)
+            .Select(nd => data.Bosses.FirstOrDefault(b => b.Id == st.BossSequence[nd.Floor - 1])).Where(b => b != null).ToList();
+    // Why the current tree leaves rule r out of act `act`'s candidates (RuleCandidates' conditions, in its order), each cause
+    // marked new when the f62275b data did not have it (a step-9 correctness fix: lane R's exclusions, flags, rule keys, and the
+    // run-scope check against every act).
+    List<(string Cause, bool New)> RuleCauses(DungeonRunState st, DungeonRunSchedule sc, int act, DungeonRunGlobalRule r)
+    {
+        var causes = new List<(string, bool)>();
+        var active = st.ActiveRules.Where(x => x.Act == 0 || x.Act == act).ToList();
+        var ids = new HashSet<string>((r.RunScope ? st.ActiveRules : active).Select(x => x.Id), StringComparer.Ordinal);
+        var actIds = new HashSet<string>(active.Select(x => x.Id), StringComparer.Ordinal);
+        var rulesNow = (r.RunScope ? st.ActiveRules : active).Where(x => x.Kind != null).Select(x => schedules.Rule(x.Id)).Where(x => x != null).ToList();
+        var bosses = r.RunScope ? Enumerable.Range(1, sc.Acts.Count).SelectMany(a => BossesOfAct(st, sc, a)).ToList() : BossesOfAct(st, sc, act);
+        var actBosses = new HashSet<string>(BossesOfAct(st, sc, act).Select(b => b.Id), StringComparer.Ordinal);
+        if (r.RunScope && act != 1) causes.Add(("run scope, act " + act, false));
+        if (ids.Contains(r.Id)) causes.Add(("already active", false));
+        if (r.Effect == DungeonRunGlobalRule.EffectMatch && !SabberStoneCore.CardSets.DungeonRun.DungeonRunGlobalRules.IsScripted(r.Id)) causes.Add(("not scripted", false));
+        if (!DungeonRunAdmission.Classify(null, r.Id, AdmitScope.Rule, null, st.IsCatalogRun).Admitted) causes.Add(("not admitted", false));
+        if (r.NoBoardShrine && st.HasBoardShrine) causes.Add(("noBoardShrine", !OldHas(oldRules, r.Id, "noBoardShrine", "True")));
+        if (r.IncompatibleClasses.Contains(st.Class)) causes.Add(("class " + st.Class, !OldHas(oldRules, r.Id, "classes", st.Class)));
+        foreach (string t in r.IncompatibleTreasures.Where(t => DungeonRun.HoldsTreasure(st, t))) causes.Add(("treasure " + t + " (incompatibleTreasures)", true));
+        if (r.NoOpeningFlags && st.Cards.Any(c => c.Opening)) causes.Add(("an opening-flag card (noOpeningFlags)", true));
+        foreach (var other in rulesNow.Where(o => r.IncompatibleRules.Contains(o.Id) || o.IncompatibleRules.Contains(r.Id)))
+            causes.Add(("rule " + other.Id, !(OldHas(oldRules, r.Id, "rules", other.Id) || OldHas(oldRules, other.Id, "rules", r.Id)) || !actIds.Contains(other.Id)));
+        foreach (string m in r.IncompatibleModifiers.Where(ids.Contains)) causes.Add(("modifier " + m, !OldHas(oldRules, r.Id, "modifiers", m) || !actIds.Contains(m)));
+        foreach (var b in bosses)
+        {
+            bool cross = !actBosses.Contains(b.Id);
+            if (b.IncompatibleRules.Contains(r.Id)) causes.Add(("boss " + b.Id + " incompatibleRules", cross || !OldHas(oldBosses, b.Id, "rules", r.Id)));
+            foreach (string f in b.Flags.Where(r.IncompatibleFlags.Contains))
+                causes.Add(("boss " + b.Id + " flag " + f + (cross ? " (another act: the run-scope check)" : ""), cross || !OldHas(oldRules, r.Id, "flags", f) || !OldHas(oldBosses, b.Id, "flags", f)));
+        }
+        return causes;
+    }
+    // The modifiers the current tree bans on the act (ModifierCandidates' sources), each cause marked new as above.
+    List<(string Cause, bool New)> ModifierCauses(DungeonRunState st, string m)
+    {
+        var causes = new List<(string, bool)>();
+        var node = run.CurrentNode(st);
+        var sc = run.ScheduleFor(st);
+        if (st.ActiveRules.Any(x => x.Act == node.Act && x.Id == m)) causes.Add(("already active", false));
+        foreach (var b in BossesOfAct(st, sc, node.Act).Where(b => DungeonRun.ActWideModifierBans(st, b).Contains(m)))
+            causes.Add(("boss " + b.Id + " incompatibleModifiers", !OldHas(oldBosses, b.Id, "modifiers", m)));
+        foreach (var r in run.ActiveGlobalRules(st).Where(r => r.IncompatibleModifiers.Contains(m)))
+            causes.Add(("rule " + r.Id + " incompatibleModifiers", !OldHas(oldRules, r.Id, "modifiers", m)));
+        return causes;
+    }
+    // OpenAnomaly's and OpenModifier's draws over a candidate list (the same streams and order).
+    List<string> DrawAnomaly(DungeonRunState st, List<DungeonRunGlobalRule> candidates)
+    {
+        var left = candidates.ToList(); var offer = new List<string>();
+        for (int k = 0; k < DungeonRun.AnomalyOptions && left.Count > 0; k++)
+        {
+            int roll = StableSeed.Index(StableSeed.Derive(st.Seed, DungeonRun.AnomalyStream, st.Node, k), left.Sum(r => Math.Max(1, r.Weight)));
+            var picked = left[left.Count - 1];
+            foreach (var r in left) { roll -= Math.Max(1, r.Weight); if (roll < 0) { picked = r; break; } }
+            offer.Add(picked.Id); left.Remove(picked);
+        }
+        offer.Add(DungeonRunGlobalRule.None);
+        return offer;
+    }
+    List<string> DrawModifier(DungeonRunState st, List<DungeonRunModifier> candidates)
+    {
+        var left = candidates.ToList(); var offer = new List<string>();
+        for (int k = 0; k < DungeonRun.ModifierOptions && left.Count > 0; k++)
+        {
+            var picked = left[StableSeed.Index(StableSeed.Derive(st.Seed, DungeonRun.ModifierStream, st.Node, k), left.Count)];
+            offer.Add(picked.Id); left.Remove(picked);
+        }
+        return offer;
+    }
+    // Attributes a moved offer: lifting every exclusion the current tree has and f62275b had not reproduces the recorded offer.
+    string Attribute(DungeonRunState st, string kind, List<string> recordedOffer, out bool ok)
+    {
+        ok = false;
+        var sc = run.ScheduleFor(st);
+        int act = run.CurrentNode(st).Act;
+        var lifted = new List<string>();
+        List<string> redraw;
+        if (kind == "anomaly")
+        {
+            var now = run.RuleCandidates(st, sc, act, DungeonRunGlobalRule.KindAnomaly);
+            var before = new List<DungeonRunGlobalRule>();
+            foreach (var r in schedules.Rules.Where(r => r.Kind == DungeonRunGlobalRule.KindAnomaly && r.Admitted))
+            {
+                if (now.Contains(r)) { before.Add(r); continue; }
+                var causes = RuleCauses(st, sc, act, r);
+                if (causes.Count > 0 && causes.All(c => c.New)) { before.Add(r); lifted.Add(r.Id + " [" + string.Join("; ", causes.Select(c => c.Cause)) + "]"); }
+            }
+            redraw = DrawAnomaly(st, before);
+        }
+        else if (kind == "modifier")
+        {
+            var now = run.ModifierCandidates(st);
+            var before = new List<DungeonRunModifier>();
+            foreach (var m in schedules.Modifiers.OrderBy(m => m.Id, StringComparer.Ordinal))
+            {
+                if (now.Contains(m)) { before.Add(m); continue; }
+                var causes = ModifierCauses(st, m.Id);
+                if (causes.Count > 0 && causes.All(c => c.New)) { before.Add(m); lifted.Add(m.Id + " [" + string.Join("; ", causes.Select(c => c.Cause)) + "]"); }
+            }
+            redraw = DrawModifier(st, before);
+        }
+        else return "a moved " + kind + " line: no step-9 attribution for it";
+        ok = lifted.Count > 0 && redraw.SequenceEqual(recordedOffer);
+        return "lifted " + string.Join(", ", lifted) + " -> redraw " + string.Join(",", redraw) + (ok ? " = recorded" : " != recorded " + string.Join(",", recordedOffer));
+    }
+    string Seen(string line) { int k = line.IndexOf(" => ", StringComparison.Ordinal); return k < 0 ? line : line.Substring(0, k); }
+    string Kind(string line) => line.Split(' ')[0];
+    List<string> OfferOf(string line) => Seen(line).Split(' ').ElementAtOrDefault(1)?.Split(',').ToList() ?? new List<string>();
+
+    string StateOf(string line) { int k = line.LastIndexOf(" state ", StringComparison.Ordinal); return k < 0 ? null : line.Substring(k + 7); }
+
+    // Each replay is walked as ReplayV3.Walk walks it (loaded through DungeonRunMigration.Upgrade, resumed, then the fixed policy
+    // of ReplayV3.Step), one step at a time and compared with the recording as it goes. A line that differs must be a step that
+    // did what the recording did (the same seen text) and entered an offer node whose offer moved, with the state differing by
+    // that offer alone: the recorded offer put into the current state gives exactly the recorded state digest. The moved offer
+    // must also be attributed (lifting the step-9 exclusions f62275b's exclusions.txt lacks redraws it as recorded). The
+    // recorded offer is then put back and the walk goes on, so every later line is compared too and must match the recording
+    // (or be another such offer). Any other difference, a line missing or one too many is unattributed.
+    var lines = new List<string>();
+    int movedLines = 0, attributed = 0, comparedLines = 0;
+    var moved = new List<string>(); var unattributed = new List<string>(); var headers = new List<string>();
+    for (int i = 0; i < n; i++)
+    {
+        var exp = i < recorded.Count ? recorded[i] : new List<string>();
+        var save = ReplayV3.Read(files[i]);
+        save.LoadedVersion = save.Version;
+        DungeonRunMigration.Upgrade(save, run, _ => { });
+        var st = save.Active;
+        string phase = st.Phase.ToString();
+        run.Resume(st);
+        var cur = new List<string> { $"save {Path.GetFileName(files[i])} v{save.Version} schedule v{st.ScheduleVersion} {st.Schedule} {st.Class} floor {st.Floor} {phase} -> {st.Phase} state {ReplayV3.Digest(ReplayV3.Xml(save))}" };
+        if (cur[0] != exp.ElementAtOrDefault(0)) headers.Add(ReplayV3.FileName(i));
+        bool broken = false;
+        for (int guard = 0; guard < 800 && !st.Finished; guard++)
+        {
+            int d = cur.Count;
+            ReplayV3.Step(run, save, cur);
+            if (d < exp.Count && cur[d] == exp[d]) continue;
+            movedLines++;
+            string at = $"{ReplayV3.FileName(i)} line {d}";
+            string kind = d + 1 < exp.Count ? Kind(exp[d + 1]) : null;
+            string nowKind = st.Phase == DungeonRunPhase.Modifier && st.ModifierOffer != null ? (st.ModifierOffer.Kind == DungeonRunGlobalRule.KindAnomaly ? "anomaly" : "modifier") : null;
+            if (d >= exp.Count || Seen(cur[d]) != Seen(exp[d]) || nowKind == null || kind != nowKind)
+            {
+                unattributed.Add(at + ": " + cur[d] + " | recorded " + exp.ElementAtOrDefault(d));
+                broken = true; break;
+            }
+            var recordedOffer = OfferOf(exp[d + 1]);
+            var nowOffer = st.ModifierOffer.Offered.ToList();
+            var patched = DungeonRunStore.Clone(save);
+            patched.Active.ModifierOffer.Offered = recordedOffer.ToList();
+            bool onlyOffer = ReplayV3.Digest(ReplayV3.Xml(patched)) == StateOf(exp[d]);
+            string why = Attribute(st, kind, recordedOffer, out bool ok);
+            string entry = $"{at}: {kind} offer {string.Join(",", recordedOffer)} -> {string.Join(",", nowOffer)}; {why}"
+                + (onlyOffer ? "; with the recorded offer the state is the recorded one" : "; with the recorded offer the state still differs from the recorded one");
+            if (!ok || !onlyOffer) { unattributed.Add(entry); broken = true; break; }
+            attributed++; moved.Add(entry);
+            // f62275b's offer back in the run: the walk goes on from the recorded state.
+            st.ModifierOffer.Offered = recordedOffer.ToList();
+        }
+        if (!broken)
+        {
+            cur.Add($"end {st.Phase} floor {st.Floor} matches {st.Matches.Count} deck {st.Deck.Count} lord damage {ReplayV3.Ids((save.Profile.BossDamage ?? new List<DungeonRunBossDamage>()).Select(x => x.Boss + ":" + x.Remaining))} finished {st.Finished}");
+            int end = cur.Count - 1;
+            if (cur.Count != exp.Count || cur[end] != exp[end]) unattributed.Add($"{ReplayV3.FileName(i)}: {cur.Count} lines ({cur[end]}), recorded {exp.Count} ({exp.LastOrDefault()})");
+            comparedLines += cur.Count;
+        }
+        lines.AddRange(cur);
+    }
+    if (Environment.GetEnvironmentVariable("C_ENC25_REPLAY_V3") is string dump && dump.Length > 0) File.WriteAllText(dump, string.Join("\n", lines) + "\n", new UTF8Encoding(false));
+    foreach (string m in moved) Note("L4 moved: " + m);
+    foreach (string m in unattributed) Note("L4 unattributed: " + m);
+    var saves = files.Select(ReplayV3.Read).ToList();
+    Check($"L4 the {n} saves recorded on f62275b (verify/tools/gen/p9/record_replay_v3.sh) are stamp-3 runs of acts-v3h and acts-v3t at their stops"
+        + " (act I anomaly, a shrine run's act I anomaly holding a rule its board shrine excludes, the finale tavern, Hagatha's and the relay's pre-match,"
+        + " a Plague Lord in the match, a modifier node, a tavern purchase waiting for its target), and each loads and resumes as it did there",
+        saves.All(x => x.Version == 6 && x.Active.ScheduleVersion == 3) && saves.Select(x => x.Active.Schedule).SequenceEqual(ReplayV3.Stops.Select(x => x.Schedule))
+        && saves.Select(x => x.Active.Class).SequenceEqual(ReplayV3.Stops.Select(x => x.Row)) && saves[5].Active.Phase == DungeonRunPhase.InMatch
+        && saves[7].Active.Tavern?.Pending != null && saves[1].Active.HasBoardShrine && headers.Count == 0 && recorded.Count == n,
+        headers.Count + " load lines differ: " + string.Join(" ", headers));
+    Check($"L4 each replay equals the recording line for line, except steps whose state differs only by a moved offer that lifting the step-9 exclusions (those f62275b's exclusions.txt lacks)"
+        + $" redraws exactly as recorded; with that offer put back the walk goes on as recorded ({comparedLines} of {expected.Length} lines walked, {movedLines} moved: {attributed} attributed offers, {unattributed.Count} unattributed)",
+        unattributed.Count == 0 && comparedLines == expected.Length && lines.Count(l => l.StartsWith("save ", StringComparison.Ordinal)) == n, string.Join(" | ", unattributed));
+    string shrine = recorded[1].FirstOrDefault(l => l.StartsWith("anomaly ", StringComparison.Ordinal));
+    Check("L4 a stored offer is never redrawn: the shrine run's act I anomaly offer (" + Seen(shrine ?? "(none)") + "), made before the ordering fix, replays as recorded",
+        shrine != null && lines.Contains(shrine) && OfferOf(shrine).Any(id => data.Schedules.Rule(id)?.NoBoardShrine == true));
+    Check("L4 every replayed run ends in victory", lines.Count(l => l.StartsWith("end Victory", StringComparison.Ordinal)) == n);
 });
 
 // ============================================================ R. the reachability sweep

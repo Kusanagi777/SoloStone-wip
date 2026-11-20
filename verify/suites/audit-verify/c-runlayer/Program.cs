@@ -54,10 +54,13 @@ string[] classIds = { "DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "
 var errors = DungeonRunValidator.Validate(data, null);
 Check("data validates (client check not run headless)", errors.Count == 0, errors.Count + " errors: " + string.Join(" | ", errors.Take(12)));
 // Phase 6 F1 adds the 14 Dungeon Run passive treasures (LOOTA_800 ... LOOTA_846, act runs only): 33 + 14 = 47; phase 6 F2 the
-// 30 Dungeon Run active treasures (LOOTA_805 ... LOOTA_847 with the Quel'Delar pieces, act runs only): 47 + 30 = 77.
-Check("11 classes, 33 decks, 20 bosses, 77 treasures (33 + phase 6 F1's 14 act-run passives + F2's 30 act-run actives)", data.Classes.Count == 11 && data.Decks.Count == 33 && data.Bosses.Count == 20 && data.Treasures.Count == 77
-    && data.Treasures.Count(t => t.Runs == DungeonRunTreasure.RunsAct) == 44 && data.Treasures.Count(t => t.Runs == DungeonRunTreasure.RunsAct && t.Active) == 30,
-    $"{data.Classes.Count}/{data.Decks.Count}/{data.Bosses.Count}/{data.Treasures.Count}");
+// 30 Dungeon Run active treasures (LOOTA_805 ... LOOTA_847 with the Quel'Delar pieces, act runs only): 47 + 30 = 77. Step 9
+// (lane E, D9) adds GILA_BOSS_43t, Damph's encounter reward: a v4-only, never-offered row with no scope, so it loads without the
+// catalog too (78); the other two v4 rows (ULDA_111, GILA_911) are scoped to catalog decks and stay out here.
+Check("11 classes, 33 decks, 20 bosses, 78 treasures (33 + phase 6 F1's 14 act-run passives + F2's 30 act-run actives + step 9's GILA_BOSS_43t reward)", data.Classes.Count == 11 && data.Decks.Count == 33 && data.Bosses.Count == 20 && data.Treasures.Count == 78
+    && data.Treasures.Count(t => t.Runs == DungeonRunTreasure.RunsAct) == 44 && data.Treasures.Count(t => t.Runs == DungeonRunTreasure.RunsAct && t.Active) == 30
+    && data.Treasures.Where(t => t.Runs == DungeonRunTreasure.RunsV4).Select(t => t.Id + (t.Reward && !t.Offered ? ":reward" : "")).SequenceEqual(new[] { "GILA_BOSS_43t:reward" }),
+    $"{data.Classes.Count}/{data.Decks.Count}/{data.Bosses.Count}/{data.Treasures.Count} v4 {string.Join(",", data.Treasures.Where(t => t.Runs == DungeonRunTreasure.RunsV4).Select(t => t.Id))}");
 Check("classes are the 11 CardClass names in data order", data.Classes.Select(c => c.Id).SequenceEqual(classIds));
 Check("class ladder expands to 44 keys + challenge", data.Unlocks.Count == 45 && classIds.All(c => new[] { "floor3", "floor4", "floor5", "win" }
     .All(step => data.Unlocks.TryGetValue(c.ToLowerInvariant() + "_" + step, out var cond) && cond.Class == c)), string.Join(",", data.Unlocks.Keys.Take(6)));
@@ -625,18 +628,20 @@ Check($"random-play matches run without engine faults ({matches} games)", faults
     // Phase 2 review: the validator applies the admission table to passive treasures, their effect shells, legacy powers and
     // every content shell (shrines included), not only to pool cards, player powers and active treasures.
     var passiveTreasure = new RunContent { Key = "probe_passive", Kind = RunContentKind.PassiveTreasure, EffectKey = "probe_fx", Name = "probe", Text = "probe" };
-    // Phase 7 D admitted TRLA_809 (a shrine upgrade); ULDA_111 (start-of-game-draw, a match exit: phase 9) stands in as the rejected shell.
-    var rejectedEffect = new RunContent { Key = "probe_fx", Kind = RunContentKind.Effect, ShellId = "ULDA_111", Name = "probe", Text = "probe" };
+    // Phase 7 D admitted TRLA_809 (a shrine upgrade); step 9 admitted ULDA_111 (the escape), so GILA_900h2 (fight-hero-card, a
+    // final rejection) stands in as the rejected shell.
+    var rejectedEffect = new RunContent { Key = "probe_fx", Kind = RunContentKind.Effect, ShellId = "GILA_900h2", Name = "probe", Text = "probe" };
     var rejectedShrine = new RunContent { Key = "probe_shrine_1", Kind = RunContentKind.PassivePower, ShellId = "GILA_900p", Name = "probe", Text = "probe" };
     var synthetic = new DungeonRunData { DataVersion = "runlayer", Rules = data.Rules };
     synthetic.Treasures.Add(new DungeonRunTreasure { Id = "probe_passive", Rarity = "common", Universal = true });
-    // Phase 6 F15 admitted GILA_511 and phase 7 T2 TRLA_191 (a teammate); GILA_911 (turn-rewind, phase 9) is an id the table still rejects.
-    synthetic.Treasures.Add(new DungeonRunTreasure { Id = "GILA_911", Rarity = "common", Universal = true });
+    // Phase 6 F15 admitted GILA_511, phase 7 T2 TRLA_191 (a teammate) and step 9 GILA_911 (the Rewind restart); DALA_740
+    // (treasure-data-gap, rejected for good in step 9) is a treasure id the table still rejects.
+    synthetic.Treasures.Add(new DungeonRunTreasure { Id = "DALA_740", Rarity = "common", Universal = true });
     var errs = DungeonRunValidator.Validate(synthetic, null, DungeonRunContent.All.Concat(new[] { passiveTreasure, rejectedEffect, rejectedShrine }).ToList());
     Check("validator: a passive treasure whose effect shell the table rejects fails admission",
-        errs.Any(e => e.StartsWith("ULDA_111: admission start-of-game-draw:") && e.Contains("(probe_passive effect)")), string.Join(" | ", errs.Where(e => e.Contains("probe"))));
-    Check("validator: a passive treasure id the table rejects (GILA_911) fails admission",
-        errs.Any(e => e.StartsWith("GILA_911: admission turn-rewind:")), string.Join(" | ", errs.Where(e => e.StartsWith("GILA_911"))));
+        errs.Any(e => e.StartsWith("GILA_900h2: admission fight-hero-card:") && e.Contains("(probe_passive effect)")), string.Join(" | ", errs.Where(e => e.Contains("probe"))));
+    Check("validator: a passive treasure id the table rejects (DALA_740) fails admission",
+        errs.Any(e => e.StartsWith("DALA_740: admission treasure-data-gap:")), string.Join(" | ", errs.Where(e => e.StartsWith("DALA_740"))));
     Check("validator: a shrine whose shell the table rejects fails admission",
         errs.Any(e => e.StartsWith("GILA_900p: admission turn-rewind:") && e.Contains("(content probe_shrine_1)")), string.Join(" | ", errs.Where(e => e.Contains("probe_shrine"))));
     Check("validator: the real data with the real content still has 0 errors", DungeonRunValidator.Validate(data, null).Count == 0);
