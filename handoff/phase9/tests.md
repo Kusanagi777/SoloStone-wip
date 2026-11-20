@@ -125,6 +125,13 @@ Fixed at the user's request after the test phase (released behaviour):
   twice), c-secretsearch detail lines only (summary 689/0); `bp.sh enc17`: the Chu/flark game 11 -> 9 turns, 22 -> 16
   decisions, boss win, checks pass (twice). Not rerun: the other bosspilot modes that use Chu's deck
   (`enc-dala_63_dagg`, which holds Sea Reaver) or any deck with AT_130/GVG_007.
+  A parallel session (closed PR Kusanagi777/SoloStone-wip#4) measured an equivalent rule (a minion whose card carries
+  TOPDECK stays in hand; the same outcome for all 26 cards; engine md5 `be14eef8767e265ed19c36012ad0de85`, not this tree's
+  build) on da49182, before and after, each side twice: `runs.sh 1/2 all` and `bp.sh run`, `act`, `catalog`, `enc09`,
+  `f04-boss`, `enc17`. Every entry was run 1 = run 2 on both sides (timing lines excepted). The same three moves appeared
+  (c-gen-9, randplay game 120 to F4B15E7C27E9B2EC, enc17's Chu/flark game 11 -> 9 turns). Everything else measured was
+  byte-equal: the other 75 run entries (selfplay 2CE546A18F96DCBC), bp run 40/27, act 40/27, catalog 40/28, enc09 and
+  f04-boss.
 
 No other step-9 defect was found by any lane. Defects in the lanes' own tests, found by the review and fixed (section 4).
 
