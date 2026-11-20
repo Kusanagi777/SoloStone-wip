@@ -146,7 +146,8 @@ Fixed at the user's request after the test phase (released behaviour):
   `runs.sh 1 all` against the Draw.cs fix's run 1 (wip/t-draw): c-gen-9 (W2d, W4b; 90 -> 92/0), c-secretsearch (PR #2's case
   12; 689 -> 692/0), randplay digest F4B15E7C27E9B2EC -> D636637696A3BCE4 (game 120 only, the game with GVG_007; run 2 the same digest);
   every other entry byte-equal (c-rules-9 56/2, T2 and K1 as before). `bp.sh enc08`, `enc09`: twice identical, 0 faults,
-  0 fallbacks; enc17 and pairs9 chunks 8, 11, 12 and 23 below.
+  0 fallbacks; `bp.sh enc17` twice identical and byte-equal to the Draw.cs fix's record (0 faults, 0 fallbacks,
+  0 failed checks); `bp.sh pairs9` chunks 8, 11, 12 and 23 (run 1): 0 faults, 0 fallbacks, 0 failed checks.
 
 No other step-9 defect was found by any lane. Defects in the lanes' own tests, found by the review and fixed (section 4).
 
