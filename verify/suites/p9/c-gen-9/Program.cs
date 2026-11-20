@@ -774,13 +774,18 @@ Guard("W", () =>
             "zone " + reaver.Zone?.Type);
         Check("W1d its draw effect does not fire again when it is played (the board Yetis still at 1 damage)", mine.Damage == 1 && mine2.Damage == 1, mine.Damage + "/" + mine2.Damage);
     }
-    // W2 Flame Leviathan: 2 damage to all minions (the engine's TopdeckTask; the card text says all characters); it stays in hand.
+    // W2 Flame Leviathan: "deal 2 damage to all characters", both heroes included (its TopdeckTask hit EntityType.ALLMINIONS until
+    // PR #3's fix, ALL now); it stays in hand.
     {
         var g = G(); var p = g.Player1;
         var mine = Board(g, p, Yeti); var theirs = Board(g, g.Player2, Yeti);
         int hand = p.HandZone.Count;
+        int own = p.Hero.Health + p.Hero.Armor, foe = g.Player2.Hero.Health + g.Player2.Hero.Armor;
         var lev = DrawTop(g, p, Leviathan);
         Check("W2a Flame Leviathan drawn: 2 damage to the minions of both sides", mine.Damage == 2 && theirs.Damage == 2, mine.Damage + "/" + theirs.Damage);
+        Check("W2d and 2 damage to both heroes (all characters)",
+            p.Hero.Health + p.Hero.Armor == own - 2 && g.Player2.Hero.Health + g.Player2.Hero.Armor == foe - 2,
+            "hero " + own + "->" + (p.Hero.Health + p.Hero.Armor) + " enemy hero " + foe + "->" + (g.Player2.Hero.Health + g.Player2.Hero.Armor));
         Check("W2b Flame Leviathan stays in hand after its draw effect", lev.Zone == p.HandZone && p.HandZone.Count == hand + 1 && LastZone(g, lev) == (int)Zone.HAND,
             "zone " + lev.Zone?.Type + " hand " + hand + "->" + p.HandZone.Count + " last " + (Zone)LastZone(g, lev));
         Mana(p);
