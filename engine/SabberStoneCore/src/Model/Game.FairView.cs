@@ -26,5 +26,29 @@ namespace SabberStoneCore.Model
             }
             return removed;
         }
+
+        /// <summary>
+        /// Drops every aura's applied id whose entity is no longer registered: a fair view that retires hidden entities
+        /// (Kalecgos's DAL_609 on the opponent's hand) must call this before it reissues their ids, or an aura removal looks up a
+        /// retired id (KeyNotFoundException) or strips its effect from the entity reissued under it. Returns how many were dropped.
+        /// </summary>
+        public int RemoveDetachedAuraTargetsForFairView()
+        {
+            int removed = 0;
+            foreach (SabberStoneCore.Auras.IAura aura in Auras)
+                removed += ForgetUnregisteredTargets(aura);
+            return removed;
+        }
+
+        private static int ForgetUnregisteredTargets(SabberStoneCore.Auras.IAura aura)
+        {
+            if (aura is SabberStoneCore.Auras.Aura single) return single.ForgetUnregisteredTargets();
+            int removed = 0;
+            // MultiAura's children are not registered in Auras.
+            if (aura is SabberStoneCore.Auras.MultiAura multi)
+                foreach (SabberStoneCore.Auras.IAura child in multi)
+                    removed += ForgetUnregisteredTargets(child);
+            return removed;
+        }
     }
 }

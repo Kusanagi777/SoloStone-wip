@@ -123,7 +123,7 @@ differ between any two runs; its SUMMARY line is what must match):
 | c-enc-08 | 113 | c-rules-06 | 224 |
 | c-enc-09 | 166 | c-enc-10 | 116 |
 | c-w3fix | 4 | c-secretscan | faults 0 (both generations; items 851) |
-| c-secretsearch | SUMMARY checks passed 689 failed 0 | selfplay | decks 57 games 200 p1 103 p2 97 other 0 faults 0 digest 2CE546A18F96DCBC |
+| c-secretsearch | SUMMARY checks passed 689 failed 0 (692 / 0 since case 12, step 9's test phase) | selfplay | decks 57 games 200 p1 103 p2 97 other 0 faults 0 digest 2CE546A18F96DCBC |
 | randplay | games=200 digest=1DE562A92D22C987 (regkeys 2588) | c-enc-11 (wave 4) | RESULT 109 passed, 0 failed |
 | c-enc-12 (wave 4) | RESULT 105 passed, 0 failed | c-enc-13 (wave 4) | RESULT 112 passed, 0 failed |
 | c-w4fix (wave 4) | RESULT 4 passed, 0 failed | c-enc-14 (wave 5) | RESULT 117 passed, 0 failed |
@@ -213,7 +213,8 @@ three step-9 bosspilot harnesses `p9/c-bosspilot-pairs9`, `c-bosspilot-ends9` an
 and K1 by design until calibration (two act III twists roll in about 10% of runs, below 15%; `mod_hot_start` is a no-op on
 the floor-15 majors); c-longrun-9's `TIME` line is left out of `same.sh`'s comparison. The `final.sh` stage `p9` runs the
 non-calibration modes: `bp.sh pairs9 1-25` (chunk 23 exited 3, three boss-AI fallbacks in case 1722, until the engine's
-aura-removal fix, tests.md section 2), `bp.sh ends9 <part>` and `bp.sh treasure9`. The calibration modes (`slots9`,
+aura-removal fix, tests.md section 2), `bp.sh ends9 <part>` and `bp.sh treasure9`. c-secretsearch gains case 12
+KalecgosHiddenHand (the fair view's complement to that fix; SUMMARY 689 -> 692 / 0). The calibration modes (`slots9`,
 `outliers9`, `finale9`, `tekahn9`, `longrun9`) and the 48t gate (`gate48t`, `uld152`) run as queues.
 
 Generators (`gen.sh`): all six generated files byte-identical; encounters "255 rows, 296 decks (125 authentic, 171

@@ -505,7 +505,7 @@ namespace SabberStoneCore.CardSets
 			cards.Add("GVG_007", new CardDef(new Power
 			{
 				// TODO Test: Flame Leviathan_GVG_007
-				TopdeckTask = new DamageTask(2, EntityType.ALLMINIONS)
+				TopdeckTask = new DamageTask(2, EntityType.ALL)
 			}));
 
 			// ------------------------------------------ MINION - MAGE

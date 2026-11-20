@@ -774,13 +774,18 @@ Guard("W", () =>
             "zone " + reaver.Zone?.Type);
         Check("W1d its draw effect does not fire again when it is played (the board Yetis still at 1 damage)", mine.Damage == 1 && mine2.Damage == 1, mine.Damage + "/" + mine2.Damage);
     }
-    // W2 Flame Leviathan: 2 damage to all minions (the engine's TopdeckTask; the card text says all characters); it stays in hand.
+    // W2 Flame Leviathan: "deal 2 damage to all characters", both heroes included (its TopdeckTask hit EntityType.ALLMINIONS until
+    // PR #3's fix, ALL now); it stays in hand.
     {
         var g = G(); var p = g.Player1;
         var mine = Board(g, p, Yeti); var theirs = Board(g, g.Player2, Yeti);
         int hand = p.HandZone.Count;
+        int own = p.Hero.Health + p.Hero.Armor, foe = g.Player2.Hero.Health + g.Player2.Hero.Armor;
         var lev = DrawTop(g, p, Leviathan);
         Check("W2a Flame Leviathan drawn: 2 damage to the minions of both sides", mine.Damage == 2 && theirs.Damage == 2, mine.Damage + "/" + theirs.Damage);
+        Check("W2d and 2 damage to both heroes (all characters)",
+            p.Hero.Health + p.Hero.Armor == own - 2 && g.Player2.Hero.Health + g.Player2.Hero.Armor == foe - 2,
+            "hero " + own + "->" + (p.Hero.Health + p.Hero.Armor) + " enemy hero " + foe + "->" + (g.Player2.Hero.Health + g.Player2.Hero.Armor));
         Check("W2b Flame Leviathan stays in hand after its draw effect", lev.Zone == p.HandZone && p.HandZone.Count == hand + 1 && LastZone(g, lev) == (int)Zone.HAND,
             "zone " + lev.Zone?.Type + " hand " + hand + "->" + p.HandZone.Count + " last " + (Zone)LastZone(g, lev));
         Mana(p);
@@ -800,6 +805,21 @@ Guard("W", () =>
         var g = G(Thirty(Reaver)); var p = g.Player1;
         Check("W4 opening hands of Sea Reavers keep them (no card lost to the set-aside zone)", p.HandZone.Count(x => x.Card.Id == Reaver) >= 3 && p.SetasideZone.All(x => x.Card.Id != Reaver),
             "hand " + p.HandZone.Count(x => x.Card.Id == Reaver) + " setaside " + p.SetasideZone.Count(x => x.Card.Id == Reaver) + " first " + (g.FirstPlayer == p));
+    }
+    // W4b the opening deal fires no "When you draw this" effect (Hearthstone: cards dealt into the starting hand do not
+    // trigger; the engine already skips them for mulligan replacements). Flame Leviathans dealt into the opening hand leave
+    // both heroes at 30 and open no TRIGGER block, read before MainBegin's turn-1 draw (an ordinary draw, which does fire).
+    {
+        var cfg = new GameConfig { RandomSeed = 7, Shuffle = false, SkipMulligan = false, History = true, Logging = false, FormatType = FormatType.FT_WILD,
+            Player1HeroClass = CardClass.WARRIOR, Player2HeroClass = CardClass.MAGE,
+            Player1Deck = Thirty(Leviathan).Select(C).ToList(), Player2Deck = Thirty(Yeti).Select(C).ToList() };
+        var g = new Game(cfg);
+        g.StartGame();
+        var p = g.Player1;
+        var dealt = p.HandZone.Where(x => x.Card.Id == Leviathan).ToList();
+        Check("W4b Flame Leviathans dealt into the opening hand do not fire (heroes at 30, no TRIGGER block, all still in hand)",
+            dealt.Count >= 3 && g.Player1.Hero.Health == 30 && g.Player2.Hero.Health == 30 && dealt.All(x => !Triggered(g, x) && x.Zone == p.HandZone),
+            "dealt " + dealt.Count + " heroes " + g.Player1.Hero.Health + "/" + g.Player2.Hero.Health + " triggered " + dealt.Count(x => Triggered(g, x)));
     }
     // W5 Casts When Drawn spells (the tag: Ancient Curse; TOPDECK only: Burrowing Mine): cast, out of the hand, the next card drawn.
     foreach (var (id, dmg) in new[] { (Curse, 7), (Mine, 10) })
