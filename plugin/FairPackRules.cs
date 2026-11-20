@@ -207,6 +207,14 @@ public static class FairPackRules
         using (var output = new MemoryStream()) { stream.CopyTo(output); return output.ToArray(); }
     }
 
+    internal static byte[] WithLf(byte[] bytes)
+    {
+        var output = new MemoryStream(bytes.Length);
+        for (int i = 0; i < bytes.Length; i++)
+            if (bytes[i] != (byte)'\r' || i + 1 >= bytes.Length || bytes[i + 1] != (byte)'\n') output.WriteByte(bytes[i]);
+        return output.ToArray();
+    }
+
     private static string Hash(byte[] bytes)
     {
         using (var sha = SHA256.Create())
@@ -216,7 +224,9 @@ public static class FairPackRules
     internal static PackCatalogue LoadCatalogue(string metaId, IEnumerable<string> activeSets, string newestSet)
     {
         LocalCardPremium.Validate();
-        byte[] bytes = ReadResource("FairPackEligibilityV1.json");
+        // The pin is over the LF file. A build from a CRLF checkout (Git for Windows' default) embeds CRLF: hash the text with
+        // LF line endings, so only a real content change fails the check.
+        byte[] bytes = WithLf(ReadResource("FairPackEligibilityV1.json"));
         if (Hash(bytes) != ManifestHash) throw new InvalidOperationException("Fair-pack manifest hash mismatch.");
         var root = (Dictionary<string, object>)MiniJSON.Json.Deserialize(Encoding.UTF8.GetString(bytes));
         var sets = (Dictionary<string, object>)root["sets"];
