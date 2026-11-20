@@ -852,6 +852,55 @@ Case("ShiftingScrollHiddenHand", () =>
     Check("every action of such a view applies (the view clones)", errors == 0 && applied > 0, string.Join(" | ", why));
 });
 
+// ----------------------------------------------------------------------------------------------- 12 KalecgosHiddenHand
+// Step 9 test phase (pairs9 chunk 23 case 1722, dala_07_belnaara vs MAGE): the player's Kalecgos (DAL_609, a SwitchingAura on
+// its own hand) applies to the hidden hand when the boss's turn starts. The fair view retires those ids and reissues the hand
+// slots under others (CanonicalizePrivateActors); the aura's applied set must lose the retired ids, or the view's end of turn
+// (TurnOff -> SwitchingAura.RemoveInternal) looks one up (KeyNotFoundException) or, once reissued, strips another card.
+Case("KalecgosHiddenHand", () =>
+{
+    int views = 0, live = 0, applied = 0, missing = 0, aliased = 0, errors = 0; var why = new List<string>();
+    // Kalecgos's aura covers its owner's hand only: an applied id must be a card there, never a retired id or a reissued one.
+    void Audit(Game vg)
+    {
+        foreach (var a in vg.Auras.OfType<SabberStoneCore.Auras.Aura>().Where(a => a.Owner.Card.Id == "DAL_609"))
+            for (int id = 0; id < vg.IdEntityDic.Capacity; id++)
+            {
+                if (!a.AppliesTo(id)) continue;
+                if (!vg.IdEntityDic.ContainsKey(id)) missing++;
+                else if (vg.IdEntityDic[id].Zone != a.Owner.Controller.HandZone) aliased++;
+            }
+    }
+    for (int seed = 1; seed <= 6; seed++)
+    {
+        var g = NewRun(seed: 4200 + seed);
+        Board(g.Player1, "DAL_609");
+        // Odd seeds: the boss's minion first, so the hand holds the highest ids; even seeds: a deck card after the hand, so
+        // the view's reissued ids shift past the hand's. Either layout has retired the hand's ids in the field.
+        if (seed % 2 == 1) Board(g.Player2, Yeti, ready: true);
+        var held = Enumerable.Range(0, 1 + seed % 3).Select(_ => Hand(g.Player1, "CS2_029")).ToList();
+        if (seed % 2 == 0) DeckTop(g.Player1, Yeti);
+        EndTurn(g);
+        if (g.CurrentPlayer != g.Player2) EndTurn(g);
+        var aura = g.Auras.OfType<SabberStoneCore.Auras.Aura>().Single(a => a.Owner.Card.Id == "DAL_609");
+        if (held.All(c => aura.AppliesTo(c.Id))) live++;
+        if (seed % 2 == 0) Board(g.Player2, Yeti, ready: true);
+        Mana(g.Player2, 10);
+        var view = View(g, PriorOf("EX1_287"), 777 + seed);
+        views++;
+        Audit(view.FingerprintGame);
+        foreach (var action in view.Actions)
+        {
+            try { var next = view.Apply(action); applied++; Audit(next.FingerprintGame); }
+            catch (Exception e) { errors++; if (why.Count < 3) why.Add(action + ": " + (e.InnerException ?? e).GetType().Name + " " + (e.InnerException ?? e).Message.Split('\n')[0]); }
+        }
+    }
+    Note($"views {views}, live auras {live}, actions applied {applied}, missing ids {missing}, aliased ids {aliased}, errors {errors}");
+    Check("the player's Kalecgos applies to every hidden hand card on the boss's turn (the case is live)", live == views, $"{live}/{views}");
+    Check("a view of that hand keeps the aura on no retired or reissued id", missing == 0 && aliased == 0, $"missing {missing}, aliased {aliased}");
+    Check("every action of such a view applies, its end of turn included", errors == 0 && applied > 0, string.Join(" | ", why));
+});
+
 Console.WriteLine($"SUMMARY checks passed {passes} failed {failures}");
 foreach (var line in failLines) Console.WriteLine("FAILED " + line);
 return failures == 0 ? 0 : 1;
