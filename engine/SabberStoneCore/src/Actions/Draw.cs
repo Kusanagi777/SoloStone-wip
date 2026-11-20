@@ -106,7 +106,10 @@ namespace SabberStoneCore.Actions
                 if (game.History) game.PowerHistory.Add(PowerHistoryBuilder.BlockEnd());
             }
 
-            var task = entered && playable.Zone == controller.HandZone ? playable.Power?.TopdeckTask : null;
+            // A "When you draw this" minion (it stays in hand: not a spell, not Summoned When Drawn) dealt into the opening hand
+            // does not fire, as in Hearthstone and as a mulligan replacement (Choose.cs, AddHandPhase) already does not.
+            bool openingDeal = game.Step == Step.BEGIN_DRAW && !(playable is Spell) && playable.Card[SummonedWhenDrawn] == 0;
+            var task = entered && !openingDeal && playable.Zone == controller.HandZone ? playable.Power?.TopdeckTask : null;
             if (task != null)
             {
                 if (game.History)
