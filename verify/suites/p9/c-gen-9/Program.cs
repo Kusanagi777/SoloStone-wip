@@ -34,6 +34,9 @@ using SabberStoneCore.Tasks.SimpleTasks;
 //      view no longer has; Kalecgos (DAL_609, SwitchingAura) turning off at the end of the boss's simulated turn, Glinda
 //      Crowskin (GIL_618, Aura) and Summoning Portal (EX1_315, SummoningPortalAura) leaving play in the view resolve with no
 //      exception, and in the real game every aura still gives back what it gave
+//   W  "When you draw this" (Sea Reaver AT_130, Flame Leviathan GVG_007; bosspilot enc17): the draw effect fires and the card
+//      stays in hand, playable; Casts When Drawn spells still leave the hand, Summoned When Drawn minions still move themselves
+//      (W0 freezes the class of every card with a TopdeckTask)
 // Typhoon's InterceptLeave is not re-tested here: lane G changed nothing (it is there since a95b97e; c-enc-engine E7-E10).
 // C_GEN_9_ONLY=U,P,... runs only those sections; C_GEN_9_GAMES=n plays n games in G (default 200).
 int failures = 0, passes = 0;
@@ -701,6 +704,147 @@ Guard("G", () =>
     Check("G1 " + n + " seeded run games are played (v4 defaults, every loadout in turn, encounter bosses), no fault", games == n && faults == 0, games + " games, " + faults + " faults");
     Check("G2 the games make many cards during play (the check below has something to see)", generatedEntities >= 15 * n && generatedAll.Count >= 300, generatedEntities + " / " + generatedAll.Count);
     Check("G3 0 unscripted cards are generated in the " + n + " games (during play and by the setup)", unscriptedMade.Count == 0, Few(unscriptedMade.Keys, 20));
+});
+
+// ============================================================ W  "When you draw this" against Casts When Drawn
+// bosspilot enc17 (Chu's deck, top card AT_130 Sea Reaver): the draw completion (Generic.CompleteDraw) moved every drawn card
+// with a TopdeckTask from the hand to the set-aside zone for good, the right thing for a Casts When Drawn spell (cast, then
+// gone) and for a Summoned When Drawn minion (its task moves the card itself), but not for a minion whose text is "When you
+// draw this, <effect>" (Sea Reaver AT_130, Flame Leviathan GVG_007): the effect fires and the card stays in hand, playable.
+// W0 enumerates every card with a TopdeckTask and freezes its class; W1-W9 draw each class in real engine games.
+Guard("W", () =>
+{
+    const GameTag SummonedWhenDrawn = (GameTag)3128; // the client's "Summoned When Drawn" keyword tag (no GameTag name)
+    const string Reaver = "AT_130", Leviathan = "GVG_007", Curse = "LOE_110t", Mine = "GVG_056t", Ninja = "TLC_513t2", Illusion = "EDR_260t", Imp = "CAP_400t2t";
+    // The cards that stay in hand: minions with a draw effect and neither Casts When Drawn nor Summoned When Drawn.
+    var staysInHand = new[] { Leviathan, Reaver };
+    var withTask = Cards.All.Where(x => x.Power?.TopdeckTask != null).OrderBy(x => x.Id, StringComparer.Ordinal).ToList();
+    bool Casts(Card x) => x[GameTag.CASTSWHENDRAWN] != 0 || x.RefTags.TryGetValue(GameTag.CASTSWHENDRAWN, out int v) && v != 0;
+    foreach (var x in withTask)
+        Note("W0 " + x.Id + " " + x.Type + " '" + x.Name + "' castswhendrawn " + (Casts(x) ? 1 : 0) + " summonedwhendrawn " + x[SummonedWhenDrawn]
+            + " topdeck " + x[GameTag.TOPDECK] + " | " + (x.Text ?? "").Replace("\n", " "));
+    var nonSpells = withTask.Where(x => x.Type != CardType.SPELL).ToList();
+    Check("W0a every card with a TopdeckTask is a spell or a minion (no weapon, hero or location has one)", withTask.All(x => x.Type == CardType.SPELL || x.Type == CardType.MINION),
+        Few(withTask.Where(x => x.Type != CardType.SPELL && x.Type != CardType.MINION).Select(x => x.Id + ":" + x.Type)));
+    Check("W0b the minions with a TopdeckTask are the two 'When you draw this' minions and the three Summoned When Drawn minions",
+        nonSpells.Select(x => x.Id).SequenceEqual(new[] { Illusion, Imp, Leviathan, Reaver, Ninja }.OrderBy(x => x, StringComparer.Ordinal)), Few(nonSpells.Select(x => x.Id)));
+    Check("W0c the 'When you draw this' minions carry neither Casts When Drawn nor Summoned When Drawn; the other three carry Summoned When Drawn",
+        nonSpells.All(x => staysInHand.Contains(x.Id) == (!Casts(x) && x[SummonedWhenDrawn] == 0)),
+        Few(nonSpells.Select(x => x.Id + " cwd " + (Casts(x) ? 1 : 0) + " swd " + x[SummonedWhenDrawn])));
+    Check("W0d " + withTask.Count + " cards with a TopdeckTask (" + withTask.Count(x => x.Type == CardType.SPELL) + " spells)", withTask.Count >= 20, Few(withTask.Select(x => x.Id), 40));
+
+    Game G(string[] deck1 = null, bool history = true)
+    {
+        var cfg = new GameConfig { RandomSeed = 7, Shuffle = false, SkipMulligan = false, History = history, Logging = false, FormatType = FormatType.FT_WILD,
+            Player1HeroClass = CardClass.WARRIOR, Player2HeroClass = CardClass.MAGE,
+            Player1Deck = (deck1 ?? Thirty(Yeti)).Select(C).ToList(), Player2Deck = Thirty(Yeti).Select(C).ToList() };
+        var g = new Game(cfg);
+        g.StartGame();
+        g.Process(ChooseTask.Mulligan(g.Player1, new List<int>()));
+        g.Process(ChooseTask.Mulligan(g.Player2, new List<int>()));
+        g.MainBegin();
+        ToSide(g, g.Player1);
+        return g;
+    }
+    // Put the card on top of the drawer's deck and draw exactly it.
+    IPlayable DrawTop(Game g, Controller c, string id)
+    {
+        var e = Entity.FromCard(c, C(id));
+        c.DeckZone.Add(e);
+        Generic.Draw(c, e);
+        g.DeathProcessingAndAuraUpdate();
+        return e;
+    }
+    int LastZone(Game g, IPlayable e) => g.PowerHistory.Full.OfType<SabberStoneCore.Kettle.PowerHistoryTagChange>().Where(t => t.EntityId == e.Id && t.Tag == GameTag.ZONE).Select(t => t.Value).DefaultIfEmpty(-1).Last();
+    bool Triggered(Game g, IPlayable e) => g.PowerHistory.Full.OfType<SabberStoneCore.Kettle.PowerHistoryBlockStart>().Any(b => b.BlockType == BlockType.TRIGGER && b.Source == e.Id);
+
+    // W1 Sea Reaver: 1 damage to the drawer's minions only; the card stays in hand and is played later.
+    {
+        var g = G(); var p = g.Player1;
+        var mine = Board(g, p, Yeti); var mine2 = Board(g, p, Croc); var theirs = Board(g, g.Player2, Yeti);
+        int hand = p.HandZone.Count;
+        var reaver = DrawTop(g, p, Reaver);
+        Check("W1a Sea Reaver drawn: 1 damage to each of the drawer's minions, none to the enemy's", mine.Damage == 1 && mine2.Damage == 1 && theirs.Damage == 0,
+            mine.Damage + "/" + mine2.Damage + "/" + theirs.Damage);
+        Check("W1b Sea Reaver stays in hand after its draw effect (hand +1, the history's last ZONE for it is HAND, its TRIGGER block is there)",
+            reaver.Zone == p.HandZone && p.HandZone.Count == hand + 1 && LastZone(g, reaver) == (int)Zone.HAND && Triggered(g, reaver),
+            "zone " + reaver.Zone?.Type + " hand " + hand + "->" + p.HandZone.Count + " last " + (Zone)LastZone(g, reaver) + " trigger " + Triggered(g, reaver));
+        Mana(p);
+        Check("W1c the drawn Sea Reaver is played later: on the board as a 6/7", Play(g, reaver) && reaver.Zone == p.BoardZone && ((Minion)reaver).Health == 7,
+            "zone " + reaver.Zone?.Type);
+        Check("W1d its draw effect does not fire again when it is played (the board Yetis still at 1 damage)", mine.Damage == 1 && mine2.Damage == 1, mine.Damage + "/" + mine2.Damage);
+    }
+    // W2 Flame Leviathan: 2 damage to all minions (the engine's TopdeckTask; the card text says all characters); it stays in hand.
+    {
+        var g = G(); var p = g.Player1;
+        var mine = Board(g, p, Yeti); var theirs = Board(g, g.Player2, Yeti);
+        int hand = p.HandZone.Count;
+        var lev = DrawTop(g, p, Leviathan);
+        Check("W2a Flame Leviathan drawn: 2 damage to the minions of both sides", mine.Damage == 2 && theirs.Damage == 2, mine.Damage + "/" + theirs.Damage);
+        Check("W2b Flame Leviathan stays in hand after its draw effect", lev.Zone == p.HandZone && p.HandZone.Count == hand + 1 && LastZone(g, lev) == (int)Zone.HAND,
+            "zone " + lev.Zone?.Type + " hand " + hand + "->" + p.HandZone.Count + " last " + (Zone)LastZone(g, lev));
+        Mana(p);
+        Check("W2c the drawn Flame Leviathan is played later", Play(g, lev) && lev.Zone == p.BoardZone, "zone " + lev.Zone?.Type);
+    }
+    // W3 a full hand: the drawn Sea Reaver is burnt, its effect does not fire (unchanged).
+    {
+        var g = G(); var p = g.Player1;
+        var mine = Board(g, p, Yeti);
+        while (p.HandZone.Count < p.HandZone.MaxSize) p.HandZone.Add(Entity.FromCard(p, C(Wisp))); // (ToHand keeps the hand below 10)
+        var reaver = DrawTop(g, p, Reaver);
+        Check("W3 with a full hand Sea Reaver is burnt to the graveyard and its effect does not fire", reaver.Zone == p.GraveyardZone && mine.Damage == 0,
+            "zone " + reaver.Zone?.Type + " dmg " + mine.Damage);
+    }
+    // W4 the opening deal: a Sea Reaver dealt into the opening hand stays there (the board is empty: no damage to deal).
+    {
+        var g = G(Thirty(Reaver)); var p = g.Player1;
+        Check("W4 opening hands of Sea Reavers keep them (no card lost to the set-aside zone)", p.HandZone.Count(x => x.Card.Id == Reaver) >= 3 && p.SetasideZone.All(x => x.Card.Id != Reaver),
+            "hand " + p.HandZone.Count(x => x.Card.Id == Reaver) + " setaside " + p.SetasideZone.Count(x => x.Card.Id == Reaver) + " first " + (g.FirstPlayer == p));
+    }
+    // W5 Casts When Drawn spells (the tag: Ancient Curse; TOPDECK only: Burrowing Mine): cast, out of the hand, the next card drawn.
+    foreach (var (id, dmg) in new[] { (Curse, 7), (Mine, 10) })
+    {
+        var g = G(); var p = g.Player1;
+        int hand = p.HandZone.Count, hp = p.Hero.Health;
+        var spell = DrawTop(g, p, id);
+        Check("W5 " + id + " (castswhendrawn " + (Casts(spell.Card) ? 1 : 0) + ") is cast when drawn: " + dmg + " damage to the drawer, the spell leaves the hand, a replacement is drawn",
+            p.Hero.Health == hp - dmg && spell.Zone != p.HandZone && p.HandZone.Count == hand + 1 && p.HandZone.All(x => x.Card.Id != id),
+            "hp " + hp + "->" + p.Hero.Health + " zone " + spell.Zone?.Type + " hand " + hand + "->" + p.HandZone.Count);
+    }
+    // W6-W8 Summoned When Drawn minions: the task moves the card itself (to the board, or for the Imp a copy to the opponent's).
+    {
+        var g = G(); var p = g.Player1;
+        int hand = p.HandZone.Count;
+        var ninja = DrawTop(g, p, Ninja);
+        Check("W6 Tortollan Ninja is summoned when drawn and a replacement is drawn", ninja.Zone == p.BoardZone && p.HandZone.Count == hand + 1 && p.HandZone.All(x => x.Card.Id != Ninja),
+            "zone " + ninja.Zone?.Type + " hand " + hand + "->" + p.HandZone.Count);
+    }
+    {
+        var g = G(); var p = g.Player1;
+        int hand = p.HandZone.Count;
+        var ill = DrawTop(g, p, Illusion);
+        Check("W7a Illusion is summoned when drawn and a replacement is drawn", ill.Zone == p.BoardZone && p.HandZone.Count == hand + 1, "zone " + ill.Zone?.Type + " hand " + hand + "->" + p.HandZone.Count);
+        while (!p.BoardZone.IsFull) Board(g, p, Wisp);
+        hand = p.HandZone.Count;
+        var held = DrawTop(g, p, Illusion);
+        Check("W7b with a full board the Illusion stays in hand and a replacement is drawn (unchanged)", held.Zone == p.HandZone && p.HandZone.Count == hand + 2,
+            "zone " + held.Zone?.Type + " hand " + hand + "->" + p.HandZone.Count);
+    }
+    {
+        var g = G(); var p = g.Player1;
+        int hand = p.HandZone.Count, theirs = g.Player2.BoardZone.Count;
+        var imp = DrawTop(g, p, Imp);
+        Check("W8 Imp-formant drawn: a copy is summoned for the opponent, the drawn card leaves the hand, a replacement is drawn",
+            g.Player2.BoardZone.Count == theirs + 1 && g.Player2.BoardZone.Any(x => x.Card.Id == Imp) && imp.Zone != p.HandZone && p.HandZone.Count == hand + 1,
+            "zone " + imp.Zone?.Type + " hand " + hand + "->" + p.HandZone.Count + " their board " + theirs + "->" + g.Player2.BoardZone.Count);
+    }
+    // W9 the same draws with history off (search clones): Sea Reaver still stays in hand.
+    {
+        var g = G(history: false); var p = g.Player1;
+        var mine = Board(g, p, Yeti);
+        var reaver = DrawTop(g, p, Reaver);
+        Check("W9 history off: Sea Reaver deals its damage and stays in hand", mine.Damage == 1 && reaver.Zone == p.HandZone, "zone " + reaver.Zone?.Type + " dmg " + mine.Damage);
+    }
 });
 
 Console.WriteLine("RESULT " + passes + " passed, " + failures + " failed");
