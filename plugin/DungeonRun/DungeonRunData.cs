@@ -1076,6 +1076,11 @@ internal sealed class DungeonRunAct
     internal int TurnCap;
     /// <summary>D11 (finale "formRatchet"): the act's fights set RunMatchPlan.FormRatchet (lane X).</summary>
     internal bool FormRatchet;
+    /// <summary>
+    /// Act or finale "bossDeck" (owner 2026-11-20): the boss's starting deck size per floor in act, like bossHealth. A deck
+    /// larger than its floor's value is cut to it (DungeonRun.SizeBossDeck); empty (absent) keeps every deck whole.
+    /// </summary>
+    internal int[] BossDeck = new int[0];
 }
 
 /// <summary>
@@ -1491,6 +1496,7 @@ internal sealed class DungeonRunSchedules
             // Step 9 (D11, schedule side): the finale's turn cap and form ratchet (stamp 4 only; lane X reads them).
             if (finale.ContainsKey("turnCap")) { act.TurnCap = NpcWorldJson.Integer(finale, "turnCap"); pair.Key.V4Keys.Add("finale.turnCap"); }
             if (finale.ContainsKey("formRatchet")) { act.FormRatchet = NpcWorldJson.Boolean(finale, "formRatchet"); pair.Key.V4Keys.Add("finale.formRatchet"); }
+            if (finale.ContainsKey("bossDeck")) { act.BossDeck = Curve("bossDeck", 30); pair.Key.V4Keys.Add("finale.bossDeck"); }
             pair.Key.Acts.Add(act);
         }
         foreach (var m in NpcWorldJson.List(root, "modifiers").Cast<object>().Select(NpcWorldJson.Object))
@@ -1549,6 +1555,7 @@ internal sealed class DungeonRunSchedules
             act.TreasureCommonWeight = NpcWorldJson.Integer(rarity, "common", 0);
         }
         if (row.ContainsKey("bundleAfterTreasure")) { schedule.V4Keys.Add("bundleAfterTreasure"); act.BundleAfterTreasure = NpcWorldJson.Boolean(row, "bundleAfterTreasure", true); }
+        if (row.ContainsKey("bossDeck")) { schedule.V4Keys.Add("bossDeck"); act.BossDeck = Ints(row, "bossDeck"); }
     }
 }
 

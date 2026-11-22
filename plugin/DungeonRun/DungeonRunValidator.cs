@@ -1167,6 +1167,7 @@ internal static class DungeonRunValidator
             if (x.Acts.Any(a => !a.BundleAfterTreasure)) v4Keys.Add("bundleAfterTreasure");
             if (x.Acts.Any(a => a.TurnCap != 0)) v4Keys.Add("finale.turnCap");
             if (x.Acts.Any(a => a.FormRatchet)) v4Keys.Add("finale.formRatchet");
+            if (x.Acts.Any(a => a.BossDeck.Length > 0)) v4Keys.Add("bossDeck");
             v4Keys = v4Keys.Distinct(StringComparer.Ordinal).OrderBy(k => k, StringComparer.Ordinal).ToList();
             if (v4Keys.Count > 0 && x.StampVersion < 4) errors.Add($"schedule {x.Id}: {string.Join(", ", v4Keys)} need version 4");
             if (x.V4Keys.Contains("drawTuning"))
@@ -1185,6 +1186,8 @@ internal static class DungeonRunValidator
                     errors.Add($"schedule {x.Id} act {a.Id}: treasureRarity needs rare and common weights of at least 1");
                 if (a.IsFinale && !a.BundleAfterTreasure) errors.Add($"schedule {x.Id} act {a.Id}: a finale drafts no bundle (bundleAfterTreasure)");
                 if (a.TurnCap != 0 && (a.TurnCap < 1 || a.TurnCap > 1000)) errors.Add($"schedule {x.Id} act {a.Id}: turnCap {a.TurnCap} is outside 1..1000");
+                if (a.BossDeck.Length > 0 && a.BossDeck.Length != a.Floors) errors.Add($"schedule {x.Id} act {a.Id}: bossDeck has {a.BossDeck.Length} values, needs {a.Floors}");
+                if (a.BossDeck.Any(n => n < DungeonRun.MinBossDeck || n > 60)) errors.Add($"schedule {x.Id} act {a.Id}: bossDeck values must be {DungeonRun.MinBossDeck} to 60");
             }
             bool usesV3 = x.MixesProvenance || x.Acts.Any(a => a.AnomalyAtStart || a.TwistPool.Count > 0 || a.IsFinale
                 || a.Combat.Any(c => schedules.PoolSets.ContainsKey(c.Pool)) || a.MajorPool != null && schedules.PoolSets.ContainsKey(a.MajorPool));

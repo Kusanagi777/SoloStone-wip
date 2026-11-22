@@ -1303,6 +1303,14 @@ weights by act and Good Food's cap, Tekahn's turnCap 150, the restart caps, and 
 Calibration (plan stage 4: fair-player measurement of the slots above, then encounter `v4` tier and `healthOffset`
 overrides and curve changes, in the D4 order) is still to do; until then R0 is a target, not a property of the defaults.
 
+**Boss Health and deck size per round (owner, 2026-11-20).** The first boss starts at 10 Health with a 15-card deck, and
+both grow with every fight. acts-v4h/v4t (`sameActsAs`) now set `bossHealth` to 10 14 18 22 26 / 30 34 38 42 46 /
+50 54 58 62 66 (Heist finale 70 72 74 76; Tekahn 70) and the new stamp-4 act key `bossDeck` to 15-19 / 20-24 / 25-29.
+`DungeonRun.SizeBossDeck` (read through `Tuned`) cuts the starting boss deck to its floor's size with a seeded pick
+(stream 17, the floor), keeping Fabled bundles and sideboard cards; forms, relay decks, mirror decks and encounters with
+identity Health (Plague Lords, Hagatha) keep their own decks, and a finale names no `bossDeck`, so its decks stay whole.
+NativeMatch accepts a run boss deck of 10 to 30 cards. These replace the v3 curves the step-9 calibration started from.
+
 ## Implementation Status (2026-11-09)
 
 All pieces are written and the plugin builds against client 37.0.2.256589 with SDK 10.0.402 (0 errors; client bindings check PASS, Mono guard PASS). Nothing has run inside the Hearthstone client yet.

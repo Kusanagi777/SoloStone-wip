@@ -619,7 +619,9 @@ Guard("K", () =>
 // ============================================================ G  200 seeded run games: 0 unscripted cards generated
 Guard("G", () =>
 {
-    int n = int.TryParse(Environment.GetEnvironmentVariable("C_GEN_9_GAMES"), out int gn) ? gn : 200;
+    // 340 games (200 before 2026-11-20): bosses now start at 10 Health and 15 cards, so games are shorter and make fewer cards;
+    // 340 gives G3 about the coverage 200 gave before (4701 cards made, 1313 distinct, against 4343 and 1367).
+    int n = int.TryParse(Environment.GetEnvironmentVariable("C_GEN_9_GAMES"), out int gn) ? gn : 340;
     var loadouts = data.Classes.SelectMany(c => c.Decks.Select(d => (Row: c, Deck: d))).ToList();
     var bosses = data.Encounters.Where(b => data.BossDecks.ContainsKey(b.Deck)).Select(b => b.Id).OrderBy(x => x, StringComparer.Ordinal).ToList();
     var generatedAll = new SortedDictionary<string, int>(StringComparer.Ordinal);
@@ -702,7 +704,9 @@ Guard("G", () =>
     Note("G games digest " + Hash(new[] { gameLines.ToString() }) + ", made-card digest " + Hash(generatedAll.Select(kv => kv.Key + "=" + kv.Value)));
     File.WriteAllText(VerifyPaths.Out("tmp/c-gen-9-games.txt"), gameLines.ToString());
     Check("G1 " + n + " seeded run games are played (v4 defaults, every loadout in turn, encounter bosses), no fault", games == n && faults == 0, games + " games, " + faults + " faults");
-    Check("G2 the games make many cards during play (the check below has something to see)", generatedEntities >= 15 * n && generatedAll.Count >= 300, generatedEntities + " / " + generatedAll.Count);
+    // Fixed totals, not a per-game rate (game length follows the boss curve): at least the old default bar of 3000 cards, and
+    // 1000 distinct (the old bar was 300). A run with fewer games (C_GEN_9_GAMES) may fall short of them.
+    Check("G2 the games make many cards during play (the check below has something to see)", generatedEntities >= 3000 && generatedAll.Count >= 1000, generatedEntities + " / " + generatedAll.Count);
     Check("G3 0 unscripted cards are generated in the " + n + " games (during play and by the setup)", unscriptedMade.Count == 0, Few(unscriptedMade.Keys, 20));
 });
 

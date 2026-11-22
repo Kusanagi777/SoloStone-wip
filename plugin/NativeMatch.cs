@@ -549,9 +549,10 @@ public sealed class NativeMatch
         if (plan.PlayerDeck == null || plan.PlayerDeck.Count < 10 || plan.PlayerDeck.Count > deckMax || plan.PlayerDeck.Any(card => card == null))
             throw new ArgumentException("Run deck must hold 10 to " + deckMax + " cards.", nameof(plan));
         // Phase 8: an imported encounter keeps its original deck size (a major, a finale boss, a boss form: 10 to 60 cards).
+        // A schedule's "bossDeck" (DungeonRun.SizeBossDeck) cuts a boss deck to its floor's size, so a run boss holds 10 to 30.
         if (plan.BossDeck == null || plan.BossDeck.Any(card => card == null)
-            || (plan.EncounterDeck ? plan.BossDeck.Count < 10 || plan.BossDeck.Count > 60 : plan.BossDeck.Count != 30))
-            throw new ArgumentException(plan.EncounterDeck ? "An encounter's deck must hold 10 to 60 cards." : "Boss deck must hold 30 cards.", nameof(plan));
+            || (plan.EncounterDeck ? plan.BossDeck.Count < 10 || plan.BossDeck.Count > 60 : plan.BossDeck.Count < DungeonRun.MinBossDeck || plan.BossDeck.Count > 30))
+            throw new ArgumentException(plan.EncounterDeck ? "An encounter's deck must hold 10 to 60 cards." : "Boss deck must hold " + DungeonRun.MinBossDeck + " to 30 cards.", nameof(plan));
         runPlan = plan;
         runBossProfile = boss.Profile;
         runBossPlan = boss.Plan;

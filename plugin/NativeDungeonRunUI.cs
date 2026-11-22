@@ -80,17 +80,30 @@ internal static class NativeDungeonRunUI
 
     // Raised while the board is being left: remember, and open once the HUB is idle (Update).
     // A fight's reopen never carries a picker refusal that an earlier, lapsed reopen left behind.
-    private static void OnFightClosed() { pendingNotice = null; Reopen(); }
+    private static void OnFightClosed() { pendingNotice = null; pendingSignature = null; Reopen(); }
     private static void Reopen() { reopenPending = true; reopenSince = Time.realtimeSinceStartup; }
     // The native class picker (NativeDungeonRunPicker) hands back here after Play or a fallback: open once the HUB is idle.
     // A refusal from its Play (DungeonRunRuntime.NewRun) is shown as the caption when the screen opens.
-    internal static void OpenWhenHome(string notice = null) { pendingNotice = notice; Reopen(); }
+    internal static void OpenWhenHome(string notice = null) { pendingNotice = notice; pendingSignature = null; Reopen(); }
     private static string pendingNotice;
+    // The native picker's hand-off for a row with signature treasures (a Tombs explorer): the screen opens on the Signature
+    // step with the class, row, deck and power the portrait tray and playmat chose.
+    internal static void SignatureWhenHome(string cls, string row, string deck, string power)
+    {
+        pendingNotice = null; pendingSignature = new[] { cls, row, deck, power }; Reopen();
+    }
+    private static string[] pendingSignature;
 
     internal static void Open() => Guard(() => {
         reopenPending = false;
         if (popup == null) popup = new GameObject("SoloStoneDungeonRunDialog").AddComponent<NativeDungeonRunMenu>();
         ResetFlow(); message = pendingNotice; pendingNotice = null;
+        if (pendingSignature != null)
+        {
+            // SetupFlow walks back to the first step whose choice is no longer valid, so a stale hand-off is harmless.
+            classId = pendingSignature[0]; rowId = pendingSignature[1]; deckId = pendingSignature[2]; powerId = pendingSignature[3];
+            step = Step.Signature; pendingSignature = null;
+        }
         // Progress already earned (or carried over from a version-1 save) shows as unlocked now; the next commit writes it.
         DungeonRunRuntime.RefreshUnlocks();
         popup.Open();
@@ -101,8 +114,9 @@ internal static class NativeDungeonRunUI
     // Ticked by NativeUIProbe.Update: applies deferred rebuilds (never inside a row's own release handler) and the reopen.
     internal static void Update() => Guard(() => {
         popup?.ApplyRefresh();
+        if (pickerPending && !IsOpen) { pickerPending = false; NativeDungeonRunPicker.Open(); }
         if (!reopenPending) return;
-        if (Time.realtimeSinceStartup - reopenSince > ReopenWindow) { reopenPending = false; pendingNotice = null; return; }
+        if (Time.realtimeSinceStartup - reopenSince > ReopenWindow) { reopenPending = false; pendingNotice = null; pendingSignature = null; return; }
         if (ReopenReady()) Open();
     });
 
@@ -235,8 +249,14 @@ internal static class NativeDungeonRunUI
             });
             ResetFlow();
         });
-        if (close && message == null) Close();
+        if (message != null) return;
+        if (close) { Close(); return; }
+        // New run (owner 2026-11-20): the run setup is the client's own screens (NativeDungeonRunPicker), not this menu's
+        // lists. The menu closes and the picker opens on the next tick (not inside this row's release handler); a picker that
+        // cannot start opens this menu again on its setup flow.
+        Close(); pickerPending = true;
     }
+    private static bool pickerPending;
 
     // ------------------------------------------------------------------ names
 

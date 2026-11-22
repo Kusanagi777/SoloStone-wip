@@ -39,6 +39,11 @@ internal static class NativeDungeonRunText
     internal static string HeroLine(string name, string adventure, string classes, int health) =>
         name + " (" + (adventure == null ? "" : adventure + ", ") + classes + (health > 0 ? ", " + health + " Health" : "") + ")";
     internal static string SignatureLine(string name, string text) => "Signature: " + Described(name, PowerText(text));
+    /// <summary>The portrait tray's description of a run row (NativeDungeonRunPicker): "Mage. Heist hero. 3 decks, 3 hero powers."</summary>
+    internal static string TrayDescription(RunHeroOption row) =>
+        row == null ? "" : row.ClassName + ". " + (row.Adventure == null ? "Dungeon Run class hero" : row.Adventure + " hero") + ". "
+            + row.DeckCount + (row.DeckCount == 1 ? " deck, " : " decks, ") + row.PowerCount + (row.PowerCount == 1 ? " hero power" : " hero powers")
+            + (row.SignatureCount > 0 ? ", a signature treasure" : "") + ".";
 
     internal const string ClassCaption = "Pick a class. A run is three acts of fights; a loss ends it.";
     internal const string DeckCaption = "Each class has three starter decks. Play the class to unlock the others.";

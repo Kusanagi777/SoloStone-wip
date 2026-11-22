@@ -75,6 +75,7 @@ var added = new Dictionary<string, (string Kind, string Why)>(StringComparer.Ord
     ["schedule .Acts[].BundleAfterTreasure"] = ("neutral", "D5 (b): NoBundleAfter reads it through Tuned"),
     ["schedule .Acts[].TurnCap"] = ("neutral", "D11: the finale's turn cap (PlanMatchEnds, Tuned)"),
     ["schedule .Acts[].FormRatchet"] = ("neutral", "D11: the finale's form ratchet (PlanMatchEnds, Tuned)"),
+    ["schedule .Acts[].BossDeck"] = ("neutral", "owner 2026-11-20: the boss's starting deck size per floor (SizeBossDeck, Tuned)"),
     ["tavern .WeightByAct"] = ("tuned", "D4/D5: OfferWeight reads it only when Tuned"),
     ["tavern .MaxPerRun"] = ("tuned", "D4: RunCapReached reads it only when Tuned"),
     ["treasure .Shared"] = ("tuned", "D6: TreasureInScope reads it only when Tuned"),
@@ -263,6 +264,78 @@ Guard("T", () =>
         states > 100 && weightBad.Count == 0 && v4Differs > 0, string.Join(" ", weightBad.Take(8)));
     Check("T2 and no option is at its maxPerRun on them (HealthBonus 30: maxPerRun unread)", capBad.Count == 0, string.Join(" ", capBad.Take(8)));
     Check("T3 and every treasure is in scope exactly where its scope matches (\"shared\" unread)", scopeBad.Count == 0, scopeBad.Count + ": " + string.Join(" ", scopeBad.Take(8)));
+});
+
+// ============================================================ B. boss Health and deck size per round (owner 2026-11-20)
+// acts-v4h/v4t: the first boss starts at 10 Health and 15 cards and both grow every fight (bossHealth, bossDeck); a released
+// schedule keeps its 30-card decks and its curve. Runs are walked by won fights (first offers, "none" at a modifier node).
+Guard("B", () =>
+{
+    var run = new DungeonRun(data);
+    var profile = new DungeonRunProfile(); profile.Unlocked.AddRange(data.Unlocks.Keys);
+    var scratch = new DungeonRunProfile();
+    // (floor, boss, plan Health, expected Health, plan deck, source deck, size) of every fight on floors 1-15.
+    List<(int Floor, DungeonRunBoss Boss, int Health, int? Expected, int Deck, int Source, int? Size, string Cards)> Walk(string schedule, long seed)
+    {
+        var row = data.Class("MAGE");
+        var s = run.NewRun(profile, row.Id, row.Decks[0], row.Powers[0], seed, schedule: schedule);
+        var fights = new List<(int, DungeonRunBoss, int, int?, int, int, int?, string)>();
+        for (int guard = 0; guard < 800 && s.Floor <= 15 && !s.Finished; guard++)
+        {
+            switch (s.Phase)
+            {
+                case DungeonRunPhase.PreMatch:
+                    s.ActiveRules.RemoveAll(x => x.Kind != null);
+                    var boss = run.CurrentBoss(s);
+                    var plan = run.BuildPlan(s, scratch);
+                    var act = run.CurrentAct(s);
+                    var node = run.CurrentNode(s);
+                    int? expected = boss.FixedHealth ? (int?)null : Math.Max(1, act.BossHealth[node.FloorInAct - 1] + run.HealthOffset(boss));
+                    string deckId = boss.Deck;
+                    fights.Add((s.Floor, boss, plan.BossHealth, expected, plan.BossDeck.Count, data.BossDecks[deckId].Count, run.BossDeckSize(s, boss), string.Join(",", plan.BossDeck.Select(c => c.Id))));
+                    run.BeginMatch(s); run.RecordOutcome(s, scratch, DungeonRunOutcome.Win);
+                    break;
+                case DungeonRunPhase.TreasureDraft: run.PickTreasure(s, s.OpenDraft.Offered[0]); break;
+                case DungeonRunPhase.Modifier:
+                    run.PickModifier(s, s.ModifierOffer.Kind == DungeonRunGlobalRule.KindAnomaly || s.ModifierOffer.Offered.Contains(DungeonRunGlobalRule.None) ? DungeonRunGlobalRule.None : s.ModifierOffer.Offered[0]);
+                    break;
+                case DungeonRunPhase.Tavern: run.LeaveTavern(s); break;
+                case DungeonRunPhase.BundleDraft:
+                    if (s.OpenDraft.Takes == 0) { run.PickBundle(s, s.OpenDraft.Offered[0]); break; }
+                    string bundle = s.OpenDraft.Choosing ?? s.OpenDraft.Offered[0];
+                    var left = run.OfferCards(s.OpenDraft, bundle);
+                    foreach (string kept in s.OpenDraft.Chosen) left.Remove(kept);
+                    run.PickDraftCard(s, bundle, left[0]);
+                    break;
+                default: throw new Exception("walk stopped at " + s.Phase);
+            }
+        }
+        return fights;
+    }
+    var v4 = new List<(string, (int Floor, DungeonRunBoss Boss, int Health, int? Expected, int Deck, int Source, int? Size, string Cards))>();
+    foreach (string id in new[] { "acts-v4h", "acts-v4t" })
+        for (long seed = 9300; seed < 9306; seed++)
+            foreach (var f in Walk(id, seed)) v4.Add((id + "/" + seed, f));
+    var first = v4.Where(x => x.Item2.Floor == 1).ToList();
+    Check("B1 on acts-v4h and acts-v4t the first boss starts at 10 Health (plus its own offset) and 15 cards (" + first.Count + " runs)",
+        first.Count == 12 && first.All(x => x.Item2.Expected == 10 + run.HealthOffset(x.Item2.Boss) && x.Item2.Health == x.Item2.Expected && x.Item2.Size == 15 && x.Item2.Deck == 15),
+        string.Join(" ", first.Where(x => x.Item2.Deck != 15 || x.Item2.Health != x.Item2.Expected).Select(x => x.Item1 + ":" + x.Item2.Boss.Id + "=" + x.Item2.Health + "hp/" + x.Item2.Deck)));
+    var sizeBad = v4.Where(x => x.Item2.Size is int n ? x.Item2.Deck != Math.Min(n, x.Item2.Source) || n != 14 + x.Item2.Floor : x.Item2.Deck != x.Item2.Source).ToList();
+    Check("B2 every fight on floors 1-15 plays a " + "15-29 card deck, one more card each floor (identity-Health and mirror bosses keep their own) (" + v4.Count + " fights)",
+        v4.Count >= 12 * 15 && sizeBad.Count == 0, string.Join(" ", sizeBad.Take(8).Select(x => x.Item1 + "@" + x.Item2.Floor + ":" + x.Item2.Boss.Id + "=" + x.Item2.Deck + "/" + x.Item2.Size)));
+    var healthBad = v4.Where(x => x.Item2.Expected is int e && x.Item2.Health != e).ToList();
+    var curve = data.Schedules.Schedules["acts-v4h"].Acts.Where(a => !a.IsFinale).SelectMany(a => a.BossHealth).ToList();
+    Check("B3 every curve-Health fight plays its floor's Health, and the act curve rises every floor (" + string.Join(" ", curve) + ")",
+        healthBad.Count == 0 && curve.First() == 10 && curve.Zip(curve.Skip(1), (a, b) => b > a).All(up => up),
+        string.Join(" ", healthBad.Take(8).Select(x => x.Item1 + "@" + x.Item2.Floor + ":" + x.Item2.Boss.Id + "=" + x.Item2.Health + "/" + x.Item2.Expected)));
+    var released = new[] { "acts-v3h", "acts-v2" }.SelectMany(id => Walk(id, 9300).Take(3).Select(f => (id, f))).ToList();
+    Check("B4 a released schedule keeps whole boss decks and its own curve (acts-v3h and acts-v2 floors 1-3)",
+        released.Count == 6 && released.All(x => x.f.Size == null && x.f.Deck == x.f.Source) && released.Where(x => x.f.Floor == 1).All(x => x.f.Expected == 30 + run.HealthOffset(x.f.Boss)),
+        string.Join(" ", released.Select(x => x.id + "@" + x.f.Floor + "=" + x.f.Health + "hp/" + x.f.Deck)));
+    var again = Walk("acts-v4h", 9300).Select(f => f.Cards).ToList();
+    var seeds = v4.Where(x => x.Item2.Floor == 1 && x.Item1.StartsWith("acts-v4h/")).Select(x => x.Item2.Cards).Distinct().Count();
+    Check("B5 the cut is seeded: the same run walked twice meets the same boss cards every floor (and 6 seeds give " + seeds + " different first decks)",
+        again.Count > 0 && again.SequenceEqual(v4.Where(x => x.Item1 == "acts-v4h/9300").Select(x => x.Item2.Cards)));
 });
 
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");

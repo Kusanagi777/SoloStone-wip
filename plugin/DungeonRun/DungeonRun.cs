@@ -27,6 +27,10 @@ internal sealed partial class DungeonRun
     // Phase 8: the default schedule of a new run (component 0), the provenance-mix boss draw (act * 10 + slot, then the pick
     // index; a boss's shrine variant: 1000 + floor), the anomaly offer (Node, draw) and the twist roll (act, 0 chance / 1 pick).
     internal const long ScheduleStream = 13, EncounterStream = 14, AnomalyStream = 15, TwistStream = 16;
+    // The boss's starting deck cut to its floor's size (act "bossDeck"; component: the floor).
+    internal const long BossDeckStream = 17;
+    /// <summary>The smallest boss deck a schedule's "bossDeck" may name (NativeMatch's encounter floor).</summary>
+    internal const int MinBossDeck = 10;
     /// <summary>Rules an anomaly node rolls (the offer adds "none").</summary>
     internal const int AnomalyOptions = 2;
     /// <summary>ULDA_720 Battle Scars (a run-scope rule): the run hero starts at <see cref="BattleScarsHealth"/> and keeps its damage between fights.</summary>
@@ -843,11 +847,42 @@ internal sealed partial class DungeonRun
             throw new InvalidOperationException($"The run deck holds {state.Deck.Count} cards; the schedule allows {DeckMin(state)} to {DeckMax(state)}.");
         var plan = BuildBasePlan(state, cls, boss);
         if (boss.IsEncounter || state.ActiveRules.Any(r => r.Kind != null)) ApplyEncounter(state, profile, boss, plan);
+        SizeBossDeck(state, boss, plan);
         // Step 9 (lane X, DungeonRun.Outcomes.cs): TurnCap, FormRatchet and EscapeAllowed; the plan's defaults today.
         PlanMatchEnds(state, boss, plan);
         // Step 9 (lane R, D17): a forbidden pair the state holds is logged (DungeonRun.ForbiddenPairLog), never acted on.
         LogForbiddenPairs(state);
         return plan;
+    }
+
+    /// <summary>
+    /// The current floor's boss deck size: the act's "bossDeck" at the floor in act (owner 2026-11-20: the first boss starts at
+    /// 15 cards and every later fight has more), or null when the act names none or the run is not Tuned (every released
+    /// schedule), or when the boss keeps its own deck: an encounter whose Health is its identity (a Plague Lord, Hagatha) and a
+    /// mirror-deck boss.
+    /// </summary>
+    internal int? BossDeckSize(DungeonRunState state, DungeonRunBoss boss)
+    {
+        if (!Tuned(state) || boss == null) return null;
+        if (boss.IsEncounter && boss.FixedHealth || boss.HasFlag(DungeonRunEncounterData.MirrorDeck)) return null;
+        var node = CurrentNode(state);
+        var act = CurrentAct(state);
+        if (node == null || act == null || act.BossDeck.Length < node.FloorInAct) return null;
+        return act.BossDeck[node.FloorInAct - 1];
+    }
+
+    // Cuts the plan's starting boss deck to BossDeckSize: a seeded pick (BossDeckStream, the floor), so a restaged floor meets
+    // the same cards, kept in deck order. Fabled bundles and their companions, and cards with a sideboard, are never cut, so
+    // the rest of the deck stays valid. A deck already at or under the size is left whole; forms and relay decks are untouched.
+    private void SizeBossDeck(DungeonRunState state, DungeonRunBoss boss, RunMatchPlan plan)
+    {
+        if (!(BossDeckSize(state, boss) is int size) || plan.BossDeck == null || plan.BossDeck.Count <= size) return;
+        bool Kept(SabberStoneCore.Model.Card c) => SabberStoneCore.Actions.FabledRules.IsFabled(c.Id) || SabberStoneCore.Actions.FabledRules.IsCompanion(c.Id)
+            || plan.BossSideboards != null && plan.BossSideboards.ContainsKey(c.Id);
+        var cuttable = Enumerable.Range(0, plan.BossDeck.Count).Where(i => !Kept(plan.BossDeck[i])).ToList();
+        Shuffle(cuttable, state.Seed, BossDeckStream, state.Floor);
+        var cut = new HashSet<int>(cuttable.Take(Math.Min(cuttable.Count, plan.BossDeck.Count - size)));
+        plan.BossDeck = plan.BossDeck.Where((c, i) => !cut.Contains(i)).ToList();
     }
 
     // The plan of every run before phase 8, unchanged; ApplyEncounter adds an imported encounter's fields and the global rules.

@@ -197,12 +197,6 @@ internal static class DungeonRunRuntime
         lock (Gate) return Catalog(profile => DungeonRunCatalog.Heroes(rules, profile, classId, ClientCardId), new RunHeroOption[0]);
     }
 
-    /// <summary>The playable named hero rows with one class (phase 6: Heist, Monster Hunt, Rikkar), which the native tray does not offer.</summary>
-    internal static int SingleClassHeroRows
-    {
-        get { lock (Gate) { try { return Rules?.Data.HeroRows.Count(h => !h.IsDual) ?? 0; } catch (Exception) { return 0; } } }
-    }
-
     // The seed the next NewRun uses once a signature offer was shown for it (the offer is drawn from the run seed, so the
     // picker must see it before the run starts); dropped when another row is chosen.
     private static long? pendingSeed;
