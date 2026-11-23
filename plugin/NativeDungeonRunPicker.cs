@@ -484,8 +484,9 @@ internal static class NativeDungeonRunPicker
     // GameSaveDataManager.ClearLocalData drops the in-memory map entry, so the next request is answered empty (EnsurePreference).
     // keepClient (a page change only: End from Tick, then the reopen's TryBegin) leaves the client key's entry in memory, so the
     // reopened tray reads the "has seen" flags (ClientSaveMarks) its previous page's session wrote (EnsurePreference fills only a
-    // missing key). Nothing else is in that entry: the session answered it empty and kept only those flags, and a page change
-    // happens on the tray, before the playmat's NEWLY_UNLOCKED markers. The server key (the chosen class) is always cleared.
+    // missing key). The session answered that entry empty, so it holds only the client marks the session wrote: the tray's "has seen"
+    // flags, and, when the page changes after the playmat's way back to the tray, the playmat's NEWLY_UNLOCKED / tutorial marks
+    // too (kept as well; unchecked in the client). The server key (the chosen class) is always cleared.
     private static void ClearBorrowedSaves() => ClearBorrowedSaves(false);
     private static void ClearBorrowedSaves(bool keepClient)
     {

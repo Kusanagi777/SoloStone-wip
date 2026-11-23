@@ -455,6 +455,18 @@ Guard("TP", () =>
         (bothNext == null ? "none" : bothNext.Value.Where) + " / " + (loneP == null ? "none" : loneP.Value.Where) + " / "
         + (loneN == null ? "none" : loneN.Value.Where) + " / " + (narrowLone == null ? "none" : narrowLone.Value.NextX.ToString()));
 
+    // Pages keep one row: with Previous's spot under the grid covered but the row level with Back clear at both ends, pages 2-3
+    // (both plates) go level with Back, and so do page 1 (Next only) and the last page (Previous only), not under the grid.
+    var lowOnPrevious = new List<(float X, float Y, float W, float H)> { (90f, 150f, 150f, 50f) };
+    var keepBoth = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, lowOnPrevious, 720);
+    var keepNext = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, lowOnPrevious, 720, needPrevious: false, needNext: true);
+    var keepPrevious = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, lowOnPrevious, 720, needPrevious: true, needNext: false);
+    Check("TP14 a page with one plate uses the row the two-plate pages use when that row is clear at both ends",
+        keepBoth != null && keepBoth.Value.Where == "level with Back" && keepNext != null && keepNext.Value.Where == "level with Back"
+        && keepPrevious != null && keepPrevious.Value.Where == "level with Back" && keepNext.Value.Y == keepBoth.Value.Y,
+        (keepBoth == null ? "none" : keepBoth.Value.Where) + " / " + (keepNext == null ? "none" : keepNext.Value.Where) + " / "
+        + (keepPrevious == null ? "none" : keepPrevious.Value.Where));
+
     // The plates sit at the same place on every page: pages 1-3 show 12 (the full grid itself), page 4 one portrait (the
     // remembered grid). While the tray slides in, Back and the grid move together, so the plates move with them; at another
     // screen size the remembered grid is not used.

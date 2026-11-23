@@ -305,7 +305,8 @@ internal static class NativeDungeonRunText
     // Where the tray's Previous and Next plates go (screen pixels, bottom-left origin, y up): Previous at the hero grid's left end,
     // Next at its right end, each Back's size, on the first clear row of: just under the grid (on the tray's empty bottom plate),
     // then level with Back. marginX/marginY are how far a plate's art reaches past its hit body (NativeButtonKit.FrameMarginOf);
-    // the art is kept off the grid, Back, every rect in avoid (Choose, the buttons shown) and the screen edge. Only the plates
+    // the art is kept off the grid, Back, every rect in avoid (Choose, the buttons shown) and the screen edge. A row where both
+    // ends are clear is preferred on every page, so the plates keep their row; failing that, only the plates
     // that will be shown must be clear (needPrevious: not on page 1; needNext: not on the last page), and the grid must hold two
     // plates side by side only when both are. grid is the full-capacity grid (TrayPagerGrid), so the plates sit at the same place
     // on every page. Null when no row is clear, or when neither plate is needed.
@@ -318,14 +319,24 @@ internal static class NativeDungeonRunText
         var obstacles = (avoid ?? Enumerable.Empty<(float X, float Y, float W, float H)>()).ToList();
         obstacles.Add(grid); obstacles.Add(back);
         float left = grid.X + marginX, right = grid.X + grid.W - w - marginX;
+        bool twoFit = right - marginX >= left + w + marginX;
         // the grid is narrower than two plates side by side
-        if (needPrevious && needNext && right - marginX < left + w + marginX) return null;
+        if (needPrevious && needNext && !twoFit) return null;
         float gap = System.Math.Max(h * .25f, 2 * marginY);
-        foreach (var (where, bottom) in new[] { ("under the grid", grid.Y - gap - h), ("level with Back", back.Y) })
+        var rows = new[] { ("under the grid", grid.Y - gap - h), ("level with Back", back.Y) };
+        // First the row where both ends are clear (the same row on every page that can hold both), then, for a page that shows
+        // one plate only, the first row where that plate's end is clear.
+        for (int pass = 0; pass < 2; pass++)
         {
-            if (bottom - marginY < 0 || bottom + h + marginY > screenHeight) continue;
-            bool Clear(float x) => !obstacles.Any(o => x - marginX < o.X + o.W && o.X < x + w + marginX && bottom - marginY < o.Y + o.H && o.Y < bottom + h + marginY);
-            if ((!needPrevious || Clear(left)) && (!needNext || Clear(right))) return (left, right, bottom, where);
+            bool both = pass == 0;
+            if (both && !twoFit) continue;
+            foreach (var (where, bottom) in rows)
+            {
+                if (bottom - marginY < 0 || bottom + h + marginY > screenHeight) continue;
+                bool Clear(float x) => !obstacles.Any(o => x - marginX < o.X + o.W && o.X < x + w + marginX && bottom - marginY < o.Y + o.H && o.Y < bottom + h + marginY);
+                if (both ? Clear(left) && Clear(right) : (!needPrevious || Clear(left)) && (!needNext || Clear(right))) return (left, right, bottom, where);
+            }
+            if (needPrevious && needNext) break; // both plates shown: only the first pass applies
         }
         return null;
     }
