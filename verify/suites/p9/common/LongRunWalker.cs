@@ -406,7 +406,7 @@ internal sealed class LongRunWalker
         if (plan.PlayerDeck == null || plan.PlayerDeck.Count < 10 || plan.PlayerDeck.Count > deckMax || plan.PlayerDeck.Any(c => c == null))
             problems.Add("run deck " + (plan.PlayerDeck?.Count ?? -1) + " of 10.." + deckMax);
         if (plan.BossDeck == null || plan.BossDeck.Any(c => c == null)
-            || (plan.EncounterDeck ? plan.BossDeck.Count < 10 || plan.BossDeck.Count > 60 : plan.BossDeck.Count != 30))
+            || (plan.EncounterDeck ? plan.BossDeck.Count < 10 || plan.BossDeck.Count > 60 : plan.BossDeck.Count < DungeonRun.MinBossDeck || plan.BossDeck.Count > 30))
             problems.Add((plan.EncounterDeck ? "encounter" : "boss") + " deck " + (plan.BossDeck?.Count ?? -1));
         if (s.IsActRun && (s.Deck.Count < run.DeckMin(s) || s.Deck.Count > deckMax)) problems.Add("run deck " + s.Deck.Count + " outside " + run.DeckMin(s) + ".." + deckMax);
         if (plan.PlayerDeckSlots != null && plan.PlayerDeckSlots.Count > 0 && plan.PlayerDeckSlots.Count != plan.PlayerDeck?.Count)

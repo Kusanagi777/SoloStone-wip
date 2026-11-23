@@ -12,6 +12,7 @@ A	UnityEngine.ScreenCaptureModule
 A	blizzard.bgsclient			
 C	*	Blizzard.Commerce.TransactionData	.ctor	(Blizzard.Commerce.ProductId,System.String,System.UInt32,System.Boolean)
 C	Assembly-CSharp	AdventureDeckDbfRecord	.ctor	System.Void()
+C	Assembly-CSharp	AdventureGuestHeroesDbfRecord	.ctor	System.Void()
 C	Assembly-CSharp	AdventureHeroPowerDbfRecord	.ctor	System.Void()
 C	Assembly-CSharp	AlertPopup+PopupInfo	.ctor	System.Void()
 C	Assembly-CSharp	AlertPopup+ResponseCallback	.ctor	System.Void(System.Object,System.IntPtr)
@@ -168,6 +169,7 @@ F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_backButton	UIBButton
 F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_collectionButton	UIBButton
 F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_heroActor	*
 F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_heroName	*
+F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_heroPickerButtonBonesByHeroCount	*
 F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_heroPowerActor	*
 F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_heroPowerContainer	*
 F	Assembly-CSharp	AbsDeckPickerTrayDisplay	m_playButton	*
@@ -429,6 +431,7 @@ F	Assembly-CSharp	GameDbf	CosmeticCoin	Dbf`1<CosmeticCoinDbfRecord>
 F	Assembly-CSharp	GameDbf	Deck	Dbf`1<DeckDbfRecord>
 F	Assembly-CSharp	GameDbf	DeckCard	Dbf`1<DeckCardDbfRecord>
 F	Assembly-CSharp	GameDbf	DeckTemplate	Dbf`1<DeckTemplateDbfRecord>
+F	Assembly-CSharp	GameDbf	GuestHero	Dbf`1<GuestHeroDbfRecord>
 F	Assembly-CSharp	GameDbf	League	Dbf`1<LeagueDbfRecord>
 F	Assembly-CSharp	GameDbf	Pet	Dbf`1<PetDbfRecord>
 F	Assembly-CSharp	GameDbf	PetLevel	Dbf`1<PetLevelDbfRecord>
@@ -724,6 +727,7 @@ M	*	UberText	GetTextBounds	()
 M	*	UberText	UpdateNow	(System.Boolean)
 M	*	iTween	Count	(UnityEngine.GameObject)
 M	Assembly-CSharp	AbsDeckPickerTrayDisplay	OnPlayButtonPressed_SaveHeroAndAdvanceToDungeonRunIfNecessary	()
+M	Assembly-CSharp	AbsDeckPickerTrayDisplay	OnPlayGameButtonReleased	(UIEvent)
 M	Assembly-CSharp	AbsDeckPickerTrayDisplay	SetHeroButtonsEnabled	(System.Boolean)
 M	Assembly-CSharp	AbsDeckPickerTrayDisplay	SetPlayButtonEnabled	(System.Boolean)
 M	Assembly-CSharp	AchievementCategoryDbfRecord	get_Icon	System.String()
@@ -798,6 +802,12 @@ M	Assembly-CSharp	AdventureDungeonCrawlPlayMat	GetPlayMatState	AdventureDungeonC
 M	Assembly-CSharp	AdventureDungeonCrawlPlayMat	PlayDeckOptionSelected	System.Void()
 M	Assembly-CSharp	AdventureDungeonCrawlPlayMat	PlayHeroPowerOptionSelected	()
 M	Assembly-CSharp	AdventureDungeonCrawlPlayMat	get_PlayButton	PlayButton()
+M	Assembly-CSharp	AdventureGuestHeroesDbfRecord	SetAdventureId	System.Void(System.Int32)
+M	Assembly-CSharp	AdventureGuestHeroesDbfRecord	SetBaseGuestHeroId	System.Void(System.Int32)
+M	Assembly-CSharp	AdventureGuestHeroesDbfRecord	SetCustomScenario	System.Void(System.Int32)
+M	Assembly-CSharp	AdventureGuestHeroesDbfRecord	SetGuestHeroId	System.Void(System.Int32)
+M	Assembly-CSharp	AdventureGuestHeroesDbfRecord	SetSortOrder	System.Void(System.Int32)
+M	Assembly-CSharp	AdventureGuestHeroesDbfRecord	SetWingId	System.Void(System.Int32)
 M	Assembly-CSharp	AdventureGuestHeroesDbfRecord	get_AdventureId	System.Int32()
 M	Assembly-CSharp	AdventureHeroPowerDbfRecord	get_AdventureId	System.Int32()
 M	Assembly-CSharp	AdventureHeroPowerDbfRecord	get_CardId	System.Int32()
@@ -1256,6 +1266,7 @@ M	Assembly-CSharp	DefLoader	GetAllEntityDefs	System.Collections.Generic.Dictiona
 M	Assembly-CSharp	DefLoader	GetEntityDef	EntityDef(System.Int32,System.Boolean)
 M	Assembly-CSharp	DefLoader	GetEntityDef	EntityDef(System.String)
 M	Assembly-CSharp	DefLoader	HasLoadedEntityDefs	System.Boolean()
+M	Assembly-CSharp	DefLoader+DisposableFullDef	get_EntityDef	EntityDef()
 M	Assembly-CSharp	DialogBase	AddHideListener	System.Void(DialogBase+HideCallback)
 M	Assembly-CSharp	DialogBase	HandleKeyboardInput	()
 M	Assembly-CSharp	DialogBase	Hide	System.Void()
@@ -1470,6 +1481,11 @@ M	Assembly-CSharp	GoldRewardData	get_Amount	System.Int64()
 M	Assembly-CSharp	GraphicsManager	InitializeScreen	()
 M	Assembly-CSharp	GraphicsManager	Shutdown	()
 M	Assembly-CSharp	GraphicsManager	UpdateFramerateSettings	*
+M	Assembly-CSharp	GuestHeroDbfRecord	get_CardId	System.Int32()
+M	Assembly-CSharp	GuestHeroPickerButton	UpdateDisplay	(DefLoader+DisposableFullDef,TAG_PREMIUM)
+M	Assembly-CSharp	GuestHeroPickerTrayDisplay	GetSortedAdventureGuestHeroes	()
+M	Assembly-CSharp	GuestHeroPickerTrayDisplay	HandleAdventureGuestHeroUnlockData	(AdventureGuestHeroesDbfRecord,HeroPickerButton)
+M	Assembly-CSharp	GuestHeroPickerTrayDisplay	UpdateHeroInfo	(DefLoader+DisposableFullDef,System.String,System.String,TAG_PREMIUM)
 M	Assembly-CSharp	Hearthstone.Attribution.BlizzardAttributionManager	SendEvent_FirstShopVisit	*
 M	Assembly-CSharp	Hearthstone.Attribution.BlizzardAttributionManager	SendEvent_Purchase	*
 M	Assembly-CSharp	Hearthstone.Attribution.BlizzardAttributionManager	SendEvent_VirtualCurrencyTransaction	*
@@ -1534,6 +1550,9 @@ M	Assembly-CSharp	Hearthstone.DataModels.AchievementSubcategoryListDataModel	set
 M	Assembly-CSharp	Hearthstone.DataModels.CardBackDataModel	get_CardBackId	System.Int32()
 M	Assembly-CSharp	Hearthstone.DataModels.CardDataModel	get_CardId	System.String()
 M	Assembly-CSharp	Hearthstone.DataModels.EventDataModel	get_Payload	System.Object()
+M	Assembly-CSharp	Hearthstone.DataModels.HeroPickerOptionDataModel	set_IsNewlyUnlocked	System.Void(System.Boolean)
+M	Assembly-CSharp	Hearthstone.DataModels.HeroPickerOptionDataModel	set_IsTimelocked	System.Void(System.Boolean)
+M	Assembly-CSharp	Hearthstone.DataModels.HeroPickerOptionDataModel	set_IsUnowned	System.Void(System.Boolean)
 M	Assembly-CSharp	Hearthstone.DataModels.JournalMetaDataModel	set_DoneChangingTabs	System.Void(System.Boolean)
 M	Assembly-CSharp	Hearthstone.DataModels.JournalMetaDataModel	set_HasPassedTavernGuideButtonIntro	System.Void(System.Boolean)
 M	Assembly-CSharp	Hearthstone.DataModels.JournalMetaDataModel	set_HasSeenWelcomeApprentice	System.Void(System.Boolean)
@@ -1754,6 +1773,10 @@ M	Assembly-CSharp	HearthstoneTelemetry.TelemetryClient	SendShopStatus	*
 M	Assembly-CSharp	HearthstoneTelemetry.TelemetryClient	SendShopVisit	*
 M	Assembly-CSharp	HeraldCardTextBuilder	GetHeraldColossalName	(Entity)
 M	Assembly-CSharp	HeraldCardTextBuilder	GetHeraldColossalName	*
+M	Assembly-CSharp	HeroPickerButton	GetDataModel	Hearthstone.DataModels.HeroPickerOptionDataModel()
+M	Assembly-CSharp	HeroPickerButton	GetGuestHero	GuestHeroDbfRecord()
+M	Assembly-CSharp	HeroPickerButton	SetClassname	System.Void(System.String)
+M	Assembly-CSharp	HeroPickerButton	SetLockReasonText	System.Void(System.String)
 M	Assembly-CSharp	HeroPickerButton	get_HeroCardDbId	System.Int32()
 M	Assembly-CSharp	HeroSkinInfoManager	Get	HeroSkinInfoManager()
 M	Assembly-CSharp	HeroSkinUtils	GetCollectionManagerHeroSkinPurchaseProductData	(System.String)
@@ -3149,6 +3172,7 @@ T	Assembly-CSharp	DeckTrayHeroSkinContent
 T	Assembly-CSharp	DeckTrayPetContent		
 T	Assembly-CSharp	DeckTrayReorderableContent		
 T	Assembly-CSharp	DefLoader		
+T	Assembly-CSharp	DefLoader+DisposableFullDef		
 T	Assembly-CSharp	DialogBase		
 T	Assembly-CSharp	DialogBase+HideCallback		
 T	Assembly-CSharp	DialogManager		
@@ -3199,6 +3223,9 @@ T	Assembly-CSharp	GameUtils
 T	Assembly-CSharp	Gameplay		
 T	Assembly-CSharp	GoldRewardData		
 T	Assembly-CSharp	GraphicsManager		
+T	Assembly-CSharp	GuestHeroDbfRecord		
+T	Assembly-CSharp	GuestHeroPickerButton		
+T	Assembly-CSharp	GuestHeroPickerTrayDisplay		
 T	Assembly-CSharp	Hearthstone.DataModels.AchievementCategoryDataModel		
 T	Assembly-CSharp	Hearthstone.DataModels.AchievementCategoryListDataModel		
 T	Assembly-CSharp	Hearthstone.DataModels.AchievementDataModel		
@@ -3211,6 +3238,7 @@ T	Assembly-CSharp	Hearthstone.DataModels.AchievementSubcategoryListDataModel
 T	Assembly-CSharp	Hearthstone.DataModels.CardBackDataModel		
 T	Assembly-CSharp	Hearthstone.DataModels.CardDataModel		
 T	Assembly-CSharp	Hearthstone.DataModels.EventDataModel		
+T	Assembly-CSharp	Hearthstone.DataModels.HeroPickerOptionDataModel		
 T	Assembly-CSharp	Hearthstone.DataModels.JournalMetaDataModel		
 T	Assembly-CSharp	Hearthstone.DataModels.PackDataModel		
 T	Assembly-CSharp	Hearthstone.DataModels.PriceDataModel		

@@ -75,6 +75,7 @@ var added = new Dictionary<string, (string Kind, string Why)>(StringComparer.Ord
     ["schedule .Acts[].BundleAfterTreasure"] = ("neutral", "D5 (b): NoBundleAfter reads it through Tuned"),
     ["schedule .Acts[].TurnCap"] = ("neutral", "D11: the finale's turn cap (PlanMatchEnds, Tuned)"),
     ["schedule .Acts[].FormRatchet"] = ("neutral", "D11: the finale's form ratchet (PlanMatchEnds, Tuned)"),
+    ["schedule .Acts[].BossDeck"] = ("neutral", "owner 2026-11-20: the boss's starting deck size per floor (SizeBossDeck, Tuned)"),
     ["tavern .WeightByAct"] = ("tuned", "D4/D5: OfferWeight reads it only when Tuned"),
     ["tavern .MaxPerRun"] = ("tuned", "D4: RunCapReached reads it only when Tuned"),
     ["treasure .Shared"] = ("tuned", "D6: TreasureInScope reads it only when Tuned"),
@@ -263,6 +264,235 @@ Guard("T", () =>
         states > 100 && weightBad.Count == 0 && v4Differs > 0, string.Join(" ", weightBad.Take(8)));
     Check("T2 and no option is at its maxPerRun on them (HealthBonus 30: maxPerRun unread)", capBad.Count == 0, string.Join(" ", capBad.Take(8)));
     Check("T3 and every treasure is in scope exactly where its scope matches (\"shared\" unread)", scopeBad.Count == 0, scopeBad.Count + ": " + string.Join(" ", scopeBad.Take(8)));
+});
+
+// ============================================================ B. boss Health and deck size per round (owner 2026-11-20)
+// acts-v4h/v4t: the first boss starts at 10 Health and 15 cards and both grow every fight (bossHealth, bossDeck); a released
+// schedule keeps its 30-card decks and its curve. Runs are walked by won fights (first offers, "none" at a modifier node).
+Guard("B", () =>
+{
+    var run = new DungeonRun(data);
+    var profile = new DungeonRunProfile(); profile.Unlocked.AddRange(data.Unlocks.Keys);
+    var scratch = new DungeonRunProfile();
+    // (floor, boss, plan Health, expected Health, plan deck, source deck, size) of every fight on floors 1-15.
+    List<(int Floor, DungeonRunBoss Boss, int Health, int? Expected, int Deck, int Source, int? Size, string Cards)> Walk(string schedule, long seed)
+    {
+        var row = data.Class("MAGE");
+        var s = run.NewRun(profile, row.Id, row.Decks[0], row.Powers[0], seed, schedule: schedule);
+        var fights = new List<(int, DungeonRunBoss, int, int?, int, int, int?, string)>();
+        for (int guard = 0; guard < 800 && s.Floor <= 15 && !s.Finished; guard++)
+        {
+            switch (s.Phase)
+            {
+                case DungeonRunPhase.PreMatch:
+                    s.ActiveRules.RemoveAll(x => x.Kind != null);
+                    var boss = run.CurrentBoss(s);
+                    var plan = run.BuildPlan(s, scratch);
+                    var act = run.CurrentAct(s);
+                    var node = run.CurrentNode(s);
+                    int? expected = boss.FixedHealth ? (int?)null : Math.Max(1, act.BossHealth[node.FloorInAct - 1] + run.HealthOffset(boss));
+                    string deckId = boss.Deck;
+                    fights.Add((s.Floor, boss, plan.BossHealth, expected, plan.BossDeck.Count, data.BossDecks[deckId].Count, run.BossDeckSize(s, boss), string.Join(",", plan.BossDeck.Select(c => c.Id))));
+                    run.BeginMatch(s); run.RecordOutcome(s, scratch, DungeonRunOutcome.Win);
+                    break;
+                case DungeonRunPhase.TreasureDraft: run.PickTreasure(s, s.OpenDraft.Offered[0]); break;
+                case DungeonRunPhase.Modifier:
+                    run.PickModifier(s, s.ModifierOffer.Kind == DungeonRunGlobalRule.KindAnomaly || s.ModifierOffer.Offered.Contains(DungeonRunGlobalRule.None) ? DungeonRunGlobalRule.None : s.ModifierOffer.Offered[0]);
+                    break;
+                case DungeonRunPhase.Tavern: run.LeaveTavern(s); break;
+                case DungeonRunPhase.BundleDraft:
+                    if (s.OpenDraft.Takes == 0) { run.PickBundle(s, s.OpenDraft.Offered[0]); break; }
+                    string bundle = s.OpenDraft.Choosing ?? s.OpenDraft.Offered[0];
+                    var left = run.OfferCards(s.OpenDraft, bundle);
+                    foreach (string kept in s.OpenDraft.Chosen) left.Remove(kept);
+                    run.PickDraftCard(s, bundle, left[0]);
+                    break;
+                default: throw new Exception("walk stopped at " + s.Phase);
+            }
+        }
+        return fights;
+    }
+    var v4 = new List<(string, (int Floor, DungeonRunBoss Boss, int Health, int? Expected, int Deck, int Source, int? Size, string Cards))>();
+    foreach (string id in new[] { "acts-v4h", "acts-v4t" })
+        for (long seed = 9300; seed < 9306; seed++)
+            foreach (var f in Walk(id, seed)) v4.Add((id + "/" + seed, f));
+    var first = v4.Where(x => x.Item2.Floor == 1).ToList();
+    Check("B1 on acts-v4h and acts-v4t the first boss starts at 10 Health (plus its own offset) and 15 cards (" + first.Count + " runs)",
+        first.Count == 12 && first.All(x => x.Item2.Expected == 10 + run.HealthOffset(x.Item2.Boss) && x.Item2.Health == x.Item2.Expected && x.Item2.Size == 15 && x.Item2.Deck == 15),
+        string.Join(" ", first.Where(x => x.Item2.Deck != 15 || x.Item2.Health != x.Item2.Expected).Select(x => x.Item1 + ":" + x.Item2.Boss.Id + "=" + x.Item2.Health + "hp/" + x.Item2.Deck)));
+    var sizeBad = v4.Where(x => x.Item2.Size is int n ? x.Item2.Deck != Math.Min(n, x.Item2.Source) || n != 14 + x.Item2.Floor : x.Item2.Deck != x.Item2.Source).ToList();
+    Check("B2 every fight on floors 1-15 plays a " + "15-29 card deck, one more card each floor (identity-Health and mirror bosses keep their own) (" + v4.Count + " fights)",
+        v4.Count >= 12 * 15 && sizeBad.Count == 0, string.Join(" ", sizeBad.Take(8).Select(x => x.Item1 + "@" + x.Item2.Floor + ":" + x.Item2.Boss.Id + "=" + x.Item2.Deck + "/" + x.Item2.Size)));
+    var healthBad = v4.Where(x => x.Item2.Expected is int e && x.Item2.Health != e).ToList();
+    var curve = data.Schedules.Schedules["acts-v4h"].Acts.Where(a => !a.IsFinale).SelectMany(a => a.BossHealth).ToList();
+    Check("B3 every curve-Health fight plays its floor's Health, and the act curve rises every floor (" + string.Join(" ", curve) + ")",
+        healthBad.Count == 0 && curve.First() == 10 && curve.Zip(curve.Skip(1), (a, b) => b > a).All(up => up),
+        string.Join(" ", healthBad.Take(8).Select(x => x.Item1 + "@" + x.Item2.Floor + ":" + x.Item2.Boss.Id + "=" + x.Item2.Health + "/" + x.Item2.Expected)));
+    var released = new[] { "acts-v3h", "acts-v2" }.SelectMany(id => Walk(id, 9300).Take(3).Select(f => (id, f))).ToList();
+    Check("B4 a released schedule keeps whole boss decks and its own curve (acts-v3h and acts-v2 floors 1-3)",
+        released.Count == 6 && released.All(x => x.f.Size == null && x.f.Deck == x.f.Source) && released.Where(x => x.f.Floor == 1).All(x => x.f.Expected == 30 + run.HealthOffset(x.f.Boss)),
+        string.Join(" ", released.Select(x => x.id + "@" + x.f.Floor + "=" + x.f.Health + "hp/" + x.f.Deck)));
+    var again = Walk("acts-v4h", 9300).Select(f => f.Cards).ToList();
+    var seeds = v4.Where(x => x.Item2.Floor == 1 && x.Item1.StartsWith("acts-v4h/")).Select(x => x.Item2.Cards).Distinct().Count();
+    Check("B5 the cut is seeded: the same run walked twice meets the same boss cards every floor (and 6 seeds give " + seeds + " different first decks)",
+        again.Count > 0 && again.SequenceEqual(v4.Where(x => x.Item1 == "acts-v4h/9300").Select(x => x.Item2.Cards)));
+});
+
+// ============================================================ TP. the native portrait tray's pages (owner 2026-11-22)
+// NativeDungeonRunPicker shows the run rows a page at a time (Dalaran's tray lays out at most 12 heroes) with Previous/Next
+// plates; its pure parts are NativeDungeonRunText.TrayPageRows (which rows a page shows) and TrayPagerPlace (where the plates go).
+Guard("TP", () =>
+{
+    var run = new DungeonRun(data);
+    var profile = new DungeonRunProfile(); profile.Unlocked.AddRange(data.Unlocks.Keys);
+    // The rows in the picker's order (BuildTrayRows: class by class, the class row then its named heroes, each id once). The
+    // client's own filters (a known hero card with a GUEST_HERO record, a TAG_CLASS) are not applied here.
+    var rows = new List<RunHeroOption>();
+    foreach (var cls in DungeonRunCatalog.Classes(run, profile))
+        foreach (var hero in DungeonRunCatalog.Heroes(run, profile, cls.Id))
+            if (!rows.Any(r => r.Id == hero.Id)) rows.Add(hero);
+    var flags = rows.Select(r => r.IsHero).ToList();
+    const int cap = 12;
+    // The slice the tray showed before paging (136bf1a FeedGuestHeroes): the class rows first, then the heroes, in row order.
+    List<int> Before(IList<bool> f)
+    {
+        var kept = new HashSet<int>(Enumerable.Range(0, f.Count).OrderBy(i => f[i] ? 1 : 0).Take(cap));
+        return Enumerable.Range(0, f.Count).Where(kept.Contains).ToList();
+    }
+    List<List<int>> PagesOf(IList<bool> f, Func<int, bool> laysOut = null) =>
+        Enumerable.Range(0, NativeDungeonRunText.Pages(f.Count, cap)).Select(p => NativeDungeonRunText.TrayPageRows(f, cap, p, laysOut)).ToList();
+    string Ids(IEnumerable<int> page) => string.Join(" ", page.Select(i => rows[i].Id));
+    bool Partition(IList<bool> f, List<List<int>> pages) =>
+        pages.SelectMany(p => p).OrderBy(i => i).SequenceEqual(Enumerable.Range(0, f.Count))
+        && pages.All(p => p.Count > 0 && p.Count <= cap && p.SequenceEqual(p.OrderBy(i => i)));
+    var real = PagesOf(flags);
+    Note("TP data rows " + rows.Count + " (" + flags.Count(x => !x) + " class rows, " + flags.Count(x => x) + " named heroes), "
+        + real.Count + " pages: " + string.Join(" / ", real.Select(Ids)));
+    Check("TP1 on the shipped rows page 1 is the 12 the tray showed before paging, and every row is on exactly one page in row order",
+        rows.Count > cap && real[0].SequenceEqual(Before(flags)) && Partition(flags, real) && real.Count == (rows.Count + cap - 1) / cap,
+        "page 1 " + Ids(real[0]) + "; before " + Ids(Before(flags)));
+
+    // The owner's tray (2026-11-22 log): 37 rows, 11 class rows, the tray lays out 12 -> pages of 12, 12, 12 and 1.
+    var synth = Enumerable.Range(0, 37).Select(i => !(i % 3 == 0 && i <= 30)).ToList();
+    var pages37 = PagesOf(synth);
+    Check("TP2 37 rows (11 class rows) at 12 a page: 4 pages of 12, 12, 12 and 1, page 1 the 11 class rows and the first hero, every row once",
+        synth.Count(x => !x) == 11 && pages37.Select(p => p.Count).SequenceEqual(new[] { 12, 12, 12, 1 }) && pages37[0].SequenceEqual(Before(synth))
+        && pages37[0].Count(i => !synth[i]) == 11 && Partition(synth, pages37) && pages37[3].Single() == 36,
+        string.Join(" / ", pages37.Select(p => string.Join(",", p))));
+    var clampedHigh = NativeDungeonRunText.TrayPageRows(synth, cap, 9);
+    var clampedLow = NativeDungeonRunText.TrayPageRows(synth, cap, -1);
+    Check("TP3 a page index out of range is clamped (page 10 of 4 is page 4, page 0 of 4 is page 1)",
+        clampedHigh.SequenceEqual(pages37[3]) && clampedLow.SequenceEqual(pages37[0]) && NativeDungeonRunText.ClampPage(9, 37, cap) == 3);
+    // A prefab without a 1-hero layout: the last page is 2 rows ending on the last row (it repeats one row of page 3).
+    var short37 = PagesOf(synth, n => n >= 2 && n <= cap);
+    Check("TP4 a last page the prefab cannot lay out takes the smallest size it can, ending on the last row, and no row is lost",
+        short37.Count == 4 && short37[3].SequenceEqual(new[] { 35, 36 }) && short37.Take(3).All(p => p.Count == 12)
+        && short37.SelectMany(p => p).Distinct().Count() == 37 && short37[0].SequenceEqual(pages37[0]),
+        string.Join(",", short37[3]));
+    Check("TP5 no paging when the rows fit one page or no capacity is known (every row, in row order)",
+        NativeDungeonRunText.TrayPageRows(synth, 0, 2).SequenceEqual(Enumerable.Range(0, 37))
+        && NativeDungeonRunText.TrayPageRows(synth, 37, 1).SequenceEqual(Enumerable.Range(0, 37))
+        && NativeDungeonRunText.TrayPageRows(synth.Take(5).ToList(), cap, 3).SequenceEqual(Enumerable.Range(0, 5))
+        && NativeDungeonRunText.TrayPageRows(new List<bool>(), cap, 0).Count == 0 && NativeDungeonRunText.TrayPageRows(null, cap, 0).Count == 0
+        && NativeDungeonRunText.Pages(12, cap) == 1 && NativeDungeonRunText.Pages(13, cap) == 2);
+    Check("TP6 the page log and the plate labels",
+        NativeDungeonRunText.TrayPageLog(0, 4) == "tray page 1 of 4" && NativeDungeonRunText.TrayPageLog(3, 4) == "tray page 4 of 4"
+        && NativeDungeonRunText.TrayPreviousLabel == "Previous" && NativeDungeonRunText.TrayNextLabel == "Next");
+
+    // Plates (screen pixels, y up): Back is 120x40, its art reaches 4 px past the body sideways and 3 px up and down.
+    var grid = (X: 100f, Y: 200f, W: 600f, H: 400f);
+    var back = (X: 900f, Y: 100f, W: 120f, H: 40f);
+    var choose = new List<(float X, float Y, float W, float H)> { (800f, 150f, 200f, 200f) };
+    var under = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, choose, 720);
+    Check("TP7 the plates go just under the hero grid at its two ends, a quarter plate below it, clear of Back and Choose",
+        under != null && under.Value.Where == "under the grid" && under.Value.PreviousX == 104 && under.Value.NextX == 576 && under.Value.Y == 150,
+        under == null ? "none" : under.Value.Where + " " + under.Value.PreviousX + "," + under.Value.NextX + "," + under.Value.Y);
+    var low = NativeDungeonRunText.TrayPagerPlace((100f, 30f, 600f, 400f), (900f, 470f, 120f, 40f), 4, 3, null, 720);
+    Check("TP8 with no room under the grid they go level with Back",
+        low != null && low.Value.Where == "level with Back" && low.Value.Y == 470 && low.Value.PreviousX == 104 && low.Value.NextX == 576,
+        low == null ? "none" : low.Value.Where + " " + low.Value.Y);
+    var blocked = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, new List<(float X, float Y, float W, float H)> { (0f, 0f, 1280f, 199f) }, 720);
+    var narrow = NativeDungeonRunText.TrayPagerPlace((100f, 200f, 250f, 400f), back, 4, 3, null, 720);
+    var offScreen = NativeDungeonRunText.TrayPagerPlace((100f, 30f, 600f, 400f), (900f, 700f, 120f, 40f), 4, 3, null, 720);
+    Check("TP9 no place (null) when every row is covered, the grid is narrower than two plates, or the row is off screen",
+        blocked == null && narrow == null && offScreen == null);
+
+    // The owner's last page (page 4 of 4: one portrait). The tray lays the one button out alone (here a 120x160 portrait in the
+    // middle of the plate), far narrower than two plates: placed against that, Previous had no place and page 4 was a dead end.
+    // The plates are placed against the full-capacity grid instead, remembered from a full page as an offset from Back.
+    var one = (X: 340f, Y: 350f, W: 120f, H: 160f);
+    var memo = new NativeDungeonRunText.TrayGridMemo();
+    var g1 = NativeDungeonRunText.TrayPagerGrid(memo, grid, 12, cap, back, 1280, 720, out string s1);
+    var g4 = NativeDungeonRunText.TrayPagerGrid(memo, one, 1, cap, back, 1280, 720, out string s4);
+    var avoid4 = new List<(float X, float Y, float W, float H)>(choose) { one };
+    var last = g4 == null ? null : NativeDungeonRunText.TrayPagerPlace(g4.Value, back, 4, 3, avoid4, 720, needPrevious: true, needNext: false);
+    var oldLast = NativeDungeonRunText.TrayPagerPlace(one, back, 4, 3, choose, 720);
+    var bare = NativeDungeonRunText.TrayPagerGrid(new NativeDungeonRunText.TrayGridMemo(), one, 1, cap, back, 1280, 720, out string sBare);
+    var bareLast = bare == null ? null : NativeDungeonRunText.TrayPagerPlace(bare.Value, back, 4, 3, avoid4, 720, needPrevious: true, needNext: false);
+    Check("TP10 a 1-hero last page places Previous: at page 1's spot against the remembered full grid, or under the one button with nothing remembered (the shown grid alone, both plates asked, has no place)",
+        s1 == "full" && g1 == grid && s4 == "remembered" && g4 == grid
+        && last != null && last.Value.Where == "under the grid" && last.Value.PreviousX == 104 && last.Value.Y == 150
+        && oldLast == null
+        && sBare == "shown" && bare == one && bareLast != null && bareLast.Value.Where == "under the grid" && bareLast.Value.PreviousX == 344 && bareLast.Value.Y == 300,
+        s1 + " " + s4 + " " + (last == null ? "none" : last.Value.Where + " " + last.Value.PreviousX + "," + last.Value.Y)
+        + "; bare " + sBare + " " + (bareLast == null ? "none" : bareLast.Value.Where + " " + bareLast.Value.PreviousX + "," + bareLast.Value.Y));
+
+    // Only the plates that will be shown must be clear: something on Next's spot under the grid (or on Previous's) moves both
+    // plates when both show (here to no place at all), but not a lone Previous (last page) or a lone Next (page 1).
+    var onNext = new List<(float X, float Y, float W, float H)> { (560f, 140f, 150f, 60f) };
+    var onPrevious = new List<(float X, float Y, float W, float H)> { (90f, 140f, 150f, 60f) };
+    var bothNext = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, onNext, 720);
+    var loneP = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, onNext, 720, needPrevious: true, needNext: false);
+    var bothPrevious = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, onPrevious, 720);
+    var loneN = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, onPrevious, 720, needPrevious: false, needNext: true);
+    var neither = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, null, 720, needPrevious: false, needNext: false);
+    var narrowLone = NativeDungeonRunText.TrayPagerPlace((100f, 200f, 250f, 400f), back, 4, 3, null, 720, needPrevious: false, needNext: true);
+    Check("TP11 only the plates shown must be clear: a covered Next spot leaves a lone Previous under the grid, a covered Previous spot a lone Next, and a lone plate needs no room for two",
+        (bothNext == null || bothNext.Value.Where != "under the grid") && (bothPrevious == null || bothPrevious.Value.Where != "under the grid")
+        && loneP != null && loneP.Value.Where == "under the grid" && loneP.Value.PreviousX == 104 && loneP.Value.Y == 150
+        && loneN != null && loneN.Value.Where == "under the grid" && loneN.Value.NextX == 576 && loneN.Value.Y == 150
+        && neither == null && narrowLone != null && narrowLone.Value.NextX == 226,
+        (bothNext == null ? "none" : bothNext.Value.Where) + " / " + (loneP == null ? "none" : loneP.Value.Where) + " / "
+        + (loneN == null ? "none" : loneN.Value.Where) + " / " + (narrowLone == null ? "none" : narrowLone.Value.NextX.ToString()));
+
+    // Pages keep one row: with Previous's spot under the grid covered but the row level with Back clear at both ends, pages 2-3
+    // (both plates) go level with Back, and so do page 1 (Next only) and the last page (Previous only), not under the grid.
+    var lowOnPrevious = new List<(float X, float Y, float W, float H)> { (90f, 150f, 150f, 50f) };
+    var keepBoth = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, lowOnPrevious, 720);
+    var keepNext = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, lowOnPrevious, 720, needPrevious: false, needNext: true);
+    var keepPrevious = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, lowOnPrevious, 720, needPrevious: true, needNext: false);
+    Check("TP14 a page with one plate uses the row the two-plate pages use when that row is clear at both ends",
+        keepBoth != null && keepBoth.Value.Where == "level with Back" && keepNext != null && keepNext.Value.Where == "level with Back"
+        && keepPrevious != null && keepPrevious.Value.Where == "level with Back" && keepNext.Value.Y == keepBoth.Value.Y,
+        (keepBoth == null ? "none" : keepBoth.Value.Where) + " / " + (keepNext == null ? "none" : keepNext.Value.Where) + " / "
+        + (keepPrevious == null ? "none" : keepPrevious.Value.Where));
+
+    // The plates sit at the same place on every page: pages 1-3 show 12 (the full grid itself), page 4 one portrait (the
+    // remembered grid). While the tray slides in, Back and the grid move together, so the plates move with them; at another
+    // screen size the remembered grid is not used.
+    var memoPages = new NativeDungeonRunText.TrayGridMemo();
+    var spots = new List<(float PreviousX, float NextX, float Y, string Where)?>();
+    for (int p = 0; p < 4; p++)
+    {
+        var live = p < 3 ? grid : one;
+        var g = NativeDungeonRunText.TrayPagerGrid(memoPages, live, p < 3 ? 12 : 1, cap, back, 1280, 720, out _);
+        var a = new List<(float X, float Y, float W, float H)>(choose) { live };
+        spots.Add(g == null ? null : NativeDungeonRunText.TrayPagerPlace(g.Value, back, 4, 3, a, 720, needPrevious: p > 0, needNext: p < 3));
+    }
+    var slid = (X: back.X, Y: back.Y - 30f, W: back.W, H: back.H);
+    var gSlid = NativeDungeonRunText.TrayPagerGrid(memoPages, (one.X, one.Y - 30f, one.W, one.H), 1, cap, slid, 1280, 720, out string sSlid);
+    var gResized = NativeDungeonRunText.TrayPagerGrid(memoPages, one, 1, cap, back, 1920, 1080, out string sResized);
+    Check("TP12 the plates sit at the same place on every page (Previous on pages 2-4, Next on pages 1-3, one row), follow Back while the tray slides, and a new screen size forgets the grid",
+        spots.All(x => x != null && x.Value.Where == "under the grid" && x.Value.Y == 150)
+        && spots.Skip(1).All(x => x.Value.PreviousX == 104) && spots.Take(3).All(x => x.Value.NextX == 576)
+        && sSlid == "remembered" && gSlid == (grid.X, grid.Y - 30f, grid.W, grid.H)
+        && sResized == "shown" && gResized == one,
+        string.Join(" / ", spots.Select(x => x == null ? "none" : x.Value.PreviousX + "," + x.Value.NextX + "," + x.Value.Y)) + "; " + sSlid + " " + sResized);
+    Check("TP13 the post-show overlap check counts shared area only, not touching edges",
+        NativeDungeonRunText.TrayRectsOverlap((0f, 0f, 10f, 10f), (5f, 5f, 10f, 10f))
+        && !NativeDungeonRunText.TrayRectsOverlap((0f, 0f, 10f, 10f), (10f, 0f, 10f, 10f))
+        && !NativeDungeonRunText.TrayRectsOverlap((0f, 0f, 10f, 10f), (0f, 10f, 10f, 10f))
+        && NativeDungeonRunText.TrayRectsOverlap((0f, 0f, 10f, 10f), (2f, 2f, 2f, 2f)));
 });
 
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");

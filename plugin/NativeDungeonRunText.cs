@@ -39,6 +39,11 @@ internal static class NativeDungeonRunText
     internal static string HeroLine(string name, string adventure, string classes, int health) =>
         name + " (" + (adventure == null ? "" : adventure + ", ") + classes + (health > 0 ? ", " + health + " Health" : "") + ")";
     internal static string SignatureLine(string name, string text) => "Signature: " + Described(name, PowerText(text));
+    /// <summary>The portrait tray's description of a run row (NativeDungeonRunPicker): "Mage. Heist hero. 3 decks, 3 hero powers."</summary>
+    internal static string TrayDescription(RunHeroOption row) =>
+        row == null ? "" : row.ClassName + ". " + (row.Adventure == null ? "Dungeon Run class hero" : row.Adventure + " hero") + ". "
+            + row.DeckCount + (row.DeckCount == 1 ? " deck, " : " decks, ") + row.PowerCount + (row.PowerCount == 1 ? " hero power" : " hero powers")
+            + (row.SignatureCount > 0 ? ", a signature treasure" : "") + ".";
 
     internal const string ClassCaption = "Pick a class. A run is three acts of fights; a loss ends it.";
     internal const string DeckCaption = "Each class has three starter decks. Play the class to unlock the others.";
@@ -271,4 +276,104 @@ internal static class NativeDungeonRunText
 
     internal static int Pages(int count, int perPage) => count <= 0 ? 1 : (count + perPage - 1) / perPage;
     internal static int ClampPage(int page, int count, int perPage) => page < 0 ? 0 : page >= Pages(count, perPage) ? Pages(count, perPage) - 1 : page;
+
+    // ---- the portrait tray's pages (NativeDungeonRunPicker, owner 2026-11-22). The tray's prefab lays out at most `perPage`
+    // heroes (its layout capacity, 12 on Dalaran's tray), so the run rows are paged. Page order: the class rows first, then the
+    // named heroes, each kept in row order, so page 1 is the 12 the tray showed before paging (every class row and the first
+    // named hero). A page lists its rows in row order. When the prefab cannot lay out the last page's size (laysOut), the last
+    // page is the smallest size it can lay out, ending on the last row (it repeats rows of the page before), so no row is lost.
+    internal const string TrayPreviousLabel = "Previous", TrayNextLabel = "Next";
+    internal static string TrayPageLog(int page, int pages) => "tray page " + (page + 1) + " of " + pages;
+    /// <summary>The indices (into the tray's rows, in row order) of the rows page <paramref name="page"/> shows; every row when
+    /// they fit one page or no capacity is known (<paramref name="perPage"/> &lt;= 0).</summary>
+    internal static List<int> TrayPageRows(IList<bool> isHero, int perPage, int page, System.Func<int, bool> laysOut = null)
+    {
+        int count = isHero == null ? 0 : isHero.Count;
+        if (perPage <= 0 || perPage >= count) return Enumerable.Range(0, count).ToList();
+        var order = Enumerable.Range(0, count).OrderBy(i => isHero[i] ? 1 : 0).ToList(); // OrderBy is stable
+        page = ClampPage(page, count, perPage);
+        int start = page * perPage, size = System.Math.Min(perPage, count - start);
+        if (laysOut != null && !laysOut(size))
+        {
+            int fit = size + 1;
+            while (fit < perPage && !laysOut(fit)) fit++;
+            size = fit; start = count - fit;
+        }
+        return order.Skip(start).Take(size).OrderBy(i => i).ToList();
+    }
+
+    // Where the tray's Previous and Next plates go (screen pixels, bottom-left origin, y up): Previous at the hero grid's left end,
+    // Next at its right end, each Back's size, on the first clear row of: just under the grid (on the tray's empty bottom plate),
+    // then level with Back. marginX/marginY are how far a plate's art reaches past its hit body (NativeButtonKit.FrameMarginOf);
+    // the art is kept off the grid, Back, every rect in avoid (Choose, the buttons shown) and the screen edge. A row where both
+    // ends are clear is preferred on every page, so the plates keep their row; failing that, only the plates
+    // that will be shown must be clear (needPrevious: not on page 1; needNext: not on the last page), and the grid must hold two
+    // plates side by side only when both are. grid is the full-capacity grid (TrayPagerGrid), so the plates sit at the same place
+    // on every page. Null when no row is clear, or when neither plate is needed.
+    internal static (float PreviousX, float NextX, float Y, string Where)? TrayPagerPlace((float X, float Y, float W, float H) grid,
+        (float X, float Y, float W, float H) back, float marginX, float marginY, IEnumerable<(float X, float Y, float W, float H)> avoid, float screenHeight,
+        bool needPrevious = true, bool needNext = true)
+    {
+        float w = back.W, h = back.H;
+        if (w <= 0 || h <= 0 || grid.W <= 0 || grid.H <= 0 || !needPrevious && !needNext) return null;
+        var obstacles = (avoid ?? Enumerable.Empty<(float X, float Y, float W, float H)>()).ToList();
+        obstacles.Add(grid); obstacles.Add(back);
+        float left = grid.X + marginX, right = grid.X + grid.W - w - marginX;
+        bool twoFit = right - marginX >= left + w + marginX;
+        // the grid is narrower than two plates side by side
+        if (needPrevious && needNext && !twoFit) return null;
+        float gap = System.Math.Max(h * .25f, 2 * marginY);
+        var rows = new[] { ("under the grid", grid.Y - gap - h), ("level with Back", back.Y) };
+        // First the row where both ends are clear (the same row on every page that can hold both), then, for a page that shows
+        // one plate only, the first row where that plate's end is clear.
+        for (int pass = 0; pass < 2; pass++)
+        {
+            bool both = pass == 0;
+            if (both && !twoFit) continue;
+            foreach (var (where, bottom) in rows)
+            {
+                if (bottom - marginY < 0 || bottom + h + marginY > screenHeight) continue;
+                bool Clear(float x) => !obstacles.Any(o => x - marginX < o.X + o.W && o.X < x + w + marginX && bottom - marginY < o.Y + o.H && o.Y < bottom + h + marginY);
+                if (both ? Clear(left) && Clear(right) : (!needPrevious || Clear(left)) && (!needNext || Clear(right))) return (left, right, bottom, where);
+            }
+            if (needPrevious && needNext) break; // both plates shown: only the first pass applies
+        }
+        return null;
+    }
+
+    /// <summary>The tray's full-capacity hero grid as an offset from Back's rect (Back moves with the tray, so the offset holds
+    /// while the tray slides in), with the screen size it was measured at. Kept across a page change (NativeDungeonRunPicker).</summary>
+    internal sealed class TrayGridMemo
+    {
+        internal (float X, float Y, float W, float H)? FromBack;
+        internal float ScreenW, ScreenH;
+    }
+
+    // The grid TrayPagerPlace places against. A page showing the tray's full capacity (liveButtons >= perPage, perPage > 0) is the
+    // full grid itself, and memo remembers it from Back's rect; a shorter page (the last one: 1 of 37 rows at 12 a page) uses the
+    // remembered full grid at the same offset from Back, so the plates stay where they were; with nothing remembered at this
+    // screen size, the buttons shown. source names which ("full", "remembered", "shown"). Null with no grid at all.
+    internal static (float X, float Y, float W, float H)? TrayPagerGrid(TrayGridMemo memo, (float X, float Y, float W, float H)? live, int liveButtons,
+        int perPage, (float X, float Y, float W, float H) back, float screenW, float screenH, out string source)
+    {
+        if (live != null && perPage > 0 && liveButtons >= perPage)
+        {
+            if (memo != null)
+            {
+                var g = live.Value;
+                memo.FromBack = (g.X - back.X, g.Y - back.Y, g.W, g.H); memo.ScreenW = screenW; memo.ScreenH = screenH;
+            }
+            source = "full"; return live;
+        }
+        if (memo?.FromBack != null && memo.ScreenW == screenW && memo.ScreenH == screenH)
+        {
+            var o = memo.FromBack.Value;
+            source = "remembered"; return (back.X + o.X, back.Y + o.Y, o.W, o.H);
+        }
+        source = "shown"; return live;
+    }
+
+    /// <summary>True when two screen rects share area (edges that only touch do not count).</summary>
+    internal static bool TrayRectsOverlap((float X, float Y, float W, float H) a, (float X, float Y, float W, float H) b) =>
+        a.X < b.X + b.W && b.X < a.X + a.W && a.Y < b.Y + b.H && b.Y < a.Y + a.H;
 }
