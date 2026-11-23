@@ -338,4 +338,84 @@ Guard("B", () =>
         again.Count > 0 && again.SequenceEqual(v4.Where(x => x.Item1 == "acts-v4h/9300").Select(x => x.Item2.Cards)));
 });
 
+// ============================================================ TP. the native portrait tray's pages (owner 2026-11-22)
+// NativeDungeonRunPicker shows the run rows a page at a time (Dalaran's tray lays out at most 12 heroes) with Previous/Next
+// plates; its pure parts are NativeDungeonRunText.TrayPageRows (which rows a page shows) and TrayPagerPlace (where the plates go).
+Guard("TP", () =>
+{
+    var run = new DungeonRun(data);
+    var profile = new DungeonRunProfile(); profile.Unlocked.AddRange(data.Unlocks.Keys);
+    // The rows in the picker's order (BuildTrayRows: class by class, the class row then its named heroes, each id once). The
+    // client's own filters (a known hero card with a GUEST_HERO record, a TAG_CLASS) are not applied here.
+    var rows = new List<RunHeroOption>();
+    foreach (var cls in DungeonRunCatalog.Classes(run, profile))
+        foreach (var hero in DungeonRunCatalog.Heroes(run, profile, cls.Id))
+            if (!rows.Any(r => r.Id == hero.Id)) rows.Add(hero);
+    var flags = rows.Select(r => r.IsHero).ToList();
+    const int cap = 12;
+    // The slice the tray showed before paging (136bf1a FeedGuestHeroes): the class rows first, then the heroes, in row order.
+    List<int> Before(IList<bool> f)
+    {
+        var kept = new HashSet<int>(Enumerable.Range(0, f.Count).OrderBy(i => f[i] ? 1 : 0).Take(cap));
+        return Enumerable.Range(0, f.Count).Where(kept.Contains).ToList();
+    }
+    List<List<int>> PagesOf(IList<bool> f, Func<int, bool> laysOut = null) =>
+        Enumerable.Range(0, NativeDungeonRunText.Pages(f.Count, cap)).Select(p => NativeDungeonRunText.TrayPageRows(f, cap, p, laysOut)).ToList();
+    string Ids(IEnumerable<int> page) => string.Join(" ", page.Select(i => rows[i].Id));
+    bool Partition(IList<bool> f, List<List<int>> pages) =>
+        pages.SelectMany(p => p).OrderBy(i => i).SequenceEqual(Enumerable.Range(0, f.Count))
+        && pages.All(p => p.Count > 0 && p.Count <= cap && p.SequenceEqual(p.OrderBy(i => i)));
+    var real = PagesOf(flags);
+    Note("TP data rows " + rows.Count + " (" + flags.Count(x => !x) + " class rows, " + flags.Count(x => x) + " named heroes), "
+        + real.Count + " pages: " + string.Join(" / ", real.Select(Ids)));
+    Check("TP1 on the shipped rows page 1 is the 12 the tray showed before paging, and every row is on exactly one page in row order",
+        rows.Count > cap && real[0].SequenceEqual(Before(flags)) && Partition(flags, real) && real.Count == (rows.Count + cap - 1) / cap,
+        "page 1 " + Ids(real[0]) + "; before " + Ids(Before(flags)));
+
+    // The owner's tray (2026-11-22 log): 37 rows, 11 class rows, the tray lays out 12 -> pages of 12, 12, 12 and 1.
+    var synth = Enumerable.Range(0, 37).Select(i => !(i % 3 == 0 && i <= 30)).ToList();
+    var pages37 = PagesOf(synth);
+    Check("TP2 37 rows (11 class rows) at 12 a page: 4 pages of 12, 12, 12 and 1, page 1 the 11 class rows and the first hero, every row once",
+        synth.Count(x => !x) == 11 && pages37.Select(p => p.Count).SequenceEqual(new[] { 12, 12, 12, 1 }) && pages37[0].SequenceEqual(Before(synth))
+        && pages37[0].Count(i => !synth[i]) == 11 && Partition(synth, pages37) && pages37[3].Single() == 36,
+        string.Join(" / ", pages37.Select(p => string.Join(",", p))));
+    var clampedHigh = NativeDungeonRunText.TrayPageRows(synth, cap, 9);
+    var clampedLow = NativeDungeonRunText.TrayPageRows(synth, cap, -1);
+    Check("TP3 a page index out of range is clamped (page 10 of 4 is page 4, page 0 of 4 is page 1)",
+        clampedHigh.SequenceEqual(pages37[3]) && clampedLow.SequenceEqual(pages37[0]) && NativeDungeonRunText.ClampPage(9, 37, cap) == 3);
+    // A prefab without a 1-hero layout: the last page is 2 rows ending on the last row (it repeats one row of page 3).
+    var short37 = PagesOf(synth, n => n >= 2 && n <= cap);
+    Check("TP4 a last page the prefab cannot lay out takes the smallest size it can, ending on the last row, and no row is lost",
+        short37.Count == 4 && short37[3].SequenceEqual(new[] { 35, 36 }) && short37.Take(3).All(p => p.Count == 12)
+        && short37.SelectMany(p => p).Distinct().Count() == 37 && short37[0].SequenceEqual(pages37[0]),
+        string.Join(",", short37[3]));
+    Check("TP5 no paging when the rows fit one page or no capacity is known (every row, in row order)",
+        NativeDungeonRunText.TrayPageRows(synth, 0, 2).SequenceEqual(Enumerable.Range(0, 37))
+        && NativeDungeonRunText.TrayPageRows(synth, 37, 1).SequenceEqual(Enumerable.Range(0, 37))
+        && NativeDungeonRunText.TrayPageRows(synth.Take(5).ToList(), cap, 3).SequenceEqual(Enumerable.Range(0, 5))
+        && NativeDungeonRunText.TrayPageRows(new List<bool>(), cap, 0).Count == 0 && NativeDungeonRunText.TrayPageRows(null, cap, 0).Count == 0
+        && NativeDungeonRunText.Pages(12, cap) == 1 && NativeDungeonRunText.Pages(13, cap) == 2);
+    Check("TP6 the page log and the plate labels",
+        NativeDungeonRunText.TrayPageLog(0, 4) == "tray page 1 of 4" && NativeDungeonRunText.TrayPageLog(3, 4) == "tray page 4 of 4"
+        && NativeDungeonRunText.TrayPreviousLabel == "Previous" && NativeDungeonRunText.TrayNextLabel == "Next");
+
+    // Plates (screen pixels, y up): Back is 120x40, its art reaches 4 px past the body sideways and 3 px up and down.
+    var grid = (X: 100f, Y: 200f, W: 600f, H: 400f);
+    var back = (X: 900f, Y: 100f, W: 120f, H: 40f);
+    var choose = new List<(float X, float Y, float W, float H)> { (800f, 150f, 200f, 200f) };
+    var under = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, choose, 720);
+    Check("TP7 the plates go just under the hero grid at its two ends, a quarter plate below it, clear of Back and Choose",
+        under != null && under.Value.Where == "under the grid" && under.Value.PreviousX == 104 && under.Value.NextX == 576 && under.Value.Y == 150,
+        under == null ? "none" : under.Value.Where + " " + under.Value.PreviousX + "," + under.Value.NextX + "," + under.Value.Y);
+    var low = NativeDungeonRunText.TrayPagerPlace((100f, 30f, 600f, 400f), (900f, 470f, 120f, 40f), 4, 3, null, 720);
+    Check("TP8 with no room under the grid they go level with Back",
+        low != null && low.Value.Where == "level with Back" && low.Value.Y == 470 && low.Value.PreviousX == 104 && low.Value.NextX == 576,
+        low == null ? "none" : low.Value.Where + " " + low.Value.Y);
+    var blocked = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, new List<(float X, float Y, float W, float H)> { (0f, 0f, 1280f, 199f) }, 720);
+    var narrow = NativeDungeonRunText.TrayPagerPlace((100f, 200f, 250f, 400f), back, 4, 3, null, 720);
+    var offScreen = NativeDungeonRunText.TrayPagerPlace((100f, 30f, 600f, 400f), (900f, 700f, 120f, 40f), 4, 3, null, 720);
+    Check("TP9 no place (null) when every row is covered, the grid is narrower than two plates, or the row is off screen",
+        blocked == null && narrow == null && offScreen == null);
+});
+
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");

@@ -276,4 +276,52 @@ internal static class NativeDungeonRunText
 
     internal static int Pages(int count, int perPage) => count <= 0 ? 1 : (count + perPage - 1) / perPage;
     internal static int ClampPage(int page, int count, int perPage) => page < 0 ? 0 : page >= Pages(count, perPage) ? Pages(count, perPage) - 1 : page;
+
+    // ---- the portrait tray's pages (NativeDungeonRunPicker, owner 2026-11-22). The tray's prefab lays out at most `perPage`
+    // heroes (its layout capacity, 12 on Dalaran's tray), so the run rows are paged. Page order: the class rows first, then the
+    // named heroes, each kept in row order, so page 1 is the 12 the tray showed before paging (every class row and the first
+    // named hero). A page lists its rows in row order. When the prefab cannot lay out the last page's size (laysOut), the last
+    // page is the smallest size it can lay out, ending on the last row (it repeats rows of the page before), so no row is lost.
+    internal const string TrayPreviousLabel = "Previous", TrayNextLabel = "Next";
+    internal static string TrayPageLog(int page, int pages) => "tray page " + (page + 1) + " of " + pages;
+    /// <summary>The indices (into the tray's rows, in row order) of the rows page <paramref name="page"/> shows; every row when
+    /// they fit one page or no capacity is known (<paramref name="perPage"/> &lt;= 0).</summary>
+    internal static List<int> TrayPageRows(IList<bool> isHero, int perPage, int page, System.Func<int, bool> laysOut = null)
+    {
+        int count = isHero == null ? 0 : isHero.Count;
+        if (perPage <= 0 || perPage >= count) return Enumerable.Range(0, count).ToList();
+        var order = Enumerable.Range(0, count).OrderBy(i => isHero[i] ? 1 : 0).ToList(); // OrderBy is stable
+        page = ClampPage(page, count, perPage);
+        int start = page * perPage, size = System.Math.Min(perPage, count - start);
+        if (laysOut != null && !laysOut(size))
+        {
+            int fit = size + 1;
+            while (fit < perPage && !laysOut(fit)) fit++;
+            size = fit; start = count - fit;
+        }
+        return order.Skip(start).Take(size).OrderBy(i => i).ToList();
+    }
+
+    // Where the tray's Previous and Next plates go (screen pixels, bottom-left origin, y up): Previous at the hero grid's left end,
+    // Next at its right end, each Back's size, on the first clear row of: just under the grid (on the tray's empty bottom plate),
+    // then level with Back. marginX/marginY are how far a plate's art reaches past its hit body (NativeButtonKit.FrameMarginOf);
+    // the art is kept off the grid, Back, every rect in avoid (Choose) and the screen edge. Null when no row is clear.
+    internal static (float PreviousX, float NextX, float Y, string Where)? TrayPagerPlace((float X, float Y, float W, float H) grid,
+        (float X, float Y, float W, float H) back, float marginX, float marginY, IEnumerable<(float X, float Y, float W, float H)> avoid, float screenHeight)
+    {
+        float w = back.W, h = back.H;
+        if (w <= 0 || h <= 0 || grid.W <= 0 || grid.H <= 0) return null;
+        var obstacles = (avoid ?? Enumerable.Empty<(float X, float Y, float W, float H)>()).ToList();
+        obstacles.Add(grid); obstacles.Add(back);
+        float left = grid.X + marginX, right = grid.X + grid.W - w - marginX;
+        if (right - marginX < left + w + marginX) return null; // the grid is narrower than two plates side by side
+        float gap = System.Math.Max(h * .25f, 2 * marginY);
+        foreach (var (where, bottom) in new[] { ("under the grid", grid.Y - gap - h), ("level with Back", back.Y) })
+        {
+            if (bottom - marginY < 0 || bottom + h + marginY > screenHeight) continue;
+            bool Clear(float x) => !obstacles.Any(o => x - marginX < o.X + o.W && o.X < x + w + marginX && bottom - marginY < o.Y + o.H && o.Y < bottom + h + marginY);
+            if (Clear(left) && Clear(right)) return (left, right, bottom, where);
+        }
+        return null;
+    }
 }
