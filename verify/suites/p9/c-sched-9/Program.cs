@@ -416,6 +416,71 @@ Guard("TP", () =>
     var offScreen = NativeDungeonRunText.TrayPagerPlace((100f, 30f, 600f, 400f), (900f, 700f, 120f, 40f), 4, 3, null, 720);
     Check("TP9 no place (null) when every row is covered, the grid is narrower than two plates, or the row is off screen",
         blocked == null && narrow == null && offScreen == null);
+
+    // The owner's last page (page 4 of 4: one portrait). The tray lays the one button out alone (here a 120x160 portrait in the
+    // middle of the plate), far narrower than two plates: placed against that, Previous had no place and page 4 was a dead end.
+    // The plates are placed against the full-capacity grid instead, remembered from a full page as an offset from Back.
+    var one = (X: 340f, Y: 350f, W: 120f, H: 160f);
+    var memo = new NativeDungeonRunText.TrayGridMemo();
+    var g1 = NativeDungeonRunText.TrayPagerGrid(memo, grid, 12, cap, back, 1280, 720, out string s1);
+    var g4 = NativeDungeonRunText.TrayPagerGrid(memo, one, 1, cap, back, 1280, 720, out string s4);
+    var avoid4 = new List<(float X, float Y, float W, float H)>(choose) { one };
+    var last = g4 == null ? null : NativeDungeonRunText.TrayPagerPlace(g4.Value, back, 4, 3, avoid4, 720, needPrevious: true, needNext: false);
+    var oldLast = NativeDungeonRunText.TrayPagerPlace(one, back, 4, 3, choose, 720);
+    var bare = NativeDungeonRunText.TrayPagerGrid(new NativeDungeonRunText.TrayGridMemo(), one, 1, cap, back, 1280, 720, out string sBare);
+    var bareLast = bare == null ? null : NativeDungeonRunText.TrayPagerPlace(bare.Value, back, 4, 3, avoid4, 720, needPrevious: true, needNext: false);
+    Check("TP10 a 1-hero last page places Previous: at page 1's spot against the remembered full grid, or under the one button with nothing remembered (the shown grid alone, both plates asked, has no place)",
+        s1 == "full" && g1 == grid && s4 == "remembered" && g4 == grid
+        && last != null && last.Value.Where == "under the grid" && last.Value.PreviousX == 104 && last.Value.Y == 150
+        && oldLast == null
+        && sBare == "shown" && bare == one && bareLast != null && bareLast.Value.Where == "under the grid" && bareLast.Value.PreviousX == 344 && bareLast.Value.Y == 300,
+        s1 + " " + s4 + " " + (last == null ? "none" : last.Value.Where + " " + last.Value.PreviousX + "," + last.Value.Y)
+        + "; bare " + sBare + " " + (bareLast == null ? "none" : bareLast.Value.Where + " " + bareLast.Value.PreviousX + "," + bareLast.Value.Y));
+
+    // Only the plates that will be shown must be clear: something on Next's spot under the grid (or on Previous's) moves both
+    // plates when both show (here to no place at all), but not a lone Previous (last page) or a lone Next (page 1).
+    var onNext = new List<(float X, float Y, float W, float H)> { (560f, 140f, 150f, 60f) };
+    var onPrevious = new List<(float X, float Y, float W, float H)> { (90f, 140f, 150f, 60f) };
+    var bothNext = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, onNext, 720);
+    var loneP = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, onNext, 720, needPrevious: true, needNext: false);
+    var bothPrevious = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, onPrevious, 720);
+    var loneN = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, onPrevious, 720, needPrevious: false, needNext: true);
+    var neither = NativeDungeonRunText.TrayPagerPlace(grid, back, 4, 3, null, 720, needPrevious: false, needNext: false);
+    var narrowLone = NativeDungeonRunText.TrayPagerPlace((100f, 200f, 250f, 400f), back, 4, 3, null, 720, needPrevious: false, needNext: true);
+    Check("TP11 only the plates shown must be clear: a covered Next spot leaves a lone Previous under the grid, a covered Previous spot a lone Next, and a lone plate needs no room for two",
+        (bothNext == null || bothNext.Value.Where != "under the grid") && (bothPrevious == null || bothPrevious.Value.Where != "under the grid")
+        && loneP != null && loneP.Value.Where == "under the grid" && loneP.Value.PreviousX == 104 && loneP.Value.Y == 150
+        && loneN != null && loneN.Value.Where == "under the grid" && loneN.Value.NextX == 576 && loneN.Value.Y == 150
+        && neither == null && narrowLone != null && narrowLone.Value.NextX == 226,
+        (bothNext == null ? "none" : bothNext.Value.Where) + " / " + (loneP == null ? "none" : loneP.Value.Where) + " / "
+        + (loneN == null ? "none" : loneN.Value.Where) + " / " + (narrowLone == null ? "none" : narrowLone.Value.NextX.ToString()));
+
+    // The plates sit at the same place on every page: pages 1-3 show 12 (the full grid itself), page 4 one portrait (the
+    // remembered grid). While the tray slides in, Back and the grid move together, so the plates move with them; at another
+    // screen size the remembered grid is not used.
+    var memoPages = new NativeDungeonRunText.TrayGridMemo();
+    var spots = new List<(float PreviousX, float NextX, float Y, string Where)?>();
+    for (int p = 0; p < 4; p++)
+    {
+        var live = p < 3 ? grid : one;
+        var g = NativeDungeonRunText.TrayPagerGrid(memoPages, live, p < 3 ? 12 : 1, cap, back, 1280, 720, out _);
+        var a = new List<(float X, float Y, float W, float H)>(choose) { live };
+        spots.Add(g == null ? null : NativeDungeonRunText.TrayPagerPlace(g.Value, back, 4, 3, a, 720, needPrevious: p > 0, needNext: p < 3));
+    }
+    var slid = (X: back.X, Y: back.Y - 30f, W: back.W, H: back.H);
+    var gSlid = NativeDungeonRunText.TrayPagerGrid(memoPages, (one.X, one.Y - 30f, one.W, one.H), 1, cap, slid, 1280, 720, out string sSlid);
+    var gResized = NativeDungeonRunText.TrayPagerGrid(memoPages, one, 1, cap, back, 1920, 1080, out string sResized);
+    Check("TP12 the plates sit at the same place on every page (Previous on pages 2-4, Next on pages 1-3, one row), follow Back while the tray slides, and a new screen size forgets the grid",
+        spots.All(x => x != null && x.Value.Where == "under the grid" && x.Value.Y == 150)
+        && spots.Skip(1).All(x => x.Value.PreviousX == 104) && spots.Take(3).All(x => x.Value.NextX == 576)
+        && sSlid == "remembered" && gSlid == (grid.X, grid.Y - 30f, grid.W, grid.H)
+        && sResized == "shown" && gResized == one,
+        string.Join(" / ", spots.Select(x => x == null ? "none" : x.Value.PreviousX + "," + x.Value.NextX + "," + x.Value.Y)) + "; " + sSlid + " " + sResized);
+    Check("TP13 the post-show overlap check counts shared area only, not touching edges",
+        NativeDungeonRunText.TrayRectsOverlap((0f, 0f, 10f, 10f), (5f, 5f, 10f, 10f))
+        && !NativeDungeonRunText.TrayRectsOverlap((0f, 0f, 10f, 10f), (10f, 0f, 10f, 10f))
+        && !NativeDungeonRunText.TrayRectsOverlap((0f, 0f, 10f, 10f), (0f, 10f, 10f, 10f))
+        && NativeDungeonRunText.TrayRectsOverlap((0f, 0f, 10f, 10f), (2f, 2f, 2f, 2f)));
 });
 
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");

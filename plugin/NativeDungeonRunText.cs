@@ -305,23 +305,64 @@ internal static class NativeDungeonRunText
     // Where the tray's Previous and Next plates go (screen pixels, bottom-left origin, y up): Previous at the hero grid's left end,
     // Next at its right end, each Back's size, on the first clear row of: just under the grid (on the tray's empty bottom plate),
     // then level with Back. marginX/marginY are how far a plate's art reaches past its hit body (NativeButtonKit.FrameMarginOf);
-    // the art is kept off the grid, Back, every rect in avoid (Choose) and the screen edge. Null when no row is clear.
+    // the art is kept off the grid, Back, every rect in avoid (Choose, the buttons shown) and the screen edge. Only the plates
+    // that will be shown must be clear (needPrevious: not on page 1; needNext: not on the last page), and the grid must hold two
+    // plates side by side only when both are. grid is the full-capacity grid (TrayPagerGrid), so the plates sit at the same place
+    // on every page. Null when no row is clear, or when neither plate is needed.
     internal static (float PreviousX, float NextX, float Y, string Where)? TrayPagerPlace((float X, float Y, float W, float H) grid,
-        (float X, float Y, float W, float H) back, float marginX, float marginY, IEnumerable<(float X, float Y, float W, float H)> avoid, float screenHeight)
+        (float X, float Y, float W, float H) back, float marginX, float marginY, IEnumerable<(float X, float Y, float W, float H)> avoid, float screenHeight,
+        bool needPrevious = true, bool needNext = true)
     {
         float w = back.W, h = back.H;
-        if (w <= 0 || h <= 0 || grid.W <= 0 || grid.H <= 0) return null;
+        if (w <= 0 || h <= 0 || grid.W <= 0 || grid.H <= 0 || !needPrevious && !needNext) return null;
         var obstacles = (avoid ?? Enumerable.Empty<(float X, float Y, float W, float H)>()).ToList();
         obstacles.Add(grid); obstacles.Add(back);
         float left = grid.X + marginX, right = grid.X + grid.W - w - marginX;
-        if (right - marginX < left + w + marginX) return null; // the grid is narrower than two plates side by side
+        // the grid is narrower than two plates side by side
+        if (needPrevious && needNext && right - marginX < left + w + marginX) return null;
         float gap = System.Math.Max(h * .25f, 2 * marginY);
         foreach (var (where, bottom) in new[] { ("under the grid", grid.Y - gap - h), ("level with Back", back.Y) })
         {
             if (bottom - marginY < 0 || bottom + h + marginY > screenHeight) continue;
             bool Clear(float x) => !obstacles.Any(o => x - marginX < o.X + o.W && o.X < x + w + marginX && bottom - marginY < o.Y + o.H && o.Y < bottom + h + marginY);
-            if (Clear(left) && Clear(right)) return (left, right, bottom, where);
+            if ((!needPrevious || Clear(left)) && (!needNext || Clear(right))) return (left, right, bottom, where);
         }
         return null;
     }
+
+    /// <summary>The tray's full-capacity hero grid as an offset from Back's rect (Back moves with the tray, so the offset holds
+    /// while the tray slides in), with the screen size it was measured at. Kept across a page change (NativeDungeonRunPicker).</summary>
+    internal sealed class TrayGridMemo
+    {
+        internal (float X, float Y, float W, float H)? FromBack;
+        internal float ScreenW, ScreenH;
+    }
+
+    // The grid TrayPagerPlace places against. A page showing the tray's full capacity (liveButtons >= perPage, perPage > 0) is the
+    // full grid itself, and memo remembers it from Back's rect; a shorter page (the last one: 1 of 37 rows at 12 a page) uses the
+    // remembered full grid at the same offset from Back, so the plates stay where they were; with nothing remembered at this
+    // screen size, the buttons shown. source names which ("full", "remembered", "shown"). Null with no grid at all.
+    internal static (float X, float Y, float W, float H)? TrayPagerGrid(TrayGridMemo memo, (float X, float Y, float W, float H)? live, int liveButtons,
+        int perPage, (float X, float Y, float W, float H) back, float screenW, float screenH, out string source)
+    {
+        if (live != null && perPage > 0 && liveButtons >= perPage)
+        {
+            if (memo != null)
+            {
+                var g = live.Value;
+                memo.FromBack = (g.X - back.X, g.Y - back.Y, g.W, g.H); memo.ScreenW = screenW; memo.ScreenH = screenH;
+            }
+            source = "full"; return live;
+        }
+        if (memo?.FromBack != null && memo.ScreenW == screenW && memo.ScreenH == screenH)
+        {
+            var o = memo.FromBack.Value;
+            source = "remembered"; return (back.X + o.X, back.Y + o.Y, o.W, o.H);
+        }
+        source = "shown"; return live;
+    }
+
+    /// <summary>True when two screen rects share area (edges that only touch do not count).</summary>
+    internal static bool TrayRectsOverlap((float X, float Y, float W, float H) a, (float X, float Y, float W, float H) b) =>
+        a.X < b.X + b.W && b.X < a.X + a.W && a.Y < b.Y + b.H && b.Y < a.Y + a.H;
 }

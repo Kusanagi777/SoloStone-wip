@@ -80,23 +80,32 @@ internal static class NativeDungeonRunUI
 
     // Raised while the board is being left: remember, and open once the HUB is idle (Update).
     // A fight's reopen never carries a picker refusal that an earlier, lapsed reopen left behind.
-    private static void OnFightClosed() { pendingNotice = null; pendingSignature = null; pendingPickerPage = -1; Reopen(); }
+    private static void OnFightClosed() { pendingNotice = null; pendingSignature = null; DropPickerPage("a fight closed"); Reopen(); }
     private static void Reopen() { reopenPending = true; reopenSince = Time.realtimeSinceStartup; }
     // The native class picker (NativeDungeonRunPicker) hands back here after Play or a fallback: open once the HUB is idle.
     // A refusal from its Play (DungeonRunRuntime.NewRun) is shown as the caption when the screen opens.
-    internal static void OpenWhenHome(string notice = null) { pendingNotice = notice; pendingSignature = null; pendingPickerPage = -1; Reopen(); }
+    internal static void OpenWhenHome(string notice = null) { pendingNotice = notice; pendingSignature = null; DropPickerPage("the menu was asked for"); Reopen(); }
     private static string pendingNotice;
     // The native picker's hand-off for a row with signature treasures (a Tombs explorer): the screen opens on the Signature
     // step with the class, row, deck and power the portrait tray and playmat chose.
     internal static void SignatureWhenHome(string cls, string row, string deck, string power)
     {
-        pendingNotice = null; pendingSignature = new[] { cls, row, deck, power }; pendingPickerPage = -1; Reopen();
+        pendingNotice = null; pendingSignature = new[] { cls, row, deck, power }; DropPickerPage("the Signature step was asked for"); Reopen();
     }
     private static string[] pendingSignature;
     // The native picker's page change (NativeDungeonRunPicker.FlipPage): its portrait tray is rebuilt by leaving for the HUB and
     // opening the picker again on that page once the HUB is idle, instead of this menu (which a picker that cannot start opens).
     internal static void PickerWhenHome(int page) { pendingNotice = null; pendingSignature = null; pendingPickerPage = Math.Max(0, page); Reopen(); }
     private static int pendingPickerPage = -1;
+    // A pending page change that will not reopen the picker is logged (the player is left at the HUB, or on the screen that
+    // replaced it), and the picker lets go of what it kept for that reopen (NativeDungeonRunPicker.DropPageChange).
+    private static void DropPickerPage(string why)
+    {
+        if (pendingPickerPage < 0) return;
+        log?.LogWarning("DUNGEON_RUN_UI tray page " + (pendingPickerPage + 1) + " reopen dropped: " + why);
+        pendingPickerPage = -1;
+        NativeDungeonRunPicker.DropPageChange();
+    }
 
     internal static void Open() => Guard(() => {
         reopenPending = false;
@@ -120,12 +129,17 @@ internal static class NativeDungeonRunUI
         popup?.ApplyRefresh();
         if (pickerPending && !IsOpen) { pickerPending = false; NativeDungeonRunPicker.Open(); }
         if (!reopenPending) return;
-        if (Time.realtimeSinceStartup - reopenSince > ReopenWindow) { reopenPending = false; pendingNotice = null; pendingSignature = null; pendingPickerPage = -1; return; }
+        if (Time.realtimeSinceStartup - reopenSince > ReopenWindow)
+        {
+            reopenPending = false; pendingNotice = null; pendingSignature = null;
+            DropPickerPage("the HUB was not idle within " + ReopenWindow + "s");
+            return;
+        }
         if (!ReopenReady()) return;
         if (pendingPickerPage < 0) { Open(); return; }
         int page = pendingPickerPage;
         reopenPending = false; pendingPickerPage = -1;
-        NativeDungeonRunPicker.Open(page);
+        NativeDungeonRunPicker.Open(page, true);
     });
 
     private static bool ReopenReady()

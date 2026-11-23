@@ -104,6 +104,23 @@ internal static class NativeDungeonRunPicker
     // Since when the controls wait for the tray's own Back, camera or hero grid (-1: not waiting); past PagerWaitWindow a WARNING.
     private static float pagerWaitSince = -1;
     private const float PagerWaitWindow = 10;
+    // The full-capacity hero grid, remembered from a full page (NativeDungeonRunText.TrayPagerGrid), so the plates sit at the same
+    // place on every page, the short last page included.
+    private static NativeDungeonRunText.TrayGridMemo trayGrid = new NativeDungeonRunText.TrayGridMemo();
+    // Choose was taken on this visit of the tray: no page change until the tray subscene is left (the playmat's way back to the
+    // tray is a new visit).
+    private static bool trayChosen;
+    // What a page change carries into the session that reopens the tray (Tick -> NativeDungeonRunUI.PickerWhenHome -> Open(page,
+    // true)): the pager's failures (so "disabled for the session" holds across pages), the remembered grid, and that the borrowed
+    // client key's in-memory "has seen" flags are kept for that one reopen (ClearBorrowedSaves). Null otherwise; any other open
+    // drops it (Open), as does a reopen the menu side gives up on (DropPageChange).
+    private sealed class PageCarry
+    {
+        internal int Failures;
+        internal bool Disabled;
+        internal NativeDungeonRunText.TrayGridMemo Grid;
+    }
+    private static PageCarry pageCarry;
     private static List<FedDeck> fedDecks;
     private static List<FedPower> fedPowers;
     // Only our power -> deck back path may dismiss the hero power options (KeepPowerOptions).
@@ -231,17 +248,33 @@ internal static class NativeDungeonRunPicker
     // ------------------------------------------------------------------ entry
 
     /// <summary>Fan-made modes: the native picker when there is no run, otherwise (or when it cannot start) the menu. A page
-    /// change opens it again on that tray page (NativeDungeonRunUI.PickerWhenHome).</summary>
-    internal static void Open(int page = 0)
+    /// change opens it again on that tray page (NativeDungeonRunUI.PickerWhenHome, pageChange true: it takes what the page
+    /// change carried, PageCarry).</summary>
+    internal static void Open(int page = 0, bool pageChange = false)
     {
+        var carry = pageChange ? pageCarry : null;
+        pageCarry = null;
         if (Active) { Log("open ignored: a picker session is already " + phase); return; }
         bool started = false;
-        try { started = TryBegin(page); }
+        try { started = TryBegin(page, carry); }
         catch (Exception error) { Log("exception before entering: " + error); End("begin failed"); }
-        if (!started) NativeDungeonRunUI.Open();
+        if (started) return;
+        // A page change that cannot reopen the tray lets go of the "has seen" flags it kept (a normal open never kept any).
+        if (carry != null) Safe("save cleanup", ClearBorrowedSaves);
+        NativeDungeonRunUI.Open();
     }
 
-    private static bool TryBegin(int page)
+    /// <summary>NativeDungeonRunUI dropped a pending page-change reopen (another hand-off replaced it, or the HUB was not idle
+    /// in time): what the page change kept for it goes.</summary>
+    internal static void DropPageChange()
+    {
+        if (pageCarry == null) return;
+        pageCarry = null;
+        if (!Active) Safe("save cleanup", ClearBorrowedSaves);
+        Log("page change dropped: its kept state cleared");
+    }
+
+    private static bool TryBegin(int page, PageCarry carry)
     {
         if (!DungeonRunRuntime.Available) return false;
         var save = DungeonRunRuntime.Save;
@@ -263,7 +296,13 @@ internal static class NativeDungeonRunPicker
         chosenRow = null;
         // The page is clamped once the tray's capacity is known (FeedGuestHeroes).
         trayPage = Math.Max(0, page); trayPerPage = 0; trayShown = null; trayDisplay = null;
-        reopenTray = pagerDisabled = pagerWaitWarned = false; pagerFailures = 0; pagerState = ""; pagerWaitSince = -1;
+        reopenTray = pagerWaitWarned = trayChosen = false; pagerState = ""; pagerWaitSince = -1;
+        // A page change carries the pager's failures and the remembered grid on; any other open starts them afresh.
+        pagerFailures = carry?.Failures ?? 0; pagerDisabled = carry?.Disabled ?? false;
+        trayGrid = carry?.Grid ?? new NativeDungeonRunText.TrayGridMemo();
+        if (carry != null)
+            Log("page change to tray page " + (trayPage + 1) + ": carried " + pagerFailures + " page-control failure(s)" + (pagerDisabled ? " (disabled)" : "")
+                + ", grid " + (trayGrid.FromBack == null ? "not remembered" : "remembered") + ", client-key \"has seen\" flags kept");
         if (trayRows.Count == 0) { Log("refused: no run row has a client hero card and GUEST_HERO record: opening the run menu"); return false; }
         if (record.GameSaveDataServerKey != (int)ServerKey || record.GameSaveDataClientKey != (int)ClientKey)
         {
@@ -273,7 +312,9 @@ internal static class NativeDungeonRunPicker
         }
         left = openMenu = leaveRequested = forcedHub = false; recoveries = 0; lastSubscene = ""; menuNotice = null;
         ClearFeed();
-        ClearBorrowedSaves(); // a new run: nothing an earlier session kept in memory is answered
+        // A new run: nothing an earlier session kept in memory is answered, except on a page change's reopen the client key's
+        // "has seen" flags its own session just wrote (so a first-entry intro or VO does not replay on every page).
+        ClearBorrowedSaves(carry != null);
         Set(Phase.Requesting);
         config.SetSelectedAdventureMode(Adventure, Mode);
         Log("selected " + Adventure + "/" + Mode + " options[189]=" + Options.Get().GetInt(Option.SELECTED_ADVENTURE)
@@ -353,9 +394,10 @@ internal static class NativeDungeonRunPicker
                 {
                     // A page change (FlipPage) opens the picker again on its page; a fallback on the way opened the menu instead.
                     int again = reopenTray && !openMenu && phase == Phase.Leaving ? trayPage : -1;
+                    var carry = again < 0 ? null : new PageCarry { Failures = pagerFailures, Disabled = pagerDisabled, Grid = trayGrid };
                     if (openMenu) NativeDungeonRunUI.OpenWhenHome(menuNotice);
-                    End(phase == Phase.Aborting ? "fallback done" : again >= 0 ? "back at HUB for tray page " + (again + 1) : "back at HUB");
-                    if (again >= 0) NativeDungeonRunUI.PickerWhenHome(again);
+                    End(phase == Phase.Aborting ? "fallback done" : again >= 0 ? "back at HUB for tray page " + (again + 1) : "back at HUB", carry != null);
+                    if (again >= 0) { pageCarry = carry; NativeDungeonRunUI.PickerWhenHome(again); }
                 }
                 else if (Elapsed <= SceneWindow) GoHub();
                 // Never End in ADVENTURE: the tray's back stack is empty (ResetSubScene) and retail SubSceneGoBack does
@@ -389,16 +431,17 @@ internal static class NativeDungeonRunPicker
 
     private static int BackStackCount(AdventureConfig config) => (backStackField.GetValue(config) as ICollection)?.Count ?? -1;
 
-    private static void End(string why)
+    // keepSeen: a page change's End (Tick), which keeps the borrowed client key's "has seen" flags for its reopen (ClearBorrowedSaves).
+    private static void End(string why, bool keepSeen = false)
     {
         if (phase != Phase.Idle) Log("session ended: " + why);
         phase = Phase.Idle; leaveRequested = false; openMenu = false; menuNotice = null;
         Safe("feed cleanup", ClearFeed);
         trayRows = null; chosenRow = null;
         Safe("page controls cleanup", RetirePager);
-        trayPage = 0; trayPerPage = 0; trayShown = null; trayDisplay = null; reopenTray = false;
+        trayPage = 0; trayPerPage = 0; trayShown = null; trayDisplay = null; reopenTray = false; trayChosen = false;
         Safe("navigation cleanup", CleanNavigation);
-        Safe("save cleanup", ClearBorrowedSaves);
+        Safe("save cleanup", () => ClearBorrowedSaves(keepSeen));
         // The playmat's picks (the adapter's set_SelectedDeckId / set_SelectedHeroPowerDbId and OnHeroPowerOptionSelected
         // 0010-0016) live in AdventureConfig: a reserved fed deck id must not outlive the session (ResetLoadout 0000-0029).
         Safe("loadout cleanup", () => AdventureConfig.Get()?.ResetLoadout());
@@ -439,14 +482,19 @@ internal static class NativeDungeonRunPicker
     }
 
     // GameSaveDataManager.ClearLocalData drops the in-memory map entry, so the next request is answered empty (EnsurePreference).
-    private static void ClearBorrowedSaves()
+    // keepClient (a page change only: End from Tick, then the reopen's TryBegin) leaves the client key's entry in memory, so the
+    // reopened tray reads the "has seen" flags (ClientSaveMarks) its previous page's session wrote (EnsurePreference fills only a
+    // missing key). Nothing else is in that entry: the session answered it empty and kept only those flags, and a page change
+    // happens on the tray, before the playmat's NEWLY_UNLOCKED markers. The server key (the chosen class) is always cleared.
+    private static void ClearBorrowedSaves() => ClearBorrowedSaves(false);
+    private static void ClearBorrowedSaves(bool keepClient)
     {
         var manager = GameSaveDataManager.Get();
         if (manager == null) return;
-        bool had = manager.IsDataReady(ServerKey) || manager.IsDataReady(ClientKey);
+        bool had = manager.IsDataReady(ServerKey) || !keepClient && manager.IsDataReady(ClientKey);
         manager.ClearLocalData(ServerKey);
-        manager.ClearLocalData(ClientKey);
-        if (had) Log("cleared in-memory save data " + ServerKey + "/" + ClientKey);
+        if (!keepClient) manager.ClearLocalData(ClientKey);
+        if (had) Log("cleared in-memory save data " + ServerKey + (keepClient ? " (kept " + ClientKey + " for the page change)" : "/" + ClientKey));
     }
 
     /// <summary>Back to the HUB and the plank menu, never stuck in ADVENTURE. Never throws.</summary>
@@ -456,6 +504,7 @@ internal static class NativeDungeonRunPicker
         {
             log?.LogError("DUNGEON_RUN_PICKER fallback to HUB + Dungeon Run menu: " + why);
             if (phase == Phase.Idle) return;
+            Safe("page controls hide", HidePager); // the fallback leaves the tray: no page change from here
             // A page change that fails on its way to the HUB ends on the menu, never on a second picker session.
             if (reopenTray) { reopenTray = false; openMenu = true; }
             if (phase == Phase.Leaving || phase == Phase.Aborting) return; // already on the way back: keep its menu choice
@@ -1265,6 +1314,9 @@ internal static class NativeDungeonRunPicker
                 return false;
             }
             chosenRow = row;
+            // No page change once a hero is chosen: the tray is on its way to the playmat (TickPager, FlipPage).
+            trayChosen = true;
+            HidePager();
             heroClassField.SetValue(button, row.Class);
             setPlayButtonEnabled.Invoke(__instance, new object[] { false });
             setHeroButtonsEnabled.Invoke(__instance, new object[] { false });
@@ -1280,11 +1332,14 @@ internal static class NativeDungeonRunPicker
     // ---- the tray's page controls (owner 2026-11-22)
     //
     // Two clones of the tray's own Back (AbsDeckPickerTrayDisplay.m_backButton, a UIBButton), made the way NativeDeckPickerGuide
-    // makes its Guide button, shown only while the rows need more than one page, on the tray subscene, with no dialog up and the
-    // session not leaving: Previous (not on page 1) at the hero grid's left end and Next (not on the last page) at its right end,
-    // on the empty plate under the grid, else level with Back (NativeDungeonRunText.TrayPagerPlace), never over the grid, Back or
-    // Choose. They are placed from the live rects every frame. A failure retires them (rebuilt on the next frame); the third
-    // disables them for the session, and with no controls the rows on the other pages cannot be chosen (a WARNING names them).
+    // makes its Guide button, shown only while the rows need more than one page, on the tray subscene, before Choose, with no
+    // dialog up and the session not leaving: Previous (not on page 1) at the hero grid's left end and Next (not on the last page)
+    // at its right end, on the empty plate under the grid, else level with Back (NativeDungeonRunText.TrayPagerPlace), never over
+    // the grid, the buttons shown, Back or Choose. The grid is the full-capacity one (a full page's, remembered from Back's rect for
+    // the short last page: TrayPagerGrid), so the plates sit at the same place on every page; they are placed from the live rects
+    // every frame and, once up, checked against them (as NativeDeckPickerGuide's Touches). A failure retires them (rebuilt on the
+    // next frame); the third disables them for the session and the page changes that follow it (PageCarry), and with no controls
+    // the rows on the other pages cannot be chosen (a WARNING names them).
 
     private static void UpdatePager()
     {
@@ -1295,7 +1350,8 @@ internal static class NativeDungeonRunPicker
             PagerState(state);
             // Waiting this long on the tray's own Back, camera or grid means the controls never come: the other pages are lost.
             bool stuck = state.StartsWith("waiting (no Back", StringComparison.Ordinal) || state.StartsWith("waiting (no camera", StringComparison.Ordinal)
-                || state.StartsWith("waiting (Back not", StringComparison.Ordinal) || state.StartsWith("waiting (hero grid", StringComparison.Ordinal);
+                || state.StartsWith("waiting (Back not", StringComparison.Ordinal) || state.StartsWith("waiting (hero grid", StringComparison.Ordinal)
+                || state.StartsWith("waiting (Back art", StringComparison.Ordinal);
             if (!stuck) pagerWaitSince = -1;
             else if (pagerWaitSince < 0) pagerWaitSince = Time.realtimeSinceStartup;
             else if (!pagerWaitWarned && Time.realtimeSinceStartup - pagerWaitSince > PagerWaitWindow)
@@ -1309,7 +1365,7 @@ internal static class NativeDungeonRunPicker
             Safe("page controls retire", RetirePager);
             pagerDisabled = ++pagerFailures >= 3;
             Log("page controls failed (" + pagerFailures + "): " + error.GetType().Name + ": " + error.Message
-                + (pagerDisabled ? "; disabled for this session" : "; rebuilt on the next frame"));
+                + (pagerDisabled ? "; disabled for this session (and its page changes)" : "; rebuilt on the next frame"));
             if (pagerDisabled) PagerState("disabled after " + pagerFailures + " failures");
         }
     }
@@ -1319,8 +1375,11 @@ internal static class NativeDungeonRunPicker
         var tray = trayDisplay;
         int pages = trayPerPage > 0 && trayRows != null ? NativeDungeonRunText.Pages(trayRows.Count, trayPerPage) : 1;
         UIBButton back = pages > 1 && tray != null ? tray.m_backButton : null;
+        bool onTray = AdventureConfig.Get()?.CurrentSubScene == Tray;
+        if (!onTray) trayChosen = false; // the next visit of the tray (the playmat's way back) may page again
         string why = pages <= 1 ? "not needed (one page)" : tray == null ? "waiting (no tray)"
-            : AdventureConfig.Get()?.CurrentSubScene != Tray ? "waiting (not on the tray)"
+            : !onTray ? "waiting (not on the tray)"
+            : trayChosen ? "hidden (a hero was chosen)"
             : back == null || !back.gameObject.activeInHierarchy ? "waiting (no Back button)"
             : UniversalInputManager.Get()?.IsDialogActive() == true ? "waiting (a dialog is up)" : "";
         if (why.Length != 0) { HidePager(); return why; }
@@ -1335,34 +1394,60 @@ internal static class NativeDungeonRunPicker
         if (camera == null) { HidePager(); return "waiting (no camera)"; }
         var backRect = PagerRect(camera, back);
         if (backRect == null) { HidePager(); return "waiting (Back not laid out)"; }
-        // The hero grid: the union of this tray's portrait buttons on screen.
-        (float X, float Y, float W, float H)? grid = null;
+        // The buttons shown: the union of this tray's portrait buttons on screen, and each of them (kept clear of the plates).
+        (float X, float Y, float W, float H)? shown = null;
+        var heroes = new List<(float X, float Y, float W, float H)>();
         foreach (var hero in tray.GetComponentsInChildren<HeroPickerButton>(false))
         {
             var rect = PagerRect(camera, hero);
             if (rect == null) continue;
-            if (grid == null) { grid = rect; continue; }
-            var a = grid.Value; var b = rect.Value;
+            heroes.Add(rect.Value);
+            if (shown == null) { shown = rect; continue; }
+            var a = shown.Value; var b = rect.Value;
             float x = Math.Min(a.X, b.X), y = Math.Min(a.Y, b.Y);
-            grid = (x, y, Math.Max(a.X + a.W, b.X + b.W) - x, Math.Max(a.Y + a.H, b.Y + b.H) - y);
+            shown = (x, y, Math.Max(a.X + a.W, b.X + b.W) - x, Math.Max(a.Y + a.H, b.Y + b.H) - y);
         }
+        // The plates are placed against the full-capacity grid (a full page's, remembered from Back's rect for the short last
+        // page), so they sit at the same place on every page.
+        var grid = NativeDungeonRunText.TrayPagerGrid(trayGrid, shown, heroes.Count, trayPerPage, backRect.Value, Screen.width, Screen.height, out string gridSource);
         if (grid == null) { HidePager(); return "waiting (hero grid not laid out)"; }
+        // Back's art reach past its body: unknown art means the plates cannot be kept off the controls yet (as NativeDeckPickerGuide.Place).
+        FrameMargin? frame = NativeButtonKit.FrameMarginOf(back);
+        if (frame == null) { HidePager(); return "waiting (Back art unknown)"; }
+        FrameMargin margin = frame.Value;
         var avoid = new List<(float X, float Y, float W, float H)>();
         var choose = PagerRect(camera, trayPlayField.GetValue(tray) as Component);
         if (choose != null) avoid.Add(choose.Value);
-        FrameMargin margin = NativeButtonKit.FrameMarginOf(back) ?? new FrameMargin(0, 0, 0);
-        var place = NativeDungeonRunText.TrayPagerPlace(grid.Value, backRect.Value, Math.Max(margin.Left, margin.Right), margin.Vertical, avoid, Screen.height);
-        string where = "tray " + Fmt(grid.Value) + " back " + Fmt(backRect.Value) + (choose == null ? "" : " choose " + Fmt(choose.Value));
+        if (shown != null) avoid.Add(shown.Value);
+        bool needPrevious = trayPage > 0, needNext = trayPage < pages - 1;
+        var place = NativeDungeonRunText.TrayPagerPlace(grid.Value, backRect.Value, Math.Max(margin.Left, margin.Right), margin.Vertical, avoid, Screen.height,
+            needPrevious, needNext);
+        string where = "tray " + gridSource + " " + Fmt(grid.Value) + (gridSource == "full" || shown == null ? "" : " shown " + Fmt(shown.Value))
+            + " back " + Fmt(backRect.Value) + (choose == null ? "" : " choose " + Fmt(choose.Value));
         if (place == null) { HidePager(); return "no free place | " + where; }
         var spot = place.Value;
         // The clones' pivots sit where Back's does, so each moves by its plate's offset from Back's (as NativeDeckPickerGuide.Place).
         Vector3 from = camera.WorldToScreenPoint(back.transform.position);
         float backX = backRect.Value.X + backRect.Value.W / 2, backY = backRect.Value.Y + backRect.Value.H / 2;
         float plateY = spot.Y + backRect.Value.H / 2 - backY;
-        ShowPageButton(pagePrevious, NativeDungeonRunText.TrayPreviousLabel, trayPage > 0, camera, back,
+        bool wasShown = pagePrevious.gameObject.activeSelf || pageNext.gameObject.activeSelf;
+        ShowPageButton(pagePrevious, NativeDungeonRunText.TrayPreviousLabel, needPrevious, camera, back,
             from + new Vector3(spot.PreviousX + backRect.Value.W / 2 - backX, plateY, 0));
-        ShowPageButton(pageNext, NativeDungeonRunText.TrayNextLabel, trayPage < pages - 1, camera, back,
+        ShowPageButton(pageNext, NativeDungeonRunText.TrayNextLabel, needNext, camera, back,
             from + new Vector3(spot.NextX + backRect.Value.W / 2 - backX, plateY, 0));
+        // Once a plate has been up a frame, its own bounds must clear Back, Choose and every button shown (NativeDeckPickerGuide's
+        // Touches): a pivot or scale off from the plan fails closed (UpdatePager retires the plates) rather than sit on a control.
+        if (wasShown)
+        {
+            var controls = new List<(float X, float Y, float W, float H)>(heroes) { backRect.Value };
+            if (choose != null) controls.Add(choose.Value);
+            foreach (var (plate, label) in new[] { (pagePrevious, NativeDungeonRunText.TrayPreviousLabel), (pageNext, NativeDungeonRunText.TrayNextLabel) })
+            {
+                var mine = plate.gameObject.activeSelf ? PagerRect(camera, plate) : null;
+                if (mine != null && controls.Any(c => NativeDungeonRunText.TrayRectsOverlap(mine.Value, c)))
+                    throw new InvalidOperationException("tray page control " + label + " " + Fmt(mine.Value) + " overlaps a tray control (" + spot.Where + ")");
+            }
+        }
         return "shown on " + NativeDungeonRunText.TrayPageLog(trayPage, pages) + " " + spot.Where + " | " + where;
     }
 
@@ -1449,13 +1534,23 @@ internal static class NativeDungeonRunPicker
 
     // Previous (-1) or Next (+1) on the tray. The tray reads its heroes only while it is built, so the new page is shown by
     // rebuilding it through the picker's own entry: this session leaves for the HUB as the tray's Back does (Tick: Leaving),
-    // and at the HUB the picker opens again on the new page (NativeDungeonRunUI.PickerWhenHome -> Open(page)), which also
-    // clears the selection and Hero Info. Any fallback on the way opens the menu instead (Abort).
+    // and at the HUB the picker opens again on the new page (NativeDungeonRunUI.PickerWhenHome -> Open(page, true)), which also
+    // clears the selection and Hero Info. Any fallback on the way opens the menu instead (Abort). The reopen keeps the borrowed
+    // client key's in-memory "has seen" flags (ClearBorrowedSaves), so a first-entry intro does not replay on each page; the
+    // rest of the entry (save-key request, scene load, tray build) runs again on every page change: the cost of the round trip.
     private static void FlipPage(int delta)
     {
         try
         {
             if (!InAdventure || phase != Phase.InAdventure || leaveRequested || trayRows == null || trayPerPage <= 0) return;
+            // Only from the tray itself, before Choose, with no dialog up, and only through a plate that is up and enabled.
+            var plate = delta < 0 ? pagePrevious : pageNext;
+            string refused = pagerDisabled ? "the page controls are disabled"
+                : AdventureConfig.Get()?.CurrentSubScene != Tray ? "not on the tray"
+                : trayChosen ? "a hero was chosen on this visit of the tray"
+                : UniversalInputManager.Get()?.IsDialogActive() == true ? "a dialog is up"
+                : plate == null || !plate.gameObject.activeInHierarchy || !plate.IsEnabled() ? "the control is not up" : "";
+            if (refused.Length != 0) { Log("tray page " + (delta < 0 ? "Previous" : "Next") + " ignored: " + refused); return; }
             int pages = NativeDungeonRunText.Pages(trayRows.Count, trayPerPage);
             int target = NativeDungeonRunText.ClampPage(trayPage + delta, trayRows.Count, trayPerPage);
             if (target == trayPage) return;
