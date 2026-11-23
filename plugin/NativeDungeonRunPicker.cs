@@ -76,7 +76,7 @@ internal static class NativeDungeonRunPicker
     {
         internal RunPowerOption Option;
         internal int CardDbId;
-        internal bool Placeholder; // a locked filler slot (FillPowerSlots); never chosen, never first for its card
+        internal bool Placeholder; // a locked filler slot (EnsureFeed); never chosen, never first for its card
         internal AdventureHeroPowerDbfRecord Record;
     }
     // The run row the playmat is fed for (a class row "MAGE" or a named hero row "DALA_Rakanishu").
@@ -1003,6 +1003,17 @@ internal static class NativeDungeonRunPicker
         // (00A6-00E7) and leaves that slot un-Init'd, and the playmat's TRANSITIONING wait (Update 0086-00AB) needs every deck
         // option ready and not mid-outro, so an empty slot risks a stuck deck -> power step. A 4th row keeps every slot
         // Init'd: Random, a pick among the UNLOCKED decks made at Play.
+        // A row with fewer decks than pouches (a Monster Hunt hunter has one deck: with Random that is 2 rows for 4 pouches) left the
+        // other pouches un-Init'd, and the playmat showed no deck options at all (owner's PC, GILA_500h3). Every pouch is fed: the
+        // ones between the row's decks and Random (which stays last, on the Random pouch art) are locked placeholders whose hint
+        // says there is no other deck, so they can never be picked (as a class row's locked decks, which the playmat already shows).
+        bool unlockedDeck = feed.Any(d => d.Unlocked);
+        while (deckSlots > feed.Count + 1)
+            feed.Add(new FedDeck
+            {
+                Placeholder = true, Unlocked = false, Name = NativeDungeonRunText.NoOtherDeckName, Description = "",
+                Hint = NativeDungeonRunText.NoOtherDeckHint, Cards = new List<long>(),
+            });
         if (deckSlots > feed.Count)
         {
             int randomCard = CardDbId(RandomDeckCard);
@@ -1011,20 +1022,10 @@ internal static class NativeDungeonRunPicker
             if (randomCard > 0) overrides[RandomDeckCard] = new DungeonRunRuntime.PickerCard { Name = name, Text = text };
             feed.Add(new FedDeck
             {
-                Random = true, Unlocked = feed.Any(d => d.Unlocked), Name = name, Description = text, Hint = NativeDungeonRunText.LockedWord,
+                Random = true, Unlocked = unlockedDeck, Name = name, Description = text, Hint = NativeDungeonRunText.LockedWord,
                 Cards = randomCard > 0 ? new List<long> { randomCard } : new List<long>(),
             });
         }
-        // A row with fewer decks than pouches (a Monster Hunt hunter has one deck: with Random that is 2 rows for 4 pouches) left the
-        // other pouches un-Init'd, and the playmat showed no deck options at all (owner's PC, GILA_500h3). Every pouch is fed: the
-        // rest are locked placeholders whose hint says there is no other deck, so they can never be picked (as a class row's locked
-        // decks, which the playmat already shows).
-        while (deckSlots > feed.Count)
-            feed.Add(new FedDeck
-            {
-                Placeholder = true, Unlocked = false, Name = NativeDungeonRunText.NoOtherDeckName, Description = "",
-                Hint = NativeDungeonRunText.NoOtherDeckHint, Cards = new List<long>(),
-            });
         if (deckSlots >= 0 && deckSlots != feed.Count) Log("WARNING deck slots=" + deckSlots + " but " + feed.Count + " decks fed");
         for (int i = 0; i < feed.Count; i++)
         {
