@@ -66,8 +66,8 @@ internal static class NativeDungeonRunPicker
     private sealed class FedDeck
     {
         internal int DeckId;
-        internal RunDeckOption Option; // null for Random
-        internal bool Random, Unlocked;
+        internal RunDeckOption Option; // null for Random and for a Placeholder
+        internal bool Random, Placeholder, Unlocked;
         internal string Name, Description, Hint;
         internal List<long> Cards;
         internal AdventureDeckDbfRecord Record;
@@ -76,6 +76,7 @@ internal static class NativeDungeonRunPicker
     {
         internal RunPowerOption Option;
         internal int CardDbId;
+        internal bool Placeholder; // a locked filler slot (EnsureFeed); never chosen, never first for its card
         internal AdventureHeroPowerDbfRecord Record;
     }
     // The run row the playmat is fed for (a class row "MAGE" or a named hero row "DALA_Rakanishu").
@@ -822,7 +823,7 @@ internal static class NativeDungeonRunPicker
             if (deck == 0 || power == 0) { Log("Play before deck and power were chosen: ignored"); return false; }
             var fedDeck = FedDeckById(deck);
             var fedPower = FedPowerByCard(power);
-            if (fedRow == null || fedDeck == null || fedPower == null)
+            if (fedRow == null || fedDeck == null || fedPower == null || fedDeck.Placeholder || fedPower.Placeholder)
             {
                 Log("Play with a selection the picker did not feed (row=" + fedRow + " deck=" + fedDeck?.Name + " power=" + fedPower?.Option.Id + "): ignored");
                 return false;
@@ -1002,6 +1003,17 @@ internal static class NativeDungeonRunPicker
         // (00A6-00E7) and leaves that slot un-Init'd, and the playmat's TRANSITIONING wait (Update 0086-00AB) needs every deck
         // option ready and not mid-outro, so an empty slot risks a stuck deck -> power step. A 4th row keeps every slot
         // Init'd: Random, a pick among the UNLOCKED decks made at Play.
+        // A row with fewer decks than pouches (a Monster Hunt hunter has one deck: with Random that is 2 rows for 4 pouches) left the
+        // other pouches un-Init'd, and the playmat showed no deck options at all (owner's PC, GILA_500h3). Every pouch is fed: the
+        // ones between the row's decks and Random (which stays last, on the Random pouch art) are locked placeholders whose hint
+        // says there is no other deck, so they can never be picked (as a class row's locked decks, which the playmat already shows).
+        bool unlockedDeck = feed.Any(d => d.Unlocked);
+        while (deckSlots > feed.Count + 1)
+            feed.Add(new FedDeck
+            {
+                Placeholder = true, Unlocked = false, Name = NativeDungeonRunText.NoOtherDeckName, Description = "",
+                Hint = NativeDungeonRunText.NoOtherDeckHint, Cards = new List<long>(),
+            });
         if (deckSlots > feed.Count)
         {
             int randomCard = CardDbId(RandomDeckCard);
@@ -1010,7 +1022,7 @@ internal static class NativeDungeonRunPicker
             if (randomCard > 0) overrides[RandomDeckCard] = new DungeonRunRuntime.PickerCard { Name = name, Text = text };
             feed.Add(new FedDeck
             {
-                Random = true, Unlocked = feed.Any(d => d.Unlocked), Name = name, Description = text, Hint = NativeDungeonRunText.LockedWord,
+                Random = true, Unlocked = unlockedDeck, Name = name, Description = text, Hint = NativeDungeonRunText.LockedWord,
                 Cards = randomCard > 0 ? new List<long> { randomCard } : new List<long>(),
             });
         }
@@ -1048,6 +1060,26 @@ internal static class NativeDungeonRunPicker
             powerFeed.Add(new FedPower { Option = p, CardDbId = card, Record = record });
             overrides[p.ClientCardId] = new DungeonRunRuntime.PickerCard { Name = p.Name, Text = p.Text, Cost = p.Cost };
         }
+        // The same for the power slots (Rikkar has one power for three slots, a Monster Hunt hunter one or two): the rest are locked
+        // placeholders on the first power's card. FedPowerByCard maps that card to the real power, which comes first.
+        for (int i = powerFeed.Count; i < powerSlots && powerFeed.Count > 0; i++)
+        {
+            var first = powerFeed[0];
+            var record = new AdventureHeroPowerDbfRecord();
+            record.SetID(FedPowerRecordIdBase + i);
+            Set(record, "ADVENTURE_ID", (int)Adventure); Set(record, "CLASS_ID", (int)cls); Set(record, "GUEST_HERO_ID", 0); Set(record, "CARD_ID", first.CardDbId);
+            Set(record, "SORT_ORDER", i); Set(record, "IS_DEFAULT", false);
+            Set(record, "UNLOCK_GAME_SAVE_SUBKEY", 0); Set(record, "UNLOCK_VALUE", 1); Set(record, "UNLOCK_ACHIEVEMENT", 0);
+            Set(record, "UNLOCK_CRITERIA_TEXT", FormatSafe(NativeDungeonRunText.NoOtherPowerHint));
+            Set(record, "UNLOCKED_DESCRIPTION_TEXT", "");
+            var option = new RunPowerOption
+            {
+                Id = first.Option.Id, ShellCardId = first.Option.ShellCardId, ClientCardId = first.Option.ClientCardId, Name = first.Option.Name,
+                Text = first.Option.Text, PlainText = first.Option.PlainText, Cost = first.Option.Cost, Targeted = first.Option.Targeted,
+                IsDefault = false, Unlocked = false, UnlockHint = NativeDungeonRunText.NoOtherPowerHint, SortOrder = i,
+            };
+            powerFeed.Add(new FedPower { Option = option, CardDbId = first.CardDbId, Placeholder = true, Record = record });
+        }
         if (powerSlots >= 0 && powerSlots != powerFeed.Count) Log("WARNING hero power slots=" + powerSlots + " but " + powerFeed.Count + " powers fed");
 
         // The tray's hero names stay on the playmat: its portrait shows the chosen row's name.
@@ -1056,9 +1088,9 @@ internal static class NativeDungeonRunPicker
         DungeonRunRuntime.BeginPicker(overrides);
         overrideIds = overrides.Keys.ToList();
         ResetCachedNames(overrideIds, "begin");
-        Log("fed decks row=" + classId + " slots=" + deckSlots + ": " + string.Join(" | ", feed.Select(d => "deckId=" + d.DeckId + " " + (d.Random ? "random" : d.Option.Id)
+        Log("fed decks row=" + classId + " slots=" + deckSlots + ": " + string.Join(" | ", feed.Select(d => "deckId=" + d.DeckId + " " + (d.Random ? "random" : d.Placeholder ? "placeholder" : d.Option.Id)
             + " name=" + d.Name + " " + (d.Unlocked ? "unlocked" : "locked(" + d.Hint + ")") + " cards=" + d.Cards.Count)));
-        Log("fed powers row=" + classId + " slots=" + powerSlots + ": " + string.Join(" | ", powerFeed.Select(p => p.Option.Id + " card=" + p.Option.ClientCardId + "(" + p.CardDbId + ")"
+        Log("fed powers row=" + classId + " slots=" + powerSlots + ": " + string.Join(" | ", powerFeed.Select(p => (p.Placeholder ? "placeholder " : "") + p.Option.Id + " card=" + p.Option.ClientCardId + "(" + p.CardDbId + ")"
             + " name=" + p.Option.Name + " cost=" + p.Option.Cost + " " + (p.Option.Unlocked ? "unlocked" : "locked(" + p.Option.UnlockHint + ")"))));
         Log("picker card overrides: " + overrides.Count + " [" + string.Join(",", overrides.Keys) + "]"
             + (missing.Count == 0 ? "" : "; deck cards the client does not know (left out): " + string.Join(",", missing)));

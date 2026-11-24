@@ -55,6 +55,9 @@ internal static class NativeDungeonRunText
     internal const string NoTreasuresCaption = "No treasures yet.";
     internal const string NoChoicesCaption = "Nothing is on offer.";
     internal const string LockedWord = "Locked";
+    // The native playmat's filler slots for a row with fewer decks or powers than the prefab shows (NativeDungeonRunPicker).
+    internal const string NoOtherDeckName = "No other deck", NoOtherDeckHint = "This hero has no other starting deck.",
+        NoOtherPowerHint = "This hero has no other hero power.";
 
     internal static string Unavailable(string reason) =>
         "Dungeon Run is unavailable: " + (string.IsNullOrEmpty(reason) ? "unknown reason" : reason);
