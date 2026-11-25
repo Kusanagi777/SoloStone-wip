@@ -16,7 +16,8 @@ internal static class DungeonRunBuild
     /// </summary>
     internal static string CardReason(string id, IReadOnlyList<string> classSet, OfflinePoolPolicy policy)
     {
-        Card card;
+        // Fully qualified: the client's Assembly-CSharp has its own global Card, which wins in the plugin build.
+        SabberStoneCore.Model.Card card;
         try { card = Cards.FromId(id); } catch { card = null; }
         if (card == null) return "missing";
         if (!card.Collectible) return "not-collectible";
