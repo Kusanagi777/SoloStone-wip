@@ -622,7 +622,7 @@ Guard("G", () =>
     // 340 games (200 before 2026-11-20): bosses now start at 10 Health and 15 cards, so games are shorter and make fewer cards;
     // 340 gives G3 about the coverage 200 gave before (4701 cards made, 1313 distinct, against 4343 and 1367).
     int n = int.TryParse(Environment.GetEnvironmentVariable("C_GEN_9_GAMES"), out int gn) ? gn : 340;
-    var loadouts = data.Classes.SelectMany(c => c.Decks.Select(d => (Row: c, Deck: d))).ToList();
+    var loadouts = data.Classes.SelectMany(c => c.StartDecks(data).Select(d => (Row: c, Deck: d))).ToList();
     var bosses = data.Encounters.Where(b => data.BossDecks.ContainsKey(b.Deck)).Select(b => b.Id).OrderBy(x => x, StringComparer.Ordinal).ToList();
     var generatedAll = new SortedDictionary<string, int>(StringComparer.Ordinal);
     var unscriptedMade = new SortedDictionary<string, int>(StringComparer.Ordinal);

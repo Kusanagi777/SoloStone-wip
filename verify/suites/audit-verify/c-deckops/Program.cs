@@ -822,7 +822,7 @@ string[] tavernEnchants = table.Options.Where(o => o.Ench != null).Select(o => o
         for (int seed = 1; seed <= 30; seed++)
         {
             var cls = data.Classes[seed % data.Classes.Count];
-            var s = run.NewRun(all, cls.Id, cls.Decks[seed % cls.Decks.Count], cls.Powers[0], 70000 + seed, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), 70000 + seed).FirstOrDefault());
+            var s = run.NewRun(all, cls.Id, cls.StartDecks(data)[seed % cls.StartDecks(data).Count], cls.Powers[0], 70000 + seed, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), 70000 + seed).FirstOrDefault());
             Walk(s, x => false, shop: t =>
             {
                 foreach (string id in t.Tavern.Offers.ToList())
@@ -954,7 +954,7 @@ string[] tavernEnchants = table.Options.Where(o => o.Ench != null).Select(o => o
             string.Join(",", t.Tavern.Pending?.Candidates ?? new List<string>()));
         var bad = new List<string>();
         foreach (var cls in data.Classes)
-            foreach (string deckId in cls.Decks)
+            foreach (string deckId in cls.StartDecks(data))
             {
                 var r = run.NewRun(all, cls.Id, deckId, cls.Powers[0], 11, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), 11).FirstOrDefault());
                 foreach (var c in r.Cards) if (DungeonRunDeck.CopyError(run, r, c.Uid) != null) bad.Add(cls.Id + ":" + c.Id);

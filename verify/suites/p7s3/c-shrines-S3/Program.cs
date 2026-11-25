@@ -146,8 +146,9 @@ Guard("A", () =>
     Check("A4 the hidden-steal row (TRLA_186) states the hidden zone: the boss's deck, its own-deck ledger and the masked hand",
         hs.Family == "boss-hidden-steal" && hs.Admit == (AdmitScope.Player | AdmitScope.Boss) && hs.NeverGenerated && hs.Reason.Contains("OwnDeckLedger") && hs.Reason.Contains("deck")
         && hs.Reason.Contains("masks"));
+    // Build Deck: Rikkar's build decks repeat their default deck's shrine, so the 27 are counted on the fixed decks.
     Check("A4 every one of the 27 shrines is scripted (no deck plays without its shrine any more)",
-        data.Decks.Where(d => d.Shrine != null).All(d => ShrineRules.IsScripted(d.Shrine)) && data.Decks.Count(d => d.Shrine != null) == 27);
+        data.Decks.Where(d => d.Shrine != null).All(d => ShrineRules.IsScripted(d.Shrine)) && data.Decks.Count(d => d.Shrine != null && !d.Build) == 27);
     var errors = DungeonRunValidator.Validate(data, null);
     Check("A5 the validator passes the shipped data (shrines included)", errors.Count == 0 && DungeonRunValidator.ValidateShrines(data).Count == 0, string.Join(" | ", errors.Take(3)));
     var (s2, p2, g) = F("rumble_warlock_179", 22);

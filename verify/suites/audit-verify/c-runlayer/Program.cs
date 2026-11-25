@@ -57,7 +57,8 @@ Check("data validates (client check not run headless)", errors.Count == 0, error
 // 30 Dungeon Run active treasures (LOOTA_805 ... LOOTA_847 with the Quel'Delar pieces, act runs only): 47 + 30 = 77. Step 9
 // (lane E, D9) adds GILA_BOSS_43t, Damph's encounter reward: a v4-only, never-offered row with no scope, so it loads without the
 // catalog too (78); the other two v4 rows (ULDA_111, GILA_911) are scoped to catalog decks and stay out here.
-Check("11 classes, 33 decks, 20 bosses, 78 treasures (33 + phase 6 F1's 14 act-run passives + F2's 30 act-run actives + step 9's GILA_BOSS_43t reward)", data.Classes.Count == 11 && data.Decks.Count == 33 && data.Bosses.Count == 20 && data.Treasures.Count == 78
+// Build Deck (Task 3): each class row adds its build deck (no cards, never locked): 33 + 11 = 44 decks.
+Check("11 classes, 44 decks (33 + 11 build decks), 20 bosses, 78 treasures (33 + phase 6 F1's 14 act-run passives + F2's 30 act-run actives + step 9's GILA_BOSS_43t reward)", data.Classes.Count == 11 && data.Decks.Count == 44 && data.Decks.Count(d => d.Build) == 11 && data.Bosses.Count == 20 && data.Treasures.Count == 78
     && data.Treasures.Count(t => t.Runs == DungeonRunTreasure.RunsAct) == 44 && data.Treasures.Count(t => t.Runs == DungeonRunTreasure.RunsAct && t.Active) == 30
     && data.Treasures.Where(t => t.Runs == DungeonRunTreasure.RunsV4).Select(t => t.Id + (t.Reward && !t.Offered ? ":reward" : "")).SequenceEqual(new[] { "GILA_BOSS_43t:reward" }),
     $"{data.Classes.Count}/{data.Decks.Count}/{data.Bosses.Count}/{data.Treasures.Count} v4 {string.Join(",", data.Treasures.Where(t => t.Runs == DungeonRunTreasure.RunsV4).Select(t => t.Id))}");
@@ -65,7 +66,8 @@ Check("classes are the 11 CardClass names in data order", data.Classes.Select(c 
 Check("class ladder expands to 44 keys + challenge", data.Unlocks.Count == 45 && classIds.All(c => new[] { "floor3", "floor4", "floor5", "win" }
     .All(step => data.Unlocks.TryGetValue(c.ToLowerInvariant() + "_" + step, out var cond) && cond.Class == c)), string.Join(",", data.Unlocks.Keys.Take(6)));
 Check("data versions bumped (save version 6: phase 8 encounters and global rules)", data.DataVersion == "dungeon-run/2" && DungeonRunSave.CurrentVersion == 6, data.DataVersion);
-foreach (var deck in data.Decks)
+// A build deck lists no cards (c-sched-9 BD9 checks it): the fixed decks are the 33 ten-card starters.
+foreach (var deck in data.Decks.Where(d => !d.Build))
 {
     var cls = (CardClass)Enum.Parse(typeof(CardClass), deck.Class);
     var bad = deck.Cards.Where(id => !CardClassRules.IsAllowedInDeck(Cards.FromId(id), cls)).ToList();
@@ -88,7 +90,8 @@ foreach (var deck in data.Decks)
 // ---------------------------------------------------------------- 2. fresh profile, refusals
 var fresh = new DungeonRunProfile();
 foreach (var cls in data.Classes)
-    Check($"fresh {cls.Id}: only the default deck and the basic power", run.AvailableDecks(cls, fresh).Select(d => d.Id).SequenceEqual(new[] { cls.Decks[0] })
+    // The build deck is never locked, so a fresh profile has it beside the default deck.
+    Check($"fresh {cls.Id}: only the default deck, the build deck and the basic power", run.AvailableDecks(cls, fresh).Select(d => d.Id).SequenceEqual(new[] { cls.Decks[0], cls.BuildDeck(data).Id })
         && run.AvailablePowers(cls, fresh).SequenceEqual(new[] { cls.Powers[0] }));
 Throws<InvalidOperationException>("locked deck refused", () => run.NewRun(fresh, "MAGE", "mage_kindled", "CS2_034", 1, signatureId: run.SignatureOffer(fresh, run.Data.FindClass("MAGE"), 1).FirstOrDefault()), DungeonRun.LockedDeck);
 Throws<InvalidOperationException>("locked power refused", () => run.NewRun(fresh, "MAGE", "mage_rimeward", "mage_rimebite", 1, signatureId: run.SignatureOffer(fresh, run.Data.FindClass("MAGE"), 1).FirstOrDefault()), DungeonRun.LockedPower);
@@ -101,8 +104,9 @@ Throws<ArgumentException>("null power refused", () => run.NewRun(fresh, "MAGE", 
 // ---------------------------------------------------------------- 3. every class x deck x power starts and builds a plan
 var all = new DungeonRunProfile(); all.Unlocked.AddRange(data.Unlocks.Keys);
 int combos = 0, plans = 0;
+// A build deck has no cards to start a run on (R2): every deck but the build deck.
 foreach (var cls in data.Classes)
-    foreach (string deckId in cls.Decks)
+    foreach (string deckId in cls.StartDecks(data))
         foreach (string power in cls.Powers)
         {
             combos++;
@@ -239,11 +243,11 @@ DungeonRunState PlayOut(DungeonRunProfile profile, DungeonRunState s, Func<Dunge
     Check("floor 5 adds mage_floor5 (deck 3)", f5.Unlocked.OrderBy(k => k).SequenceEqual(new[] { "mage_floor3", "mage_floor4", "mage_floor5" }), string.Join(",", f5.Unlocked));
     Check("a win unlocks all four Mage keys", w.Unlocked.OrderBy(k => k).SequenceEqual(new[] { "mage_floor3", "mage_floor4", "mage_floor5", "mage_win" }), string.Join(",", w.Unlocked));
     var mage = data.Class("MAGE");
-    Check("floor 3: Kindled Sparks available, power list unchanged", run.AvailableDecks(mage, f3).Select(d => d.Id).SequenceEqual(new[] { "mage_rimeward", "mage_kindled" })
+    Check("floor 3: Kindled Sparks available, power list unchanged", run.AvailableDecks(mage, f3).Select(d => d.Id).SequenceEqual(new[] { "mage_rimeward", "mage_kindled", "mage_build" })
         && run.AvailablePowers(mage, f3).SequenceEqual(new[] { "CS2_034" }));
     Check("floor 4: Survey available", run.AvailablePowers(mage, f4).SequenceEqual(new[] { "CS2_034", "carto_survey" }));
-    Check("win: all 3 decks and 3 powers", run.AvailableDecks(mage, w).Count() == 3 && run.AvailablePowers(mage, w).Count() == 3);
-    Check("Mage progress opens nothing for another class", data.Classes.Where(c => c.Id != "MAGE").All(c => run.AvailableDecks(c, w).Count() == 1 && run.AvailablePowers(c, w).Count() == 1));
+    Check("win: all 3 decks (and the never-locked build deck) and 3 powers", run.AvailableDecks(mage, w).Count() == 4 && run.AvailablePowers(mage, w).Count() == 3);
+    Check("Mage progress opens nothing for another class (its default and build decks only)", data.Classes.Where(c => c.Id != "MAGE").All(c => run.AvailableDecks(c, w).Count() == 2 && run.AvailablePowers(c, w).Count() == 1));
     Check("a newly unlocked deck starts a run", run.NewRun(f3, "MAGE", "mage_kindled", "CS2_034", 5, signatureId: run.SignatureOffer(f3, run.Data.FindClass("MAGE"), 5).FirstOrDefault()).Deck.Count == 10);
 }
 {
@@ -496,7 +500,8 @@ foreach (var name in new[] { "trapper", "pilgrim-bulwark", "sellsword-warcry" })
 {
     var classes = DungeonRunCatalog.Classes(run, fresh);
     Check("catalog: 11 classes in order, portraits and defaults", classes.Count == 11 && classes.Select(c => c.Id).SequenceEqual(classIds)
-        && classes.All(c => c.DecksUnlocked == 1 && c.PowersUnlocked == 1 && c.DeckCount == 3 && c.PowerCount == 3 && c.HeroCardId == data.Class(c.Id).HeroCard)
+        // Build Deck: the build deck is the row's fourth deck, never locked.
+        && classes.All(c => c.DecksUnlocked == 2 && c.PowersUnlocked == 1 && c.DeckCount == 4 && c.PowerCount == 3 && c.HeroCardId == data.Class(c.Id).HeroCard)
         && classes.Select(c => c.SortOrder).SequenceEqual(Enumerable.Range(0, 11)));
     Check("catalog: client ids default to the engine ids headless", classes.All(c => c.ClientHeroCardId == c.HeroCardId)
         && classes.SelectMany(c => DungeonRunCatalog.Powers(run, fresh, c.Id)).All(p => p.ClientCardId == p.ShellCardId));
@@ -510,9 +515,11 @@ foreach (var name in new[] { "trapper", "pilgrim-bulwark", "sellsword-warcry" })
     var labels = new List<string>();
     foreach (var c in classes)
     {
-        var decks = DungeonRunCatalog.Decks(run, fresh, c.Id); var powers = DungeonRunCatalog.Powers(run, fresh, c.Id);
+        // The Build Deck option is listed last (c-sched-9 BD10 checks it); the three fixed decks are checked here.
+        var options = DungeonRunCatalog.Decks(run, fresh, c.Id);
+        var decks = options.Where(d => !d.IsBuild).ToList(); var powers = DungeonRunCatalog.Powers(run, fresh, c.Id);
         var decksAll = DungeonRunCatalog.Decks(run, all, c.Id); var powersAll = DungeonRunCatalog.Powers(run, all, c.Id);
-        bool ok = decks.Count == 3 && powers.Count == 3 && decks[0].IsDefault && decks[0].Unlocked && powers[0].IsDefault && powers[0].Unlocked
+        bool ok = options.Count == 4 && options[3].IsBuild && options[3].Unlocked && decks.Count == 3 && powers.Count == 3 && decks[0].IsDefault && decks[0].Unlocked && powers[0].IsDefault && powers[0].Unlocked
             && decks.Skip(1).All(d => !d.Unlocked && !d.IsDefault) && powers.Skip(1).All(p => !p.Unlocked && !p.IsDefault)
             && decks.Concat<object>(powers).All(o => o is RunDeckOption d ? (d.UnlockHint == null) == d.Unlocked : (((RunPowerOption)o).UnlockHint == null) == ((RunPowerOption)o).Unlocked)
             && decksAll.All(d => d.Unlocked && d.UnlockHint == null) && powersAll.All(p => p.Unlocked && p.UnlockHint == null)
@@ -584,7 +591,7 @@ foreach (var boss in data.Bosses)
 }
 int combo = 0;
 foreach (var cls in data.Classes)
-    foreach (string deckId in cls.Decks)
+    foreach (string deckId in cls.StartDecks(data))
         foreach (string power in cls.Powers)
         {
             var s = NewFor(all, cls.Id, 555 + combo, deckId, power);
@@ -600,7 +607,7 @@ foreach (string newClass in new[] { "DEATHKNIGHT", "DEMONHUNTER" })
         && cls.Powers[0] == Cards.FromAssetId(Cards.FromId(cls.HeroCard)[GameTag.HERO_POWER])?.Id, cls.HeroCard + " " + Cards.FromAssetId(Cards.FromId(cls.HeroCard)[GameTag.HERO_POWER])?.Id);
     Check($"{newClass}: 4 class bundles (legacy fixed entries)", data.LegacyBundles.Count(b => b.Class == newClass && !b.IsPool) == 4);
     Check($"{newClass}: classTags", data.ClassTags.ContainsKey(newClass));
-    foreach (string deckId in cls.Decks)
+    foreach (string deckId in cls.StartDecks(data))
         foreach (string power in cls.Powers)
         {
             var profile = new DungeonRunProfile(); profile.Unlocked.AddRange(data.Unlocks.Keys);
@@ -689,9 +696,10 @@ Check($"random-play matches run without engine faults ({matches} games)", faults
     // Phase 6 F10 scripts the starter collectibles: PALADIN_SHAMAN, DRUID_PRIEST and HUNTER_WARRIOR ship enabled with
     // ULDA_<Explorer>_Deck1-3 and their Random decks, MAGE_ROGUE adds Deck2-3, Ol' Barkeye adds DALA_Hunter_Deck3: 89 decks.
     // Phase 6 F14 adds Rikkar's nine class forms (Rumble) with their 27 shrine starters: 37 classes, 116 decks.
-    Check("catalog data: 37 playable classes (11 + the 4 Tombs dual rows + the 4 Monster Hunt heroes + the 9 Heist villains + Rikkar's 9 forms), no row disabled, 116 decks (phase 6 F14)",
+    Check("catalog data: 37 playable classes (11 + the 4 Tombs dual rows + the 4 Monster Hunt heroes + the 9 Heist villains + Rikkar's 9 forms), no row disabled, 140 decks (phase 6 F14's 116 + 24 build decks)",
         cdata.Classes.Count == 37 && cdata.Classes.Count(c => c.Adventure == "Heist") == 9 && cdata.Classes.Count(c => c.Adventure == "Rumble") == 9 && cdata.Classes.Count(c => c.IsDual) == 4 && cdata.FindClass("GILA_500h3")?.IsHero == true && cdata.FindClass("GILA_600h")?.IsHero == true && cdata.FindClass("GILA_400h")?.IsHero == true && cdata.FindClass("GILA_900h")?.IsHero == true && cdata.FindClass("MAGE_ROGUE")?.ClassSet.SequenceEqual(new[] { "MAGE", "ROGUE" }) == true
-        && cdata.DisabledClasses.Count == 0 && cdata.Decks.Count == 116 && cdata.DisabledDecks.Count == 0,
+        // Build Deck: 24 build decks (the 11 class rows, the 4 Monster Hunt heroes, Rikkar's 9 forms): 116 + 24 = 140.
+        && cdata.DisabledClasses.Count == 0 && cdata.Decks.Count == 140 && cdata.Decks.Count(d => d.Build) == 24 && cdata.DisabledDecks.Count == 0,
         $"{cdata.Classes.Count} classes, {cdata.DisabledClasses.Count} disabled, {cdata.Decks.Count} decks");
     Check("legacy data (no catalog) has no dual row: legacy runs are single-class", data.Classes.All(c => c.ClassSet.Count == 1) && data.DisabledClasses.Count == 0);
     Check("draft knobs read from run-v1.json: bucketMaxTakes 3, dualMatchWeight 2", cdata.Rules.BucketMaxTakes == 3 && cdata.Rules.DualMatchWeight == 2);
@@ -770,7 +778,7 @@ Check($"random-play matches run without engine faults ({matches} games)", faults
     foreach (var cls in cdata.Classes)
         for (int k = 0; k < 6; k++)
         {
-            var s = crun.NewRun(call, cls.Id, cls.Decks[k % cls.Decks.Count], cls.Powers[k % cls.Powers.Count], 70000 + 97 * cruns, signatureId: crun.SignatureOffer(call, crun.Data.FindClass(cls.Id), 70000 + 97 * cruns).FirstOrDefault());
+            var s = crun.NewRun(call, cls.Id, cls.StartDecks(cdata)[k % cls.StartDecks(cdata).Count], cls.Powers[k % cls.Powers.Count], 70000 + 97 * cruns, signatureId: crun.SignatureOffer(call, crun.Data.FindClass(cls.Id), 70000 + 97 * cruns).FirstOrDefault());
             // Prefer a pool entry taken before (the repeat path), else the slot by floor.
             CPlay(crun, s, (st, d) => d.Offered.FirstOrDefault(id => st.TakesOf(id) > 0) ?? d.Offered[st.Floor % d.Offered.Count], deckLog);
             cruns++;

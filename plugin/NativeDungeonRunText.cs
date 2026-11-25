@@ -55,6 +55,8 @@ internal static class NativeDungeonRunText
     internal const string NoTreasuresCaption = "No treasures yet.";
     internal const string NoChoicesCaption = "Nothing is on offer.";
     internal const string LockedWord = "Locked";
+    // The Build Deck option (a row's build deck: DungeonRunClass.BuildDeck), in every picker; always unlocked.
+    internal const string BuildDeckName = "Build Deck", BuildDeckDescription = "Build a 10-card deck from your collection.";
     // The native playmat's filler slots for a row with fewer decks or powers than the prefab shows (NativeDungeonRunPicker).
     internal const string NoOtherDeckName = "No other deck", NoOtherDeckHint = "This hero has no other starting deck.",
         NoOtherPowerHint = "This hero has no other hero power.";

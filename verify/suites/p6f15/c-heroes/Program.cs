@@ -144,7 +144,7 @@ string WithHeroRows(Action<JsonObject> edit)
         // Appended to the shipped heroRows (phase 6 F3 on), whose treasures are scoped to their starters.
         var probeRows = JsonNode.Parse(@"[
           {""id"": ""TRLA_209h_Mage"", ""name"": ""Rikkar"", ""kind"": ""hero"", ""adventure"": ""Rumble"", ""hero"": ""TRLA_209h_Mage"", ""health"": 30,
-           ""classes"": [""MAGE""], ""powers"": [""CS2_034""], ""decks"": [""rikkar_mage_probe""], ""treasureTags"": [""spells""], ""signatureOffer"": 2},
+           ""classes"": [""MAGE""], ""powers"": [""CS2_034""], ""decks"": [""rikkar_mage_probe"", ""rikkar_mage_probe_build""], ""treasureTags"": [""spells""], ""signatureOffer"": 2},
           {""id"": ""TRLA_209h_Druid"", ""name"": ""Rikkar"", ""kind"": ""hero"", ""adventure"": ""Rumble"", ""hero"": ""TRLA_209h_Druid"", ""health"": 30,
            ""classes"": [""DRUID""], ""powers"": [""CS2_017""], ""decks"": [], ""enabled"": false, ""disabledReason"": ""F14: shrine starters not shipped""}
         ]").AsArray();
@@ -162,6 +162,8 @@ string WithHeroRows(Action<JsonObject> edit)
         foreach (string id in data.Deck(data.Class("MAGE").DefaultDeck).Cards) mageCards.Add(id);
         probe["cards"] = mageCards;
         decks.Add(probe);
+        // Build Deck: every row lists one build-able deck, last (a build deck: no cards, a display card).
+        decks.Add(JsonNode.Parse(@"{""id"": ""rikkar_mage_probe_build"", ""class"": ""TRLA_209h_Mage"", ""name"": ""Build Deck"", ""description"": ""probe"", ""build"": true, ""displayCard"": ""DALA_800""}"));
         n["powerUpgrades"] = JsonNode.Parse(@"[{""from"": ""CS2_034"", ""to"": ""mage_rimebite"", ""on"": ""actClear""}]");
     });
     var d = Load(json);
@@ -195,8 +197,10 @@ DungeonRunData Probe(Action<DungeonRunData, DungeonRunClass, DungeonRunStarterDe
     var row = new DungeonRunClass
     {
         Id = portrait, Name = DungeonRunContent.Get(portrait).Name, HeroCard = portrait, Kind = DungeonRunClass.KindHero, Adventure = "Rumble", Health = 30,
-        Classes = new List<string> { cls }, Powers = new List<string> { d.Class(cls).Powers[0] }, Decks = new List<string> { "probe_" + portrait },
+        Classes = new List<string> { cls }, Powers = new List<string> { d.Class(cls).Powers[0] }, Decks = new List<string> { "probe_" + portrait, "probe_" + portrait + "_build" },
     };
+    // Build Deck: every row lists one build-able deck, last (a build deck: no cards, a display card, never locked).
+    d.Decks.Add(new DungeonRunStarterDeck { Id = "probe_" + portrait + "_build", Class = portrait, Name = "Build Deck", Description = "probe", Build = true, DisplayCard = "DALA_800" });
     var deck = new DungeonRunStarterDeck { Id = "probe_" + portrait, Class = portrait, Name = "Probe", Description = "probe", Cards = d.Deck(d.Class(cls).DefaultDeck).Cards.ToList() };
     d.Classes.Add(row); d.Decks.Add(deck);
     edit?.Invoke(d, row, deck);

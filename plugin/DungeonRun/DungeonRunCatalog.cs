@@ -67,6 +67,11 @@ internal sealed class RunDeckOption
     /// <summary>The starter's engine card ids in data order (a duplicate appears twice).</summary>
     public IReadOnlyList<string> CardIds;
     public bool IsDefault, Unlocked;
+    /// <summary>
+    /// The row's Build Deck option (its build-able deck, DungeonRunClass.BuildDeck: a build deck, or a Heist/Tombs generated
+    /// deck): named <see cref="NativeDungeonRunText.BuildDeckName"/>, always unlocked, no cards; listed last.
+    /// </summary>
+    public bool IsBuild;
     /// <summary>The unlock key (null for the default deck) and, while locked, the hint ("Reach floor 3 with Mage to unlock").</summary>
     public string UnlockKey, UnlockHint;
     public int SortOrder;
@@ -161,7 +166,9 @@ internal static class DungeonRunCatalog
     internal static string RowClassName(DungeonRunClass cls) =>
         cls == null ? "" : string.Join(" / ", cls.ClassSet.Select(NativeDungeonRunText.ClassName));
 
-    /// <summary>The class's decks, default first; empty for an unknown class.</summary>
+    /// <summary>
+    /// The class's decks, default first and the Build Deck option (the row's build-able deck) last; empty for an unknown class.
+    /// </summary>
     internal static IReadOnlyList<RunDeckOption> Decks(DungeonRun rules, DungeonRunProfile profile, string classId)
     {
         var cls = rules?.Data.FindClass(classId);
@@ -171,6 +178,16 @@ internal static class DungeonRunCatalog
         {
             var deck = rules.Data.FindDeck(id);
             if (deck == null) continue;
+            if (deck.IsBuildable)
+            {
+                // Build Deck: always unlocked (a Heist/Tombs generated deck's own unlock never gates it), no listed cards.
+                result.Add(new RunDeckOption
+                {
+                    Id = deck.Id, ClassId = cls.Id, Name = NativeDungeonRunText.BuildDeckName, Description = NativeDungeonRunText.BuildDeckDescription,
+                    CardIds = new string[0], IsDefault = false, Unlocked = true, IsBuild = true, SortOrder = result.Count,
+                });
+                continue;
+            }
             bool unlocked = rules.IsUnlocked(profile, deck.Unlock);
             result.Add(new RunDeckOption
             {

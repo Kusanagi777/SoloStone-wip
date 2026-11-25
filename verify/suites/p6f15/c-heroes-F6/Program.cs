@@ -147,7 +147,8 @@ Check("T1 the tokens to verify are scripted: Shifting Chameleon, Explosive (Cast
 foreach (string id in displays)
     Check($"T1 {id} ({FactName(id)}): a run-layer loadout card, no engine content entry, the display card of exactly one generated deck of its class",
         DungeonRunContent.ForShell(id) == null && !DungeonRunContent.TryGet(id, out _) && clientIds.Contains(id)
-        && data.Decks.Count(d => d.DisplayCard == id) == 1 && data.Decks.Single(d => d.DisplayCard == id) is var dd && dd.IsGenerated
+        // Build Deck: the build decks show DALA_800 too (the default display card), so only the generated decks are counted.
+        && data.Decks.Count(d => d.DisplayCard == id && !d.Build) == 1 && data.Decks.Single(d => d.DisplayCard == id && !d.Build) is var dd && dd.IsGenerated
         && data.FindClass(dd.Class).ClassSet[0] == ClassOfTag(FactTag(id, 199)) && FactName(id) == dd.Name);
 
 // ---------------------------------------------------------------- T2 data, validator, admission
@@ -640,9 +641,10 @@ foreach (var h in heroes)
             hero != null && hero.IsHero && !hero.IsDual && hero.Adventure == "Heist" && hero.Health == 30 && hero.HeroCardId == h.Row
             && DungeonRunCatalog.Heroes(run, fresh, cls)[0].Id == cls);
         var decks = DungeonRunCatalog.Decks(run, fresh, h.Row);
-        Check($"T23 Decks({h.Row}): {row.Decks.Count} decks, the first open, the rest locked with a hint naming {row.Name} (never its portrait id)",
-            decks.Count == row.Decks.Count && decks[0].Unlocked && decks[0].IsDefault && decks.Skip(1).All(d => !d.Unlocked && d.UnlockHint.Contains(row.Name) && !d.UnlockHint.Contains("DALA_"))
-            && decks.Last().Name == FactName(h.Display) && decks.Last().CardIds.Count == 0,
+        // Build Deck: the generated deck (listed last) is the row's Build Deck option, always unlocked, named "Build Deck" (c-sched-9 BD10).
+        Check($"T23 Decks({h.Row}): {row.Decks.Count} decks, the first open, the fixed rest locked with a hint naming {row.Name} (never its portrait id), the generated deck the open Build Deck",
+            decks.Count == row.Decks.Count && decks[0].Unlocked && decks[0].IsDefault && decks.Skip(1).Take(decks.Count - 2).All(d => !d.Unlocked && d.UnlockHint.Contains(row.Name) && !d.UnlockHint.Contains("DALA_"))
+            && decks.Last().IsBuild && decks.Last().Unlocked && decks.Last().Name == "Build Deck" && decks.Last().CardIds.Count == 0,
             string.Join(" | ", decks.Select(d => d.Name + ":" + d.UnlockHint)));
         var ps = DungeonRunCatalog.Powers(run, fresh, h.Row, id => transport.TryGetValue(id, out var sent) ? sent : id);
         Check($"T23 Powers({h.Row}): the basic power open (sent as its HERO_ id), HP1 and HP2 locked, named, costed and texted as the client prints them",

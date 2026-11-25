@@ -68,7 +68,7 @@ DungeonRunState ReachFloor(DungeonRunClass cls, int floor, long seed)
 {
     int k = sweep++;
     int n = data.Classes.Count; // 11: k < 33 covers every class x deck and every class x power once
-    var s = run.NewRun(all, cls.Id, cls.Decks[(k / n) % cls.Decks.Count], cls.Powers[((k / n) + (k / (3 * n))) % cls.Powers.Count], seed, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), seed).FirstOrDefault());
+    var s = run.NewRun(all, cls.Id, cls.StartDecks(run.Data)[(k / n) % cls.StartDecks(run.Data).Count], cls.Powers[((k / n) + (k / (3 * n))) % cls.Powers.Count], seed, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), seed).FirstOrDefault());
     var scratch = new DungeonRunProfile();
     if (actRun)
     {

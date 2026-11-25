@@ -998,7 +998,7 @@ Guard("W", () =>
     // Step 9 (lane R, C2): the act I anomaly offer NewRun stores is drawn after the board shrine is set (the ordering fix), so the
     // stored offer itself never holds No-Face (W16 above reads the candidates afterwards, which held before the fix too).
     int storedOffers = 0, storedNoFace = 0;
-    var shrineDecks = data.Decks.Where(x => x.Shrine != null && data.FindClass(x.Class) != null).ToList();
+    var shrineDecks = data.Decks.Where(x => x.Shrine != null && !x.Build && data.FindClass(x.Class) != null).ToList();
     foreach (var deck in shrineDecks)
         for (int k = 0; k < 20; k++)
         {

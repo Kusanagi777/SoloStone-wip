@@ -310,9 +310,10 @@ foreach (var st in starters)
     {
         var h = DungeonRunCatalog.Heroes(run, fresh, primary).FirstOrDefault(x => x.Id == row);
         var decks = DungeonRunCatalog.Decks(run, fresh, row);
-        Check($"T3 picker: Heroes({primary}) offers {row} ({hero}, Tombs, dual, 30 Health, 3 powers, 4 decks); its first deck open, the rest locked",
+        // Build Deck: the generated Random deck (last) is the row's Build Deck option, always unlocked (c-sched-9 BD10).
+        Check($"T3 picker: Heroes({primary}) offers {row} ({hero}, Tombs, dual, 30 Health, 3 powers, 4 decks); its first deck open, the fixed rest locked, the Build Deck open",
             h != null && h.IsHero && h.IsDual && h.Adventure == "Tombs" && h.HeroCardId == hero && h.Health == 30 && h.PowerCount == 3 && h.DeckCount == 4
-            && decks.Count == 4 && decks[0].Unlocked && decks[0].IsDefault && decks.Skip(1).All(d => !d.Unlocked) && decks[0].CardIds.Count == 10,
+            && decks.Count == 4 && decks[0].Unlocked && decks[0].IsDefault && decks.Skip(1).Take(2).All(d => !d.Unlocked) && decks[3].IsBuild && decks[3].Unlocked && decks[0].CardIds.Count == 10,
             string.Join(" | ", decks.Select(d => d.Name + ":" + d.Unlocked)));
     }
     var floor5 = new DungeonRunProfile(); floor5.Heroes.Add(new DungeonRunHeroStats { Class = "PALADIN_SHAMAN", BestFloor = 5 }); run.RefreshUnlocks(floor5);

@@ -297,7 +297,17 @@ internal static class DungeonRunValidator
             string where = "deck " + deck.Id;
             if (!deckIds.Add(deck.Id)) Fail(where, "listed twice");
             var owner = data.FindClass(deck.Class);
-            if (deck.IsGenerated)
+            if (deck.Build)
+            {
+                // A build deck (Build Deck): the player builds the starter, so it lists no cards and has no generator; it shows
+                // a display card and is never locked. The class loop below counts it apart from the fixed decks.
+                if (deck.Cards.Count != 0) Fail(where, "a build deck lists cards");
+                if (deck.IsGenerated) Fail(where, "a build deck has no generator");
+                if (deck.DisplayCard == null) Fail(where, "a build deck needs a displayCard");
+                else { Find(deck.DisplayCard, where + " display card"); Client(deck.DisplayCard, where + " display card"); }
+                if (deck.Unlock != null) Fail(where, "a build deck is never locked");
+            }
+            else if (deck.IsGenerated)
             {
                 // A generated starter (phase 6): no listed cards, a known generator, a display card, and a pool big enough
                 // for a starter of every class it draws from (DungeonRun.GeneratorPool, the same predicate NewRun uses).
@@ -461,13 +471,19 @@ internal static class DungeonRunValidator
             foreach (string power in cls.PowerUnlocks.Keys.Where(p => !cls.Powers.Contains(p))) Fail(where, $"unlock for unlisted power {power}");
             // A dual-class row (a Tombs explorer) and any named hero row ship the original starters that pass the pool checks:
             // 1 to DeckOptions fixed decks, and a hero row at most one generated deck beside them (the Heist and Tombs
-            // "Random" deck, the adventure's fourth choice).
+            // "Random" deck, the adventure's fourth choice). A class row ships exactly DeckOptions fixed decks. Every row has
+            // exactly one build-able deck (Build Deck), its last: its generated deck, or else a build deck; neither counts as fixed.
             bool someDecks = cls.IsDual || cls.IsHero;
-            int generatedDecks = cls.IsHero ? cls.Decks.Count(d => data.FindDeck(d)?.IsGenerated == true) : 0;
-            int fixedDecks = cls.Decks.Count - generatedDecks;
-            if (someDecks ? fixedDecks < 1 || fixedDecks > data.Rules.DeckOptions : cls.Decks.Count != data.Rules.DeckOptions)
-                Fail(where, $"has {fixedDecks} {(generatedDecks > 0 ? "fixed " : "")}decks, expected {(someDecks ? "1 to " : "")}{data.Rules.DeckOptions}");
+            var rowDecks = cls.Decks.Select(data.FindDeck).ToList();
+            int generatedDecks = cls.IsHero ? rowDecks.Count(d => d != null && d.IsGenerated && !d.Build) : 0;
+            int buildDecks = rowDecks.Count(d => d != null && d.Build);
+            int fixedDecks = cls.Decks.Count - generatedDecks - buildDecks;
+            if (someDecks ? fixedDecks < 1 || fixedDecks > data.Rules.DeckOptions : fixedDecks != data.Rules.DeckOptions)
+                Fail(where, $"has {fixedDecks} {(generatedDecks + buildDecks > 0 ? "fixed " : "")}decks, expected {(someDecks ? "1 to " : "")}{data.Rules.DeckOptions}");
             if (generatedDecks > 1) Fail(where, $"has {generatedDecks} generated decks, expected at most 1");
+            int buildable = rowDecks.Count(d => d != null && d.IsBuildable);
+            if (buildable != 1) Fail(where, $"has {buildable} build-able decks (build or generated), expected 1");
+            else if (rowDecks[rowDecks.Count - 1]?.IsBuildable != true) Fail(where, $"its build-able deck {cls.BuildDeck(data).Id} must be its last deck");
             // Signatures (Tombs loadouts): each a signature treasure of this row alone, scripted and admitted (the treasure loop
             // checks its content and admission); the offer size is 1 to the signature count.
             foreach (string sig in cls.Signatures)
@@ -493,7 +509,10 @@ internal static class DungeonRunValidator
                     foreach (string id in deck.Cards.Distinct()) PoolCard(id, where + " deck " + deck.Id, runClasses, catalogRun: cls.IsHero);
                 if (deck.IsGenerated && !cls.IsHero) Fail(where, $"deck {deck.Id} is generated; only a hero row may have one");
                 if (i == 0 && deck.Unlock != null) Fail(where, $"default deck {deck.Id} must not need an unlock");
-                if (i > 0 && deck.Unlock == null) Fail(where, $"deck {deck.Id} has no unlock");
+                if (i > 0 && deck.Unlock == null && !deck.Build) Fail(where, $"deck {deck.Id} has no unlock");
+                // Rikkar's build deck names the board shrine of the row's default deck (a built run starts with it on the board).
+                if (deck.Build && i > 0 && deck.Shrine != data.FindDeck(cls.Decks[0])?.Shrine)
+                    Fail(where, $"build deck {deck.Id} names shrine {deck.Shrine ?? "(none)"}, the default deck {cls.Decks[0]} {data.FindDeck(cls.Decks[0])?.Shrine ?? "(none)"}");
             }
         }
         foreach (var deck in data.Decks)
@@ -1020,8 +1039,9 @@ internal static class DungeonRunValidator
             else if (row.ClassSet.Count != 1) Fail(where, $"shrine {deck.Shrine}: a board shrine needs a single-class row ({row.Id} has {row.ClassSet.Count})");
             else if (card.Class.ToString() != row.ClassSet[0]) Fail(where, $"shrine {deck.Shrine} is {card.Class}, the run class is {row.ClassSet[0]}");
             if (card[(GameTag)1099] <= 0) Fail(where, $"shrine {deck.Shrine} names no starter deck (tag 1099)");
+            // A build deck's id names no shrine: it copies its row's default deck's (the class loop of Validate checks that).
             int underscore = deck.Id.LastIndexOf('_');
-            if (underscore < 0 || "TRLA_" + deck.Id.Substring(underscore + 1) != deck.Shrine) Fail(where, $"shrine {deck.Shrine} is not the shrine the deck id names");
+            if (!deck.Build && (underscore < 0 || "TRLA_" + deck.Id.Substring(underscore + 1) != deck.Shrine)) Fail(where, $"shrine {deck.Shrine} is not the shrine the deck id names");
             var form = Find(deck.Shrine + "t");
             if (form == null || form.Type != CardType.MINION) Fail(where, $"shrine {deck.Shrine} has no dormant form {deck.Shrine}t");
             else if (form[(GameTag)1132] != card.AssetId) Fail(where, $"dormant form {form.Id} points to dbf {form[(GameTag)1132]}, not {deck.Shrine} ({card.AssetId})");

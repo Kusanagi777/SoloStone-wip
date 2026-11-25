@@ -74,7 +74,7 @@ foreach (string d in new[] { reloadDir, crashDir }) { if (Directory.Exists(d)) D
 string[] schedules = { "acts-v3h", "acts-v3t", "acts-v4h", "acts-v4t" };
 int stride = int.TryParse(Environment.GetEnvironmentVariable("C_LONGRUN9_STRIDE"), out int st) && st > 1 ? st : 1;
 if (stride > 1) Note("C_LONGRUN9_STRIDE " + stride + ": a partial run set");
-var loadouts = data.Classes.SelectMany(c => c.Decks.Select(deck => (Row: c, Deck: deck))).ToList();
+var loadouts = data.Classes.SelectMany(c => c.StartDecks(data).Select(deck => (Row: c, Deck: deck))).ToList();
 var tenRows = data.Classes.Where(c => c.Adventure == "MonsterHunt" || c.Adventure == "Heist" || c.Adventure == "Rumble").ToList();
 
 // D4's documented exemptions (LongRunWalker.Exemptions): three class failures a run deck holds by design, each with its reason.
@@ -184,7 +184,7 @@ Guard("W", () =>
         {
             var row = tenRows[ri];
             DungeonRunProfile pa = All(), pb = All();
-            for (int k = 0; k < 10; k++) WalkPair(t, schedule, row, row.Decks[k % row.Decks.Count], 9500000 + 1000000L * si + 100 * ri + k, k % 2 == 0, ref pa, ref pb);
+            for (int k = 0; k < 10; k++) WalkPair(t, schedule, row, row.StartDecks(data)[k % row.StartDecks(data).Count], 9500000 + 1000000L * si + 100 * ri + k, k % 2 == 0, ref pa, ref pb);
         }
         Note($"W {schedule}: {t.Runs} runs ({t.Victories} Victory, {t.Defeats} scripted Defeat, {t.Excluded} left out by FinaleExcludes), {t.Steps} steps, {t.Fights} fights,"
             + $" {t.Escapes} escapes, {t.Restarts} restarts; {t.Reloads} reloads; {t.Crashes} crash restages (hero switch {t.CrashSwitch}, relay {t.CrashRelay},"

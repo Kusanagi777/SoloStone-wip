@@ -559,4 +559,52 @@ Guard("BD", () =>
         full == "size" && third == "copies AT_006" && fine == null, full + " / " + third + " / " + (fine ?? "null"));
 });
 
+// Build Deck data (Task 3): every enabled row (class rows, hero rows, enabled catalog rows: data.Classes) has exactly one
+// build-able deck, its last: a "build" deck (no cards, a display card, no unlock, id "<row>_build") on the class, Rikkar and
+// Monster Hunt rows, the generated Random deck on the Heist and Tombs rows. The catalog shows it as "Build Deck", unlocked.
+Guard("BDD", () =>
+{
+    var bad = new List<string>();
+    foreach (var row in data.Classes)
+    {
+        var decks = row.Decks.Select(data.FindDeck).ToList();
+        var build = row.BuildDeck(data);
+        bool generatedRow = row.Adventure == "Heist" || row.Adventure == "Tombs";
+        bool ok = build != null && decks.Count(d => d != null && d.IsBuildable) == 1 && ReferenceEquals(decks.Last(), build)
+            && build.Cards.Count == 0 && build.DisplayCard != null && build.Class == row.Id
+            && (generatedRow
+                ? build.IsGenerated && !build.Build
+                : build.Build && !build.IsGenerated && build.Unlock == null && build.Id == row.Id.ToLowerInvariant() + "_build")
+            && (row.IsHero || decks.Count(d => d != null && !d.IsBuildable) == data.Rules.DeckOptions)
+            && build.Shrine == (row.Adventure == "Rumble" ? data.FindDeck(row.DefaultDeck).Shrine : null)
+            && (row.Adventure != "Rumble" || build.Shrine != null);
+        if (!ok) bad.Add(row.Id + ":" + (build?.Id ?? "none"));
+    }
+    var errs = DungeonRunValidator.Validate(data, null).Where(e => e.Contains("build", StringComparison.OrdinalIgnoreCase)).ToList();
+    var mage = data.FindClass("MAGE");
+    mage.Decks.Remove("mage_build");
+    List<string> missing;
+    try { missing = DungeonRunValidator.Validate(data, null); } finally { mage.Decks.Add("mage_build"); }
+    Check($"BD9 each of the {data.Classes.Count} enabled rows has exactly one build-able deck, its last (a build deck on the class, Rikkar and Monster Hunt rows, "
+        + "the generated deck on Heist and Tombs; Rikkar's names the default deck's shrine); the validator accepts them and refuses a row without one",
+        data.Classes.Count == 37 && bad.Count == 0 && errs.Count == 0 && missing.Any(e => e.StartsWith("class MAGE: has 0 build-able decks", StringComparison.Ordinal)),
+        string.Join(" ", bad) + " | " + string.Join(" | ", errs.Concat(missing.Where(e => e.Contains("MAGE"))).Take(6)));
+
+    var run = new DungeonRun(data);
+    var fresh = new DungeonRunProfile();
+    var wrong = new List<string>();
+    foreach (var row in data.Classes)
+    {
+        var options = DungeonRunCatalog.Decks(run, fresh, row.Id);
+        var last = options.LastOrDefault();
+        bool ok = options.Count == row.Decks.Count && last != null && last.IsBuild && last.Id == row.BuildDeck(data)?.Id && last.Name == "Build Deck"
+            && last.Description == "Build a 10-card deck from your collection." && last.Unlocked && last.CardIds.Count == 0 && !last.IsDefault
+            && options.Take(options.Count - 1).Select((o, i) => (o, d: data.FindDeck(row.Decks[i]))).All(p => !p.o.IsBuild && p.o.Id == p.d.Id && p.o.Name == p.d.Name
+                && p.o.Description == p.d.Description && p.o.CardIds.SequenceEqual(p.d.Cards) && p.o.Unlocked == run.IsUnlocked(fresh, p.d.Unlock) && p.o.UnlockKey == p.d.Unlock);
+        if (!ok) wrong.Add(row.Id);
+    }
+    Check("BD10 DungeonRunCatalog.Decks lists each row's Build Deck option last (\"Build Deck\", unlocked on a fresh profile, no cards, IsBuild), the other decks as before",
+        wrong.Count == 0, string.Join(" ", wrong));
+});
+
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");
