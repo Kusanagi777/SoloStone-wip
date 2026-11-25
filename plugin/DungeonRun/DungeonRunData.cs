@@ -1169,6 +1169,11 @@ internal sealed class DungeonRunModifier
 
 internal sealed class DungeonRunSchedule
 {
+    /// <summary>
+    /// The smallest boss deck a schedule's "bossDeck" may name (NativeMatch's encounter floor; DungeonRun.MinBossDeck). It lives
+    /// here so the validator reads it without DungeonRun (tools/dungeon-run-catalog compiles the data and the validator only).
+    /// </summary>
+    internal const int MinBossDeck = 10;
     internal string Id;
     internal int DeckMin = 10, DeckMax = 50;
     internal List<DungeonRunAct> Acts = new List<DungeonRunAct>();

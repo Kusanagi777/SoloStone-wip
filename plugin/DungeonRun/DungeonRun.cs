@@ -29,8 +29,8 @@ internal sealed partial class DungeonRun
     internal const long ScheduleStream = 13, EncounterStream = 14, AnomalyStream = 15, TwistStream = 16;
     // The boss's starting deck cut to its floor's size (act "bossDeck"; component: the floor).
     internal const long BossDeckStream = 17;
-    /// <summary>The smallest boss deck a schedule's "bossDeck" may name (NativeMatch's encounter floor).</summary>
-    internal const int MinBossDeck = 10;
+    /// <summary>The smallest boss deck a schedule's "bossDeck" may name (NativeMatch's encounter floor): <see cref="DungeonRunSchedule.MinBossDeck"/>.</summary>
+    internal const int MinBossDeck = DungeonRunSchedule.MinBossDeck;
     /// <summary>Rules an anomaly node rolls (the offer adds "none").</summary>
     internal const int AnomalyOptions = 2;
     /// <summary>ULDA_720 Battle Scars (a run-scope rule): the run hero starts at <see cref="BattleScarsHealth"/> and keeps its damage between fights.</summary>

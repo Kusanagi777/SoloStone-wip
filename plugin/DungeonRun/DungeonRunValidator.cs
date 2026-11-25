@@ -1207,7 +1207,7 @@ internal static class DungeonRunValidator
                 if (a.IsFinale && !a.BundleAfterTreasure) errors.Add($"schedule {x.Id} act {a.Id}: a finale drafts no bundle (bundleAfterTreasure)");
                 if (a.TurnCap != 0 && (a.TurnCap < 1 || a.TurnCap > 1000)) errors.Add($"schedule {x.Id} act {a.Id}: turnCap {a.TurnCap} is outside 1..1000");
                 if (a.BossDeck.Length > 0 && a.BossDeck.Length != a.Floors) errors.Add($"schedule {x.Id} act {a.Id}: bossDeck has {a.BossDeck.Length} values, needs {a.Floors}");
-                if (a.BossDeck.Any(n => n < DungeonRun.MinBossDeck || n > 60)) errors.Add($"schedule {x.Id} act {a.Id}: bossDeck values must be {DungeonRun.MinBossDeck} to 60");
+                if (a.BossDeck.Any(n => n < DungeonRunSchedule.MinBossDeck || n > 60)) errors.Add($"schedule {x.Id} act {a.Id}: bossDeck values must be {DungeonRunSchedule.MinBossDeck} to 60");
             }
             bool usesV3 = x.MixesProvenance || x.Acts.Any(a => a.AnomalyAtStart || a.TwistPool.Count > 0 || a.IsFinale
                 || a.Combat.Any(c => schedules.PoolSets.ContainsKey(c.Pool)) || a.MajorPool != null && schedules.PoolSets.ContainsKey(a.MajorPool));
