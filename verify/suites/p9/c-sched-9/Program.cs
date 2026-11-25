@@ -516,7 +516,9 @@ Guard("BD", () =>
 
     string hero = DungeonRunBuild.CardReason("BOT_238", mage, pol), fabled = DungeonRunBuild.CardReason("TIME_009", mage, pol),
         companion = DungeonRunBuild.CardReason("TIME_009t1", mage, pol);
-    Check("BD2 a hero card is \"hero\"; a Fabled primary and a companion are \"fabled\"", hero == "hero" && fabled == "fabled" && companion == "fabled",
+    // The companion is not collectible, and the collectible rule comes first (BD17).
+    Check("BD2 a hero card is \"hero\"; a Fabled primary is \"fabled\"; its companion is refused (\"not-collectible\")",
+        hero == "hero" && fabled == "fabled" && companion == "not-collectible",
         hero + " / " + fabled + " / " + companion);
 
     var r10 = DungeonRunBuild.DeckReasons(legal10, mage, 10, null, null, pol);
@@ -661,9 +663,10 @@ Guard("BDR", () =>
     string notBuild = Refusal(() => run.NewRun(fresh, "MAGE", "mage_rimeward", data.FindClass("MAGE").Powers[0], 4250, builtCards: mageList));
     string noList = Refusal(() => run.NewRun(fresh, "MAGE", "mage_build", data.FindClass("MAGE").Powers[0], 4250));
     string locked = Refusal(() => run.NewRun(fresh, "DALA_Rakanishu", "heist_mage_random", data.FindClass("DALA_Rakanishu").Powers[0], 4250));
-    Check("BD12 a built list of 9 cards is refused with \"size 9 of 10\", one with a Warrior card with \"class AT_064\"; a built list on a non-build deck and a plain "
-        + "start on a build deck are refused; a plain start on the locked Heist generated deck is still LockedDeck",
-        nine.Contains("size 9 of 10") && warrior.Contains("class AT_064") && notBuild != "started" && noList != "started" && locked == DungeonRun.LockedDeck,
+    Check("BD12 a built list of 9 cards is refused with \"size 9 of 10\", one with a Warrior card with \"class AT_064\"; a built list on a non-build deck is "
+        + "refused with NotBuildDeck, a plain start on a build deck with NeedsBuiltList; a plain start on the locked Heist generated deck is still LockedDeck",
+        nine.Contains("size 9 of 10") && warrior.Contains("class AT_064") && notBuild == DungeonRun.NotBuildDeck && noList == DungeonRun.NeedsBuiltList
+            && locked == DungeonRun.LockedDeck,
         nine + " / " + warrior + " / " + notBuild + " / " + noList + " / " + locked);
 
     var tess = data.FindClass("GILA_500h3");
@@ -678,9 +681,9 @@ Guard("BDR", () =>
     var mageTags = run.TreasureAffinityTags(mage, mageCls);
     var plainTags = run.TreasureAffinityTags(plain, mageCls);
     var huntTags = run.TreasureAffinityTags(hunt, tess);
-    Check("BD13 a built Monster Hunt run (Tess) has every treasure scoped to its row's decks in scope (GILA_501 among them; not when BuiltDeck is off); "
+    Check("BD13 a built Monster Hunt run (Tess) has every treasure scoped to its row's decks in scope (43, GILA_501 among them; not when BuiltDeck is off); "
         + "a built run's deck tags are the union of its row's decks' tags (MAGE: minions from mage_kindled, which a mage_rimeward run lacks)",
-        scoped.Contains("GILA_501") && inScope.SequenceEqual(scoped) && !gilaPlain && mageTags.SetEquals(mageUnion) && mageTags.Contains("minions")
+        scoped.Count == 43 && scoped.Contains("GILA_501") && inScope.SequenceEqual(scoped) && !gilaPlain && mageTags.SetEquals(mageUnion) && mageTags.Contains("minions")
             && !plainTags.Contains("minions") && huntTags.IsSupersetOf(new[] { "spells", "weapons" }),
         "scoped " + string.Join(",", scoped) + " in " + string.Join(",", inScope) + " plain " + gilaPlain + " | mage " + string.Join(",", mageTags.OrderBy(x => x))
             + " plain " + string.Join(",", plainTags.OrderBy(x => x)) + " hunt " + string.Join(",", huntTags.OrderBy(x => x)));
@@ -787,6 +790,80 @@ Guard("BDP", () =>
         + "none at 10",
         reach == 7 && regrouped == 6 && legendGroup == 1 && notEnough == "Not enough cards in your collection for this hero (7 of 10)" && enough == null,
         reach + " / " + regrouped + " / " + legendGroup + " / " + (notEnough ?? "null") + " / " + (enough ?? "null"));
+});
+
+// Build Deck final-review fixes: the collectible rule, the win summary and run hub names, and the run-start refusal in words.
+Guard("BDF", () =>
+{
+    var pol = OfflinePoolPolicy.Load();
+    var mage = data.FindClass("MAGE").ClassSet;
+    string[] mageList = { "AT_006", "AT_006", "AT_007", "AT_007", "AT_003", "AT_003", "AT_082", "AT_082", "AT_083", "AT_083" };
+
+    // CS2_mirror: Mirror Image's token (a Mage minion), in the engine and not collectible.
+    var token = SabberStoneCore.Model.Cards.FromId("CS2_mirror");
+    string tokenReason = DungeonRunBuild.CardReason("CS2_mirror", mage, pol);
+    var tokenDeck = DungeonRunBuild.DeckReasons(mageList.Take(9).Concat(new[] { "CS2_mirror" }).ToList(), mage, 10, null, null, pol);
+    string tokenAdd = NativeDungeonRunText.BuildAddRefusal("Mirror Image", "not-collectible CS2_mirror");
+    Check("BD17 a non-collectible card (the token CS2_mirror) is \"not-collectible\" before any other rule, DeckReasons names it, and the add refusal says "
+        + "\"Cannot add Mirror Image: not a collectible card.\"",
+        token != null && !token.Collectible && tokenReason == "not-collectible" && tokenDeck.SequenceEqual(new[] { "not-collectible CS2_mirror" })
+            && tokenAdd == "Cannot add Mirror Image: not a collectible card.",
+        (token == null ? "no card" : "collectible " + token.Collectible) + " / " + (tokenReason ?? "null") + " / " + string.Join("|", tokenDeck) + " / " + tokenAdd);
+
+    var run = new DungeonRun(data);
+    // Every Heist/Tombs generated deck keeps its unlock key in data; the win summary never names one (it shows as Build Deck).
+    var generated = data.Decks.Where(d => d.IsBuildable && d.Unlock != null).ToList();
+    var named = generated.Where(d => (DungeonRunCatalog.UnlockName(run, d.Unlock) ?? "").Contains(d.Name)).Select(d => d.Id + ":" + DungeonRunCatalog.UnlockName(run, d.Unlock)).ToList();
+    string rakanishu = DungeonRunCatalog.UnlockName(run, "dala_rakanishu_win");
+    Check($"BD18 UnlockName names no build-able deck: \"dala_rakanishu_win\" names Rakanishu's power, not \"Random Mage Deck\", and none of the {generated.Count} "
+        + "generated decks with an unlock key is named; a fixed deck's unlock is still named",
+        generated.Count > 0 && named.Count == 0 && rakanishu != null && !rakanishu.Contains("deck)") && rakanishu.Contains("(Rakanishu power)")
+            && DungeonRunCatalog.UnlockName(run, "mage_floor3") == "Kindled Sparks (Mage deck)",
+        (rakanishu ?? "null") + " | " + string.Join(" | ", named));
+
+    var fresh = new DungeonRunProfile();
+    var heist = run.NewRun(fresh, "DALA_Rakanishu", "heist_mage_random", data.FindClass("DALA_Rakanishu").Powers[0], 4260, builtCards: mageList);
+    var builtMage = run.NewRun(fresh, "MAGE", "mage_build", data.FindClass("MAGE").Powers[0], 4260, builtCards: mageList);
+    var plain = run.NewRun(fresh, "MAGE", "mage_rimeward", data.FindClass("MAGE").Powers[0], 4260);
+    var legacy = new DungeonRunState { Class = "MAGE" };
+    string[] deckNames =
+    {
+        DungeonRunCatalog.RunDeckName(run, heist), DungeonRunCatalog.RunDeckName(run, builtMage), DungeonRunCatalog.RunDeckName(run, plain),
+        DungeonRunCatalog.RunDeckName(run, legacy) ?? "null", DungeonRunCatalog.RunDeckName(run, null) ?? "null",
+    };
+    Check("BD19 RunDeckName: a built Heist run (StarterDeck heist_mage_random) and a built MAGE run are \"Build Deck\", a plain run its deck's name, a run "
+        + "with no starter deck id and no run null",
+        heist.StarterDeck == "heist_mage_random" && deckNames.SequenceEqual(new[] { "Build Deck", "Build Deck", data.FindDeck("mage_rimeward").Name, "null", "null" }),
+        string.Join(" | ", deckNames));
+
+    // The run start re-checks the list against the live collection: a delegate that no longer owns a second Dalaran Aspirant.
+    string Name(string id) { try { return SabberStoneCore.Model.Cards.FromId(id)?.Name; } catch (Exception) { return null; } }
+    var dropped = DungeonRunBuild.DeckReasons(mageList, mage, 10, id => id == "AT_006" ? 1 : 2, null, pol);
+    string droppedText = NativeDungeonRunText.BuildStartRefusal(dropped, Name);
+    string aspirant = Name("AT_006");
+    string[] texts =
+    {
+        droppedText,
+        NativeDungeonRunText.BuildStartRefusal(new[] { "size 9 of 10", "copies AT_006", "legendary AT_009", "runes" }, Name),
+        NativeDungeonRunText.BuildStartRefusal(new[] { "class AT_064", "not-collectible CS2_mirror", "hero BOT_238", "fabled TIME_009", "rune-class CATA_156" }, Name),
+        NativeDungeonRunText.BuildStartRefusal(new[] { "missing XX_none", "admission:secret-generated AT_006" }, id => null),
+        NativeDungeonRunText.BuildStartRefusal(new string[0], Name) ?? "null",
+    };
+    string[] wantTexts =
+    {
+        "That deck cannot start a run: " + aspirant + ": you no longer own that many copies.",
+        "That deck cannot start a run: it has 9 of 10 cards; " + aspirant + ": at most 2 copies of a card; " + Name("AT_009") + ": at most 1 copy of a legendary; "
+            + "a Death Knight deck needs at most 3 runes.",
+        "That deck cannot start a run: " + Name("AT_064") + ": not a card of this hero's class; Mirror Image: not a collectible card; " + Name("BOT_238")
+            + ": a hero card; " + Name("TIME_009") + ": a Fabled card; " + Name("CATA_156") + ": a rune card, only in a Death Knight deck.",
+        "That deck cannot start a run: a card: an unknown card; a card: not allowed in a run.",
+        "null",
+    };
+    Check("BD20 BuildStartRefusal words the run-start reasons with card names, no engine ids or codes: a collection that no longer owns a second Dalaran "
+        + "Aspirant gives \"That deck cannot start a run: Dalaran Aspirant: you no longer own that many copies.\"; every DeckReasons code has words; no reasons is null",
+        dropped.SequenceEqual(new[] { "owned AT_006" }) && aspirant == "Dalaran Aspirant" && texts.SequenceEqual(wantTexts)
+            && texts.Take(3).All(t => !t.Contains("AT_") && !t.Contains("CS2_") && !t.Contains("BOT_") && !t.Contains("TIME_") && !t.Contains("CATA_")),
+        string.Join(" | ", texts));
 });
 
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");

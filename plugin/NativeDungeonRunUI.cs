@@ -149,6 +149,14 @@ internal static class NativeDungeonRunUI
 
     internal static void Close() => Guard(() => popup?.Hide());
 
+    // A click outside the board closes the menu, except on the Build step with cards picked: closing would drop the list
+    // (Open starts a new flow). Back still leaves the Build step.
+    internal static void BlockerRelease()
+    {
+        if (step == Step.Build && built != null && built.Count > 0) return;
+        Close();
+    }
+
     // Ticked by NativeUIProbe.Update: applies deferred rebuilds (never inside a row's own release handler) and the reopen.
     internal static void Update() => Guard(() => {
         popup?.ApplyRefresh();
@@ -637,10 +645,12 @@ internal static class NativeDungeonRunUI
             result.Row(NativeDungeonRunText.BuildCardIdPrefix + id, NativeDungeonRunText.BuildCardLabel(card, built.Count(x => x == id)), () => AddBuildCard(id));
         }
         Paging(result, count, CardsPerPage);
-        result.Row(NativeDungeonRunText.BuildRemoveId, NativeDungeonRunText.BuildRemoveLabel, RemoveLastBuildCard, built.Count > 0);
+        // A disabled plank carries no action (as the locked deck and power rows): the disabled state alone never has to stop a click.
+        bool any = built.Count > 0;
+        result.Row(NativeDungeonRunText.BuildRemoveId, NativeDungeonRunText.BuildRemoveLabel, any ? RemoveLastBuildCard : (Action)null, any);
         bool legal = cls != null && DungeonRunBuild.DeckReasons(built, cls.ClassSet, size, BuildOwned, BuildGroup,
             SabberStoneCore.Model.OfflinePoolPolicy.Load()).Count == 0;
-        result.Row(NativeDungeonRunText.BuildDoneId, NativeDungeonRunText.BuildDoneLabel, BuildDone, legal);
+        result.Row(NativeDungeonRunText.BuildDoneId, NativeDungeonRunText.BuildDoneLabel, legal ? BuildDone : (Action)null, legal);
     }
 
     private static void RunHub(RunPage result, DungeonRun rules, DungeonRunState state)
@@ -696,9 +706,10 @@ internal static class NativeDungeonRunUI
             .Concat(rules.ActiveGlobalRules(state).Select(r => NativeDungeonRunText.RuleName(r.Id))));
         if (rulesLine != null) result.Lines.Add(rulesLine);
         if (!string.IsNullOrEmpty(boss.Power)) result.Lines.Add(Described(boss.Power));
-        // A migrated version-1 run has no starter deck id: class and power only.
+        // A migrated version-1 run has no starter deck id: class and power only. A built run is "Build Deck" (on a Heist or Tombs
+        // row too, whose StarterDeck is the generated deck).
         result.Lines.Add(NativeDungeonRunText.ChoiceLine(rules.Data.FindClass(state.Class)?.Name ?? state.Hero,
-            rules.Data.FindDeck(state.StarterDeck)?.Name, Named(rules.PlayerPower(state))));
+            DungeonRunCatalog.RunDeckName(rules, state), Named(rules.PlayerPower(state))));
         result.Lines.Add(NativeDungeonRunText.DeckLine(state.Deck.Count));
         result.Lines.Add(NativeDungeonRunText.TreasureCountLine(state.Treasures.Count + state.ActiveTreasures.Count));
         string shrineLine = ShrineLine(state);
@@ -949,7 +960,7 @@ internal sealed class NativeDungeonRunMenu : ButtonListMenu
         try { NativeDungeonRunUI.Guard(() => base.Hide()); } finally { ownsDialog = false; }
     }
     protected override void OnDestroy() => NativeDungeonRunUI.Guard(() => { Hide(); base.OnDestroy(); });
-    protected override void OnBlockerRelease(UIEvent e) => NativeDungeonRunUI.Close();
+    protected override void OnBlockerRelease(UIEvent e) => NativeDungeonRunUI.BlockerRelease();
     protected override void LayoutMenu() => NativeDungeonRunUI.Guard(LayoutRun);
 
     private static Rect Union(Rect a, Rect b) =>

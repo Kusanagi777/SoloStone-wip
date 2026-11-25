@@ -286,12 +286,23 @@ internal static class DungeonRunCatalog
         return cls != null && cls.IsHero && !cls.IsDual && !string.IsNullOrEmpty(cls.Name) ? cls.Name : NativeDungeonRunText.ClassName(rowId);
     }
 
-    /// <summary>What an unlock key opens, for the run summary ("Kindled Sparks (Mage deck)"); null when it opens nothing.</summary>
+    /// <summary>
+    /// How the run hub names a run's starter deck: <see cref="NativeDungeonRunText.BuildDeckName"/> for a built run (its StarterDeck
+    /// is the row's build deck, on a Heist or Tombs row the generated deck, which the pickers show as Build Deck too), else the
+    /// starter deck's name; null for no run or a run with no starter deck id (a migrated version-1 run).
+    /// </summary>
+    internal static string RunDeckName(DungeonRun rules, DungeonRunState state) =>
+        state == null ? null : state.BuiltDeck ? NativeDungeonRunText.BuildDeckName : rules?.Data.FindDeck(state.StarterDeck)?.Name;
+
+    /// <summary>
+    /// What an unlock key opens, for the run summary ("Kindled Sparks (Mage deck)"); null when it opens nothing. A build-able deck
+    /// is never named: Build Deck is always open, and a Heist/Tombs generated deck keeps its unlock key in data only.
+    /// </summary>
     internal static string UnlockName(DungeonRun rules, string unlockKey)
     {
         if (rules == null || unlockKey == null) return null;
         var names = new List<string>();
-        foreach (var deck in rules.Data.Decks.Where(d => d.Unlock == unlockKey))
+        foreach (var deck in rules.Data.Decks.Where(d => d.Unlock == unlockKey && !d.IsBuildable))
             names.Add(NativeDungeonRunText.UnlockedDeck(deck.Name, RowName(rules, deck.Class)));
         foreach (var cls in rules.Data.Classes)
             foreach (string power in cls.Powers.Where(p => cls.PowerUnlock(p) == unlockKey))

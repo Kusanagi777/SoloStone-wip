@@ -9,7 +9,8 @@ using SabberStoneCore.Model;
 internal static class DungeonRunBuild
 {
     /// <summary>
-    /// Why a card may not be in a deck of a run with <paramref name="classSet"/>, or null when it may: "hero" (a hero card),
+    /// Why a card may not be in a deck of a run with <paramref name="classSet"/>, or null when it may: "missing" (not in the card
+    /// data), "not-collectible" (a token, a treasure shell or any other card a collection cannot hold), "hero" (a hero card),
     /// "fabled" (a Fabled primary or companion), "rune-class" (a rune cost outside a Death Knight run), else the first
     /// <see cref="DungeonRunValidator.PoolCardReason"/> code (catalog-run checks).
     /// </summary>
@@ -18,6 +19,7 @@ internal static class DungeonRunBuild
         Card card;
         try { card = Cards.FromId(id); } catch { card = null; }
         if (card == null) return "missing";
+        if (!card.Collectible) return "not-collectible";
         if (card.Type == CardType.HERO) return "hero";
         if (SabberStoneCore.Actions.FabledRules.IsFabled(id) || SabberStoneCore.Actions.FabledRules.IsCompanion(id)) return "fabled";
         if (DungeonRunValidator.HasRuneCost(id) && !classSet.Contains("DEATHKNIGHT")) return "rune-class";

@@ -288,7 +288,8 @@ internal static class DungeonRunRuntime
     /// <param name="signatureId">A hero row with signatures (phase 6): one of <see cref="SignaturesFor"/>; else null.</param>
     /// <param name="builtCards">Build Deck: the engine card ids the player built (<paramref name="deckId"/> the row's build deck),
     /// else null. Re-checked first with <see cref="DungeonRunBuild.DeckReasons"/> against the active profile's owned counts and
-    /// copy groups (the run's own check groups copies by id and skips ownership); the reasons are the refusal.</param>
+    /// copy groups (the run's own check groups copies by id and skips ownership); the reasons, in words with card names
+    /// (<see cref="NativeDungeonRunText.BuildStartRefusal"/>), are the refusal.</param>
     internal static string NewRun(string classId, string deckId, string powerId, string signatureId = null, IReadOnlyList<string> builtCards = null)
     {
         var run = Rules;
@@ -318,7 +319,8 @@ internal static class DungeonRunRuntime
     }
 
     // Build Deck: why the built list may not start a run of row classId with the active profile's collection (copies per live
-    // copy group, never more than owned), or null. An unknown row is left to DungeonRun.NewRun's own refusal.
+    // copy group, never more than owned), in words with card names, or null. An unknown row is left to DungeonRun.NewRun's own
+    // refusal.
     private static string BuiltListRefusal(DungeonRun run, string classId, IReadOnlyList<string> builtCards)
     {
         var cls = run.Data.FindClass(classId);
@@ -329,7 +331,10 @@ internal static class DungeonRunRuntime
             id => collection.TotalOwnedCount(ClientCardId(id)),
             id => id == null ? null : LocalCardCatalog.CopyGroup(ClientCardId(id)),
             SabberStoneCore.Model.OfflinePoolPolicy.Load());
-        return reasons.Count == 0 ? null : DungeonRun.IllegalBuiltList + string.Join(", ", reasons) + ".";
+        return NativeDungeonRunText.BuildStartRefusal(reasons, id =>
+        {
+            try { return SabberStoneCore.Model.Cards.FromId(id)?.Name; } catch (Exception) { return null; }
+        });
     }
 
     /// <summary>A random run seed (never 0). Only random-seed runs feed stats and unlocks.</summary>

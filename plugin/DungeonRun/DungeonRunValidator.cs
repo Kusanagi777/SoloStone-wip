@@ -1016,10 +1016,11 @@ internal static class DungeonRunValidator
     /// Phase 7 board shrines, shrine upgrades and teammates. A deck's "shrine" is a client MINION of the deck row's (single)
     /// class, carrying a starter deck (tag 1099), whose number is the deck id's ("rumble_druid_115" names TRLA_115); its dormant
     /// form "&lt;id&gt;t" exists and points back to it (tag 1132 = the shrine's dbf id); a shrine the engine scripts has exactly that
-    /// form (ShrineRules.FormOf). The teammate table holds the nine classes, six distinct MINION teammates each, of that class,
-    /// 54 in all, none a shrine; every scripted teammate is in it. The shrine-upgrade pool lists nine distinct cards; every
-    /// scripted upgrade is in it. With <paramref name="clientKnows"/>, every id is a client card. Data with none of the three
-    /// keys (a test's synthetic data) checks nothing here.
+    /// form (ShrineRules.FormOf). A Rikkar row's build deck ("trla_209h_mage_build") is exempt from the id rule: its id names no
+    /// shrine, it copies its row's default deck's (Validate's class loop checks that). The teammate table holds the nine
+    /// classes, six distinct MINION teammates each, of that class, 54 in all, none a shrine; every scripted teammate is in it.
+    /// The shrine-upgrade pool lists nine distinct cards; every scripted upgrade is in it. With <paramref name="clientKnows"/>,
+    /// every id is a client card. Data with none of the three keys (a test's synthetic data) checks nothing here.
     /// </summary>
     internal static List<string> ValidateShrines(DungeonRunData data, Func<string, bool> clientKnows = null)
     {
