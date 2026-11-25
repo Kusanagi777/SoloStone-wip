@@ -607,4 +607,80 @@ Guard("BDD", () =>
         wrong.Count == 0, string.Join(" ", wrong));
 });
 
+// Build Deck run start (Task 4): NewRun with a built list starts on the row's build deck (the Heist/Tombs generated deck on
+// those rows) with exactly the list, skips the deck unlock, marks the run BuiltDeck; a built run counts as every deck of its
+// row for treasure scope and deck tags. The fresh profile has nothing unlocked, so heist_mage_random is locked for a plain start.
+Guard("BDR", () =>
+{
+    var run = new DungeonRun(data);
+    var fresh = new DungeonRunProfile();
+    var xml = new System.Xml.Serialization.XmlSerializer(typeof(DungeonRunSave));
+    string Xml(DungeonRunState state) { using var w = new StringWriter(); xml.Serialize(w, new DungeonRunSave { Active = state }); return w.ToString(); }
+    string[] mageList = { "AT_006", "AT_006", "AT_007", "AT_007", "AT_003", "AT_003", "AT_082", "AT_082", "AT_083", "AT_083" };
+    string[] rogueList = { "AT_028", "AT_028", "AT_029", "AT_029", "AT_082", "AT_082", "AT_083", "AT_083", "AT_084", "AT_084" };
+    DungeonRunState Built(string row, IReadOnlyList<string> list, long seed = 4250)
+    {
+        var cls = data.FindClass(row);
+        return run.NewRun(fresh, cls.Id, cls.BuildDeck(data).Id, cls.Powers[0], seed, builtCards: list);
+    }
+    string Refusal(Action start)
+    {
+        try { start(); return "started"; }
+        catch (InvalidOperationException e) { return e.Message; }
+    }
+
+    var mage = Built("MAGE", mageList);
+    var heist = Built("DALA_Rakanishu", mageList);
+    var plain = run.NewRun(fresh, "MAGE", "mage_rimeward", data.FindClass("MAGE").Powers[0], 4250);
+    var bad = new List<string>();
+    foreach (var (state, row) in new[] { (mage, "MAGE"), (heist, "DALA_Rakanishu") })
+    {
+        var back = DungeonRunStore.Clone(new DungeonRunSave { Active = state }).Active;
+        string resumed;
+        try { run.Resume(back); resumed = null; } catch (Exception e) { resumed = e.Message; }
+        string build = data.FindClass(row).BuildDeck(data).Id;
+        if (!state.Deck.SequenceEqual(mageList) || state.StarterDeck != build || !state.BuiltDeck) bad.Add(row + " start " + state.StarterDeck + " " + state.BuiltDeck);
+        if (!back.Deck.SequenceEqual(mageList) || back.StarterDeck != build || !back.BuiltDeck || !Xml(state).Contains("BuiltDeck=\"true\"")) bad.Add(row + " xml");
+        if (resumed != null) bad.Add(row + " resume: " + resumed);
+    }
+    var lost = DungeonRunStore.Clone(new DungeonRunSave { Profile = new DungeonRunProfile(), Active = Built("MAGE", mageList, 4251) });
+    lost.Active.Phase = DungeonRunPhase.InMatch;
+    run.RecordOutcome(lost.Active, lost.Profile, DungeonRunOutcome.Loss);
+    var entry = DungeonRunStore.Clone(lost).Profile.Archive.LastOrDefault();
+    Check("BD11 a built MAGE run and a built Heist run (fresh profile) hold exactly the list, StarterDeck the row's build deck (mage_build, heist_mage_random), "
+        + "BuiltDeck true; the XML round trip keeps them and Resume accepts it; a plain run writes no BuiltDeck; the archived summary keeps BuiltDeck",
+        bad.Count == 0 && mage.StarterDeck == "mage_build" && heist.StarterDeck == "heist_mage_random" && !plain.BuiltDeck && !Xml(plain).Contains("BuiltDeck")
+            && entry != null && entry.BuiltDeck,
+        string.Join(" | ", bad) + " | archive " + (entry == null ? "none" : entry.StarterDeck + " " + entry.BuiltDeck));
+
+    string nine = Refusal(() => Built("MAGE", mageList.Take(9).ToList()));
+    string warrior = Refusal(() => Built("MAGE", mageList.Take(9).Concat(new[] { "AT_064" }).ToList()));
+    string notBuild = Refusal(() => run.NewRun(fresh, "MAGE", "mage_rimeward", data.FindClass("MAGE").Powers[0], 4250, builtCards: mageList));
+    string noList = Refusal(() => run.NewRun(fresh, "MAGE", "mage_build", data.FindClass("MAGE").Powers[0], 4250));
+    string locked = Refusal(() => run.NewRun(fresh, "DALA_Rakanishu", "heist_mage_random", data.FindClass("DALA_Rakanishu").Powers[0], 4250));
+    Check("BD12 a built list of 9 cards is refused with \"size 9 of 10\", one with a Warrior card with \"class AT_064\"; a built list on a non-build deck and a plain "
+        + "start on a build deck are refused; a plain start on the locked Heist generated deck is still LockedDeck",
+        nine.Contains("size 9 of 10") && warrior.Contains("class AT_064") && notBuild != "started" && noList != "started" && locked == DungeonRun.LockedDeck,
+        nine + " / " + warrior + " / " + notBuild + " / " + noList + " / " + locked);
+
+    var tess = data.FindClass("GILA_500h3");
+    var hunt = Built("GILA_500h3", rogueList);
+    var scoped = data.Treasures.Where(t => t.Scope.Decks.Any(tess.Decks.Contains)).Select(t => t.Id).OrderBy(id => id, StringComparer.Ordinal).ToList();
+    var inScope = scoped.Where(id => DungeonRun.TreasureInScope(data.FindTreasure(id), tess, hunt)).ToList();
+    hunt.BuiltDeck = false;
+    bool gilaPlain = DungeonRun.TreasureInScope(data.FindTreasure("GILA_501"), tess, hunt);
+    hunt.BuiltDeck = true;
+    var mageCls = data.FindClass("MAGE");
+    var mageUnion = new HashSet<string>(data.TagsOf(mageCls).Concat(mageCls.Decks.SelectMany(d => data.FindDeck(d).TreasureTags)));
+    var mageTags = run.TreasureAffinityTags(mage, mageCls);
+    var plainTags = run.TreasureAffinityTags(plain, mageCls);
+    var huntTags = run.TreasureAffinityTags(hunt, tess);
+    Check("BD13 a built Monster Hunt run (Tess) has every treasure scoped to its row's decks in scope (GILA_501 among them; not when BuiltDeck is off); "
+        + "a built run's deck tags are the union of its row's decks' tags (MAGE: minions from mage_kindled, which a mage_rimeward run lacks)",
+        scoped.Contains("GILA_501") && inScope.SequenceEqual(scoped) && !gilaPlain && mageTags.SetEquals(mageUnion) && mageTags.Contains("minions")
+            && !plainTags.Contains("minions") && huntTags.IsSupersetOf(new[] { "spells", "weapons" }),
+        "scoped " + string.Join(",", scoped) + " in " + string.Join(",", inScope) + " plain " + gilaPlain + " | mage " + string.Join(",", mageTags.OrderBy(x => x))
+            + " plain " + string.Join(",", plainTags.OrderBy(x => x)) + " hunt " + string.Join(",", huntTags.OrderBy(x => x)));
+});
+
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");

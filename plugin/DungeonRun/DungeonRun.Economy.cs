@@ -110,7 +110,14 @@ internal sealed partial class DungeonRun
     /// scope then no longer limits it.
     /// </summary>
     internal static bool TreasureInScope(DungeonRunTreasure t, DungeonRunClass cls, DungeonRunState state) =>
-        t.Scope.Matches(cls.ClassSet, state.StarterDeck, state.Power) || t.Shared && Tuned(state);
+        ScopeMatchesRun(t.Scope, cls, state) || t.Shared && Tuned(state);
+
+    /// <summary>
+    /// Whether <paramref name="scope"/> names the run natively: one of its classes, its starter deck or its power. A built run
+    /// (<see cref="DungeonRunState.BuiltDeck"/>, Build Deck) holds every deck of its row, so a scope naming any of them matches.
+    /// </summary>
+    internal static bool ScopeMatchesRun(DungeonRunScope scope, DungeonRunClass cls, DungeonRunState state) =>
+        scope.Matches(cls.ClassSet, state.StarterDeck, state.Power) || state.BuiltDeck && cls.Decks.Any(scope.Decks.Contains);
 
     /// <summary>
     /// D6: the treasure offer of a stamp-4 run (OpenTreasureDraft's candidates, already filtered and in ordinal order). Slot 1 a
@@ -128,7 +135,7 @@ internal sealed partial class DungeonRun
         int Weight(DungeonRunTreasure t)
         {
             int rarity = t.Rarity == "rare" ? rare : common;
-            bool native = !t.Scope.IsEmpty && t.Scope.Matches(cls.ClassSet, state.StarterDeck, state.Power);
+            bool native = !t.Scope.IsEmpty && ScopeMatchesRun(t.Scope, cls, state);
             bool affine = native || t.Tags.Any(classTags.Contains);
             return Math.Max(1, (int)Math.Round(rarity * (100 + 50 * (affine ? 1 : 0)) / 100.0, MidpointRounding.AwayFromZero));
         }

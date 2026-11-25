@@ -112,7 +112,9 @@ internal sealed partial class DungeonRun
     internal const string LockedDeck = "That deck is locked.", LockedPower = "That hero power is locked.",
         OtherClassDeck = "That deck belongs to another class.", ChooseSignature = "Choose a signature treasure.",
         NotOffered = "That signature treasure is not on offer.",
-        ExcludedFinale = "That schedule's finale is this hero's own character.";
+        ExcludedFinale = "That schedule's finale is this hero's own character.",
+        NotBuildDeck = "Only Build Deck starts from a built deck.", NeedsBuiltList = "Build Deck needs a built deck.",
+        IllegalBuiltList = "That deck cannot start a run: ";
 
     /// <summary>
     /// Starts a run with a class, one of its starter decks and one of its powers (design R2). An unknown id throws
@@ -127,23 +129,38 @@ internal sealed partial class DungeonRun
     /// </summary>
     /// <param name="signatureId">A hero row with signatures (Tombs of Terror): one of <see cref="SignatureOffer"/> for this seed,
     /// required; any other row: must be null.</param>
+    /// <param name="builtCards">Build Deck: the starter the player built, or null. With a list, <paramref name="deckId"/> must be
+    /// the row's build deck (<see cref="DungeonRunClass.BuildDeck"/>: a "build" deck, or the Heist/Tombs generated deck), whose
+    /// unlock is not checked; the list must pass <see cref="DungeonRunBuild.DeckReasons"/> (ownership is the client's), else
+    /// <see cref="InvalidOperationException"/> with the reasons. The run deck is the list and the run is marked
+    /// <see cref="DungeonRunState.BuiltDeck"/>. A start with no list on a "build" deck throws (a build deck has no cards).</param>
     internal DungeonRunState NewRun(DungeonRunProfile profile, string classId, string deckId, string powerId, long seed, bool typedSeed = false,
-        string schedule = null, string signatureId = null)
+        string schedule = null, string signatureId = null, IReadOnlyList<string> builtCards = null)
     {
-        var state = NewRunCore(profile, classId, deckId, powerId, seed, typedSeed, schedule);
+        var state = NewRunCore(profile, classId, deckId, powerId, seed, typedSeed, schedule, builtCards);
         ApplyLoadout(profile, state, signatureId);
         return state;
     }
 
     private DungeonRunState NewRunCore(DungeonRunProfile profile, string classId, string deckId, string powerId, long seed, bool typedSeed,
-        string schedule)
+        string schedule, IReadOnlyList<string> builtCards)
     {
         var cls = Data.FindClass(classId) ?? throw new ArgumentException("Unknown class " + (classId ?? "(none)") + ".");
         var deck = Data.FindDeck(deckId) ?? throw new ArgumentException("Unknown deck " + (deckId ?? "(none)") + ".");
         if (powerId == null || !cls.Powers.Contains(powerId)) throw new ArgumentException("Unknown hero power " + (powerId ?? "(none)") + " for " + cls.Id + ".");
         if (deck.Class != cls.Id || !cls.Decks.Contains(deck.Id)) throw new InvalidOperationException(OtherClassDeck);
-        if (!IsUnlocked(profile, deck.Unlock)) throw new InvalidOperationException(LockedDeck);
+        bool built = builtCards != null;
+        // Build Deck: a built list starts only on the row's build deck, which is always open (the Heist/Tombs generated deck's
+        // *_win unlock gates its generated start, never a built one); a "build" deck has no cards of its own to start from.
+        if (built && deck != cls.BuildDeck(Data)) throw new InvalidOperationException(NotBuildDeck);
+        if (!built && deck.Build) throw new InvalidOperationException(NeedsBuiltList);
+        if (!built && !IsUnlocked(profile, deck.Unlock)) throw new InvalidOperationException(LockedDeck);
         if (!IsUnlocked(profile, cls.PowerUnlock(powerId))) throw new InvalidOperationException(LockedPower);
+        if (built)
+        {
+            var reasons = DungeonRunBuild.DeckReasons(builtCards, cls.ClassSet, Rules.StarterSize, null, null, OfflinePoolPolicy.Load());
+            if (reasons.Count > 0) throw new InvalidOperationException(IllegalBuiltList + string.Join(", ", reasons) + ".");
+        }
         DungeonRunSchedule acts = null;
         if (schedule != DungeonRunSchedules.LegacyId && (schedule != null || Data.Schedules != null))
         {
@@ -153,21 +170,21 @@ internal sealed partial class DungeonRun
             // finale is its hero row's own character (the default roll leaves such a schedule out; a named one is refused).
             if (FinaleExcludes(acts, cls)) throw new InvalidOperationException(ExcludedFinale);
         }
-        // A generated starter (phase 6) is drawn from the run seed; a fixed one is the deck's cards.
-        var starter = deck.IsGenerated ? GenerateStarter(cls, deck, seed) : deck.Cards;
+        // A built starter is the player's list; a generated one (phase 6) is drawn from the run seed; a fixed one is the deck's cards.
+        var starter = built ? builtCards.ToList() : deck.IsGenerated ? GenerateStarter(cls, deck, seed) : deck.Cards;
         if (acts == null)
             return new DungeonRunState
             {
                 // A new run drafts from the loaded catalog (catalog-v1.json "catalogVersion"); with no catalog loaded it is a
                 // legacy run (0), as every run of an older save is.
-                DataVersion = Data.DataVersion, CatalogVersion = Data.CatalogVersion, Seed = seed, TypedSeed = typedSeed,
+                DataVersion = Data.DataVersion, CatalogVersion = Data.CatalogVersion, Seed = seed, TypedSeed = typedSeed, BuiltDeck = built,
                 Class = cls.Id, StarterDeck = deck.Id, Power = powerId,
                 Deck = new List<string>(starter),
                 BossSequence = BossSequence(profile, seed),
             };
         var state = new DungeonRunState
         {
-            DataVersion = Data.DataVersion, CatalogVersion = Data.CatalogVersion, Seed = seed, TypedSeed = typedSeed,
+            DataVersion = Data.DataVersion, CatalogVersion = Data.CatalogVersion, Seed = seed, TypedSeed = typedSeed, BuiltDeck = built,
             Class = cls.Id, StarterDeck = deck.Id, Power = powerId,
             // A schedule an older version released unchanged keeps that version's stamp (DungeonRunSchedule.StampVersion).
             ScheduleVersion = acts.StampVersion, Schedule = acts.Id, Node = 0,
@@ -1181,7 +1198,7 @@ internal sealed partial class DungeonRun
         profile.Archive.Add(new DungeonRunArchiveEntry
         {
             Class = state.Class, StarterDeck = state.StarterDeck, Power = state.Power ?? state.Shrine, Hero = state.Hero,
-            Seed = state.SeedText, TypedSeed = state.TypedSeed, FloorReached = state.Floor, Won = won,
+            Seed = state.SeedText, TypedSeed = state.TypedSeed, BuiltDeck = state.BuiltDeck, FloorReached = state.Floor, Won = won,
             LastBoss = LastBoss(state), Treasures = new List<string>(state.Treasures.Concat(state.ActiveTreasures)),
             BoardShrine = state.BoardShrine, ShrineUpgrades = new List<string>(state.ShrineUpgrades ?? new List<string>()),
         });
@@ -1192,6 +1209,20 @@ internal sealed partial class DungeonRun
     // ------------------------------------------------------------------ treasures (design F6)
 
     /// <summary>
+    /// The treasure-affinity tags of a run of <paramref name="cls"/>: the class's (a hero row reads its primary class's tags,
+    /// plus its own treasureTags, when it has no classTags entry of its own), plus the starter deck's (a migrated version-1 run
+    /// has no starter deck id). A built run (<see cref="DungeonRunState.BuiltDeck"/>) holds every deck of its row: the union of
+    /// their tags (a build deck has none of its own).
+    /// </summary>
+    internal HashSet<string> TreasureAffinityTags(DungeonRunState state, DungeonRunClass cls)
+    {
+        var tags = new HashSet<string>(Data.TagsOf(cls));
+        foreach (string deck in state.BuiltDeck ? cls.Decks : new List<string> { state.StarterDeck })
+            tags.UnionWith(Data.FindDeck(deck)?.TreasureTags ?? new List<string>());
+        return tags;
+    }
+
+    /// <summary>
     /// Opens a treasure draft; false when nothing is on offer. <paramref name="passiveOnly"/> (an act's "passiveAtStart"
     /// draft) offers passive treasures only.
     /// </summary>
@@ -1199,10 +1230,7 @@ internal sealed partial class DungeonRun
     {
         var cls = RunClass(state);
         var offeredBefore = new HashSet<string>(state.Drafts.Where(d => d.Kind == "treasure").SelectMany(d => d.Offered));
-        // Affinity tags: the class's, plus the starter deck's (a migrated version-1 run has no starter deck id).
-        // A hero row reads its primary class's tags (plus its own treasureTags) when it has no classTags entry of its own.
-        var classTags = new HashSet<string>(Data.TagsOf(cls));
-        classTags.UnionWith(Data.FindDeck(state.StarterDeck)?.TreasureTags ?? new List<string>());
+        var classTags = TreasureAffinityTags(state, cls);
         var candidates = Data.Treasures
             .Where(t => t.Offered && !t.Legacy && !t.Signature && !offeredBefore.Contains(t.Id) && !state.Treasures.Contains(t.Id) && !state.ActiveTreasures.Contains(t.Id))
             .Where(t => TreasureInScope(t, cls, state) && TreasureOfferedOn(t, state))
