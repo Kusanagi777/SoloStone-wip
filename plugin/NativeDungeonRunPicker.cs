@@ -61,13 +61,11 @@ internal static class NativeDungeonRunPicker
     // ---- what the playmat is fed during a session (null outside one; never added to GameDbf)
     // Reserved ids for the fed decks (AdventureDeck.DECK_ID, answered only by FedDeckContents) and the fed records' own IDs.
     private const int FedDeckIdBase = 0x5D520000, FedPowerRecordIdBase = 0x5D521000;
-    // The retail "Random <Class> Deck" pouch's single card (DALA_800); shown as our Random deck's list when the client has it.
-    private const string RandomDeckCard = "DALA_800";
     private sealed class FedDeck
     {
         internal int DeckId;
-        internal RunDeckOption Option; // null for Random and for a Placeholder
-        internal bool Random, Placeholder, Unlocked;
+        internal RunDeckOption Option; // null for a Placeholder
+        internal bool Placeholder, Unlocked;
         internal string Name, Description, Hint;
         internal List<long> Cards;
         internal AdventureDeckDbfRecord Record;
@@ -682,13 +680,25 @@ internal static class NativeDungeonRunPicker
                 if (deck == null) { Abort("selected deck " + data.SelectedDeckId + " is not one the picker fed"); return false; }
                 // OnDeckOptionSelected (0000-0026) already showed its list: a locked deck is previewed, never taken on.
                 if (!deck.Unlocked) { Log("deck " + deck.Name + " is locked (" + deck.Hint + "): staying on the deck step"); return false; }
+                if (deck.Option != null && deck.Option.IsBuild)
+                {
+                    // Build Deck: the run menu builds the list (its Build step, then Power and any Signature), so the playmat
+                    // stops here. The class step id as Play's signature hand-off finds it; without the tray's row the fed row is
+                    // the class row (RowFor), whose class step id is the row id.
+                    var row = chosenRow != null && chosenRow.Option.Id == fedRow ? chosenRow.Option : null;
+                    string cls = row?.ClassId ?? fedRow;
+                    Log("deck step done: " + deck.Name + " (" + deck.Option.Id + "): HUB then the menu's Build step (class=" + cls + " row=" + fedRow + ")");
+                    NativeDungeonRunUI.BuildWhenHome(cls, fedRow, deck.Option.Id);
+                    leaveRequested = true; openMenu = false;
+                    return false;
+                }
                 if (mat == null) { Abort("deck step done but the playmat is gone"); return false; }
                 confirmedDeckId = deck.DeckId;
                 // The mirror of retail's power -> deck step (OnHeroPowerOptionSelected 0055 PlayHeroPowerOptionSelected): the deck
                 // options play their outro (PlayWidgetOptionSelected: state TRANSITIONING, PlayOutro: Clickable off, then on
                 // CODE_OPTION_OUTRO_COMPLETE OnOutroFinished SetActive(false)), so they stop catching clicks over the powers.
                 // ShowHeroPowerOptionsWhenReady waits (MoveNext 0045-0051) until Update sees every deck outro done (0086-00F9).
-                Log("deck step done: " + deck.Name + (deck.Random ? " (random)" : "") + "; hiding deck options " + OptionStates(deckOptionsField, mat));
+                Log("deck step done: " + deck.Name + "; hiding deck options " + OptionStates(deckOptionsField, mat));
                 mat.PlayDeckOptionSelected();
                 Run(__instance, showHeroPowers, "hero powers");
                 // ShowHeroPowerOptionsWhenReady pushes the step's back handler only with treasures (MoveNext 0099-00AC);
@@ -828,10 +838,16 @@ internal static class NativeDungeonRunPicker
                 Log("Play with a selection the picker did not feed (row=" + fedRow + " deck=" + fedDeck?.Name + " power=" + fedPower?.Option.Id + "): ignored");
                 return false;
             }
-            string deckId = fedDeck.Random ? RandomUnlockedDeck() : fedDeck.Option.Id;
+            // The Build Deck pouch is handed to the run menu at the deck step (NextLoadout): Play never starts a run on it.
+            if (fedDeck.Option == null || fedDeck.Option.IsBuild)
+            {
+                Log("Play on " + fedDeck.Name + " (the deck step hands it to the run menu): ignored");
+                return false;
+            }
+            string deckId = fedDeck.Option.Id;
             SetPlay(__instance, false);
             var row = chosenRow != null && chosenRow.Option.Id == fedRow ? chosenRow.Option : null;
-            if (deckId != null && row != null && row.SignatureCount > 0)
+            if (row != null && row.SignatureCount > 0)
             {
                 // A Tombs explorer starts with a signature treasure: the menu's Signature step takes it, the rest already chosen.
                 Log("row " + fedRow + " has " + row.SignatureCount + " signature treasures: HUB then the menu's Signature step (deck="
@@ -840,9 +856,8 @@ internal static class NativeDungeonRunPicker
                 leaveRequested = true; openMenu = false;
                 return false;
             }
-            string refusal = deckId == null ? "No unlocked deck to pick at random." : DungeonRunRuntime.NewRun(fedRow, deckId, fedPower.Option.Id);
-            Log("NewRun row=" + fedRow + " deck=" + deckId + (fedDeck.Random ? " (random among " + string.Join(",", fedDecks.Where(d => !d.Random && d.Unlocked).Select(d => d.Option.Id)) + ")" : "")
-                + " power=" + fedPower.Option.Id + " -> " + (refusal == null ? "started; HUB then the run hub" : "refused: " + refusal + "; HUB then the menu"));
+            string refusal = DungeonRunRuntime.NewRun(fedRow, deckId, fedPower.Option.Id);
+            Log("NewRun row=" + fedRow + " deck=" + deckId + " power=" + fedPower.Option.Id + " -> " + (refusal == null ? "started; HUB then the run hub" : "refused: " + refusal + "; HUB then the menu"));
             // A refusal is shown as the menu's caption (stay-on-playmat would need a native dialog in the borrowed scene).
             menuNotice = refusal;
             leaveRequested = true; openMenu = true;
@@ -962,13 +977,6 @@ internal static class NativeDungeonRunPicker
     private static FedDeck FedDeckById(long deckId) => deckId == 0 ? null : fedDecks?.FirstOrDefault(d => d.DeckId == deckId);
     private static FedPower FedPowerByCard(long cardDbId) => cardDbId == 0 ? null : fedPowers?.FirstOrDefault(p => p.CardDbId == cardDbId);
 
-    private static string RandomUnlockedDeck()
-    {
-        var unlocked = fedDecks?.Where(d => !d.Random && d.Unlocked).ToList();
-        if (unlocked == null || unlocked.Count == 0) return null;
-        return unlocked[new System.Random(Guid.NewGuid().GetHashCode()).Next(unlocked.Count)].Option.Id;
-    }
-
     // The row the playmat shows for a class: the row the tray's Choose took when it is of that class, else the class row.
     private static string RowFor(TAG_CLASS cls) => chosenRow != null && chosenRow.Class == cls ? chosenRow.Option.Id : cls.ToString();
 
@@ -984,48 +992,48 @@ internal static class NativeDungeonRunPicker
         var display = crawlInstanceField.GetValue(null) as AdventureDungeonCrawlDisplay;
         var mat = display == null ? null : playMatField.GetValue(display) as AdventureDungeonCrawlPlayMat;
         int deckSlots = mat == null ? -1 : OptionList(deckOptionsField, mat).Count, powerSlots = mat == null ? -1 : OptionList(powerOptionsField, mat).Count;
-        string className = NativeDungeonRunText.ClassName(cls.ToString());
         var overrides = new Dictionary<string, DungeonRunRuntime.PickerCard>(StringComparer.Ordinal);
         var missing = new List<string>();
 
-        // Borrowed pouch art: DALARAN's decks of this class, in their order (the Random pouch last).
+        // Borrowed pouch art: DALARAN's decks of this class, in their order (retail's "Random <Class> Deck" pouch last).
         var art = GameDbf.AdventureDeck.GetRecords().Where(d => d.AdventureId == (int)Adventure && d.ClassId == (int)cls).OrderBy(d => d.SortOrder).ToList();
         var feed = new List<FedDeck>();
+        FedDeck build = null;
         foreach (var deck in decks)
         {
+            if (deck.IsBuild)
+            {
+                // The row's Build Deck option (DecksFor lists it last): no cards, so its pouch lists its display card from data
+                // (DALA_800 on a build deck, DALA_80x or ULDA_90x on a Heist or Tombs generated deck) when the client has it,
+                // named as the option; else an empty list.
+                int displayCard = CardDbId(deck.DisplayCard);
+                if (displayCard > 0) overrides[deck.DisplayCard] = new DungeonRunRuntime.PickerCard { Name = deck.Name, Text = deck.Description };
+                build = new FedDeck
+                {
+                    Option = deck, Unlocked = deck.Unlocked, Name = deck.Name, Description = deck.Description, Hint = deck.UnlockHint,
+                    Cards = displayCard > 0 ? new List<long> { displayCard } : new List<long>(),
+                };
+                continue;
+            }
             feed.Add(new FedDeck
             {
                 Option = deck, Unlocked = deck.Unlocked, Name = deck.Name, Description = deck.Description, Hint = deck.UnlockHint,
                 Cards = ClientCards(deck.CardIds, overrides, missing),
             });
         }
-        // The prefab has a 4th pouch (retail's "Random <Class> Deck"). ShowDecks breaks out of its loop when the rows run out
-        // (00A6-00E7) and leaves that slot un-Init'd, and the playmat's TRANSITIONING wait (Update 0086-00AB) needs every deck
-        // option ready and not mid-outro, so an empty slot risks a stuck deck -> power step. A 4th row keeps every slot
-        // Init'd: Random, a pick among the UNLOCKED decks made at Play.
-        // A row with fewer decks than pouches (a Monster Hunt hunter has one deck: with Random that is 2 rows for 4 pouches) left the
-        // other pouches un-Init'd, and the playmat showed no deck options at all (owner's PC, GILA_500h3). Every pouch is fed: the
-        // ones between the row's decks and Random (which stays last, on the Random pouch art) are locked placeholders whose hint
-        // says there is no other deck, so they can never be picked (as a class row's locked decks, which the playmat already shows).
-        bool unlockedDeck = feed.Any(d => d.Unlocked);
-        while (deckSlots > feed.Count + 1)
+        // Every pouch is fed. ShowDecks breaks out of its loop when the rows run out (00A6-00E7) and leaves the other slots
+        // un-Init'd, and the playmat's TRANSITIONING wait (Update 0086-00AB) needs every deck option ready and not mid-outro, so
+        // an empty slot risks a stuck deck -> power step; a row with fewer decks than pouches (a Monster Hunt hunter has one
+        // deck and Build Deck: 2 rows for 4 pouches) showed no deck options at all (owner's PC, GILA_500h3). The pouches between
+        // the row's decks and Build Deck (which stays last, on retail's Random pouch art) are locked placeholders whose hint says
+        // there is no other deck, so they can never be picked (as a class row's locked decks, which the playmat already shows).
+        while (deckSlots > feed.Count + (build == null ? 0 : 1))
             feed.Add(new FedDeck
             {
                 Placeholder = true, Unlocked = false, Name = NativeDungeonRunText.NoOtherDeckName, Description = "",
                 Hint = NativeDungeonRunText.NoOtherDeckHint, Cards = new List<long>(),
             });
-        if (deckSlots > feed.Count)
-        {
-            int randomCard = CardDbId(RandomDeckCard);
-            string name = "Random " + className + " Deck";
-            string text = "Starts the run with one of your unlocked " + className + " decks, picked when you press Play.";
-            if (randomCard > 0) overrides[RandomDeckCard] = new DungeonRunRuntime.PickerCard { Name = name, Text = text };
-            feed.Add(new FedDeck
-            {
-                Random = true, Unlocked = unlockedDeck, Name = name, Description = text, Hint = NativeDungeonRunText.LockedWord,
-                Cards = randomCard > 0 ? new List<long> { randomCard } : new List<long>(),
-            });
-        }
+        if (build != null) feed.Add(build);
         if (deckSlots >= 0 && deckSlots != feed.Count) Log("WARNING deck slots=" + deckSlots + " but " + feed.Count + " decks fed");
         for (int i = 0; i < feed.Count; i++)
         {
@@ -1038,7 +1046,7 @@ internal static class NativeDungeonRunPicker
             Set(record, "UNLOCK_GAME_SAVE_SUBKEY", 0); Set(record, "UNLOCK_VALUE", d.Unlocked ? 0 : 1);
             Set(record, "UNLOCK_CRITERIA_TEXT", FormatSafe(d.Unlocked ? "" : d.Hint ?? NativeDungeonRunText.LockedWord));
             Set(record, "UNLOCKED_DESCRIPTION_TEXT", d.Description ?? "");
-            var pouch = art.Count == 0 ? null : art[d.Random ? art.Count - 1 : Math.Min(i, art.Count - 1)];
+            var pouch = art.Count == 0 ? null : art[d.Option != null && d.Option.IsBuild ? art.Count - 1 : Math.Min(i, art.Count - 1)];
             if (pouch != null && !string.IsNullOrEmpty(pouch.DisplayTexture)) Set(record, "DISPLAY_TEXTURE", pouch.DisplayTexture);
             d.Record = record;
         }
@@ -1088,7 +1096,7 @@ internal static class NativeDungeonRunPicker
         DungeonRunRuntime.BeginPicker(overrides);
         overrideIds = overrides.Keys.ToList();
         ResetCachedNames(overrideIds, "begin");
-        Log("fed decks row=" + classId + " slots=" + deckSlots + ": " + string.Join(" | ", feed.Select(d => "deckId=" + d.DeckId + " " + (d.Random ? "random" : d.Placeholder ? "placeholder" : d.Option.Id)
+        Log("fed decks row=" + classId + " slots=" + deckSlots + ": " + string.Join(" | ", feed.Select(d => "deckId=" + d.DeckId + " " + (d.Placeholder ? "placeholder" : d.Option.Id + (d.Option.IsBuild ? " (build, display " + d.Option.DisplayCard + ")" : ""))
             + " name=" + d.Name + " " + (d.Unlocked ? "unlocked" : "locked(" + d.Hint + ")") + " cards=" + d.Cards.Count)));
         Log("fed powers row=" + classId + " slots=" + powerSlots + ": " + string.Join(" | ", powerFeed.Select(p => (p.Placeholder ? "placeholder " : "") + p.Option.Id + " card=" + p.Option.ClientCardId + "(" + p.CardDbId + ")"
             + " name=" + p.Option.Name + " cost=" + p.Option.Cost + " " + (p.Option.Unlocked ? "unlocked" : "locked(" + p.Option.UnlockHint + ")"))));

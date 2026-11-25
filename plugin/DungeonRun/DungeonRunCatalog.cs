@@ -72,6 +72,11 @@ internal sealed class RunDeckOption
     /// deck): named <see cref="NativeDungeonRunText.BuildDeckName"/>, always unlocked, no cards; listed last.
     /// </summary>
     public bool IsBuild;
+    /// <summary>
+    /// The deck's display card (DungeonRunStarterDeck.DisplayCard: DALA_800 on a build deck, DALA_80x or ULDA_90x on a Heist or
+    /// Tombs generated deck), a client card id; null on a deck without one. A native picker shows it as the Build Deck pouch's list.
+    /// </summary>
+    public string DisplayCard;
     /// <summary>The unlock key (null for the default deck) and, while locked, the hint ("Reach floor 3 with Mage to unlock").</summary>
     public string UnlockKey, UnlockHint;
     public int SortOrder;
@@ -201,7 +206,8 @@ internal static class DungeonRunCatalog
                 result.Add(new RunDeckOption
                 {
                     Id = deck.Id, ClassId = cls.Id, Name = NativeDungeonRunText.BuildDeckName, Description = NativeDungeonRunText.BuildDeckDescription,
-                    CardIds = new string[0], IsDefault = false, Unlocked = true, IsBuild = true, SortOrder = result.Count,
+                    CardIds = new string[0], IsDefault = false, Unlocked = true, IsBuild = true, DisplayCard = deck.DisplayCard,
+                    SortOrder = result.Count,
                 });
                 continue;
             }
@@ -210,7 +216,7 @@ internal static class DungeonRunCatalog
             {
                 Id = deck.Id, ClassId = cls.Id, Name = deck.Name, Description = deck.Description, CardIds = deck.Cards.ToList(),
                 IsDefault = id == cls.DefaultDeck, Unlocked = unlocked, UnlockKey = deck.Unlock,
-                UnlockHint = unlocked ? null : Hint(rules, deck.Unlock), SortOrder = result.Count,
+                UnlockHint = unlocked ? null : Hint(rules, deck.Unlock), DisplayCard = deck.DisplayCard, SortOrder = result.Count,
             });
         }
         return result;

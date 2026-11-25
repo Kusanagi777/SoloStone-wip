@@ -599,11 +599,14 @@ Guard("BDD", () =>
         var last = options.LastOrDefault();
         bool ok = options.Count == row.Decks.Count && last != null && last.IsBuild && last.Id == row.BuildDeck(data)?.Id && last.Name == "Build Deck"
             && last.Description == "Build a 10-card deck from your collection." && last.Unlocked && last.CardIds.Count == 0 && !last.IsDefault
+            && last.DisplayCard != null && last.DisplayCard == row.BuildDeck(data).DisplayCard && last.UnlockKey == null && last.UnlockHint == null
             && options.Take(options.Count - 1).Select((o, i) => (o, d: data.FindDeck(row.Decks[i]))).All(p => !p.o.IsBuild && p.o.Id == p.d.Id && p.o.Name == p.d.Name
-                && p.o.Description == p.d.Description && p.o.CardIds.SequenceEqual(p.d.Cards) && p.o.Unlocked == run.IsUnlocked(fresh, p.d.Unlock) && p.o.UnlockKey == p.d.Unlock);
+                && p.o.Description == p.d.Description && p.o.CardIds.SequenceEqual(p.d.Cards) && p.o.Unlocked == run.IsUnlocked(fresh, p.d.Unlock) && p.o.UnlockKey == p.d.Unlock
+                && p.o.DisplayCard == p.d.DisplayCard);
         if (!ok) wrong.Add(row.Id);
     }
-    Check("BD10 DungeonRunCatalog.Decks lists each row's Build Deck option last (\"Build Deck\", unlocked on a fresh profile, no cards, IsBuild), the other decks as before",
+    Check("BD10 DungeonRunCatalog.Decks lists each row's Build Deck option last (\"Build Deck\", unlocked on a fresh profile, no cards, IsBuild, the build deck's "
+        + "display card, no unlock key or hint), the other decks as before",
         wrong.Count == 0, string.Join(" ", wrong));
 });
 
