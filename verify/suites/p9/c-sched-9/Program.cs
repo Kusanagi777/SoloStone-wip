@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using OfflinePoolPolicy = SabberStoneCore.Model.OfflinePoolPolicy;
 
 // c-sched-9: step 9 tripwire F1 (handoff/phase9/plan.md D1 and section 1 F): the released schedules (acts-v1, acts-v2, act1,
 // acts-v3h, acts-v3t) and every value they read stay as they were released, on the shipped data (encounters-v1.json loaded).
@@ -493,6 +494,69 @@ Guard("TP", () =>
         && !NativeDungeonRunText.TrayRectsOverlap((0f, 0f, 10f, 10f), (10f, 0f, 10f, 10f))
         && !NativeDungeonRunText.TrayRectsOverlap((0f, 0f, 10f, 10f), (0f, 10f, 10f, 10f))
         && NativeDungeonRunText.TrayRectsOverlap((0f, 0f, 10f, 10f), (2f, 2f, 2f, 2f)));
+});
+
+// ============================================================ BD. Build Deck rules (DungeonRunBuild)
+// Card ids are engine cards, scripted and admitted for a catalog run (each is verified by the predicate in the checks): mage
+// AT_003/AT_006/AT_007 and legendary AT_009, neutral AT_082/AT_083, rogue AT_028/AT_029, warrior AT_064, hero BOT_238,
+// Fabled TIME_009 with its companion TIME_009t1, Death Knight rune cards RLK_024 (1 blood), RLK_025 (1 frost), RLK_048
+// (1 unholy), RLK_061 (2 unholy) and CATA_156 (2 blood). No neutral rune card is admitted, so "rune-class" uses a Death
+// Knight card on a Mage row.
+Guard("BD", () =>
+{
+    var pol = OfflinePoolPolicy.Load();
+    IReadOnlyList<string> Set(string row) => data.Classes.First(c => c.Id == row).ClassSet;
+    var mage = Set("MAGE"); var dk = Set("DEATHKNIGHT"); var dual = Set("MAGE_ROGUE");
+    string[] mageCards = { "AT_003", "AT_006", "AT_007" }, neutral = { "AT_082", "AT_083" };
+    string[] legal10 = { "AT_006", "AT_006", "AT_007", "AT_007", "AT_003", "AT_003", "AT_082", "AT_082", "AT_083", "AT_083" };
+
+    string warrior = DungeonRunBuild.CardReason("AT_064", mage, pol);
+    Check("BD1 a Mage row allows scripted, admitted Mage cards and neutrals, and refuses a Warrior card (class)",
+        mageCards.Concat(neutral).All(id => DungeonRunBuild.CardReason(id, mage, pol) == null) && warrior == "class", warrior ?? "null");
+
+    string hero = DungeonRunBuild.CardReason("BOT_238", mage, pol), fabled = DungeonRunBuild.CardReason("TIME_009", mage, pol),
+        companion = DungeonRunBuild.CardReason("TIME_009t1", mage, pol);
+    Check("BD2 a hero card is \"hero\"; a Fabled primary and a companion are \"fabled\"", hero == "hero" && fabled == "fabled" && companion == "fabled",
+        hero + " / " + fabled + " / " + companion);
+
+    var r10 = DungeonRunBuild.DeckReasons(legal10, mage, 10, null, null, pol);
+    var r9 = DungeonRunBuild.DeckReasons(legal10.Take(9).ToList(), mage, 10, null, null, pol);
+    var r11 = DungeonRunBuild.DeckReasons(legal10.Concat(new[] { "AT_084" }).ToList(), mage, 10, null, null, pol);
+    Check("BD3 10 legal cards have no reasons; 9 and 11 are \"size 9 of 10\" / \"size 11 of 10\"",
+        r10.Count == 0 && r9.Contains("size 9 of 10") && r11.Contains("size 11 of 10"), string.Join("|", r10.Concat(r9).Concat(r11)));
+
+    var triple = DungeonRunBuild.DeckReasons(new[] { "AT_006", "AT_006", "AT_006", "AT_007", "AT_007", "AT_003", "AT_003", "AT_082", "AT_082", "AT_083" }, mage, 10, null, null, pol);
+    var twoLegend = DungeonRunBuild.DeckReasons(new[] { "AT_009", "AT_009", "AT_007", "AT_007", "AT_003", "AT_003", "AT_082", "AT_082", "AT_083", "AT_083" }, mage, 10, null, null, pol);
+    Check("BD4 3 copies are \"copies <id>\"; 2 of a legendary are \"legendary <id>\"",
+        triple.Contains("copies AT_006") && twoLegend.SequenceEqual(new[] { "legendary AT_009" }), string.Join("|", triple.Concat(twoLegend)));
+
+    var grouped = DungeonRunBuild.DeckReasons(new[] { "AT_006", "AT_006", "AT_007", "AT_003", "AT_003", "AT_082", "AT_082", "AT_083", "AT_083", "AT_084" },
+        mage, 10, null, id => id == "AT_006" || id == "AT_007" ? "group-a" : id, pol);
+    var ownedLow = DungeonRunBuild.DeckReasons(legal10, mage, 10, id => id == "AT_006" ? 1 : 2, null, pol);
+    Check("BD5 two ids in one copy group (2 + 1) are \"copies <group>\"; owning 1 of an id used twice is \"owned <id>\"; owned null skips ownership",
+        grouped.SequenceEqual(new[] { "copies group-a" }) && ownedLow.SequenceEqual(new[] { "owned AT_006" }) && r10.Count == 0,
+        string.Join("|", grouped.Concat(ownedLow)));
+
+    string[] dk3 = { "RLK_024", "RLK_024", "RLK_025", "RLK_025", "RLK_048", "RLK_048", "AT_082", "AT_082", "AT_083", "AT_083" };
+    string[] dk4 = { "RLK_024", "RLK_024", "RLK_025", "RLK_025", "RLK_048", "RLK_048", "AT_082", "AT_082", "RLK_061", "RLK_061" };
+    var d3 = DungeonRunBuild.DeckReasons(dk3, dk, 10, null, null, pol);
+    var d4 = DungeonRunBuild.DeckReasons(dk4, dk, 10, null, null, pol);
+    string runeOnMage = DungeonRunBuild.CardReason("CATA_156", mage, pol);
+    Check("BD6 a Death Knight deck needing 4 runes is \"runes\", 3 runes is legal; a rune-cost card on a Mage row is \"rune-class\"",
+        d3.Count == 0 && d4.SequenceEqual(new[] { "runes" }) && runeOnMage == "rune-class", string.Join("|", d3.Concat(d4)) + " / " + runeOnMage);
+
+    var dualMage = DungeonRunBuild.DeckReasons(legal10, dual, 10, null, null, pol);
+    string[] mix = { "AT_006", "AT_006", "AT_007", "AT_007", "AT_028", "AT_028", "AT_029", "AT_029", "AT_082", "AT_082" };
+    var dualMix = DungeonRunBuild.DeckReasons(mix, dual, 10, null, null, pol);
+    Check("BD7 a Mage/Rogue row: 10 Mage cards are legal, and a Rogue + Mage mix is legal", dual.Count == 2 && dualMage.Count == 0 && dualMix.Count == 0,
+        string.Join("|", dualMage.Concat(dualMix)));
+
+    var full = DungeonRunBuild.AddReason(legal10, "AT_084", mage, 10, null, null, pol);
+    var nine = legal10.Take(9).ToList();
+    var third = DungeonRunBuild.AddReason(nine.Where(x => x != "AT_083").Concat(new[] { "AT_084" }).ToList(), "AT_006", mage, 10, null, null, pol);
+    var fine = DungeonRunBuild.AddReason(nine, "AT_083", mage, 10, null, null, pol);
+    Check("BD8 AddReason is \"size\" on a full deck, \"copies <id>\" for a third copy, and null for a legal add",
+        full == "size" && third == "copies AT_006" && fine == null, full + " / " + third + " / " + (fine ?? "null"));
 });
 
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");
