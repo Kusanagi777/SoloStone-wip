@@ -755,8 +755,10 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
     // Step 9: the eight twists roll on the v4 defaults (partial -> implemented), ULDA_111 and GILA_911 are v4 treasures (missing ->
     // implemented), GILA_BOSS_48t's restart path is scripted (missing -> partial, its deck role waits for the gate): implemented
     // 3880 -> 3890, partial 10 -> 3 (GILA_BOSS_43t, GILA_BOSS_48t, GILA_BOSS_99t), missing 13 -> 10.
-    Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13; wave 5: families 14-19; wave 6: families 20-24; the close-out; step 9): 4970 rows; 3890 implemented, 3 partial, 10 missing, 1067 duplicate/support, 0 intentionally adapted",
-        rows.Count == 4970 && classes.GetValueOrDefault("implemented") == 3890 && classes.GetValueOrDefault("partial") == 3 && classes.GetValueOrDefault("missing") == 10
+    // Build Deck: + 24 rows, all "implemented" (the run:starter rows of the 11 class and 13 hero build decks; they hold no cards):
+    // implemented 3890 -> 3914, 4970 -> 4994 rows.
+    Check("ledger golden (phase 8 wave 3: families 06, 09, 10; wave 4: families 11, 12, 13; wave 5: families 14-19; wave 6: families 20-24; the close-out; step 9; Build Deck): 4994 rows; 3914 implemented, 3 partial, 10 missing, 1067 duplicate/support, 0 intentionally adapted",
+        rows.Count == 4994 && classes.GetValueOrDefault("implemented") == 3914 && classes.GetValueOrDefault("partial") == 3 && classes.GetValueOrDefault("missing") == 10
         && classes.GetValueOrDefault("duplicate/support") == 1067 && classes.GetValueOrDefault("intentionally adapted") == 0, string.Join(",", classes.Select(p => p.Key + "=" + p.Value)));
 }
 

@@ -11,8 +11,8 @@ One ledger for the unified Dungeon Run (gap review 2026-11-10, implementation st
 | Reference-CSV records (original adventure ids) | 2,050 |
 | Original bucket / starter / finale-deck / loadout cards and labels not in the CSV | 1,769 |
 | Of those, original cards also in SoloStone's current pool | 1,467 |
-| SoloStone-only rows (run catalog entries and current pool cards) | 1,151 |
-| **Total rows** | **4,970** |
+| SoloStone-only rows (run catalog entries and current pool cards) | 1,175 |
+| **Total rows** | **4,994** |
 
 The reference CSV has 2,050 records and every one is a row. 0 bucket labels without a CSV record (Monster Hunt's Darius and Toki labels) were added as `label:` rows. A card that has several provenances is one row whose `adventures`, `roles`, `buckets` and `decks` columns list all of them.
 
@@ -20,12 +20,12 @@ The reference CSV has 2,050 records and every one is a row. 0 bucket labels with
 
 | Classification | Rows | Original (non-SoloStone) rows | SoloStone rows |
 | --- | ---: | ---: | ---: |
-| implemented | 3,890 | 2,832 | 2,836 |
+| implemented | 3,914 | 2,832 | 2,860 |
 | partial | 3 | 3 | 0 |
 | missing | 10 | 10 | 0 |
 | duplicate/support | 1,067 | 974 | 228 |
 | intentionally adapted | 0 | 0 | 0 |
-| **Total** | 4,970 | 3,819 | 3,064 |
+| **Total** | 4,994 | 3,819 | 3,088 |
 
 A row with several adventures counts once in each column it belongs to, so the last two columns can overlap.
 
@@ -38,7 +38,7 @@ A row with several adventures counts once in each column it belongs to, so the l
 | Rumble Run | 989 | 0 | 0 | 163 | 0 | 1,152 |
 | The Dalaran Heist | 1,627 | 0 | 6 | 291 | 0 | 1,924 |
 | Tombs of Terror | 1,328 | 0 | 3 | 278 | 0 | 1,609 |
-| SoloStone | 2,836 | 0 | 0 | 228 | 0 | 3,064 |
+| SoloStone | 2,860 | 0 | 0 | 228 | 0 | 3,088 |
 
 ### Classification by role
 
@@ -46,7 +46,7 @@ A row with several adventures counts once in each column it belongs to, so the l
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | boss deck | 1,779 | 0 | 0 | 0 | 0 | 1,779 |
 | bucket member | 1,713 | 0 | 0 | 0 | 0 | 1,713 |
-| starter | 809 | 0 | 0 | 0 | 0 | 809 |
+| starter | 833 | 0 | 0 | 0 | 0 | 833 |
 | bucket label | 0 | 0 | 0 | 440 | 0 | 440 |
 | enchantment | 0 | 0 | 0 | 396 | 0 | 396 |
 | boss power | 279 | 0 | 2 | 85 | 0 | 366 |
@@ -163,7 +163,7 @@ A row is counted under every role it has (a card can be a bucket member and a st
 | Tombs of Terror | portrait |  |  |  | 10 |  | 10 |
 | Tombs of Terror | twist | 4 |  |  |  |  | 4 |
 | SoloStone | boss deck | 1,779 |  |  |  |  | 1,779 |
-| SoloStone | starter | 791 |  |  |  |  | 791 |
+| SoloStone | starter | 815 |  |  |  |  | 815 |
 | SoloStone | enchantment |  |  |  | 166 |  | 166 |
 | SoloStone | boss power | 20 |  |  |  |  | 20 |
 | SoloStone | boss hero |  |  |  | 18 |  | 18 |
@@ -224,7 +224,7 @@ Each non-implemented, non-support row lists in `blocked_by` every gap that stand
 
 | ai_support | Rows |
 | --- | ---: |
-| ok | 2,973 |
+| ok | 2,997 |
 | not applicable | 1,067 |
 | ok:run-treasure | 110 |
 | ok:secret-card | 42 |
@@ -678,7 +678,7 @@ Client entity checks ran against the CARD table in `data/dungeon-run/reference/c
 
 | Validation | Rows |
 | --- | ---: |
-| passes (all forms) | 3,985 |
+| passes (all forms) | 4,009 |
 | rejected (one rule or more) | 14 |
 | not applicable | 971 |
 | rejected: `encounter-rejected` | 9 |
@@ -757,15 +757,15 @@ It builds the engine (`engine/SabberStoneCore`, net10.0) and compiles `plugin/Du
 
 | Input | SHA-256 (first 16) |
 | --- | --- |
-| `data/dungeon-run/catalog-v1.json` | `b6c143aff9097222` |
+| `data/dungeon-run/catalog-v1.json` | `7a819ba2d76fd107` |
 | `data/dungeon-run/encounters-v1.json` | `b53222487046ed75` |
-| `data/dungeon-run/pool-v1.json` | `2d41da2a94213f40` |
+| `data/dungeon-run/pool-v1.json` | `a7c7a59a6b39b834` |
 | `data/dungeon-run/reference/adventure-reference.csv` | `4a608dfa596733e7` |
 | `data/dungeon-run/reference/adventures.json` | `ffb19db176d63f1c` |
 | `data/dungeon-run/reference/buckets.json` | `b3015218a0ea9193` |
 | `data/dungeon-run/reference/client-tables.json` | `c7b51c98f568706a` |
-| `data/dungeon-run/run-v1.json` | `e05f5fc25898ed5c` |
-| `data/dungeon-run/schedule-v1.json` | `77a8f0bfe067a561` |
+| `data/dungeon-run/run-v1.json` | `06aff301eb5cc865` |
+| `data/dungeon-run/schedule-v1.json` | `834914a6503247fc` |
 | `data/dungeon-run/tavern-v1.json` | `82e90c87679c8e30` |
 | `data/npc/decks-v1.json` | `6c94aa100d51468f` |
 | `plugin/NativeMatch.cs TransportCardId map` | `18 ids` |
