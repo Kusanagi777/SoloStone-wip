@@ -148,6 +148,7 @@ static partial class Program
             LayoutTests(temp,source,bundle,supported,payload);
             ClientPolicyTests(temp);
             MinisignTests(temp);
+            MemberDumpTests();
             ManifestTests(temp);
             NetworkTests(temp);
             EngineTests(temp);
