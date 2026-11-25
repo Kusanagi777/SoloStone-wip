@@ -334,3 +334,53 @@ All on this tree (`wip/t-int`), each harness call through the harness lock; logs
   moved with step 9; seed-sensitive, 40 games).
 - `verify/baseline` is not re-recorded (the final-tree regression was stopped; engine md5 is now b8159b68).
 - The harness was not built on an f62275b export (bp9-before); the run harness reads the step-9 fields by reflection.
+
+## 7. Build Deck (phases 0-2, 2026-11-25)
+
+Branch `wip/t-bd` (worktree `/home/user/wt/t-bd`), from `c1eac51`; spec
+`docs/superpowers/specs/2026-11-25-dungeon-run-build-deck-design.md`, plan
+`docs/superpowers/plans/2026-11-25-dungeon-run-build-deck-phases-0-2.md`. Every Random starting deck became Build Deck:
+the player builds a legal 10-card starter from their collection on the run menu's plank Build step, picks a power (and a
+signature where the row has them) and the run starts with those 10 cards. The Collection Manager editor (spec phases 3-4)
+is a later plan; phase 0's member dump (`tool members`, `installer/build-deck-members.txt`) is for the owner to run.
+
+The checks are sixteen new checks in `p9/c-sched-9` (RESULT 42 -> 58 passed), in four guards:
+
+| Check | Guard | What it checks |
+|---|---|---|
+| BD1 | BD (rules) | `DungeonRunBuild.CardReason`: a Mage row allows scripted, admitted Mage cards and neutrals; a Warrior card is `class` |
+| BD2 | BD | a hero card is `hero`; a Fabled primary and a Fabled companion are `fabled` |
+| BD3 | BD | `DeckReasons`: 10 legal cards give no reasons; 9 and 11 give `size 9 of 10` / `size 11 of 10` |
+| BD4 | BD | 3 copies of a card are `copies <id>`; 2 of a legendary are `legendary <id>` |
+| BD5 | BD | two ids in one copy group (2 + 1) are `copies <group>`; owning 1 of an id used twice is `owned <id>`; `owned` null skips ownership (the pure run start's check) |
+| BD6 | BD | a Death Knight deck needing 4 runes is `runes`, 3 runes is legal; a rune-cost card on a Mage row is `rune-class` |
+| BD7 | BD | a dual Mage/Rogue row: 10 Mage cards are legal, and a Mage + Rogue mix is legal |
+| BD8 | BD | `AddReason` is `size` on a full deck, `copies <id>` for a third copy, null for a legal add |
+| BD9 | BDD (data) | each of the 37 enabled rows has exactly one build-able deck, its last: a `build` deck (no cards, a display card, no unlock, id `<row>_build`) on the class, Rikkar and Monster Hunt rows, the generated deck on the Heist and Tombs rows; class rows keep 3 fixed decks; each Rikkar build deck names its default deck's shrine; the validator accepts the data and refuses a row without one (`class MAGE: has 0 build-able decks`) |
+| BD10 | BDD | `DungeonRunCatalog.Decks` lists each row's Build Deck option last: "Build Deck", unlocked on a fresh profile, no cards, `IsBuild`, the build deck's `DisplayCard`, no unlock key or hint; the other options as before (their `DisplayCard` the data's) |
+| BD11 | BDR (run start) | a built MAGE run and a built Heist run (fresh profile) hold exactly the list, `StarterDeck` the row's build deck (`mage_build`, `heist_mage_random`), `BuiltDeck` true; the XML round trip keeps them and `Resume` accepts them; a plain run writes no `BuiltDeck`; the archived summary of a lost built run keeps it |
+| BD12 | BDR | a built list of 9 cards is refused with `size 9 of 10`, one with a Warrior card with `class AT_064`; a built list on a non-build deck (`NotBuildDeck`) and a plain start on a build deck (`NeedsBuiltList`) are refused; a plain start on the locked Heist generated deck is still `LockedDeck` |
+| BD13 | BDR | a built Monster Hunt run (Tess, GILA_500h3) has every treasure scoped to its row's decks in scope (43, GILA_501 among them; GILA_501 is out with `BuiltDeck` off); a built run's deck tags are the union of its row's decks' tags (MAGE: `minions` from mage_kindled, which a mage_rimeward run lacks) |
+| BD14 | BDP (plank builder) | `BuildPage` on an 18-card fixture: the class/neutral filters (the engine card's class), the cost buckets 0-1, 2..6, 7+, 6 per page by cost then name, a page past the end is the last page; the filter enum and its cycle (All, Class, Neutral, Cost0to1..Cost6, Cost7Plus, back to All) |
+| BD15 | BDP | the exact texts: `BuildCardLabel` "Fireball (4) 1/2" (copies in the list / copies it may hold: min(owned, 2, 1 for a legendary)), `BuildCaption` "Picked n of 10: ..." with repeats folded, the filter plank labels and the add-refusal captions |
+| BD16 | BDP | `BuildReachable` counts legal copies per copy group (min(owned summed over the group, 2, 1 with a legendary in it)): the 7-copy fixture is 7, 6 with two ids grouped by the delegate, a legendary's group 1; the line "Not enough cards in your collection for this hero (7 of 10)", none at 10 |
+
+Not covered here (the plugin cannot be compiled in the cloud): `DungeonRunRuntime.BuildCandidates` and the runtime
+`NewRun` re-check against the live collection, the plank Build step and its hand-offs (`NativeDungeonRunUI`), and the
+native picker's Build Deck pouch and hand-off (`NativeDungeonRunPicker`). Their first compile and every check of them is
+the owner's PC build (HANDOFF 3.5).
+
+Regression on this branch (2026-11-25; every harness call through the harness lock; the base is `3dcae7b`, the first
+Build Deck commit, which adds only the uncalled rules file and BD1-BD8):
+- Builds: the catalog tool, all 93 suite projects and randplay, 0 errors; the 39 hall projects build and run.
+- `runs.sh 1 all` (77 entries) against 3dcae7b: only c-sched-9 (50 -> 58: BD9-BD16) and c-catalog (a crash at 3dcae7b,
+  the catalog tool's compile break from 136bf1a, repaired by 45d3df4 -> 127/0) move. The known failures stay: c-enc-18
+  108/1 (R2), c-rules-9 56/2 (T2, K1). randplay D636637696A3BCE4, selfplay 2CE546A18F96DCBC, c-secretsearch 692/0 as at
+  3dcae7b.
+- `hall.sh same`: 39 of 39 equal to `verify/baseline/hall.txt`.
+- The 11 released bosspilot modes (run, fixture, catalog, act, shrine, shrineS2/S3/U/T1/T2/D), each twice identical,
+  0 faults and 0 fallbacks, are byte-identical to the same modes at 3dcae7b. Their differences from the wave-6 records
+  (10 to 54 lines per mode, turn and decision counts and a few outcomes; act 27 boss wins where the record has 26) exist at
+  3dcae7b already: `verify/baseline` is still wave 6's (section 6).
+- The restoration ledger is regenerated: 4970 -> 4994 rows, the 24 build decks' `run:starter` rows, all implemented
+  (implemented 3890 -> 3914); c-deckops T5 and c-catalog's ledger golden follow.
