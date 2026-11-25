@@ -77,6 +77,23 @@ internal sealed class RunDeckOption
     public int SortOrder;
 }
 
+/// <summary>
+/// A card the player may put in a Build Deck starter (DungeonRunRuntime.BuildCandidates): a collectible card the row admits
+/// (<see cref="DungeonRunBuild.CardReason"/> null) that the player owns.
+/// </summary>
+internal sealed class RunBuildCard
+{
+    /// <summary>The engine card id (what the built list holds), the card id the client is sent for it, and its name.</summary>
+    public string Id, ClientId, Name;
+    public int Cost;
+    /// <summary>A legendary: at most one copy of its copy group.</summary>
+    public bool Legendary;
+    /// <summary>Copies owned, golden and normal together (always more than 0).</summary>
+    public int Owned;
+    /// <summary>The copy-limit group (a Core reprint and its original share one); the client id when it has none.</summary>
+    public string CopyGroup;
+}
+
 /// <summary>A hero power of one class.</summary>
 internal sealed class RunPowerOption
 {
