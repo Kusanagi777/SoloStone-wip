@@ -151,7 +151,8 @@ var transport = new Dictionary<string, string>
         var r = data.FindClass(row);
         var d = data.FindDeck(deck);
         Check($"T2 hero row {row}: one authored starter {deck} of 10 scripted, admitted {cls} or neutral cards",
-            r.Decks.SequenceEqual(new[] { deck }) && d.Class == row && d.Cards.Count == 10 && !d.IsGenerated
+            // Build Deck: the row's build deck follows its one authored starter.
+            r.Decks.SequenceEqual(new[] { deck, row.ToLowerInvariant() + "_build" }) && data.FindDeck(r.Decks[1])?.Build == true && d.Class == row && d.Cards.Count == 10 && !d.IsGenerated
             && d.Cards.All(id => C(id) != null && C(id).Implemented && (C(id).Class.ToString() == cls || C(id).Class == CardClass.NEUTRAL)
                 && DungeonRunAdmission.Classify(C(id), id, AdmitScope.Player, null, catalogRun: true).Admitted),
             string.Join(",", d?.Cards ?? new List<string>()));
@@ -213,7 +214,7 @@ var transport = new Dictionary<string, string>
         var rb = DungeonRunAdmission.Classify(C("GILA_911"), "GILA_911", AdmitScope.Boss, null, catalogRun: true);
         Check("T2 GILA_911: admitted for the run player only (game-restart, step 9)", r.Subject && r.Admitted && !rb.AdmittedSome && r.Family == "game-restart");
     }
-    string badPower = runJson.Replace("\"powers\": [\"CS2_034\"], \"decks\": [\"mh_toki_workshop\"]", "\"powers\": [\"GILA_900p\"], \"decks\": [\"mh_toki_workshop\"]");
+    string badPower = runJson.Replace("\"powers\": [\"CS2_034\"], \"decks\": [\"mh_toki_workshop\", \"gila_900h_build\"]", "\"powers\": [\"GILA_900p\"], \"decks\": [\"mh_toki_workshop\", \"gila_900h_build\"]");
     var ePower = DungeonRunValidator.Validate(DungeonRunData.Parse(badPower, poolJson, npcJson, catalogJson, scheduleJson, tavernJson), null);
     Check("T2 validator: Toki with Temporal Loop (unscripted, rejected) is an error", badPower != runJson && ePower.Any(e => e.Contains("GILA_900p")), string.Join(" | ", ePower.Take(2)));
 }

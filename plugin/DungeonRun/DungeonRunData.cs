@@ -106,6 +106,18 @@ internal sealed class DungeonRunClass
     internal IReadOnlyList<string> ClassSet => Classes.Count > 0 ? Classes : Id == null ? new string[0] : new[] { Id };
     internal string DefaultPower => Powers.FirstOrDefault();
     internal string DefaultDeck => Decks.FirstOrDefault();
+    /// <summary>
+    /// The row's one build-able deck (<see cref="DungeonRunStarterDeck.IsBuildable"/>): its "build" deck on a class, Rikkar or
+    /// Monster Hunt row, its generated "Random" deck on a Heist or Tombs row; null when the row lists none.
+    /// </summary>
+    internal DungeonRunStarterDeck BuildDeck(DungeonRunData data) =>
+        data == null ? null : Decks.Select(data.FindDeck).FirstOrDefault(d => d != null && d.IsBuildable);
+    /// <summary>
+    /// The row's deck ids a run starts on from the data alone (no built list), in data order: every deck but a build deck, which
+    /// has no cards (a generated deck stays: NewRun draws it). Headless suites rotate their runs over these.
+    /// </summary>
+    internal List<string> StartDecks(DungeonRunData data) =>
+        Decks.Where(id => data?.FindDeck(id)?.Build != true).ToList();
     internal string PowerUnlock(string power) => power != null && PowerUnlocks.TryGetValue(power, out string key) ? key : null;
 }
 
@@ -132,6 +144,14 @@ internal sealed class DungeonRunStarterDeck
     internal string DisplayCard;
     internal const string GeneratorRandomClass = "random-class", GeneratorRandomDual = "random-dual";
     internal bool IsGenerated => Generator != null;
+    /// <summary>
+    /// A build deck (pool-v1.json / run-v1.json "build": true; Build Deck): no cards, a <see cref="DisplayCard"/>, never locked.
+    /// It is only the StarterDeck id of a run whose player built the starter; the rows that have no generated deck list one,
+    /// last (DungeonRunClass.BuildDeck).
+    /// </summary>
+    internal bool Build;
+    /// <summary>What a picker shows as Build Deck: a build deck or a generated deck (the row's one, DungeonRunClass.BuildDeck).</summary>
+    internal bool IsBuildable => Build || IsGenerated;
 }
 
 /// <summary>Which runs may be offered a treasure: any listed class, starter deck or power. Empty = every run.</summary>
@@ -753,8 +773,10 @@ internal sealed class DungeonRunData
             Generator = NpcWorldJson.Text(row, "generator", false),
             DisplayCard = NpcWorldJson.Text(row, "displayCard", false),
             Shrine = NpcWorldJson.Text(row, "shrine", false),
-            // A generated deck lists no cards (the key may be absent); a fixed deck must list them.
-            Cards = row.ContainsKey("generator") ? NpcWorldJson.Strings(row, "cards") ?? new List<string>() : NpcWorldJson.Strings(row, "cards", true),
+            Build = NpcWorldJson.Boolean(row, "build"),
+            // A generated or build deck lists no cards (the key may be absent); a fixed deck must list them.
+            Cards = row.ContainsKey("generator") || NpcWorldJson.Boolean(row, "build")
+                ? NpcWorldJson.Strings(row, "cards") ?? new List<string>() : NpcWorldJson.Strings(row, "cards", true),
         };
         foreach (var row in NpcWorldJson.List(pool, "starterDecks").Cast<object>().Select(Obj))
             data.Decks.Add(DeckRow(row));
@@ -1147,6 +1169,11 @@ internal sealed class DungeonRunModifier
 
 internal sealed class DungeonRunSchedule
 {
+    /// <summary>
+    /// The smallest boss deck a schedule's "bossDeck" may name (NativeMatch's encounter floor; DungeonRun.MinBossDeck). It lives
+    /// here so the validator reads it without DungeonRun (tools/dungeon-run-catalog compiles the data and the validator only).
+    /// </summary>
+    internal const int MinBossDeck = 10;
     internal string Id;
     internal int DeckMin = 10, DeckMax = 50;
     internal List<DungeonRunAct> Acts = new List<DungeonRunAct>();

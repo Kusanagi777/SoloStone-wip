@@ -56,7 +56,8 @@ static partial class Program
             }
             if (args.Length > 0 && args[0] == "mono-guard") return MonoGuard.Run(args.Skip(1).ToArray());
             if (args.Length > 0 && args[0] == "bindings") return BindingScan.Run(args.Skip(1).ToArray());
-            Console.Error.WriteLine("Usage: tool mono-guard ... | tool bindings ... | tool keygen OUTDIR NAME | tool sign KEYFILE FILE COMMENT [OUT] | tool check-app APPDIR | tool check-release OUTDIR VERSION [--no-setup] | tool check-manifest FILE | tool verify FILE SIGNATURE PUBLIC_KEY"); return 2;
+            if (args.Length > 0 && args[0] == "members") return MemberDump.Run(args.Skip(1).ToArray());
+            Console.Error.WriteLine("Usage: tool mono-guard ... | tool bindings ... | tool members ASSEMBLY.dll LIST.txt | tool keygen OUTDIR NAME | tool sign KEYFILE FILE COMMENT [OUT] | tool check-app APPDIR | tool check-release OUTDIR VERSION [--no-setup] | tool check-manifest FILE | tool verify FILE SIGNATURE PUBLIC_KEY"); return 2;
         } catch (Exception e) { Console.Error.WriteLine(e.Message); return 1; }
     }
 }

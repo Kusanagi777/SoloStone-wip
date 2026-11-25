@@ -525,7 +525,7 @@ Check("catalog runs: the entry predicate CatalogSecretPrior reads is the one Ope
                 .Any(id => Engine(id)?.IsSecret == true && DungeonRunAdmission.Classify(Engine(id), id, AdmitScope.Player, null, true).Admitted)));
         for (long seed = 1; seed <= 8; seed++)
         {
-            var st = catRun.NewRun(catAll, cls.Id, cls.Decks[(int)(seed % cls.Decks.Count)], cls.Powers[(int)(seed % cls.Powers.Count)], seed * 104729 + catRuns, signatureId: catRun.SignatureOffer(catAll, catRun.Data.FindClass(cls.Id), seed * 104729 + catRuns).FirstOrDefault());
+            var st = catRun.NewRun(catAll, cls.Id, cls.StartDecks(catData)[(int)(seed % cls.StartDecks(catData).Count)], cls.Powers[(int)(seed % cls.Powers.Count)], seed * 104729 + catRuns, signatureId: catRun.SignatureOffer(catAll, catRun.Data.FindClass(cls.Id), seed * 104729 + catRuns).FirstOrDefault());
             var rng = new Random((int)(seed * 17 + catRuns));
             for (int guard = 0; guard < 200 && !st.Finished; guard++)
             {
@@ -592,7 +592,7 @@ Check("catalog runs: the entry predicate CatalogSecretPrior reads is the one Ope
     var srcRun = new DungeonRun(priorData);
     int runs = 0, secretsSeen = 0; var outside = new SortedSet<string>(StringComparer.Ordinal);
     foreach (var cls in priorData.Classes)
-        foreach (var deck in cls.Decks)
+        foreach (var deck in cls.StartDecks(priorData))
             foreach (var power in cls.Powers)
                 for (long seed = 1; seed <= 6; seed++)
                 {

@@ -55,6 +55,8 @@ internal static class NativeDungeonRunText
     internal const string NoTreasuresCaption = "No treasures yet.";
     internal const string NoChoicesCaption = "Nothing is on offer.";
     internal const string LockedWord = "Locked";
+    // The Build Deck option (a row's build deck: DungeonRunClass.BuildDeck), in every picker; always unlocked.
+    internal const string BuildDeckName = "Build Deck", BuildDeckDescription = "Build a 10-card deck from your collection.";
     // The native playmat's filler slots for a row with fewer decks or powers than the prefab shows (NativeDungeonRunPicker).
     internal const string NoOtherDeckName = "No other deck", NoOtherDeckHint = "This hero has no other starting deck.",
         NoOtherPowerHint = "This hero has no other hero power.";
@@ -279,6 +281,161 @@ internal static class NativeDungeonRunText
 
     internal static int Pages(int count, int perPage) => count <= 0 ? 1 : (count + perPage - 1) / perPage;
     internal static int ClampPage(int page, int count, int perPage) => page < 0 ? 0 : page >= Pages(count, perPage) ? Pages(count, perPage) - 1 : page;
+
+    // ---- Build Deck's plank builder (NativeDungeonRunUI Step.Build): the row's candidate cards (DungeonRunRuntime.BuildCandidates)
+    // as planks, 6 a page, under a filter plank that cycles the filters; the picked list in the caption.
+    internal const string BuildHeader = "Build your deck", BuildRemoveLabel = "Remove last", BuildDoneLabel = "Done";
+    internal const string BuildFilterId = "dungeon-run.build.filter", BuildRemoveId = "dungeon-run.build.remove", BuildDoneId = "dungeon-run.build.done",
+        BuildCardIdPrefix = "dungeon-run.build.card:";
+    /// <summary>The builder's card filters, in the order the filter plank cycles them: every card, the row's class cards (an engine
+    /// card whose class is not neutral), neutral cards, then mana-cost buckets (0 and 1 together, 2 to 6 alone, 7 and more).</summary>
+    internal enum BuildFilter { All, Class, Neutral, Cost0to1, Cost2, Cost3, Cost4, Cost5, Cost6, Cost7Plus }
+    /// <summary>The filter after <paramref name="filter"/> (the last wraps to <see cref="BuildFilter.All"/>).</summary>
+    internal static BuildFilter NextBuildFilter(BuildFilter filter) => filter >= BuildFilter.Cost7Plus ? BuildFilter.All : filter + 1;
+    /// <summary>The filter plank's label: "Filter: All cards", "Filter: Cost 0-1", "Filter: Cost 7+".</summary>
+    internal static string BuildFilterLabel(BuildFilter filter)
+    {
+        switch (filter)
+        {
+            case BuildFilter.All: return "Filter: All cards";
+            case BuildFilter.Class: return "Filter: Class cards";
+            case BuildFilter.Neutral: return "Filter: Neutral cards";
+            case BuildFilter.Cost0to1: return "Filter: Cost 0-1";
+            case BuildFilter.Cost7Plus: return "Filter: Cost 7+";
+            default: return "Filter: Cost " + (filter - BuildFilter.Cost2 + 2);
+        }
+    }
+
+    private static bool BuildNeutral(RunBuildCard card)
+    {
+        try { return SabberStoneCore.Model.Cards.FromId(card.Id)?.Class == SabberStoneCore.Enums.CardClass.NEUTRAL; }
+        catch (System.Exception) { return false; }
+    }
+
+    private static bool BuildMatches(RunBuildCard card, BuildFilter filter)
+    {
+        switch (filter)
+        {
+            case BuildFilter.All: return true;
+            case BuildFilter.Class: return !BuildNeutral(card);
+            case BuildFilter.Neutral: return BuildNeutral(card);
+            case BuildFilter.Cost0to1: return card.Cost <= 1;
+            case BuildFilter.Cost7Plus: return card.Cost >= 7;
+            default: return card.Cost == filter - BuildFilter.Cost2 + 2;
+        }
+    }
+
+    /// <summary>The cards of <paramref name="all"/> that <paramref name="filter"/> keeps, by cost, then name, then id.</summary>
+    internal static IReadOnlyList<RunBuildCard> BuildFiltered(IReadOnlyList<RunBuildCard> all, BuildFilter filter) =>
+        (all ?? new RunBuildCard[0]).Where(c => c != null && BuildMatches(c, filter))
+            .OrderBy(c => c.Cost).ThenBy(c => c.Name, System.StringComparer.Ordinal).ThenBy(c => c.Id, System.StringComparer.Ordinal).ToList();
+
+    /// <summary>Page <paramref name="page"/> (0-based; clamped to the pages there are) of <see cref="BuildFiltered"/>, <paramref name="perPage"/> cards.</summary>
+    internal static IReadOnlyList<RunBuildCard> BuildPage(IReadOnlyList<RunBuildCard> all, BuildFilter filter, int page, int perPage)
+    {
+        var filtered = BuildFiltered(all, filter);
+        page = ClampPage(page, filtered.Count, perPage);
+        return filtered.Skip(page * perPage).Take(perPage).ToList();
+    }
+
+    /// <summary>The copies of one card a built list may hold: what is owned, at most 2, at most 1 for a legendary.</summary>
+    internal static int BuildCopyLimit(RunBuildCard card) => System.Math.Min(card.Owned, card.Legendary ? 1 : 2);
+
+    /// <summary>
+    /// A card plank: "Fireball (4) 1/2" is the name, the mana cost, then n/m where n (<paramref name="inDeck"/>) is the copies of
+    /// this card in the list and m the copies this list may hold of it (<see cref="BuildCopyLimit"/>: min(owned, 2, 1 for a
+    /// legendary)). The copy group's shared limit is not folded in: an add past it is refused with its reason.
+    /// </summary>
+    internal static string BuildCardLabel(RunBuildCard c, int inDeck) => c.Name + " (" + c.Cost + ") " + inDeck + "/" + BuildCopyLimit(c);
+
+    /// <summary>The caption's list line: "Picked 3 of 10: 2x Fireball, Frostbolt" (repeats folded, first pick first); "Picked 0 of 10".</summary>
+    internal static string BuildCaption(IReadOnlyList<string> names, int size)
+    {
+        int count = names?.Count ?? 0;
+        return "Picked " + count + " of " + size + (count == 0 ? "" : ": " + DeckCardsLine(names));
+    }
+
+    /// <summary>
+    /// The legal copies <paramref name="all"/> can put in one deck: per copy group, min(the owned counts of its cards summed, 2,
+    /// or 1 when a card of the group is legendary), summed over the groups. <paramref name="copyGroup"/> maps a card id to its
+    /// group; null uses each card's own <see cref="RunBuildCard.CopyGroup"/> (its id when it has none). Rune limits are not counted.
+    /// </summary>
+    internal static int BuildReachable(IReadOnlyList<RunBuildCard> all, System.Func<string, string> copyGroup)
+    {
+        System.Func<RunBuildCard, string> group = c => (copyGroup != null ? copyGroup(c.Id) : c.CopyGroup) ?? c.Id;
+        return (all ?? new RunBuildCard[0]).Where(c => c != null && c.Owned > 0).GroupBy(group, System.StringComparer.Ordinal)
+            .Sum(g => System.Math.Min(g.Sum(c => c.Owned), g.Any(c => c.Legendary) ? 1 : 2));
+    }
+
+    /// <summary>The caption line when the row's owned legal copies (<see cref="BuildReachable"/>) cannot fill the deck: "Not enough
+    /// cards in your collection for this hero (7 of 10)"; null when they can.</summary>
+    internal static string BuildNotEnoughLine(int reachable, int size) =>
+        reachable >= size ? null : "Not enough cards in your collection for this hero (" + reachable + " of " + size + ")";
+
+    /// <summary>
+    /// The caption when a card plank's add is refused, from <see cref="DungeonRunBuild.AddReason"/>'s code: "Cannot add Fireball:
+    /// the deck is full." for "size"; the copies, legendary, owned, runes and not-collectible codes in words; any other code as given.
+    /// </summary>
+    internal static string BuildAddRefusal(string name, string reason)
+    {
+        string why = BuildReasonWords((reason ?? "").Split(' ')[0]);
+        return "Cannot add " + name + ": " + (why == null ? reason : why + ".");
+    }
+
+    // The words of a DungeonRunBuild reason code shared by the add and run-start refusals ("at most 2 copies of a card"); null
+    // for a code they word differently or not at all.
+    private static string BuildReasonWords(string code)
+    {
+        switch (code)
+        {
+            case "size": return "the deck is full";
+            case "copies": return "at most 2 copies of a card";
+            case "legendary": return "at most 1 copy of a legendary";
+            case "owned": return "you own no more copies";
+            case "runes": return "a Death Knight deck needs at most 3 runes";
+            case "not-collectible": return "not a collectible card";
+            default: return null;
+        }
+    }
+
+    /// <summary>
+    /// The run-start refusal of a built list, from <see cref="DungeonRunBuild.DeckReasons"/>: <see cref="DungeonRun.IllegalBuiltList"/>,
+    /// then each reason in words with its card's name, joined by "; ": "That deck cannot start a run: Fireball: you no longer own
+    /// that many copies." The add refusal's words are reused (<see cref="BuildReasonWords"/>). <paramref name="name"/> names an
+    /// engine id or a copy group; a name it cannot give (null, empty, or it throws) is "a card", so no engine id is shown. Null
+    /// when there are no reasons.
+    /// </summary>
+    internal static string BuildStartRefusal(IReadOnlyList<string> reasons, System.Func<string, string> name)
+    {
+        if (reasons == null || reasons.Count == 0) return null;
+        string Named(string id)
+        {
+            string text = null;
+            try { text = id == null || name == null ? null : name(id); } catch (System.Exception) { text = null; }
+            return string.IsNullOrEmpty(text) ? "a card" : text;
+        }
+        var parts = new List<string>();
+        foreach (string reason in reasons)
+        {
+            string text = reason ?? "";
+            int space = text.IndexOf(' ');
+            string code = space < 0 ? text : text.Substring(0, space), rest = space < 0 ? null : text.Substring(space + 1);
+            if (code == "size") { parts.Add("it has " + rest + " cards"); continue; }
+            string why;
+            switch (code)
+            {
+                case "owned": why = "you no longer own that many copies"; break;
+                case "class": why = "not a card of this hero's class"; break;
+                case "hero": why = "a hero card"; break;
+                case "fabled": why = "a Fabled card"; break;
+                case "rune-class": why = "a rune card, only in a Death Knight deck"; break;
+                case "missing": why = "an unknown card"; break;
+                default: why = BuildReasonWords(code) ?? "not allowed in a run"; break;
+            }
+            parts.Add(rest == null ? why : Named(rest) + ": " + why);
+        }
+        return DungeonRun.IllegalBuiltList + string.Join("; ", parts) + ".";
+    }
 
     // ---- the portrait tray's pages (NativeDungeonRunPicker, owner 2026-11-22). The tray's prefab lays out at most `perPage`
     // heroes (its layout capacity, 12 on Dalaran's tray), so the run rows are paged. Page order: the class rows first, then the

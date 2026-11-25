@@ -74,7 +74,7 @@ string[] adventurePools = { "Heist", "MonsterHunt", "Tombs" };
 string Origin(DungeonRunClass c) => c.Adventure ?? "classes";
 
 // The loadouts: every hero row x every starter deck (116; acts-v4t leaves out DALA_Tekahn's four, FinaleExcludes).
-var loadouts = data.Classes.SelectMany(c => c.Decks.Select(deck => (Row: c, Deck: deck))).ToList();
+var loadouts = data.Classes.SelectMany(c => c.StartDecks(data).Select(deck => (Row: c, Deck: deck))).ToList();
 DungeonRunState New(DungeonRunClass row, string deck, long seed, string schedule, int power = 0) =>
     run.NewRun(all, row.Id, deck, row.Powers[power % row.Powers.Count], seed, schedule: schedule, signatureId: run.SignatureOffer(all, row, seed).FirstOrDefault());
 

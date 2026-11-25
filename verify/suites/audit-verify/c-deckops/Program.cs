@@ -822,7 +822,7 @@ string[] tavernEnchants = table.Options.Where(o => o.Ench != null).Select(o => o
         for (int seed = 1; seed <= 30; seed++)
         {
             var cls = data.Classes[seed % data.Classes.Count];
-            var s = run.NewRun(all, cls.Id, cls.Decks[seed % cls.Decks.Count], cls.Powers[0], 70000 + seed, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), 70000 + seed).FirstOrDefault());
+            var s = run.NewRun(all, cls.Id, cls.StartDecks(data)[seed % cls.StartDecks(data).Count], cls.Powers[0], 70000 + seed, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), 70000 + seed).FirstOrDefault());
             Walk(s, x => false, shop: t =>
             {
                 foreach (string id in t.Tavern.Offers.ToList())
@@ -954,7 +954,7 @@ string[] tavernEnchants = table.Options.Where(o => o.Ench != null).Select(o => o
             string.Join(",", t.Tavern.Pending?.Candidates ?? new List<string>()));
         var bad = new List<string>();
         foreach (var cls in data.Classes)
-            foreach (string deckId in cls.Decks)
+            foreach (string deckId in cls.StartDecks(data))
             {
                 var r = run.NewRun(all, cls.Id, deckId, cls.Powers[0], 11, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), 11).FirstOrDefault());
                 foreach (var c in r.Cards) if (DungeonRunDeck.CopyError(run, r, c.Uid) != null) bad.Add(cls.Id + ":" + c.Id);
@@ -1030,7 +1030,7 @@ string[] tavernEnchants = table.Options.Where(o => o.Ench != null).Select(o => o
     // Phase 6 F1's regeneration added 2 rows (4440 -> 4442); F2 adds none; F3 adds 5 (the hero rows run:class:GILA_500h3 and
     // run:class:GILA_600h, their starters run:starter:mh_tess_scavenger and run:starter:mh_darius_militia, and the borrowed
     // Battlegrounds enchantment shell TB_BaconShopBadsongE of GILA_608).
-    Check("T5 the ledger keeps 4970 rows (the phase-8 close-out: - 22, the Monster Hunt label cards GILA_Darius_01-11 and GILA_Toki_01-11 are their buckets' label rows instead of a label: row beside each; phase 8 wave 6: families 20-24 + 61 run:boss rows and + 13 cards of their decks new to the ledger; phase 8 wave 5: families 14-19 + 91 run:boss rows and + 67 cards of their decks new to the ledger; phase 8 wave 4: family 11 + 13 run:boss rows and + 6 cards of their decks, family 12 + 13 run:boss rows and + 10 cards of their decks, family 13 + 8 run:boss rows of the Rumble Run champions and + 7 cards of their decks, FP1_029 new in both 12 and 13; phase 8 wave 3: + 26 run:boss rows, 11 of family 09 and 15 of family 10, and + 34 cards of their decks; phase 8 wave 2: + 35 run:boss rows, 18 of family 07 and 17 of family 08, and + 30 cards of their decks; phase 8 family 01: + 12 encounter rows and + 12 for the four Secret bosses; phase 6 F6: + the 9 Heist hero rows, their 35 starters and CORE_WON_096; F7/F8 + 5; F9 + run:starter:tombs_reno_random; F10 + 17: the 12 new starters, the 3 Random decks of the enabled dual rows and 2 rows they bring; F14 + 36: Rikkar's 9 run:class rows and 27 shrine starters)", rows.Count == 4970, rows.Count.ToString());
+    Check("T5 the ledger keeps 4994 rows (Build Deck: + 24 run:starter rows, the 11 class build decks of pool-v1.json and the 13 hero build decks of run-v1.json, 4 Monster Hunt and 9 Rikkar; they hold no cards, so no card row is new; the phase-8 close-out: - 22, the Monster Hunt label cards GILA_Darius_01-11 and GILA_Toki_01-11 are their buckets' label rows instead of a label: row beside each; phase 8 wave 6: families 20-24 + 61 run:boss rows and + 13 cards of their decks new to the ledger; phase 8 wave 5: families 14-19 + 91 run:boss rows and + 67 cards of their decks new to the ledger; phase 8 wave 4: family 11 + 13 run:boss rows and + 6 cards of their decks, family 12 + 13 run:boss rows and + 10 cards of their decks, family 13 + 8 run:boss rows of the Rumble Run champions and + 7 cards of their decks, FP1_029 new in both 12 and 13; phase 8 wave 3: + 26 run:boss rows, 11 of family 09 and 15 of family 10, and + 34 cards of their decks; phase 8 wave 2: + 35 run:boss rows, 18 of family 07 and 17 of family 08, and + 30 cards of their decks; phase 8 family 01: + 12 encounter rows and + 12 for the four Secret bosses; phase 6 F6: + the 9 Heist hero rows, their 35 starters and CORE_WON_096; F7/F8 + 5; F9 + run:starter:tombs_reno_random; F10 + 17: the 12 new starters, the 3 Random decks of the enabled dual rows and 2 rows they bring; F14 + 36: Rikkar's 9 run:class rows and 27 shrine starters)", rows.Count == 4994, rows.Count.ToString());
     var tavernRows = table.Options.Where(o => o.Weight > 0 || o.AliasOf != null).Select(o => o.Id).ToList();
     var notImplemented = tavernRows.Where(id => !rows.ContainsKey(id) || rows[id][Col("classification")] != "implemented").ToList();
     Check("T5 every active tavern option row is implemented", notImplemented.Count == 0, string.Join(" ", notImplemented.Select(id => id + "=" + (rows.ContainsKey(id) ? rows[id][Col("classification")] + "/" + rows[id][Col("gaps")] : "missing"))));

@@ -99,7 +99,7 @@ DungeonRunState ReachFloor(DungeonRunClass cls, int floor, long seed, bool defau
 {
     int k = sweep++;
     int n = data.Classes.Count;
-    var s = run.NewRun(all, cls.Id, deck ?? cls.Decks[(k / n) % cls.Decks.Count], power ?? cls.Powers[((k / n) + (k / (3 * n))) % cls.Powers.Count], seed,
+    var s = run.NewRun(all, cls.Id, deck ?? cls.StartDecks(run.Data)[(k / n) % cls.StartDecks(run.Data).Count], power ?? cls.Powers[((k / n) + (k / (3 * n))) % cls.Powers.Count], seed,
         schedule: defaultRoll ? null : scheduleId, signatureId: run.SignatureOffer(all, run.Data.FindClass(cls.Id), seed).FirstOrDefault());
     if (defaultRoll && (!s.IsActRun || s.ScheduleVersion != run.ScheduleFor(s).StampVersion || !data.Schedules.Defaults.Contains(s.Schedule)))
         throw new Exception("not a run of a default schedule");
@@ -149,7 +149,7 @@ for (int i = sweepFrom; i < sweepFrom + defaultSweep; i++)
 {
     int n = data.Classes.Count;
     var hero = data.Classes[i % n];
-    string deck = hero.Decks[(i / n) % hero.Decks.Count], power = hero.Powers[(i / n) % hero.Powers.Count];
+    string deck = hero.StartDecks(run.Data)[(i / n) % hero.StartDecks(run.Data).Count], power = hero.Powers[(i / n) % hero.Powers.Count];
     long seed = seedBase + i;
     var probe = run.NewRun(all, hero.Id, deck, power, seed, signatureId: run.SignatureOffer(all, run.Data.FindClass(hero.Id), seed).FirstOrDefault());
     int floor = 1 + 7 * i % probe.BossSequence.Count;

@@ -408,8 +408,9 @@ namespace DungeonRunCatalogTool
             // layer loads only with a catalog.
             if (NpcWorldJson.Parse(runText) is IDictionary<string, object> runRoot && runRoot.TryGetValue("catalogStarterDecks", out object catalogDecks) && catalogDecks is System.Collections.IList catalogDeckRows)
                 foreach (var row in catalogDeckRows.Cast<object>().OfType<IDictionary<string, object>>())
-                    // A generated starter (phase 6, the Heist and Tombs "Random" decks) lists no cards: NewRun draws them.
-                    foreach (string c in NpcWorldJson.Strings(row, "cards", !row.ContainsKey("generator")) ?? new List<string>()) Index(cardStarters, c, NpcWorldJson.Text(row, "id"));
+                    // A generated starter (phase 6, the Heist and Tombs "Random" decks) lists no cards: NewRun draws them; nor does a
+                    // build deck (Build Deck: the player builds it), as DungeonRunData's DeckRow reads them.
+                    foreach (string c in NpcWorldJson.Strings(row, "cards", !row.ContainsKey("generator") && !NpcWorldJson.Boolean(row, "build")) ?? new List<string>()) Index(cardStarters, c, NpcWorldJson.Text(row, "id"));
             var cards = new SortedDictionary<string, object>(StringComparer.Ordinal);
             foreach (string id in cardEntries.Keys.Concat(cardStarters.Keys).Distinct().OrderBy(x => x, StringComparer.Ordinal))
             {

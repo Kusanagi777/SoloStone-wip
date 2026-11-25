@@ -322,7 +322,7 @@ foreach (var e in explorers)
     var (d, r, a) = For(e.Row);
     var cls = d.Class(e.Row);
     string[] classes = e.Row.Split('_');
-    foreach (string deckId in cls.Decks)
+    foreach (string deckId in cls.StartDecks(d))
     {
         var deck = d.FindDeck(deckId);
         foreach (string power in cls.Powers)
@@ -641,8 +641,10 @@ foreach (var e in explorers)
         && ps[0].Targeted && !ps[1].Targeted && !ps[2].Targeted && ps.Skip(1).All(o => o.UnlockHint.Contains("Mage / Rogue") || o.UnlockHint.Contains("Reno")),
         string.Join(" | ", ps.Select(o => o.Name + ":" + o.UnlockHint)));
     var decks = DungeonRunCatalog.Decks(run, fresh, "MAGE_ROGUE");
-    Check("T17 Decks(MAGE_ROGUE): Novice Spellslinger open, Spell Seeker, Secret Traps and Reno Random Deck locked (a generated deck: no listed cards)",
-        decks.Count == 4 && decks[0].Unlocked && decks[0].IsDefault && decks.Skip(1).All(d => !d.Unlocked) && decks[3].Name == "Reno Random Deck" && decks[3].CardIds.Count == 0,
+    // Build Deck: the generated Reno Random Deck is the row's Build Deck option, always unlocked (c-sched-9 BD10).
+    Check("T17 Decks(MAGE_ROGUE): Novice Spellslinger open, Spell Seeker and Secret Traps locked, Reno Random Deck shown as the open Build Deck (a generated deck: no listed cards)",
+        decks.Count == 4 && decks[0].Unlocked && decks[0].IsDefault && decks.Skip(1).Take(2).All(d => !d.Unlocked) && decks[3].Id == "tombs_reno_random" && decks[3].IsBuild
+        && decks[3].Unlocked && decks[3].Name == "Build Deck" && decks[3].CardIds.Count == 0,
         string.Join(" | ", decks.Select(d => d.Name + ":" + d.UnlockHint)));
     foreach (var e in explorers.Where(x => !x.Enabled))
     {

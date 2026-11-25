@@ -148,7 +148,8 @@ var transport = new Dictionary<string, string>
             && data.Unlocks.ContainsKey(row.ToLowerInvariant() + "_floor4"));
         var d = data.FindDeck(deck);
         Check($"T2 hero row {row}: one authored starter {deck} of 10 scripted {cls} or neutral cards",
-            r.Decks.SequenceEqual(new[] { deck }) && d.Class == row && d.Cards.Count == 10 && !d.IsGenerated
+            // Build Deck: the row's build deck follows its one authored starter.
+            r.Decks.SequenceEqual(new[] { deck, row.ToLowerInvariant() + "_build" }) && data.FindDeck(r.Decks[1])?.Build == true && d.Class == row && d.Cards.Count == 10 && !d.IsGenerated
             && d.Cards.All(id => C(id) != null && C(id).Implemented && (C(id).Class.ToString() == cls || C(id).Class == CardClass.NEUTRAL)),
             string.Join(",", d?.Cards ?? new List<string>()));
     }

@@ -328,6 +328,13 @@ public sealed class DungeonRunState
     /// <summary>The run seed; shown as 16 hex digits. Every random choice derives from it (design F1).</summary>
     [XmlAttribute] public long Seed;
     [XmlAttribute] public bool TypedSeed;
+    /// <summary>
+    /// Build Deck (still save version 6, the step-9 pattern): the player built the starter (<see cref="StarterDeck"/> is the row's
+    /// build deck, DungeonRunClass.BuildDeck); the run counts as every deck of its row for treasure scope and deck tags. Omitted
+    /// when false, so no earlier run's body changes.
+    /// </summary>
+    [XmlAttribute] public bool BuiltDeck;
+    public bool ShouldSerializeBuiltDeck() => BuiltDeck;
     /// <summary>The run's class (an engine CardClass name, "MAGE"); set on every version-2 run.</summary>
     [XmlAttribute] public string Class;
     /// <summary>The starter deck the run began with (pool "starterDecks" id).</summary>
@@ -516,6 +523,9 @@ public sealed class DungeonRunArchiveEntry
     [XmlAttribute] public string Hero;
     [XmlAttribute] public string Seed;
     [XmlAttribute] public bool TypedSeed;
+    /// <summary>Build Deck: the run's starter was built (DungeonRunState.BuiltDeck); omitted when false.</summary>
+    [XmlAttribute] public bool BuiltDeck;
+    public bool ShouldSerializeBuiltDeck() => BuiltDeck;
     [XmlAttribute] public int FloorReached;
     [XmlAttribute] public bool Won;
     [XmlAttribute] public string LastBoss;

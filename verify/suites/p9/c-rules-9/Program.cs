@@ -69,7 +69,7 @@ var all = All(data);
 string[] actTwists = { "DALA_829", "DALA_831", "DALA_832", "DALA_833", "ULDA_801", "ULDA_802", "ULDA_803", "ULDA_804" };
 
 // The loadouts: every hero row x every starter deck (the row's first power, its first signature offer).
-List<(DungeonRunClass Row, string Deck)> Loadouts(DungeonRunData d) => d.Classes.SelectMany(c => c.Decks.Select(deck => (c, deck))).ToList();
+List<(DungeonRunClass Row, string Deck)> Loadouts(DungeonRunData d) => d.Classes.SelectMany(c => c.StartDecks(d).Select(deck => (c, deck))).ToList();
 DungeonRunState New(DungeonRun r, DungeonRunClass row, string deck, long seed, string schedule, int power = 0)
 {
     var profile = All(r.Data);
@@ -271,7 +271,7 @@ Guard("F", () =>
 // ============================================================ S. C2: the ordering fix on every Rumble shrine deck
 Guard("S", () =>
 {
-    var shrineDecks = data.Decks.Where(x => x.Shrine != null && data.FindClass(x.Class) != null).ToList();
+    var shrineDecks = data.Decks.Where(x => x.Shrine != null && !x.Build && data.FindClass(x.Class) != null).ToList();
     var noShrine = data.Schedules.Rules.Where(r => r.NoBoardShrine).Select(r => r.Id).ToList();
     int runs = 0, shrineRuns = 0, offers = 0, badOffers = 0, badTwists = 0, twists = 0, other = 0;
     var bad = new List<string>();

@@ -67,9 +67,36 @@ internal sealed class RunDeckOption
     /// <summary>The starter's engine card ids in data order (a duplicate appears twice).</summary>
     public IReadOnlyList<string> CardIds;
     public bool IsDefault, Unlocked;
+    /// <summary>
+    /// The row's Build Deck option (its build-able deck, DungeonRunClass.BuildDeck: a build deck, or a Heist/Tombs generated
+    /// deck): named <see cref="NativeDungeonRunText.BuildDeckName"/>, always unlocked, no cards; listed last.
+    /// </summary>
+    public bool IsBuild;
+    /// <summary>
+    /// The deck's display card (DungeonRunStarterDeck.DisplayCard: DALA_800 on a build deck, DALA_80x or ULDA_90x on a Heist or
+    /// Tombs generated deck), a client card id; null on a deck without one. A native picker shows it as the Build Deck pouch's list.
+    /// </summary>
+    public string DisplayCard;
     /// <summary>The unlock key (null for the default deck) and, while locked, the hint ("Reach floor 3 with Mage to unlock").</summary>
     public string UnlockKey, UnlockHint;
     public int SortOrder;
+}
+
+/// <summary>
+/// A card the player may put in a Build Deck starter (DungeonRunRuntime.BuildCandidates): a collectible card the row admits
+/// (<see cref="DungeonRunBuild.CardReason"/> null) that the player owns.
+/// </summary>
+internal sealed class RunBuildCard
+{
+    /// <summary>The engine card id (what the built list holds), the card id the client is sent for it, and its name.</summary>
+    public string Id, ClientId, Name;
+    public int Cost;
+    /// <summary>A legendary: at most one copy of its copy group.</summary>
+    public bool Legendary;
+    /// <summary>Copies owned, golden and normal together (always more than 0).</summary>
+    public int Owned;
+    /// <summary>The copy-limit group (a Core reprint and its original share one); the client id when it has none.</summary>
+    public string CopyGroup;
 }
 
 /// <summary>A hero power of one class.</summary>
@@ -161,7 +188,9 @@ internal static class DungeonRunCatalog
     internal static string RowClassName(DungeonRunClass cls) =>
         cls == null ? "" : string.Join(" / ", cls.ClassSet.Select(NativeDungeonRunText.ClassName));
 
-    /// <summary>The class's decks, default first; empty for an unknown class.</summary>
+    /// <summary>
+    /// The class's decks, default first and the Build Deck option (the row's build-able deck) last; empty for an unknown class.
+    /// </summary>
     internal static IReadOnlyList<RunDeckOption> Decks(DungeonRun rules, DungeonRunProfile profile, string classId)
     {
         var cls = rules?.Data.FindClass(classId);
@@ -171,12 +200,23 @@ internal static class DungeonRunCatalog
         {
             var deck = rules.Data.FindDeck(id);
             if (deck == null) continue;
+            if (deck.IsBuildable)
+            {
+                // Build Deck: always unlocked (a Heist/Tombs generated deck's own unlock never gates it), no listed cards.
+                result.Add(new RunDeckOption
+                {
+                    Id = deck.Id, ClassId = cls.Id, Name = NativeDungeonRunText.BuildDeckName, Description = NativeDungeonRunText.BuildDeckDescription,
+                    CardIds = new string[0], IsDefault = false, Unlocked = true, IsBuild = true, DisplayCard = deck.DisplayCard,
+                    SortOrder = result.Count,
+                });
+                continue;
+            }
             bool unlocked = rules.IsUnlocked(profile, deck.Unlock);
             result.Add(new RunDeckOption
             {
                 Id = deck.Id, ClassId = cls.Id, Name = deck.Name, Description = deck.Description, CardIds = deck.Cards.ToList(),
                 IsDefault = id == cls.DefaultDeck, Unlocked = unlocked, UnlockKey = deck.Unlock,
-                UnlockHint = unlocked ? null : Hint(rules, deck.Unlock), SortOrder = result.Count,
+                UnlockHint = unlocked ? null : Hint(rules, deck.Unlock), DisplayCard = deck.DisplayCard, SortOrder = result.Count,
             });
         }
         return result;
@@ -246,12 +286,23 @@ internal static class DungeonRunCatalog
         return cls != null && cls.IsHero && !cls.IsDual && !string.IsNullOrEmpty(cls.Name) ? cls.Name : NativeDungeonRunText.ClassName(rowId);
     }
 
-    /// <summary>What an unlock key opens, for the run summary ("Kindled Sparks (Mage deck)"); null when it opens nothing.</summary>
+    /// <summary>
+    /// How the run hub names a run's starter deck: <see cref="NativeDungeonRunText.BuildDeckName"/> for a built run (its StarterDeck
+    /// is the row's build deck, on a Heist or Tombs row the generated deck, which the pickers show as Build Deck too), else the
+    /// starter deck's name; null for no run or a run with no starter deck id (a migrated version-1 run).
+    /// </summary>
+    internal static string RunDeckName(DungeonRun rules, DungeonRunState state) =>
+        state == null ? null : state.BuiltDeck ? NativeDungeonRunText.BuildDeckName : rules?.Data.FindDeck(state.StarterDeck)?.Name;
+
+    /// <summary>
+    /// What an unlock key opens, for the run summary ("Kindled Sparks (Mage deck)"); null when it opens nothing. A build-able deck
+    /// is never named: Build Deck is always open, and a Heist/Tombs generated deck keeps its unlock key in data only.
+    /// </summary>
     internal static string UnlockName(DungeonRun rules, string unlockKey)
     {
         if (rules == null || unlockKey == null) return null;
         var names = new List<string>();
-        foreach (var deck in rules.Data.Decks.Where(d => d.Unlock == unlockKey))
+        foreach (var deck in rules.Data.Decks.Where(d => d.Unlock == unlockKey && !d.IsBuildable))
             names.Add(NativeDungeonRunText.UnlockedDeck(deck.Name, RowName(rules, deck.Class)));
         foreach (var cls in rules.Data.Classes)
             foreach (string power in cls.Powers.Where(p => cls.PowerUnlock(p) == unlockKey))

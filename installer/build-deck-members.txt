@@ -1,0 +1,12 @@
+# Types and members the Build Deck editor mode needs, for: tool members Assembly-CSharp.dll installer/build-deck-members.txt
+# One type per line, then the members whose IL summary (size, calls, int constants) to print. A trailing * lists matching type names only.
+CollectionManagerDisplay ShowDeck Exit
+CollectionManager OnDeckCreated GetDeck GetEditedDeck
+CollectionDeck GetClasses HasClass GetRuleset AddCard get_IsValidForRuleset GetMaxCardCount
+DeckRuleset IsDeckValid
+DeckRule_*
+CollectionDeckTray OnBackOutOfDeckContentsImpl DeleteEditingDeck
+CollectionPageManager UpdateFiltersForDeck
+CollectibleDisplay UpdateCurrentPageCardLocks
+CollectibleCard
+DeckRuleset*

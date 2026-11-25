@@ -159,7 +159,10 @@ Check("T1 TRLA_065p has no client loadout row (ADVENTURE_HERO_POWER, ADVENTURE_L
             && r.Signatures.Count == 0 && run.AvailableHeroes(cls, all).Any(x => x.Id == id) && !r.IsDual);
         Check($"T2 hero row {id}: one power, the {f.Cls} basic power {f.Basic}, no unlock", r.Powers.SequenceEqual(new[] { f.Basic }) && r.PowerUnlock(f.Basic) == null && r.PowerUnlocks.Count == 0);
         var want = f.Shrines.Select(n => $"rumble_{f.Cls.ToLowerInvariant()}_{n}").ToList();
-        Check($"T2 hero row {id}: decks {string.Join(", ", want)}", r.Decks.SequenceEqual(want), string.Join(",", r.Decks));
+        // Build Deck: the row's build deck follows the three shrine starters and names the default deck's shrine.
+        Check($"T2 hero row {id}: decks {string.Join(", ", want)}, then its build deck (shrine TRLA_{f.Shrines[0]})",
+            r.Decks.SequenceEqual(want.Append(id.ToLowerInvariant() + "_build")) && data.FindDeck(r.Decks[3])?.Build == true
+            && data.FindDeck(r.Decks[3]).Shrine == "TRLA_" + f.Shrines[0], string.Join(",", r.Decks));
         foreach (int n in f.Shrines)
         {
             var d = data.FindDeck($"rumble_{f.Cls.ToLowerInvariant()}_{n}");
@@ -255,7 +258,8 @@ foreach (var f in forms)
 {
     string id = Row(f.Cls), cls = f.Cls.ToUpperInvariant();
     var row = data.Class(id);
-    foreach (string deckId in row.Decks)
+    // A build deck has no cards to start a run on (R2): every deck but the build deck.
+    foreach (string deckId in row.StartDecks(data))
     {
         var deck = data.FindDeck(deckId);
         var s = run.NewRun(all, id, deckId, f.Basic, 5);
@@ -279,15 +283,15 @@ foreach (var f in forms)
     bool Refused(Func<DungeonRunState> fn) { try { fn(); return false; } catch (InvalidOperationException) { return true; } catch (ArgumentException) { return true; } }
     Check($"T3 {id}: a new profile has Rikkar's form, its power and the first shrine starter; the second and third are locked",
         run.AvailableHeroes(cls, fresh).Any(h => h.Id == id) && run.AvailablePowers(row, fresh).SequenceEqual(new[] { f.Basic })
-        && run.AvailableDecks(row, fresh).Select(d => d.Id).SequenceEqual(new[] { row.Decks[0] }) && run.NewRun(fresh, id, row.Decks[0], f.Basic, 3).StarterDeck == row.Decks[0]
+        && run.AvailableDecks(row, fresh).Select(d => d.Id).SequenceEqual(new[] { row.Decks[0], row.Decks[3] }) && run.NewRun(fresh, id, row.Decks[0], f.Basic, 3).StarterDeck == row.Decks[0]
         && Refused(() => run.NewRun(fresh, id, row.Decks[1], f.Basic, 3)) && Refused(() => run.NewRun(fresh, id, row.Decks[2], f.Basic, 3)));
     var floor5 = new DungeonRunProfile(); floor5.Heroes.Add(new DungeonRunHeroStats { Class = id, BestFloor = 5 }); run.RefreshUnlocks(floor5);
     var floor3 = new DungeonRunProfile(); floor3.Heroes.Add(new DungeonRunHeroStats { Class = id, BestFloor = 3 }); run.RefreshUnlocks(floor3);
     Check($"T3 {id}: reaching floor 3 with the form opens the second shrine starter, floor 5 the third; the class row's progress does not",
-        run.AvailableDecks(row, floor3).Select(d => d.Id).SequenceEqual(row.Decks.Take(2)) && run.AvailableDecks(row, floor5).Select(d => d.Id).SequenceEqual(row.Decks),
+        run.AvailableDecks(row, floor3).Select(d => d.Id).SequenceEqual(row.Decks.Take(2).Append(row.Decks[3])) && run.AvailableDecks(row, floor5).Select(d => d.Id).SequenceEqual(row.Decks),
         string.Join(",", floor5.Unlocked));
     var classOnly = new DungeonRunProfile(); classOnly.Heroes.Add(new DungeonRunHeroStats { Class = cls, BestFloor = 15 }); run.RefreshUnlocks(classOnly);
-    Check($"T3 {id}: a {cls} class row's progress does not open Rikkar's shrine starters", run.AvailableDecks(row, classOnly).Count() == 1);
+    Check($"T3 {id}: a {cls} class row's progress does not open Rikkar's shrine starters", run.AvailableDecks(row, classOnly).Count() == 2);
     Check($"T3 {id}: NewRun refuses another class's deck and another class's power", Refused(() => run.NewRun(all, id, "heist_mage_1", f.Basic, 3))
         && Refused(() => run.NewRun(all, id, row.DefaultDeck, f.Cls == "Mage" ? "CS2_102" : "CS2_034", 3)));
 }
@@ -299,7 +303,7 @@ foreach (var f in forms)
     var row = data.Class(id);
     int shortFloors = 0, treasureDrafts = 0, picked = 0, runs = 0;
     var notes = new List<string>();
-    foreach (string deckId in row.Decks)
+    foreach (string deckId in row.StartDecks(data))
         for (long seed = 11; seed <= 13; seed++)
         {
             var s = run.NewRun(all, id, deckId, f.Basic, seed);
@@ -347,9 +351,11 @@ foreach (var f in forms)
         var hero = heroes.FirstOrDefault(x => x.Id == id);
         Check($"T5 Heroes({cls}) lists {id} (Rikkar, Rumble, 30 Health, portrait {id}) after the class row",
             hero != null && hero.IsHero && !hero.IsDual && hero.Adventure == "Rumble" && hero.Health == 30 && hero.HeroCardId == id && hero.Name == "Rikkar" && heroes[0].Id == cls);
-        var decks = DungeonRunCatalog.Decks(run, fresh, id);
-        Check($"T5 Decks({id}): the three shrine starters named for their shrines, ten cards each, the first open, the rest locked with a hint naming Rikkar (never a portrait id)",
-            decks.Count == 3 && decks.All(d => d.CardIds.Count == 10) && decks[0].IsDefault && decks[0].Unlocked
+        // Build Deck: the Build Deck option follows the three starters (c-sched-9 BD10).
+        var options = DungeonRunCatalog.Decks(run, fresh, id);
+        var decks = options.Where(d => !d.IsBuild).ToList();
+        Check($"T5 Decks({id}): the Build Deck option last; the three shrine starters named for their shrines, ten cards each, the first open, the rest locked with a hint naming Rikkar (never a portrait id)",
+            options.Count == 4 && options[3].IsBuild && decks.Count == 3 && decks.All(d => d.CardIds.Count == 10) && decks[0].IsDefault && decks[0].Unlocked
             && decks.Skip(1).All(d => !d.Unlocked && d.UnlockHint.Contains("Rikkar") && !d.UnlockHint.Contains("TRLA_"))
             && decks.Select(d => d.Name).SequenceEqual(f.Shrines.Select(DeckName)), string.Join(" | ", decks.Select(d => d.Name + ":" + d.UnlockHint)));
         var ps = DungeonRunCatalog.Powers(run, fresh, id, x => transport.TryGetValue(x, out var sent) ? sent : x);
@@ -422,7 +428,8 @@ string AiGame(string id, string power, string deckId, long seed)
 foreach (var f in forms)
 {
     string id = Row(f.Cls);
-    foreach (string deckId in data.Class(id).Decks)
+    // A build deck has no cards to play (R2): every deck but the build deck.
+    foreach (string deckId in data.Class(id).StartDecks(data))
     {
         string line;
         try { line = AiGame(id, f.Basic, deckId, 281); }

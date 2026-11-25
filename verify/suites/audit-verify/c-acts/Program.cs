@@ -1034,7 +1034,7 @@ string LongRuns(out List<string> problems, out int victories)
     foreach (string cls in new[] { "DEATHKNIGHT", "DEMONHUNTER" })
     {
         var row = data.Class(cls);
-        var decks = row.Decks.Where(d => data.FindDeck(d) != null).ToList();
+        var decks = row.StartDecks(data).Where(d => data.FindDeck(d) != null).ToList();
         for (int di = 0; di < decks.Count; di++)
         {
             string deck = decks[di];

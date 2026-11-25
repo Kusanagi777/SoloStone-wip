@@ -228,6 +228,44 @@ internal static class DungeonRunRuntime
         lock (Gate) return Catalog(profile => DungeonRunCatalog.Powers(rules, profile, classId, ClientCardId), new RunPowerOption[0]);
     }
 
+    /// <summary>
+    /// Build Deck: the cards a starter of row <paramref name="rowId"/> may hold, from the active profile's collection, by cost
+    /// then name. Every collectible engine card the row admits (<see cref="DungeonRunBuild.CardReason"/> null) whose client id
+    /// (<see cref="ClientCardId"/>) the player owns, with its owned count (golden and normal) and copy group. Empty for an
+    /// unknown row, with no profile open, or when the mode is unavailable.
+    /// </summary>
+    internal static IReadOnlyList<RunBuildCard> BuildCandidates(string rowId)
+    {
+        var empty = new RunBuildCard[0];
+        try
+        {
+            var run = Rules;
+            var cls = run?.Data.FindClass(rowId);
+            var collection = LocalLadder.Profile;
+            if (cls == null || collection == null) return empty;
+            // LocalProfile.TotalOwnedCount sums OwnedCards per id; summed once here instead of once per engine card.
+            var owned = collection.OwnedCards.Where(c => c.Id != null).GroupBy(c => c.Id, StringComparer.Ordinal)
+                .ToDictionary(g => g.Key, g => g.Sum(c => c.Count), StringComparer.Ordinal);
+            var policy = SabberStoneCore.Model.OfflinePoolPolicy.Load();
+            var result = new List<RunBuildCard>();
+            foreach (var card in SabberStoneCore.Model.Cards.All)
+            {
+                if (card?.Id == null || !card.Collectible) continue;
+                string clientId = ClientCardId(card.Id);
+                if (!owned.TryGetValue(clientId, out int count) || count <= 0) continue;
+                if (DungeonRunBuild.CardReason(card.Id, cls.ClassSet, policy) != null) continue;
+                result.Add(new RunBuildCard
+                {
+                    Id = card.Id, ClientId = clientId, Name = card.Name, Cost = card.Cost,
+                    Legendary = card.Rarity == SabberStoneCore.Enums.Rarity.LEGENDARY, Owned = count,
+                    CopyGroup = LocalCardCatalog.CopyGroup(clientId),
+                });
+            }
+            return result.OrderBy(c => c.Cost).ThenBy(c => c.Name, StringComparer.Ordinal).ThenBy(c => c.Id, StringComparer.Ordinal).ToList();
+        }
+        catch (Exception failure) { Log?.Invoke("Dungeon Run build candidates failed: " + failure.GetType().Name + ": " + failure.Message); return empty; }
+    }
+
     private static IReadOnlyList<T> Catalog<T>(Func<DungeonRunProfile, IReadOnlyList<T>> read, IReadOnlyList<T> empty)
     {
         try
@@ -248,7 +286,11 @@ internal static class DungeonRunRuntime
     /// already in the archive. Nothing is written on a refusal.
     /// </summary>
     /// <param name="signatureId">A hero row with signatures (phase 6): one of <see cref="SignaturesFor"/>; else null.</param>
-    internal static string NewRun(string classId, string deckId, string powerId, string signatureId = null)
+    /// <param name="builtCards">Build Deck: the engine card ids the player built (<paramref name="deckId"/> the row's build deck),
+    /// else null. Re-checked first with <see cref="DungeonRunBuild.DeckReasons"/> against the active profile's owned counts and
+    /// copy groups (the run's own check groups copies by id and skips ownership); the reasons, in words with card names
+    /// (<see cref="NativeDungeonRunText.BuildStartRefusal"/>), are the refusal.</param>
+    internal static string NewRun(string classId, string deckId, string powerId, string signatureId = null, IReadOnlyList<string> builtCards = null)
     {
         var run = Rules;
         if (run == null) return "Dungeon Run is unavailable.";
@@ -258,17 +300,41 @@ internal static class DungeonRunRuntime
             var loaded = Save;
             if (loaded == null) return NativeDungeonRunText.NoSaveCaption;
             if (loaded.Active != null && !loaded.Active.Finished) return "A run is already in progress.";
+            if (builtCards != null)
+            {
+                string builtRefusal = BuiltListRefusal(run, classId, builtCards);
+                if (builtRefusal != null) return builtRefusal;
+            }
             long seed;
             lock (Gate) seed = pendingSeedRow == classId && pendingSeed != null ? pendingSeed.Value : RandomSeed();
-            Mutate(s => { state = run.NewRun(s.Profile, classId, deckId, powerId, seed, signatureId: signatureId); s.Active = state; });
+            Mutate(s => { state = run.NewRun(s.Profile, classId, deckId, powerId, seed, signatureId: signatureId, builtCards: builtCards); s.Active = state; });
             lock (Gate) { pendingSeed = null; pendingSeedRow = null; }
         }
         catch (ArgumentException refusal) { return refusal.Message; }
         catch (InvalidOperationException refusal) { return refusal.Message; }
         catch (Exception failure) { return NativeDungeonRunText.Failed(failure.Message); }
-        Log?.Invoke("DUNGEON_RUN new run class=" + state.Class + " deck=" + state.StarterDeck + " power=" + state.Power + " seed=" + state.SeedText
+        Log?.Invoke("DUNGEON_RUN new run class=" + state.Class + " deck=" + state.StarterDeck + (state.BuiltDeck ? " built=true" : "") + " power=" + state.Power + " seed=" + state.SeedText
             + (state.IsActRun ? " schedule=" + state.Schedule + " v" + state.ScheduleVersion + " floors=" + run.ScheduleFor(state).FloorCount : " schedule=legacy"));
         return null;
+    }
+
+    // Build Deck: why the built list may not start a run of row classId with the active profile's collection (copies per live
+    // copy group, never more than owned), in words with card names, or null. An unknown row is left to DungeonRun.NewRun's own
+    // refusal.
+    private static string BuiltListRefusal(DungeonRun run, string classId, IReadOnlyList<string> builtCards)
+    {
+        var cls = run.Data.FindClass(classId);
+        if (cls == null) return null;
+        var collection = LocalLadder.Profile;
+        if (collection == null) return NativeDungeonRunText.NoSaveCaption;
+        var reasons = DungeonRunBuild.DeckReasons(builtCards, cls.ClassSet, run.Rules.StarterSize,
+            id => collection.TotalOwnedCount(ClientCardId(id)),
+            id => id == null ? null : LocalCardCatalog.CopyGroup(ClientCardId(id)),
+            SabberStoneCore.Model.OfflinePoolPolicy.Load());
+        return NativeDungeonRunText.BuildStartRefusal(reasons, id =>
+        {
+            try { return SabberStoneCore.Model.Cards.FromId(id)?.Name; } catch (Exception) { return null; }
+        });
     }
 
     /// <summary>A random run seed (never 0). Only random-seed runs feed stats and unlocks.</summary>

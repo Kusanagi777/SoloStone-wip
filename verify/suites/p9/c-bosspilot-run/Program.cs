@@ -91,7 +91,7 @@ string hearth = Step9.HearthstoneShell();
 // The loadouts: every enabled hero row x each of its starter decks (plan section 1: 116), with the row's origin.
 var loadouts = new List<(DungeonRunClass Cls, string Deck, string Origin)>();
 foreach (var cls in data.Classes.Where(c => c.Enabled))
-    foreach (string d in cls.Decks)
+    foreach (string d in cls.StartDecks(data))
         loadouts.Add((cls, d, cls.Kind == DungeonRunClass.KindClass ? "class" : cls.Adventure));
 if (List("PLAYER_CLASS") is string[] pc) loadouts = loadouts.Where(l => pc.Contains(l.Cls.Id)).ToList();
 if (List("PLAYER_DECK") is string[] pd) loadouts = loadouts.Where(l => pd.Contains(l.Deck)).ToList();

@@ -126,7 +126,12 @@ Guard("D", () =>
     var rumble = data.Decks.Where(d => d.Id.StartsWith("rumble_", StringComparison.Ordinal)).ToList();
     Check("D1 the 27 Rumble Run starter decks each name their shrine (deck \"shrine\" = TRLA_<n> of the deck id)",
         rumble.Count == 27 && rumble.All(d => d.Shrine == "TRLA_" + d.Id.Substring(d.Id.LastIndexOf('_') + 1)), rumble.Count + " decks");
-    Check("D2 no other deck names a shrine", data.Decks.Where(d => !d.Id.StartsWith("rumble_", StringComparison.Ordinal)).All(d => d.Shrine == null));
+    // Build Deck: a Rikkar row's build deck names its default deck's shrine (a built run starts with that shrine on the board).
+    Check("D2 no other deck names a shrine but Rikkar's nine build decks, each its row's default deck's",
+        data.Decks.Where(d => !d.Id.StartsWith("rumble_", StringComparison.Ordinal) && !d.Build).All(d => d.Shrine == null)
+        && data.Decks.Where(d => d.Build && d.Shrine != null).Select(d => d.Shrine + ":" + d.Class).OrderBy(x => x, StringComparer.Ordinal)
+            .SequenceEqual(data.Classes.Where(c => c.Adventure == "Rumble").Select(c => data.FindDeck(c.DefaultDeck).Shrine + ":" + c.Id).OrderBy(x => x, StringComparer.Ordinal))
+        && data.Decks.Count(d => d.Build && d.Shrine != null) == 9);
     Check("D3 the teammate table: 9 classes, 6 each, 54 distinct, the 9 companions included",
         data.Teammates.Count == 9 && data.Teammates.Values.All(v => v.Count == 6) && data.Teammates.Values.SelectMany(v => v).Distinct().Count() == 54
         && new[] { "TRLA_121", "TRLA_135", "TRLA_139", "TRLA_148", "TRLA_156", "TRLA_164", "TRLA_172", "TRLA_180", "TRLA_188" }.All(id => data.Teammates.Values.Any(v => v.Contains(id))));
