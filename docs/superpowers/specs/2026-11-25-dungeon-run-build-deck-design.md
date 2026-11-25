@@ -1,6 +1,6 @@
 # Dungeon Run: "Build Deck" replaces every Random starting deck
 
-Status: design, awaiting the owner's approval. Date: 2026-11-25.
+Status: design, awaiting the owner's approval. Date: 2026-11-25. Owner answers to the builder check folded in.
 
 ## Intent
 
@@ -22,6 +22,15 @@ card from their collection".
 - **Built fresh each time, never saved.** Nothing is kept for the next run; leaving the editor discards the list. The
   run's own save keeps the run deck, as it does today for every run.
 - **Approach A:** the client's Collection Manager deck editor, not plank screens (approaches below).
+- **Return point:** after Done the player picks the hero power and starts the run on **the run menu's Power step**
+  (plank screens), hero and 10 cards kept. Back without Done returns to the run menu's Deck step.
+- **Always unlocked:** Build Deck is available from the start on every row, including the Heist and Tombs heroes whose
+  Random deck needed a `*_win` unlock.
+- **Treasures:** a built run counts as **every starting deck of its row** for treasure scope and deck treasure tags (the
+  closest match to the old Random, which was one of them). A Monster Hunt built run keeps its hunter's whole pool.
+- **Fallback:** where Phase 0 shows the Collection Manager cannot do a part (most likely two-class decks for the Tombs
+  dual rows, or the 10-card limit), that part uses approach B's plank deck builder instead; everything else keeps the
+  Collection Manager.
 
 ## Goals
 
@@ -101,6 +110,11 @@ an add and to gate Done) and by the run start (defence in depth).
   treasure scope, tag affinity and Rikkar's board shrine. A built run records **the id of the Random deck it replaced**:
   the generated deck's id on Heist/Tombs rows (unchanged treasure scope), and on rows whose Random was the picker pouch,
   a new data row per class/hero "build" deck (see 4). A new save attribute `BuiltDeck="true"` marks these runs.
+- **Unlocks:** the starter-deck unlock check in `NewRun` (DungeonRun.cs:142) does not apply to a built run, so the
+  Heist/Tombs generated decks' `*_win` locks never gate Build Deck.
+- **Treasures:** for a `BuiltDeck` run, the treasure scope check (DungeonRun.Economy.cs:113, :131) and the deck tag
+  affinity (DungeonRun.cs:1205) treat the run as holding every deck of its row (`R.Decks`): a treasure scoped to any of
+  them is in scope, and the deck tags are the union. One rule in the scope check, no treasure data edited.
 - Save version: the run already stores its full deck list (`DungeonRunState.Deck`); the new attribute is additive and
   guarded like the step-9 attributes. A version bump only if the migration rules require one for a new attribute
   (builder checks DungeonRunMigration).
@@ -131,7 +145,7 @@ an add and to gate Done) and by the run start (defence in depth).
   the only offline exit `CollectionExitAllowed` allows). If not, Done is refused with the reasons. Every native
   `SendChanges` source (SaveCurrentDeck, OnScenePreUnload, MarkDeckAsSeen, PocoSetDeckName, ReconcileCardOwnership) for
   the temporary id is swallowed.
-- **Back without Done:** discards the list and returns to the deck step.
+- **Back without Done:** discards the list and returns to the run menu's Deck step.
 - **Safety:** every hook guarded; any failure removes the temporary deck, clears the session flag on every exit
   (including Fail/Recover) and returns to the run menu with a caption, never a blocked UI.
 
@@ -153,13 +167,22 @@ The borrowed picker session ends whenever the scene leaves ADVENTURE (NativeDung
 the borrowed playmat at its hero-power step would mean auto-driving the tray and deck steps. So the round trip is
 ADVENTURE -> HUB -> COLLECTIONMANAGER (build) -> HUB -> **the run menu's Power step** with row and built list carried
 (the `SignatureWhenHome` / `PickerWhenHome` hand-off pattern, its own pending slot, no 180 s lapse while the editor is
-open). The run starts from the plank Power step. (Owner decision pending: see "Open for the owner".)
+open). The run starts from the plank Power step (owner's decision).
 
 ### 6. Unlocks, stats
 
-- Build Deck is unlocked wherever Random was available: the picker pouch was unlocked whenever any deck was; the
-  Heist/Tombs generated decks carry `*_win` unlocks (run-v1.json:66-118). Owner decision pending.
-- Built runs count toward stats and unlocks like any random-seed run unless the owner decides otherwise (pending).
+- Build Deck is always unlocked (owner's decision), including on the Heist/Tombs rows whose generated decks carry
+  `*_win` unlocks (run-v1.json:66-118); see 2.
+- Built runs count toward stats and unlocks like any random-seed run (builder's call, marked: the owner did not ask
+  otherwise; a typed-seed-style exclusion is one switch if wanted later).
+
+### 7. Fallback: the plank builder (approach B) where the editor cannot work
+
+If Phase 0 shows a part of A is impossible with the client (two-class filtering for a NORMAL_DECK, a deck-size hook,
+refusing a single add), that part uses a plank deck builder in `NativeDungeonRunUI`: legal cards as planks ("Fireball (4)
+- 2 owned"), 6 per page, mana-cost and class/neutral filters, add/remove, the picked list in the caption, Done at 10,
+then the same Power step. It is driven by the same `DungeonRunBuild` rules. Most likely scope: the Tombs dual rows only.
+The decision per part is recorded after Phase 0.
 
 ## Phases (each ends with a build on the owner's PC)
 
@@ -175,9 +198,17 @@ open). The run starts from the plank Power step. (Owner decision pending: see "O
 3. **Editor mode.** Temporary deck, bookkeeping, 10-card limit, blocks, Done/Back.
 4. **Dual-class and Death Knight rows; illegal-card popups; doc updates (R12, dungeon-run.md, tests.md).**
 
-## Open for the owner (pending)
+## Builder's calls (marked for the owner to check)
 
-Listed in the message that hands over this document.
+- Card rules: no hero cards, no Fabled primaries/companions, no sideboard-only cards; rune-cost cards only on Death
+  Knight rows (deck at most 3 runes); copy limits by copy group; golden and normal copies counted together.
+- Built runs count toward stats and unlocks.
+- Rikkar's build deck names the same board shrine as the row's default deck.
+- Illegal cards: refused on add with a reason; greying them on the collection pages only if Phase 0 finds a hook.
+- Blocked in the editor mode: New Deck, deck-list actions, Complete My Deck/DeckHelper, paste, recipes, crafting and
+  disenchanting, rename, cosmetics.
+- The generated Heist/Tombs Random decks stay in the data (built runs' StarterDeck id; headless suites), shown as Build
+  Deck.
 
 ## Left to the builder
 
