@@ -14,6 +14,18 @@ static partial class Program
         Check(text.Contains("IL "),"member dump gives the IL size of a named member");
         Check(text.Contains("calls:"),"member dump lists the calls of a named member");
         string names=MemberDump.Describe(dll,"SoloStone.Minisign*",new string[0]);
+        // One bad body or list line must not discard the rest of the dump.
+        using(var stream=File.OpenRead(dll)) using(var pe=new PEReader(stream)) {
+            string bad=MemberDump.Summarize(pe.GetMetadataReader(),new byte[]{0xFE,0xFF,0x28,0x01});
+            Check(bad.Contains("IL 4") && bad.Contains("(error reading IL:") && bad.Contains("calls:"),"an unreadable body prints an error line and keeps its summary");
+        }
+        string list=Path.GetTempFileName();
+        try {
+            File.WriteAllLines(list,new[]{"# c","First a","Broken","Last"});
+            var written=new System.IO.StringWriter();
+            MemberDump.Run(new[]{dll,list},written,(path,type,members)=>{ if(type=="Broken") throw new InvalidOperationException("boom"); return "ok "+type+"\n"; });
+            Check(written.ToString()=="ok First\n(error in Broken: boom)\nok Last\n","a failing list line prints an error and the dump continues");
+        } finally { File.Delete(list); }
         Check(names.Split('\n').Any(l=>l.Trim().StartsWith("SoloStone.Minisign",StringComparison.Ordinal)),"a pattern ending in * lists matching type names");
     }
 }
@@ -24,16 +36,20 @@ static partial class Program
 // '#' starts a comment. For each named member: IL size, the distinct members it calls, and the distinct int constants it loads.
 static class MemberDump
 {
-    public static int Run(string[] args) {
+    public static int Run(string[] args) => Run(args,Console.Out,Describe);
+
+    // Each list line is written as soon as it is described, and one failing line prints an error line and the dump goes on.
+    public static int Run(string[] args,TextWriter output,Func<string,string,IReadOnlyList<string>,string> describe) {
         if(args.Length!=2) { Console.Error.WriteLine("Usage: tool members ASSEMBLY.dll LIST.txt"); return 2; }
-        var output=new System.Text.StringBuilder();
         foreach(string raw in File.ReadAllLines(args[1])) {
             string line=raw; int hash=line.IndexOf('#'); if(hash>=0) line=line.Substring(0,hash);
             var words=line.Split(new[]{' ','\t'},StringSplitOptions.RemoveEmptyEntries);
             if(words.Length==0) continue;
-            output.Append(Describe(args[0],words[0],words.Skip(1).ToArray()));
+            string text;
+            try { text=describe(args[0],words[0],words.Skip(1).ToArray()); }
+            catch(Exception e) { text="(error in "+words[0]+": "+e.Message+")\n"; }
+            output.Write(text); output.Flush();
         }
-        Console.Out.Write(output.ToString());
         return 0;
     }
 
@@ -68,16 +84,24 @@ static class MemberDump
             if(method.RelativeVirtualAddress==0) { text.Append("    IL 0 (no body)\n"); continue; }
             var body=pe.GetMethodBody(method.RelativeVirtualAddress);
             var il=body.GetILBytes();
-            var calls=new SortedSet<string>(StringComparer.Ordinal); var ints=new SortedSet<int>();
-            Scan(md,il,calls,ints);
-            text.Append("    IL ").Append(il.Length).Append('\n');
-            text.Append("    calls: ").Append(string.Join("; ",calls)).Append('\n');
-            text.Append("    ints: ").Append(string.Join(", ",ints)).Append('\n');
+            text.Append(Summarize(md,il));
         }
     }
 
+    // IL size, calls and ints of one body. A body that cannot be read prints an error line instead of ending the dump.
+    public static string Summarize(MetadataReader md,byte[] il) {
+        var calls=new SortedSet<string>(StringComparer.Ordinal); var ints=new SortedSet<int>();
+        var text=new System.Text.StringBuilder();
+        text.Append("    IL ").Append(il.Length).Append('\n');
+        try { Scan(md,il,calls,ints); }
+        catch(Exception e) { text.Append("    (error reading IL: ").Append(e.Message).Append(")\n"); }
+        text.Append("    calls: ").Append(string.Join("; ",calls)).Append('\n');
+        text.Append("    ints: ").Append(string.Join(", ",ints)).Append('\n');
+        return text.ToString();
+    }
+
     // "ret(params)" in BindingScan's spelling becomes "Name(params) : ret".
-    static string Spell(string name,string signature) { int open=signature.IndexOf('('); return name+signature.Substring(open)+" : "+signature.Substring(0,open); }
+    static string Spell(string name,string signature) { int open=signature.IndexOf('('); if(open<0) return name+" : "+signature; return name+signature.Substring(open)+" : "+signature.Substring(0,open); }
 
     sealed class PropertyProvider : System.Reflection.Metadata.ISignatureTypeProvider<string,object>
     {
