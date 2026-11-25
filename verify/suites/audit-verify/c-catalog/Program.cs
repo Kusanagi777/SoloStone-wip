@@ -548,6 +548,9 @@ string[] grantHeroes = { "Houndmaster Shaw", "Tess Greymane" };
                 Cards = mageCards.Concat(rogueCards).ToList() });
             row.Decks.Add(id);
         }
+        // Build Deck: every row lists one build-able deck, last (a build deck: no cards, a display card, never locked).
+        d.Decks.Add(new DungeonRunStarterDeck { Id = "probe_dual_build", Class = "MAGE_ROGUE", Name = "Build Deck", Description = "probe", Build = true, DisplayCard = "DALA_800" });
+        row.Decks.Add("probe_dual_build");
         d.Classes.Add(row);
         d.ClassTags["MAGE_ROGUE"] = d.ClassTags["MAGE"].ToList();
         edit?.Invoke(d, row);
