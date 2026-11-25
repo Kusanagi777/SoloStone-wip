@@ -683,4 +683,107 @@ Guard("BDR", () =>
             + " plain " + string.Join(",", plainTags.OrderBy(x => x)) + " hunt " + string.Join(",", huntTags.OrderBy(x => x)));
 });
 
+// Build Deck plank builder (Task 6): the run menu's pure helpers (NativeDungeonRunText). The fixture's names, costs and owned
+// counts are its own; class vs neutral is the engine card's class (AT_001..AT_009 are Mage, AT_082..AT_090 neutral).
+Guard("BDP", () =>
+{
+    RunBuildCard C(string id, string name, int cost, int owned = 2, bool legendary = false, string group = null) =>
+        new RunBuildCard { Id = id, ClientId = id, Name = name, Cost = cost, Owned = owned, Legendary = legendary, CopyGroup = group ?? id };
+    // Given out of order: BuildPage sorts by cost, then name.
+    var all = new List<RunBuildCard>
+    {
+        C("AT_009", "Rhonin", 8, 1, true), C("AT_090", "Mukla's Champion", 5), C("AT_001", "Flame Lance", 5), C("AT_082", "Lowly Squire", 1),
+        C("AT_007", "Spellslinger", 3), C("AT_089", "Boneguard Lieutenant", 2), C("AT_002", "Effigy", 3), C("AT_086", "Saboteur", 3),
+        C("AT_004", "Arcane Blast", 0), C("AT_088", "Mogor's Champion", 6), C("AT_003", "Fallen Hero", 2), C("AT_083", "Dragonhawk Rider", 3),
+        C("AT_005", "Polymorph: Boar", 3), C("AT_085", "Maiden of the Lake", 4), C("AT_008", "Coldarra Drake", 6), C("AT_084", "Lance Carrier", 2),
+        C("AT_006", "Dalaran Aspirant", 4), C("AT_087", "Argent Horserider", 3),
+    };
+    var neutralIds = new HashSet<string> { "AT_082", "AT_083", "AT_084", "AT_085", "AT_086", "AT_087", "AT_088", "AT_089", "AT_090" };
+    bool classesAsAssumed = all.All(c => (SabberStoneCore.Model.Cards.FromId(c.Id).Class == SabberStoneCore.Enums.CardClass.NEUTRAL) == neutralIds.Contains(c.Id));
+    string Names(string filter, int page) => string.Join(",", NativeDungeonRunText.BuildPage(all,
+        (NativeDungeonRunText.BuildFilter)Enum.Parse(typeof(NativeDungeonRunText.BuildFilter), filter), page, 6).Select(c => c.Name));
+    var want = new (string Filter, int Page, string Names)[]
+    {
+        ("All", 0, "Arcane Blast,Lowly Squire,Boneguard Lieutenant,Fallen Hero,Lance Carrier,Argent Horserider"),
+        ("All", 1, "Dragonhawk Rider,Effigy,Polymorph: Boar,Saboteur,Spellslinger,Dalaran Aspirant"),
+        ("All", 2, "Maiden of the Lake,Flame Lance,Mukla's Champion,Coldarra Drake,Mogor's Champion,Rhonin"),
+        ("All", 9, "Maiden of the Lake,Flame Lance,Mukla's Champion,Coldarra Drake,Mogor's Champion,Rhonin"),
+        ("Class", 0, "Arcane Blast,Fallen Hero,Effigy,Polymorph: Boar,Spellslinger,Dalaran Aspirant"),
+        ("Class", 1, "Flame Lance,Coldarra Drake,Rhonin"),
+        ("Neutral", 0, "Lowly Squire,Boneguard Lieutenant,Lance Carrier,Argent Horserider,Dragonhawk Rider,Saboteur"),
+        ("Neutral", 1, "Maiden of the Lake,Mukla's Champion,Mogor's Champion"),
+        ("Cost0to1", 0, "Arcane Blast,Lowly Squire"),
+        ("Cost2", 0, "Boneguard Lieutenant,Fallen Hero,Lance Carrier"),
+        ("Cost3", 0, "Argent Horserider,Dragonhawk Rider,Effigy,Polymorph: Boar,Saboteur,Spellslinger"),
+        ("Cost4", 0, "Dalaran Aspirant,Maiden of the Lake"),
+        ("Cost5", 0, "Flame Lance,Mukla's Champion"),
+        ("Cost6", 0, "Coldarra Drake,Mogor's Champion"),
+        ("Cost7Plus", 0, "Rhonin"),
+    };
+    var wrongPages = want.Where(w => Names(w.Filter, w.Page) != w.Names).Select(w => w.Filter + " " + w.Page + " = " + Names(w.Filter, w.Page)).ToList();
+    var filters = (NativeDungeonRunText.BuildFilter[])Enum.GetValues(typeof(NativeDungeonRunText.BuildFilter));
+    string order = string.Join(",", filters);
+    var cycle = new List<NativeDungeonRunText.BuildFilter>();
+    var f0 = NativeDungeonRunText.BuildFilter.All;
+    for (int i = 0; i <= filters.Length; i++) { cycle.Add(f0); f0 = NativeDungeonRunText.NextBuildFilter(f0); }
+    int filteredAll = NativeDungeonRunText.BuildFiltered(all, NativeDungeonRunText.BuildFilter.All).Count,
+        filteredClass = NativeDungeonRunText.BuildFiltered(all, NativeDungeonRunText.BuildFilter.Class).Count;
+    Check("BD14 BuildPage filters class vs neutral (the engine card's class) and the cost buckets (0-1, 2..6, 7+), 6 per page by cost then name; a page past "
+        + "the end is the last page; the filter enum and its cycle are All, Class, Neutral, Cost0to1..Cost6, Cost7Plus and back to All",
+        classesAsAssumed && wrongPages.Count == 0 && filteredAll == 18 && filteredClass == 9
+            && order == "All,Class,Neutral,Cost0to1,Cost2,Cost3,Cost4,Cost5,Cost6,Cost7Plus" && cycle.Take(filters.Length).SequenceEqual(filters)
+            && cycle.Last() == NativeDungeonRunText.BuildFilter.All,
+        "classes " + classesAsAssumed + " | " + string.Join(" | ", wrongPages) + " | counts " + filteredAll + "/" + filteredClass + " | " + order);
+
+    var fireball = C("CS2_029", "Fireball", 4, 2);
+    string[] labels =
+    {
+        NativeDungeonRunText.BuildCardLabel(fireball, 1), NativeDungeonRunText.BuildCardLabel(fireball, 0),
+        NativeDungeonRunText.BuildCardLabel(C("AT_009", "Rhonin", 8, 1, true), 0), NativeDungeonRunText.BuildCardLabel(C("AT_009", "Rhonin", 8, 2, true), 1),
+        NativeDungeonRunText.BuildCardLabel(C("AT_007", "Spellslinger", 3, 1), 1), NativeDungeonRunText.BuildCardLabel(C("AT_007", "Spellslinger", 3, 5), 2),
+    };
+    string[] captions =
+    {
+        NativeDungeonRunText.BuildCaption(new string[0], 10), NativeDungeonRunText.BuildCaption(new[] { "Fireball", "Frostbolt", "Fireball" }, 10),
+    };
+    string[] texts =
+    {
+        NativeDungeonRunText.BuildFilterLabel(NativeDungeonRunText.BuildFilter.All), NativeDungeonRunText.BuildFilterLabel(NativeDungeonRunText.BuildFilter.Class),
+        NativeDungeonRunText.BuildFilterLabel(NativeDungeonRunText.BuildFilter.Neutral), NativeDungeonRunText.BuildFilterLabel(NativeDungeonRunText.BuildFilter.Cost0to1),
+        NativeDungeonRunText.BuildFilterLabel(NativeDungeonRunText.BuildFilter.Cost4), NativeDungeonRunText.BuildFilterLabel(NativeDungeonRunText.BuildFilter.Cost7Plus),
+        NativeDungeonRunText.BuildAddRefusal("Fireball", "size"), NativeDungeonRunText.BuildAddRefusal("Fireball", "copies CS2_029"),
+        NativeDungeonRunText.BuildAddRefusal("Rhonin", "legendary AT_009"), NativeDungeonRunText.BuildAddRefusal("Fireball", "owned CS2_029"),
+        NativeDungeonRunText.BuildAddRefusal("Bone Breaker", "runes"), NativeDungeonRunText.BuildAddRefusal("Fireball", "class CS2_029"),
+    };
+    string[] wantLabels = { "Fireball (4) 1/2", "Fireball (4) 0/2", "Rhonin (8) 0/1", "Rhonin (8) 1/1", "Spellslinger (3) 1/1", "Spellslinger (3) 2/2" };
+    string[] wantCaptions = { "Picked 0 of 10", "Picked 3 of 10: 2x Fireball, Frostbolt" };
+    string[] wantTexts =
+    {
+        "Filter: All cards", "Filter: Class cards", "Filter: Neutral cards", "Filter: Cost 0-1", "Filter: Cost 4", "Filter: Cost 7+",
+        "Cannot add Fireball: the deck is full.", "Cannot add Fireball: at most 2 copies of a card.", "Cannot add Rhonin: at most 1 copy of a legendary.",
+        "Cannot add Fireball: you own no more copies.", "Cannot add Bone Breaker: a Death Knight deck needs at most 3 runes.", "Cannot add Fireball: class CS2_029",
+    };
+    Check("BD15 BuildCardLabel is \"Fireball (4) 1/2\" (copies in the list / copies it may hold: min(owned, 2, 1 for a legendary)); BuildCaption is \"Picked n of size\" "
+        + "and the picked names with repeats folded; the filter plank and add-refusal texts are exact",
+        labels.SequenceEqual(wantLabels) && captions.SequenceEqual(wantCaptions) && texts.SequenceEqual(wantTexts),
+        string.Join(" | ", labels) + " | " + string.Join(" | ", captions) + " | " + string.Join(" | ", texts));
+
+    // 7 legal copies: 3 owned of one card (2), 1 owned (1), a legendary owned twice (1), two ids of one copy group owned once each
+    // (2), and 1 owned (1). A copyGroup delegate overrides the cards' own groups: AT_006 and AT_007 in one group hold 2, not 3.
+    var seven = new List<RunBuildCard>
+    {
+        C("AT_006", "Dalaran Aspirant", 4, 3), C("AT_007", "Spellslinger", 3, 1), C("AT_009", "Rhonin", 8, 2, true),
+        C("AT_003", "Fallen Hero", 2, 1, false, "group-a"), C("CORE_AT_003", "Fallen Hero", 2, 1, false, "group-a"), C("AT_082", "Lowly Squire", 1, 1),
+    };
+    int reach = NativeDungeonRunText.BuildReachable(seven, null);
+    int regrouped = NativeDungeonRunText.BuildReachable(seven, id => id == "AT_006" || id == "AT_007" ? "group-b" : seven.First(c => c.Id == id).CopyGroup);
+    int legendGroup = NativeDungeonRunText.BuildReachable(new[] { C("AT_009", "Rhonin", 8, 1, true, "g"), C("CORE_AT_009", "Rhonin", 8, 1, false, "g") }, null);
+    string notEnough = NativeDungeonRunText.BuildNotEnoughLine(reach, 10), enough = NativeDungeonRunText.BuildNotEnoughLine(10, 10);
+    Check("BD16 BuildReachable counts legal copies per copy group (min(owned summed over the group, 2, 1 with a legendary in it)): the 7-copy fixture is 7, 6 with "
+        + "AT_006 and AT_007 grouped by the delegate, a legendary's group 1; the caption line is \"Not enough cards in your collection for this hero (7 of 10)\", "
+        + "none at 10",
+        reach == 7 && regrouped == 6 && legendGroup == 1 && notEnough == "Not enough cards in your collection for this hero (7 of 10)" && enough == null,
+        reach + " / " + regrouped + " / " + legendGroup + " / " + (notEnough ?? "null") + " / " + (enough ?? "null"));
+});
+
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");

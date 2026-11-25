@@ -16,9 +16,10 @@ using EngineCard = SabberStoneCore.Model.Card;
 internal static class NativeDungeonRunUI
 {
     internal const int ClassesPerPage = 6, CardsPerPage = 6, TreasuresPerPage = 4;
-    // Phase 6 adds Hero (a class with named adventure heroes) and Signature (a hero row with signature treasures); the order is
-    // the walk's, so "step > Step.Deck" still means "past the deck choice".
-    internal enum Step { Class, Hero, Deck, Power, Signature, Confirm }
+    // Phase 6 adds Hero (a class with named adventure heroes) and Signature (a hero row with signature treasures); Build Deck adds
+    // Build (the plank builder, after choosing the row's Build Deck option). The order is the walk's, so "step > Step.Deck" still
+    // means "past the deck choice".
+    internal enum Step { Class, Hero, Deck, Build, Power, Signature, Confirm }
     internal enum View { Main, Deck, Treasures, Abandon }
 
     internal sealed class RowSpec { internal string Id, Label; internal Action Action; internal bool Enabled = true; }
@@ -42,6 +43,16 @@ internal static class NativeDungeonRunUI
     private static string classId, deckId, powerId, message;
     // The row the run starts on (the class row, or a named hero row under it) and the signature picked (Tombs).
     private static string rowId, signatureId;
+    // Build Deck (Step.Build): the list being built (engine card ids, in pick order; null when the deck is not built), the row's
+    // candidates (DungeonRunRuntime.BuildCandidates walks every engine card, so it is read once per build session, in
+    // BeginBuild) by id, the row they were read for, the legal copies they can reach, and the filter shown. Never saved: every
+    // way out of the menu except BuildWhenHome ends in ResetFlow (Open), which drops it.
+    private static List<string> built;
+    private static IReadOnlyList<RunBuildCard> buildCards;
+    private static Dictionary<string, RunBuildCard> buildById;
+    private static string buildRow;
+    private static int buildReachable;
+    private static NativeDungeonRunText.BuildFilter buildFilter;
 
     internal static bool IsOpen => popup != null && popup.IsShown();
     // Joins every home stacking guard: nothing else opens over the run screen.
@@ -80,22 +91,30 @@ internal static class NativeDungeonRunUI
 
     // Raised while the board is being left: remember, and open once the HUB is idle (Update).
     // A fight's reopen never carries a picker refusal that an earlier, lapsed reopen left behind.
-    private static void OnFightClosed() { pendingNotice = null; pendingSignature = null; DropPickerPage("a fight closed"); Reopen(); }
+    private static void OnFightClosed() { pendingNotice = null; pendingSignature = null; pendingBuild = null; DropPickerPage("a fight closed"); Reopen(); }
     private static void Reopen() { reopenPending = true; reopenSince = Time.realtimeSinceStartup; }
     // The native class picker (NativeDungeonRunPicker) hands back here after Play or a fallback: open once the HUB is idle.
     // A refusal from its Play (DungeonRunRuntime.NewRun) is shown as the caption when the screen opens.
-    internal static void OpenWhenHome(string notice = null) { pendingNotice = notice; pendingSignature = null; DropPickerPage("the menu was asked for"); Reopen(); }
+    internal static void OpenWhenHome(string notice = null) { pendingNotice = notice; pendingSignature = null; pendingBuild = null; DropPickerPage("the menu was asked for"); Reopen(); }
     private static string pendingNotice;
     // The native picker's hand-off for a row with signature treasures (a Tombs explorer): the screen opens on the Signature
     // step with the class, row, deck and power the portrait tray and playmat chose.
     internal static void SignatureWhenHome(string cls, string row, string deck, string power)
     {
-        pendingNotice = null; pendingSignature = new[] { cls, row, deck, power }; DropPickerPage("the Signature step was asked for"); Reopen();
+        pendingNotice = null; pendingBuild = null; pendingSignature = new[] { cls, row, deck, power }; DropPickerPage("the Signature step was asked for"); Reopen();
     }
     private static string[] pendingSignature;
+    // The native picker's hand-off for the Build Deck option: the screen opens on the Build step with the class, row and deck
+    // (the row's build deck) the portrait tray and playmat chose, and an empty list. Its own pending slot; it does not lapse
+    // (Update) while the menu is closed for the build.
+    internal static void BuildWhenHome(string cls, string row, string deck)
+    {
+        pendingNotice = null; pendingSignature = null; pendingBuild = new[] { cls, row, deck }; DropPickerPage("the Build step was asked for"); Reopen();
+    }
+    private static string[] pendingBuild;
     // The native picker's page change (NativeDungeonRunPicker.FlipPage): its portrait tray is rebuilt by leaving for the HUB and
     // opening the picker again on that page once the HUB is idle, instead of this menu (which a picker that cannot start opens).
-    internal static void PickerWhenHome(int page) { pendingNotice = null; pendingSignature = null; pendingPickerPage = Math.Max(0, page); Reopen(); }
+    internal static void PickerWhenHome(int page) { pendingNotice = null; pendingSignature = null; pendingBuild = null; pendingPickerPage = Math.Max(0, page); Reopen(); }
     private static int pendingPickerPage = -1;
     // A pending page change that will not reopen the picker is logged (the player is left at the HUB, or on the screen that
     // replaced it), and the picker lets go of what it kept for that reopen (NativeDungeonRunPicker.DropPageChange).
@@ -117,6 +136,12 @@ internal static class NativeDungeonRunUI
             classId = pendingSignature[0]; rowId = pendingSignature[1]; deckId = pendingSignature[2]; powerId = pendingSignature[3];
             step = Step.Signature; pendingSignature = null;
         }
+        else if (pendingBuild != null)
+        {
+            // As the Signature hand-off: SetupFlow walks back from a stale row or deck (and drops the list).
+            classId = pendingBuild[0]; rowId = pendingBuild[1]; deckId = pendingBuild[2];
+            pendingBuild = null; BeginBuild();
+        }
         // Progress already earned (or carried over from a version-1 save) shows as unlocked now; the next commit writes it.
         DungeonRunRuntime.RefreshUnlocks();
         popup.Open();
@@ -129,7 +154,8 @@ internal static class NativeDungeonRunUI
         popup?.ApplyRefresh();
         if (pickerPending && !IsOpen) { pickerPending = false; NativeDungeonRunPicker.Open(); }
         if (!reopenPending) return;
-        if (Time.realtimeSinceStartup - reopenSince > ReopenWindow)
+        // A Build hand-off never lapses: it waits for the HUB to be idle however long that takes.
+        if (pendingBuild == null && Time.realtimeSinceStartup - reopenSince > ReopenWindow)
         {
             reopenPending = false; pendingNotice = null; pendingSignature = null;
             DropPickerPage("the HUB was not idle within " + ReopenWindow + "s");
@@ -161,6 +187,23 @@ internal static class NativeDungeonRunUI
     {
         step = Step.Class; view = View.Main; page = classPage = 0;
         classId = deckId = powerId = rowId = signatureId = null;
+        DropBuild();
+    }
+
+    // Build Deck: a new build session on rowId (the Build step, an empty list); the row's candidates are read here, once.
+    private static void BeginBuild()
+    {
+        step = Step.Build; page = 0; powerId = signatureId = null; buildFilter = NativeDungeonRunText.BuildFilter.All;
+        built = new List<string>(); buildRow = rowId;
+        buildCards = DungeonRunRuntime.BuildCandidates(rowId);
+        buildById = buildCards.GroupBy(c => c.Id, StringComparer.Ordinal).ToDictionary(g => g.Key, g => g.First(), StringComparer.Ordinal);
+        buildReachable = NativeDungeonRunText.BuildReachable(buildCards, null);
+    }
+
+    private static void DropBuild()
+    {
+        built = null; buildCards = null; buildById = null; buildRow = null; buildReachable = 0;
+        buildFilter = NativeDungeonRunText.BuildFilter.All;
     }
 
     private static void Refresh() => popup?.Refresh();
@@ -185,11 +228,16 @@ internal static class NativeDungeonRunUI
             {
                 case Step.Hero: step = Step.Class; classId = rowId = null; page = classPage; break;
                 case Step.Deck:
-                    deckId = null;
+                    deckId = null; DropBuild();
                     if (HasHeroStep(classId)) { step = Step.Hero; rowId = null; page = 0; }
                     else { step = Step.Class; classId = rowId = null; page = classPage; }
                     break;
-                case Step.Power: step = Step.Deck; powerId = null; page = 0; break;
+                // Build Deck: Back without Done discards the list; Back from the Power step of a built start keeps it.
+                case Step.Build: step = Step.Deck; DropBuild(); page = 0; break;
+                case Step.Power:
+                    powerId = null; page = 0;
+                    step = built != null ? Step.Build : Step.Deck;
+                    break;
                 case Step.Signature: step = Step.Power; signatureId = null; page = 0; break;
                 default: step = HasSignatures(rowId) ? Step.Signature : Step.Power; page = 0; break;
             }
@@ -215,17 +263,49 @@ internal static class NativeDungeonRunUI
         page = 0; message = null; Refresh();
     }
     private static void ChooseHero(string id) { rowId = id; deckId = powerId = signatureId = null; step = Step.Deck; page = 0; message = null; Refresh(); }
-    private static void ChooseDeck(string id) { deckId = id; powerId = null; step = Step.Power; page = 0; message = null; Refresh(); }
+    // The row's Build Deck option (RunDeckOption.IsBuild) opens the Build step; any other deck goes on to the Power step.
+    private static void ChooseDeck(string id, bool build)
+    {
+        deckId = id; powerId = null; message = null;
+        if (build) BeginBuild(); else { DropBuild(); step = Step.Power; page = 0; }
+        Refresh();
+    }
     private static void ChoosePower(string id) { powerId = id; signatureId = null; step = HasSignatures(rowId) ? Step.Signature : Step.Confirm; page = 0; message = null; Refresh(); }
     private static void ChooseSignature(string id) { signatureId = id; step = Step.Confirm; page = 0; message = null; Refresh(); }
     private static bool HasHeroStep(string cls) => cls != null && DungeonRunRuntime.HeroesFor(cls).Count > 1;
     private static bool HasSignatures(string row) => row != null && DungeonRunRuntime.HeroesFor(classId ?? row).Any(h => h.Id == row && h.SignatureCount > 0);
 
+    // Build Deck: the list's owned counts and copy groups come from the candidates read for this session (the run start
+    // re-checks the list against the live collection: DungeonRunRuntime.NewRun).
+    private static int BuildOwned(string id) => buildById != null && buildById.TryGetValue(id, out var card) ? card.Owned : 0;
+    private static string BuildGroup(string id) => buildById != null && buildById.TryGetValue(id, out var card) && card.CopyGroup != null ? card.CopyGroup : id;
+    private static string BuildName(string id) => buildById != null && buildById.TryGetValue(id, out var card) ? card.Name : CardName(id);
+
+    // A card plank: adds the card when DungeonRunBuild.AddReason allows it, else its reason is the caption.
+    private static void AddBuildCard(string id)
+    {
+        message = null;
+        var rules = DungeonRunRuntime.Rules;
+        var cls = rules?.Data.FindClass(rowId);
+        if (built != null && cls != null)
+        {
+            string reason = DungeonRunBuild.AddReason(built, id, cls.ClassSet, rules.Rules.StarterSize, BuildOwned, BuildGroup,
+                SabberStoneCore.Model.OfflinePoolPolicy.Load());
+            if (reason == null) built.Add(id); else message = NativeDungeonRunText.BuildAddRefusal(BuildName(id), reason);
+        }
+        Refresh();
+    }
+    private static void RemoveLastBuildCard() { if (built != null && built.Count > 0) built.RemoveAt(built.Count - 1); message = null; Refresh(); }
+    private static void CycleBuildFilter() { buildFilter = NativeDungeonRunText.NextBuildFilter(buildFilter); page = 0; message = null; Refresh(); }
+    // Done: on to the Power step with the list kept; the run starts from the Confirm step with it.
+    private static void BuildDone() { step = Step.Power; powerId = signatureId = null; page = 0; message = null; Refresh(); }
+
     private static void StartRun()
     {
         try
         {
-            message = DungeonRunRuntime.NewRun(rowId, deckId, powerId, signatureId);
+            // A built start passes the list (re-checked there against the live collection); a refusal keeps it for another try.
+            message = DungeonRunRuntime.NewRun(rowId, deckId, powerId, signatureId, built?.ToList());
             if (message == null) ResetFlow();
         }
         catch (Exception failure) { message = NativeDungeonRunText.Failed(failure.Message); Failed(failure); }
@@ -429,8 +509,13 @@ internal static class NativeDungeonRunUI
         if (step != Step.Class && cls == null) { ResetFlow(); }
         else if (step > Step.Hero && row == null) { step = heroes.Count > 1 ? Step.Hero : Step.Class; rowId = deckId = powerId = signatureId = null; page = 0; }
         else if (step > Step.Deck && deck == null) { step = Step.Deck; deckId = powerId = signatureId = null; page = 0; }
+        // Build Deck: the Build step needs the row's build deck; a build deck past the Deck step needs this row's list.
+        else if (step == Step.Build && !deck.IsBuild) { step = Step.Deck; deckId = powerId = signatureId = null; page = 0; }
+        else if (step > Step.Deck && deck.IsBuild && (built == null || buildRow != row.Id)) BeginBuild();
         else if (step > Step.Power && power == null) { step = Step.Power; powerId = signatureId = null; page = 0; }
         else if (step > Step.Signature && signatures.Count > 0 && signature == null) { step = Step.Signature; signatureId = null; page = 0; }
+        // A list belongs to the build deck chosen and lives from the Build step on; anywhere else it is dropped.
+        if (step < Step.Build || deck == null || !deck.IsBuild) DropBuild();
         var back = new Action(() => Back());
         switch (step)
         {
@@ -453,10 +538,11 @@ internal static class NativeDungeonRunUI
                 foreach (var option in decks)
                 {
                     string id = option.Id;
+                    bool build = option.IsBuild;
                     if (option.Unlocked)
                     {
                         result.Lines.Add(NativeDungeonRunText.Described(option.Name, option.Description));
-                        result.Row(NativeDungeonRunText.DeckPickIdPrefix + id, option.Name, () => ChooseDeck(id));
+                        result.Row(NativeDungeonRunText.DeckPickIdPrefix + id, option.Name, () => ChooseDeck(id, build));
                     }
                     else
                     {
@@ -465,6 +551,9 @@ internal static class NativeDungeonRunUI
                         result.Row(NativeDungeonRunText.DeckPickIdPrefix + id, NativeDungeonRunText.LockedChoiceLabel(option.Name), null, false);
                     }
                 }
+                break;
+            case Step.Build:
+                BuildStep(result, row);
                 break;
             case Step.Power:
                 result.Header = NativeDungeonRunText.PowerHeader;
@@ -496,8 +585,10 @@ internal static class NativeDungeonRunUI
                 result.Header = NativeDungeonRunText.ConfirmHeader;
                 result.Lines.Add(NativeDungeonRunText.ConfirmLine(row.Name));
                 result.Lines.Add(NativeDungeonRunText.StarterDeckLine(deck.Name));
-                // A generated starter (Heist and Tombs "Random") is drawn when the run starts: it lists no cards here.
-                if (deck.CardIds.Count > 0) result.Lines.Add(NativeDungeonRunText.DeckCardsLine(deck.CardIds.Select(CardName)));
+                // A built start lists the cards built. A generated starter (Heist and Tombs "Random", outside Build Deck) is drawn
+                // when the run starts: it lists no cards here.
+                if (built != null) result.Lines.Add(NativeDungeonRunText.DeckCardsLine(built.Select(BuildName)));
+                else if (deck.CardIds.Count > 0) result.Lines.Add(NativeDungeonRunText.DeckCardsLine(deck.CardIds.Select(CardName)));
                 result.Lines.Add(NativeDungeonRunText.PowerLine(power.Name, power.PlainText));
                 if (signature != null) result.Lines.Add(NativeDungeonRunText.SignatureLine(signature.Name, signature.Text));
                 result.Row(NativeDungeonRunText.StartId, NativeDungeonRunText.StartLabel, StartRun);
@@ -521,6 +612,35 @@ internal static class NativeDungeonRunUI
         }
         Paging(result, classes.Count, ClassesPerPage);
         result.Row(NativeDungeonRunText.CloseId, NativeDungeonRunText.CloseLabel, Close);
+    }
+
+    // Build Deck's plank builder: the filter plank, up to CardsPerPage card planks of this session's candidates ("Fireball (4)
+    // 1/2"), Previous/Next, Remove last and Done (enabled once the list is a legal deck of the run's starter size:
+    // DungeonRunBuild.DeckReasons empty). The caption: the row, the picked list, and a line when the row's owned legal copies
+    // cannot reach the starter size. SetupFlow adds Back (to the Deck step, the list dropped).
+    private static void BuildStep(RunPage result, RunHeroOption row)
+    {
+        var rules = DungeonRunRuntime.Rules;
+        var cls = rules.Data.FindClass(row.Id);
+        int size = rules.Rules.StarterSize;
+        result.Header = NativeDungeonRunText.BuildHeader;
+        result.Lines.Add(row.Name + " - " + row.ClassName);
+        result.Lines.Add(NativeDungeonRunText.BuildCaption(built.Select(BuildName).ToList(), size));
+        string notEnough = NativeDungeonRunText.BuildNotEnoughLine(buildReachable, size);
+        if (notEnough != null) result.Lines.Add(notEnough);
+        int count = NativeDungeonRunText.BuildFiltered(buildCards, buildFilter).Count;
+        page = NativeDungeonRunText.ClampPage(page, count, CardsPerPage);
+        result.Row(NativeDungeonRunText.BuildFilterId, NativeDungeonRunText.BuildFilterLabel(buildFilter), CycleBuildFilter);
+        foreach (var card in NativeDungeonRunText.BuildPage(buildCards, buildFilter, page, CardsPerPage))
+        {
+            string id = card.Id;
+            result.Row(NativeDungeonRunText.BuildCardIdPrefix + id, NativeDungeonRunText.BuildCardLabel(card, built.Count(x => x == id)), () => AddBuildCard(id));
+        }
+        Paging(result, count, CardsPerPage);
+        result.Row(NativeDungeonRunText.BuildRemoveId, NativeDungeonRunText.BuildRemoveLabel, RemoveLastBuildCard, built.Count > 0);
+        bool legal = cls != null && DungeonRunBuild.DeckReasons(built, cls.ClassSet, size, BuildOwned, BuildGroup,
+            SabberStoneCore.Model.OfflinePoolPolicy.Load()).Count == 0;
+        result.Row(NativeDungeonRunText.BuildDoneId, NativeDungeonRunText.BuildDoneLabel, BuildDone, legal);
     }
 
     private static void RunHub(RunPage result, DungeonRun rules, DungeonRunState state)
