@@ -344,12 +344,13 @@ the player builds a legal 10-card starter from their collection on the run menu'
 signature where the row has them) and the run starts with those 10 cards. The Collection Manager editor (spec phases 3-4)
 is a later plan; phase 0's member dump (`tool members`, `installer/build-deck-members.txt`) is for the owner to run.
 
-The checks are sixteen new checks in `p9/c-sched-9` (RESULT 42 -> 58 passed), in four guards:
+The checks are twenty new checks in `p9/c-sched-9` (RESULT 42 -> 62 passed), in five guards (BDF, BD17-BD20, is the
+final-review fix wave's):
 
 | Check | Guard | What it checks |
 |---|---|---|
 | BD1 | BD (rules) | `DungeonRunBuild.CardReason`: a Mage row allows scripted, admitted Mage cards and neutrals; a Warrior card is `class` |
-| BD2 | BD | a hero card is `hero`; a Fabled primary and a Fabled companion are `fabled` |
+| BD2 | BD | a hero card is `hero`; a Fabled primary is `fabled`; its companion (not collectible) is `not-collectible`, the collectible rule coming first |
 | BD3 | BD | `DeckReasons`: 10 legal cards give no reasons; 9 and 11 give `size 9 of 10` / `size 11 of 10` |
 | BD4 | BD | 3 copies of a card are `copies <id>`; 2 of a legendary are `legendary <id>` |
 | BD5 | BD | two ids in one copy group (2 + 1) are `copies <group>`; owning 1 of an id used twice is `owned <id>`; `owned` null skips ownership (the pure run start's check) |
@@ -359,15 +360,21 @@ The checks are sixteen new checks in `p9/c-sched-9` (RESULT 42 -> 58 passed), in
 | BD9 | BDD (data) | each of the 37 enabled rows has exactly one build-able deck, its last: a `build` deck (no cards, a display card, no unlock, id `<row>_build`) on the class, Rikkar and Monster Hunt rows, the generated deck on the Heist and Tombs rows; class rows keep 3 fixed decks; each Rikkar build deck names its default deck's shrine; the validator accepts the data and refuses a row without one (`class MAGE: has 0 build-able decks`) |
 | BD10 | BDD | `DungeonRunCatalog.Decks` lists each row's Build Deck option last: "Build Deck", unlocked on a fresh profile, no cards, `IsBuild`, the build deck's `DisplayCard`, no unlock key or hint; the other options as before (their `DisplayCard` the data's) |
 | BD11 | BDR (run start) | a built MAGE run and a built Heist run (fresh profile) hold exactly the list, `StarterDeck` the row's build deck (`mage_build`, `heist_mage_random`), `BuiltDeck` true; the XML round trip keeps them and `Resume` accepts them; a plain run writes no `BuiltDeck`; the archived summary of a lost built run keeps it |
-| BD12 | BDR | a built list of 9 cards is refused with `size 9 of 10`, one with a Warrior card with `class AT_064`; a built list on a non-build deck (`NotBuildDeck`) and a plain start on a build deck (`NeedsBuiltList`) are refused; a plain start on the locked Heist generated deck is still `LockedDeck` |
-| BD13 | BDR | a built Monster Hunt run (Tess, GILA_500h3) has every treasure scoped to its row's decks in scope (43, GILA_501 among them; GILA_501 is out with `BuiltDeck` off); a built run's deck tags are the union of its row's decks' tags (MAGE: `minions` from mage_kindled, which a mage_rimeward run lacks) |
+| BD12 | BDR | a built list of 9 cards is refused with a message containing `size 9 of 10`, one with a Warrior card with one containing `class AT_064`; a built list on a non-build deck is refused with exactly `DungeonRun.NotBuildDeck` and a plain start on a build deck with exactly `DungeonRun.NeedsBuiltList`; a plain start on the locked Heist generated deck is exactly `LockedDeck` |
+| BD13 | BDR | a built Monster Hunt run (Tess, GILA_500h3): exactly 43 treasures are scoped to its row's decks (GILA_501 among them), and every one is in scope; GILA_501 is out with `BuiltDeck` off; a built run's deck tags are the union of its row's decks' tags (MAGE: `minions` from mage_kindled, which a mage_rimeward run lacks) |
 | BD14 | BDP (plank builder) | `BuildPage` on an 18-card fixture: the class/neutral filters (the engine card's class), the cost buckets 0-1, 2..6, 7+, 6 per page by cost then name, a page past the end is the last page; the filter enum and its cycle (All, Class, Neutral, Cost0to1..Cost6, Cost7Plus, back to All) |
 | BD15 | BDP | the exact texts: `BuildCardLabel` "Fireball (4) 1/2" (copies in the list / copies it may hold: min(owned, 2, 1 for a legendary)), `BuildCaption` "Picked n of 10: ..." with repeats folded, the filter plank labels and the add-refusal captions |
 | BD16 | BDP | `BuildReachable` counts legal copies per copy group (min(owned summed over the group, 2, 1 with a legendary in it)): the 7-copy fixture is 7, 6 with two ids grouped by the delegate, a legendary's group 1; the line "Not enough cards in your collection for this hero (7 of 10)", none at 10 |
+| BD17 | BDF (review fixes) | a non-collectible card (the token CS2_mirror, in the engine, not collectible) is `not-collectible` from `CardReason`, before any other rule; `DeckReasons` names it; the add refusal reads "Cannot add Mirror Image: not a collectible card." |
+| BD18 | BDF | `DungeonRunCatalog.UnlockName` names no build-able deck: `dala_rakanishu_win` gives only Rakanishu's power ("Frostburn (Rakanishu power)"), and none of the 13 Heist/Tombs generated decks with an unlock key is named; `mage_floor3` still names "Kindled Sparks (Mage deck)" |
+| BD19 | BDF | `DungeonRunCatalog.RunDeckName` (the run hub's deck name): a built Heist run (StarterDeck `heist_mage_random`) and a built MAGE run are "Build Deck", a plain run its deck's name ("Rimeward"), a run with no starter deck id and no run null |
+| BD20 | BDF | `NativeDungeonRunText.BuildStartRefusal` (the runtime run-start refusal): `DeckReasons` with an owned delegate that no longer owns a second Dalaran Aspirant gives exactly "That deck cannot start a run: Dalaran Aspirant: you no longer own that many copies."; the size, copies, legendary, runes, class, not-collectible, hero, Fabled and rune-class codes are worded with card names (exact texts, no engine id), an unnamed card is "a card", an unknown code "not allowed in a run", no reasons null |
 
 Not covered here (the plugin cannot be compiled in the cloud): `DungeonRunRuntime.BuildCandidates` and the runtime
-`NewRun` re-check against the live collection, the plank Build step and its hand-offs (`NativeDungeonRunUI`), and the
-native picker's Build Deck pouch and hand-off (`NativeDungeonRunPicker`). Their first compile and every check of them is
+`NewRun` re-check against the live collection (its wording is BD20's `BuildStartRefusal`; the wiring to the profile is
+not), the plank Build step and its hand-offs (`NativeDungeonRunUI`: the run hub's deck name through BD19's
+`RunDeckName`, Remove last and Done carrying no action while disabled, a click outside the board kept while a list is
+being built), and the native picker's Build Deck pouch and hand-off (`NativeDungeonRunPicker`). Their first compile and every check of them is
 the owner's PC build (HANDOFF 3.5).
 
 Regression on this branch (2026-11-25; every harness call through the harness lock; the base is `3dcae7b`, the first
@@ -382,5 +389,8 @@ Build Deck commit, which adds only the uncalled rules file and BD1-BD8):
   0 faults and 0 fallbacks, are byte-identical to the same modes at 3dcae7b. Their differences from the wave-6 records
   (10 to 54 lines per mode, turn and decision counts and a few outcomes; act 27 boss wins where the record has 26) exist at
   3dcae7b already: `verify/baseline` is still wave 6's (section 6).
+- Final-review fix wave (BD17-BD20, BD2/BD12/BD13 tightened): the 93 suite projects and the catalog tool build with 0
+  errors; c-sched-9 62/0, c-catalog 127/0, c-runlayer 244/0 and c-heroes-F6 566/0 (the last two read `UnlockName`; both
+  equal to `verify/baseline/runs`).
 - The restoration ledger is regenerated: 4970 -> 4994 rows, the 24 build decks' `run:starter` rows, all implemented
   (implemented 3890 -> 3914); c-deckops T5 and c-catalog's ledger golden follow.

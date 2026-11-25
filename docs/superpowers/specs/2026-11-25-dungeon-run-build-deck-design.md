@@ -1,6 +1,6 @@
 # Dungeon Run: "Build Deck" replaces every Random starting deck
 
-Status: design, awaiting the owner's approval. Date: 2026-11-25. Owner answers to the builder check folded in.
+Status: design, approved by the owner 2026-11-25. Date: 2026-11-25. Owner answers to the builder check folded in.
 
 ## Intent
 

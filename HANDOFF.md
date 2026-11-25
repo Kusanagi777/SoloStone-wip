@@ -321,7 +321,9 @@ Spec `docs/superpowers/specs/2026-11-25-dungeon-run-build-deck-design.md` (appro
   group and 1 for a legendary, never more than owned); one build-able deck per row, always unlocked and last (a new
   `build` deck on the class, Rikkar and Monster Hunt rows; the generated Random deck on the Heist and Tombs rows); the
   built run start (`DungeonRun.NewRun(..., builtCards)`, save attribute `BuiltDeck`, save version unchanged; a built run
-  counts as every deck of its row for treasure scope and deck tags); the plank builder's pure helpers. c-sched-9 BD1-BD16.
+  counts as every deck of its row for treasure scope and deck tags); the plank builder's pure helpers; the final-review
+  fixes (non-collectible cards refused, the win summary and run hub never name a Random deck, the run-start refusal in
+  words with card names). c-sched-9 BD1-BD20.
 - Done, not compiled here: `DungeonRunRuntime.BuildCandidates` and the runtime `NewRun` re-check against the live
   collection; the run menu's Build step (`NativeDungeonRunUI`: filter, 6 cards per page, Remove last, Done; Back keeps or
   drops the list as the spec says); the native picker's Build Deck pouch (last, the old Random pouch's slot and art; the
@@ -343,6 +345,11 @@ Spec `docs/superpowers/specs/2026-11-25-dungeon-run-build-deck-design.md` (appro
   6. A Monster Hunt row in the native picker shows its one deck, placeholders, then Build Deck; choosing Build Deck
      leaves to the HUB and opens the run menu's Build step; a built Monster Hunt run offers its hunter's treasures.
   7. Nothing changes the player's constructed decks or collection (the deck list and the card counts are as before).
+  8. Build a list, then disenchant or otherwise lose a copy of one of its cards before Start: Start is refused with a
+     worded caption naming the card ("That deck cannot start a run: <card>: you no longer own that many copies."), no
+     engine ids.
+  9. Clicking outside the board during Build keeps the list (the menu stays open while cards are picked); Back still
+     leaves the Build step. A built Heist or Tombs run's hub line names its deck "Build Deck".
 
 ## 4. Build and test in the cloud
 
