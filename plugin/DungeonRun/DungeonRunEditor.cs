@@ -33,8 +33,9 @@ internal static class DungeonRunEditor
     internal enum RecoverKind { None, RemoveAndPlank, DeckAndLeave }
     internal enum BuilderKind { Editor, Plank }
 
-    /// <summary>Phase gate (design M): false in the phase-3 build; Task 6 sets it to true after F's and G's PC checks pass.</summary>
-    internal static readonly bool DualAndDkInEditor = false;
+    /// <summary>Phase gate (design M): false in the phase-3 build; true from phase 4, where dual-class (Tombs) and Death Knight rows
+    /// use the editor (F, G). If F's or G's PC checks (P12, P13) fail, false puts those rows back on the plank.</summary>
+    internal static readonly bool DualAndDkInEditor = true;
 
     /// <summary>D3: Creating (seeding) allows, Editing applies the run rules, every other stage refuses.</summary>
     internal static AddVerdictKind AddVerdict(Stage stage) =>

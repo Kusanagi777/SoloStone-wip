@@ -996,7 +996,8 @@ Guard("BDE", () =>
     var E = DungeonRunEditor.BuilderKind.Editor;
     // (row, candidates, reachable, size, nativeDecks, nativeLimit, editorFailed, gate)
     Check("BD25 (M) Builder: the all-clear Mage row is Editor; each Plank condition alone gives Plank (editorFailed, 0 candidates, reachable 9 of 10, 111 of 111 native decks, "
-        + "a dual row and a Death Knight row with the gate off); the dual and Death Knight rows give Editor with the gate on",
+        + "a dual row and a Death Knight row with the gate off); the dual and Death Knight rows give Editor with the gate on; the shipped gate "
+        + "(DungeonRunEditor.DualAndDkInEditor, phase 4) is on, so the dual and Death Knight rows give Editor through it",
         rows.All(r => r != null)
             && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 5, 111, false, false) == E
             && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 5, 111, true, false) == B
@@ -1009,7 +1010,10 @@ Guard("BDE", () =>
             && DungeonRunEditor.Builder(dualRow, 40, 10, data.Rules.StarterSize, 5, 111, false, true) == E
             && DungeonRunEditor.Builder(dkRow, 40, 10, data.Rules.StarterSize, 5, 111, false, true) == E
             && DungeonRunEditor.Builder(tessRow, 40, 10, data.Rules.StarterSize, 5, 111, false, false) == E
-            && !DungeonRunEditor.DualAndDkInEditor,
+            && DungeonRunEditor.DualAndDkInEditor
+            && DungeonRunEditor.Builder(dualRow, 40, 10, data.Rules.StarterSize, 5, 111, false, DungeonRunEditor.DualAndDkInEditor) == E
+            && DungeonRunEditor.Builder(dkRow, 40, 10, data.Rules.StarterSize, 5, 111, false, DungeonRunEditor.DualAndDkInEditor) == E
+            && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 5, 111, false, DungeonRunEditor.DualAndDkInEditor) == E,
         "gate " + DungeonRunEditor.DualAndDkInEditor);
 
     Func<string, string> same = s => s;

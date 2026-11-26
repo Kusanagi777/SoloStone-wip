@@ -7,13 +7,15 @@ using HarmonyLib;
 using PegasusShared;
 using UnityEngine;
 
-// Build Deck editor mode (design docs/superpowers/specs/2026-11-26-dungeon-run-build-deck-editor-design.md, A-C, I-M): the
+// Build Deck editor mode (design docs/superpowers/specs/2026-11-26-dungeon-run-build-deck-editor-design.md, A-M): the
 // client's Collection Manager edits a temporary, session-only native deck (ids DungeonRunEditor.FirstRunBuildId..Last) for a
 // Dungeon Run starter. The deck is created at the HUB (OnDeckCreated, never in CM), CM opens on it in card view, Done hands the
 // list to the run menu's Power step and Back returns to its Deck step; both leave CM through the native Exit and remove the deck
 // at the HUB (CollectionManager.RemoveDeck). Nothing is persisted: every SendChanges of a band id is swallowed (NativeDeckEditor
 // SaveLocalDraft). Any failure recovers once per session (DungeonRunEditor.RecoverAction): to the plank Build step while still at
 // the HUB, else to the Deck step after leaving CM; after that Build Deck uses the plank until restart (editorFailed).
+// Dual-class (Tombs) and Death Knight rows (F, G) get the row's classes from GetClasses and only those class tabs plus Neutral;
+// a Death Knight re-open carries its runes on the header. Every other row's classes and class tabs stay native.
 // The pure decisions live in DungeonRunEditor. Every hook body is guarded and never throws into Harmony; a failure schedules the
 // recovery on the next tick (Abort). Diagnostics are LogWarning lines prefixed DUNGEON_RUN_EDITOR.
 internal static class NativeDungeonRunEditor
@@ -30,6 +32,9 @@ internal static class NativeDungeonRunEditor
         internal IReadOnlyList<string> Seed;               // engine ids of a re-open (J2), else null
         internal IReadOnlyDictionary<string, int> SeedCounts; // client id -> copies of Seed
         internal RuneType[] SeedRunes;                     // a Death Knight re-open's header and template runes, else null
+        // F1/F2/C1: the row's classes (ClassTags, parsed once) on a dual or Death Knight row; null on every other row, whose
+        // GetClasses and class tabs stay native.
+        internal TAG_CLASS[] Classes;
         internal DungeonRunEditor.EditorCards Cards;
         internal SabberStoneCore.Model.OfflinePoolPolicy Policy;
         internal Func<string, string> CardReason;           // DungeonRunBuild.CardReason, memoized for the session
@@ -63,6 +68,12 @@ internal static class NativeDungeonRunEditor
     private static ConstructorInfo violationCtor;
     // F2: CollectionPageManager's cosmetic tab fields that were found (m_heroSkinsTab, m_cardBacksTab, m_coinsTab, m_petsTab).
     private static FieldInfo[] cosmeticTabs = new FieldInfo[0];
+    // F2's class tabs, optional (CollectionClassTab's accessibility is unknown, so by name): CollectionClassTab.get_TabInfo() and its
+    // CollectionTabInfo.tagClass (both null: the class tabs stay native), CollectionPageManager.m_classTabs (null: any CollectionClassTab
+    // that is not a cosmetic tab is a class tab) and HasClassCardsAvailable(TAG_CLASS) (null: a tab of the row's classes is shown).
+    private static MethodInfo classTabInfo, hasClassCards;
+    private static FieldInfo classTabTag, classTabList;
+    private static Type classTabType;
 
     // Contingent hooks (design D1 S4, D3 A3): written, registered only when the owner's PC check asks for them.
     /// <summary>PC check P5: the tray label reads "n/10" after S1. If it does not, true registers S4 (OnCardCountUpdated).</summary>
@@ -70,6 +81,9 @@ internal static class NativeDungeonRunEditor
     /// <summary>PC check P9: every owned run-legal card is on the pages under the native Filter. If one is missing, true registers
     /// A3 (Filter / FilterFailsOnShowInvalidRule).</summary>
     internal static readonly bool EnablePageFilterHook = false;
+    /// <summary>PC check P12: on a MAGE_ROGUE row the Rogue tab is shown and a Rogue card can be added with F1 + F2 + A1 (+A3). If
+    /// not, true registers C1 (GetHeroClasses gives the row's classes); if that fails too, dual rows go back to the plank (design M).</summary>
+    internal static readonly bool EnableHeroClassesHook = false;
 
     // ------------------------------------------------------------------ what Tasks 4-5 and the wiring read
 
@@ -154,8 +168,13 @@ internal static class NativeDungeonRunEditor
             Patch(harmony, Required(typeof(CollectionManagerDisplay), name, Type.EmptyTypes), nameof(RunBuildHidden));
         // H Rename: skipped, so OnRenameFinished's spinner never shows (the save is swallowed anyway, B8).
         Patch(harmony, Required(typeof(DeckTrayDeckListContent), "RenameCurrentlyEditingDeck", Type.EmptyTypes), nameof(RunBuildRename));
-        // F2 (cosmetic tabs here; Task 6 adds the class tabs to the same postfix).
+        // F1: a dual or Death Knight row's classes, a fresh list per call (UpdateTabsForDualClass adds to lists built from it).
+        Patch(harmony, Required(typeof(CollectionDeck), "GetClasses", Type.EmptyTypes), nameof(RunBuildClasses));
+        // C1 (contingent, EnableHeroClassesHook; PC check P12).
+        if (EnableHeroClassesHook) Patch(harmony, deckHeroClasses, nameof(RunBuildHeroClasses));
+        // F2: the cosmetic tabs hidden; on a dual or Death Knight row only the row's class tabs and Neutral.
         BindCosmeticTabs();
+        BindClassTabs();
         harmony.Patch(Required(typeof(CollectionPageManager), "ShouldShowTab", new[] { typeof(BookTab) }),
             postfix: new HarmonyMethod(typeof(NativeDungeonRunEditor), nameof(RunBuildTabs)));
     }
@@ -173,6 +192,36 @@ internal static class NativeDungeonRunEditor
             else Log("CollectionPageManager." + name + " not found: that tab is not hidden for the temporary deck");
         }
         cosmeticTabs = found.ToArray();
+    }
+
+    // F2's class-tab members, looked up once by name. A missing one is logged here (once) and its field stays null (see the fields).
+    private static void BindClassTabs()
+    {
+        classTabInfo = hasClassCards = null; classTabTag = classTabList = null; classTabType = null;
+        try
+        {
+            classTabType = typeof(CollectionPageManager).Assembly.GetType("CollectionClassTab", false);
+            MethodInfo info = classTabType == null ? null : AccessTools.Method(classTabType, "get_TabInfo", Type.EmptyTypes);
+            FieldInfo tag = info == null || info.IsStatic ? null : AccessTools.Field(info.ReturnType, "tagClass");
+            if (tag != null && !tag.IsStatic && tag.FieldType == typeof(TAG_CLASS)) { classTabInfo = info; classTabTag = tag; }
+            else Log("CollectionClassTab.TabInfo.tagClass not found (type " + (classTabType != null) + ", TabInfo " + (info != null)
+                + "): class tabs are not filtered for the temporary deck");
+        }
+        catch (Exception error) { Log("CollectionClassTab lookup failed, class tabs are not filtered: " + error.GetBaseException().Message); }
+        try
+        {
+            FieldInfo tabs = AccessTools.Field(typeof(CollectionPageManager), "m_classTabs");
+            if (tabs != null && !tabs.IsStatic && typeof(System.Collections.IList).IsAssignableFrom(tabs.FieldType)) classTabList = tabs;
+            else Log("CollectionPageManager.m_classTabs not found: every CollectionClassTab but the cosmetic ones counts as a class tab");
+        }
+        catch (Exception error) { Log("CollectionPageManager.m_classTabs lookup failed: " + error.GetBaseException().Message); }
+        try
+        {
+            MethodInfo available = AccessTools.Method(typeof(CollectionPageManager), "HasClassCardsAvailable", new[] { typeof(TAG_CLASS) });
+            if (available != null && !available.IsStatic && available.ReturnType == typeof(bool)) hasClassCards = available;
+            else Log("CollectionPageManager.HasClassCardsAvailable(TAG_CLASS) not found: the row's class tabs are always shown");
+        }
+        catch (Exception error) { Log("CollectionPageManager.HasClassCardsAvailable lookup failed: " + error.GetBaseException().Message); }
     }
 
     // V1/A1's optional members, looked up once. A missing one is logged here (once) and leaves its field null. Never throws.
@@ -294,6 +343,13 @@ internal static class NativeDungeonRunEditor
         var heroes = DungeonRunEditor.HeaderHeroes(row, rules.Data, DungeonRunRuntime.ClientCardId);
         string classHero = DungeonRunRuntime.ClientCardId(rules.Data.FindClass(row.ClassSet[0])?.HeroCard);
         if (heroes.Count == 0 || string.IsNullOrEmpty(classHero)) { Log("begin: plank, no header hero for " + rowId); return null; }
+        // F1: the class hooks act only on the rows phase 4 brought to the editor; every other row's classes stay native.
+        TAG_CLASS[] classes = null;
+        if (row.IsDual || row.ClassSet.Contains("DEATHKNIGHT"))
+        {
+            try { classes = DungeonRunEditor.ClassTags(row).Select(tag => (TAG_CLASS)Enum.Parse(typeof(TAG_CLASS), tag)).ToArray(); }
+            catch (ArgumentException error) { Log("begin: plank, a class of " + rowId + " is not a client class: " + error.Message); return null; }
+        }
         var policy = SabberStoneCore.Model.OfflinePoolPolicy.Load();
         var classSet = row.ClassSet;
         var memo = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -309,6 +365,7 @@ internal static class NativeDungeonRunEditor
             ClassId = classId, RowId = rowId, DeckId = deckId, Row = row, Seed = seed?.ToList(), SeedCounts = counts,
             // A2: a Death Knight re-open carries its runes on the header and the template, whatever the header hero is.
             SeedRunes = seed != null && row.ClassSet.Contains("DEATHKNIGHT") ? NativeDeckRunes.Order("HERO_11", seed) : null,
+            Classes = classes,
             Cards = cards, Policy = policy, CardReason = cardReason, Size = size, TempId = id.Value, Heroes = heroes,
             ClassHero = classHero, Stage = DungeonRunEditor.Stage.Creating, StageSince = Now,
         };
@@ -891,18 +948,64 @@ internal static class NativeDungeonRunEditor
         return false;
     }
 
+    // ------------------------------------------------------------------ dual class and Death Knight (F, G)
+
+    // F1, prefix on CollectionDeck.GetClasses() : List<TAG_CLASS>: on a dual or Death Knight row the row's classes, a fresh list on every
+    // call (callers add to lists built from it). Covers ShowDeck's filter, HasClass (so a DK + X row engages the native DK UI), the
+    // per-card class rules, the page header; the card-derived dual and tourist classes are bypassed. Every other deck and row: native.
+    private static bool RunBuildClasses(CollectionDeck __instance, ref List<TAG_CLASS> __result)
+    {
+        var s = session;
+        if (!OwnsDeck(__instance) || s.Classes == null) return true;
+        try
+        {
+            __result = new List<TAG_CLASS>(s.Classes);
+            return false;
+        }
+        catch (Exception error) { Abort(error); return true; }
+    }
+
+    // C1 (contingent, EnableHeroClassesHook; PC check P12), prefix on CollectionDeck.GetHeroClasses(): the row's classes, so native
+    // ShouldShowTab shows class B. Native while Creating: A2's hero test must read the hero's own classes.
+    private static bool RunBuildHeroClasses(CollectionDeck __instance, ref List<TAG_CLASS> __result)
+    {
+        var s = session;
+        if (!OwnsDeck(__instance) || s.Classes == null || s.Stage == DungeonRunEditor.Stage.Creating) return true;
+        try
+        {
+            __result = new List<TAG_CLASS>(s.Classes);
+            return false;
+        }
+        catch (Exception error) { Abort(error); return true; }
+    }
+
     // F2, postfix on CollectionPageManager.ShouldShowTab(BookTab): for the temporary deck the cosmetic tabs are hidden (as their
-    // trays are, RunBuildHidden). Every other tab, and every other deck, keeps native's answer.
+    // trays are, RunBuildHidden). On a dual or Death Knight row a class tab of the row's classes or Neutral is shown when native shows
+    // it or the class has cards (HasClassCardsAvailable: native reads GetHeroClasses, which lacks class B); any other class tab is
+    // hidden. Every other tab, row and deck keeps native's answer.
     private static void RunBuildTabs(CollectionPageManager __instance, BookTab __0, ref bool __result)
     {
         if (__0 == null || !OwnsEditedDeck()) return;
         try
         {
             if (IsCosmeticTab(__instance, __0)) { __result = false; return; }
-            // F2 class tabs: Task 6 (phase 4) goes here. A CollectionClassTab whose TabInfo.tagClass is one of the row's classes
-            // or NEUTRAL gets __result || HasClassCardsAvailable(tagClass); any other class tab gets false. Not done in Task 5.
+            var s = session;
+            if (s?.Classes == null || classTabInfo == null || !IsClassTab(__instance, __0)) return;
+            object info = classTabInfo.Invoke(__0, null);
+            if (info == null) return;
+            var tag = (TAG_CLASS)classTabTag.GetValue(info);
+            if (tag == TAG_CLASS.NEUTRAL || Array.IndexOf(s.Classes, tag) >= 0)
+                __result = __result || hasClassCards == null || (bool)hasClassCards.Invoke(__instance, new object[] { tag });
+            else __result = false;
         }
         catch (Exception error) { Abort(error); }
+    }
+
+    // A class tab: one of the page manager's m_classTabs, else (that field missing) any CollectionClassTab.
+    private static bool IsClassTab(CollectionPageManager pages, BookTab tab)
+    {
+        if (classTabList == null) return classTabType != null && classTabType.IsInstanceOfType(tab);
+        return classTabList.GetValue(pages) is System.Collections.IList tabs && tabs.Contains(tab);
     }
 
     private static bool IsCosmeticTab(CollectionPageManager pages, BookTab tab)
