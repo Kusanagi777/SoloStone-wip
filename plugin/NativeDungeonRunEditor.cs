@@ -57,6 +57,10 @@ internal static class NativeDungeonRunEditor
         saveAndList, navigationClear;
     // E3's refusal channel, optional (null: the AlertPopup fallback): static GameplayErrorManager.Get() and its DisplayMessage(string).
     private static MethodInfo errorManagerGet, errorManagerDisplay;
+    // V1's violation and A1's broken rule, optional (their accessibility is unknown, so reflection): DeckRuleset.GetDeckSizeRule
+    // (CollectionDeck) and the DeckRuleViolation(DeckRule, string) constructor. Null: V1 gives no violation, A1 no broken rule.
+    private static MethodInfo deckSizeRule;
+    private static ConstructorInfo violationCtor;
 
     // Contingent hooks (design D1 S4, D3 A3): written, registered only when the owner's PC check asks for them.
     /// <summary>PC check P5: the tray label reads "n/10" after S1. If it does not, true registers S4 (OnCardCountUpdated).</summary>
@@ -140,7 +144,24 @@ internal static class NativeDungeonRunEditor
                 typeof(DeckRule.RuleType[]) }), nameof(RunBuildFilterFails));
         }
         BindErrorChannel();
+        BindViolationMembers();
     }
+
+    // V1/A1's optional members, looked up once. A missing one is logged here (once) and leaves its field null. Never throws.
+    private static void BindViolationMembers()
+    {
+        const BindingFlags any = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        try { deckSizeRule = typeof(DeckRuleset).GetMethod("GetDeckSizeRule", any, null, new[] { typeof(CollectionDeck) }, null); }
+        catch (Exception) { deckSizeRule = null; }
+        try { violationCtor = typeof(DeckRuleViolation).GetConstructor(any, null, new[] { typeof(DeckRule), typeof(string) }, null); }
+        catch (Exception) { violationCtor = null; }
+        if (deckSizeRule == null) Log("DeckRuleset.GetDeckSizeRule(CollectionDeck) not found: V1 gives no violation, A1 no broken rule");
+        if (violationCtor == null) Log("DeckRuleViolation(DeckRule, string) not found: V1 gives no violation");
+    }
+
+    // The deck-size rule of the ruleset for the deck, or null (member missing, or no such rule).
+    private static DeckRule SizeRule(DeckRuleset ruleset, CollectionDeck deck) =>
+        ruleset == null || deckSizeRule == null ? null : deckSizeRule.Invoke(ruleset, new object[] { deck }) as DeckRule;
 
     // E3: GameplayErrorManager is unbound and optional. Missing, or not the expected shape: refusals use ShowRefusal. Never throws.
     private static void BindErrorChannel()
@@ -624,8 +645,13 @@ internal static class NativeDungeonRunEditor
             __result = s.ValidText == null;
             if (!__result)
             {
-                DeckRule rule = __instance?.GetDeckSizeRule(__0);
-                if (rule != null) violations.Add(new DeckRuleViolation(rule, s.ValidText));
+                // Without the two optional members there is no violation to give: the list is null (controller ruling, fix round 1).
+                if (deckSizeRule == null || violationCtor == null) __1 = null;
+                else
+                {
+                    DeckRule rule = SizeRule(__instance, __0);
+                    if (rule != null) violations.Add((DeckRuleViolation)violationCtor.Invoke(new object[] { rule, s.ValidText }));
+                }
             }
         }
         catch (Exception error) { Abort(error); __result = false; }
@@ -634,7 +660,7 @@ internal static class NativeDungeonRunEditor
 
     // A1, prefix on DeckRuleset.CanAddToDeck(..., ref RuleInvalidReason, ref DeckRule, ...): the run's rules replace the native ones for
     // the temporary deck. Never shows anything: it can run per page visual. A refusal names the deck-size rule as the broken rule
-    // (native never returns false without one; it is the rule V1's violation names).
+    // (native never returns false without one; it is the rule V1's violation names), or null when that member was not found.
     private static bool RunBuildCanAdd(DeckRuleset __instance, EntityDef __0, CollectionDeck __2, ref RuleInvalidReason __3, ref DeckRule __4,
         ref bool __result)
     {
@@ -645,7 +671,7 @@ internal static class NativeDungeonRunEditor
         {
             string refusal = RulesetRefusal(s, __2, __0);
             __result = refusal == null;
-            if (!__result) { __3 = new RuleInvalidReason(refusal, 1, false); __4 = __instance?.GetDeckSizeRule(__2); }
+            if (!__result) { __3 = new RuleInvalidReason(refusal, 1, false); __4 = SizeRule(__instance, __2); }
         }
         catch (Exception error) { Abort(error); __result = false; }
         return false;
@@ -665,7 +691,7 @@ internal static class NativeDungeonRunEditor
             if (!__result)
             {
                 __3.Add(new RuleInvalidReason(refusal, 1, false));
-                DeckRule rule = __instance?.GetDeckSizeRule(__2);
+                DeckRule rule = SizeRule(__instance, __2);
                 if (rule != null) __4.Add(rule);
             }
         }
