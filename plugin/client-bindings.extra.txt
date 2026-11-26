@@ -140,8 +140,13 @@ row M CollectionManagerDisplay CanViewHeroSkins # same loop: no cosmetic trays f
 row M CollectionManagerDisplay CanViewCardBacks # same loop: no cosmetic trays for the temporary deck
 row M CollectionManagerDisplay CanViewCoins # same loop: no cosmetic trays for the temporary deck
 row M CollectionManagerDisplay CanViewPets # same loop: no cosmetic trays for the temporary deck
-site NativeDungeonRunEditor.Initialize | Method | (unknown type) # rows above: the byref Required calls and the name loop. Reconcile this line with tool bindings --list-unresolved on the PC
-site NativeDungeonRunEditor.Initialize | Method | CollectionManager.OnDeckCreated (not on this type) # row above: the nullable parameter. Reconcile this line with tool bindings --list-unresolved on the PC
+row M DeckRuleset FilterFailsOnShowInvalidRule # Required(..., {EntityDef, CollectionDeck, DeckRule.RuleType[]}): page filter, patched only while EnablePageFilterHook is on (PC check P9); the nested RuleType[] is spelled differently by the scanner
+row M DeckTrayCardListContent AddCard # Required(..., 8 parameters with Action<string> and DeckRule.RuleType[]): the editor's refused-add message; spelled differently by the scanner
+site NativeDungeonRunEditor.Initialize | Method | CollectionManager.OnDeckCreated (not on this type) # row above: the nullable parameter
+site NativeDungeonRunEditor.Initialize | Method | CollectionManagerDisplay.ShowDeck (not on this type) # the nullable CollectionUtils.ViewMode? parameter; ShowDeck * is a scanned row
+site NativeDungeonRunEditor.Initialize | Method | CollectionDeck.AddCard (not on this type) # the nested DeckRule.RuleType[] parameter; the exact AddCard row is scanned
+site NativeDungeonRunEditor.Initialize | Method | DeckRuleset.FilterFailsOnShowInvalidRule (not on this type) # row above: the nested DeckRule.RuleType[] parameter
+site NativeDungeonRunEditor.Initialize | Method | DeckTrayCardListContent.AddCard (not on this type) # row above: the Action<string> and nested DeckRule.RuleType[] parameters
 
 # NativeFxTelemetry.InstallHooks
 row P Network+HistSubSpellStart SpellPrefabGUID # SubSpellInstance.SubSpellStartTask.FieldType.GetProperty; FX journal
@@ -456,14 +461,14 @@ row M SoundManager Play # GetDeclaredMethods().Single(name == Play && 4 paramete
 site NativeTurnTimerOption.Initialize | Enumerate | SoundManager.(members chosen at run time) # row above: the Single(...) lookup
 site NativeTurnTimerOption.Initialize | Patch | (target not known from the IL) # row above: the Single(...) lookup
 
-# NativeUIProbe+<>c__DisplayClass162_0.<CurrentRecipeGuide>b__0
+# NativeUIProbe+<>c__DisplayClass166_0.<CurrentRecipeGuide>b__0
 row F DeckTemplatePicker m_currentSelectedDeck # recipe guide: which template is selected
-site NativeUIProbe+<>c__DisplayClass162_0.<CurrentRecipeGuide>b__0 | Field | (unknown type) # FindCurrentRecipeGuide reads the picker's selected template; recipe guide only
+site NativeUIProbe+<>c__DisplayClass166_0.<CurrentRecipeGuide>b__0 | Field | (unknown type) # FindCurrentRecipeGuide reads the picker's selected template; recipe guide only
 
-# NativeUIProbe+<MassBoosterOpened>d__374.MoveNext
+# NativeUIProbe+<MassBoosterOpened>d__378.MoveNext
 row F PackOpeningDirector m_massPackOpeningHighlights # mass pack opening: the widgets must have loaded before the receipt is fed
 row F PackOpeningDirector m_massPackOpeningSummary # mass pack opening: the widgets must have loaded before the receipt is fed
-site NativeUIProbe+<MassBoosterOpened>d__374.MoveNext | Field | (unknown type) # director is a local typed PackOpeningDirector; rows above. A miss fails the pack opening closed
+site NativeUIProbe+<MassBoosterOpened>d__378.MoveNext | Field | (unknown type) # director is a local typed PackOpeningDirector; rows above. A miss fails the pack opening closed
 
 # NativeUIProbe.Batch
 row F NetCache+NetCacheBatchRequest m_requests # cache batch requests are made non-reloading while the probe is active
