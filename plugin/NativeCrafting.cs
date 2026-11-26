@@ -137,6 +137,8 @@ internal static class NativeCrafting
 
     private static bool CanCraft(EntityDef __0, TAG_PREMIUM __1, ref CraftingManager.CanCraftCardResult __result)
     {
+        // Build Deck editor (design H): ownership must not change while a temporary deck is built.
+        if (NativeDungeonRunEditor.Active) { __result = CraftingManager.CanCraftCardResult.NotCraftable; return false; }
         if (!Enabled) return true;
         if (__1 == TAG_PREMIUM.NORMAL && __0 != null && Eligible(__0.GetCardId(), __1)) return true;
         __result = CraftingManager.CanCraftCardResult.NotCraftable;
@@ -158,8 +160,17 @@ internal static class NativeCrafting
         return false;
     }
 
+    // Build Deck editor (design H): no craft, upgrade or disenchant while a temporary deck is built. Never throws.
+    private static bool RefuseInRunBuildEditor()
+    {
+        try { ShowError(NativeDungeonRunText.EditorCraftingOff); }
+        catch (Exception error) { NativeDungeonRunEditor.Abort(error); }
+        return false;
+    }
+
     private static bool BeforeCreate(bool __0)
     {
+        if (NativeDungeonRunEditor.Active) return RefuseInRunBuildEditor();
         if (!Enabled) return true;
         var manager = CraftingManager.Get();
         if (manager?.GetPendingClientTransaction()?.GetLastTransactionWasDisenchant() == true) return true;
@@ -170,6 +181,7 @@ internal static class NativeCrafting
 
     private static bool BeforeUpgradeEvent(string __0)
     {
+        if (NativeDungeonRunEditor.Active && (__0 == "CODE_CREATE" || __0 == "CODE_UPGRADE")) return RefuseInRunBuildEditor();
         if (!Enabled || (__0 != "CODE_CREATE" && __0 != "CODE_UPGRADE")) return true;
         var manager = CraftingManager.Get();
         if (manager == null || !manager.GetShownCardInfo(out EntityDef card, out TAG_PREMIUM premium)) return false;
@@ -232,6 +244,7 @@ internal static class NativeCrafting
 
     private static bool BeforeDisenchant()
     {
+        if (NativeDungeonRunEditor.Active) return RefuseInRunBuildEditor();
         if (!Enabled) return true;
         var manager = CraftingManager.Get();
         if (manager?.GetPendingClientTransaction()?.GetLastTransactionWasCrafting() == true) return true;
@@ -386,6 +399,11 @@ internal static class NativeCrafting
     private static bool CommitBatch(CraftingPendingTransaction __0, int __2, int __3, int __4, int __5)
     {
         if (!NativeUIProbe.Active) return true;
+        if (NativeDungeonRunEditor.Active)
+        {
+            log.LogWarning("NATIVE_CRAFT blocked a crafting transaction while a Build Deck deck is edited (design H).");
+            return RefuseInRunBuildEditor();
+        }
         if (!Enabled)
         {
             log.LogWarning("NATIVE_CRAFT blocked transport without a crafting ledger.");
@@ -566,6 +584,13 @@ internal static class NativeCrafting
 
     private static void PreviewMass(MassDisenchant __instance, ref List<CollectibleCard> __0)
     {
+        if (NativeDungeonRunEditor.Active)
+        {
+            // Design H: nothing to sell while a Build Deck deck is edited; the empty preview and the button off, as for an invalid one.
+            __0 = new List<CollectibleCard>();
+            SafeStep("mass preview button", () => __instance.m_disenchantButton.SetEnabled(false));
+            return;
+        }
         if (!Enabled) return;
         var cards = (__0 ?? new List<CollectibleCard>()).Where(card => card.PremiumType == TAG_PREMIUM.NORMAL
             && LocalCrafting.TryGetPrice(card.CardId, out _, out _)).ToList();
@@ -607,6 +632,13 @@ internal static class NativeCrafting
     private static bool CommitMass()
     {
         if (!NativeUIProbe.Active) return true;
+        if (NativeDungeonRunEditor.Active)
+        {
+            log.LogWarning("NATIVE_CRAFT blocked a crafting transaction while a Build Deck deck is edited (design H).");
+            // Native blocked the modal before sending: undo that as every other mass refusal does.
+            UnblockMass();
+            return RefuseInRunBuildEditor();
+        }
         if (!Enabled)
         {
             log.LogWarning("NATIVE_CRAFT blocked transport without a crafting ledger.");
@@ -656,11 +688,7 @@ internal static class NativeCrafting
             }
             if (!committed || !refreshed || !notified || massListenersFailed)
             {
-                SafeStep("mass unblock", () => {
-                    MassDisenchant modal = MassDisenchant.Get();
-                    if (modal != null) Required(typeof(MassDisenchant), "BlockUI").Invoke(modal, new object[] { false });
-                });
-                SafeStep("mass restore button", () => MassDisenchant.Get()?.m_disenchantButton.SetEnabled(HasMassExtras()));
+                UnblockMass();
                 if (committed) WarnMassRefresh();
                 else SafeStep("mass error popup", () => ShowError(errorMessage));
             }
@@ -668,6 +696,19 @@ internal static class NativeCrafting
         finally { massResponse = null; massCompleting = false; }
         return false;
     }
+
+    // A refused mass disenchant: the modal unblocked and its button restored (MassButtonEnabled).
+    private static void UnblockMass()
+    {
+        SafeStep("mass unblock", () => {
+            MassDisenchant modal = MassDisenchant.Get();
+            if (modal != null) Required(typeof(MassDisenchant), "BlockUI").Invoke(modal, new object[] { false });
+        });
+        SafeStep("mass restore button", () => MassDisenchant.Get()?.m_disenchantButton.SetEnabled(MassButtonEnabled()));
+    }
+
+    // The modal's disenchant button: off while a Build Deck deck is edited (design H), else on when there are extras to sell.
+    private static bool MassButtonEnabled() => !NativeDungeonRunEditor.Active && HasMassExtras();
 
     private static bool MassCompleted(CollectionManager __instance)
     {
@@ -691,7 +732,7 @@ internal static class NativeCrafting
         if (!Enabled || __0 || massCompleting) return;
         bool refreshed = RefreshDust(CraftingLedgerRegistry.Current);
         refreshed &= RefreshPage();
-        refreshed &= SafeStep("mass final button", () => MassDisenchant.Get()?.m_disenchantButton.SetEnabled(HasMassExtras()));
+        refreshed &= SafeStep("mass final button", () => MassDisenchant.Get()?.m_disenchantButton.SetEnabled(MassButtonEnabled()));
         if (!refreshed) WarnMassRefresh();
     }
 

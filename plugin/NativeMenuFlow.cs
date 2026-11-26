@@ -32,8 +32,9 @@ internal static class NativeMenuFlow
         return NativeMenuTarget.None;
     }
 
-    internal static bool CollectionExitAllowed(bool loggedIn, bool localActive, bool pickerOrigin) =>
-        loggedIn || (localActive && pickerOrigin);
+    // runBuildLeaving: a Build Deck editor session is leaving CM (design K "Belt"); the formula's tested home is DungeonRunEditor.
+    internal static bool CollectionExitAllowed(bool loggedIn, bool localActive, bool pickerOrigin, bool runBuildLeaving = false) =>
+        DungeonRunEditor.ExitAllowed(loggedIn, localActive, pickerOrigin, runBuildLeaving);
 
     internal static bool FatalPackDisconnectReturnsHome(bool replayActive) => !replayActive;
 }

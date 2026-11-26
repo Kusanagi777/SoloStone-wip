@@ -37,9 +37,12 @@ internal static partial class NativeUIProbe
     }
 
     // Postfix after the shifted slot gate: New Deck also needs room under the personal cap (NativeUIProjection.ShowNewDeckButton).
+    // No New Deck while a Build Deck editor session exists (design B11, H).
     private static void GateNewDeckButton(ref bool __result)
     {
-        if (!__result || !active) return;
+        if (!__result) return;
+        if (NativeDungeonRunEditor.Active) { __result = false; return; }
+        if (!active) return;
         try { __result = NativeUIProjection.ShowNewDeckButton(true, Profile.CustomDeckCount, SessionLoanerKeys().Count()); }
         catch (Exception) { __result = false; }
     }

@@ -31,11 +31,13 @@ internal static class DungeonRunBuild
     /// Every reason the deck is illegal (empty when legal): "size n of size", "copies group" (more than 2 of a copy group),
     /// "legendary group" (more than 1 of a legendary's group), "owned id" (more copies than owned), "runes" (a Death Knight
     /// run needing more than 3 runes) and "code id" (a card <see cref="CardReason"/> refuses). <paramref name="owned"/> null
-    /// skips ownership; <paramref name="copyGroup"/> null groups by id.
+    /// skips ownership; <paramref name="copyGroup"/> null groups by id. <paramref name="cardReason"/> (an id's
+    /// <see cref="CardReason"/> code, or null) is a memo hook; null computes it from <paramref name="classSet"/> and <paramref name="policy"/>.
     /// </summary>
     internal static IReadOnlyList<string> DeckReasons(IReadOnlyList<string> cards, IReadOnlyList<string> classSet, int size,
-        Func<string, int> owned, Func<string, string> copyGroup, OfflinePoolPolicy policy)
+        Func<string, int> owned, Func<string, string> copyGroup, OfflinePoolPolicy policy, Func<string, string> cardReason = null)
     {
+        cardReason = cardReason ?? (id => CardReason(id, classSet, policy));
         var reasons = new List<string>();
         if (cards.Count != size) reasons.Add($"size {cards.Count} of {size}");
         Func<string, string> group = copyGroup ?? (id => id);
@@ -52,7 +54,7 @@ internal static class DungeonRunBuild
 
         foreach (var id in cards.Distinct(StringComparer.Ordinal))
         {
-            string reason = CardReason(id, classSet, policy);
+            string reason = cardReason(id);
             if (reason != null) reasons.Add(reason + " " + id);
         }
 
@@ -73,13 +75,13 @@ internal static class DungeonRunBuild
     /// <paramref name="size"/> is "full"; the codes of <see cref="DeckReasons"/> otherwise), or null when the add is legal.
     /// </summary>
     internal static string AddReason(IReadOnlyList<string> cards, string id, IReadOnlyList<string> classSet, int size,
-        Func<string, int> owned, Func<string, string> copyGroup, OfflinePoolPolicy policy)
+        Func<string, int> owned, Func<string, string> copyGroup, OfflinePoolPolicy policy, Func<string, string> cardReason = null)
     {
         if (cards.Count >= size) return "size";
         var next = cards.Concat(new[] { id }).ToList();
         // Only reasons the add brings count (the deck so far may already hold others); size is decided above.
-        var before = new HashSet<string>(DeckReasons(cards, classSet, cards.Count, owned, copyGroup, policy), StringComparer.Ordinal);
-        return DeckReasons(next, classSet, next.Count, owned, copyGroup, policy).FirstOrDefault(r => !before.Contains(r));
+        var before = new HashSet<string>(DeckReasons(cards, classSet, cards.Count, owned, copyGroup, policy, cardReason), StringComparer.Ordinal);
+        return DeckReasons(next, classSet, next.Count, owned, copyGroup, policy, cardReason).FirstOrDefault(r => !before.Contains(r));
     }
 
     private static bool IsLegendary(string id)

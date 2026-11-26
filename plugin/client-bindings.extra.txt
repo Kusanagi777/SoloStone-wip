@@ -130,6 +130,24 @@ site NativeBigCardWatchdog.ResolveAdmissionBindings | Field | HistoryManager.Run
 row M CraftingManager GetCardValue # Prefix(...) with a byref parameter list the scanner cannot read: CraftingManager.GetCardValue(string, premium, CardValueDbfRecord&)
 site NativeCrafting.Prefix | Method | (unknown type) # the rows above cover the one call that passes MakeByRefType parameters; the other Prefix calls are plain typeof and name literals the scanner reads
 
+# NativeDungeonRunEditor.Initialize
+row M DeckRuleset IsDeckValid # Required(..., {CollectionDeck, IList<DeckRuleViolation>&, RuleType[]}): the editor's "complete at the run's size" check; a byref parameter list the scanner cannot read
+row M DeckRuleset CanAddToDeck # Required(..., ref RuleInvalidReason and ref List overloads): the editor's add rules; byref parameter lists the scanner cannot read
+row M DeckRuleset Filter # Required(..., DeckRule&): page filter, patched only while EnablePageFilterHook is on (PC check P9); byref parameter list the scanner cannot read
+row M CollectionManager OnDeckCreated # Required(typeof(CollectionManager), OnDeckCreated, {DeckHeader, int?}): the temporary deck header; the scanner spells the nullable differently
+row M CollectionManagerDisplay ShouldShowDeckOptionsMenu # Required(typeof(CollectionManagerDisplay), name, ...) in a loop over names: no deck options menu for the temporary deck
+row M CollectionManagerDisplay CanViewHeroSkins # same loop: no cosmetic trays for the temporary deck
+row M CollectionManagerDisplay CanViewCardBacks # same loop: no cosmetic trays for the temporary deck
+row M CollectionManagerDisplay CanViewCoins # same loop: no cosmetic trays for the temporary deck
+row M CollectionManagerDisplay CanViewPets # same loop: no cosmetic trays for the temporary deck
+row M DeckRuleset FilterFailsOnShowInvalidRule # Required(..., {EntityDef, CollectionDeck, DeckRule.RuleType[]}): page filter, patched only while EnablePageFilterHook is on (PC check P9); the nested RuleType[] is spelled differently by the scanner
+row M DeckTrayCardListContent AddCard # Required(..., 8 parameters with Action<string> and DeckRule.RuleType[]): the editor's refused-add message; spelled differently by the scanner
+site NativeDungeonRunEditor.Initialize | Method | CollectionManager.OnDeckCreated (not on this type) # row above: the nullable parameter
+site NativeDungeonRunEditor.Initialize | Method | CollectionManagerDisplay.ShowDeck (not on this type) # the nullable CollectionUtils.ViewMode? parameter; ShowDeck * is a scanned row
+site NativeDungeonRunEditor.Initialize | Method | CollectionDeck.AddCard (not on this type) # the nested DeckRule.RuleType[] parameter; the exact AddCard row is scanned
+site NativeDungeonRunEditor.Initialize | Method | DeckRuleset.FilterFailsOnShowInvalidRule (not on this type) # row above: the nested DeckRule.RuleType[] parameter
+site NativeDungeonRunEditor.Initialize | Method | DeckTrayCardListContent.AddCard (not on this type) # row above: the Action<string> and nested DeckRule.RuleType[] parameters
+
 # NativeFxTelemetry.InstallHooks
 row P Network+HistSubSpellStart SpellPrefabGUID # SubSpellInstance.SubSpellStartTask.FieldType.GetProperty; FX journal
 row P Network+HistSubSpellStart SourceEntityID # SubSpellInstance.SubSpellStartTask.FieldType.GetProperty; FX journal
@@ -443,14 +461,14 @@ row M SoundManager Play # GetDeclaredMethods().Single(name == Play && 4 paramete
 site NativeTurnTimerOption.Initialize | Enumerate | SoundManager.(members chosen at run time) # row above: the Single(...) lookup
 site NativeTurnTimerOption.Initialize | Patch | (target not known from the IL) # row above: the Single(...) lookup
 
-# NativeUIProbe+<>c__DisplayClass162_0.<CurrentRecipeGuide>b__0
+# NativeUIProbe+<>c__DisplayClass166_0.<CurrentRecipeGuide>b__0
 row F DeckTemplatePicker m_currentSelectedDeck # recipe guide: which template is selected
-site NativeUIProbe+<>c__DisplayClass162_0.<CurrentRecipeGuide>b__0 | Field | (unknown type) # FindCurrentRecipeGuide reads the picker's selected template; recipe guide only
+site NativeUIProbe+<>c__DisplayClass166_0.<CurrentRecipeGuide>b__0 | Field | (unknown type) # FindCurrentRecipeGuide reads the picker's selected template; recipe guide only
 
-# NativeUIProbe+<MassBoosterOpened>d__374.MoveNext
+# NativeUIProbe+<MassBoosterOpened>d__378.MoveNext
 row F PackOpeningDirector m_massPackOpeningHighlights # mass pack opening: the widgets must have loaded before the receipt is fed
 row F PackOpeningDirector m_massPackOpeningSummary # mass pack opening: the widgets must have loaded before the receipt is fed
-site NativeUIProbe+<MassBoosterOpened>d__374.MoveNext | Field | (unknown type) # director is a local typed PackOpeningDirector; rows above. A miss fails the pack opening closed
+site NativeUIProbe+<MassBoosterOpened>d__378.MoveNext | Field | (unknown type) # director is a local typed PackOpeningDirector; rows above. A miss fails the pack opening closed
 
 # NativeUIProbe.Batch
 row F NetCache+NetCacheBatchRequest m_requests # cache batch requests are made non-reloading while the probe is active
@@ -557,3 +575,7 @@ site NativeBigCardWatchdog.ResolveBindings | Method | HistoryManager.m_showingBi
 
 # Code that tolerates a missing target. It must not block players; each line goes stale if the code stops reading the client.
 skip NativeShopTilePrices.Mirror # cosmetic: copies price text style, and skips any field a client lacks (field != null)
+skip NativeDungeonRunEditor.BindCosmeticTabs # Build Deck editor: the cosmetic tab fields are optional; a missing one is logged and that tab stays native
+skip NativeDungeonRunEditor.BindClassTabs # Build Deck editor: the class tab members are optional; a missing one is logged and the tabs stay native
+skip NativeDungeonRunEditor.BindViolationMembers # Build Deck editor: GetDeckSizeRule and the DeckRuleViolation constructor are optional; missing, the validity check gives no violation object
+skip NativeDungeonRunEditor.BindErrorChannel # Build Deck editor: GameplayErrorManager is optional; missing, add refusals use the AlertPopup

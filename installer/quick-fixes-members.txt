@@ -1,0 +1,17 @@
+# Dungeon Run quick fixes (Rafaam line, native hero power before Build Deck, editor lock banner), for:
+#   tool members Assembly-CSharp.dll installer/quick-fixes-members.txt
+# One type per line, then the members to summarize. Lambdas, local functions and iterator bodies a member reaches are
+# followed automatically; "!Name" also prints the full instruction listing (branch order).
+AdventureDungeonCrawlDisplay !ShowDeckOptionsWhenReady !ShowHeroPowerOptionsWhenReady Start OnSubSceneLoaded
+AdventureDungeonCrawlDisplay+<*
+AdventureDungeonCrawlPlayMat
+AdventureDungeonCrawlPlayMat+<*
+AdventureDungeonCrawl*
+DungeonCrawl*
+NotificationManager
+AdventureUtils*
+GameSaveKeySubkeyId
+CollectibleDisplay UpdateCurrentPageCardLocks
+CollectiblePageDisplay UpdateCurrentPageCardLocks
+CollectionCardVisual ShowLock
+CollectionCardVisual+LockType

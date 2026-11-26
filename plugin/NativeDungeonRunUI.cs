@@ -45,13 +45,17 @@ internal static class NativeDungeonRunUI
     private static string rowId, signatureId;
     // Build Deck (Step.Build): the list being built (engine card ids, in pick order; null when the deck is not built), the row's
     // candidates (DungeonRunRuntime.BuildCandidates walks every engine card, so it is read once per build session, in
-    // BeginBuild) by id, the row they were read for, the legal copies they can reach, and the filter shown. Never saved: every
-    // way out of the menu except BuildWhenHome ends in ResetFlow (Open), which drops it.
+    // BeginBuild) by id, the planks shown for them (one per copy group: a Core reprint and its original are one plank), the row
+    // they were read for, the legal copies they can reach, and the filter shown. Never saved: every way out of the menu except
+    // BuildWhenHome ends in ResetFlow (Open), which drops it.
     private static List<string> built;
-    private static IReadOnlyList<RunBuildCard> buildCards;
+    private static IReadOnlyList<RunBuildCard> buildCards, buildPlanks;
     private static Dictionary<string, RunBuildCard> buildById;
     private static string buildRow;
     private static int buildReachable;
+    // The list came from the Collection Manager editor's Done (NativeDungeonRunEditor): Back on the Power step re-opens the
+    // editor with it (design J2) instead of the plank Build step.
+    private static bool builtByEditor;
     private static NativeDungeonRunText.BuildFilter buildFilter;
 
     internal static bool IsOpen => popup != null && popup.IsShown();
@@ -91,30 +95,47 @@ internal static class NativeDungeonRunUI
 
     // Raised while the board is being left: remember, and open once the HUB is idle (Update).
     // A fight's reopen never carries a picker refusal that an earlier, lapsed reopen left behind.
-    private static void OnFightClosed() { pendingNotice = null; pendingSignature = null; pendingBuild = null; DropPickerPage("a fight closed"); Reopen(); }
+    private static void OnFightClosed() { pendingNotice = null; pendingSignature = null; pendingBuild = null; DropEditorHandOffs(); DropPickerPage("a fight closed"); Reopen(); }
     private static void Reopen() { reopenPending = true; reopenSince = Time.realtimeSinceStartup; }
     // The native class picker (NativeDungeonRunPicker) hands back here after Play or a fallback: open once the HUB is idle.
     // A refusal from its Play (DungeonRunRuntime.NewRun) is shown as the caption when the screen opens.
-    internal static void OpenWhenHome(string notice = null) { pendingNotice = notice; pendingSignature = null; pendingBuild = null; DropPickerPage("the menu was asked for"); Reopen(); }
+    internal static void OpenWhenHome(string notice = null) { pendingNotice = notice; pendingSignature = null; pendingBuild = null; DropEditorHandOffs(); DropPickerPage("the menu was asked for"); Reopen(); }
     private static string pendingNotice;
     // The native picker's hand-off for a row with signature treasures (a Tombs explorer): the screen opens on the Signature
     // step with the class, row, deck and power the portrait tray and playmat chose.
     internal static void SignatureWhenHome(string cls, string row, string deck, string power)
     {
-        pendingNotice = null; pendingBuild = null; pendingSignature = new[] { cls, row, deck, power }; DropPickerPage("the Signature step was asked for"); Reopen();
+        pendingNotice = null; pendingBuild = null; DropEditorHandOffs(); pendingSignature = new[] { cls, row, deck, power }; DropPickerPage("the Signature step was asked for"); Reopen();
     }
     private static string[] pendingSignature;
     // The native picker's hand-off for the Build Deck option: the screen opens on the Build step with the class, row and deck
-    // (the row's build deck) the portrait tray and playmat chose, and an empty list. Its own pending slot; it does not lapse
-    // (Update) while the menu is closed for the build.
-    internal static void BuildWhenHome(string cls, string row, string deck)
+    // (the row's build deck) the portrait tray and playmat chose, and an empty list (or, where the Collection Manager editor is
+    // used, design M, that editor opens instead). Its own pending slot; it does not lapse (Update) while the menu is closed for
+    // the build. A failed editor session hands back here too, with its caption (design L).
+    internal static void BuildWhenHome(string cls, string row, string deck, string notice = null)
     {
-        pendingNotice = null; pendingSignature = null; pendingBuild = new[] { cls, row, deck }; DropPickerPage("the Build step was asked for"); Reopen();
+        pendingNotice = notice; pendingSignature = null; DropEditorHandOffs(); pendingBuild = new[] { cls, row, deck }; DropPickerPage("the Build step was asked for"); Reopen();
     }
     private static string[] pendingBuild;
+    // The Collection Manager editor's hand-offs (NativeDungeonRunEditor, design I/J1): Done opens the Power step with the list
+    // built (pendingBuilt), Back the Deck step with the class and row kept (pendingDeck). Neither lapses (Update): the editor
+    // leaves CM first.
+    internal static void BuiltWhenHome(string cls, string row, string deck, IReadOnlyList<string> list)
+    {
+        pendingNotice = null; pendingSignature = null; pendingBuild = null; DropEditorHandOffs();
+        pendingBuilt = new[] { cls, row, deck }; pendingBuiltList = list.ToList(); DropPickerPage("the Power step was asked for"); Reopen();
+    }
+    internal static void DeckWhenHome(string cls, string row, string deck, string notice)
+    {
+        pendingNotice = notice; pendingSignature = null; pendingBuild = null; DropEditorHandOffs();
+        pendingDeck = new[] { cls, row, deck }; DropPickerPage("the Deck step was asked for"); Reopen();
+    }
+    private static string[] pendingBuilt, pendingDeck;
+    private static List<string> pendingBuiltList;
+    private static void DropEditorHandOffs() { pendingBuilt = null; pendingBuiltList = null; pendingDeck = null; }
     // The native picker's page change (NativeDungeonRunPicker.FlipPage): its portrait tray is rebuilt by leaving for the HUB and
     // opening the picker again on that page once the HUB is idle, instead of this menu (which a picker that cannot start opens).
-    internal static void PickerWhenHome(int page) { pendingNotice = null; pendingSignature = null; pendingBuild = null; pendingPickerPage = Math.Max(0, page); Reopen(); }
+    internal static void PickerWhenHome(int page) { pendingNotice = null; pendingSignature = null; pendingBuild = null; DropEditorHandOffs(); pendingPickerPage = Math.Max(0, page); Reopen(); }
     private static int pendingPickerPage = -1;
     // A pending page change that will not reopen the picker is logged (the player is left at the HUB, or on the screen that
     // replaced it), and the picker lets go of what it kept for that reopen (NativeDungeonRunPicker.DropPageChange).
@@ -140,7 +161,29 @@ internal static class NativeDungeonRunUI
         {
             // As the Signature hand-off: SetupFlow walks back from a stale row or deck (and drops the list).
             classId = pendingBuild[0]; rowId = pendingBuild[1]; deckId = pendingBuild[2];
-            pendingBuild = null; BeginBuild();
+            pendingBuild = null;
+            // Design M: the Collection Manager editor where it is used (the menu stays closed); else the plank Build step.
+            if (NativeDungeonRunEditor.Begin(classId, rowId, deckId, null)) return;
+            BeginBuild();
+        }
+        else if (pendingBuilt != null)
+        {
+            // The editor's Done (design I): the Power step with its list. BeginBuild first (it sets buildRow and a new list), so
+            // SetupFlow's "this row's list" check holds for the list assigned after it.
+            classId = pendingBuilt[0]; rowId = pendingBuilt[1]; deckId = pendingBuilt[2];
+            var list = pendingBuiltList ?? new List<string>();
+            pendingBuilt = null; pendingBuiltList = null;
+            BeginBuild();
+            built = list.ToList();
+            builtByEditor = true;
+            step = Step.Power;
+        }
+        else if (pendingDeck != null)
+        {
+            // The editor's Back or recovery (design J1, L): the Deck step with the class and row kept, the list dropped.
+            classId = pendingDeck[0]; rowId = pendingDeck[1];
+            pendingDeck = null;
+            step = Step.Deck;
         }
         // Progress already earned (or carried over from a version-1 save) shows as unlocked now; the next commit writes it.
         DungeonRunRuntime.RefreshUnlocks();
@@ -162,8 +205,9 @@ internal static class NativeDungeonRunUI
         popup?.ApplyRefresh();
         if (pickerPending && !IsOpen) { pickerPending = false; NativeDungeonRunPicker.Open(); }
         if (!reopenPending) return;
-        // A Build hand-off never lapses: it waits for the HUB to be idle however long that takes.
-        if (pendingBuild == null && Time.realtimeSinceStartup - reopenSince > ReopenWindow)
+        // A Build hand-off (and the editor's Done and Back hand-offs) never lapses: it waits for the HUB to be idle however long
+        // that takes.
+        if (pendingBuild == null && pendingBuilt == null && pendingDeck == null && Time.realtimeSinceStartup - reopenSince > ReopenWindow)
         {
             reopenPending = false; pendingNotice = null; pendingSignature = null;
             DropPickerPage("the HUB was not idle within " + ReopenWindow + "s");
@@ -202,16 +246,17 @@ internal static class NativeDungeonRunUI
     private static void BeginBuild()
     {
         step = Step.Build; page = 0; powerId = signatureId = null; buildFilter = NativeDungeonRunText.BuildFilter.All;
-        built = new List<string>(); buildRow = rowId;
+        built = new List<string>(); buildRow = rowId; builtByEditor = false;
         buildCards = DungeonRunRuntime.BuildCandidates(rowId);
         buildById = buildCards.GroupBy(c => c.Id, StringComparer.Ordinal).ToDictionary(g => g.Key, g => g.First(), StringComparer.Ordinal);
+        buildPlanks = NativeDungeonRunText.BuildMergePrintings(buildCards);
         buildReachable = NativeDungeonRunText.BuildReachable(buildCards, null);
     }
 
     private static void DropBuild()
     {
-        built = null; buildCards = null; buildById = null; buildRow = null; buildReachable = 0;
-        buildFilter = NativeDungeonRunText.BuildFilter.All;
+        built = null; buildCards = null; buildPlanks = null; buildById = null; buildRow = null; buildReachable = 0;
+        buildFilter = NativeDungeonRunText.BuildFilter.All; builtByEditor = false;
     }
 
     private static void Refresh() => popup?.Refresh();
@@ -244,7 +289,17 @@ internal static class NativeDungeonRunUI
                 case Step.Build: step = Step.Deck; DropBuild(); page = 0; break;
                 case Step.Power:
                     powerId = null; page = 0;
-                    step = built != null ? Step.Build : Step.Deck;
+                    // Design J2: after an editor Done, Back re-opens the editor with the list (the menu closes; it reopens on
+                    // Power at Done, or on Deck at Back); a plank list goes back to the Build step; no list to the Deck step.
+                    switch (DungeonRunEditor.PowerBack(builtByEditor, built != null, NativeDungeonRunEditor.Available))
+                    {
+                        case DungeonRunEditor.PowerBackTarget.Editor:
+                            if (NativeDungeonRunEditor.Begin(classId, rowId, deckId, built.ToList())) { Close(); return true; }
+                            step = Step.Build;
+                            break;
+                        case DungeonRunEditor.PowerBackTarget.PlankBuild: step = Step.Build; break;
+                        default: step = Step.Deck; break;
+                    }
                     break;
                 case Step.Signature: step = Step.Power; signatureId = null; page = 0; break;
                 default: step = HasSignatures(rowId) ? Step.Signature : Step.Power; page = 0; break;
@@ -275,7 +330,14 @@ internal static class NativeDungeonRunUI
     private static void ChooseDeck(string id, bool build)
     {
         deckId = id; powerId = null; message = null;
-        if (build) BeginBuild(); else { DropBuild(); step = Step.Power; page = 0; }
+        if (build)
+        {
+            // Design M: the Collection Manager editor where it is used (the menu closes; it reopens on Power at Done, on Deck
+            // at Back); else the plank Build step.
+            if (NativeDungeonRunEditor.Begin(classId, rowId, id, null)) { Close(); return; }
+            BeginBuild();
+        }
+        else { DropBuild(); step = Step.Power; page = 0; }
         Refresh();
     }
     private static void ChoosePower(string id) { powerId = id; signatureId = null; step = HasSignatures(rowId) ? Step.Signature : Step.Confirm; page = 0; message = null; Refresh(); }
@@ -636,13 +698,16 @@ internal static class NativeDungeonRunUI
         result.Lines.Add(NativeDungeonRunText.BuildCaption(built.Select(BuildName).ToList(), size));
         string notEnough = NativeDungeonRunText.BuildNotEnoughLine(buildReachable, size);
         if (notEnough != null) result.Lines.Add(notEnough);
-        int count = NativeDungeonRunText.BuildFiltered(buildCards, buildFilter).Count;
+        int count = NativeDungeonRunText.BuildFiltered(buildPlanks, buildFilter).Count;
         page = NativeDungeonRunText.ClampPage(page, count, CardsPerPage);
         result.Row(NativeDungeonRunText.BuildFilterId, NativeDungeonRunText.BuildFilterLabel(buildFilter), CycleBuildFilter);
-        foreach (var card in NativeDungeonRunText.BuildPage(buildCards, buildFilter, page, CardsPerPage))
+        // One plank per copy group; a click adds a printing the player still has a copy of (BuildPickPrinting), so the list's
+        // per-id owned check (BuildOwned) holds when the copies are split between a Core reprint and its original.
+        foreach (var card in NativeDungeonRunText.BuildPage(buildPlanks, buildFilter, page, CardsPerPage))
         {
-            string id = card.Id;
-            result.Row(NativeDungeonRunText.BuildCardIdPrefix + id, NativeDungeonRunText.BuildCardLabel(card, built.Count(x => x == id)), () => AddBuildCard(id));
+            var plank = card;
+            result.Row(NativeDungeonRunText.BuildCardIdPrefix + plank.Id, NativeDungeonRunText.BuildCardLabel(plank, NativeDungeonRunText.BuildInDeck(plank, built)),
+                () => AddBuildCard(NativeDungeonRunText.BuildPickPrinting(plank, built)));
         }
         Paging(result, count, CardsPerPage);
         // A disabled plank carries no action (as the locked deck and power rows): the disabled state alone never has to stop a click.

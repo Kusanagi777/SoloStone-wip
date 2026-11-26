@@ -767,7 +767,7 @@ Guard("BDP", () =>
     {
         "Filter: All cards", "Filter: Class cards", "Filter: Neutral cards", "Filter: Cost 0-1", "Filter: Cost 4", "Filter: Cost 7+",
         "Cannot add Fireball: the deck is full.", "Cannot add Fireball: at most 2 copies of a card.", "Cannot add Rhonin: at most 1 copy of a legendary.",
-        "Cannot add Fireball: you own no more copies.", "Cannot add Bone Breaker: a Death Knight deck needs at most 3 runes.", "Cannot add Fireball: class CS2_029",
+        "Cannot add Fireball: you own no more copies.", "Cannot add Bone Breaker: a Death Knight deck needs at most 3 runes.", "Cannot add Fireball: not a card of this hero's class.",
     };
     Check("BD15 BuildCardLabel is \"Fireball (4) 1/2\" (copies in the list / copies it may hold: min(owned, 2, 1 for a legendary)); BuildCaption is \"Picked n of size\" "
         + "and the picked names with repeats folded; the filter plank and add-refusal texts are exact",
@@ -864,6 +864,305 @@ Guard("BDF", () =>
         dropped.SequenceEqual(new[] { "owned AT_006" }) && aspirant == "Dalaran Aspirant" && texts.SequenceEqual(wantTexts)
             && texts.Take(3).All(t => !t.Contains("AT_") && !t.Contains("CS2_") && !t.Contains("BOT_") && !t.Contains("TIME_") && !t.Contains("CATA_")),
         string.Join(" | ", texts));
+});
+
+// Build Deck owner fix (2026-11-26): a Core reprint and its original are one plank. The owner's Mage builder showed "Elven Archer
+// (1) 0/2" twice (CS2_189 and its reprint CORE_CS2_189, one copy group).
+Guard("BDM", () =>
+{
+    var pol = OfflinePoolPolicy.Load();
+    var mage = data.FindClass("MAGE").ClassSet;
+    RunBuildCard C(string id, string name, int cost, int owned, string group, bool legendary = false) =>
+        new RunBuildCard { Id = id, ClientId = id, Name = name, Cost = cost, Owned = owned, Legendary = legendary, CopyGroup = group };
+    var raw = new List<RunBuildCard>
+    {
+        C("CORE_CS2_189", "Elven Archer", 1, 1, "CS2_189"), C("CS2_189", "Elven Archer", 1, 1, "CS2_189"),
+        C("AT_082", "Lowly Squire", 1, 2, "AT_082"),
+        C("CORE_X_LEG", "Rhonin", 8, 1, "AT_009", true), C("AT_009", "Rhonin", 8, 1, "AT_009"),
+    };
+    var planks = NativeDungeonRunText.BuildMergePrintings(raw);
+    var archer = planks.First(p => p.Name == "Elven Archer");
+    var squire = planks.First(p => p.Name == "Lowly Squire");
+    var rhonin = planks.First(p => p.Name == "Rhonin");
+    var page = NativeDungeonRunText.BuildPage(planks, NativeDungeonRunText.BuildFilter.All, 0, 6).Select(p => p.Name).ToList();
+
+    // Click the archer plank three times the way the run menu does: pick a printing, then DungeonRunBuild.AddReason with per-id
+    // owned counts and the copy groups of the raw candidates.
+    var byId = raw.ToDictionary(c => c.Id, StringComparer.Ordinal);
+    var built = new List<string>();
+    var refusals = new List<string>();
+    var labels = new List<string> { NativeDungeonRunText.BuildCardLabel(archer, NativeDungeonRunText.BuildInDeck(archer, built)) };
+    for (int i = 0; i < 3; i++)
+    {
+        string pick = NativeDungeonRunText.BuildPickPrinting(archer, built);
+        string reason = DungeonRunBuild.AddReason(built, pick, mage, 10, id => byId.TryGetValue(id, out var c) ? c.Owned : 0,
+            id => byId.TryGetValue(id, out var c) ? c.CopyGroup : id, pol);
+        if (reason == null) built.Add(pick); else refusals.Add(reason);
+        labels.Add(NativeDungeonRunText.BuildCardLabel(archer, NativeDungeonRunText.BuildInDeck(archer, built)));
+    }
+    Check("BD21 BuildMergePrintings makes one plank per copy group: Elven Archer (CS2_189 + CORE_CS2_189, 1 owned each) is one plank with id CS2_189, owned 2, "
+        + "printings CS2_189 then CORE_CS2_189; a one-printing card is unchanged; a group is legendary when any printing is; the page lists each name once. "
+        + "Three clicks add CS2_189 then CORE_CS2_189 (labels 0/2, 1/2, 2/2) and the third is refused for the shared copy limit, never for ownership",
+        planks.Count == 3 && archer.Id == "CS2_189" && archer.Owned == 2 && archer.CopyGroup == "CS2_189"
+            && archer.Printings != null && archer.Printings.Select(p => p.Id).SequenceEqual(new[] { "CS2_189", "CORE_CS2_189" })
+            && ReferenceEquals(squire, raw[2]) && squire.Printings == null && rhonin.Legendary && rhonin.Owned == 2 && rhonin.Id == "AT_009"
+            && NativeDungeonRunText.BuildCopyLimit(rhonin) == 1
+            && page.SequenceEqual(new[] { "Elven Archer", "Lowly Squire", "Rhonin" })
+            && built.SequenceEqual(new[] { "CS2_189", "CORE_CS2_189" }) && refusals.Count == 1 && refusals[0].StartsWith("copies ")
+            && labels.SequenceEqual(new[] { "Elven Archer (1) 0/2", "Elven Archer (1) 1/2", "Elven Archer (1) 2/2", "Elven Archer (1) 2/2" }),
+        string.Join(",", planks.Select(p => p.Id + ":" + p.Owned)) + " | " + string.Join(",", page) + " | built " + string.Join(",", built)
+            + " | refused " + string.Join(",", refusals) + " | " + string.Join(" / ", labels));
+});
+
+// Build Deck editor decisions (design 2026-11-26-dungeon-run-build-deck-editor-design.md; plugin/DungeonRun/DungeonRunEditor.cs).
+Guard("BDE", () =>
+{
+    // fixture: every literal loaner/test deck id of NativeUIProjection.cs:374-500 (DeckKeys is private to an untested file)
+    var nativeFixture = new long[]
+    {
+        900000001L, 900000002L, 900000010L, 900000011L, 900000012L, 900000013L, 900000014L, 900000015L, 900000016L, 900000017L, 900000018L,
+        900000019L, 900000020L, 900000021L, 900000022L, 900000023L, 900000024L, 900000025L, 900000026L, 900000027L, 900000028L, 900000029L,
+        900000030L, 900000031L, 900000032L, 900000033L, 900000034L, 900000035L, 900000036L, 900000037L, 900000038L, 900000039L, 900000040L,
+        900000041L, 900000042L, 900000043L, 900000044L, 900000045L, 900000046L, 900000047L, 900000048L, 900000049L, 900000050L, 900000051L,
+        900000052L, 900000053L, 900000054L, 900000055L, 900000056L, 900000057L, 900000058L, 900000059L, 900000060L, 900000061L, 900000062L,
+        900000063L, 900000064L, 900000065L, 900000066L, 900000067L, 900000068L, 900000069L, 900000070L, 900000071L, 900000072L, 900000073L,
+        900000074L, 900000075L, 900000076L, 900000077L, 900000078L, 900000079L, 900000130L, 900000131L, 900000132L, 900000133L, 900000134L,
+        900000135L, 900000150L, 900000151L, 900000152L, 900000153L, 900000154L, 900000155L, 900000156L, 900000158L, 900000170L, 900000171L,
+        900000172L, 900000173L, 900000174L, 900000175L, 900000176L, 900000177L, 900000178L, 900000200L, 900000201L, 900000202L, 900000203L,
+        900000204L, 900000205L, 900000206L, 900000207L, 900000208L, 900000209L, 900000210L, 900000211L, 900000212L, 900000213L, 900000214L,
+        900000215L, 900000216L, 900000217L, 900000218L, 900000219L, 900000220L, 900000221L, 900000222L, 900000223L, 900000224L, 900000225L
+    };
+    var band = Enumerable.Range(0, 100).Select(i => 900000300L + i).ToList();
+    Check("BD22 (A1) the run-build band is 900000300..900000399: 900000299 and 900000400 are outside, 900000300 and 900000399 inside, the legacy personal ids 910000001 and "
+        + "910000010 outside, and none of the " + nativeFixture.Length + " loaner/test ids of NativeUIProjection.cs:374-500 is inside; NextRunBuildId gives the lowest free id "
+        + "(900000302 after 300 and 301), null on a full band; NonBandCount([900000300, 910000010, 900000215]) is 2",
+        !DungeonRunEditor.IsRunBuildId(900000299) && !DungeonRunEditor.IsRunBuildId(900000400)
+            && DungeonRunEditor.IsRunBuildId(900000300) && DungeonRunEditor.IsRunBuildId(900000399)
+            && !DungeonRunEditor.IsRunBuildId(910000001) && !DungeonRunEditor.IsRunBuildId(910000010)
+            && nativeFixture.Length > 100 && nativeFixture.All(id => !DungeonRunEditor.IsRunBuildId(id))
+            && DungeonRunEditor.NextRunBuildId(new long[] { 900000300, 900000301 }) == 900000302
+            && DungeonRunEditor.NextRunBuildId(nativeFixture) == 900000300
+            && DungeonRunEditor.NextRunBuildId(band) == null
+            && DungeonRunEditor.NonBandCount(new long[] { 900000300, 910000010, 900000215 }) == 2,
+        "fixture " + nativeFixture.Length);
+
+    var verdicts = new[] { DungeonRunEditor.Stage.None, DungeonRunEditor.Stage.Creating, DungeonRunEditor.Stage.Entering,
+        DungeonRunEditor.Stage.Editing, DungeonRunEditor.Stage.Leaving }.Select(DungeonRunEditor.AddVerdict).ToArray();
+    Check("BD23 (D3, J, K belt) flow tables: AddVerdict is Refuse, Allow, Refuse, Rule, Refuse for None, Creating, Entering, Editing, Leaving; LeaveTarget sends Done to Power and "
+        + "Back and Recover to Deck; PowerBack follows the four rows of J2; ExitAllowed (false,true,false,true) is true, (false,true,false,false) false, (false,false,true,true) false, "
+        + "(true,false,false,false) true",
+        verdicts.SequenceEqual(new[] { DungeonRunEditor.AddVerdictKind.Refuse, DungeonRunEditor.AddVerdictKind.Allow, DungeonRunEditor.AddVerdictKind.Refuse,
+            DungeonRunEditor.AddVerdictKind.Rule, DungeonRunEditor.AddVerdictKind.Refuse })
+            && DungeonRunEditor.LeaveTarget(DungeonRunEditor.Leave.Done) == DungeonRunEditor.LeaveStep.Power
+            && DungeonRunEditor.LeaveTarget(DungeonRunEditor.Leave.Back) == DungeonRunEditor.LeaveStep.Deck
+            && DungeonRunEditor.LeaveTarget(DungeonRunEditor.Leave.Recover) == DungeonRunEditor.LeaveStep.Deck
+            && DungeonRunEditor.PowerBack(true, true, true) == DungeonRunEditor.PowerBackTarget.Editor
+            && DungeonRunEditor.PowerBack(true, true, false) == DungeonRunEditor.PowerBackTarget.PlankBuild
+            && DungeonRunEditor.PowerBack(false, true, true) == DungeonRunEditor.PowerBackTarget.PlankBuild
+            && DungeonRunEditor.PowerBack(false, true, false) == DungeonRunEditor.PowerBackTarget.PlankBuild
+            && DungeonRunEditor.PowerBack(true, false, true) == DungeonRunEditor.PowerBackTarget.Deck
+            && DungeonRunEditor.PowerBack(false, false, false) == DungeonRunEditor.PowerBackTarget.Deck
+            && DungeonRunEditor.ExitAllowed(false, true, false, true) && !DungeonRunEditor.ExitAllowed(false, true, false, false)
+            && !DungeonRunEditor.ExitAllowed(false, false, true, true) && DungeonRunEditor.ExitAllowed(true, false, false, false),
+        string.Join(",", verdicts));
+
+    var recoverBad = new List<string>();
+    foreach (DungeonRunEditor.Stage st in Enum.GetValues(typeof(DungeonRunEditor.Stage)))
+        foreach (bool hub in new[] { false, true })
+            foreach (bool once in new[] { false, true })
+            {
+                var want = once || st == DungeonRunEditor.Stage.None ? DungeonRunEditor.RecoverKind.None
+                    : st == DungeonRunEditor.Stage.Creating || st == DungeonRunEditor.Stage.Entering && hub ? DungeonRunEditor.RecoverKind.RemoveAndPlank
+                    : DungeonRunEditor.RecoverKind.DeckAndLeave;
+                var got = DungeonRunEditor.RecoverAction(st, hub, once);
+                if (got != want) recoverBad.Add(st + "/" + hub + "/" + once + "=" + got);
+            }
+    Check("BD24 (L) RecoverAction over stage x atHub x recoveredOnce: recoveredOnce and the None stage give None; Creating, and Entering at the HUB, give RemoveAndPlank; "
+        + "Entering in CM, Editing and Leaving give DeckAndLeave (20 cases)",
+        recoverBad.Count == 0 && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Creating, false, false) == DungeonRunEditor.RecoverKind.RemoveAndPlank
+            && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Entering, true, false) == DungeonRunEditor.RecoverKind.RemoveAndPlank
+            && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Entering, false, false) == DungeonRunEditor.RecoverKind.DeckAndLeave
+            && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Editing, true, false) == DungeonRunEditor.RecoverKind.DeckAndLeave
+            && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Leaving, false, false) == DungeonRunEditor.RecoverKind.DeckAndLeave
+            && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Editing, false, true) == DungeonRunEditor.RecoverKind.None,
+        string.Join(",", recoverBad));
+
+    var mageRow = data.FindClass("MAGE");
+    var dualRow = data.FindClass("MAGE_ROGUE");
+    var dkRow = data.FindClass("DEATHKNIGHT");
+    var tessRow = data.FindClass("GILA_500h3");
+    var rows = new[] { mageRow, dualRow, dkRow, tessRow };
+    var B = DungeonRunEditor.BuilderKind.Plank;
+    var E = DungeonRunEditor.BuilderKind.Editor;
+    // (row, candidates, reachable, size, nativeDecks, nativeLimit, editorFailed, gate)
+    Check("BD25 (M) Builder: the all-clear Mage row is Editor; each Plank condition alone gives Plank (editorFailed, 0 candidates, reachable 9 of 10, 111 of 111 native decks, "
+        + "a dual row and a Death Knight row with the gate off); the dual and Death Knight rows give Editor with the gate on; the shipped gate "
+        + "(DungeonRunEditor.DualAndDkInEditor, phase 4) is on, so the dual and Death Knight rows give Editor through it",
+        rows.All(r => r != null)
+            && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 5, 111, false, false) == E
+            && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 5, 111, true, false) == B
+            && DungeonRunEditor.Builder(mageRow, 0, 10, data.Rules.StarterSize, 5, 111, false, false) == B
+            && DungeonRunEditor.Builder(mageRow, 40, 9, data.Rules.StarterSize, 5, 111, false, false) == B
+            && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 111, 111, false, false) == B
+            && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 110, 111, false, false) == E
+            && dualRow.IsDual && DungeonRunEditor.Builder(dualRow, 40, 10, data.Rules.StarterSize, 5, 111, false, false) == B
+            && dkRow.ClassSet.Contains("DEATHKNIGHT") && DungeonRunEditor.Builder(dkRow, 40, 10, data.Rules.StarterSize, 5, 111, false, false) == B
+            && DungeonRunEditor.Builder(dualRow, 40, 10, data.Rules.StarterSize, 5, 111, false, true) == E
+            && DungeonRunEditor.Builder(dkRow, 40, 10, data.Rules.StarterSize, 5, 111, false, true) == E
+            && DungeonRunEditor.Builder(tessRow, 40, 10, data.Rules.StarterSize, 5, 111, false, false) == E
+            && DungeonRunEditor.DualAndDkInEditor
+            && DungeonRunEditor.Builder(dualRow, 40, 10, data.Rules.StarterSize, 5, 111, false, DungeonRunEditor.DualAndDkInEditor) == E
+            && DungeonRunEditor.Builder(dkRow, 40, 10, data.Rules.StarterSize, 5, 111, false, DungeonRunEditor.DualAndDkInEditor) == E
+            && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 5, 111, false, DungeonRunEditor.DualAndDkInEditor) == E,
+        "gate " + DungeonRunEditor.DualAndDkInEditor);
+
+    Func<string, string> same = s => s;
+    var tessHeroes = DungeonRunEditor.HeaderHeroes(tessRow, data, same);
+    var mageHeroes = DungeonRunEditor.HeaderHeroes(mageRow, data, same);
+    var dualHeroes = DungeonRunEditor.HeaderHeroes(dualRow, data, same);
+    var tessClassHero = data.FindClass(tessRow.ClassSet[0]).HeroCard;
+    var mageRogueTags = DungeonRunEditor.ClassTags(dualRow);
+    Check("BD26 (A2, F) HeaderHeroes: Tess (GILA_500h3, classes [ROGUE]) is [GILA_500h3, the ROGUE class row's hero]; the MAGE row is its hero only; the MAGE_ROGUE row is "
+        + "[ULDA_Reno, the MAGE hero]; a clientId mapping is applied; HeroAccepted(MAGE, [MAGE], MAGE row) is true, NEUTRAL and WARRIOR are false, (MAGE, [MAGE, ROGUE], MAGE_ROGUE row) "
+        + "is true; ClassTags of the MAGE_ROGUE row is [MAGE, ROGUE]",
+        tessRow.HeroCard == "GILA_500h3" && tessClassHero == data.FindClass("ROGUE").HeroCard && tessClassHero != tessRow.HeroCard
+            && tessHeroes.SequenceEqual(new[] { "GILA_500h3", tessClassHero })
+            && mageHeroes.SequenceEqual(new[] { mageRow.HeroCard })
+            && dualHeroes.SequenceEqual(new[] { dualRow.HeroCard, data.FindClass("MAGE").HeroCard })
+            && DungeonRunEditor.HeaderHeroes(mageRow, data, s => "C_" + s).SequenceEqual(new[] { "C_" + mageRow.HeroCard })
+            && DungeonRunEditor.HeroAccepted("MAGE", new[] { "MAGE" }, mageRow)
+            && !DungeonRunEditor.HeroAccepted("NEUTRAL", new[] { "MAGE" }, mageRow)
+            && !DungeonRunEditor.HeroAccepted("WARRIOR", new[] { "MAGE" }, mageRow)
+            && !DungeonRunEditor.HeroAccepted("MAGE", new[] { "MAGE", "ROGUE" }, mageRow)
+            && DungeonRunEditor.HeroAccepted("MAGE", new[] { "MAGE", "ROGUE" }, dualRow)
+            && mageRogueTags.SequenceEqual(new[] { "MAGE", "ROGUE" }) && DungeonRunEditor.ClassTags(mageRow).SequenceEqual(new[] { "MAGE" }),
+        string.Join(",", tessHeroes) + " | " + string.Join(",", dualHeroes));
+
+    var all = new[] { true, true, true, true, true, true, true, true };
+    bool Owns(bool[] a) => DungeonRunEditor.OwnsEditor(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7]);
+    bool eachFalse = true;
+    for (int i = 0; i < all.Length; i++)
+    {
+        var a = (bool[])all.Clone();
+        a[i] = false;
+        if (Owns(a)) eachFalse = false;
+    }
+    Check("BD27 (H0) OwnsEditor is true with all eight inputs true and false when any single input is false", Owns(all) && eachFalse);
+});
+
+// Build Deck editor mapping, reasons and texts (design E1-E4, C "Seed"): EditorCards, AddCode, DoneReasons, memoized cardReason, SeedCounts.
+Guard("BDX", () =>
+{
+    var pol = OfflinePoolPolicy.Load();
+    var mageRow = data.FindClass("MAGE");
+    var dkRow = data.FindClass("DEATHKNIGHT");
+    var mage = mageRow.ClassSet;
+    string Name(string id) { try { return SabberStoneCore.Model.Cards.FromId(id)?.Name; } catch (Exception) { return null; } }
+    RunBuildCard C(string id, int owned, string clientId = null, string group = null, bool legendary = false) =>
+        new RunBuildCard { Id = id, ClientId = clientId ?? id, Name = Name(id) ?? id, Cost = 1, Owned = owned, Legendary = legendary, CopyGroup = group ?? id };
+    var cand = new List<RunBuildCard>
+    {
+        C("AT_003", 2), C("AT_006", 2), C("AT_007", 2), C("AT_082", 2), C("AT_083", 2), C("AT_009", 1, legendary: true),
+        C("RLK_024", 2), C("RLK_025", 2), C("RLK_048", 2), C("RLK_061", 2),
+        C("ZZ_B", 1, "CLX"), C("ZZ_A", 1, "CLX"),
+    };
+    var cards = new DungeonRunEditor.EditorCards(cand);
+    string[] legal10 = { "AT_006", "AT_006", "AT_007", "AT_007", "AT_003", "AT_003", "AT_082", "AT_082", "AT_083", "AT_083" };
+
+    var list10 = cards.EngineList(legal10.Concat(new string[0]), out var none);
+    var list10b = cards.EngineList(legal10.Take(9).Concat(new[] { "NOPE_1" }), out var lost);
+    Check("BD28 EditorCards: two engine ids with one client id (ZZ_B and ZZ_A, \"CLX\") map to the lower by ordinal, ZZ_A, and the client id is in Collisions; an unknown "
+        + "client id has no engine id; EngineList maps a 10-slot list in order with none unmapped, and reports an unknown client id in unmapped (the other 9 mapped); "
+        + "Owned, Group, Name and ClientId read a candidate, 0 / the id itself / null for any other id",
+        cards.Engine("CLX") == "ZZ_A" && cards.Collisions.SequenceEqual(new[] { "CLX" }) && cards.Engine("NOPE_1") == null && cards.Engine(null) == null
+            && list10.SequenceEqual(legal10) && none.Count == 0
+            && list10b.SequenceEqual(legal10.Take(9)) && lost.SequenceEqual(new[] { "NOPE_1" })
+            && cards.Owned("AT_009") == 1 && cards.Owned("AT_064") == 0 && cards.Group("AT_006") == "AT_006" && cards.Group("AT_064") == "AT_064"
+            && cards.Name("AT_006") == Name("AT_006") && cards.Name("AT_064") == null && cards.ClientId("ZZ_B") == "CLX" && cards.ClientId("AT_064") == null,
+        cards.Engine("CLX") + " / " + string.Join(",", cards.Collisions));
+
+    var nine = legal10.Take(9).ToList();
+    var candAdd = DungeonRunEditor.AddCode(cards, nine, "AT_083", mageRow, 10, pol, null);
+    var thirdAdd = DungeonRunEditor.AddCode(cards, nine, "AT_006", mageRow, 10, pol, null);
+    var warriorAdd = DungeonRunEditor.AddCode(cards, nine, "AT_064", mageRow, 10, pol, null);
+    var ownedAdd = DungeonRunEditor.AddCode(cards, nine, "AT_084", mageRow, 10, pol, null);
+    var unknownAdd = DungeonRunEditor.AddCode(cards, nine, "ZZZ_NOPE", mageRow, 10, pol, null);
+    var fullAdd = DungeonRunEditor.AddCode(cards, legal10, "AT_083", mageRow, 10, pol, null);
+    var fullOther = DungeonRunEditor.AddCode(cards, legal10, "AT_064", mageRow, 10, pol, null);
+    string warriorText = NativeDungeonRunText.BuildAddRefusal(Name("AT_064"), warriorAdd.Code);
+    var dkSlots = new[] { "RLK_024", "RLK_024", "RLK_025", "RLK_025", "RLK_048", "RLK_048", "AT_082", "AT_082" };
+    var runeAdd = DungeonRunEditor.AddCode(cards, dkSlots, "RLK_061", dkRow, 10, pol, null);
+    var runeFine = DungeonRunEditor.AddCode(cards, dkSlots, "AT_083", dkRow, 10, pol, null);
+    string runeText = NativeDungeonRunText.BuildAddRefusal("Bone Breaker", runeAdd.Code);
+    Check("BD29 AddCode on the MAGE row: a candidate equals DungeonRunBuild.AddReason (null for a legal add, \"copies AT_006\" for a third); AT_064 (a Warrior card) is \"class AT_064\" "
+        + "and its text is \"Cannot add \" + its engine name + \": not a card of this hero's class.\" with no id; a legal card that is no candidate (AT_084, no copy owned) is "
+        + "\"owned AT_084\"; an id unknown to the engine is \"unavailable\"; an 11th card is \"size\", candidate or not; on a DEATHKNIGHT row with 3 runes used a 4th-rune card "
+        + "is \"runes\", worded \"a Death Knight deck needs at most 3 runes\"",
+        candAdd.Code == DungeonRunBuild.AddReason(nine, "AT_083", mage, 10, cards.Owned, cards.Group, pol) && candAdd.Code == null && candAdd.EngineId == "AT_083"
+            && thirdAdd.Code == DungeonRunBuild.AddReason(nine, "AT_006", mage, 10, cards.Owned, cards.Group, pol) && thirdAdd.Code == "copies AT_006"
+            && warriorAdd.Code == "class AT_064" && warriorText == "Cannot add " + Name("AT_064") + ": not a card of this hero's class." && !warriorText.Contains("AT_064")
+            && ownedAdd.Code == "owned AT_084" && unknownAdd.Code != null && unknownAdd.Code.StartsWith("unavailable") && unknownAdd.EngineId == null
+            && fullAdd.Code == "size" && fullOther.Code == "size"
+            && runeAdd.Code == "runes" && runeFine.Code == null && runeText == "Cannot add Bone Breaker: a Death Knight deck needs at most 3 runes.",
+        string.Join(" | ", new[] { candAdd.Code, thirdAdd.Code, warriorAdd.Code, ownedAdd.Code, unknownAdd.Code, fullAdd.Code, fullOther.Code, runeAdd.Code, runeFine.Code }.Select(x => x ?? "null")));
+
+    // BD3-BD8's fixtures with and without a memoized cardReason.
+    int memoCalls = 0;
+    var memoCache = new Dictionary<string, string>(StringComparer.Ordinal);
+    Func<IReadOnlyList<string>, Func<string, string>> memoFor = set => id =>
+    {
+        string key = string.Join(",", set) + "|" + id;
+        if (!memoCache.TryGetValue(key, out var r)) { memoCalls++; memoCache[key] = r = DungeonRunBuild.CardReason(id, set, pol); }
+        return r;
+    };
+    var dkSet = dkRow.ClassSet; var dualSet = data.FindClass("MAGE_ROGUE").ClassSet;
+    string[] triple = { "AT_006", "AT_006", "AT_006", "AT_007", "AT_007", "AT_003", "AT_003", "AT_082", "AT_082", "AT_083" };
+    string[] twoLegend = { "AT_009", "AT_009", "AT_007", "AT_007", "AT_003", "AT_003", "AT_082", "AT_082", "AT_083", "AT_083" };
+    string[] grouped = { "AT_006", "AT_006", "AT_007", "AT_003", "AT_003", "AT_082", "AT_082", "AT_083", "AT_083", "AT_084" };
+    string[] dk4 = { "RLK_024", "RLK_024", "RLK_025", "RLK_025", "RLK_048", "RLK_048", "AT_082", "AT_082", "RLK_061", "RLK_061" };
+    string[] mix = { "AT_006", "AT_006", "AT_007", "AT_007", "AT_028", "AT_028", "AT_029", "AT_029", "AT_082", "AT_082" };
+    Func<string, int> low = id => id == "AT_006" ? 1 : 2;
+    Func<string, string> grp = id => id == "AT_006" || id == "AT_007" ? "group-a" : id;
+    var deckCases = new (string[] Cards, IReadOnlyList<string> Set, Func<string, int> Owned, Func<string, string> Group)[]
+    {
+        (legal10, mage, null, null), (legal10.Take(9).ToArray(), mage, null, null), (legal10.Concat(new[] { "AT_084" }).ToArray(), mage, null, null),
+        (triple, mage, null, null), (twoLegend, mage, null, null), (grouped, mage, null, grp), (legal10, mage, low, null), (dk4, dkSet, null, null),
+        (mix, dualSet, null, null), (new[] { "AT_064", "BOT_238", "TIME_009", "CS2_mirror", "RLK_061", "AT_006", "AT_006", "AT_006", "AT_082", "AT_083" }, mage, null, null),
+    };
+    bool sameDeck = deckCases.All(c => DungeonRunBuild.DeckReasons(c.Cards, c.Set, 10, c.Owned, c.Group, pol, memoFor(c.Set))
+        .SequenceEqual(DungeonRunBuild.DeckReasons(c.Cards, c.Set, 10, c.Owned, c.Group, pol, null)));
+    var addCases = new (string[] Cards, string Id)[]
+    {
+        (legal10, "AT_084"), (legal10.Take(9).Where(x => x != "AT_083").Concat(new[] { "AT_084" }).ToArray(), "AT_006"), (legal10.Take(9).ToArray(), "AT_083"),
+        (legal10.Take(9).ToArray(), "AT_064"), (legal10.Take(9).ToArray(), "RLK_061"),
+    };
+    bool sameAdd = addCases.All(c => DungeonRunBuild.AddReason(c.Cards, c.Id, mage, 10, null, null, pol, memoFor(mage))
+        == DungeonRunBuild.AddReason(c.Cards, c.Id, mage, 10, null, null, pol, null));
+    var done9 = DungeonRunEditor.DoneReasons(cards, legal10.Take(9).ToList(), mageRow, 10, pol, memoFor(mage));
+    var doneLost = DungeonRunEditor.DoneReasons(cards, legal10.Take(9).Concat(new[] { "NOPE_1" }).ToList(), mageRow, 10, pol, null);
+    var doneOk = DungeonRunEditor.DoneReasons(cards, legal10, mageRow, 10, pol, null);
+    Check("BD30 a memoized cardReason (called " + memoCalls + " times for the " + (deckCases.Length + addCases.Length) + " fixtures) gives the same DeckReasons and AddReason lists as null "
+        + "(BD3-BD8's lists, a dual row, a mixed bad list); DoneReasons of a 9-slot list contains \"size 9 of 10\" and of a list with an unmapped slot contains "
+        + "\"unavailable NOPE_1\"; a legal 10 has none",
+        sameDeck && sameAdd && memoCalls > 0 && done9.Contains("size 9 of 10") && doneLost.Contains("unavailable NOPE_1") && doneLost.Contains("size 9 of 10")
+            && doneOk.Count == 0,
+        sameDeck + " " + sameAdd + " / " + string.Join("|", done9) + " / " + string.Join("|", doneLost));
+
+    string doneText = NativeDungeonRunText.EditorDoneRefusal(new[] { "size 9 of 10", "copies AT_006" }, Name);
+    var seed = DungeonRunEditor.SeedCounts(new[] { "AT_003", "AT_003", "AT_006", "AT_007", "AT_082", "AT_083", "AT_009", "RLK_024", "RLK_025", "RLK_048" }, cards);
+    var seed2 = DungeonRunEditor.SeedCounts(new[] { "ZZ_B", "ZZ_A", "AT_003" }, cards);
+    bool threw = false;
+    try { DungeonRunEditor.SeedCounts(new[] { "AT_006", "AT_064" }, cards); } catch (ArgumentException) { threw = true; }
+    Check("BD31 EditorDoneRefusal is exactly \"Your deck is not ready: it has 9 of 10 cards; Dalaran Aspirant: at most 2 copies of a card.\", null for no reasons; an unmapped "
+        + "slot is worded with no id; the header and caption constants are exact; SeedCounts of a list with 2x one card gives 9 keys summing to 10 (client ids); two colliding engine ids count under their one client id; SeedCounts throws on a non-candidate",
+        doneText == "Your deck is not ready: it has 9 of 10 cards; Dalaran Aspirant: at most 2 copies of a card."
+            && NativeDungeonRunText.EditorDoneRefusal(new string[0], Name) == null
+            && NativeDungeonRunText.EditorDoneRefusal(new[] { "unavailable NOPE_1" }, Name) == "Your deck is not ready: a card: not a card this run can use."
+            && NativeDungeonRunText.EditorAddHeader == "Cannot add card" && NativeDungeonRunText.EditorDoneHeader == "Deck not ready"
+            && NativeDungeonRunText.EditorFailedCaption == "The deck editor could not open. Build your deck here instead."
+            && NativeDungeonRunText.EditorCraftingOff == "Crafting is off while you build a Dungeon Run deck."
+            && seed.Count == 9 && seed.Values.Sum() == 10 && seed["AT_003"] == 2 && seed2.Count == 2 && seed2["CLX"] == 2 && threw,
+        doneText + " / " + string.Join(",", seed.Select(kv => kv.Key + "=" + kv.Value)));
 });
 
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");

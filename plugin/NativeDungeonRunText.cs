@@ -338,13 +338,54 @@ internal static class NativeDungeonRunText
         return filtered.Skip(page * perPage).Take(perPage).ToList();
     }
 
+    /// <summary>
+    /// The card planks: one per copy group of <paramref name="all"/> (its <see cref="RunBuildCard.CopyGroup"/>, else its id), so a
+    /// Core reprint and its original are one plank. A group with one card is that card; a group with several is a new card with the
+    /// first printing's id, client id, name and cost (the one whose id is the group key, else the lowest id), the owned counts
+    /// summed, legendary when any printing is, and <see cref="RunBuildCard.Printings"/> listing them (that printing first, then by id).
+    /// </summary>
+    internal static IReadOnlyList<RunBuildCard> BuildMergePrintings(IReadOnlyList<RunBuildCard> all)
+    {
+        var result = new List<RunBuildCard>();
+        foreach (var g in (all ?? new RunBuildCard[0]).Where(c => c != null).GroupBy(c => c.CopyGroup ?? c.Id, System.StringComparer.Ordinal))
+        {
+            var printings = g.OrderBy(c => c.Id == g.Key ? 0 : 1).ThenBy(c => c.Id, System.StringComparer.Ordinal).ToList();
+            if (printings.Count == 1) { result.Add(printings[0]); continue; }
+            var first = printings[0];
+            result.Add(new RunBuildCard
+            {
+                Id = first.Id, ClientId = first.ClientId, Name = first.Name, Cost = first.Cost, CopyGroup = g.Key,
+                Legendary = printings.Any(c => c.Legendary), Owned = printings.Sum(c => c.Owned), Printings = printings,
+            });
+        }
+        return result;
+    }
+
+    // The printings a plank stands for: its Printings, else the card itself.
+    private static IReadOnlyList<RunBuildCard> BuildPrintings(RunBuildCard card) => card.Printings ?? new[] { card };
+
+    /// <summary>The copies of plank <paramref name="card"/> in <paramref name="built"/>: every printing it stands for counts.</summary>
+    internal static int BuildInDeck(RunBuildCard card, IReadOnlyList<string> built)
+    {
+        var ids = new HashSet<string>(BuildPrintings(card).Select(p => p.Id), System.StringComparer.Ordinal);
+        return built == null ? 0 : built.Count(ids.Contains);
+    }
+
+    /// <summary>
+    /// The engine id a click on plank <paramref name="card"/> adds: the first printing (<see cref="RunBuildCard.Printings"/> order)
+    /// with an owned copy not yet in <paramref name="built"/>, else the plank's own id (the add is then refused with its reason).
+    /// </summary>
+    internal static string BuildPickPrinting(RunBuildCard card, IReadOnlyList<string> built) =>
+        BuildPrintings(card).FirstOrDefault(p => (built == null ? 0 : built.Count(x => x == p.Id)) < p.Owned)?.Id ?? card.Id;
+
     /// <summary>The copies of one card a built list may hold: what is owned, at most 2, at most 1 for a legendary.</summary>
     internal static int BuildCopyLimit(RunBuildCard card) => System.Math.Min(card.Owned, card.Legendary ? 1 : 2);
 
     /// <summary>
     /// A card plank: "Fireball (4) 1/2" is the name, the mana cost, then n/m where n (<paramref name="inDeck"/>) is the copies of
     /// this card in the list and m the copies this list may hold of it (<see cref="BuildCopyLimit"/>: min(owned, 2, 1 for a
-    /// legendary)). The copy group's shared limit is not folded in: an add past it is refused with its reason.
+    /// legendary)). For a merged plank (<see cref="BuildMergePrintings"/>) n is <see cref="BuildInDeck"/> and owned is summed over
+    /// its printings, so the copy group's shared limit is the one shown.
     /// </summary>
     internal static string BuildCardLabel(RunBuildCard c, int inDeck) => c.Name + " (" + c.Cost + ") " + inDeck + "/" + BuildCopyLimit(c);
 
@@ -379,11 +420,11 @@ internal static class NativeDungeonRunText
     internal static string BuildAddRefusal(string name, string reason)
     {
         string why = BuildReasonWords((reason ?? "").Split(' ')[0]);
-        return "Cannot add " + name + ": " + (why == null ? reason : why + ".");
+        return "Cannot add " + name + ": " + why + ".";
     }
 
-    // The words of a DungeonRunBuild reason code shared by the add and run-start refusals ("at most 2 copies of a card"); null
-    // for a code they word differently or not at all.
+    // The words of a DungeonRunBuild reason code shared by the add and run-start refusals ("at most 2 copies of a card"); a code
+    // without words is "not allowed in a run", so no engine id or raw code reaches the player.
     private static string BuildReasonWords(string code)
     {
         switch (code)
@@ -394,7 +435,12 @@ internal static class NativeDungeonRunText
             case "owned": return "you own no more copies";
             case "runes": return "a Death Knight deck needs at most 3 runes";
             case "not-collectible": return "not a collectible card";
-            default: return null;
+            case "class": return "not a card of this hero's class";
+            case "hero": return "a hero card";
+            case "fabled": return "a Fabled card";
+            case "rune-class": return "rune cards are for Death Knight runs only";
+            case "missing": case "unavailable": return "not a card this run can use";
+            default: return "not allowed in a run";
         }
     }
 
@@ -405,7 +451,20 @@ internal static class NativeDungeonRunText
     /// engine id or a copy group; a name it cannot give (null, empty, or it throws) is "a card", so no engine id is shown. Null
     /// when there are no reasons.
     /// </summary>
-    internal static string BuildStartRefusal(IReadOnlyList<string> reasons, System.Func<string, string> name)
+    internal static string BuildStartRefusal(IReadOnlyList<string> reasons, System.Func<string, string> name) =>
+        BuildReasonsText(DungeonRun.IllegalBuiltList, reasons, name);
+
+    internal const string EditorAddHeader = "Cannot add card", EditorDoneHeader = "Deck not ready",
+        EditorFailedCaption = "The deck editor could not open. Build your deck here instead.",
+        EditorCraftingOff = "Crafting is off while you build a Dungeon Run deck.";
+
+    /// <summary>The Done refusal of the editor: "Your deck is not ready: it has 9 of 10 cards; Fireball: at most 2 copies of a card."
+    /// (<see cref="BuildReasonsText"/>); null when there are no reasons.</summary>
+    internal static string EditorDoneRefusal(IReadOnlyList<string> reasons, System.Func<string, string> name) =>
+        BuildReasonsText("Your deck is not ready: ", reasons, name);
+
+    /// <summary>The reasons of <see cref="DungeonRunBuild.DeckReasons"/> in words after <paramref name="prefix"/>, joined by "; ", ending in a period.</summary>
+    internal static string BuildReasonsText(string prefix, IReadOnlyList<string> reasons, System.Func<string, string> name)
     {
         if (reasons == null || reasons.Count == 0) return null;
         string Named(string id)
@@ -425,16 +484,13 @@ internal static class NativeDungeonRunText
             switch (code)
             {
                 case "owned": why = "you no longer own that many copies"; break;
-                case "class": why = "not a card of this hero's class"; break;
-                case "hero": why = "a hero card"; break;
-                case "fabled": why = "a Fabled card"; break;
                 case "rune-class": why = "a rune card, only in a Death Knight deck"; break;
                 case "missing": why = "an unknown card"; break;
-                default: why = BuildReasonWords(code) ?? "not allowed in a run"; break;
+                default: why = BuildReasonWords(code); break;
             }
             parts.Add(rest == null ? why : Named(rest) + ": " + why);
         }
-        return DungeonRun.IllegalBuiltList + string.Join("; ", parts) + ".";
+        return prefix + string.Join("; ", parts) + ".";
     }
 
     // ---- the portrait tray's pages (NativeDungeonRunPicker, owner 2026-11-22). The tray's prefab lays out at most `perPage`

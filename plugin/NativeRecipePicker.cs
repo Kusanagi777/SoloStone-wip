@@ -147,6 +147,12 @@ internal static partial class NativeUIProbe
     private static bool ChooseLocalRecipe(DeckTemplatePicker __instance)
     {
         if (!active) return true;
+        // Build Deck editor (design H): the temporary deck never takes a recipe (nor the Custom choice).
+        if (NativeDungeonRunEditor.OwnsEditedDeck())
+        {
+            log?.LogWarning("DUNGEON_RUN_EDITOR recipe refused for " + NativeDungeonRunEditor.TempId);
+            return false;
+        }
         if (committedRecipePickers.Contains(__instance)) return false;
         bool committed = false;
         long id = 0;
@@ -225,6 +231,8 @@ internal static partial class NativeUIProbe
     private static void AttachRecipeGuide(CollectionManagerDisplay __instance)
     {
         if (!active) return;
+        // Build Deck editor (design B16): no recipe guide on the temporary deck.
+        if (NativeDungeonRunEditor.OwnsEditedDeck()) return;
         NativeRecipeSafety.OrDefault(() => {
             if (CurrentCollectionScene()) NativeRecipeGuide.Attach(__instance);
             return true;

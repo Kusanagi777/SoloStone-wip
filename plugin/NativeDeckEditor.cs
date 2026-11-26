@@ -18,11 +18,22 @@ internal static partial class NativeUIProbe
             new[] { typeof(string), typeof(CollectionDeck), typeof(bool) });
     }
 
-    // Use the same counterpart groups for the native editor and its invalid-deck UI.
+    // Use the same counterpart groups for the native editor and its invalid-deck UI. The Build Deck editor's temporary deck
+    // (design B12) is admitted without the draft and custom-card terms: its copies group as the run's candidates do.
     private static bool LocalDeckCopyCount(string __0, CollectionDeck __1, ref int __result)
     {
-        if (!active || __1 == null || __1.HasSideboardCards || !NativeUIProjection.IsPersonalId(__1.ID)
-            || Profile.GetDraft(__1.ID) == null || !LocalDecks.CustomCards.Any(card => card.Id == __0)) return true;
+        if (!active || __1 == null || __1.HasSideboardCards) return true;
+        if (NativeDungeonRunEditor.Owns(__1.ID))
+        {
+            try
+            {
+                __result = NativeUIProjection.DeckCopyCount(__1.GetCardsWithCardID(), __0);
+                return false;
+            }
+            catch (Exception error) { NativeDungeonRunEditor.Abort(error); return true; }
+        }
+        if (!NativeUIProjection.IsPersonalId(__1.ID) || Profile.GetDraft(__1.ID) == null
+            || !LocalDecks.CustomCards.Any(card => card.Id == __0)) return true;
         __result = NativeUIProjection.DeckCopyCount(__1.GetCardsWithCardID(), __0);
         return false;
     }
@@ -54,6 +65,8 @@ internal static partial class NativeUIProbe
         string heroCardID, DeckSourceType deckSourceType, string pastedDeckHashString, bool isHeroOverridden)
     {
         if (!active) return true;
+        // Build Deck editor (design B17): no new deck while a session exists (the New Deck button is gated too).
+        if (NativeDungeonRunEditor.Active) { log.LogWarning("DUNGEON_RUN_EDITOR deck creation refused while a session exists"); return false; }
         long candidateId = Profile.NextCustomDeckId;
         bool allowed = NativeUIProjection.CanCreateDraft(deckType == DeckType.NORMAL_DECK,
             deckSourceType == DeckSourceType.DECK_SOURCE_TYPE_NORMAL && pastedDeckHashString == null,
@@ -146,6 +159,8 @@ internal static partial class NativeUIProbe
     private static bool SaveLocalDraft(CollectionDeck __instance, CollectionDeck.ChangeSource __0)
     {
         if (active && __instance is SideboardDeck sideboard) __instance = sideboard.MainDeck;
+        // Build Deck's temporary deck is never persisted (design B8): every save is swallowed, whatever its source.
+        if (active && DungeonRunEditor.IsRunBuildId(__instance.ID)) { NativeDungeonRunEditor.Swallowed(__instance.ID, __0); return false; }
         bool supportedSource = __0 == CollectionDeck.ChangeSource.MarkDeckAsSeen
             || __0 == CollectionDeck.ChangeSource.PocoSetDeckName
             || __0 == CollectionDeck.ChangeSource.OnScenePreUnload
@@ -266,6 +281,8 @@ internal static partial class NativeUIProbe
 
     private static bool PrepareDiscardDeck(CollectionDeckTray __instance, bool deleteDeck, ref bool __result)
     {
+        // Build Deck editor (design J1): Back from the temporary deck, with or without deleteDeck, never reaches native.
+        if (active && NativeDungeonRunEditor.OwnsTray(__instance)) return NativeDungeonRunEditor.BackOut(__instance, ref __result);
         if (!active || !CurrentCollectionScene() || !deleteDeck
             || !ReferenceEquals(__instance, CollectionDeckTray.Get())) return true;
         // Preserve native early exits before any discard side effects or local commit.
@@ -291,12 +308,16 @@ internal static partial class NativeUIProbe
         return TryPrepareLocalDelete(__0, null, true);
     }
 
-    private static bool TryPrepareLocalDelete(long deckId, AlertPopup confirmation, bool validOwner) =>
-        NativeUIProjection.TryPrepareDelete(() => {
+    private static bool TryPrepareLocalDelete(long deckId, AlertPopup confirmation, bool validOwner)
+    {
+        // Build Deck's temporary deck is removed only at the HUB (design B10, K8): refused silently, with no popup.
+        if (DungeonRunEditor.IsRunBuildId(deckId)) { log.LogWarning("DUNGEON_RUN_EDITOR delete refused for " + deckId); return false; }
+        return NativeUIProjection.TryPrepareDelete(() => {
             if (!validOwner) throw new InvalidOperationException("The delete target changed. Reopen Collection and retry.");
             if (preparedDeletes.Contains(deckId)) return;
             PrepareLocalDelete(deckId, confirmation);
         }, error => ReportDeleteFailure(deckId, error, confirmation));
+    }
 
     private static void PrepareLocalDelete(long deckId, AlertPopup confirmation)
     {
@@ -438,23 +459,27 @@ internal static partial class NativeUIProbe
                 __instance.GetDeckID(), __0);
     }
 
+    // The Build Deck editor's temporary deck (design H) is blocked by the same hooks (OwnsRunBuildEditor, false with no session).
     private static bool HidePersonalDeckConvert(DeckOptionsMenu __instance, ref bool __result)
     {
-        if (!OwnsPersonalDeckEditor(Field(__instance, "m_deck") as CollectionDeck, __instance)) return true;
+        var deck = Field(__instance, "m_deck") as CollectionDeck;
+        if (!OwnsPersonalDeckEditor(deck, __instance) && !OwnsRunBuildEditor(deck, __instance)) return true;
         __result = false;
         return false;
     }
 
+    // Design B18: for the temporary deck too (no Options 188 write on any path that still reaches it).
     private static bool HidePersonalDeckTutorial(CollectionManager __instance, ref bool __result)
     {
-        if (!OwnsPersonalDeckEditor(__instance?.GetEditedDeck(), __instance)) return true;
+        var edited = __instance?.GetEditedDeck();
+        if (!OwnsPersonalDeckEditor(edited, __instance) && !OwnsRunBuildEditor(edited, __instance)) return true;
         __result = false;
         return false;
     }
 
     private static bool HidePersonalDeckHelperChoices(CollectionDeck __0, ref bool __result)
     {
-        if (!OwnsPersonalDeckEditor(__0, null)) return true;
+        if (!OwnsPersonalDeckEditor(__0, null) && !OwnsRunBuildEditor(__0, null)) return true;
         __result = false;
         return false;
     }
@@ -462,7 +487,8 @@ internal static partial class NativeUIProbe
     private static bool BlockPersonalDeckHelper(DeckTrayCardListContent __instance, CollectionDeckSlot __0, bool __1)
     {
         var edited = CollectionManager.Get()?.GetEditedDeck();
-        if (!OwnsPersonalDeckEditor(edited, __instance)) return true;
+        // The temporary deck has no local helper: native's is skipped and nothing is shown.
+        if (!OwnsPersonalDeckEditor(edited, __instance)) return !OwnsRunBuildEditor(edited, __instance);
         try
         {
             // DeckMaker reads the projected collection; Done still commits through SaveLocalDraft.
@@ -493,12 +519,44 @@ internal static partial class NativeUIProbe
             return true;
         }, false, LogRecipeFailure);
 
-    private static bool BlockPersonalDeckCompletion(CollectionDeckTray __instance) =>
-        !OwnsPersonalDeckEditor(CollectionManager.Get()?.GetEditedDeck(), __instance);
+    private static bool BlockPersonalDeckCompletion(CollectionDeckTray __instance)
+    {
+        var edited = CollectionManager.Get()?.GetEditedDeck();
+        return !OwnsPersonalDeckEditor(edited, __instance) && !OwnsRunBuildEditor(edited, __instance);
+    }
 
     private static bool OwnsPersonalDeckEditor(CollectionDeck candidate, object instance)
     {
         // Replace Cards and ghost styling cover all persisted personal decks; crafting can make any deck incomplete.
+        var editor = DeckEditorTerms(candidate, instance);
+        bool persisted = active && editor.CurrentCollection && editor.Edited != null && Profile.GetDraft(editor.Edited.ID) != null;
+        return NativeUIProjection.OwnsPersonalDeckEditor(active, editor.CurrentCollection, editor.Manager,
+            editor.Tray, editor.MainContext, editor.ExactDeck, editor.ExactInstance, persisted);
+    }
+
+    // Design H0: the sibling of OwnsPersonalDeckEditor for the Build Deck editor's temporary deck. The same terms, with "persisted"
+    // replaced by the session owning the edited deck in the Editing stage. False with no session (personal and loaner decks are
+    // never affected). Never throws: a failure schedules the editor's recovery and answers false.
+    private static bool OwnsRunBuildEditor(CollectionDeck candidate, object instance)
+    {
+        if (!NativeDungeonRunEditor.Active) return false;
+        try
+        {
+            var editor = DeckEditorTerms(candidate, instance);
+            bool runBuild = editor.Edited != null && NativeDungeonRunEditor.Owns(editor.Edited.ID)
+                && NativeDungeonRunEditor.CurrentStage == DungeonRunEditor.Stage.Editing;
+            return DungeonRunEditor.OwnsEditor(active, editor.CurrentCollection, editor.Manager, editor.Tray, editor.MainContext,
+                editor.ExactDeck, editor.ExactInstance, runBuild);
+        }
+        catch (Exception error) { NativeDungeonRunEditor.Abort(error); return false; }
+    }
+
+    // The terms both editor predicates share: the Collection scene, the live manager and tray, the main deck-editing context
+    // (edit mode, deck contents, not a brawl deck, not the recipe view, the tray's context is the edited deck), the candidate is
+    // the edited deck and the hook instance is the current one.
+    private static (bool CurrentCollection, bool Manager, bool Tray, bool MainContext, bool ExactDeck, bool ExactInstance,
+        CollectionDeck Edited) DeckEditorTerms(CollectionDeck candidate, object instance)
+    {
         CollectionManager manager = CollectionManager.Get();
         CollectionDeckTray tray = CollectionDeckTray.Get();
         CollectionDeck edited = manager?.GetEditedDeck();
@@ -514,9 +572,8 @@ internal static partial class NativeUIProbe
             && manager.IsInEditMode() && tray.IsShowingDeckContents() && !edited.IsBrawlDeck
             && display.GetViewMode() != CollectionUtils.ViewMode.DECK_TEMPLATE
             && ReferenceEquals(tray.GetCurrentDeckContext(), edited);
-        bool persisted = active && currentCollection && edited != null && Profile.GetDraft(edited.ID) != null;
-        return NativeUIProjection.OwnsPersonalDeckEditor(active, currentCollection, manager != null,
-            tray != null, currentMainContext, ReferenceEquals(candidate, edited), exactInstance, persisted);
+        return (currentCollection, manager != null, tray != null, currentMainContext, ReferenceEquals(candidate, edited),
+            exactInstance, edited);
     }
 
     private static bool IsLoanerId(long id) => NativeUIProjection.IsLoanerId(id);
@@ -530,6 +587,10 @@ internal static partial class NativeUIProbe
             throw new InvalidOperationException("Native deck header cache is unavailable.");
         return (NetCache.NetCacheDecks)value;
     }
+
+    // The published deck headers, or null (NativeDungeonRunEditor's header asserts, design A4).
+    internal static NetCache.NetCacheDecks PublishedDeckHeaders =>
+        cache.TryGetValue(typeof(NetCache.NetCacheDecks), out object value) ? value as NetCache.NetCacheDecks : null;
 
     private static IEnumerable<string> SessionLoanerKeys() => decks
         .Where(pair => NativeUIProjection.IsLoanerId(pair.Key)).Select(pair => pair.Value.Id);
@@ -642,7 +703,9 @@ internal static partial class NativeUIProbe
         try
         {
             IReadOnlyDictionary<long, long> ranks = ExpectedRanks();
-            List<CollectionDeck> working = CollectionManager.Get().GetDecks(DeckType.NORMAL_DECK);
+            // Build Deck's temporary deck is outside the local library (design B7).
+            List<CollectionDeck> working = CollectionManager.Get().GetDecks(DeckType.NORMAL_DECK)
+                .Where(deck => !DungeonRunEditor.IsRunBuildId(deck.ID)).ToList();
             if (!working.Select(deck => deck.ID).OrderBy(id => id).SequenceEqual(ranks.Keys.OrderBy(id => id)))
                 throw new InvalidOperationException("Native deck set does not match the local library.");
             foreach (CollectionDeck deck in working)
@@ -762,6 +825,8 @@ internal static partial class NativeUIProbe
         CollectionManager manager = CollectionManager.Get();
         foreach (CollectionDeck working in manager.GetDecks(DeckType.NORMAL_DECK))
         {
+            // B7: CopyFrom(baseDeck) would wipe a Build Deck list.
+            if (DungeonRunEditor.IsRunBuildId(working.ID)) continue;
             CollectionDeck baseDeck = manager.GetBaseDeck(working.ID);
             if (baseDeck != null) working.CopyFrom(baseDeck);
         }

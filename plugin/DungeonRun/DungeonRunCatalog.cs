@@ -97,6 +97,11 @@ internal sealed class RunBuildCard
     public int Owned;
     /// <summary>The copy-limit group (a Core reprint and its original share one); the client id when it has none.</summary>
     public string CopyGroup;
+    /// <summary>
+    /// A plank that stands for several printings of one copy group (<see cref="NativeDungeonRunText.BuildMergePrintings"/>): each
+    /// printing as its own card (its own id and owned count), the plank's id first; null for a card with one printing.
+    /// </summary>
+    public IReadOnlyList<RunBuildCard> Printings;
 }
 
 /// <summary>A hero power of one class.</summary>
