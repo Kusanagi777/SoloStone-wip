@@ -41,6 +41,8 @@ internal static class NativeDungeonRunEditor
         internal DungeonRunEditor.Leave Leave;
         internal float StageSince, ReadySince = -1, ShownAt, ExitedAt;
         internal bool Shown, EditEnded, Exited, ForcedHub, RecoveredOnce;
+        // V1's memo: the sorted slot signature last judged and its Done refusal text (null: the deck is complete).
+        internal string ValidKey, ValidText;
     }
 
     private static ManualLogSource log;
@@ -53,6 +55,15 @@ internal static class NativeDungeonRunEditor
 
     private static MethodInfo onDeckCreated, removeDeck, doneEditing, deckClass, deckHeroClasses, showDeck, exitDisplay,
         saveAndList, navigationClear;
+    // E3's refusal channel, optional (null: the AlertPopup fallback): static GameplayErrorManager.Get() and its DisplayMessage(string).
+    private static MethodInfo errorManagerGet, errorManagerDisplay;
+
+    // Contingent hooks (design D1 S4, D3 A3): written, registered only when the owner's PC check asks for them.
+    /// <summary>PC check P5: the tray label reads "n/10" after S1. If it does not, true registers S4 (OnCardCountUpdated).</summary>
+    internal static readonly bool EnableCountLabelHook = false;
+    /// <summary>PC check P9: every owned run-legal card is on the pages under the native Filter. If one is missing, true registers
+    /// A3 (Filter / FilterFailsOnShowInvalidRule).</summary>
+    internal static readonly bool EnablePageFilterHook = false;
 
     // ------------------------------------------------------------------ what Tasks 4-5 and the wiring read
 
@@ -98,6 +109,53 @@ internal static class NativeDungeonRunEditor
         navigationClear = Required(typeof(Navigation), "Clear", Type.EmptyTypes);
         // I: the only member that tells Done from Back (native Done never validates or saves; it ends in Navigation.GoBack).
         Patch(harmony, Required(typeof(CollectionDeckTray), "DoneButtonPress", new[] { typeof(UIEvent) }), nameof(RunBuildDone));
+
+        // D1 S1-S3: the run's size for the temporary deck. The ruleset is shared (s_FormatRulesets), so it is never mutated.
+        Patch(harmony, Required(typeof(DeckRuleset), "GetDeckSize", new[] { typeof(CollectionDeck) }), nameof(RunBuildSize));
+        Patch(harmony, Required(typeof(DeckRuleset), "GetMinimumAllowedDeckSize", new[] { typeof(CollectionDeck) }), nameof(RunBuildSize));
+        Patch(harmony, Required(typeof(DeckRuleset), "GetDeckSizeWhileEditing", new[] { typeof(CollectionDeck), typeof(EntityDef) }),
+            nameof(RunBuildSize));
+        // D2 V1: "complete at 10" (cosmetic: native Done never checks validity; RunBuildDone owns the refusal). The 2-arg form delegates here.
+        Patch(harmony, Required(typeof(DeckRuleset), "IsDeckValid", new[] { typeof(CollectionDeck),
+            typeof(IList<DeckRuleViolation>).MakeByRefType(), typeof(DeckRule.RuleType[]) }), nameof(RunBuildValid));
+        // D3 A1: every ruleset add check funnels into these two overloads (the 4-arg form delegates to the ref one). Silent.
+        Patch(harmony, Required(typeof(DeckRuleset), "CanAddToDeck", new[] { typeof(EntityDef), typeof(TAG_PREMIUM), typeof(CollectionDeck),
+            typeof(RuleInvalidReason).MakeByRefType(), typeof(DeckRule).MakeByRefType(), typeof(DeckRule.RuleType[]) }), nameof(RunBuildCanAdd));
+        Patch(harmony, Required(typeof(DeckRuleset), "CanAddToDeck", new[] { typeof(EntityDef), typeof(TAG_PREMIUM), typeof(CollectionDeck),
+            typeof(List<RuleInvalidReason>).MakeByRefType(), typeof(List<DeckRule>).MakeByRefType(), typeof(DeckRule.RuleType[]) }),
+            nameof(RunBuildCanAddList));
+        // E3 A2: the silent belt for adds that do not come from the tray.
+        Patch(harmony, Required(typeof(CollectionDeck), "AddCard", new[] { typeof(string), typeof(TAG_PREMIUM), typeof(bool), typeof(EntityDef),
+            typeof(DeckRule.RuleType[]) }), nameof(RunBuildDeckAdd));
+        // E3 A4: the popup site; the call list shows every CollectionDeckTray.AddCard overload reaching it (P6 checks every path).
+        Patch(harmony, Required(typeof(DeckTrayCardListContent), "AddCard", new[] { typeof(EntityDef), typeof(TAG_PREMIUM), typeof(bool),
+            typeof(Action<string>), typeof(Actor), typeof(bool), typeof(bool), typeof(DeckRule.RuleType[]) }), nameof(RunBuildTrayAdd));
+        if (EnableCountLabelHook)
+            Patch(harmony, Required(typeof(CollectionDeckTray), "OnCardCountUpdated", new[] { typeof(int), typeof(int) }), nameof(RunBuildCount));
+        if (EnablePageFilterHook)
+        {
+            Patch(harmony, Required(typeof(DeckRuleset), "Filter", new[] { typeof(EntityDef), typeof(CollectionDeck),
+                typeof(DeckRule).MakeByRefType(), typeof(DeckRule.RuleType[]) }), nameof(RunBuildFilter));
+            Patch(harmony, Required(typeof(DeckRuleset), "FilterFailsOnShowInvalidRule", new[] { typeof(EntityDef), typeof(CollectionDeck),
+                typeof(DeckRule.RuleType[]) }), nameof(RunBuildFilterFails));
+        }
+        BindErrorChannel();
+    }
+
+    // E3: GameplayErrorManager is unbound and optional. Missing, or not the expected shape: refusals use ShowRefusal. Never throws.
+    private static void BindErrorChannel()
+    {
+        try
+        {
+            Type errors = typeof(CollectionManager).Assembly.GetType("GameplayErrorManager", false);
+            MethodInfo get = errors == null ? null : AccessTools.Method(errors, "Get", Type.EmptyTypes);
+            MethodInfo display = errors == null ? null : AccessTools.Method(errors, "DisplayMessage", new[] { typeof(string) });
+            if (get != null && get.IsStatic && display != null && !display.IsStatic) { errorManagerGet = get; errorManagerDisplay = display; return; }
+            Log("GameplayErrorManager unavailable (type " + (errors != null) + ", Get " + (get != null) + ", DisplayMessage " + (display != null)
+                + "): add refusals use the AlertPopup");
+        }
+        catch (Exception error) { Log("GameplayErrorManager lookup failed, add refusals use the AlertPopup: " + error.GetBaseException().Message); }
+        errorManagerGet = errorManagerDisplay = null;
     }
 
     private static MethodInfo Required(Type type, string name, Type[] args) =>
@@ -523,6 +581,232 @@ internal static class NativeDungeonRunEditor
         string name = s.Cards.Name(id);
         if (name != null) return name;
         try { return SabberStoneCore.Model.Cards.FromId(id)?.Name; } catch (Exception) { return null; }
+    }
+
+    // ------------------------------------------------------------------ the run's rules (D size, validity and add bypass; E refusals)
+
+    // The design preamble's guard for a deck argument: the probe is active and the deck is the live session's temporary deck.
+    private static bool OwnsDeck(CollectionDeck deck) => session != null && NativeUIProbe.Active && deck != null && Owns(deck.ID);
+
+    // S1 GetDeckSize, S2 GetMinimumAllowedDeckSize, S3 GetDeckSizeWhileEditing (no overcap extra, no tag-997 bump): the run's size.
+    private static bool RunBuildSize(CollectionDeck __0, ref int __result)
+    {
+        var s = session;
+        try
+        {
+            if (!OwnsDeck(__0)) return true;
+            __result = s.Size;
+            return false;
+        }
+        catch (Exception error) { Abort(error); return true; }
+    }
+
+    // V1, prefix on the 3-arg DeckRuleset.IsDeckValid: valid exactly when Done would accept the list (DoneReasons is empty); else one
+    // violation on the deck-size rule carrying the Done refusal text. Memoized on the sorted slot signature (get_IsValidForRuleset
+    // calls it at an unknown rate). Cosmetic only. The out list is always assigned.
+    private static bool RunBuildValid(DeckRuleset __instance, CollectionDeck __0, ref IList<DeckRuleViolation> __1, ref bool __result)
+    {
+        var s = session;
+        if (!OwnsDeck(__0)) return true;
+        var violations = new List<DeckRuleViolation>();
+        __1 = violations;
+        __result = false;
+        try
+        {
+            List<string> slots = __0.GetCardsWithCardID();
+            string key = string.Join(",", slots.OrderBy(id => id, StringComparer.Ordinal));
+            if (s.ValidKey != key)
+            {
+                var reasons = DungeonRunEditor.DoneReasons(s.Cards, slots, s.Row, s.Size, s.Policy, s.CardReason);
+                s.ValidText = NativeDungeonRunText.EditorDoneRefusal(reasons, id => CardName(s, id));
+                s.ValidKey = key;
+            }
+            __result = s.ValidText == null;
+            if (!__result)
+            {
+                DeckRule rule = __instance?.GetDeckSizeRule(__0);
+                if (rule != null) violations.Add(new DeckRuleViolation(rule, s.ValidText));
+            }
+        }
+        catch (Exception error) { Abort(error); __result = false; }
+        return false;
+    }
+
+    // A1, prefix on DeckRuleset.CanAddToDeck(..., ref RuleInvalidReason, ref DeckRule, ...): the run's rules replace the native ones for
+    // the temporary deck. Never shows anything: it can run per page visual. A refusal names the deck-size rule as the broken rule
+    // (native never returns false without one; it is the rule V1's violation names).
+    private static bool RunBuildCanAdd(DeckRuleset __instance, EntityDef __0, CollectionDeck __2, ref RuleInvalidReason __3, ref DeckRule __4,
+        ref bool __result)
+    {
+        var s = session;
+        if (!OwnsDeck(__2)) return true;
+        __result = false; __3 = null; __4 = null;
+        try
+        {
+            string refusal = RulesetRefusal(s, __2, __0);
+            __result = refusal == null;
+            if (!__result) { __3 = new RuleInvalidReason(refusal, 1, false); __4 = __instance?.GetDeckSizeRule(__2); }
+        }
+        catch (Exception error) { Abort(error); __result = false; }
+        return false;
+    }
+
+    // A1, the list overload (it loops m_rules itself): the same verdict, as one reason and one broken rule.
+    private static bool RunBuildCanAddList(DeckRuleset __instance, EntityDef __0, CollectionDeck __2, ref List<RuleInvalidReason> __3,
+        ref List<DeckRule> __4, ref bool __result)
+    {
+        var s = session;
+        if (!OwnsDeck(__2)) return true;
+        __result = false; __3 = new List<RuleInvalidReason>(); __4 = new List<DeckRule>();
+        try
+        {
+            string refusal = RulesetRefusal(s, __2, __0);
+            __result = refusal == null;
+            if (!__result)
+            {
+                __3.Add(new RuleInvalidReason(refusal, 1, false));
+                DeckRule rule = __instance?.GetDeckSizeRule(__2);
+                if (rule != null) __4.Add(rule);
+            }
+        }
+        catch (Exception error) { Abort(error); __result = false; }
+        return false;
+    }
+
+    // D3 AddVerdict for A1: Creating (seeding) allows, Editing applies AddCode, any other stage refuses. Null: allowed; else the text.
+    private static string RulesetRefusal(EditorSession s, CollectionDeck deck, EntityDef card)
+    {
+        switch (DungeonRunEditor.AddVerdict(s.Stage))
+        {
+            case DungeonRunEditor.AddVerdictKind.Allow: return null;
+            case DungeonRunEditor.AddVerdictKind.Rule: return AddCheck(s, deck, card?.GetCardId(), card).Text;
+            default: return NativeDungeonRunText.EditorAddHeader;
+        }
+    }
+
+    // A2, prefix on CollectionDeck.AddCard(string, TAG_PREMIUM, bool, EntityDef, RuleType[]): the same verdict, silent (adds that
+    // skip the tray, e.g. AddCardWithPreferredPremium). Allowed adds run native.
+    private static bool RunBuildDeckAdd(CollectionDeck __instance, string __0, ref bool __result)
+    {
+        var s = session;
+        if (!OwnsDeck(__instance)) return true;
+        try
+        {
+            var verdict = DungeonRunEditor.AddVerdict(s.Stage);
+            if (verdict == DungeonRunEditor.AddVerdictKind.Allow) return true;
+            string code = verdict == DungeonRunEditor.AddVerdictKind.Rule ? AddCheck(s, __instance, __0, null).Code : "stage " + s.Stage;
+            if (code == null) return true;
+            Log("add refused (deck) " + s.TempId + " " + __0 + ": " + code);
+        }
+        catch (Exception error) { Abort(error); }
+        __result = false;
+        return false;
+    }
+
+    // A4, prefix on DeckTrayCardListContent.AddCard (the tray's main card list): the popup site. A refused click shows one
+    // worded message (E4) and native never runs; a legal add runs native (A2 and A1 agree with it).
+    private static bool RunBuildTrayAdd(DeckTrayCardListContent __instance, EntityDef __0, ref bool __result)
+    {
+        var s = session;
+        if (s == null || !OwnsCardsContent(__instance)) return true;
+        try
+        {
+            var verdict = DungeonRunEditor.AddVerdict(s.Stage);
+            if (verdict == DungeonRunEditor.AddVerdictKind.Allow) return true;
+            string clientId = __0?.GetCardId();
+            if (verdict == DungeonRunEditor.AddVerdictKind.Refuse) Log("add refused (tray) " + s.TempId + " " + clientId + ": stage " + s.Stage);
+            else
+            {
+                var check = AddCheck(s, CollectionManager.Get().GetEditedDeck(), clientId, __0);
+                if (check.Code == null) return true;
+                Log("add refused (tray) " + s.TempId + " " + clientId + ": " + check.Code);
+                ShowAddRefusal(check.Text);
+            }
+        }
+        catch (Exception error) { Abort(error); }
+        __result = false;
+        return false;
+    }
+
+    // E2 + E4 for one add to the deck: (null, null) when the run's rules allow it, else the code and its worded refusal.
+    private static (string Code, string Text) AddCheck(EditorSession s, CollectionDeck deck, string clientId, EntityDef card)
+    {
+        var (code, engineId) = DungeonRunEditor.AddCode(s.Cards, deck.GetCardsWithCardID(), clientId, s.Row, s.Size, s.Policy, s.CardReason);
+        return code == null ? (null, null) : (code, NativeDungeonRunText.BuildAddRefusal(AddName(s, engineId ?? clientId, card), code));
+    }
+
+    // E4: the candidate's or the engine's name, else the client's (EntityDef.GetName), else "this card": never an id.
+    private static string AddName(EditorSession s, string id, EntityDef card)
+    {
+        string name = id == null ? null : CardName(s, id);
+        if (string.IsNullOrEmpty(name))
+        {
+            try { name = card?.GetName(); } catch (Exception) { name = null; }
+        }
+        return string.IsNullOrEmpty(name) ? "this card" : name;
+    }
+
+    // E3 channel: GameplayErrorManager.Get().DisplayMessage(text), transient and never queued (one per click); without it (unbound,
+    // Get() null or destroyed, or it throws) the AlertPopup behind RefusalOpen.
+    private static void ShowAddRefusal(string text)
+    {
+        object errors = null;
+        try
+        {
+            errors = errorManagerGet?.Invoke(null, null);
+            if (errors is UnityEngine.Object unity && unity == null) errors = null;
+            if (errors != null) { errorManagerDisplay.Invoke(errors, new object[] { text }); return; }
+        }
+        catch (Exception error) { Log("GameplayErrorManager.DisplayMessage failed, AlertPopup instead: " + error.GetBaseException().Message); }
+        ShowRefusal(NativeDungeonRunText.EditorAddHeader, text);
+    }
+
+    // A4's guard: the content is the current tray's main card list (not a sideboard's) and the tray edits the temporary deck.
+    private static bool OwnsCardsContent(DeckTrayCardListContent content)
+    {
+        try
+        {
+            var tray = CollectionDeckTray.Get();
+            return content != null && OwnsTray(tray) && ReferenceEquals(content, tray.GetCardsContent());
+        }
+        catch (Exception) { return false; }
+    }
+
+    // S4 (contingent, EnableCountLabelHook; PC check P5): the "x/10" label, assuming the second argument is the max.
+    private static void RunBuildCount(CollectionDeckTray __instance, ref int __1)
+    {
+        try
+        {
+            var s = session;
+            if (s != null && OwnsTray(__instance)) __1 = s.Size;
+        }
+        catch (Exception error) { Abort(error); }
+    }
+
+    // A3 (contingent, EnablePageFilterHook; PC check P9): a candidate passes the native page filter; any other card stays native, so
+    // an illegal card still shows and is refused with a message.
+    private static bool RunBuildFilter(EntityDef __0, CollectionDeck __1, ref DeckRule __2, ref bool __result)
+    {
+        if (!IsCandidateFor(__0, __1)) return true;
+        __result = true; __2 = null;
+        return false;
+    }
+
+    private static bool RunBuildFilterFails(EntityDef __0, CollectionDeck __1, ref bool __result)
+    {
+        if (!IsCandidateFor(__0, __1)) return true;
+        __result = false;
+        return false;
+    }
+
+    private static bool IsCandidateFor(EntityDef card, CollectionDeck deck)
+    {
+        try
+        {
+            var s = session;
+            return OwnsDeck(deck) && card != null && s.Cards.Engine(card.GetCardId()) != null;
+        }
+        catch (Exception error) { Abort(error); return false; }
     }
 
     /// <summary>B8: a SendChanges of a band id was swallowed (logged once per id and source).</summary>

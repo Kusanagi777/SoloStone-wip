@@ -18,11 +18,22 @@ internal static partial class NativeUIProbe
             new[] { typeof(string), typeof(CollectionDeck), typeof(bool) });
     }
 
-    // Use the same counterpart groups for the native editor and its invalid-deck UI.
+    // Use the same counterpart groups for the native editor and its invalid-deck UI. The Build Deck editor's temporary deck
+    // (design B12) is admitted without the draft and custom-card terms: its copies group as the run's candidates do.
     private static bool LocalDeckCopyCount(string __0, CollectionDeck __1, ref int __result)
     {
-        if (!active || __1 == null || __1.HasSideboardCards || !NativeUIProjection.IsPersonalId(__1.ID)
-            || Profile.GetDraft(__1.ID) == null || !LocalDecks.CustomCards.Any(card => card.Id == __0)) return true;
+        if (!active || __1 == null || __1.HasSideboardCards) return true;
+        if (NativeDungeonRunEditor.Owns(__1.ID))
+        {
+            try
+            {
+                __result = NativeUIProjection.DeckCopyCount(__1.GetCardsWithCardID(), __0);
+                return false;
+            }
+            catch (Exception error) { NativeDungeonRunEditor.Abort(error); return true; }
+        }
+        if (!NativeUIProjection.IsPersonalId(__1.ID) || Profile.GetDraft(__1.ID) == null
+            || !LocalDecks.CustomCards.Any(card => card.Id == __0)) return true;
         __result = NativeUIProjection.DeckCopyCount(__1.GetCardsWithCardID(), __0);
         return false;
     }
