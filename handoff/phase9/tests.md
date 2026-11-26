@@ -342,7 +342,7 @@ Branch `wip/t-bd` (worktree `/home/user/wt/t-bd`), from `c1eac51`; spec
 `docs/superpowers/plans/2026-11-25-dungeon-run-build-deck-phases-0-2.md`. Every Random starting deck became Build Deck:
 the player builds a legal 10-card starter from their collection on the run menu's plank Build step, picks a power (and a
 signature where the row has them) and the run starts with those 10 cards. The Collection Manager editor (spec phases 3-4)
-is a later plan; phase 0's member dump (`tool members`, `installer/build-deck-members.txt`) is for the owner to run.
+is section 8 (phases 3-4); phase 0's member dump (`tool members`, `installer/build-deck-members.txt`) is for the owner to run.
 
 The checks are twenty new checks in `p9/c-sched-9` (RESULT 42 -> 62 passed), in five guards (BDF, BD17-BD20, is the
 final-review fix wave's):
@@ -394,3 +394,36 @@ Build Deck commit, which adds only the uncalled rules file and BD1-BD8):
   equal to `verify/baseline/runs`).
 - The restoration ledger is regenerated: 4970 -> 4994 rows, the 24 build decks' `run:starter` rows, all implemented
   (implemented 3890 -> 3914); c-deckops T5 and c-catalog's ledger golden follow.
+
+## 8. Build Deck editor (phases 3-4, 2026-11-26)
+
+Branch `wip/t-ed` (worktree `/home/user/wt/t-ed`), from `790e72b`; design
+`docs/superpowers/specs/2026-11-26-dungeon-run-build-deck-editor-design.md` (settles the spec's phases 3-4), plan
+`docs/superpowers/plans/2026-11-26-dungeon-run-build-deck-editor-phases-3-4.md`. Build Deck now opens the client's
+Collection Manager on a temporary session-only deck; the plank stays the fallback. The pure rules live in
+`plugin/DungeonRun/DungeonRunEditor.cs` and `NativeDungeonRunText.cs`.
+
+The checks are ten new ones in `p9/c-sched-9` (RESULT 63 -> 73 passed): BD22-BD27 in a new guard `BDE` and BD28-BD31 in
+`BDX`, with BD15's expected text changed (below). BD25 asserts the shipped gate (Task 6):
+
+| Check | Design | What it checks |
+|---|---|---|
+| BD22 | A1 | the band 900000300..900000399: its edges, the legacy personal ids and every loaner/test id of `NativeUIProjection` outside it; `NextRunBuildId` gives the lowest free id, null on a full band; `NonBandCount` |
+| BD23 | D3, J, K belt | `AddVerdict` per stage; `LeaveTarget` (Done to Power, Back and Recover to Deck); `PowerBack`'s four rows; `ExitAllowed`'s truth table |
+| BD24 | L | `RecoverAction` over stage x atHub x recoveredOnce (20 cases): None, RemoveAndPlank, DeckAndLeave |
+| BD25 | M, G | `Builder`: the all-clear Mage row is Editor; each Plank condition alone gives Plank (editorFailed, 0 candidates, reachable 9 of 10, 111 of 111 native decks, dual and Death Knight rows with the gate off); with the gate on they give Editor; the shipped `DualAndDkInEditor` is true and gives Editor |
+| BD26 | A2, F | `HeaderHeroes` (named hero first, then the class hero; a clientId mapping applied), `HeroAccepted`, `ClassTags` |
+| BD27 | H0 | `OwnsEditor` is true with all eight inputs true and false when any single input is false |
+| BD28 | E1 | `EditorCards`: two engine ids with one client id map to the lower by ordinal and are reported in `Collisions`; `EngineList` maps a list in order and reports unmapped ids; `Owned`, `Group`, `Name`, `ClientId` |
+| BD29 | E2 | `AddCode` equals `DungeonRunBuild.AddReason` for candidates; a Warrior card is `class` with a worded text and no id; a legal non-candidate is `owned`; an unknown id `unavailable`; the 11th card `size`; a 4th rune `runes` |
+| BD30 | E2, D | a memoized `cardReason` gives the same `DeckReasons` and `AddReason` lists as none (BD3-BD8's lists, a dual row, a mixed bad list); `DoneReasons` of a 9-slot list and of a list with an unmapped slot |
+| BD31 | E4, C | `EditorDoneRefusal` exact text (null for no reasons), an unmapped slot worded with no id, the header and caption constants, `SeedCounts` (client ids, collisions folded, throws on a non-candidate) |
+
+BD15 changed its expected add-refusal text: a card of another class is now the worded "not a card of this hero's class."
+(design E4) instead of one that carried the class id.
+
+Not covered here (the plugin cannot be compiled in the cloud): every client hook (`NativeDungeonRunEditor.cs` and the
+guards in `NativeDeckEditor.cs`, `NativeUIProbe.cs`, `NativeCrafting.cs`, `NativeRecipePicker.cs`, `NativeDeckLimits.cs`),
+the session and its tick (open, Done, Back, leave, recover), the run menu's hand-offs (`NativeDungeonRunUI`), the
+client-bindings rows, and the owner's PC checks of design section P. Their first compile and every check of them is the
+owner's PC build (HANDOFF 3.6).

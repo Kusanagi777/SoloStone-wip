@@ -121,9 +121,10 @@ an add and to gate Done) and by the run start (defence in depth).
 
 ### 3. The editor mode (client; Phase 0 confirms every member)
 
-- **Temporary deck:** a reserved id band below 910000010 and outside the loaner/test bands (900000010..900000179),
-  `IsRunBuildId(id)`. Never a profile draft. Projected like the shop's decks: a `NetCacheDecks` header (NORMAL_DECK,
-  FT_STANDARD, the row's hero card), `CollectionManager.OnDeckCreated(header, null)`, `MarkNetworkContentsLoaded`
+- **Temporary deck:** a reserved id band 900000300..900000399, outside the loaner/test bands (900000010..900000179),
+  `IsRunBuildId(id)` (corrected 2026-11-26 by the editor design addendum). Never a profile draft. Projected like the shop's decks: a `NetCacheDecks` header (NORMAL_DECK,
+  FT_STANDARD) that goes into `NetCacheDecks` through native `AddDeck`, called from `CollectionManager.OnDeckCreated(header, null)`;
+  the hero is the row's named hero, with the class hero as the fallback (corrected 2026-11-26 by the editor design addendum). Then `MarkNetworkContentsLoaded`
   (NativeShopProjection.cs:16-33).
 - **Bookkeeping:** `DecksReady`, `ValidateNative`, `ReorderLocalDrafts`, `ExpectedRanks/ExpectedHeader`, `DeckSaveAction`
   (new disposition: never persist), `DeleteLocalDraft`, the tray limits and `LocalDeckCopyCount` admit or skip the
@@ -141,11 +142,12 @@ an add and to gate Done) and by the run start (defence in depth).
   crafting/disenchant (ownership must not change mid-build), rename, cosmetics trays. The existing
   `OwnsPersonalDeckEditor` blockers are extended to the temporary deck by a sibling predicate.
 - **Done:** if `DungeonRunBuild.Validate` passes, the list goes to the run hand-off, the temporary deck is removed
-  (header dropped, native delete allowed through `preparedDeletes`), and the editor leaves to the HUB (`Navigate(HUB)`,
-  the only offline exit `CollectionExitAllowed` allows). If not, Done is refused with the reasons. Every native
+  at the HUB by `CollectionManager.RemoveDeck`, not by native delete through `preparedDeletes` (corrected 2026-11-26 by the editor design addendum), and the editor leaves with
+  native `CollectionManagerDisplay.Exit` after `Navigation.Clear`, not `Navigate(HUB)` (corrected 2026-11-26 by the editor design addendum). If not, Done is refused with the reasons. Every native
   `SendChanges` source (SaveCurrentDeck, OnScenePreUnload, MarkDeckAsSeen, PocoSetDeckName, ReconcileCardOwnership) for
   the temporary id is swallowed.
-- **Back without Done:** discards the list and returns to the run menu's Deck step.
+- **Back without Done:** discards the list and returns to the run menu's Deck step. Back on the Power step after an editor
+  Done re-opens the editor with the list (corrected 2026-11-26 by the editor design addendum).
 - **Safety:** every hook guarded; any failure removes the temporary deck, clears the session flag on every exit
   (including Fail/Recover) and returns to the run menu with a caption, never a blocked UI.
 

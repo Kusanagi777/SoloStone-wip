@@ -328,8 +328,9 @@ Spec `docs/superpowers/specs/2026-11-25-dungeon-run-build-deck-design.md` (appro
   collection; the run menu's Build step (`NativeDungeonRunUI`: filter, 6 cards per page, Remove last, Done; Back keeps or
   drops the list as the spec says); the native picker's Build Deck pouch (last, the old Random pouch's slot and art; the
   Random pick is gone), which hands the choice to the run menu's Build step through the HUB.
-- Not done (a second plan, after the owner runs phase 0's `tool members` with `installer/build-deck-members.txt` and
-  pastes the output): the Collection Manager editor mode (spec phases 3-4).
+- Not done here: the Collection Manager editor mode (spec phases 3-4). It was built afterwards from the owner's two
+  member dumps; see section 3.6, `docs/superpowers/specs/2026-11-26-dungeon-run-build-deck-editor-design.md` and
+  `docs/superpowers/plans/2026-11-26-dungeon-run-build-deck-editor-phases-3-4.md`.
 - The owner's PC checks (rebuild the plugin, install, then in the client):
   1. Build Deck shows last on every row, in the native picker (every tray: classes, Rikkar, Monster Hunt, Heist, Tombs)
      and in the run menu's Deck step, unlocked on a fresh profile, including the Heist and Tombs heroes.
@@ -350,6 +351,109 @@ Spec `docs/superpowers/specs/2026-11-25-dungeon-run-build-deck-design.md` (appro
      engine ids.
   9. Clicking outside the board during Build keeps the list (the menu stays open while cards are picked); Back still
      leaves the Build step. A built Heist or Tombs run's hub line names its deck "Build Deck".
+
+### 3.6 Build Deck editor (phases 3-4, `wip/t-ed`; the owner's PC checks are open)
+
+Build Deck now opens the client's Collection Manager (CM) on a temporary, session-only deck (ids 900000300..900000399;
+every save swallowed; removed at the HUB). Done hands the 10 cards to the run menu's Power step; Back returns to the
+Deck step; Back on Power after an editor Done re-opens the editor with the list. Dual-class and Death Knight rows use
+the editor too (`DungeonRunEditor.DualAndDkInEditor` ships true). The plank Build step stays the fallback (a collection
+that cannot reach 10, a tray at 111 native decks, any editor failure). Spec
+`docs/superpowers/specs/2026-11-26-dungeon-run-build-deck-editor-design.md` (section P is the risk table behind this
+list), plan `docs/superpowers/plans/2026-11-26-dungeon-run-build-deck-editor-phases-3-4.md`; tests
+`handoff/phase9/tests.md` section 8 (c-sched-9 BD22-BD31, 73 checks in all).
+- Done, tested here: the pure rules (`plugin/DungeonRun/DungeonRunEditor.cs`: id band, Builder gate, stage and flow
+  tables, header heroes, recovery) and the card mapping, add and Done reasons and texts.
+- Done, not compiled here: all client code (`plugin/NativeDungeonRunEditor.cs`, and the hooks added to
+  `NativeDeckEditor.cs`, `NativeUIProbe.cs`, `NativeCrafting.cs`, `NativeRecipePicker.cs`, `NativeDeckLimits.cs`,
+  `NativeDungeonRunUI.cs`). The first Windows build is its first compile.
+
+**Switches** (each is `internal static readonly bool`: flip it, rebuild):
+
+| Switch (file) | Ships | Turn it on / off when |
+|---|---|---|
+| `EnableCountLabelHook` (`NativeDungeonRunEditor.cs`) | false | check 8 shows the tray label is not `n/10`: set true |
+| `EnablePageFilterHook` (`NativeDungeonRunEditor.cs`) | false | check 9 finds an owned legal card missing from the pages: set true |
+| `EnableHeroClassesHook` (`NativeDungeonRunEditor.cs`) | false | check 23 (dual tabs or cards) fails: set true first and re-check |
+| `DungeonRunEditor.DualAndDkInEditor` (`plugin/DungeonRun/DungeonRunEditor.cs`) | **true** | checks 23 (P12) or 24 (P13) fail and the hook above does not fix them: set false (dual and Death Knight rows go back to the plank) and update c-sched-9 BD25, which asserts the shipped gate |
+
+**P12 and P13 gate this release.** If either fails, set `DualAndDkInEditor` to false and change BD25 to expect the
+plank for those rows, then rebuild; single-class rows are unaffected.
+
+The owner's PC checks (rebuild the plugin first; each item says what to do "If it fails"). P-numbers are the rows of
+design section P:
+1. **Build and bindings.** Rebuild, then run `tool bindings --list-unresolved`, reconcile
+   `plugin/client-bindings.extra.txt` (the `NativeDungeonRunEditor` rows, sites and skips were written without the
+   client and may need their `site` lines adjusted), run `tool bindings --write` and commit
+   `plugin/client-bindings.txt`. Never hand-edit that file. If it fails: CS0122 on the first reference to the client
+   type `BookTab` (the `ShouldShowTab` patch) means the type is not accessible: look the method up by name with no
+   typed argument and take `object __0` in `RunBuildTabs`.
+2. **Open (P2, P3, P19).** From the run menu's Deck step choose Build Deck: the HUB goes to CM, which opens on a deck
+   named "Build Deck" in card view, on the row's class page, with an empty tray. Repeat from the native picker's
+   Build Deck pouch. The log shows `DUNGEON_RUN_EDITOR opened`. If it fails: the player lands on the plank with a
+   caption (Recover); for P2 try `true` for the first `ShowDeck` bool and dump `ShowDeckHelper`; for P3 wait more
+   frames or use `IsDoneEntering`.
+3. **Temporary deck (A1, A4, P4).** The log shows `created 900000300` with both decks non-null, no "new deck" naming
+   flow appears, and the A4 asserts log OK. If it fails: send the log; the plank fallback holds.
+4. **HUB value (P1).** The log prints `(int)SceneMgr.Mode.HUB` (expected 3); Done offline shows no reconnect dialog.
+   If it fails: nothing to change, the `ExitAllowed` belt covers it.
+5. **Class tags and portrait (P11).** For one hero of each adventure (DALA, ULDA, GILA, TRLA) the log gives
+   `GetClass()` and `GetHeroClasses()`; note the deck-box portrait; whether `ULDA_Reno` gives `[MAGE, ROGUE]` natively
+   is the most useful line. If it fails: the class-hero fallback (A2) takes over by itself; otherwise a fixed hero per
+   adventure.
+6. **No collateral (P18, B2).** After Done and after Back the log has no `Unknown local deck` or
+   `Unmapped/unloaded native deck` and only "swallowed" lines for saves; TOURNAMENT binds normally afterwards. If it
+   fails: send the log.
+7. **Size and completeness (P10).** The deck box shows incomplete at 9 cards and complete at 10. If it fails: drop the
+   V1 hook (cosmetic; Done owns the check).
+8. **Tray label (P5).** The label reads `n/10`. If it fails: set `EnableCountLabelHook` true.
+9. **Findable cards (P9).** Every owned legal card is on the pages (format, rotation and set filters hide none). If it
+   fails: set `EnablePageFilterHook` true.
+10. **Add refusals (P6, P7).** A third copy, a second legendary, a card of another class and an 11th card each show
+    one transient message; test click, drag and right-click; clicking 5 times shows no stacked popups. If it fails:
+    P6, the add is refused silently with no message (dump `CollectionCardVisual OnRelease OnDrag`); P7, the AlertPopup
+    fallback with its debounce is used automatically.
+11. **Locks (P8).** On opening, the first page is not all shown locked; after 10 cards or the copy limit the illegal
+    cards are greyed; the native lock overlay for a refused card may name the deck-size rule (cosmetic). If it fails:
+    an optional `ShowLock` postfix after a `LockType` dump.
+12. **Golden copies (P15).** Add a golden copy of an owned card: the Done list matches the cards shown. If it fails:
+    map by `GetSlots()` counts instead of `GetCardsWithCardID`.
+13. **Tourist card (P22).** If a tourist card is a candidate, add it; the run admits it or not by its data. If it
+    fails: note it; no change.
+14. **Blocked actions (section H).** For the editor deck: no options menu; the deck name cannot be renamed; the
+    hero-skin, card-back, coin and pet tabs are absent, also right at the open; right-click crafting and disenchant
+    refuse with the message; Complete My Deck and the suggestions do nothing; New Deck, recipes and paste do nothing.
+    If it fails: send which one; `ShouldShowDeckOptionsMenu` may be inlined by the runtime and the options menu then
+    shows (the Convert belt still holds).
+15. **Done (P17).** Done at 9 cards shows "Your deck is not ready: it has 9 of 10 cards." and the editor stays; Done at
+    10 goes CM -> HUB, the run menu opens on Power, Confirm lists the 10 cards, the run starts with them. If it fails:
+    `DoneEditing` only instead of `SaveCurrentDeckAndEnterDeckListMode` + `Exit`.
+16. **Back (P16).** Back and Escape in the editor go CM -> HUB -> the run menu's Deck step with class and row kept;
+    the band deck is gone; `Options` 188 is unchanged. If it fails: also hook `OnBackOutOfContainerContents`.
+17. **Re-open (P14).** After Done, Back on Power re-opens CM on the same 10 cards (premiums and, on Death Knight, the
+    runes); Done again returns to Power with the same list. If it fails: seed through `AddCard` while Creating.
+18. **Removal (K).** After Done and after Back the HUB log shows `removed`; normal Collection shows no Build Deck box;
+    TOURNAMENT shows the usual decks; restart the client after a Done: no band deck and the sweep logs nothing;
+    Escape at the HUB right after the return does nothing odd. If it fails: send the log.
+19. **Profile switch (P20).** Switch profile while the editor is open: no stray band deck afterwards. If it fails: the
+    sweep at Bootstrap and Recover cover it; send the log.
+20. **Plank fallbacks (M).** With 111 native decks Build Deck opens the plank; a profile with fewer than 10 legal
+    copies opens the plank with the "Not enough" line; after an editor failure the next Build Deck uses the plank.
+    If it fails: send the log.
+21. **Failure (L), optional.** If you can make O6 throw once (a log-only or debug build), the player lands on the plank
+    Build step with a caption, the band deck is removed, and the next Build Deck uses the plank.
+22. **Page turns (P21).** Page turns stay smooth with a full tray. If it fails: cache `AddCode` per (slot signature,
+    client id).
+23. **Dual rows (P12, gates the release).** On a MAGE_ROGUE row: the Mage, Rogue and Neutral tabs only (the
+    deck-template tab is also hidden); a Rogue class card on the Rogue tab is unlocked and can be added; the Mage page
+    jump at the open lands on Mage; searching on the temporary deck, the tabs follow the search. If it fails: set
+    `EnableHeroClassesHook` true and re-check; else set `DualAndDkInEditor` false and update BD25.
+24. **Death Knight rows (P13, gates the release).** The rune indicator fills as rune cards are added; a 4th-rune card
+    is greyed and refused with the message; Back on Power then re-opening shows the same runes. If it fails: the
+    ghosting alone is cosmetic; if a 4th rune is not refused, or the runes are lost on re-open, set
+    `DualAndDkInEditor` false and update BD25.
+25. **Nothing changes (global).** The constructed deck list, the profile drafts and every card count are as before,
+    including after a crafting or golden-upgrade attempt in the editor. If it fails: send which one; this is a bug.
 
 ## 4. Build and test in the cloud
 
