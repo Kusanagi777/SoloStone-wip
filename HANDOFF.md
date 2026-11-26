@@ -332,6 +332,9 @@ Spec `docs/superpowers/specs/2026-11-25-dungeon-run-build-deck-design.md` (appro
   member dumps; see section 3.6, `docs/superpowers/specs/2026-11-26-dungeon-run-build-deck-editor-design.md` and
   `docs/superpowers/plans/2026-11-26-dungeon-run-build-deck-editor-phases-3-4.md`.
 - The owner's PC checks (rebuild the plugin, install, then in the client):
+  On the 3.6 (wip/t-ed) build these plank checks need a fallback: a profile with fewer than 10 legal copies, 111
+  native decks, or a prior editor failure (or temporarily `DualAndDkInEditor` false for the Tombs check 5); check 4's
+  Back from Power to Build holds only for a plank-built list (an editor-built one re-opens the editor, 3.6 check 17).
   1. Build Deck shows last on every row, in the native picker (every tray: classes, Rikkar, Monster Hunt, Heist, Tombs)
      and in the run menu's Deck step, unlocked on a fresh profile, including the Heist and Tombs heroes.
   2. The Build page fits the screen: up to 12 buttons (the filter, 6 cards, Previous, Next, Remove last, Done, Back);
@@ -366,7 +369,7 @@ list), plan `docs/superpowers/plans/2026-11-26-dungeon-run-build-deck-editor-pha
   tables, header heroes, recovery) and the card mapping, add and Done reasons and texts.
 - Done, not compiled here: all client code (`plugin/NativeDungeonRunEditor.cs`, and the hooks added to
   `NativeDeckEditor.cs`, `NativeUIProbe.cs`, `NativeCrafting.cs`, `NativeRecipePicker.cs`, `NativeDeckLimits.cs`,
-  `NativeDungeonRunUI.cs`). The first Windows build is its first compile.
+  `NativeDungeonRunUI.cs`, `NativeMenuFlow.cs`, `NativeUIProjection.cs`). The first Windows build is its first compile.
 
 **Switches** (each is `internal static readonly bool`: flip it, rebuild):
 
@@ -385,16 +388,24 @@ design section P:
 1. **Build and bindings.** Rebuild, then run `tool bindings --list-unresolved`, reconcile
    `plugin/client-bindings.extra.txt` (the `NativeDungeonRunEditor` rows, sites and skips were written without the
    client and may need their `site` lines adjusted), run `tool bindings --write` and commit
-   `plugin/client-bindings.txt`. Never hand-edit that file. If it fails: CS0122 on the first reference to the client
-   type `BookTab` (the `ShouldShowTab` patch) means the type is not accessible: look the method up by name with no
-   typed argument and take `object __0` in `RunBuildTabs`.
+   `plugin/client-bindings.txt`. Never hand-edit that file. Expected reconciliations: a
+   `CollectionManagerDisplay.ShowDeck (not on this type)` site (the nullable `ViewMode?` lookup; row `ShowDeck *` is
+   already bound), possibly a `DeckTrayCardListContent.AddCard` site (`Action<string>`) and a Patch site for the
+   field-held `deckHeroClasses` target; drop the `(unknown type)` site if the scanner reports it stale. If it fails:
+   CS0122 on `BookTab`: look up `AccessTools.Method(typeof(CollectionPageManager), "ShouldShowTab")` with no argument
+   types (`NativeDungeonRunEditor.cs:180`) and change `BookTab` to `object` in `RunBuildTabs`, `IsClassTab` and
+   `IsCosmeticTab` (their bodies use `ReferenceEquals`, `IsInstanceOfType` and `IList.Contains`). CS1061/CS0122 on
+   `EntityDef.GetName` (`:884`): delete that fallback line (the name then falls back to "this card").
 2. **Open (P2, P3, P19).** From the run menu's Deck step choose Build Deck: the HUB goes to CM, which opens on a deck
    named "Build Deck" in card view, on the row's class page, with an empty tray. Repeat from the native picker's
-   Build Deck pouch. The log shows `DUNGEON_RUN_EDITOR opened`. If it fails: the player lands on the plank with a
-   caption (Recover); for P2 try `true` for the first `ShowDeck` bool and dump `ShowDeckHelper`; for P3 wait more
+   Build Deck pouch. The log shows `DUNGEON_RUN_EDITOR opened`. Clicking the Build Deck box yourself during the open
+   also opens the editor (log `the player opened it`). If it fails: a failure in CM lands on the run menu's Deck step
+   with the caption 'The deck editor could not open. Build your deck here instead.', the band deck is removed and the
+   next Build Deck opens the plank (only a failure before CM loads lands directly on the plank Build step); for P2 try `true` for the first `ShowDeck` bool and dump `ShowDeckHelper`; for P3 wait more
    frames or use `IsDoneEntering`.
 3. **Temporary deck (A1, A4, P4).** The log shows `created 900000300` with both decks non-null, no "new deck" naming
-   flow appears, and the A4 asserts log OK. If it fails: send the log; the plank fallback holds.
+   flow appears, and the log shows `created 9000003xx ... accepted; deck=True base=True header(published)=True
+   header(net)=True` (report any `(the two NetCacheDecks differ)` suffix). If it fails: send the log; the plank fallback holds.
 4. **HUB value (P1).** The log prints `(int)SceneMgr.Mode.HUB` (expected 3); Done offline shows no reconnect dialog.
    If it fails: nothing to change, the `ExitAllowed` belt covers it.
 5. **Class tags and portrait (P11).** For one hero of each adventure (DALA, ULDA, GILA, TRLA) the log gives
@@ -429,10 +440,13 @@ design section P:
     10 goes CM -> HUB, the run menu opens on Power, Confirm lists the 10 cards, the run starts with them. If it fails:
     `DoneEditing` only instead of `SaveCurrentDeckAndEnterDeckListMode` + `Exit`.
 16. **Back (P16).** Back and Escape in the editor go CM -> HUB -> the run menu's Deck step with class and row kept;
-    the band deck is gone; `Options` 188 is unchanged. If it fails: also hook `OnBackOutOfContainerContents`.
+    the band deck is gone; `Options` 188 is unchanged. Also press Back or Escape on CM's deck list during the open,
+    before the deck shows: the run menu's Deck step, log `Collection left for HUB before the editor opened` then
+    `removed`, and Play shows no Build Deck deck. If it fails: also hook `OnBackOutOfContainerContents`.
 17. **Re-open (P14).** After Done, Back on Power re-opens CM on the same 10 cards (premiums and, on Death Knight, the
     runes); Done again returns to Power with the same list. If it fails: seed through `AddCard` while Creating.
-18. **Removal (K).** After Done and after Back the HUB log shows `removed`; normal Collection shows no Build Deck box;
+18. **Removal (K).** After Done and after Back the HUB log shows `removed 9000003xx (...): before ...; after
+    deck=False base=False header(published)=False header(net)=False`; normal Collection shows no Build Deck box;
     TOURNAMENT shows the usual decks; restart the client after a Done: no band deck and the sweep logs nothing;
     Escape at the HUB right after the return does nothing odd. If it fails: send the log.
 19. **Profile switch (P20).** Switch profile while the editor is open: no stray band deck afterwards. If it fails: the
@@ -440,12 +454,14 @@ design section P:
 20. **Plank fallbacks (M).** With 111 native decks Build Deck opens the plank; a profile with fewer than 10 legal
     copies opens the plank with the "Not enough" line; after an editor failure the next Build Deck uses the plank.
     If it fails: send the log.
-21. **Failure (L), optional.** If you can make O6 throw once (a log-only or debug build), the player lands on the plank
-    Build step with a caption, the band deck is removed, and the next Build Deck uses the plank.
+21. **Failure (L), optional.** There is no switch to force one. If one happens in CM (e.g. ShowDeck does not open edit
+    mode within 10 s): the Deck step with that caption, the band deck removed (`removed` in the log), and the next
+    Build Deck uses the plank.
 22. **Page turns (P21).** Page turns stay smooth with a full tray. If it fails: cache `AddCode` per (slot signature,
     client id).
-23. **Dual rows (P12, gates the release).** On a MAGE_ROGUE row: the Mage, Rogue and Neutral tabs only (the
-    deck-template tab is also hidden); a Rogue class card on the Rogue tab is unlocked and can be added; the Mage page
+23. **Dual rows (P12, gates the release).** On a MAGE_ROGUE row: the Mage, Rogue and Neutral tabs only (note whether
+    the deck-template tab shows; either is acceptable and does not gate P12, since recipes are refused for the
+    temporary deck); a Rogue class card on the Rogue tab is unlocked and can be added; the Mage page
     jump at the open lands on Mage; searching on the temporary deck, the tabs follow the search. If it fails: set
     `EnableHeroClassesHook` true and re-check; else set `DualAndDkInEditor` false and update BD25.
 24. **Death Knight rows (P13, gates the release).** The rune indicator fills as rune cards are added; a 4th-rune card
@@ -453,7 +469,8 @@ design section P:
     ghosting alone is cosmetic; if a 4th rune is not refused, or the runes are lost on re-open, set
     `DualAndDkInEditor` false and update BD25.
 25. **Nothing changes (global).** The constructed deck list, the profile drafts and every card count are as before,
-    including after a crafting or golden-upgrade attempt in the editor. If it fails: send which one; this is a bug.
+    including after a crafting, golden-upgrade and mass-disenchant attempt in the editor (each refused with
+    'Crafting is off while you build a Dungeon Run deck.'). If it fails: send which one; this is a bug.
 
 ## 4. Build and test in the cloud
 

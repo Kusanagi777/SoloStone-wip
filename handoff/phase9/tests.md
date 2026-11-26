@@ -423,7 +423,8 @@ BD15 changed its expected add-refusal text: a card of another class is now the w
 (design E4) instead of one that carried the class id.
 
 Not covered here (the plugin cannot be compiled in the cloud): every client hook (`NativeDungeonRunEditor.cs` and the
-guards in `NativeDeckEditor.cs`, `NativeUIProbe.cs`, `NativeCrafting.cs`, `NativeRecipePicker.cs`, `NativeDeckLimits.cs`),
+guards in `NativeDeckEditor.cs`, `NativeUIProbe.cs`, `NativeCrafting.cs`, `NativeRecipePicker.cs`, `NativeDeckLimits.cs`,
+`NativeMenuFlow.cs`, `NativeUIProjection.cs`),
 the session and its tick (open, Done, Back, leave, recover), the run menu's hand-offs (`NativeDungeonRunUI`), the
 client-bindings rows, and the owner's PC checks of design section P. Their first compile and every check of them is the
 owner's PC build (HANDOFF 3.6).

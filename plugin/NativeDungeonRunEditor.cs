@@ -45,7 +45,9 @@ internal static class NativeDungeonRunEditor
         internal DungeonRunEditor.Stage Stage;
         internal DungeonRunEditor.Leave Leave;
         internal float StageSince, ReadySince = -1, ShownAt, ExitedAt;
-        internal bool Shown, EditEnded, Exited, ForcedHub, RecoveredOnce;
+        internal bool Shown, EditEnded, Exited, ForcedHub, RecoveredOnce, ReachedCollection;
+        // L: failures logged (not re-armed) during the one recovery's own leave; the log stops after three.
+        internal int Suppressed;
         // V1's memo: the sorted slot signature last judged and its Done refusal text (null: the deck is complete).
         internal string ValidKey, ValidText;
     }
@@ -378,7 +380,9 @@ internal static class NativeDungeonRunEditor
         var manager = CollectionManager.Get() ?? throw new InvalidOperationException("Native collection unavailable");
         foreach (string hero in s.Heroes)
         {
-            if (DefLoader.Get()?.GetEntityDef(hero) == null) { Log("hero " + hero + " skipped: no EntityDef"); continue; }
+            // GameDbfIndex answers null for an unknown id; DefLoader.GetEntityDef would raise a client fatal error for one.
+            if (GameDbf.GetIndex()?.GetCardRecord(hero) == null || DefLoader.Get()?.GetEntityDef(hero) == null)
+            { Log("hero " + hero + " skipped: no card record or EntityDef"); continue; }
             string name = NativeDungeonRunText.BuildDeckName;
             // The 5-arg header: NORMAL_DECK, FT_STANDARD, source NORMAL; ranked past every real deck (nothing ranks it).
             var header = NativeUIProbe.ExpectedHeader(s.TempId, new LocalDeck(name, hero, new string[0]), name,
@@ -495,12 +499,32 @@ internal static class NativeDungeonRunEditor
     private static void TickEntering(EditorSession s, SceneMgr.Mode mode, bool busy)
     {
         if (Now - s.StageSince > EnterWindow) throw new TimeoutException("the editor did not open in " + EnterWindow + "s (mode " + mode + ")");
-        if (busy || mode != SceneMgr.Mode.COLLECTIONMANAGER) { s.ReadySince = -1; return; }
+        if (busy || mode != SceneMgr.Mode.COLLECTIONMANAGER)
+        {
+            s.ReadySince = -1;
+            // J1 before the editor opened: CM, once reached, left by another path (Back or Escape on its deck list) is a Back.
+            if (!busy && s.ReachedCollection)
+            {
+                Log("back " + s.TempId + ": Collection left for " + mode + " before the editor opened");
+                NativeDungeonRunUI.DeckWhenHome(s.ClassId, s.RowId, s.DeckId, null);
+                s.Leave = DungeonRunEditor.Leave.Back;
+                Set(s, DungeonRunEditor.Stage.Leaving);
+            }
+            return;
+        }
+        s.ReachedCollection = true;
         var manager = CollectionManager.Get();
         var display = manager?.GetCollectibleDisplay() as CollectionManagerDisplay;
         var tray = CollectionDeckTray.Get();
         if (!s.Shown)
         {
+            // The player clicked the temporary deck themselves during the settle: native opened it, so O7 verifies it.
+            if (display != null && tray != null && manager.IsInEditMode() && manager.GetEditedDeck()?.ID == s.TempId)
+            {
+                Log("entering " + s.TempId + ": the player opened it");
+                s.Shown = true; s.ShownAt = Now;
+                return;
+            }
             // O5. The ready flag is unknown (P3): these must hold for EnterSettle seconds.
             if (display == null || tray == null || manager.IsInEditMode()) { s.ReadySince = -1; return; }
             if (s.ReadySince < 0) { s.ReadySince = Now; return; }
@@ -534,7 +558,7 @@ internal static class NativeDungeonRunEditor
         if (busy) return;
         if (mode == SceneMgr.Mode.COLLECTIONMANAGER)
         {
-            if (!s.EditEnded) { EndEditMode(s, true); s.EditEnded = true; return; }
+            if (!s.EditEnded) { s.EditEnded = true; EndEditMode(s, true); return; }
             if (!s.Exited) { ExitCollection(s); s.Exited = true; s.ExitedAt = Now; return; }
             float waited = Now - s.ExitedAt;
             if (waited > ExitWindow) throw new TimeoutException("Collection was not left in " + ExitWindow + "s");
@@ -737,15 +761,11 @@ internal static class NativeDungeonRunEditor
                 s.ValidKey = key;
             }
             __result = s.ValidText == null;
-            if (!__result)
+            // Without the two optional members the list stays empty (R-T4d, design D2: always assigned, never null).
+            if (!__result && deckSizeRule != null && violationCtor != null)
             {
-                // Without the two optional members there is no violation to give: the list is null (controller ruling, fix round 1).
-                if (deckSizeRule == null || violationCtor == null) __1 = null;
-                else
-                {
-                    DeckRule rule = SizeRule(__instance, __0);
-                    if (rule != null) violations.Add((DeckRuleViolation)violationCtor.Invoke(new object[] { rule, s.ValidText }));
-                }
+                DeckRule rule = SizeRule(__instance, __0);
+                if (rule != null) violations.Add((DeckRuleViolation)violationCtor.Invoke(new object[] { rule, s.ValidText }));
             }
         }
         catch (Exception error) { Abort(error); __result = false; }
@@ -1073,6 +1093,12 @@ internal static class NativeDungeonRunEditor
     {
         try
         {
+            var s = session;
+            if (RecoveryLeaving(s))
+            {
+                if (s.Suppressed++ < 3) Log("abort " + s.TempId + " during the recovery's leave (logged only): " + error);
+                return;
+            }
             Log("abort " + (session?.TempId.ToString() ?? "(no session)") + ": " + error);
             if (session != null && pendingFailure == null) pendingFailure = error;
         }
@@ -1087,6 +1113,12 @@ internal static class NativeDungeonRunEditor
         if (s == null) return false;
         try
         {
+            if (RecoveryLeaving(s))
+            {
+                if (s.Suppressed++ < 3)
+                    Log("recover " + s.TempId + ": failure during the recovery's leave logged only: " + error.GetType().Name + ": " + error.Message);
+                return true;
+            }
             var kind = DungeonRunEditor.RecoverAction(s.Stage, AtHub, s.RecoveredOnce);
             Log("recover " + s.TempId + ": " + kind + " for " + s.Stage + " after " + error.GetType().Name + ": " + error.Message);
             if (kind == DungeonRunEditor.RecoverKind.None) return false;
@@ -1095,6 +1127,11 @@ internal static class NativeDungeonRunEditor
         }
         catch (Exception) { return false; }
     }
+
+    // L: the one recovery's own leave is under way; later failures are logged, not re-armed, until it ends or ExitWindow passes
+    // (as NativeDungeonRunPicker.Recover does).
+    private static bool RecoveryLeaving(EditorSession s) => s != null && s.RecoveredOnce && s.Stage == DungeonRunEditor.Stage.Leaving
+        && s.Leave == DungeonRunEditor.Leave.Recover && Now - s.StageSince <= ExitWindow;
 
     private static bool RunRecovery(Exception error)
     {
@@ -1107,6 +1144,9 @@ internal static class NativeDungeonRunEditor
         s.RecoveredOnce = true;
         if (kind == DungeonRunEditor.RecoverKind.RemoveAndPlank)
         {
+            // CollectionManager must not keep the removed deck as its edited deck (acts only on the temporary deck in edit mode).
+            try { EndEditMode(s, false); }
+            catch (Exception again) { Log("recover " + s.TempId + ": DoneEditing failed: " + again.GetBaseException().Message); }
             try { RemoveTemp(s, "recover"); }
             catch (Exception again) { Log("recover " + s.TempId + ": remove failed (the sweep retries): " + again.GetBaseException().Message); }
             End("recovered to the plank Build step");

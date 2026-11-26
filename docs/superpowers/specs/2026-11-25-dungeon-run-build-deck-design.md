@@ -121,7 +121,7 @@ an add and to gate Done) and by the run start (defence in depth).
 
 ### 3. The editor mode (client; Phase 0 confirms every member)
 
-- **Temporary deck:** a reserved id band 900000300..900000399, outside the loaner/test bands (900000010..900000179),
+- **Temporary deck:** a reserved id band 900000300..900000399, outside the loaner/test bands (900000001..900000225, NativeUIProjection.cs:374-426),
   `IsRunBuildId(id)` (corrected 2026-11-26 by the editor design addendum). Never a profile draft. Projected like the shop's decks: a `NetCacheDecks` header (NORMAL_DECK,
   FT_STANDARD) that goes into `NetCacheDecks` through native `AddDeck`, called from `CollectionManager.OnDeckCreated(header, null)`;
   the hero is the row's named hero, with the class hero as the fallback (corrected 2026-11-26 by the editor design addendum). Then `MarkNetworkContentsLoaded`

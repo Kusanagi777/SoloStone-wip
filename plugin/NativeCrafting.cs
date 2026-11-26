@@ -399,6 +399,11 @@ internal static class NativeCrafting
     private static bool CommitBatch(CraftingPendingTransaction __0, int __2, int __3, int __4, int __5)
     {
         if (!NativeUIProbe.Active) return true;
+        if (NativeDungeonRunEditor.Active)
+        {
+            log.LogWarning("NATIVE_CRAFT blocked a crafting transaction while a Build Deck deck is edited (design H).");
+            return RefuseInRunBuildEditor();
+        }
         if (!Enabled)
         {
             log.LogWarning("NATIVE_CRAFT blocked transport without a crafting ledger.");
@@ -620,6 +625,11 @@ internal static class NativeCrafting
     private static bool CommitMass()
     {
         if (!NativeUIProbe.Active) return true;
+        if (NativeDungeonRunEditor.Active)
+        {
+            log.LogWarning("NATIVE_CRAFT blocked a crafting transaction while a Build Deck deck is edited (design H).");
+            return RefuseInRunBuildEditor();
+        }
         if (!Enabled)
         {
             log.LogWarning("NATIVE_CRAFT blocked transport without a crafting ledger.");
