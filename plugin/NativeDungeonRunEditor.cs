@@ -571,13 +571,11 @@ internal static class NativeDungeonRunEditor
             return;
         }
         // Out of CM (the HUB after Exit, or another scene a different path reached): the service-level CollectionManager must not
-        // keep the temporary deck as its edited deck.
-        if (!s.EditEnded)
-        {
-            s.EditEnded = true;
-            try { EndEditMode(s, false); }
-            catch (Exception error) { Log("leave " + s.TempId + ": DoneEditing failed: " + error.GetBaseException().Message); }
-        }
+        // keep the temporary deck as its edited deck. Always run, even after the in-CM step (it may have thrown before ending edit
+        // mode): EndEditMode(false) acts only while edit mode is on with the temporary deck as the edited deck.
+        s.EditEnded = true;
+        try { EndEditMode(s, false); }
+        catch (Exception error) { Log("leave " + s.TempId + ": DoneEditing failed: " + error.GetBaseException().Message); }
         try { RemoveTemp(s, s.Leave + " at " + mode); }
         catch (Exception error) { Log("leave " + s.TempId + ": remove failed (the sweep retries): " + error.GetBaseException().Message); }
         End(s.Leave + " left Collection");

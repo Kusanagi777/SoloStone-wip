@@ -441,8 +441,12 @@ design section P:
     `DoneEditing` only instead of `SaveCurrentDeckAndEnterDeckListMode` + `Exit`.
 16. **Back (P16).** Back and Escape in the editor go CM -> HUB -> the run menu's Deck step with class and row kept;
     the band deck is gone; `Options` 188 is unchanged. Also press Back or Escape on CM's deck list during the open,
-    before the deck shows: the run menu's Deck step, log `Collection left for HUB before the editor opened` then
-    `removed`, and Play shows no Build Deck deck. If it fails: also hook `OnBackOutOfContainerContents`.
+    before the deck shows. Native Exit is admitted there only when logged in or on a trip from the native picker
+    (`CollectionExitLoggedIn`, `NativeUIProbe.cs:1585-1586`: `Network.IsLoggedIn()`, or a previous mode of
+    TOURNAMENT). When it is admitted: the run menu's Deck step, log `Collection left for HUB before the editor opened`
+    then `removed`, and Play shows no Build Deck deck. Otherwise the exit is refused and the editor opens normally,
+    which also passes; do not apply the remedy below for that case. If it fails: also hook
+    `OnBackOutOfContainerContents`.
 17. **Re-open (P14).** After Done, Back on Power re-opens CM on the same 10 cards (premiums and, on Death Knight, the
     runes); Done again returns to Power with the same list. If it fails: seed through `AddCard` while Creating.
 18. **Removal (K).** After Done and after Back the HUB log shows `removed 9000003xx (...): before ...; after
