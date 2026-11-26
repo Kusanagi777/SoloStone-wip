@@ -866,4 +866,52 @@ Guard("BDF", () =>
         string.Join(" | ", texts));
 });
 
+// Build Deck owner fix (2026-11-26): a Core reprint and its original are one plank. The owner's Mage builder showed "Elven Archer
+// (1) 0/2" twice (CS2_189 and its reprint CORE_CS2_189, one copy group).
+Guard("BDM", () =>
+{
+    var pol = OfflinePoolPolicy.Load();
+    var mage = data.FindClass("MAGE").ClassSet;
+    RunBuildCard C(string id, string name, int cost, int owned, string group, bool legendary = false) =>
+        new RunBuildCard { Id = id, ClientId = id, Name = name, Cost = cost, Owned = owned, Legendary = legendary, CopyGroup = group };
+    var raw = new List<RunBuildCard>
+    {
+        C("CORE_CS2_189", "Elven Archer", 1, 1, "CS2_189"), C("CS2_189", "Elven Archer", 1, 1, "CS2_189"),
+        C("AT_082", "Lowly Squire", 1, 2, "AT_082"),
+        C("CORE_X_LEG", "Rhonin", 8, 1, "AT_009", true), C("AT_009", "Rhonin", 8, 1, "AT_009"),
+    };
+    var planks = NativeDungeonRunText.BuildMergePrintings(raw);
+    var archer = planks.First(p => p.Name == "Elven Archer");
+    var squire = planks.First(p => p.Name == "Lowly Squire");
+    var rhonin = planks.First(p => p.Name == "Rhonin");
+    var page = NativeDungeonRunText.BuildPage(planks, NativeDungeonRunText.BuildFilter.All, 0, 6).Select(p => p.Name).ToList();
+
+    // Click the archer plank three times the way the run menu does: pick a printing, then DungeonRunBuild.AddReason with per-id
+    // owned counts and the copy groups of the raw candidates.
+    var byId = raw.ToDictionary(c => c.Id, StringComparer.Ordinal);
+    var built = new List<string>();
+    var refusals = new List<string>();
+    var labels = new List<string> { NativeDungeonRunText.BuildCardLabel(archer, NativeDungeonRunText.BuildInDeck(archer, built)) };
+    for (int i = 0; i < 3; i++)
+    {
+        string pick = NativeDungeonRunText.BuildPickPrinting(archer, built);
+        string reason = DungeonRunBuild.AddReason(built, pick, mage, 10, id => byId.TryGetValue(id, out var c) ? c.Owned : 0,
+            id => byId.TryGetValue(id, out var c) ? c.CopyGroup : id, pol);
+        if (reason == null) built.Add(pick); else refusals.Add(reason);
+        labels.Add(NativeDungeonRunText.BuildCardLabel(archer, NativeDungeonRunText.BuildInDeck(archer, built)));
+    }
+    Check("BD21 BuildMergePrintings makes one plank per copy group: Elven Archer (CS2_189 + CORE_CS2_189, 1 owned each) is one plank with id CS2_189, owned 2, "
+        + "printings CS2_189 then CORE_CS2_189; a one-printing card is unchanged; a group is legendary when any printing is; the page lists each name once. "
+        + "Three clicks add CS2_189 then CORE_CS2_189 (labels 0/2, 1/2, 2/2) and the third is refused for the shared copy limit, never for ownership",
+        planks.Count == 3 && archer.Id == "CS2_189" && archer.Owned == 2 && archer.CopyGroup == "CS2_189"
+            && archer.Printings != null && archer.Printings.Select(p => p.Id).SequenceEqual(new[] { "CS2_189", "CORE_CS2_189" })
+            && ReferenceEquals(squire, raw[2]) && squire.Printings == null && rhonin.Legendary && rhonin.Owned == 2 && rhonin.Id == "AT_009"
+            && NativeDungeonRunText.BuildCopyLimit(rhonin) == 1
+            && page.SequenceEqual(new[] { "Elven Archer", "Lowly Squire", "Rhonin" })
+            && built.SequenceEqual(new[] { "CS2_189", "CORE_CS2_189" }) && refusals.Count == 1 && refusals[0].StartsWith("copies ")
+            && labels.SequenceEqual(new[] { "Elven Archer (1) 0/2", "Elven Archer (1) 1/2", "Elven Archer (1) 2/2", "Elven Archer (1) 2/2" }),
+        string.Join(",", planks.Select(p => p.Id + ":" + p.Owned)) + " | " + string.Join(",", page) + " | built " + string.Join(",", built)
+            + " | refused " + string.Join(",", refusals) + " | " + string.Join(" / ", labels));
+});
+
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");

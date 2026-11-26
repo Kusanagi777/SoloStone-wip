@@ -338,13 +338,54 @@ internal static class NativeDungeonRunText
         return filtered.Skip(page * perPage).Take(perPage).ToList();
     }
 
+    /// <summary>
+    /// The card planks: one per copy group of <paramref name="all"/> (its <see cref="RunBuildCard.CopyGroup"/>, else its id), so a
+    /// Core reprint and its original are one plank. A group with one card is that card; a group with several is a new card with the
+    /// first printing's id, client id, name and cost (the one whose id is the group key, else the lowest id), the owned counts
+    /// summed, legendary when any printing is, and <see cref="RunBuildCard.Printings"/> listing them (that printing first, then by id).
+    /// </summary>
+    internal static IReadOnlyList<RunBuildCard> BuildMergePrintings(IReadOnlyList<RunBuildCard> all)
+    {
+        var result = new List<RunBuildCard>();
+        foreach (var g in (all ?? new RunBuildCard[0]).Where(c => c != null).GroupBy(c => c.CopyGroup ?? c.Id, System.StringComparer.Ordinal))
+        {
+            var printings = g.OrderBy(c => c.Id == g.Key ? 0 : 1).ThenBy(c => c.Id, System.StringComparer.Ordinal).ToList();
+            if (printings.Count == 1) { result.Add(printings[0]); continue; }
+            var first = printings[0];
+            result.Add(new RunBuildCard
+            {
+                Id = first.Id, ClientId = first.ClientId, Name = first.Name, Cost = first.Cost, CopyGroup = g.Key,
+                Legendary = printings.Any(c => c.Legendary), Owned = printings.Sum(c => c.Owned), Printings = printings,
+            });
+        }
+        return result;
+    }
+
+    // The printings a plank stands for: its Printings, else the card itself.
+    private static IReadOnlyList<RunBuildCard> BuildPrintings(RunBuildCard card) => card.Printings ?? new[] { card };
+
+    /// <summary>The copies of plank <paramref name="card"/> in <paramref name="built"/>: every printing it stands for counts.</summary>
+    internal static int BuildInDeck(RunBuildCard card, IReadOnlyList<string> built)
+    {
+        var ids = new HashSet<string>(BuildPrintings(card).Select(p => p.Id), System.StringComparer.Ordinal);
+        return built == null ? 0 : built.Count(ids.Contains);
+    }
+
+    /// <summary>
+    /// The engine id a click on plank <paramref name="card"/> adds: the first printing (<see cref="RunBuildCard.Printings"/> order)
+    /// with an owned copy not yet in <paramref name="built"/>, else the plank's own id (the add is then refused with its reason).
+    /// </summary>
+    internal static string BuildPickPrinting(RunBuildCard card, IReadOnlyList<string> built) =>
+        BuildPrintings(card).FirstOrDefault(p => (built == null ? 0 : built.Count(x => x == p.Id)) < p.Owned)?.Id ?? card.Id;
+
     /// <summary>The copies of one card a built list may hold: what is owned, at most 2, at most 1 for a legendary.</summary>
     internal static int BuildCopyLimit(RunBuildCard card) => System.Math.Min(card.Owned, card.Legendary ? 1 : 2);
 
     /// <summary>
     /// A card plank: "Fireball (4) 1/2" is the name, the mana cost, then n/m where n (<paramref name="inDeck"/>) is the copies of
     /// this card in the list and m the copies this list may hold of it (<see cref="BuildCopyLimit"/>: min(owned, 2, 1 for a
-    /// legendary)). The copy group's shared limit is not folded in: an add past it is refused with its reason.
+    /// legendary)). For a merged plank (<see cref="BuildMergePrintings"/>) n is <see cref="BuildInDeck"/> and owned is summed over
+    /// its printings, so the copy group's shared limit is the one shown.
     /// </summary>
     internal static string BuildCardLabel(RunBuildCard c, int inDeck) => c.Name + " (" + c.Cost + ") " + inDeck + "/" + BuildCopyLimit(c);
 

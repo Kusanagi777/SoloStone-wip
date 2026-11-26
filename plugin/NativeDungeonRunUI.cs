@@ -45,10 +45,11 @@ internal static class NativeDungeonRunUI
     private static string rowId, signatureId;
     // Build Deck (Step.Build): the list being built (engine card ids, in pick order; null when the deck is not built), the row's
     // candidates (DungeonRunRuntime.BuildCandidates walks every engine card, so it is read once per build session, in
-    // BeginBuild) by id, the row they were read for, the legal copies they can reach, and the filter shown. Never saved: every
-    // way out of the menu except BuildWhenHome ends in ResetFlow (Open), which drops it.
+    // BeginBuild) by id, the planks shown for them (one per copy group: a Core reprint and its original are one plank), the row
+    // they were read for, the legal copies they can reach, and the filter shown. Never saved: every way out of the menu except
+    // BuildWhenHome ends in ResetFlow (Open), which drops it.
     private static List<string> built;
-    private static IReadOnlyList<RunBuildCard> buildCards;
+    private static IReadOnlyList<RunBuildCard> buildCards, buildPlanks;
     private static Dictionary<string, RunBuildCard> buildById;
     private static string buildRow;
     private static int buildReachable;
@@ -205,12 +206,13 @@ internal static class NativeDungeonRunUI
         built = new List<string>(); buildRow = rowId;
         buildCards = DungeonRunRuntime.BuildCandidates(rowId);
         buildById = buildCards.GroupBy(c => c.Id, StringComparer.Ordinal).ToDictionary(g => g.Key, g => g.First(), StringComparer.Ordinal);
+        buildPlanks = NativeDungeonRunText.BuildMergePrintings(buildCards);
         buildReachable = NativeDungeonRunText.BuildReachable(buildCards, null);
     }
 
     private static void DropBuild()
     {
-        built = null; buildCards = null; buildById = null; buildRow = null; buildReachable = 0;
+        built = null; buildCards = null; buildPlanks = null; buildById = null; buildRow = null; buildReachable = 0;
         buildFilter = NativeDungeonRunText.BuildFilter.All;
     }
 
@@ -636,13 +638,16 @@ internal static class NativeDungeonRunUI
         result.Lines.Add(NativeDungeonRunText.BuildCaption(built.Select(BuildName).ToList(), size));
         string notEnough = NativeDungeonRunText.BuildNotEnoughLine(buildReachable, size);
         if (notEnough != null) result.Lines.Add(notEnough);
-        int count = NativeDungeonRunText.BuildFiltered(buildCards, buildFilter).Count;
+        int count = NativeDungeonRunText.BuildFiltered(buildPlanks, buildFilter).Count;
         page = NativeDungeonRunText.ClampPage(page, count, CardsPerPage);
         result.Row(NativeDungeonRunText.BuildFilterId, NativeDungeonRunText.BuildFilterLabel(buildFilter), CycleBuildFilter);
-        foreach (var card in NativeDungeonRunText.BuildPage(buildCards, buildFilter, page, CardsPerPage))
+        // One plank per copy group; a click adds a printing the player still has a copy of (BuildPickPrinting), so the list's
+        // per-id owned check (BuildOwned) holds when the copies are split between a Core reprint and its original.
+        foreach (var card in NativeDungeonRunText.BuildPage(buildPlanks, buildFilter, page, CardsPerPage))
         {
-            string id = card.Id;
-            result.Row(NativeDungeonRunText.BuildCardIdPrefix + id, NativeDungeonRunText.BuildCardLabel(card, built.Count(x => x == id)), () => AddBuildCard(id));
+            var plank = card;
+            result.Row(NativeDungeonRunText.BuildCardIdPrefix + plank.Id, NativeDungeonRunText.BuildCardLabel(plank, NativeDungeonRunText.BuildInDeck(plank, built)),
+                () => AddBuildCard(NativeDungeonRunText.BuildPickPrinting(plank, built)));
         }
         Paging(result, count, CardsPerPage);
         // A disabled plank carries no action (as the locked deck and power rows): the disabled state alone never has to stop a click.
