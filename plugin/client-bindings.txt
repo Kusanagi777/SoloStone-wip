@@ -1020,9 +1020,12 @@ M	Assembly-CSharp	CollectionDeck	FillFromTemplateDeck	System.Void(CollectionMana
 M	Assembly-CSharp	CollectionDeck	FindPrimaryFabledCardSlot	CollectionDeckSlot(EntityDef)
 M	Assembly-CSharp	CollectionDeck	GetAllSideboards	System.Collections.Generic.Dictionary`2<System.String,SideboardDeck>()
 M	Assembly-CSharp	CollectionDeck	GetCardsWithCardID	System.Collections.Generic.List`1<System.String>()
+M	Assembly-CSharp	CollectionDeck	GetClass	()
+M	Assembly-CSharp	CollectionDeck	GetClasses	()
 M	Assembly-CSharp	CollectionDeck	GetClasses	System.Collections.Generic.List`1<TAG_CLASS>()
 M	Assembly-CSharp	CollectionDeck	GetDisplayHeroCardID	(System.Boolean)
 M	Assembly-CSharp	CollectionDeck	GetDisplayHeroCardID	*
+M	Assembly-CSharp	CollectionDeck	GetHeroClasses	()
 M	Assembly-CSharp	CollectionDeck	GetOrCreateSideboard	SideboardDeck(System.String,TAG_PREMIUM)
 M	Assembly-CSharp	CollectionDeck	GetRuleset	DeckRuleset(System.Nullable`1<PegasusShared.FormatType>)
 M	Assembly-CSharp	CollectionDeck	GetRuneOrder	PegasusShared.RuneType[]()
@@ -1072,19 +1075,23 @@ M	Assembly-CSharp	CollectionDeckTray	CompleteMyDeckButtonPress	()
 M	Assembly-CSharp	CollectionDeckTray	CompleteMyDeckButtonPress	*
 M	Assembly-CSharp	CollectionDeckTray	DeleteEditingDeck	(System.Boolean)
 M	Assembly-CSharp	CollectionDeckTray	DeleteEditingDeck	*
+M	Assembly-CSharp	CollectionDeckTray	DoneButtonPress	(UIEvent)
 M	Assembly-CSharp	CollectionDeckTray	Get	CollectionDeckTray()
 M	Assembly-CSharp	CollectionDeckTray	GetCurrentDeckContext	CollectionDeck()
 M	Assembly-CSharp	CollectionDeckTray	GetDecksContent	DeckTrayDeckListContent()
 M	Assembly-CSharp	CollectionDeckTray	InitializeRuneIndicatorVisual	System.Void(CollectionDeck)
 M	Assembly-CSharp	CollectionDeckTray	OnBackOutOfDeckContentsImpl	*
+M	Assembly-CSharp	CollectionDeckTray	OnCardCountUpdated	(System.Int32,System.Int32)
 M	Assembly-CSharp	CollectionDeckTray	OnCardManuallyAddedByUser_CheckSuggestions	System.Void(System.Collections.Generic.IEnumerable`1<EntityDef>)
 M	Assembly-CSharp	CollectionDeckTray	OnDeckCountUpdated	*
+M	Assembly-CSharp	CollectionDeckTray	SaveCurrentDeckAndEnterDeckListMode	()
 M	Assembly-CSharp	CollectionInputMgr	PasteDeckInEditModeFromShareableDeck	*
 M	Assembly-CSharp	CollectionManager	AddCardRewards	System.Void(System.Collections.Generic.List`1<CardRewardData>,System.Boolean)
 M	Assembly-CSharp	CollectionManager	AddPendingDeckEdit	*
 M	Assembly-CSharp	CollectionManager	AddPendingDeckRename	*
 M	Assembly-CSharp	CollectionManager	AddTrialCardCounts	*
 M	Assembly-CSharp	CollectionManager	AreAllDeckContentsReady	*
+M	Assembly-CSharp	CollectionManager	DoneEditing	()
 M	Assembly-CSharp	CollectionManager	Get	CollectionManager()
 M	Assembly-CSharp	CollectionManager	GetBaseDeck	CollectionDeck(System.Int64)
 M	Assembly-CSharp	CollectionManager	GetCollectibleDisplay	CollectibleDisplay()
@@ -1112,6 +1119,7 @@ M	Assembly-CSharp	CollectionManager	OnDeckDeletedWhileOffline	*
 M	Assembly-CSharp	CollectionManager	OnInitialClientStateDeckContents	System.Void(NetCache+NetCacheDecks,System.Collections.Generic.List`1<PegasusUtil.DeckContents>)
 M	Assembly-CSharp	CollectionManager	OnInitialCollectionReceived	NetCache+NetCacheCollection(PegasusUtil.Collection)
 M	Assembly-CSharp	CollectionManager	OnMassDisenchantResponse	*
+M	Assembly-CSharp	CollectionManager	RemoveDeck	(System.Int64)
 M	Assembly-CSharp	CollectionManager	RequestDeckContentsForDecksWithoutContentsLoaded	*
 M	Assembly-CSharp	CollectionManager	SendCreateDeck	*
 M	Assembly-CSharp	CollectionManager	SetShowDeckTemplatePageForClass	System.Void(TAG_CLASS,System.Boolean)
@@ -1121,11 +1129,23 @@ M	Assembly-CSharp	CollectionManager	StartInitialMercenaryLoadIfRequired	*
 M	Assembly-CSharp	CollectionManager	UpdateFavoriteHero	System.Void(TAG_CLASS,System.String,TAG_PREMIUM,System.Boolean)
 M	Assembly-CSharp	CollectionManager+DelOnAllDeckContents	Invoke	System.Void()
 M	Assembly-CSharp	CollectionManager+OnMassDisenchant	Invoke	System.Void(System.Int32)
+M	Assembly-CSharp	CollectionManagerDisplay	CanViewCardBacks	()
+M	Assembly-CSharp	CollectionManagerDisplay	CanViewCardBacks	*
+M	Assembly-CSharp	CollectionManagerDisplay	CanViewCoins	()
+M	Assembly-CSharp	CollectionManagerDisplay	CanViewCoins	*
+M	Assembly-CSharp	CollectionManagerDisplay	CanViewHeroSkins	()
+M	Assembly-CSharp	CollectionManagerDisplay	CanViewHeroSkins	*
+M	Assembly-CSharp	CollectionManagerDisplay	CanViewPets	()
+M	Assembly-CSharp	CollectionManagerDisplay	CanViewPets	*
 M	Assembly-CSharp	CollectionManagerDisplay	CreateDeckFromClipboard	*
+M	Assembly-CSharp	CollectionManagerDisplay	Exit	()
 M	Assembly-CSharp	CollectionManagerDisplay	Exit	*
 M	Assembly-CSharp	CollectionManagerDisplay	GetPhoneDeckTemplateTray	DeckTemplatePicker()
+M	Assembly-CSharp	CollectionManagerDisplay	ShouldShowDeckOptionsMenu	()
+M	Assembly-CSharp	CollectionManagerDisplay	ShouldShowDeckOptionsMenu	*
 M	Assembly-CSharp	CollectionManagerDisplay	ShowDeck	*
 M	Assembly-CSharp	CollectionPageManager	GetDeckTemplatePicker	DeckTemplatePicker()
+M	Assembly-CSharp	CollectionPageManager	ShouldShowTab	(BookTab)
 M	Assembly-CSharp	CollectionPageManager	UpdateFiltersForDeck	System.Void(CollectionDeck,System.Collections.Generic.List`1<TAG_CLASS>,System.Boolean,BookPageManager+DelOnPageTransitionComplete,System.Object)
 M	Assembly-CSharp	CosmeticCoinDbfRecord	get_CardRecord	CardDbfRecord()
 M	Assembly-CSharp	CosmeticCoinManager	Get	*
@@ -1200,6 +1220,13 @@ M	Assembly-CSharp	DeckRule_CountCopiesOfEachCard	GetCopiesInDeck	(System.String,
 M	Assembly-CSharp	DeckRule_CountCopiesOfEachCard	GetCopiesInDeck	*
 M	Assembly-CSharp	DeckRule_SideboardSubset	IsDeckValid	*
 M	Assembly-CSharp	DeckRule_SideboardSubset	IsInAllowedSubset	*
+M	Assembly-CSharp	DeckRuleset	CanAddToDeck	*
+M	Assembly-CSharp	DeckRuleset	Filter	*
+M	Assembly-CSharp	DeckRuleset	FilterFailsOnShowInvalidRule	*
+M	Assembly-CSharp	DeckRuleset	GetDeckSize	(CollectionDeck)
+M	Assembly-CSharp	DeckRuleset	GetDeckSizeWhileEditing	(CollectionDeck,EntityDef)
+M	Assembly-CSharp	DeckRuleset	GetMinimumAllowedDeckSize	(CollectionDeck)
+M	Assembly-CSharp	DeckRuleset	IsDeckValid	*
 M	Assembly-CSharp	DeckRuleset	IsDeckValid	System.Boolean(CollectionDeck,DeckRule+RuleType[])
 M	Assembly-CSharp	DeckTemplateDbfRecord	get_ClassId	System.Int32()
 M	Assembly-CSharp	DeckTemplateDbfRecord	get_DisplayTexture	System.String()
@@ -1224,6 +1251,7 @@ M	Assembly-CSharp	DeckTrayCardBackContent	GrabCardBack	*
 M	Assembly-CSharp	DeckTrayCardBackContent	RemoveCardBack	*
 M	Assembly-CSharp	DeckTrayCardBackContent	ToggleFavoritesOnly	*
 M	Assembly-CSharp	DeckTrayCardBackContent	UpdateCardBack	*
+M	Assembly-CSharp	DeckTrayCardListContent	AddCard	*
 M	Assembly-CSharp	DeckTrayCardListContent	ShowDeckHelper	(CollectionDeckSlot,System.Boolean)
 M	Assembly-CSharp	DeckTrayCardListContent	ShowDeckHelper	*
 M	Assembly-CSharp	DeckTrayCardListContent	UpdateCardList	System.Void()
@@ -1246,6 +1274,7 @@ M	Assembly-CSharp	DeckTrayDeckListContent	OnDeckBoxVisualOver	*
 M	Assembly-CSharp	DeckTrayDeckListContent	RefreshMissingCardIndicators	System.Void()
 M	Assembly-CSharp	DeckTrayDeckListContent	RefreshTraySectionPositions	(System.Boolean)
 M	Assembly-CSharp	DeckTrayDeckListContent	RefreshTraySectionPositions	*
+M	Assembly-CSharp	DeckTrayDeckListContent	RenameCurrentlyEditingDeck	()
 M	Assembly-CSharp	DeckTrayDeckListContent	ShouldDeckBoxesBeLocked	*
 M	Assembly-CSharp	DeckTrayDeckListContent	UpdateAllTrays	(System.Boolean,System.Boolean)
 M	Assembly-CSharp	DeckTrayDeckListContent	UpdateAllTrays	*
@@ -1338,6 +1367,7 @@ M	Assembly-CSharp	EntityBase	HasReferencedTag	*
 M	Assembly-CSharp	EntityBase	HasTag	System.Boolean(GAME_TAG)
 M	Assembly-CSharp	EntityBase	IsHero	System.Boolean()
 M	Assembly-CSharp	EntityDef	GetFlavorText	System.String()
+M	Assembly-CSharp	EntityDef	GetName	System.String()
 M	Assembly-CSharp	EntityDef	GetReferencedTag	(System.Int32)
 M	Assembly-CSharp	EntityDef	GetReferencedTag	*
 M	Assembly-CSharp	EventTimingManager	Get	*
@@ -1853,6 +1883,7 @@ M	Assembly-CSharp	MultiSliceElement	ClearSlices	System.Void()
 M	Assembly-CSharp	MultiSliceElement	UpdateSlices	System.Void()
 M	Assembly-CSharp	NarrativeManager	Get	NarrativeManager()
 M	Assembly-CSharp	NarrativeManager	OnArenaRewardsShown	*
+M	Assembly-CSharp	Navigation	Clear	()
 M	Assembly-CSharp	Navigation	GoBack	System.Boolean()
 M	Assembly-CSharp	Navigation	Push	System.Void(Navigation+NavigateBackHandler)
 M	Assembly-CSharp	Navigation	PushUnique	System.Void(Navigation+NavigateBackHandler)
@@ -3069,6 +3100,7 @@ T	Assembly-CSharp	BnetBarMenuButton
 T	Assembly-CSharp	BoardDbfRecord		
 T	Assembly-CSharp	BookPageManager		
 T	Assembly-CSharp	BookPageManager+DelOnPageTransitionComplete		
+T	Assembly-CSharp	BookTab		
 T	Assembly-CSharp	BoosterDbId		
 T	Assembly-CSharp	BoosterDbfRecord		
 T	Assembly-CSharp	BoosterPackRewardData		
@@ -3154,6 +3186,7 @@ T	Assembly-CSharp	DeckOptionsMenu
 T	Assembly-CSharp	DeckPickerTrayDisplay		
 T	Assembly-CSharp	DeckRule		
 T	Assembly-CSharp	DeckRule+RuleType		
+T	Assembly-CSharp	DeckRuleViolation		
 T	Assembly-CSharp	DeckRule_CountCopiesOfEachCard		
 T	Assembly-CSharp	DeckRule_SideboardSubset		
 T	Assembly-CSharp	DeckRuleset		
