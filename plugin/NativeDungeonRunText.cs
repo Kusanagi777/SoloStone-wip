@@ -420,11 +420,11 @@ internal static class NativeDungeonRunText
     internal static string BuildAddRefusal(string name, string reason)
     {
         string why = BuildReasonWords((reason ?? "").Split(' ')[0]);
-        return "Cannot add " + name + ": " + (why == null ? reason : why + ".");
+        return "Cannot add " + name + ": " + why + ".";
     }
 
-    // The words of a DungeonRunBuild reason code shared by the add and run-start refusals ("at most 2 copies of a card"); null
-    // for a code they word differently or not at all.
+    // The words of a DungeonRunBuild reason code shared by the add and run-start refusals ("at most 2 copies of a card"); a code
+    // without words is "not allowed in a run", so no engine id or raw code reaches the player.
     private static string BuildReasonWords(string code)
     {
         switch (code)
@@ -435,7 +435,12 @@ internal static class NativeDungeonRunText
             case "owned": return "you own no more copies";
             case "runes": return "a Death Knight deck needs at most 3 runes";
             case "not-collectible": return "not a collectible card";
-            default: return null;
+            case "class": return "not a card of this hero's class";
+            case "hero": return "a hero card";
+            case "fabled": return "a Fabled card";
+            case "rune-class": return "rune cards are for Death Knight runs only";
+            case "missing": case "unavailable": return "not a card this run can use";
+            default: return "not allowed in a run";
         }
     }
 
@@ -446,7 +451,20 @@ internal static class NativeDungeonRunText
     /// engine id or a copy group; a name it cannot give (null, empty, or it throws) is "a card", so no engine id is shown. Null
     /// when there are no reasons.
     /// </summary>
-    internal static string BuildStartRefusal(IReadOnlyList<string> reasons, System.Func<string, string> name)
+    internal static string BuildStartRefusal(IReadOnlyList<string> reasons, System.Func<string, string> name) =>
+        BuildReasonsText(DungeonRun.IllegalBuiltList, reasons, name);
+
+    internal const string EditorAddHeader = "Cannot add card", EditorDoneHeader = "Deck not ready",
+        EditorFailedCaption = "The deck editor could not open. Build your deck here instead.",
+        EditorCraftingOff = "Crafting is off while you build a Dungeon Run deck.";
+
+    /// <summary>The Done refusal of the editor: "Your deck is not ready: it has 9 of 10 cards; Fireball: at most 2 copies of a card."
+    /// (<see cref="BuildReasonsText"/>); null when there are no reasons.</summary>
+    internal static string EditorDoneRefusal(IReadOnlyList<string> reasons, System.Func<string, string> name) =>
+        BuildReasonsText("Your deck is not ready: ", reasons, name);
+
+    /// <summary>The reasons of <see cref="DungeonRunBuild.DeckReasons"/> in words after <paramref name="prefix"/>, joined by "; ", ending in a period.</summary>
+    internal static string BuildReasonsText(string prefix, IReadOnlyList<string> reasons, System.Func<string, string> name)
     {
         if (reasons == null || reasons.Count == 0) return null;
         string Named(string id)
@@ -466,16 +484,13 @@ internal static class NativeDungeonRunText
             switch (code)
             {
                 case "owned": why = "you no longer own that many copies"; break;
-                case "class": why = "not a card of this hero's class"; break;
-                case "hero": why = "a hero card"; break;
-                case "fabled": why = "a Fabled card"; break;
                 case "rune-class": why = "a rune card, only in a Death Knight deck"; break;
                 case "missing": why = "an unknown card"; break;
-                default: why = BuildReasonWords(code) ?? "not allowed in a run"; break;
+                default: why = BuildReasonWords(code); break;
             }
             parts.Add(rest == null ? why : Named(rest) + ": " + why);
         }
-        return DungeonRun.IllegalBuiltList + string.Join("; ", parts) + ".";
+        return prefix + string.Join("; ", parts) + ".";
     }
 
     // ---- the portrait tray's pages (NativeDungeonRunPicker, owner 2026-11-22). The tray's prefab lays out at most `perPage`
