@@ -914,4 +914,136 @@ Guard("BDM", () =>
             + " | refused " + string.Join(",", refusals) + " | " + string.Join(" / ", labels));
 });
 
+// Build Deck editor decisions (design 2026-11-26-dungeon-run-build-deck-editor-design.md; plugin/DungeonRun/DungeonRunEditor.cs).
+Guard("BDE", () =>
+{
+    // fixture: every literal loaner/test deck id of NativeUIProjection.cs:374-500 (DeckKeys is private to an untested file)
+    var nativeFixture = new long[]
+    {
+        900000001L, 900000002L, 900000010L, 900000011L, 900000012L, 900000013L, 900000014L, 900000015L, 900000016L, 900000017L, 900000018L,
+        900000019L, 900000020L, 900000021L, 900000022L, 900000023L, 900000024L, 900000025L, 900000026L, 900000027L, 900000028L, 900000029L,
+        900000030L, 900000031L, 900000032L, 900000033L, 900000034L, 900000035L, 900000036L, 900000037L, 900000038L, 900000039L, 900000040L,
+        900000041L, 900000042L, 900000043L, 900000044L, 900000045L, 900000046L, 900000047L, 900000048L, 900000049L, 900000050L, 900000051L,
+        900000052L, 900000053L, 900000054L, 900000055L, 900000056L, 900000057L, 900000058L, 900000059L, 900000060L, 900000061L, 900000062L,
+        900000063L, 900000064L, 900000065L, 900000066L, 900000067L, 900000068L, 900000069L, 900000070L, 900000071L, 900000072L, 900000073L,
+        900000074L, 900000075L, 900000076L, 900000077L, 900000078L, 900000079L, 900000130L, 900000131L, 900000132L, 900000133L, 900000134L,
+        900000135L, 900000150L, 900000151L, 900000152L, 900000153L, 900000154L, 900000155L, 900000156L, 900000158L, 900000170L, 900000171L,
+        900000172L, 900000173L, 900000174L, 900000175L, 900000176L, 900000177L, 900000178L, 900000200L, 900000201L, 900000202L, 900000203L,
+        900000204L, 900000205L, 900000206L, 900000207L, 900000208L, 900000209L, 900000210L, 900000211L, 900000212L, 900000213L, 900000214L,
+        900000215L, 900000216L, 900000217L, 900000218L, 900000219L, 900000220L, 900000221L, 900000222L, 900000223L, 900000224L, 900000225L
+    };
+    var band = Enumerable.Range(0, 100).Select(i => 900000300L + i).ToList();
+    Check("BD22 (A1) the run-build band is 900000300..900000399: 900000299 and 900000400 are outside, 900000300 and 900000399 inside, the legacy personal ids 910000001 and "
+        + "910000010 outside, and none of the " + nativeFixture.Length + " loaner/test ids of NativeUIProjection.cs:374-500 is inside; NextRunBuildId gives the lowest free id "
+        + "(900000302 after 300 and 301), null on a full band; NonBandCount([900000300, 910000010, 900000215]) is 2",
+        !DungeonRunEditor.IsRunBuildId(900000299) && !DungeonRunEditor.IsRunBuildId(900000400)
+            && DungeonRunEditor.IsRunBuildId(900000300) && DungeonRunEditor.IsRunBuildId(900000399)
+            && !DungeonRunEditor.IsRunBuildId(910000001) && !DungeonRunEditor.IsRunBuildId(910000010)
+            && nativeFixture.Length > 100 && nativeFixture.All(id => !DungeonRunEditor.IsRunBuildId(id))
+            && DungeonRunEditor.NextRunBuildId(new long[] { 900000300, 900000301 }) == 900000302
+            && DungeonRunEditor.NextRunBuildId(nativeFixture) == 900000300
+            && DungeonRunEditor.NextRunBuildId(band) == null
+            && DungeonRunEditor.NonBandCount(new long[] { 900000300, 910000010, 900000215 }) == 2,
+        "fixture " + nativeFixture.Length);
+
+    var verdicts = new[] { DungeonRunEditor.Stage.None, DungeonRunEditor.Stage.Creating, DungeonRunEditor.Stage.Entering,
+        DungeonRunEditor.Stage.Editing, DungeonRunEditor.Stage.Leaving }.Select(DungeonRunEditor.AddVerdict).ToArray();
+    Check("BD23 (D3, J, K belt) flow tables: AddVerdict is Refuse, Allow, Refuse, Rule, Refuse for None, Creating, Entering, Editing, Leaving; LeaveTarget sends Done to Power and "
+        + "Back and Recover to Deck; PowerBack follows the four rows of J2; ExitAllowed (false,true,false,true) is true, (false,true,false,false) false, (false,false,true,true) false, "
+        + "(true,false,false,false) true",
+        verdicts.SequenceEqual(new[] { DungeonRunEditor.AddVerdictKind.Refuse, DungeonRunEditor.AddVerdictKind.Allow, DungeonRunEditor.AddVerdictKind.Refuse,
+            DungeonRunEditor.AddVerdictKind.Rule, DungeonRunEditor.AddVerdictKind.Refuse })
+            && DungeonRunEditor.LeaveTarget(DungeonRunEditor.Leave.Done) == DungeonRunEditor.LeaveStep.Power
+            && DungeonRunEditor.LeaveTarget(DungeonRunEditor.Leave.Back) == DungeonRunEditor.LeaveStep.Deck
+            && DungeonRunEditor.LeaveTarget(DungeonRunEditor.Leave.Recover) == DungeonRunEditor.LeaveStep.Deck
+            && DungeonRunEditor.PowerBack(true, true, true) == DungeonRunEditor.PowerBackTarget.Editor
+            && DungeonRunEditor.PowerBack(true, true, false) == DungeonRunEditor.PowerBackTarget.PlankBuild
+            && DungeonRunEditor.PowerBack(false, true, true) == DungeonRunEditor.PowerBackTarget.PlankBuild
+            && DungeonRunEditor.PowerBack(false, true, false) == DungeonRunEditor.PowerBackTarget.PlankBuild
+            && DungeonRunEditor.PowerBack(true, false, true) == DungeonRunEditor.PowerBackTarget.Deck
+            && DungeonRunEditor.PowerBack(false, false, false) == DungeonRunEditor.PowerBackTarget.Deck
+            && DungeonRunEditor.ExitAllowed(false, true, false, true) && !DungeonRunEditor.ExitAllowed(false, true, false, false)
+            && !DungeonRunEditor.ExitAllowed(false, false, true, true) && DungeonRunEditor.ExitAllowed(true, false, false, false),
+        string.Join(",", verdicts));
+
+    var recoverBad = new List<string>();
+    foreach (DungeonRunEditor.Stage st in Enum.GetValues(typeof(DungeonRunEditor.Stage)))
+        foreach (bool hub in new[] { false, true })
+            foreach (bool once in new[] { false, true })
+            {
+                var want = once || st == DungeonRunEditor.Stage.None ? DungeonRunEditor.RecoverKind.None
+                    : st == DungeonRunEditor.Stage.Creating || st == DungeonRunEditor.Stage.Entering && hub ? DungeonRunEditor.RecoverKind.RemoveAndPlank
+                    : DungeonRunEditor.RecoverKind.DeckAndLeave;
+                var got = DungeonRunEditor.RecoverAction(st, hub, once);
+                if (got != want) recoverBad.Add(st + "/" + hub + "/" + once + "=" + got);
+            }
+    Check("BD24 (L) RecoverAction over stage x atHub x recoveredOnce: recoveredOnce and the None stage give None; Creating, and Entering at the HUB, give RemoveAndPlank; "
+        + "Entering in CM, Editing and Leaving give DeckAndLeave (20 cases)",
+        recoverBad.Count == 0 && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Creating, false, false) == DungeonRunEditor.RecoverKind.RemoveAndPlank
+            && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Entering, true, false) == DungeonRunEditor.RecoverKind.RemoveAndPlank
+            && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Entering, false, false) == DungeonRunEditor.RecoverKind.DeckAndLeave
+            && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Editing, true, false) == DungeonRunEditor.RecoverKind.DeckAndLeave
+            && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Leaving, false, false) == DungeonRunEditor.RecoverKind.DeckAndLeave
+            && DungeonRunEditor.RecoverAction(DungeonRunEditor.Stage.Editing, false, true) == DungeonRunEditor.RecoverKind.None,
+        string.Join(",", recoverBad));
+
+    var mageRow = data.FindClass("MAGE");
+    var dualRow = data.FindClass("MAGE_ROGUE");
+    var dkRow = data.FindClass("DEATHKNIGHT");
+    var tessRow = data.FindClass("GILA_500h3");
+    var rows = new[] { mageRow, dualRow, dkRow, tessRow };
+    var B = DungeonRunEditor.BuilderKind.Plank;
+    var E = DungeonRunEditor.BuilderKind.Editor;
+    // (row, candidates, reachable, size, nativeDecks, nativeLimit, editorFailed, gate)
+    Check("BD25 (M) Builder: the all-clear Mage row is Editor; each Plank condition alone gives Plank (editorFailed, 0 candidates, reachable 9 of 10, 111 of 111 native decks, "
+        + "a dual row and a Death Knight row with the gate off); the dual and Death Knight rows give Editor with the gate on",
+        rows.All(r => r != null)
+            && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 5, 111, false, false) == E
+            && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 5, 111, true, false) == B
+            && DungeonRunEditor.Builder(mageRow, 0, 10, data.Rules.StarterSize, 5, 111, false, false) == B
+            && DungeonRunEditor.Builder(mageRow, 40, 9, data.Rules.StarterSize, 5, 111, false, false) == B
+            && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 111, 111, false, false) == B
+            && DungeonRunEditor.Builder(mageRow, 40, 10, data.Rules.StarterSize, 110, 111, false, false) == E
+            && dualRow.IsDual && DungeonRunEditor.Builder(dualRow, 40, 10, data.Rules.StarterSize, 5, 111, false, false) == B
+            && dkRow.ClassSet.Contains("DEATHKNIGHT") && DungeonRunEditor.Builder(dkRow, 40, 10, data.Rules.StarterSize, 5, 111, false, false) == B
+            && DungeonRunEditor.Builder(dualRow, 40, 10, data.Rules.StarterSize, 5, 111, false, true) == E
+            && DungeonRunEditor.Builder(dkRow, 40, 10, data.Rules.StarterSize, 5, 111, false, true) == E
+            && DungeonRunEditor.Builder(tessRow, 40, 10, data.Rules.StarterSize, 5, 111, false, false) == E
+            && !DungeonRunEditor.DualAndDkInEditor,
+        "gate " + DungeonRunEditor.DualAndDkInEditor);
+
+    Func<string, string> same = s => s;
+    var tessHeroes = DungeonRunEditor.HeaderHeroes(tessRow, data, same);
+    var mageHeroes = DungeonRunEditor.HeaderHeroes(mageRow, data, same);
+    var dualHeroes = DungeonRunEditor.HeaderHeroes(dualRow, data, same);
+    var tessClassHero = data.FindClass(tessRow.ClassSet[0]).HeroCard;
+    var mageRogueTags = DungeonRunEditor.ClassTags(dualRow);
+    Check("BD26 (A2, F) HeaderHeroes: Tess (GILA_500h3, classes [ROGUE]) is [GILA_500h3, the ROGUE class row's hero]; the MAGE row is its hero only; the MAGE_ROGUE row is "
+        + "[ULDA_Reno, the MAGE hero]; a clientId mapping is applied; HeroAccepted(MAGE, [MAGE], MAGE row) is true, NEUTRAL and WARRIOR are false, (MAGE, [MAGE, ROGUE], MAGE_ROGUE row) "
+        + "is true; ClassTags of the MAGE_ROGUE row is [MAGE, ROGUE]",
+        tessRow.HeroCard == "GILA_500h3" && tessClassHero == data.FindClass("ROGUE").HeroCard && tessClassHero != tessRow.HeroCard
+            && tessHeroes.SequenceEqual(new[] { "GILA_500h3", tessClassHero })
+            && mageHeroes.SequenceEqual(new[] { mageRow.HeroCard })
+            && dualHeroes.SequenceEqual(new[] { dualRow.HeroCard, data.FindClass("MAGE").HeroCard })
+            && DungeonRunEditor.HeaderHeroes(mageRow, data, s => "C_" + s).SequenceEqual(new[] { "C_" + mageRow.HeroCard })
+            && DungeonRunEditor.HeroAccepted("MAGE", new[] { "MAGE" }, mageRow)
+            && !DungeonRunEditor.HeroAccepted("NEUTRAL", new[] { "MAGE" }, mageRow)
+            && !DungeonRunEditor.HeroAccepted("WARRIOR", new[] { "MAGE" }, mageRow)
+            && !DungeonRunEditor.HeroAccepted("MAGE", new[] { "MAGE", "ROGUE" }, mageRow)
+            && DungeonRunEditor.HeroAccepted("MAGE", new[] { "MAGE", "ROGUE" }, dualRow)
+            && mageRogueTags.SequenceEqual(new[] { "MAGE", "ROGUE" }) && DungeonRunEditor.ClassTags(mageRow).SequenceEqual(new[] { "MAGE" }),
+        string.Join(",", tessHeroes) + " | " + string.Join(",", dualHeroes));
+
+    var all = new[] { true, true, true, true, true, true, true, true };
+    bool Owns(bool[] a) => DungeonRunEditor.OwnsEditor(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7]);
+    bool eachFalse = true;
+    for (int i = 0; i < all.Length; i++)
+    {
+        var a = (bool[])all.Clone();
+        a[i] = false;
+        if (Owns(a)) eachFalse = false;
+    }
+    Check("BD27 (H0) OwnsEditor is true with all eight inputs true and false when any single input is false", Owns(all) && eachFalse);
+});
+
 Console.WriteLine($"RESULT {passes} passed, {failures} failed");
