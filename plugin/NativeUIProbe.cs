@@ -173,6 +173,7 @@ internal static partial class NativeUIProbe
         NativeAchievements.Initialize(harmony, logger);
         NativeDungeonRunUI.Initialize(harmony, logger);
         NativeDungeonRunPicker.Initialize(harmony, logger);
+        NativeDungeonRunEditor.Initialize(harmony, logger);
         Hook(harmony, typeof(Options), "GetBoolImpl", nameof(OnboardingOption), new[] { typeof(Option), typeof(bool).MakeByRefType() });
         Hook(harmony, typeof(BnetBarMenuButton), "UpdateHighlight", nameof(HiddenMenuHighlight), Type.EmptyTypes);
         publisher = NativeUIProjection.ResolvePublisher(typeof(NetCache));
@@ -357,6 +358,8 @@ internal static partial class NativeUIProbe
         if (failure.Length != 0) return;
         // A block on the Dungeon Run picker's own path (entering, in ADVENTURE, on the way back) becomes its fallback to the HUB menu.
         if (NativeDungeonRunPicker.Recover(error)) { sceneWaiting = false; return; }
+        // A failure while a Build Deck editor session exists recovers it once (NativeDungeonRunEditor, design L).
+        if (NativeDungeonRunEditor.Recover(error)) { sceneWaiting = false; return; }
         failure = error.ToString(); ready = false; sceneWaiting = false;
         log.LogError("NATIVE_UI_BLOCKED " + failure); State("Blocked");
         NativeDungeonRunPicker.Blocked(); // the UI stops ticking: an open picker session (at the HUB) stands down
@@ -385,6 +388,8 @@ internal static partial class NativeUIProbe
             if (!ready) return;
             // First, so a subsystem below that throws every frame (each one recovered by the picker) cannot stop the way back.
             NativeDungeonRunPicker.Update();
+            // The Build Deck editor session: its recovery throws here (Fail) only when it cannot recover again.
+            NativeDungeonRunEditor.Update();
             if (AtHome()) NativeHomeUI.UpdateJournal(Box.Get(), message => log.LogInfo(message), NativeHiddenEntries.Active);
             if (sceneWaiting && SplashScreen.Get() == null && !SceneMgr.Get().IsTransitioning() && SceneMgr.Get().GetMode() == target)
             {
@@ -571,6 +576,8 @@ internal static partial class NativeUIProbe
         if (!CollectionManager.Get().IsFullyLoaded()) throw new InvalidOperationException("Collection real ready callbacks did not complete");
         AddSupportedDisplayableSets(CollectionManager.Get(), own);
         CollectionManager.Get().OnInitialClientStateDeckContents(headers, contents);
+        // Build Deck's temporary ids are never projected; any band deck is a failed leave's (design B4, K6).
+        NativeDungeonRunEditor.Sweep("bootstrap");
         foreach (var pair in decks)
         {
             var native = CollectionManager.Get().GetDeck(pair.Key);
@@ -1229,7 +1236,11 @@ internal static partial class NativeUIProbe
         if (!ready) return false;
         try
         {
-            if (CollectionManager.Get().GetDecks().Count != decks.Count) return false;
+            // Build Deck (design B2): the temporary deck is native only; a band deck with no session is a failed leave's.
+            if (!NativeDungeonRunEditor.Active) NativeDungeonRunEditor.Sweep("collection deck check");
+            if (DungeonRunEditor.NonBandCount(CollectionManager.Get().GetDecks().Keys) != decks.Count) return false;
+            long runBuild = NativeDungeonRunEditor.TempId;
+            if (runBuild != 0 && CollectionManager.Get().GetDeck(runBuild)?.NetworkContentsLoaded() != true) return false;
             foreach (long id in decks.Keys) ValidateNative(CollectionManager.Get().GetDeck(id));
             __result = true;
         }
@@ -1572,7 +1583,7 @@ internal static partial class NativeUIProbe
         return code;
     }
     private static bool CollectionExitLoggedIn() => NativeMenuFlow.CollectionExitAllowed(
-        Network.IsLoggedIn(), active, SceneMgr.Get().GetPrevMode() == SceneMgr.Mode.TOURNAMENT);
+        Network.IsLoggedIn(), active, SceneMgr.Get().GetPrevMode() == SceneMgr.Mode.TOURNAMENT, NativeDungeonRunEditor.Leaving);
     private static bool PackDisconnect()
     {
         if (!active) return true;
@@ -1617,6 +1628,8 @@ internal static partial class NativeUIProbe
             else replayArmed = false;
             if (mode == SceneMgr.Mode.TOURNAMENT)
             {
+                // No Build Deck temporary deck can be selected there (design B3, K6).
+                NativeDungeonRunEditor.Sweep("before TOURNAMENT");
                 PublishMedal();
                 if (lastSelectedId != 0) Options.Get().SetLong(Option.LAST_CUSTOM_DECK_CHOSEN, lastSelectedId);
             }

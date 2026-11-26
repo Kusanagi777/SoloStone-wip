@@ -54,6 +54,8 @@ internal static partial class NativeUIProbe
         string heroCardID, DeckSourceType deckSourceType, string pastedDeckHashString, bool isHeroOverridden)
     {
         if (!active) return true;
+        // Build Deck editor (design B17): no new deck while a session exists (the New Deck button is gated too).
+        if (NativeDungeonRunEditor.Active) { log.LogWarning("DUNGEON_RUN_EDITOR deck creation refused while a session exists"); return false; }
         long candidateId = Profile.NextCustomDeckId;
         bool allowed = NativeUIProjection.CanCreateDraft(deckType == DeckType.NORMAL_DECK,
             deckSourceType == DeckSourceType.DECK_SOURCE_TYPE_NORMAL && pastedDeckHashString == null,
@@ -146,6 +148,8 @@ internal static partial class NativeUIProbe
     private static bool SaveLocalDraft(CollectionDeck __instance, CollectionDeck.ChangeSource __0)
     {
         if (active && __instance is SideboardDeck sideboard) __instance = sideboard.MainDeck;
+        // Build Deck's temporary deck is never persisted (design B8): every save is swallowed, whatever its source.
+        if (active && DungeonRunEditor.IsRunBuildId(__instance.ID)) { NativeDungeonRunEditor.Swallowed(__instance.ID, __0); return false; }
         bool supportedSource = __0 == CollectionDeck.ChangeSource.MarkDeckAsSeen
             || __0 == CollectionDeck.ChangeSource.PocoSetDeckName
             || __0 == CollectionDeck.ChangeSource.OnScenePreUnload
@@ -266,6 +270,8 @@ internal static partial class NativeUIProbe
 
     private static bool PrepareDiscardDeck(CollectionDeckTray __instance, bool deleteDeck, ref bool __result)
     {
+        // Build Deck editor (design J1): Back from the temporary deck, with or without deleteDeck, never reaches native.
+        if (active && NativeDungeonRunEditor.OwnsTray(__instance)) return NativeDungeonRunEditor.BackOut(__instance, ref __result);
         if (!active || !CurrentCollectionScene() || !deleteDeck
             || !ReferenceEquals(__instance, CollectionDeckTray.Get())) return true;
         // Preserve native early exits before any discard side effects or local commit.
@@ -291,12 +297,16 @@ internal static partial class NativeUIProbe
         return TryPrepareLocalDelete(__0, null, true);
     }
 
-    private static bool TryPrepareLocalDelete(long deckId, AlertPopup confirmation, bool validOwner) =>
-        NativeUIProjection.TryPrepareDelete(() => {
+    private static bool TryPrepareLocalDelete(long deckId, AlertPopup confirmation, bool validOwner)
+    {
+        // Build Deck's temporary deck is removed only at the HUB (design B10, K8): refused silently, with no popup.
+        if (DungeonRunEditor.IsRunBuildId(deckId)) { log.LogWarning("DUNGEON_RUN_EDITOR delete refused for " + deckId); return false; }
+        return NativeUIProjection.TryPrepareDelete(() => {
             if (!validOwner) throw new InvalidOperationException("The delete target changed. Reopen Collection and retry.");
             if (preparedDeletes.Contains(deckId)) return;
             PrepareLocalDelete(deckId, confirmation);
         }, error => ReportDeleteFailure(deckId, error, confirmation));
+    }
 
     private static void PrepareLocalDelete(long deckId, AlertPopup confirmation)
     {
@@ -531,6 +541,10 @@ internal static partial class NativeUIProbe
         return (NetCache.NetCacheDecks)value;
     }
 
+    // The published deck headers, or null (NativeDungeonRunEditor's header asserts, design A4).
+    internal static NetCache.NetCacheDecks PublishedDeckHeaders =>
+        cache.TryGetValue(typeof(NetCache.NetCacheDecks), out object value) ? value as NetCache.NetCacheDecks : null;
+
     private static IEnumerable<string> SessionLoanerKeys() => decks
         .Where(pair => NativeUIProjection.IsLoanerId(pair.Key)).Select(pair => pair.Value.Id);
     // Shop/test-control seam: null when the live tray (this session's personal decks + bootstrap loaners + one new
@@ -642,7 +656,9 @@ internal static partial class NativeUIProbe
         try
         {
             IReadOnlyDictionary<long, long> ranks = ExpectedRanks();
-            List<CollectionDeck> working = CollectionManager.Get().GetDecks(DeckType.NORMAL_DECK);
+            // Build Deck's temporary deck is outside the local library (design B7).
+            List<CollectionDeck> working = CollectionManager.Get().GetDecks(DeckType.NORMAL_DECK)
+                .Where(deck => !DungeonRunEditor.IsRunBuildId(deck.ID)).ToList();
             if (!working.Select(deck => deck.ID).OrderBy(id => id).SequenceEqual(ranks.Keys.OrderBy(id => id)))
                 throw new InvalidOperationException("Native deck set does not match the local library.");
             foreach (CollectionDeck deck in working)
@@ -762,6 +778,8 @@ internal static partial class NativeUIProbe
         CollectionManager manager = CollectionManager.Get();
         foreach (CollectionDeck working in manager.GetDecks(DeckType.NORMAL_DECK))
         {
+            // B7: CopyFrom(baseDeck) would wipe a Build Deck list.
+            if (DungeonRunEditor.IsRunBuildId(working.ID)) continue;
             CollectionDeck baseDeck = manager.GetBaseDeck(working.ID);
             if (baseDeck != null) working.CopyFrom(baseDeck);
         }

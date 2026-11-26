@@ -517,6 +517,8 @@ internal static class NativeUIProjection
     internal static bool IsPersonalId(long deckId) => deckId == LegacyPersonalDeckId
         || deckId >= FirstAllocatedPersonalDeckId;
     internal static bool IsLoanerId(long deckId) => DeckKeys.Skip(1).Any(key => DeckId(key) == deckId);
+    // Build Deck's temporary, never-persisted ids (900000300..900000399; the tested rule is DungeonRunEditor's).
+    internal static bool IsRunBuildId(long deckId) => DungeonRunEditor.IsRunBuildId(deckId);
     internal static bool TryProjectDeckBoxLock(bool probeActive, bool collectionContext, long deckId,
         out bool locked)
     {
