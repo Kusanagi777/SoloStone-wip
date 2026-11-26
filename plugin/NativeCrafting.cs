@@ -137,6 +137,8 @@ internal static class NativeCrafting
 
     private static bool CanCraft(EntityDef __0, TAG_PREMIUM __1, ref CraftingManager.CanCraftCardResult __result)
     {
+        // Build Deck editor (design H): ownership must not change while a temporary deck is built.
+        if (NativeDungeonRunEditor.Active) { __result = CraftingManager.CanCraftCardResult.NotCraftable; return false; }
         if (!Enabled) return true;
         if (__1 == TAG_PREMIUM.NORMAL && __0 != null && Eligible(__0.GetCardId(), __1)) return true;
         __result = CraftingManager.CanCraftCardResult.NotCraftable;
@@ -158,8 +160,17 @@ internal static class NativeCrafting
         return false;
     }
 
+    // Build Deck editor (design H): no craft, upgrade or disenchant while a temporary deck is built. Never throws.
+    private static bool RefuseInRunBuildEditor()
+    {
+        try { ShowError(NativeDungeonRunText.EditorCraftingOff); }
+        catch (Exception error) { NativeDungeonRunEditor.Abort(error); }
+        return false;
+    }
+
     private static bool BeforeCreate(bool __0)
     {
+        if (NativeDungeonRunEditor.Active) return RefuseInRunBuildEditor();
         if (!Enabled) return true;
         var manager = CraftingManager.Get();
         if (manager?.GetPendingClientTransaction()?.GetLastTransactionWasDisenchant() == true) return true;
@@ -170,6 +181,7 @@ internal static class NativeCrafting
 
     private static bool BeforeUpgradeEvent(string __0)
     {
+        if (NativeDungeonRunEditor.Active && (__0 == "CODE_CREATE" || __0 == "CODE_UPGRADE")) return RefuseInRunBuildEditor();
         if (!Enabled || (__0 != "CODE_CREATE" && __0 != "CODE_UPGRADE")) return true;
         var manager = CraftingManager.Get();
         if (manager == null || !manager.GetShownCardInfo(out EntityDef card, out TAG_PREMIUM premium)) return false;
@@ -232,6 +244,7 @@ internal static class NativeCrafting
 
     private static bool BeforeDisenchant()
     {
+        if (NativeDungeonRunEditor.Active) return RefuseInRunBuildEditor();
         if (!Enabled) return true;
         var manager = CraftingManager.Get();
         if (manager?.GetPendingClientTransaction()?.GetLastTransactionWasCrafting() == true) return true;

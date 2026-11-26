@@ -459,23 +459,27 @@ internal static partial class NativeUIProbe
                 __instance.GetDeckID(), __0);
     }
 
+    // The Build Deck editor's temporary deck (design H) is blocked by the same hooks (OwnsRunBuildEditor, false with no session).
     private static bool HidePersonalDeckConvert(DeckOptionsMenu __instance, ref bool __result)
     {
-        if (!OwnsPersonalDeckEditor(Field(__instance, "m_deck") as CollectionDeck, __instance)) return true;
+        var deck = Field(__instance, "m_deck") as CollectionDeck;
+        if (!OwnsPersonalDeckEditor(deck, __instance) && !OwnsRunBuildEditor(deck, __instance)) return true;
         __result = false;
         return false;
     }
 
+    // Design B18: for the temporary deck too (no Options 188 write on any path that still reaches it).
     private static bool HidePersonalDeckTutorial(CollectionManager __instance, ref bool __result)
     {
-        if (!OwnsPersonalDeckEditor(__instance?.GetEditedDeck(), __instance)) return true;
+        var edited = __instance?.GetEditedDeck();
+        if (!OwnsPersonalDeckEditor(edited, __instance) && !OwnsRunBuildEditor(edited, __instance)) return true;
         __result = false;
         return false;
     }
 
     private static bool HidePersonalDeckHelperChoices(CollectionDeck __0, ref bool __result)
     {
-        if (!OwnsPersonalDeckEditor(__0, null)) return true;
+        if (!OwnsPersonalDeckEditor(__0, null) && !OwnsRunBuildEditor(__0, null)) return true;
         __result = false;
         return false;
     }
@@ -483,7 +487,8 @@ internal static partial class NativeUIProbe
     private static bool BlockPersonalDeckHelper(DeckTrayCardListContent __instance, CollectionDeckSlot __0, bool __1)
     {
         var edited = CollectionManager.Get()?.GetEditedDeck();
-        if (!OwnsPersonalDeckEditor(edited, __instance)) return true;
+        // The temporary deck has no local helper: native's is skipped and nothing is shown.
+        if (!OwnsPersonalDeckEditor(edited, __instance)) return !OwnsRunBuildEditor(edited, __instance);
         try
         {
             // DeckMaker reads the projected collection; Done still commits through SaveLocalDraft.
@@ -514,12 +519,44 @@ internal static partial class NativeUIProbe
             return true;
         }, false, LogRecipeFailure);
 
-    private static bool BlockPersonalDeckCompletion(CollectionDeckTray __instance) =>
-        !OwnsPersonalDeckEditor(CollectionManager.Get()?.GetEditedDeck(), __instance);
+    private static bool BlockPersonalDeckCompletion(CollectionDeckTray __instance)
+    {
+        var edited = CollectionManager.Get()?.GetEditedDeck();
+        return !OwnsPersonalDeckEditor(edited, __instance) && !OwnsRunBuildEditor(edited, __instance);
+    }
 
     private static bool OwnsPersonalDeckEditor(CollectionDeck candidate, object instance)
     {
         // Replace Cards and ghost styling cover all persisted personal decks; crafting can make any deck incomplete.
+        var editor = DeckEditorTerms(candidate, instance);
+        bool persisted = active && editor.CurrentCollection && editor.Edited != null && Profile.GetDraft(editor.Edited.ID) != null;
+        return NativeUIProjection.OwnsPersonalDeckEditor(active, editor.CurrentCollection, editor.Manager,
+            editor.Tray, editor.MainContext, editor.ExactDeck, editor.ExactInstance, persisted);
+    }
+
+    // Design H0: the sibling of OwnsPersonalDeckEditor for the Build Deck editor's temporary deck. The same terms, with "persisted"
+    // replaced by the session owning the edited deck in the Editing stage. False with no session (personal and loaner decks are
+    // never affected). Never throws: a failure schedules the editor's recovery and answers false.
+    private static bool OwnsRunBuildEditor(CollectionDeck candidate, object instance)
+    {
+        if (!NativeDungeonRunEditor.Active) return false;
+        try
+        {
+            var editor = DeckEditorTerms(candidate, instance);
+            bool runBuild = editor.Edited != null && NativeDungeonRunEditor.Owns(editor.Edited.ID)
+                && NativeDungeonRunEditor.CurrentStage == DungeonRunEditor.Stage.Editing;
+            return DungeonRunEditor.OwnsEditor(active, editor.CurrentCollection, editor.Manager, editor.Tray, editor.MainContext,
+                editor.ExactDeck, editor.ExactInstance, runBuild);
+        }
+        catch (Exception error) { NativeDungeonRunEditor.Abort(error); return false; }
+    }
+
+    // The terms both editor predicates share: the Collection scene, the live manager and tray, the main deck-editing context
+    // (edit mode, deck contents, not a brawl deck, not the recipe view, the tray's context is the edited deck), the candidate is
+    // the edited deck and the hook instance is the current one.
+    private static (bool CurrentCollection, bool Manager, bool Tray, bool MainContext, bool ExactDeck, bool ExactInstance,
+        CollectionDeck Edited) DeckEditorTerms(CollectionDeck candidate, object instance)
+    {
         CollectionManager manager = CollectionManager.Get();
         CollectionDeckTray tray = CollectionDeckTray.Get();
         CollectionDeck edited = manager?.GetEditedDeck();
@@ -535,9 +572,8 @@ internal static partial class NativeUIProbe
             && manager.IsInEditMode() && tray.IsShowingDeckContents() && !edited.IsBrawlDeck
             && display.GetViewMode() != CollectionUtils.ViewMode.DECK_TEMPLATE
             && ReferenceEquals(tray.GetCurrentDeckContext(), edited);
-        bool persisted = active && currentCollection && edited != null && Profile.GetDraft(edited.ID) != null;
-        return NativeUIProjection.OwnsPersonalDeckEditor(active, currentCollection, manager != null,
-            tray != null, currentMainContext, ReferenceEquals(candidate, edited), exactInstance, persisted);
+        return (currentCollection, manager != null, tray != null, currentMainContext, ReferenceEquals(candidate, edited),
+            exactInstance, edited);
     }
 
     private static bool IsLoanerId(long id) => NativeUIProjection.IsLoanerId(id);

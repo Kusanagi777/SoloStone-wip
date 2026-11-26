@@ -61,6 +61,8 @@ internal static class NativeDungeonRunEditor
     // (CollectionDeck) and the DeckRuleViolation(DeckRule, string) constructor. Null: V1 gives no violation, A1 no broken rule.
     private static MethodInfo deckSizeRule;
     private static ConstructorInfo violationCtor;
+    // F2: CollectionPageManager's cosmetic tab fields that were found (m_heroSkinsTab, m_cardBacksTab, m_coinsTab, m_petsTab).
+    private static FieldInfo[] cosmeticTabs = new FieldInfo[0];
 
     // Contingent hooks (design D1 S4, D3 A3): written, registered only when the owner's PC check asks for them.
     /// <summary>PC check P5: the tray label reads "n/10" after S1. If it does not, true registers S4 (OnCardCountUpdated).</summary>
@@ -145,6 +147,32 @@ internal static class NativeDungeonRunEditor
         }
         BindErrorChannel();
         BindViolationMembers();
+
+        // H: for the temporary deck no deck options menu (rename, delete, convert, share) and no cosmetic trays (a hero-skin drag
+        // would rewrite the header hero; ShowDeckHelper reads all four during the open).
+        foreach (string name in new[] { "ShouldShowDeckOptionsMenu", "CanViewHeroSkins", "CanViewCardBacks", "CanViewCoins", "CanViewPets" })
+            Patch(harmony, Required(typeof(CollectionManagerDisplay), name, Type.EmptyTypes), nameof(RunBuildHidden));
+        // H Rename: skipped, so OnRenameFinished's spinner never shows (the save is swallowed anyway, B8).
+        Patch(harmony, Required(typeof(DeckTrayDeckListContent), "RenameCurrentlyEditingDeck", Type.EmptyTypes), nameof(RunBuildRename));
+        // F2 (cosmetic tabs here; Task 6 adds the class tabs to the same postfix).
+        BindCosmeticTabs();
+        harmony.Patch(Required(typeof(CollectionPageManager), "ShouldShowTab", new[] { typeof(BookTab) }),
+            postfix: new HarmonyMethod(typeof(NativeDungeonRunEditor), nameof(RunBuildTabs)));
+    }
+
+    // F2's cosmetic tab fields, looked up once by name. A missing one is logged here (once) and skipped: that tab stays native.
+    private static void BindCosmeticTabs()
+    {
+        var found = new List<FieldInfo>();
+        foreach (string name in new[] { "m_heroSkinsTab", "m_cardBacksTab", "m_coinsTab", "m_petsTab" })
+        {
+            FieldInfo field;
+            try { field = AccessTools.Field(typeof(CollectionPageManager), name); }
+            catch (Exception) { field = null; }
+            if (field != null && !field.IsStatic) found.Add(field);
+            else Log("CollectionPageManager." + name + " not found: that tab is not hidden for the temporary deck");
+        }
+        cosmeticTabs = found.ToArray();
     }
 
     // V1/A1's optional members, looked up once. A missing one is logged here (once) and leaves its field null. Never throws.
@@ -584,6 +612,15 @@ internal static class NativeDungeonRunEditor
         catch (Exception) { return false; }
     }
 
+    /// <summary>The design preamble's guard for a hook with no deck argument: the probe is active and Collection edits the temporary
+    /// deck (any stage). False with no session, so other decks run native. Never throws.</summary>
+    internal static bool OwnsEditedDeck()
+    {
+        if (session == null) return false;
+        try { return NativeUIProbe.Active && Owns(CollectionManager.Get()?.GetEditedDeck()?.ID ?? 0); }
+        catch (Exception error) { Abort(error); return false; }
+    }
+
     /// <summary>An AlertPopup behind the <see cref="RefusalOpen"/> debounce (a stale flag, with no dialog showing, is reset).</summary>
     internal static void ShowRefusal(string header, string text)
     {
@@ -833,6 +870,46 @@ internal static class NativeDungeonRunEditor
             return OwnsDeck(deck) && card != null && s.Cards.Engine(card.GetCardId()) != null;
         }
         catch (Exception error) { Abort(error); return false; }
+    }
+
+    // ------------------------------------------------------------------ blocked actions (H)
+
+    // H, prefix on CollectionManagerDisplay.ShouldShowDeckOptionsMenu and CanViewHeroSkins / CanViewCardBacks / CanViewCoins /
+    // CanViewPets (all () : bool): false for the temporary deck; native for every other deck.
+    private static bool RunBuildHidden(ref bool __result)
+    {
+        if (!OwnsEditedDeck()) return true;
+        __result = false;
+        return false;
+    }
+
+    // H Rename, prefix on DeckTrayDeckListContent.RenameCurrentlyEditingDeck(): skipped for the temporary deck.
+    private static bool RunBuildRename()
+    {
+        if (!OwnsEditedDeck()) return true;
+        Log("rename skipped " + TempId);
+        return false;
+    }
+
+    // F2, postfix on CollectionPageManager.ShouldShowTab(BookTab): for the temporary deck the cosmetic tabs are hidden (as their
+    // trays are, RunBuildHidden). Every other tab, and every other deck, keeps native's answer.
+    private static void RunBuildTabs(CollectionPageManager __instance, BookTab __0, ref bool __result)
+    {
+        if (__0 == null || !OwnsEditedDeck()) return;
+        try
+        {
+            if (IsCosmeticTab(__instance, __0)) { __result = false; return; }
+            // F2 class tabs: Task 6 (phase 4) goes here. A CollectionClassTab whose TabInfo.tagClass is one of the row's classes
+            // or NEUTRAL gets __result || HasClassCardsAvailable(tagClass); any other class tab gets false. Not done in Task 5.
+        }
+        catch (Exception error) { Abort(error); }
+    }
+
+    private static bool IsCosmeticTab(CollectionPageManager pages, BookTab tab)
+    {
+        foreach (FieldInfo field in cosmeticTabs)
+            if (ReferenceEquals(field.GetValue(pages), tab)) return true;
+        return false;
     }
 
     /// <summary>B8: a SendChanges of a band id was swallowed (logged once per id and source).</summary>
